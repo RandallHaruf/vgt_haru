@@ -1,0 +1,242 @@
+<mvc:View controllerName="ui5ns.ui5.controller.ttc.Relatorio" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<Link text="TTC" press="navToPage2" />
+						<Link text="Relatório" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório TTC" save="onSaveView"></vm:VariantManagement>
+				</f:heading>
+				<f:actions>
+					<Button
+						text="Imprimir"
+						type="Transparent"
+						icon="sap-icon://print" />
+					<Button
+						text="Exportar CSV"
+						type="Transparent"/>
+					<Button
+						text="Exportar TXT"
+						type="Transparent" />
+					<Button
+						text="Exportar XLS"
+						type="Transparent"/>
+					<Button
+						text="Exportar PDF"
+						type="Transparent"/>
+				</f:actions>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+				<!--<f:navigationActions>
+					<Button
+						text="Voltar"
+						icon="sap-icon://nav-back"
+						type="Emphasized" 
+						press="onNavBack"/>
+				</f:navigationActions>-->
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Header -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="false">
+				<f:content>
+					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+						<fb:filterItems>
+							<fb:FilterItem name="A" label="Empresa">
+								<fb:control>
+									<MultiComboBox id="selectEmpresa"  change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="B" label="Classification">
+								<fb:control>
+									<MultiComboBox id="selectClassification" change="onSelectChange"  items="{ path: '/OpcoesClassification' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="C" label="Category">
+								<fb:control>
+									<MultiComboBox id="selectCategory" change="onSelectChange"  items="{ path: '/OpcoesCategory' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="D" label="Tax">
+								<fb:control>
+									<MultiComboBox id="selectTax" change="onSelectChange"  items="{ path: '/OpcoesTax' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="E" label="Name of Tax">
+								<fb:control>
+									<MultiComboBox id="selectNameOfTax" change="onSelectChange"  items="{ path: '/OpcoesNameOfTax' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="F" label="Jurisdição">
+								<fb:control>
+									<MultiComboBox id="selectJurisdicao" change="onSelectChange"  items="{ path: '/OpcoesJurisdicao' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="G" label="País">
+								<fb:control>
+									<MultiComboBox id="selectPais" change="onSelectChange"  items="{ path: '/OpcoesPais' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="H" label="Ano Fiscal">
+								<fb:control>
+									<MultiComboBox id="selectAnoFiscal" change="onSelectChange"  items="{ path: '/OpcoesAnoFiscal' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="I" label="Date of Payment Início">
+								<fb:control>
+									<DatePicker/>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="J" label="Date of Payment Fim">
+								<fb:control>
+									<DatePicker/>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="K" label="Currency">
+								<fb:control>
+									<MultiComboBox id="selectCurrency" change="onSelectChange"  items="{ path: '/OpcoesCurrency' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="L" label="Type of Transaction">
+								<fb:control>
+									<MultiComboBox id="selectTypeOfTransaction" change="onSelectChange"  items="{ path: '/OpcoesTypeOfTransaction' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+						</fb:filterItems>
+					</fb:FilterBar>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<!-- DynamicPage Content -->
+		<f:content>
+			<ScrollContainer horizontal="true" vertical="true" height="100%">
+				<Table items="{ path: '/Pagamentos' }">
+					<columns>
+						<Column width="6rem">
+							<Text text="Empresa"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Classification"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Category"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Tax"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Name of Tax"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Name of Government administration/body (payee name)"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Jurisdição"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="País" />
+						</Column>
+						<Column width="10rem">
+							<Text text="State" />
+						</Column>
+						<Column width="10rem">
+							<Text text="City" />
+						</Column>
+						<Column width="10rem" hAlign="End">
+							<Text text="Ano Fiscal"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Description"/>
+						</Column>
+						<Column width="10rem" hAlign="End">
+							<Text text="Date of Payment"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Currency"/>
+						</Column>
+						<Column width="15rem">
+							<Text text="Type of Transaction"/>
+						</Column>
+						<Column width="15rem">
+							<Text text="Other (specify)"/>
+						</Column>
+						<Column width="10rem" hAlign="End">
+							<Text text="Principal"/>
+						</Column>
+						<Column width="10rem" hAlign="End">
+							<Text text="Interest"/>
+						</Column>
+						<Column width="10rem" hAlign="End">
+							<Text text="Fine"/>
+						</Column>
+						<Column width="10rem" hAlign="End">
+							<Text text="Value"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Number of Document"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="Beneficiary Company"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{empresa}"/>
+								<Text text="{classification}"/>
+								<Text text="{category}"/>
+								<Text text="{tax}"/>
+								<Text text="{nameOfTax}"/>
+								<Text text="{nameOfGov}"/>
+								<Text text="{jurisdicao}"/>
+								<Text text="{pais}" />
+								<Text text="{state}" />
+								<Text text="{city}" />
+								<Text text="{anoFiscal}"/>
+								<Text text="{description}"/>
+								<Text text="{dateOfPayment}"/>
+								<Text text="{currency}"/>
+								<Text text="{typeOfTransaction}"/>
+								<Text text="{otherSpecify}"/>
+								<Text text="{principal}"/>
+								<Text text="{interest}"/>
+								<Text text="{fine}"/>
+								<Text text="{value}"/>
+								<Text text="{numberOfDocument}"/>
+								<Text text="{beneficiaryCompany}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</ScrollContainer>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

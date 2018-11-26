@@ -1,0 +1,80 @@
+.myApp .viewSelecaoModulo .painelModulos {
+	text-align: center;
+	/*top: 15%;*/
+	margin-top: 7rem;
+}
+
+/* Esconde a 'setinha' de direção em tabelas de navegação */
+.myApp .sapMLIBImgNav.sapMLIBType.sapUiIcon.sapUiIconMirrorInRTL {
+	display: none;
+}
+
+.myApp .painelModulo {
+    border-radius: 0.125rem;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.myApp .tituloModulo {
+	position: relative;
+	top: 40%;
+	font-size: 1.3rem;
+}
+
+/* Troca a cor do links no breadcrumb pelo verde da vale */
+ /* Trocar pelo hexa exato da vale */
+ /* Removido */
+/*.myApp .sapMBreadcrumbsItem a,
+.myApp .sapMBreadcrumbsItem .sapMLnk:hover:not(.sapMLnkDsbl) {
+	color: green;
+}*/
+
+.myApp .bordered {
+	border: 2px;
+	border-style: groove;
+	border-radius: 3px;
+	box-shadow: 0 0 15px #ccc;
+}
+
+.myApp .smallPadding {
+	padding: 0.5rem;
+}
+
+/* Em 'view/admin/Empresa.view.xml' o NavContainer não exibia as 
+páginas agregadas com o 'position' original... procurar entender melhor o problema */
+.myApp .fixNavContainer {
+	position: inherit;
+}
+
+/* Completa os espaços entre as celulas de tabelas com linhas */
+.myApp .celulasSeparadas .sapMListTblCell  {
+    border-left: 1px solid #ccc;
+}
+
+/* Aplicar classe ~customHeaderHeight~ aos controles do tipo Page quando for preciso
+setar um cabeçalho customizado com maior altura para acomodar mais informação */
+.myApp .customHeaderHeight .sapMSubHeader-CTX {
+	height: 6rem;	
+}
+
+.myApp .customHeaderHeight .sapMPageEnableScrolling {
+	top: 6rem;
+}
+
+.myApp .semContentPadding .sapFDynamicPageContent,
+.myApp .semContentPadding .sapFDynamicPageContentFitContainer {
+	padding: 0 !important;
+}
+
+.myApp .celulaDestacada {
+	color: #147575;
+}
+
+.myApp .viewTTCResumoTrimestre .tabelaPeriodoMinHeight {
+	min-height: 293px;
+}

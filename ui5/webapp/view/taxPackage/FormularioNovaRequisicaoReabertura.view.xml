@@ -1,0 +1,83 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.taxPackage.FormularioNovaRequisicaoReabertura"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:f2="sap.f"
+	xmlns="sap.m">
+	<f2:DynamicPage
+		title="Tax Package - Formulário de Requisição de Reabertura"
+		showFooter="true">
+		<f2:title>
+			<f2:DynamicPageTitle>
+				<f2:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" enabled="false" />
+						<Link text="Listagem Empresas" enabled="false" />
+						<Link text="Resumo Trimestre" enabled="false" />
+						<Link text="Requisição Reabertura" enabled="false" />
+						<Link text="Formulário Nova Requisição" enabled="false" />
+					</Breadcrumbs>
+				</f2:breadcrumbs>
+				<f2:heading>
+					<Title text="Tax Package - Formulário de Requisição de Reabertura"/>
+				</f2:heading>
+			</f2:DynamicPageTitle>
+		</f2:title>
+		<f2:content>
+			<f:Form 
+				id="formularioEmpresa" 
+				editable="true">
+				<f:title>
+					<core:Title text="Nova Requisição"/>
+				</f:title>
+				<f:layout>
+					<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+						emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+				</f:layout>
+				<f:formContainers>
+					<f:FormContainer>
+						<f:formElements>
+							<f:FormElement label="Empresa">
+								<f:fields>
+									<Text text="Empresa A" />
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Trimestre">
+								<f:fields>
+									<Select id="selectTrimestre">
+										<items>
+											<core:Item text=""/>
+											<core:Item text="1º Trimestre" key="1"/>
+											<core:Item text="2º Trimestre" key="2"/>
+											<core:Item text="3º Trimestre" key="3"/>
+											<core:Item text="4º Trimestre" key="4"/>
+										</items>
+									</Select>
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Justificativa">
+								<f:fields>
+									<TextArea id="textAreaJustificativa" rows="5"/>
+								</f:fields>
+							</f:FormElement>
+						</f:formElements>
+					</f:FormContainer>
+				</f:formContainers>
+			</f:Form>
+		</f2:content>
+		<f2:footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button 
+					text="Salvar" 
+					type="Accept" 
+					press="onSalvar"/>
+				<Button 
+					text="Cancelar" 
+					type="Reject" 
+					press="onCancelar"/>
+			</Toolbar>
+		</f2:footer>
+	</f2:DynamicPage>
+</mvc:View>

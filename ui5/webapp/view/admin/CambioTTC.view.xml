@@ -1,0 +1,98 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.admin.CambioTTC"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns:u="sap.ui.unified"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<!--<UploadCollection></UploadCollection>-->
+			<VBox class="sapUiSmallMargin">
+				<!--<f:Form 
+					id="formularioObjeto" 
+					editable="true">
+					<f:title>
+						<core:Title text="Empresa"/>
+					</f:title>
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+							emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer title="Cadastro">
+							<f:FormElement label="Ano">
+								<f:fields>
+									<Select>
+										<core:Item text="2018" />
+									</Select>
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Mês">
+								<f:fields>
+									<Select>
+										<core:Item text="Janeiro" />
+									</Select>
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Arquivo">
+								<f:fields>
+									<u:FileUploader
+										id="fileUploader"
+										fileType="xlsx"
+										typeMissmatch="handleTypeMissmatch" />
+									<Button
+										text="Upload File"
+										press="handleUploadPress" />
+								</f:fields>
+							</f:FormElement>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>-->
+				<f:Form editable="true" class="sapUiMediumMarginTop">
+					<f:title>
+						<core:Title text="Histórico de Câmbio" />
+					</f:title>
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+							emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer>
+							<f:formElements>
+								<f:FormElement>
+									<f:fields>
+										<Table items="{/historico}">
+											<columns>
+												<Column>
+													<Text text="Arquivo" />
+												</Column>
+												<Column>
+													<Text text="Data" />
+												</Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<Link text="{nome}" target="_blank" href="{link}" />
+														<Text text="{data}" />
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+			</VBox>
+		</Page>
+	</NavContainer>
+</mvc:View>

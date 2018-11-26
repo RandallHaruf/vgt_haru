@@ -1,0 +1,36 @@
+<core:View
+	controllerName="ui5ns.ui5.controller.admin.ListaNotificacoes"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<NotificationListItem
+				title="Nova Requisição de Reabertura (#41321)"
+				description="Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis."
+				showCloseButton="false"
+				datetime="1 days"
+				unread="true"
+				priority="High"
+				press="onListItemPress">
+				<buttons>
+					<Button text="Responder" type="Accept" press="onResponder"/>
+				</buttons>
+			</NotificationListItem>
+			<NotificationListItem
+				title="Nova Requisição de Reabertura (#12312)"
+				description="Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis."
+				showCloseButton="false"
+				datetime="3 days"
+				unread="true"
+				priority="High"
+				press="onListItemPress">
+				<buttons>
+					<Button text="Responder" type="Accept" press="onResponder"/>
+				</buttons>
+			</NotificationListItem>
+		</Page>
+	</NavContainer>
+</core:View>

@@ -1,0 +1,31 @@
+<core:FragmentDefinition
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<MenuButton 
+		text="Menu" 
+		useDefaultActionOnly="true">
+		<!--menuPosition="BeginBottom"-->
+		<menu>
+			<Menu itemSelected="onAcessoRapido">
+				<items>
+					<MenuItem text="{i18n>viewGeralEmpresas}" icon="sap-icon://building" id="acessoRapidoEmpresas" />
+					<MenuItem text="{i18n>viewGeralComunicacao}" icon="sap-icon://discussion" id="acessoRapidoComunicacao" />
+					<MenuItem text="{i18n>viewGeralRelatorio}" icon="sap-icon://manager-insight">
+						<items>
+							<MenuItem text="TTC" id="acessoRapidoRelatorioTTC" />
+							<MenuItem text="Tax Package" id="acessoRapidoRelatorioTaxPackage" />
+							<MenuItem text="Compliance" id="acessoRapidoRelatorioCompliance" />
+							<MenuItem text="Beps" id="acessoRapidoRelatorioBeps" />
+						</items>
+					</MenuItem>
+					<!--<MenuItem text="Req. Reabertura" icon="sap-icon://permission">
+						<items>
+							<MenuItem text="TTC" id="acessoRapidoReaberturaTTC" />
+							<MenuItem text="Tax Package" id="acessoRapidoReaberturaTaxPackage" />
+						</items>
+					</MenuItem>-->
+				</items>
+			</Menu>
+		</menu>
+	</MenuButton>
+</core:FragmentDefinition>

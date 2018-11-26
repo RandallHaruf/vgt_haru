@@ -1,0 +1,153 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.admin.CadastroAliquotasTaxPackage"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: [{
+						path: 'tipo',
+						group: true
+					}, {
+						path: 'id'
+					}]
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Alíquotas"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column>
+						<Text text="Nome" />
+					</Column>
+					<Column>
+						<Text text="Valor" />
+					</Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier text="{nome}" />
+							<ObjectIdentifier text="{valor}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+		<Page
+			id="paginaObjeto"
+			showHeader="false">
+			<content>
+				<VBox class="sapUiSmallMargin">
+					<f:Form 
+						id="formularioObjeto" 
+						editable="true">
+						<f:title>
+							<core:Title text="Alíquota"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer title="Cadastro">
+								<f:formElements>
+									<f:FormElement>
+										<f:label>
+											<Label text="Nome" labelFor="inputNomeAliquota" />
+										</f:label>
+										<f:fields>
+											<Input type="Text" id="inputNomeAliquota" value="{/objeto/nome}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Valor (%)" labelFor="inputValorAliquota" />
+										</f:label>
+										<f:fields>
+											<Input type="Number" id="inputValorAliquota" value="{/objeto/valor}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Data Início" labelFor="dataInicio" />
+										</f:label>
+										<f:fields>
+											<DatePicker id="dataInicio" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Data Fim" labelFor="dataFim" />
+										</f:label>
+										<f:fields>
+											<DatePicker id="dataFim" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Tipo" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectTipo" items="{/DominioAliquotaTipo}" selectedKey="{/objeto/idTipo}">
+												<core:Item text="{tipo}" key="{id_dominio_aliquota_tipo}" />
+												<!--<items>
+													<core:Item text=""/>
+													<core:Item text="País" key="1"/>
+													<core:Item text="Empresa" key="2"/>
+												</items>-->
+											</Select>
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+				</VBox>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button 
+						text="Salvar" 
+						type="Accept" 
+						press="onSalvar"/>
+					<Button 
+						text="Cancelar" 
+						type="Reject" 
+						press="onCancelar"/>
+				</Toolbar>
+			</footer>
+		</Page>
+	</NavContainer>
+</mvc:View>

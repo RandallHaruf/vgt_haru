@@ -1,0 +1,124 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.SelecaoModulo"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns:control="ui5ns.ui5.control"
+	xmlns="sap.m"
+	class="viewSelecaoModulo">
+	<f:DynamicPage class="semContentPadding">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{i18n>viewSelecaoModuloTituloPagina}" />
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<VBox>
+				<!--<Table 
+					inset="false"
+					items="{
+						path: '/Periodos'
+					}">
+					<columns>
+						<Column>
+							<Title text="Período" />
+						</Column>
+						<Column>
+							<Title text="n1" />
+						</Column>
+						<Column>
+							<Title text="n2" />
+						</Column>
+						<Column>
+							<Title text="n3" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{periodo}" />
+								<ObjectNumber
+									number="{n1}"/>
+								<ObjectNumber
+									number="{n2}"/>
+								<ObjectNumber
+									number="{=${n1}+${n2}}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>-->
+				<FlexBox
+					alignItems="Center"
+					justifyContent="End"
+					class="sapUiSmallMarginTop">
+					<items>
+						<VBox
+							class="sapUiLargeMarginEnd">
+							<Label 
+								text="{i18n>viewSelecaoModuloComboboxIdioma}"/>
+							<Select
+								id="selectIdioma"
+								change="onTrocarIdioma">
+								<items>
+									<core:Item text="{i18n>viewSelecaoModuloComboboxLinguaOpcaoIngles}" key="en-US"/>
+									<core:Item text="{i18n>viewSelecaoModuloComboboxLinguaOpcaoPortugues}" key="pt-BR"/>
+								</items>
+							</Select>
+						</VBox>
+					</items>
+				</FlexBox>
+				<Panel
+					backgroundDesign="Transparent"	 
+					expandable="False"
+					class="painelModulos">
+					<GenericTile 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						header="{i18n>viewSelecaoModuloBotaoTTC}"
+						press="navToTTC">
+						<TileContent>
+							<ImageContent src="sap-icon://home-share" />
+						</TileContent>
+					</GenericTile>
+					<GenericTile 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						header="{i18n>viewSelecaoModuloBotaoTaxPackage}"
+						press="navToTaxPackage">
+						<TileContent>
+							<ImageContent src="sap-icon://home-share" />
+						</TileContent>
+					</GenericTile>
+					<GenericTile 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						header="{i18n>viewSelecaoModuloBotaoCompliance}"
+						press="navToCompliance">
+						<TileContent>
+							<ImageContent src="sap-icon://home-share" />
+						</TileContent>
+					</GenericTile>
+					<GenericTile 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						header="{i18n>viewSelecaoModuloBotaoBeps}"
+						press="navToBeps">
+						<TileContent>
+							<ImageContent src="sap-icon://home-share" />
+						</TileContent>
+					</GenericTile>
+					<GenericTile 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						header="Admin"
+						press="navToAdmin">
+						<TileContent>
+							<ImageContent src="sap-icon://home-share" />
+						</TileContent>
+					</GenericTile>
+				</Panel>
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

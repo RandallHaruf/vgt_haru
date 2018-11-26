@@ -1,0 +1,16 @@
+{
+	"welcomeFile": "/ui5/index.html",
+	"authenticationMethod": "route",
+	"logout": {
+		"logoutEndpoint": "/do/logout"
+	},
+	"routes": [{
+		"source": "^/backend/(.*)",
+		"target": "/$1",
+		"destination": "nodejs_backend"
+	}, {
+		"source": "^/ui5/(.*)$",
+		"target": "$1",
+		"localDir": "webapp"
+	}]
+}

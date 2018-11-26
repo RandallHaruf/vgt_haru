@@ -1,0 +1,67 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.admin.CadastroDiferencasTaxPackage"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: [{
+						path: 'tipo',
+						group: true
+					}, {
+						path: 'nome'
+					}]
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Diferenças"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column vAlign="Middle"></Column>
+					<Column width="100px"></Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier text="{nome}"/>
+							<HBox>
+								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
+							</HBox>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+	</NavContainer>
+</mvc:View>

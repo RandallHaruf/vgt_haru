@@ -1,0 +1,293 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.ttc.VisualizacaoTrimestre"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns="sap.m">
+	<f:DynamicPage class="semContentPadding">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="{i18n>viewTTCMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTTCMenu2}" press="navToPage2" />
+						<Link text="{i18n>viewTTCMenu3}" press="navToPage3" />
+						<Link text="{i18n>viewTTCMenu5}" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="{i18n>viewTTCVisualizacaoTrimestreTituloPagina}"/>
+				</f:heading>
+				<f:navigationActions>
+					<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onReabrir"/>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+				<f:snappedContent>
+					<ObjectIdentifier title="{/Empresa/nome}" />
+				</f:snappedContent>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader pinnable="false">
+				<f:content>
+					<FlexBox alignItems="Start" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+						<items>
+							<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
+								<content>
+									<l:VerticalLayout>
+										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
+											<ObjectIdentifier title="{/Empresa/nome}" />
+										</l:HorizontalLayout>
+										<l:HorizontalLayout allowWrapping="true">
+											<l:VerticalLayout>
+												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/Periodo/periodo}"/>
+												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="{/AnoCalendario/anoCalendario}"/>
+											</l:VerticalLayout>
+										</l:HorizontalLayout>
+									</l:VerticalLayout>
+								</content>
+							</Panel>
+						</items>
+					</FlexBox>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<IconTabBar id="idIconTabBarInlineMode" upperCase="true" expandable="false" stretchContentHeight="true"
+				class="sapUiNoContentPadding">
+				<items>
+					<IconTabFilter text="{i18n>viewGeralBorne}">
+						<ScrollContainer
+							horizontal="true"
+							vertical="true"
+							height="100%">
+							<Table
+								id="tabelaPagamentosBorne"
+								class="celulasSeparadas"
+								items="{
+									path: '/Pagamentos/Borne',
+									sorter: [{
+										path: 'data_pagamento',
+										descending: true
+									}]
+								}">
+								<columns>
+									<Column width="7rem" hAlign="Center">
+										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									</Column>
+									<Column width="10rem" hAlign="End">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<core:Icon src="{icone_aplicavel}" />
+											<Text text="{category}" />
+											<Text text="{tax}" />
+											<Text text="{name_of_tax}" />
+											<Text text="{administracao_governamental}" />
+											<Text text="{jurisdicao}" />
+											<Text text="{pais}" />
+											<Text text="{estado}" />
+											<Text text="{cidade}" />
+											<Text text="{projeto}" />
+											<Text text="{ano_fiscal}" />
+											<Text text="{descricao}" />
+											<Text text="{data_pagamento}" />
+											<Text text="{acronimo}" />
+											<Text text="{tipo_transacao}" />
+											<Text text="{tipo_transacao_outros}" />
+											<Text text="{principal}" />
+											<Text text="{juros}" />
+											<Text text="{multa}" />
+											<Text text="{total}" />
+											<Text text="{numero_documento}" />
+											<Text text="{entidade_beneficiaria}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</ScrollContainer>
+					</IconTabFilter>
+					<IconTabSeparator icon=""/>
+					<IconTabFilter text="{i18n>viewGeralCollected}">
+						<ScrollContainer
+							horizontal="true"
+							vertical="true"
+							height="100%">
+							<Table
+								id="tabelaPagamentosCollected"
+								class="celulasSeparadas"
+								items="{
+									path: '/Pagamentos/Collected',
+									sorter: [{
+										path: 'data_pagamento',
+										descending: true
+									}]
+								}">
+								<columns>
+									<Column width="7rem" hAlign="Center">
+										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i8n>viewTTCDetalheTrimestreColunaBeneficiary}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<core:Icon src="{icone_aplicavel}" />
+											<Text text="{category}" />
+											<Text text="{tax}" />
+											<Text text="{name_of_tax}" />
+											<Text text="{administracao_governamental}" />
+											<Text text="{jurisdicao}" />
+											<Text text="{pais}" />
+											<Text text="{estado}" />
+											<Text text="{cidade}" />
+											<Text text="{projeto}" />
+											<Text text="{ano_fiscal}" />
+											<Text text="{descricao}" />
+											<Text text="{data_pagamento}" />
+											<Text text="{acronimo}" />
+											<Text text="{tipo_transacao}" />
+											<Text text="{tipo_transacao_outros}" />
+											<Text text="{principal}" />
+											<Text text="{juros}" />
+											<Text text="{multa}" />
+											<Text text="{total}" />
+											<Text text="{numero_documento}" />
+											<Text text="{entidade_beneficiaria}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</ScrollContainer>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

@@ -1,0 +1,410 @@
+<core:View
+	controllerName="ui5ns.ui5.controller.admin.Empresa"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: [{
+						path: 'nome'
+					}, {
+						path: 'pais'
+					}, {
+						path: 'status'
+					}]
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Empresas"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column>
+						<Text text="Nome" />
+					</Column>
+					<Column>
+						<Text text="País" />
+					</Column>
+					<Column>
+						<Text text="Status" />
+					</Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier title="{nome}"/>
+							<Text text="{pais}" />
+							<Text text="{status}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+		<Page
+			id="paginaObjeto"
+			showHeader="false">
+			<content>
+				<VBox class="sapUiSmallMargin">
+					<f:Form 
+						id="formularioObjeto" 
+						editable="true">
+						<f:title>
+							<core:Title text="Empresa"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer title="Cadastro">
+								<f:formElements>
+									<f:FormElement>
+										<f:label>
+											<Label text="Nome" labelFor="inputNomeEmpresa" />
+										</f:label>
+										<f:fields>
+											<Input id="inputNomeEmpresa" value="{/objeto/nome}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Número HFM/SAP" labelFor="inputHFMSAP" />
+										</f:label>
+										<f:fields>
+											<Input id="inputHFMSAP" value="{/objeto/num_hfm_sap}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement label="TIN (Tax Identification Number)">
+										<f:fields>
+											<Input id="inputTIN" value="{/objeto/tin}" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement label="Jurisdição TIN">
+										<f:fields>
+											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement label="NI (Tax Identification Number)">
+										<f:fields>
+											<Input id="inputNI" value="{/objeto/ni}" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Jurisdição NI" labelFor="inputJurisdicaoNI" />
+										</f:label>
+										<f:fields>
+											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Endereço" labelFor="inputEndereco" />
+										</f:label>
+										<f:fields>
+											<Input id="inputEndereco" value="{/objeto/endereco}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="País" labelFor="comboboxPais" />
+										</f:label>
+										<f:fields>
+											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
+												<core:Item text="{nomePais}" key="{id}" />
+											</ComboBox>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Tipo Societário" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select 
+												id="selectTipoSocietario" 
+												items="{/DominioEmpresaTipoSocietario}" 
+												selectedKey="{/objeto/fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario}">
+												<core:Item text="{tipo_societario}" key="{id_dominio_empresa_tipo_societario}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="FY Start/End Date" />
+										</f:label>
+										<f:fields>
+											<DatePicker 
+												id="datepickerStartDate" 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/objeto/fy_start_date}" 
+												required="true"
+												change="onTrocarData" />
+											<DatePicker 
+												id="datepickerEndDate" 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/objeto/fy_end_date}"
+												required="true"
+												change="onTrocarData" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Status da empresa" labelFor="selectStatus" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectStatus" items="{/DominioEmpresaStatus}" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}">
+												<core:Item text="{status}" key="{id_dominio_empresa_status}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Alíquota Vigente" labelFor="selectAliquota" />
+										</f:label>
+										<f:fields>
+											<Select id="selectAliquota" items="{/Aliquota}" selectedKey="{/objeto/fk_aliquota.id_aliquota}">
+												<core:Item text="{nome} - {valor}%" key="{id_aliquota}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="LBC Nome" labelFor="inputLBCResponsavel" />
+										</f:label>
+										<f:fields>
+											<Input id="inputLBCResponsavel" value="{/objeto/lbc_nome}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="LBC Email" labelFor="inputLBCEmail" />
+										</f:label>
+										<f:fields>
+											<Input id="inputLBCEmail" type="Email" value="{/objeto/lbc_email}" required="true" change="onTrocarEmail" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement label="Comentários">
+										<f:fields>
+											<TextArea 
+												id="textAreaComentarios" 
+												rows="5" value="{/objeto/comentarios}"/>
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form 
+						id="formularioVinculoObrigacoes"
+						editable="true">
+						<f:title>
+							<core:Title text="Obrigações Acessórias"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:FormElement>
+									<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">
+										<table:extension>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<SearchField 
+													id="searchObrigacoes"
+													width="15rem" 
+													search="onTextSearch" 
+													value="{/filterValue}" />
+											</Toolbar>
+										</table:extension>
+										<table:columns>
+											<table:Column width="45px">
+												<table:template>
+													<CheckBox selected="{selecionada}" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="Tipo" />
+												<table:template>
+													<Text text="{tipo}" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="Nome" />
+												<table:template>
+													<Text text="{nome}" />
+												</table:template>
+											</table:Column>
+										</table:columns>
+									</table:Table>
+								</f:FormElement>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<Panel headerText="Histórico de Obrigações" expandable="true" class="sapUiNoContentPadding">
+						<content>
+							<f:Form editable="true" visible="{/showHistorico}">
+								<!--<f:title>
+									<core:Title text="Histórico de Obrigações" />
+								</f:title>-->
+								<f:layout>
+									<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+										emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+								</f:layout>
+								<f:formContainers>
+									<f:FormContainer>
+										<f:formElements>
+											<f:FormElement>
+												<f:fields>
+													<ScrollContainer
+														horizontal="true"
+														vertical="true"
+														width="100%"
+														height="400px">
+														<Table 
+															items="{
+																path: '/objeto/historicoObrigacoes',
+																sorter: [{
+																	path: 'tipo'
+																}, {
+																	path: 'nome'
+																}]
+															}"
+															sticky="ColumnHeaders">
+															<columns>
+																<Column>
+																	<Text text="Tipo" />
+																</Column>
+																<Column>
+																	<Text text="Nome" />
+																</Column>
+																<Column>
+																	<Text text="Data Início" />
+																</Column>
+																<Column>
+																	<Text text="Data Fim" />
+																</Column>
+															</columns>
+															<items>
+																<ColumnListItem>
+																	<cells>
+																		<Text text="{tipo}" />
+																		<Text text="{nome}" />
+																		<DatePicker valueFormat='yyyy-MM-dd' value="{data_inicio_rel}" editable="false" />
+																		<DatePicker valueFormat='yyyy-MM-dd' value="{data_fim_rel}" editable="false" />
+																	</cells>
+																</ColumnListItem>
+															</items>
+														</Table>
+													</ScrollContainer>
+												</f:fields>
+											</f:FormElement>
+										</f:formElements>
+									</f:FormContainer>
+								</f:formContainers>
+							</f:Form>
+						</content>
+					</Panel>
+					<Panel headerText="Histórico de Alíquotas" expandable="true" class="sapUiNoContentPadding">
+						<content>
+							<f:Form editable="true" visible="{/showHistorico}">
+								<!--<f:title>
+									<core:Title text="Histórico de Alíquotas" />
+								</f:title>-->
+								<f:layout>
+									<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+										emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+								</f:layout>
+								<f:formContainers>
+									<f:FormContainer>
+										<f:formElements>
+											<f:FormElement>
+												<f:fields>
+													<ScrollContainer
+														horizontal="true"
+														vertical="true"
+														width="100%"
+														height="400px">
+														<Table 
+															items="{/objeto/historicoAliquotas}" 
+															sticky="ColumnHeaders">
+															<columns>
+																<Column vAlign="Middle">
+																	<Text text="Nome" />
+																</Column>
+																<Column>
+																	<Text text="Data Início" />
+																</Column>
+																<Column>
+																	<Text text="Data Fim" />
+																</Column>
+															</columns>
+															<items>
+																<ColumnListItem>
+																	<cells>
+																		<ObjectIdentifier title="{nome}" />
+																		<DatePicker valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
+																		<DatePicker valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
+																	</cells>
+																</ColumnListItem>
+															</items>
+														</Table>
+													</ScrollContainer>
+												</f:fields>
+											</f:FormElement>
+										</f:formElements>
+									</f:FormContainer>
+								</f:formContainers>
+							</f:Form>
+						</content>
+					</Panel>
+				</VBox>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button 
+						text="Salvar" 
+						type="Accept" 
+						press="onSalvar"/>
+					<Button 
+						text="Cancelar" 
+						type="Reject" 
+						press="onCancelar"/>
+				</Toolbar>
+			</footer>
+		</Page>
+	</NavContainer>
+</core:View>

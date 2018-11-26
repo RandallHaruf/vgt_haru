@@ -1,0 +1,120 @@
+<core:View
+	controllerName="ui5ns.ui5.controller.admin.CadastroItemsToReportTaxPackage"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: {
+						path: 'item_to_report'
+					}
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Items to Report"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column vAlign="Middle"></Column>
+					<Column width="100px"></Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier text="{pergunta}"/>
+							<HBox>
+								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
+							</HBox>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+		<Page
+			id="paginaObjeto"
+			showHeader="false">
+			<content>
+				<VBox class="sapUiSmallMargin">
+					<f:Form 
+						id="formularioObjeto" 
+						editable="true">
+						<f:title>
+							<core:Title text="Item to Report"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer title="Cadastro">
+								<f:formElements>
+									<f:FormElement>
+										<f:label>
+											<Label text="Pergunta" labelFor="inputPergunta" />
+										</f:label>
+										<f:fields>
+											<TextArea rows="5" id="inputPergunta" value="{/objeto/pergunta}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement label="Flag Sim/Não">
+										<f:fields>
+											<CheckBox  selected="{/objeto/flagSimNao}" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement label="Flag Ano">
+										<f:fields>
+											<CheckBox selected="{/objeto/flagAno}" />
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+				</VBox>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button 
+						text="Salvar" 
+						type="Accept" 
+						press="onSalvar"/>
+					<Button 
+						text="Cancelar" 
+						type="Reject" 
+						press="onCancelar"/>
+				</Toolbar>
+			</footer>
+		</Page>
+	</NavContainer>
+</core:View>

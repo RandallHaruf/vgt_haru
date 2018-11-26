@@ -1,0 +1,97 @@
+<mvc:View controllerName="ui5ns.ui5.controller.taxPackage.Relatorio" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<Link text="Tax Package" press="navToPage2" />
+						<Link text="Relatório" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório Tax Package" save="onSaveView"></vm:VariantManagement>
+				</f:heading>
+				<f:actions>
+					<Button
+						text="Imprimir"
+						type="Transparent"
+						icon="sap-icon://print" />
+					<Button
+						text="Exportar CSV"
+						type="Transparent"/>
+					<Button
+						text="Exportar TXT"
+						type="Transparent" />
+					<Button
+						text="Exportar XLS"
+						type="Transparent"/>
+					<Button
+						text="Exportar PDF"
+						type="Transparent"/>
+				</f:actions>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Header -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+						<fb:filterItems>
+							<fb:FilterItem name="A" label="Empresa">
+								<fb:control>
+									<MultiComboBox id="selectEmpresa" change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="B" label="Aba">
+								<fb:control>
+									<MultiComboBox id="selectAba" change="onSelectChange" items="{ path: '/OpcoesAba' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="C" label="Ano Calendário">
+								<fb:control>
+									<MultiComboBox id="selectAnoCalendario" change="onSelectChange" items="{ path: '/OpcoesAnoCalendario' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="D" label="Período de Referência">
+								<fb:control>
+									<MultiComboBox id="selectPeriodo" change="onSelectChange" items="{ path: '/OpcoesPeriodo' }">
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+						</fb:filterItems>
+					</fb:FilterBar>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<!-- DynamicPage Content -->
+		<f:content>
+			<ScrollContainer horizontal="true" vertical="true" height="100%">
+				<Table items="{ path: '/Registros' }">
+					<columns>
+						<Column></Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{empresa}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</ScrollContainer>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

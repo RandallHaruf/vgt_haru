@@ -1,0 +1,193 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.f"
+	xmlns="sap.m"
+	class="viewComplianceListagemObrigacoes">
+	<f:DynamicPage
+		title="{i18n>viewComplianceListagemObrigacoesTituloPagina}"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		class="semContentPadding">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<Link text="Listagem Obrigações" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="Compliance - Listagem Obrigações"/>
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+					<!--Button icon="sap-icon://manager-insight" tooltip="Relatório" text="Relatório" press="onNavToReport" /-->
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<IconTabBar
+				id="iconTabBarObrigacoes"
+				select="onFiltrar"
+				expandable="false">
+				<items>
+					<IconTabFilter
+						showAll="true"
+						count="{viewModel>/tabFilters/todas}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"
+						key="todas" />
+					<IconTabSeparator />
+					<IconTabFilter
+						icon="sap-icon://sys-help"
+						iconColor="Default"
+						count="{viewModel>/tabFilters/naoIniciada}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
+						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
+						key="naoIniciada" />
+					<IconTabFilter
+						icon="sap-icon://lateness"
+						iconColor="Neutral"
+						count="{viewModel>/tabFilters/emAndamento}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
+						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
+						key="emAndamento" />
+					<IconTabFilter
+						icon="sap-icon://alert"
+						iconColor="Negative"
+						count="{viewModel>/tabFilters/emAtraso}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
+						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
+						key="emAtraso" />
+					<IconTabFilter
+						icon="sap-icon://accept"
+						iconColor="Positive"
+						count="{viewModel>/tabFilters/entregueNoPrazo}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
+						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
+						key="entregueNoPrazo" />
+					<IconTabFilter
+						icon="sap-icon://customer-history"
+						iconColor="Critical"
+						count="{viewModel>/tabFilters/entregueForaPrazo}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
+						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
+						key="entregueForaPrazo" />
+				</items>
+				<content>
+					<Table
+						id="tabelaObrigacoes"
+						items="{
+							path: 'viewModel>/obrigacoes',
+							sorter: {
+								path: 'empresa',
+								group: true
+							}
+						}"
+						growing="true"
+						enableBusyIndicator="true"
+						growingScrollToLoad="true"
+						updateFinished="onTerminouAtualizar">
+		
+						<headerToolbar>
+							<Toolbar>
+								<!--Title 
+									id="cabecalhoTabelaObrigacoes" 
+									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
+								<ToolbarSpacer />
+								<Select
+									tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
+									change="onTrocarEmpresa">
+									<items>
+										<core:Item text="Empresa A"/>
+										<core:Item text="Empresa B"/>
+										<core:Item text="Empresa C"/>
+									</items>
+								</Select>
+								<Select
+									tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
+									change="onTrocarAnoCalendario">
+									<items>
+										<core:Item text="2018"/>
+										<core:Item text="2017"/>
+										<core:Item text="2016"/>
+									</items>
+								</Select>
+								<Button 
+									id="botaoBuscarDocumentos" 
+									icon="sap-icon://inspection" 
+									press="onBuscarDocumentos" 
+									text="{i18n>viewComplianceListagemObrigacoesBotaoBuscarDocumentos}"
+									type="Emphasized"/>
+								<Button 
+									id="botaoNovaObrigacao" 
+									icon="sap-icon://add" 
+									press="onNovaObrigacao" 
+									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}"
+									type="Emphasized"/>
+							</Toolbar>
+						</headerToolbar>
+		
+						<columns>
+							<Column>
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}" />
+							</Column>
+							<Column>
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}" />
+							</Column>
+						</columns>
+		
+						<items>
+							<ColumnListItem
+								type="Navigation"
+								press="onDetalharObrigacao">
+								<cells>
+									<ObjectIdentifier title="{viewModel>tipo}"/>
+									<Text text="{viewModel>prazoEntrega}"/>
+									<Text text="{viewModel>extensao}"/>
+									<Text text="{viewModel>anoFiscal}"/>
+									<Text text="{viewModel>pais}"/>
+									<Text text="{viewModel>periodicidade}"/>
+									<!--core:Icon src="{viewModel>suporteContratado}"/-->
+									<Text text="{viewModel>suporteContratado}"/>
+									<Text text="{viewModel>status}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
+			</IconTabBar>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

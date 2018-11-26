@@ -1,0 +1,95 @@
+<core:View height="100%" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:tnt="sap.tnt"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	controllerName="ui5ns.ui5.controller.admin.Inicio">
+	<tnt:ToolPage id="toolPage">
+		<tnt:header>
+			<tnt:ToolHeader>
+				<Button id="sideNavigationToggleButton" icon="sap-icon://menu2" type="Transparent" press="onSideNavButtonPress">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<ToolbarSpacer>
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px"/>
+					</layoutData>
+				</ToolbarSpacer>
+				<Button icon="sap-icon://ui-notifications" tooltip="{i18n>viewAdminInicioNotificacoesTooltip}" type="Transparent" press="handleNotificationsPress">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<Button text="*Nome do Usuário*" type="Transparent" press="handleUserNamePress">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+			</tnt:ToolHeader>
+		</tnt:header>
+		<tnt:sideContent>
+			<tnt:SideNavigation expanded="true" itemSelect="onItemSelect">
+				<tnt:NavigationList items="{path: 'viewModel>/menu/navigation'}">
+					<tnt:NavigationListItem text="{viewModel>title}" icon="{viewModel>icon}" enabled="{viewModel>enabled}" expanded="{viewModel>expanded}" items="{viewModel>items}" key="{viewModel>key}">
+						<tnt:NavigationListItem text="{viewModel>title}" key="{viewModel>key}" enabled="{viewModel>enabled}"></tnt:NavigationListItem>
+					</tnt:NavigationListItem>
+				</tnt:NavigationList>
+				<tnt:fixedItem>
+					<tnt:NavigationList items="{path: 'viewModel/menu/fixedNavigation'}">
+						<tnt:NavigationListItem text="{viewModel>title}" icon="{viewModel>icon}"></tnt:NavigationListItem>
+					</tnt:NavigationList>
+				</tnt:fixedItem>
+			</tnt:SideNavigation>
+		</tnt:sideContent>
+		<tnt:mainContents>
+			<NavContainer id="pageContainer">
+				<pages>
+					<!--<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Usuario" />
+					</ScrollContainer>-->
+					<ScrollContainer id="taxPackageCadastroAliquotas" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroAliquotasTaxPackage" id="taxPackageCadastroAliquotasXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="pais" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Pais" id="paisXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="empresa" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Empresa" id="empresaXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="ttcCambio" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CambioTTC" id="ttcCambioXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="ttcCadastroCategory" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroCategoryTTC" id="ttcCadastroCategoryXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="ttcCadastroTax" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroTaxTTC" id="ttcCadastroTaxXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="ttcCadastroTributos" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroNameOfTaxTTC" id="ttcCadastroTributosXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="taxPackageModulo" horizontal="false" vertical="true" height="100%">
+						<Text text="Redirecionar para visualização do Tax Package"></Text>
+					</ScrollContainer>
+					<ScrollContainer id="taxPackageCadastroItemsToReport" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage" id="taxPackageCadastroItemsToReportXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="taxPackageCadastroAdicoesExclusoes" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroDiferencasTaxPackage" id="taxPackageCadastroAdicoesExclusoesXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="complianceModulo" horizontal="false" vertical="true" height="100%">
+						<Text text="Redirecionar para visualização do Compliace"></Text>
+					</ScrollContainer>
+					<ScrollContainer id="bepsModulo" horizontal="false" vertical="true" height="100%">
+						<Text text="Redirecionar para visualização do Beps"></Text>
+					</ScrollContainer>
+					<ScrollContainer id="cadastroObrigacoes" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps" id="cadastroObrigacoesXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="listaNotificacoes" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaNotificacoes" id="listaNotificacoesXMLView" />
+					</ScrollContainer>
+				</pages>
+			</NavContainer>
+		</tnt:mainContents>
+	</tnt:ToolPage>
+</core:View>

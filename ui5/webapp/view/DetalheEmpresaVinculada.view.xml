@@ -1,0 +1,157 @@
+<mvc:View controllerName="ui5ns.ui5.controller.DetalheEmpresaVinculada" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:form="sap.ui.layout.form" xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns="sap.m">
+	<f:DynamicPage>
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome"/>
+						<Link text="Empresas Vinculadas" press="navToPage2"/>
+						<Link text="Detalhe Empresa" enabled="false"/>
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="Detalhe da Empresa"/>
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<form:Form id="formularioEmpresa" editable="true">
+				<form:title>
+					<core:Title text="Cadastro"/>
+				</form:title>
+				<form:layout>
+					<form:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+						emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+				</form:layout>
+				<form:formContainers>
+					<form:FormContainer>
+						<form:formElements>
+							<form:FormElement label="Nome">
+								<form:fields>
+									<!--<Input id="inputNomeEmpresa" value="{/objeto/nome}"/>-->
+									<Text text="{/empresa/nome}" /> 
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Número HFM/SAP">
+								<form:fields>
+									<!--<Input id="inputHFMSAP"/>-->
+									<Text text="{/empresa/hfmsap}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="TIN (Tax Identification Number)">
+								<form:fields>
+									<!--<Input id="inputTIN"/>-->
+									<Text text="{/empresa/tin}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Jurisdição TIN">
+								<form:fields>
+									<!--<Input id="inputJurisdicaoTIN"/>-->
+									<Text text="{/empresa/jurisdicaoTIN}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="NI (Tax Identification Number)">
+								<form:fields>
+									<!--<Input id="inputNI"/>-->
+									<Text text="{/empresa/ni}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Jurisdição NI">
+								<form:fields>
+									<!--<Input id="inputJurisdicaoNI"/>-->
+									<Text text="{/empresa/jurisdicaoNI}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Endereço">
+								<form:fields>
+									<!--<Input id="inputEndereco"/>-->
+									<Text text="{/empresa/endereco}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="País">
+								<form:fields>
+									<!--<ComboBox id="selectPais">
+										<items>
+											<core:Item text=""/>
+											<core:Item text="Brasil" key="1"/>
+											<core:Item text="Estados Unidos" key="2"/>
+											<core:Item text="Canadá" key="2"/>
+										</items>
+									</ComboBox>-->
+									<Text text="{/empresa/pais}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Tipo Societário">
+								<form:fields>
+									<!--<Select id="selectTipoSocietario">
+										<items>
+											<core:Item text=""/>
+											<core:Item text="Brasil" key="1"/>
+											<core:Item text="Estados Unidos" key="2"/>
+											<core:Item text="Canadá" key="2"/>
+										</items>
+									</Select>-->
+									<Text text="{/empresa/tipoSocietario}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="FY Start/End Date">
+								<form:fields>
+									<!--<DatePicker id="datepickerStartDate" placeholder="Insira uma data..."/>
+									<DatePicker id="datepickerEndDate" placeholder="Insira uma data..."/>-->
+									<Text text="{/empresa/fyStartDate} - {/empresa/fyEndDate}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Status da empresa">
+								<form:fields>
+									<!--<Select id="selectStatus">
+										<items>
+											<core:Item text=""/>
+											<core:Item text="Pré-Operação" key="1"/>
+											<core:Item text="Operação" key="2"/>
+											<core:Item text="Falência" key="2"/>
+										</items>
+									</Select>-->
+									<Text text="{/empresa/status}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Alíquota Vigente da Empresa">
+								<form:fields>
+									<!--<Select id="selectAliquotaVigente">
+										<items>
+											<core:Item text=""/>
+											<core:Item text="Alíquota 1 - 28%" key="1"/>
+											<core:Item text="Alíquota 2 - 25%" key="2"/>
+											<core:Item text="Alíquota 3 - 22%" key="2"/>
+										</items>
+									</Select>-->
+									<Text text="{/empresa/aliquotaVigente}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="LBC Nome">
+								<form:fields>
+									<!--<Input id="inputLBCResponsavel"/>-->
+									<Text text="{/empresa/lbcNome}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="LBC Email">
+								<form:fields>
+									<!--<Input id="inputLBCEmail"/>-->
+									<Text text="{/empresa/lbcEmail}" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Comentários">
+								<form:fields>
+									<TextArea rows="5" value="{/empresa/comentarios}" enabled="false" />
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+				</form:formContainers>
+			</form:Form>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

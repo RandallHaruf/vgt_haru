@@ -1,0 +1,140 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.taxPackage.ListagemEmpresas"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.f"
+	xmlns:l="sap.ui.layout"
+	xmlns="sap.m">
+	<f:DynamicPage
+		title="Tax Package - Listagem Empresas"
+		showNavButton="true"
+		navButtonPress="onNavBack">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTAXMenu2} Empresas" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="{i18n>viewTAXListagemEmpresaTituloPagina}"/>
+				</f:heading>
+				<f:navigationActions>
+					<!--<Button icon="sap-icon://manager-insight" tooltip="Relatório" text="Relatório" press="onNavToReport" />-->
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<Table 
+				id="companyTable"
+				inset="false"
+				items="{
+					path: 'companies>/Companies',
+					sorter: [{
+						path: 'name'
+					}, {
+						path: 'currency'
+					}]
+				}">
+				<headerToolbar>
+					<Toolbar>
+						<content>
+							<!--<Title text="Empresas" level="H2"/>-->
+							<ToolbarSpacer />
+							<Select
+								tooltip="{i18n>viewGeralAnoCalendario}"
+								change="onTrocarAnoCalendario">
+								<items>
+									<core:Item text="2018"/>
+									<core:Item text="2017"/>
+									<core:Item text="2016"/>
+								</items>
+							</Select>
+						</content>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<!--<Text text="Nome" />-->
+						<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="Center">  
+						<!--<Text text="1º trimestre" />-->
+						<Title text="{i18n>viewGeralPeriodo1}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="Center">
+						<!--<Text text="2º trimestre" />-->
+						<Title text="{i18n>viewGeralPeriodo2}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="Center">
+						<!--<Text text="3º trimestre" />-->
+						<Title text="{i18n>viewGeralPeriodo3}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="Center">
+						<!--<Text text="4º trimestre" />-->
+						<Title text="{i18n>viewGeralPeriodo4}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="Center" >
+						<!--<Text text="Anual" />-->
+						<Title text="{i18n>viewGeralPeriodo5}" titleStyle="H4" />
+					</Column>
+					<Column
+						hAlign="End">
+						<!--<Text text="Qte. Retificadoras" />-->
+						<Title text="{i18n>viewGeralPeriodo6Qtd}" titleStyle="H4" />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onSelecionarEmpresa">
+						<cells>
+							<Text text="{companies>name}" class="celulaDestacada" />
+							
+							<core:Icon src="{companies>primeiroTrimestre}" 
+								color="{
+									parts: [
+										'companies>primeiroTrimestre'
+									],
+									formatter: '.formatter.taxPackageIconeListagemEmpresas'
+								}" />
+							<core:Icon src="{companies>segundoTrimestre}" 
+								color="{
+									parts: [
+										'companies>segundoTrimestre'
+									],
+									formatter: '.formatter.taxPackageIconeListagemEmpresas'
+								}"/>
+							<core:Icon src="{companies>terceiroTrimestre}" 
+								color="{
+									parts: [
+										'companies>terceiroTrimestre'
+									],
+									formatter: '.formatter.taxPackageIconeListagemEmpresas'
+								}"/>
+							<core:Icon src="{companies>quartoTrimestre}" 
+								color="{
+									parts: [
+										'companies>quartoTrimestre'
+									],
+									formatter: '.formatter.taxPackageIconeListagemEmpresas'
+								}"/>
+							<core:Icon src="{companies>anual}" 
+								color="{
+									parts: [
+										'companies>anual'
+									],
+									formatter: '.formatter.taxPackageIconeListagemEmpresas'
+								}"/>
+							
+							<ObjectNumber
+								number="{companies>qteRetificadoras}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

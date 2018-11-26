@@ -1,0 +1,43 @@
+<mvc:View
+	height="100%"
+	controllerName="ui5ns.ui5.controller.beps.RepositorioDocumentos"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.f"
+	xmlns="sap.m">
+	<f:DynamicPage 
+		title="Beps - Repositório de Documentos"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		class="semContentPadding">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<Link text="Listagem Obrigações" press="navToPage2" />
+						<Link text="Repositório Documentos" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="Beps - Repositório de Documentos"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<UploadCollection
+				id="UploadCollection"
+				uploadComplete="onUploadComplete"
+				fileDeleted="onFileDeleted">
+				<toolbar>
+					<OverflowToolbar>
+						<Breadcrumbs id="breadcrumbs" currentLocationText="{/currentLocationText}" links="{/history}">
+							<Link press="onBreadcrumbPress" text="{name}" />
+						</Breadcrumbs>
+						<ToolbarSpacer />
+						<UploadCollectionToolbarPlaceholder />
+					</OverflowToolbar>
+				</toolbar>
+			</UploadCollection>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

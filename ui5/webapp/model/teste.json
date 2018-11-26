@@ -1,0 +1,13 @@
+{
+	"currentLocationText": "Attachments",
+	"history": [ ],
+	"items": [
+		{
+			"documentId": "5082cc4d-da9f-2835-2c0a-8100ed47bcde",
+			"fileName": "Notes.txt",
+			"mimeType": "text/plain",
+			"thumbnailUrl": "",
+			"url": "test-resources/sap/m/demokit/sample/UploadCollection/LinkedDocuments/Notes.txt"
+		}
+	]
+}

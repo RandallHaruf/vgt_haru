@@ -1,0 +1,547 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.ttc.DetalheTrimestre"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:f2="sap.f"
+	xmlns="sap.m">
+	<f2:DynamicPage 
+		id="dynamicPage"
+		showFooter="true">
+		<f2:title>
+			<f2:DynamicPageTitle>
+				<f2:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="{i18n>viewTTCMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTTCMenu2}" press="navToPage2" />
+						<Link text="{i18n>viewTTCMenu3}" press="navToPage3" />
+						<Link text="{i18n>viewTTCMenu4}" enabled="false" />
+					</Breadcrumbs>
+				</f2:breadcrumbs>
+				<f2:heading>
+					<Title text="{i18n>viewTTCDetalheTrimestreTituloPagina}"/>
+				</f2:heading>
+				<f2:snappedContent>
+					<ObjectIdentifier title="{/Empresa/nome}" />
+				</f2:snappedContent>
+			</f2:DynamicPageTitle>
+		</f2:title>
+		<f2:header>
+			<f2:DynamicPageHeader pinnable="false">
+				<f2:content>
+					<FlexBox alignItems="Start" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+						<items>
+							<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
+								<content>
+									<l:VerticalLayout>
+										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
+											<ObjectIdentifier title="{/Empresa/nome}" />
+										</l:HorizontalLayout>
+										<l:HorizontalLayout allowWrapping="true">
+											<l:VerticalLayout>
+												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/Periodo/periodo}"/>
+												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="{/AnoCalendario/anoCalendario}"/>
+											</l:VerticalLayout>
+										</l:HorizontalLayout>
+									</l:VerticalLayout>
+								</content>
+							</Panel>
+						</items>
+					</FlexBox>
+				</f2:content>
+			</f2:DynamicPageHeader>
+		</f2:header>
+		<f2:content>
+			<IconTabBar  upperCase="true" expandable="false" stretchContentHeight="true"
+				class="sapUiNoContentPadding">
+				<items>
+					<IconTabFilter  text="{i18n>viewGeralBorne}">
+						<ScrollContainer
+							
+							horizontal="true"
+							vertical="true"
+							height="100%">
+							<Table
+								class="celulasSeparadas"
+								items="{
+									path: '/Borne/Pagamentos',
+									sorter: [{
+										path: 'data_pagamento',
+										descending: true
+									}]
+								}">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoBorne" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column width="6.5rem" />
+									<Column width="3rem" hAlign="Center">
+										<Text text="N/A" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}"/>
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired"  />
+									</Column>
+									<Column width="15rem" hAlign="Center"> 
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+									</Column>
+									<Column width="9rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="9rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									</Column>
+									<Column width="6rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									</Column>
+									<Column width="12rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" class="sapMLabelRequired" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<HBox>
+												<Button icon="sap-icon://duplicate" type="Accept" tooltip="{i18n>viewGeralDuplicarLinha}" class="sapUiSmallMarginEnd" press="onDuplicarLinha" />
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirLinha" />
+											</HBox>
+											<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />
+											<Select
+												items="{
+													path: '/Borne/TaxCategory',
+													templateShareable: false
+												}"
+												selectedKey="{fk_category.id_tax_category}"
+												enabled="false">
+												<core:Item text="{category}" key="{id_tax_category}" />
+											</Select>
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/Borne/Tax',
+													templateShareable: false
+												}"
+												selectedKey="{fk_tax.id_tax}"
+												change="onTrocarTax">
+												<core:Item text="{tax}" key="{id_tax}" />
+											</Select>
+											<ComboBox 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: 'opcoesNameOfTax',
+													templateShareable: false
+												}"
+												selectedKey="{fk_name_of_tax.id_name_of_tax}" 
+												value="{name_of_tax}">
+												<core:Item text="{name_of_tax}" key="{id_name_of_tax}" />
+											</ComboBox>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }" 
+												value="{administracao_governamental}" />
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioJurisdicao',
+													templateShareable: false
+												}"
+												selectedKey="{fk_jurisdicao.id_dominio_jurisdicao}">
+												<core:Item text="{jurisdicao}" key="{id_dominio_jurisdicao}" />
+											</Select>
+											<ComboBox
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioPais',
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_pais.id_dominio_pais}">
+												<core:Item text="{pais}" key="{id_dominio_pais}" />
+											</ComboBox>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{estado}" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{cidade}" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{projeto}" />
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioAnoFiscal',
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}">
+												<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
+											</Select>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{descricao}" />
+											<DatePicker 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{data_pagamento}" 
+												valueFormat="yyyy-MM-dd" 
+												minDate="{/MinDate}" 
+												maxDate="{/MaxDate}" />
+											<ComboBox
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioMoeda', 
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_moeda.id_dominio_moeda}">
+												<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
+											</ComboBox>
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioTipoTransacao',
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
+												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
+											</Select>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Text" 
+												value="{tipo_transacao_outros}" />
+											<Input 
+												class="money"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{principal}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{juros}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{multa}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money total"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{total}" 
+												editable="false" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{numero_documento}" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{entidade_beneficiaria}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</ScrollContainer>
+					</IconTabFilter>
+					<IconTabSeparator icon=""/>
+					<IconTabFilter text="{i18n>viewGeralCollected}">
+						<ScrollContainer
+							horizontal="true"
+							vertical="true"
+							height="100%">
+							<Table
+								class="celulasSeparadas"
+								items="{
+									path: '/Collected/Pagamentos',
+									sorter: [{
+										path: 'data_pagamento',
+										descending: true
+									}]
+								}">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoCollected" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column width="6.5rem" />
+									<Column width="3rem" hAlign="Center">
+										<Text text="N/A" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}"/>
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired"  />
+									</Column>
+									<Column width="15rem" hAlign="Center"> 
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+									</Column>
+									<Column width="9rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="9rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									</Column>
+									<Column width="6rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									</Column>
+									<Column width="12rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" class="sapMLabelRequired" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<HBox>
+												<Button icon="sap-icon://duplicate" type="Accept" tooltip="{i18n>viewGeralDuplicarLinha}" class="sapUiSmallMarginEnd" press="onDuplicarLinha" />
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirLinha" />
+											</HBox>
+											<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />
+											<Select
+												items="{
+													path: '/Collected/TaxCategory',
+													templateShareable: false
+												}"
+												selectedKey="{fk_category.id_tax_category}"
+												enabled="false">
+												<core:Item text="{category}" key="{id_tax_category}" />
+											</Select>
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/Collected/Tax',
+													templateShareable: false
+												}"
+												selectedKey="{fk_tax.id_tax}"
+												change="onTrocarTax">
+												<core:Item text="{tax}" key="{id_tax}" />
+											</Select>
+											<ComboBox 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: 'opcoesNameOfTax',
+													templateShareable: false
+												}"
+												selectedKey="{fk_name_of_tax.id_name_of_tax}" 
+												value="{name_of_tax}">
+												<core:Item text="{name_of_tax}" key="{id_name_of_tax}" />
+											</ComboBox>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }" 
+												value="{administracao_governamental}" />
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioJurisdicao',
+													templateShareable: false
+												}"
+												selectedKey="{fk_jurisdicao.id_dominio_jurisdicao}">
+												<core:Item text="{jurisdicao}" key="{id_dominio_jurisdicao}" />
+											</Select>
+											<ComboBox
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioPais',
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_pais.id_dominio_pais}">
+												<core:Item text="{pais}" key="{id_dominio_pais}" />
+											</ComboBox>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{estado}" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{cidade}" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{projeto}" />
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioAnoFiscal',
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}">
+												<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
+											</Select>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{descricao}" />
+											<DatePicker 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{data_pagamento}" 
+												valueFormat="yyyy-MM-dd" 
+												minDate="{/MinDate}" 
+												maxDate="{/MaxDate}" />
+											<ComboBox
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioMoeda', 
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_moeda.id_dominio_moeda}">
+												<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
+											</ComboBox>
+											<Select
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												items="{
+													path: '/DominioTipoTransacao',
+													templateShareable: false
+												}"
+												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
+												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
+											</Select>
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Text" 
+												value="{tipo_transacao_outros}" />
+											<Input 
+												class="money"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{principal}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{juros}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{multa}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money total"
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												type="Number" 
+												value="{total}" 
+												editable="false" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{numero_documento}" />
+											<Input 
+												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												value="{entidade_beneficiaria}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</ScrollContainer>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</f2:content>
+		<f2:footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button 
+					text="{i18n>viewGeralSalvarFechar}" 
+					type="Accept" 
+					press="onSalvarFechar"/>
+				<Button 
+					text="{i18n>formularioObrigacaoBotaoSalvar}" 
+					type="Accept" 
+					press="onSalvar"/>
+				<Button 
+					text="{i18n>formularioObrigacaoBotaoCancelar}" 
+					type="Reject" 
+					press="onCancelar"/>
+			</Toolbar>
+		</f2:footer>
+	</f2:DynamicPage>
+</mvc:View>

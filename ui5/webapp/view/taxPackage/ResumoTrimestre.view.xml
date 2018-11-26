@@ -1,0 +1,411 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.taxPackage.ResumoTrimestre"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns="sap.m">
+	<f:DynamicPage
+		title="Tax Package - Resumo Trimestre"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		class="semContentPadding"
+		toggleHeaderOnTitleClick="false"
+		preserveHeaderStateOnScroll="true">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTAXMenu2}" press="navToPage2" />
+						<Link text="{i18n>viewTAXMenu3}" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="{i18n>viewTAXResumoTrimestreTituloPagina}"/>
+				</f:heading>
+				<f:expandedContent>
+					<!--<ObjectAttribute title="Empresa" text="Vale"/>-->
+					<ObjectIdentifier title="Vale" />
+				</f:expandedContent>
+				<f:navigationActions>
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXResumoTrimestreBotaoRequisicaoToolTip}" text="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" press="navToRequisicoes" />
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<VBox>
+				<FlexBox
+					alignItems="Center"
+					justifyContent="End"
+					class="sapUiSmallMarginTop">
+					<items>
+						<VBox 
+							class="sapUiLargeMarginEnd">
+							<!--<Label 
+								text="Ano Calendário"/>-->
+							<Select
+								change="onCurrencyChange"
+								tooltip="{i18n>viewGeralAnoCalendario}">
+								<items>
+									<core:Item text="2018"/>
+									<core:Item text="2017"/>
+									<core:Item text="2016"/>
+								</items>
+							</Select>
+						</VBox>
+					</items>
+				</FlexBox>
+					
+				<l:BlockLayout>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<Table 
+								id="firstQuarterTable"
+								inset="false"
+								items="{/trimestres/PrimeiroTrimestre}"
+								class="bordered ">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="{i18n>viewGeralPeriodo1}" level="H2"/>
+											<ToolbarSpacer />
+											<Text text="USD" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<ObjectNumber
+												number="{primeiroValor}" />
+											<ObjectNumber
+												number="{segundoValor}" />
+											<ObjectNumber
+												number="{terceiroValor}" />
+											<ObjectNumber
+												number="{quartoValor}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Toolbar class="bordered ">
+								<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
+								</content>
+							</Toolbar>
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell>
+							<Table 
+								id="tabelaSegundoTrimestre"
+								inset="false"
+								items="{/trimestres/SegundoTrimestre}"
+								class="bordered ">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="{i18n>viewGeralPeriodo2}" level="H2"/>
+											<ToolbarSpacer />
+											<Text text="USD" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<ObjectNumber
+												number="{primeiroValor}" />
+											<ObjectNumber
+												number="{segundoValor}" />
+											<ObjectNumber
+												number="{terceiroValor}" />
+											<ObjectNumber
+												number="{quartoValor}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Toolbar class="bordered ">
+								<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
+								</content>
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<Table 
+								id="tabelaTerceiroTrimestre"
+								inset="false"
+								items="{/trimestres/TerceiroTrimestre}"
+								class="bordered ">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="{i18n>viewGeralPeriodo3}" level="H2"/>
+											<ToolbarSpacer />
+											<Text text="USD" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<ObjectNumber
+												number="{primeiroValor}" />
+											<ObjectNumber
+												number="{segundoValor}" />
+											<ObjectNumber
+												number="{terceiroValor}" />
+											<ObjectNumber
+												number="{quartoValor}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Toolbar class="bordered ">
+								<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
+								</content>
+							</Toolbar>
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell>
+							<Table 
+								id="tabelaQuartoTrimestre"
+								inset="false"
+								items="{/trimestres/QuartoTrimestre}"
+								class="bordered ">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="{i18n>viewGeralPeriodo4}" level="H2"/>
+											<ToolbarSpacer />
+											<Text text="USD" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<ObjectNumber
+												number="{primeiroValor}" />
+											<ObjectNumber
+												number="{segundoValor}" />
+											<ObjectNumber
+												number="{terceiroValor}" />
+											<ObjectNumber
+												number="{quartoValor}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Toolbar class="bordered ">
+								<content>
+									<Title text="{i18n>viewGeralFaltamXDias}"/>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://edit" text="{i18n>viewGeralEditar}" type="Accept" press="onEditar"/>
+									<Button icon="sap-icon://paper-plane" text="{i18n>viewGeralEncerramento}" press="onFecharPeriodo"/>
+								</content>
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<Table 
+								id="tabelaAnual"
+								inset="false"
+								items="{/anual}"
+								class="bordered">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="{i18n>viewGeralPeriodo5}" level="H2"/>
+											<ToolbarSpacer />
+											<Text text="BRL" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<ObjectNumber
+												number="{primeiroValor}" />
+											<ObjectNumber
+												number="{segundoValor}" />
+											<ObjectNumber
+												number="{terceiroValor}" />
+											<ObjectNumber
+												number="{quartoValor}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Toolbar class="bordered ">
+								<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://attachment" text="{i18n>viewGeralAnexarDocumentacao}" type="Accept" press="onAnexarDeclaracao"/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
+								</content>
+							</Toolbar>
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell>
+							<Table 
+								id="tabelaRetificadora"
+								inset="false"
+								items="{/retificadora}"
+								class="bordered">
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="{i18n>viewGeralPeriodo6}" level="H2"/>
+											<ToolbarSpacer />
+											<Text text="BRL" />
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+									</Column>
+									<Column
+										hAlign="Center">
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<ObjectNumber
+												number="{primeiroValor}" />
+											<ObjectNumber
+												number="{segundoValor}" />
+											<ObjectNumber
+												number="{terceiroValor}" />
+											<ObjectNumber
+												number="{quartoValor}" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Toolbar class="bordered ">
+								<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://attachment" text="{i18n>viewGeralAnexarDocumentacao}" type="Accept" press="onAnexarDeclaracao"/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
+								</content>
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+				</l:BlockLayout>
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

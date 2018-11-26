@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+  	 "@sap/hana-client": "latest",
+  	 "cfenv": "latest",
+  	 "express": "latest",
+  	 "express-fileupload": "latest",
+  	 "body-parser": "latest",
+  	 "cors": "latest",
+  	 "nodemailer": "latest",
+  	 "node-schedule": "latest",
+  	 "xlsx": "^0.14.0"
+  },
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "gulp-replace": "0.5.4",
+    "jasmine-reporters": "2.1.1",
+    "gulp-jasmine": "2.4.1",
+    "gulp-istanbul": "1.1.1"
+  },
+  "files": [],
+  "main": "server.js",
+  "name": "nodejs",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node ./node_modules/gulp/bin/gulp test",
+    "test-coverage": "node ./node_modules/gulp/bin/gulp test-coverage"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "version": "1.0.0"
+}

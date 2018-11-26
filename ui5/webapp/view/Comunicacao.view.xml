@@ -1,0 +1,37 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.Comunicacao"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns="sap.m">
+	<f:DynamicPage>
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<Link text="Comunicação" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="Comunicação"/>
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<VBox>
+				<Label text="Assunto" class="sapUiMediumMarginTop" />
+				<Input width="300px" />
+				<Label text="Corpo" class="sapUiMediumMarginTop" />
+				<TextArea rows="5" width="100%" />
+				<HBox justifyContent="End">
+					<Button text="Enviar" press="onEnviarMensagem"/>
+				</HBox>
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

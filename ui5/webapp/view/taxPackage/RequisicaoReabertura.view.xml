@@ -1,0 +1,142 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.taxPackage.RequisicaoReabertura"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns="sap.m">
+	<f:DynamicPage
+		title="Tax Package - Listagem de Requisição de Reabertura"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		toggleHeaderOnTitleClick="false">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<Link text="Listagem Empresas" press="navToPage2" />
+						<Link text="Resumo Trimestre" press="navToPage3" />
+						<Link text="Requisição Reabertura" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="Tax Package - Listagem de Requisição de Reabertura"/>
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+				<f:expandedContent>
+					<ObjectIdentifier title="Vale" />
+				</f:expandedContent>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!--<f:header>
+			<f:DynamicPageHeader pinnable="false">
+				<f:content>
+					<FlexBox alignItems="Start" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+						<items>
+							<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
+								<content>
+									<l:HorizontalLayout allowWrapping="true">
+										<l:VerticalLayout>
+											<ObjectIdentifier title="Vale" class="sapUiSmallMarginBottom" />
+											<ObjectAttribute title="Ano Calendário" text="2018"/>
+										</l:VerticalLayout>
+									</l:HorizontalLayout>
+								</content>
+							</Panel>
+						</items>
+					</FlexBox>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>-->
+		<f:content>
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/requisicoes'
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Requisições de Reabertura"/>
+						<ToolbarSpacer />
+						<!--<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>-->
+						<Select tooltip="Status">
+							<core:Item text="Aguardando" />
+						</Select>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column>
+						<Text text="ID Requisição" />
+					</Column>
+					<Column
+						minScreenWidth="XXLarge"
+						demandPopin="true">
+						<Text text="Empresa" />
+					</Column>
+					<Column
+						minScreenWidth="Desktop"
+						demandPopin="true">
+						<Text text="Trimestre" />
+					</Column>
+					<Column
+						minScreenWidth="Desktop"
+						demandPopin="true">
+						<Text text="Data da Requisição" />
+					</Column>
+					<Column
+						minScreenWidth="Desktop"
+						demandPopin="true">
+						<Text text="Ano" />
+					</Column>
+					<Column
+						minScreenWidth="Desktop"
+						demandPopin="true">
+						<Text text="Usuário" />
+					</Column>
+					<Column>
+						<Text text="Justificativa" />
+					</Column>
+					<Column>
+						<Text text="Resposta" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Status" />
+					</Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier title="{id}" />
+							<Text text="{empresa}" />
+							<Text text="{trimestre}" />
+							<Text text="{dataRequisicao}" />
+							<Text text="{anoRequisicao}" />
+							<Text text="{usuario}" />
+							<Text text="{justificativa}" />
+							<Text text="{resposta}" />
+							<core:Icon src="{status/icone}" color="{status/cor}" tooltip="{status/tooltip}" size="2rem" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

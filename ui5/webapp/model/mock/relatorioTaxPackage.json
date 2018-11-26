@@ -1,0 +1,48 @@
+{
+	"headerExpanded": true,
+	"OpcoesEmpresa": [{
+		"key": "",
+		"value": "All"
+	}],
+	"OpcoesAba": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Items to Report"
+	}, {
+		"key": 2,
+		"value": "Tax Reconciliation"
+	}, {
+		"key": 3,
+		"value": "Loss Schedule"
+	}, {
+		"key": 4,
+		"value": "Credit Schedule"
+	}],
+	"OpcoesAnoCalendario": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": 2018
+	}, {
+		"key": 2,
+		"value": 2017
+	}, {
+		"key": 3,
+		"value": 2016
+	}],
+	"OpcoesPeriodo": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Anual"
+	}, {
+		"key": 2,
+		"value": "Retificadora"
+	}],
+	"Registros": [
+	]
+}

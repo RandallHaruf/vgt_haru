@@ -1,0 +1,152 @@
+<mvc:View 
+	controllerName="ui5ns.ui5.controller.beps.FormularioNovaObrigacao"
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form" 
+	xmlns:f2="sap.f"
+	xmlns="sap.m" 
+	class="viewBepsFormularioNovaObrigacao">
+	<f2:DynamicPage title="Beps - Formulário Nova Obrigação" showFooter="true">
+		<f2:title>
+			<f2:DynamicPageTitle>
+				<f2:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" enabled="false" />
+						<Link text="Listagem Obrigações" enabled="false" />
+						<Link text="Formulário Nova Obrigação" enabled="false" />
+					</Breadcrumbs>
+				</f2:breadcrumbs>
+				<f2:heading>
+					<Title text="Beps - Formulário de Cadastro de Obrigação"/>
+				</f2:heading>
+			</f2:DynamicPageTitle>
+		</f2:title>
+		<f2:content>
+			<VBox class="sapUiSmallMargin">
+				<f:Form 
+					id="formularioObrigacao" 
+					editable="true">
+					<f:title>
+						<core:Title text="Nova Obrigação"/>
+					</f:title>
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+							emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer>
+							<f:formElements>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
+									<f:fields>
+										<Select id="selectEmpresas">
+											<items>
+												<core:Item text=""/>
+												<core:Item text="Empresa A" key="1"/>
+												<core:Item text="Empresa B" key="2"/>
+												<core:Item text="Empresa C" key="2"/>
+											</items>
+										</Select>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
+									<f:fields>
+										<Input type="Text" value="{nomePais}" />
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
+									<f:fields>
+										<Select id="selectTipo">
+											<items>
+												<core:Item text=""/>
+												<core:Item text="Tipo 1" key="1"/>
+												<core:Item text="Tipo 2" key="2"/>
+												<core:Item text="Tipo 3" key="2"/>
+											</items>
+										</Select>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
+									<f:fields>
+										<Select id="selectPeriodicidade">
+											<items>
+												<core:Item text=""/>
+												<core:Item text="Periodicidade 1" key="1"/>
+												<core:Item text="Periodicidade 2" key="2"/>
+												<core:Item text="Periodicidade 3" key="2"/>
+											</items>
+										</Select>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
+									<f:fields>
+										<Select id="selectAnoFiscal">
+											<items>
+												<core:Item text=""/>
+												<core:Item text="2018"/>
+												<core:Item text="2017"/>
+												<core:Item text="2016"/>
+											</items>
+										</Select>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
+									<f:fields>
+										<DatePicker 
+											id="datepickerPrazoEntrega" 
+											placeholder="{i18n>placeholderDatepicker}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
+									<f:fields>
+										<DatePicker 
+											id="datepickerExtensao" 
+											placeholder="{i18n>placeholderDatepicker}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+									<f:fields>
+										<CheckBox id="checkObrigacaoIniciada"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="Suporte Contratado">
+									<f:fields>
+										<CheckBox id="checkSuporteContratado"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
+									<f:fields>
+										<TextArea 
+											id="textAreaSuporte"
+											rows="5" 
+											enabled="false"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelObservacoes}">
+									<f:fields>
+										<TextArea 
+											id="textAreaObservacoes" 
+											rows="5"/>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+			</VBox>
+		</f2:content>
+		<f2:footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button 
+					text="{i18n>formularioObrigacaoBotaoSalvar}" 
+					type="Accept" 
+					press="onSalvar"/>
+				<Button 
+					text="{i18n>formularioObrigacaoBotaoCancelar}" 
+					type="Reject" 
+					press="onCancelar"/>
+			</Toolbar>
+		</f2:footer>
+	</f2:DynamicPage>
+</mvc:View>

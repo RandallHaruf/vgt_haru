@@ -1,0 +1,428 @@
+context VGT {
+
+    /*@@layout{"layoutInfo":{"x":363,"y":1719.5}}*/
+    entity DOMINIO_PAIS {
+        key id_dominio_pais : Integer not null;
+            pais            : String(200);
+    };
+
+    /*@@layout{"layoutInfo":{"x":723,"y":804.5}}*/
+    entity DOMINIO_PAIS_STATUS {
+        key id_dominio_pais_status : Integer    not null;
+            status                 : String(50) not null;
+    };
+
+    /*@@layout{"layoutInfo":{"x":709,"y":1019.5}}*/
+    entity DOMINIO_PAIS_REGIAO {
+        key id_dominio_pais_regiao : Integer not null;
+            regiao                 : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-127,"y":0.5}}*/
+    entity DOMINIO_ALIQUOTA_TIPO {
+        key id_dominio_aliquota_tipo : Integer not null;
+            tipo                     : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-254,"y":1319.5}}*/
+    entity DOMINIO_EMPRESA_TIPO_SOCIETARIO {
+        key id_dominio_empresa_tipo_societario : Integer not null;
+            tipo_societario                    : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":130,"y":1189.5}}*/
+    entity DOMINIO_EMPRESA_STATUS {
+        key id_dominio_empresa_status : Integer not null;
+            status                    : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-923,"y":-92.5}}*/
+    entity DOMINIO_OBRIGACAO_ACESSORIA_TIPO {
+        key id_dominio_obrigacao_acessoria_tipo : Integer not null;
+            tipo                                : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":1024,"y":1997.5}}*/
+    entity DOMINIO_TAX_CLASSIFICATION {
+        key id_dominio_tax_classification : Integer not null;
+            classification                : String(30);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2585,"y":360.5}}*/
+    entity DOMINIO_DIFERENCA_TIPO {
+        key id_dominio_diferenca_tipo : Integer not null;
+            tipo                      : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-571,"y":1997.5}}*/
+    entity DOMINIO_JURISDICAO {
+        key id_dominio_jurisdicao : Integer not null;
+            jurisdicao            : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1088,"y":1769.5}}*/
+    entity DOMINIO_ANO_FISCAL {
+        key id_dominio_ano_fiscal : Integer not null;
+            ano_fiscal            : Integer;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-952,"y":1084.5}}*/
+    entity DOMINIO_MOEDA {
+        key id_dominio_moeda : Integer not null;
+            acronimo         : String(50);
+            nome             : String(200);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1006,"y":1954.5}}*/
+    entity DOMINIO_TIPO_TRANSACAO {
+        key id_dominio_tipo_transacao : Integer not null;
+            tipo_transacao            : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1999,"y":1518.5}}*/
+    entity DOMINIO_ANO_CALENDARIO {
+        key id_dominio_ano_calendario : Integer not null;
+            ano_calendario            : Integer;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2096,"y":1754.5}}*/
+    entity DOMINIO_REQUISICAO_REABERTURA_STATUS {
+        key id_dominio_requisicao_reabertura_status : Integer not null;
+            status                                  : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1694,"y":1529.5}}*/
+    entity DOMINIO_MODULO {
+        key id_dominio_modulo : Integer not null;
+            modulo            : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":448,"y":159.5}}*/
+    entity LOG {
+        key id_log          : Integer not null;
+            id_usuario      : Integer;
+            nome_usuario    : String(200);
+            data_operacao   : LocalDate;
+            interacao_banco : String(4000);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-157,"y":431.5}}*/
+    entity ALIQUOTA {
+        key id_aliquota              : Integer not null;
+            nome                     : String(100);
+            valor                    : String(50);
+            data_inicio              : LocalDate;
+            data_fim                 : LocalDate;
+            fk_dominio_aliquota_tipo : association[*, 0..1] to VGT.DOMINIO_ALIQUOTA_TIPO { id_dominio_aliquota_tipo };
+    };
+
+    /*@@layout{"layoutInfo":{"x":333,"y":870.5}}*/
+    entity PAIS {
+        key id_pais                    : Integer not null;
+            prescricao_prejuizo        : Integer;
+            limite_utilizacao_prejuizo : String(50);
+            prescricao_credito         : Integer;
+            fk_dominio_pais            : association[1, 0..1] to VGT.DOMINIO_PAIS { id_dominio_pais };
+            fk_dominio_pais_status     : association[*, 0..1] to VGT.DOMINIO_PAIS_STATUS { id_dominio_pais_status };
+            fk_aliquota                : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
+            fk_dominio_pais_regiao     : association[*, 0..1] to VGT.DOMINIO_PAIS_REGIAO { id_dominio_pais_regiao };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-440,"y":720.5}}*/
+    entity EMPRESA {
+        key id_empresa                         : Integer not null;
+            nome                               : String(200);
+            num_hfm_sap                        : String(100);
+            tin                                : String(100);
+            jurisdicao_tin                     : String(100);
+            ni                                 : String(100);
+            jurisdicao_ni                      : String(100);
+            endereco                           : String(500);
+            fy_start_date                      : LocalDate;
+            fy_end_date                        : LocalDate;
+            lbc_nome                           : String(200);
+            lbc_email                          : String(200);
+            comentarios                        : String(4000);
+            fk_dominio_empresa_tipo_societario : association[*, 0..1] to VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO { id_dominio_empresa_tipo_societario };
+            fk_dominio_empresa_status          : association[*, 0..1] to VGT.DOMINIO_EMPRESA_STATUS { id_dominio_empresa_status };
+            fk_aliquota                        : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
+            fk_pais                            : association[*, 0..1] to VGT.PAIS { id_pais };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-858,"y":121.5}}*/
+    entity OBRIGACAO_ACESSORIA {
+        key id_obrigacao_acessoria              : Integer not null;
+            nome                                : String(200);
+            data_inicio                         : LocalDate;
+            fk_dominio_obrigacao_acessoria_tipo : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO { id_dominio_obrigacao_acessoria_tipo };
+            data_fim                            : LocalDate;
+    };
+
+    /*@@layout{"layoutInfo":{"x":1024,"y":1783.5}}*/
+    entity TAX_CATEGORY {
+        key id_tax_category               : Integer not null;
+            category                      : String(100);
+            fk_dominio_tax_classification : association[*, 0..1] to VGT.DOMINIO_TAX_CLASSIFICATION { id_dominio_tax_classification };
+    };
+
+    /*@@layout{"layoutInfo":{"x":1031,"y":1498.5}}*/
+    entity TAX {
+        key id_tax      : Integer not null;
+            tax         : String(100);
+            fk_category : association[*, 0..1] to VGT.TAX_CATEGORY { id_tax_category };
+    };
+
+    /*@@layout{"layoutInfo":{"x":671,"y":1466.5}}*/
+    entity NAME_OF_TAX {
+        key id_name_of_tax : Integer not null;
+            name_of_tax    : String(100);
+            fk_tax         : association[*, 0..1] to VGT.TAX { id_tax };
+            ind_default    : Boolean;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2334,"y":1028.5}}*/
+    entity ITEM_TO_REPORT {
+        key id_item_to_report : Integer not null;
+            pergunta          : String(4000);
+            flag_sim_nao      : Boolean;
+            flag_ano          : Boolean;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2286,"y":350.5}}*/
+    entity DIFERENCA_OPCAO {
+        key id_diferenca_opcao        : Integer not null;
+            nome                      : String(200);
+            fk_dominio_diferenca_tipo : association[*, 0..1] to VGT.DOMINIO_DIFERENCA_TIPO { id_dominio_diferenca_tipo };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1638,"y":1270.5}}*/
+    entity PERIODO {
+        key id_periodo                : Integer not null;
+            periodo                   : String(50);
+            fk_dominio_ano_calendario : association[*, 1..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
+            fk_dominio_modulo         : association[*, 0..1] to VGT.DOMINIO_MODULO { id_dominio_modulo };
+            numero_ordem              : Integer;
+    };
+
+    /*@@layout{"layoutInfo":{"x":688,"y":1714.5}}*/
+    entity REL_PAIS_NAME_OF_TAX {
+        key fk_name_of_tax  : association[0..1] to VGT.NAME_OF_TAX { id_name_of_tax };
+        key fk_dominio_pais : association[0..1] to VGT.DOMINIO_PAIS { id_dominio_pais };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-664,"y":358.5}}*/
+    entity REL_EMPRESA_OBRIGACAO_ACESSORIA {
+        key fk_empresa             : association[0..1] to VGT.EMPRESA { id_empresa };
+        key fk_obrigacao_acessoria : association[0..1] to VGT.OBRIGACAO_ACESSORIA { id_obrigacao_acessoria };
+        key id                     : Integer not null;
+            data_inicio            : LocalDate;
+            data_fim               : LocalDate;
+            ind_historico          : Boolean default false;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-369,"y":228.5}}*/
+    entity HS_EMPRESA_ALIQUOTA {
+        key fk_empresa             : association[0..1] to VGT.EMPRESA { id_empresa };
+        key fk_aliquota            : association[0..1] to VGT.ALIQUOTA { id_aliquota };
+        key id_hs_empresa_aliquota : Integer not null;
+            data_inicio            : LocalDate;
+            data_fim               : LocalDate;
+    };
+
+    /*@@layout{"layoutInfo":{"x":273,"y":499.5}}*/
+    entity HS_PAIS_ALIQUOTA {
+        key fk_pais             : association[0..1] to VGT.PAIS { id_pais };
+        key fk_aliquota         : association[0..1] to VGT.ALIQUOTA { id_aliquota };
+        key id_hs_pais_aliquota : Integer not null;
+            data_inicio         : LocalDate;
+            data_fim            : LocalDate;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1112,"y":1498.5}}*/
+    entity REL_EMPRESA_PERIODO {
+        key fk_empresa   : association[0..1] to VGT.EMPRESA { id_empresa };
+        key fk_periodo   : association[0..1] to VGT.PERIODO { id_periodo };
+            ind_ativo    : Boolean;
+            ind_enviado  : Boolean;
+            data_enviado : LocalDate;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-573,"y":1242.5}}*/
+    entity PAGAMENTO {
+        key id_pagamento                : Integer not null;
+            ind_nao_aplicavel           : Boolean;
+            administracao_governamental : String(500);
+            estado                      : String(500);
+            cidade                      : String(500);
+            projeto                     : String(500);
+            descricao                   : String(1000);
+            data_pagamento              : LocalDate;
+            tipo_transacao_outros       : String(500);
+            principal                   : Decimal(19, 4);
+            juros                       : Decimal(19, 4);
+            multa                       : Decimal(19, 4);
+            total                       : Decimal(19, 4);
+            numero_documento            : String(500);
+            entidade_beneficiaria       : String(500);
+            fk_dominio_moeda            : association[*, 1..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+            fk_dominio_tipo_transacao   : association[*, 1..1] to VGT.DOMINIO_TIPO_TRANSACAO { id_dominio_tipo_transacao };
+            fk_dominio_ano_fiscal       : association[*, 1..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
+            fk_jurisdicao               : association[*, 1..1] to VGT.DOMINIO_JURISDICAO { id_dominio_jurisdicao };
+            fk_dominio_pais             : association[*, 1..1] to VGT.DOMINIO_PAIS { id_dominio_pais };
+            fk_name_of_tax              : association[*, 1..1] to VGT.NAME_OF_TAX { id_name_of_tax };
+            fk_empresa                  : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_empresa.id_empresa };
+            fk_periodo                  : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_periodo.id_periodo };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1745,"y":1666.5}}*/
+    entity REQUISICAO_REABERTURA {
+        key id_requisicao_reabertura                : Integer not null;
+            data_requisicao                         : LocalDate;
+            id_usuario                              : Integer;
+            nome_usuario                            : String(200);
+            justificativa                           : String(1000);
+            resposta                                : String(1000);
+            fk_dominio_requisicao_reabertura_status : association[0..1]    to VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS { id_dominio_requisicao_reabertura_status };
+            fk_empresa                              : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_empresa.id_empresa };
+            fk_periodo                              : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_periodo.id_periodo };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1042,"y":1264.5}}*/
+    entity CAMBIO_TTC {
+        key id_cambio_ttc    : Integer not null;
+            data             : LocalDate;
+            fk_dominio_moeda : association[*, 1..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+            cambio_usd       : Decimal(19, 4);
+            cambio_brl       : Decimal(19, 4);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-901,"y":827.5}}*/
+    entity TAX_PACKAGE {
+            fk_empresa       : association[*, 0..1] to VGT.EMPRESA { id_empresa };
+            fk_dominio_moeda : association[*, 0..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+        key id_tax_package   : Integer;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1297,"y":967.5}}*/
+    entity REL_TAX_PACKAGE_PERIODO {
+        key id_rel_tax_package_periodo : Integer64;
+        key fk_tax_package             : association[0..1] to VGT.TAX_PACKAGE { id_tax_package };
+        key fk_periodo                 : association[0..1] to VGT.PERIODO { id_periodo };
+            ind_ativo                  : Boolean;
+            status_envio               : Integer;
+            data_envio                 : LocalDate;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2018,"y":1123.5}}*/
+    entity RESPOSTA_ITEM_TO_REPORT {
+        id_resposta_item_to_report : Integer;
+        fk_rel_tax_package_periodo : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+        fk_tax_package             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+        fk_periodo                 : association[0..1]    to VGT.REL_TAX_PACKAGE_PERIODO;
+        fk_item_to_report          : association[*, 0..1] to VGT.ITEM_TO_REPORT { id_item_to_report };
+        ind_se_aplica              : Boolean;
+        resposta                   : String(4000);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1529,"y":211.5}}*/
+    entity TAX_RECONCILIATION {
+        key id_tax_reconciliation                                  : Integer;
+            rc_statutory_gaap_profit_loss_before_tax               : Decimal(19, 4);
+            rc_current_income_tax_current_year                     : Decimal(19, 4);
+            rc_current_income_tax_previous_year                    : Decimal(19, 4);
+            rc_deferred_income_tax                                 : Decimal(19, 4);
+            rc_non_recoverable_wht                                 : Decimal(19, 4);
+            rc_statutory_provision_for_income_tax                  : Decimal(19, 4);
+            rc_statutory_gaap_profit_loss_after_tax                : Decimal(19, 4);
+            rf_taxable_income_loss_before_losses_and_tax_credits   : Decimal(19, 4);
+            rf_total_losses_utilized                               : Decimal(19, 4);
+            rf_taxable_income_loss_after_losses                    : Decimal(19, 4);
+            rf_income_tax_before_other_taxes_and_credits           : Decimal(19, 4);
+            rf_total_other_taxes_and_tax_credits                   : Decimal(19, 4);
+            rf_net_local_tax                                       : Decimal(19, 4);
+            rf_overpayment_from_prior_year_applied_to_current_year : Decimal(19, 4);
+            rf_tax_due_overpaid                                    : Decimal(19, 4);
+            it_income_tax_as_per_the_statutory_financials          : Decimal(19, 4);
+            it_income_tax_as_per_the_tax_return                    : Decimal(19, 4);
+            it_jurisdiction_tax_rate_average                       : Decimal(19, 4);
+            it_statutory_tax_rate_average                          : Decimal(19, 4);
+            it_effective_tax_rate_as_per_the_statutory_financials  : Decimal(19, 4);
+            it_effective_tax_rate_as_per_the_tax_return            : Decimal(19, 4);
+            it_details_if_tax_returns_income_differs_from_fs       : String(2000);
+            fk_rel_tax_package_periodo                             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+            fk_tax_package                                         : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+            fk_periodo                                             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1988,"y":335.5}}*/
+    entity DIFERENCA {
+        key id_diferenca          : Integer64;
+            outro                 : String(10);
+            fk_diferenca_opcao    : association[*, 0..1] to VGT.DIFERENCA_OPCAO { id_diferenca_opcao };
+            fk_tax_reconciliation : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
+            valor                 : Integer;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2052,"y":1335.5}}*/
+    entity REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL {
+            fk_resposta_item_to_report : association[0..1] to VGT.RESPOSTA_ITEM_TO_REPORT { id_resposta_item_to_report };
+        key fk_dominio_ano_fiscal      : association[0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1304,"y":1178.5}}*/
+    entity DECLARACAO_IR {
+        key id_declaracao_ir           : Integer64;
+            fk_rel_tax_package_periodo : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+            fk_tax_package             : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+            fk_periodo                 : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1032,"y":463.5}}*/
+    entity SCHEDULE {
+        key id_schedule                  : Integer64;
+            fy                           : Integer;
+            year_of_expiration           : Integer;
+            opening_balance              : Decimal(19, 4);
+            current_year_credit          : Decimal(19, 4);
+            current_year_credit_utilized : Decimal(19, 4);
+            adjustments                  : Decimal(19, 4);
+            justificativa                : String(500);
+            current_year_credit_expired  : Decimal(19, 4);
+            closing_balance              : Decimal(19, 4);
+            obs                          : String(500);
+            tipo                         : Integer;
+            fk_rel_tax_package_periodo   : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+            fk_tax_package               : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+            fk_periodo                   : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1823,"y":776.5}}*/
+    entity ANTECIPACAO {
+        key id_antecipacao             : Integer64;
+            valor                      : Decimal(19, 4);
+            descricao                  : String(500);
+            fk_tax_reconciliation      : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
+            fk_rel_tax_package_periodo : association[*, 0..1] to VGT.TAX_RECONCILIATION;
+            fk_tax_package             : association[*, 0..1] to VGT.TAX_RECONCILIATION;
+            fk_periodo                 : association[*, 0..1] to VGT.TAX_RECONCILIATION;
+            fk_pagamento               : association[*, 0..1] to VGT.PAGAMENTO { id_pagamento };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1483,"y":-214.5}}*/
+    entity DOMINIO_TIPO_TAXA_MULTIPLA {
+        key id_dominio_tipo_taxa_multipla : Integer64;
+            tipo_taxa_multipla            : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1476,"y":-94.5}}*/
+    entity TAXA_MULTIPLA {
+        key id_taxa_multipla              : Integer64;
+            descricao                     : String(500);
+            valor                         : Decimal(19, 4);
+            fk_dominio_tipo_taxa_multipla : association[*, 0..1] to VGT.DOMINIO_TIPO_TAXA_MULTIPLA { id_dominio_tipo_taxa_multipla };
+            fk_tax_reconciliation         : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
+            fk_rel_tax_package_periodo    : association[0..1]    to VGT.TAX_RECONCILIATION;
+            fk_tax_package                : association[0..1]    to VGT.TAX_RECONCILIATION;
+            fk_periodo                    : association[0..1]    to VGT.TAX_RECONCILIATION;
+    };
+};

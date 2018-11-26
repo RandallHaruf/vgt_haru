@@ -1,0 +1,138 @@
+{
+	"headerExpanded": true,
+	"OpcoesEmpresa": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Tenti"
+	}, {
+		"key": 2,
+		"value": "Vale"
+	}],
+	"OpcoesClassification": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Tax Borne"
+	}, {
+		"key": 2,
+		"value": "Tax Collected"
+	}],
+	"OpcoesCategory": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Taxes on Profits"
+	}, {
+		"key": 2,
+		"value": "Taxes on People"
+	}],
+	"OpcoesTax": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Corporate Income Tax"
+	}, {
+		"key": 2,
+		"value": "Taxes withheld on payments of dividends (only) to overseas group companies"
+	}],
+	"OpcoesNameOfTax": [{
+		"key": "",
+		"value": "All"
+	}],
+	"OpcoesJurisdicao": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Federal"
+	}, {
+		"key": 2,
+		"value": "Estadual"
+	}, {
+		"key": 3,
+		"value": "Municipal"
+	}],
+	"OpcoesPais": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": "1",
+		"value": "Brasil"
+	}],
+	"OpcoesAnoFiscal": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 2015,
+		"value": 2015
+	}, {
+		"key": 2016,
+		"value": 2016
+	}, {
+		"key": 2017,
+		"value": 2017
+	}, {
+		"key": 2018,
+		"value": 2018
+	}],
+	"OpcoesCurrency": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": "USD",
+		"value": "USD"
+	}, {
+		"key": "GBP",
+		"value": "GBP"
+	}, {
+		"key": "BRL",
+		"value": "BRL"
+	}],
+	"OpcoesTypeOfTransaction": [{
+		"key": "",
+		"value": "All"
+	}, {
+		"key": 1,
+		"value": "Cash Installment/Settlement"
+	}, {
+		"key": 2,
+		"value": "Cash refund/reimbursment (negative value)"
+	}, {
+		"key": 3,
+		"value": "Payment with income tax credits"
+	}, {
+		"key": 4,
+		"value": "Payment with other tax credits"
+	}, {
+		"key": 5,
+		"value": "Other (specify)"
+	}],
+	"Pagamentos": [{
+		"empresa": "Vale",
+		"classification": "Tax Borne",
+		"category": "Tax on profits",
+		"tax": "Other taxes",
+		"nameOfTax": "",
+		"nameOfGov": "",
+		"jurisdicao": "Federal",
+		"anoFiscal": 2017,
+		"description": "",
+		"dateOfPayment": "20/05/2018",
+		"currency": "USD",
+		"currencyRate": "",
+		"typeOfTransaction": "Cash Installment/Settlement",
+		"otherSpecify": "",
+		"principal": 100,
+		"interest": 10,
+		"fine": 10,
+		"value": 120,
+		"valueUSD": "",
+		"numberOfDocument": "",
+		"beneficiaryCompany": ""
+	}]
+}

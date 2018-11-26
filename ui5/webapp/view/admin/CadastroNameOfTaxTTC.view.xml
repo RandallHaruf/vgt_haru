@@ -1,0 +1,210 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.admin.CadastroNameOfTaxTTC"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: [{
+						path: 'classification',
+						group: true
+					}, {
+						path: 'category'
+					}, {
+						path: 'tax'
+					}, {
+						path: 'name_of_tax'
+					}]
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Name of Tax"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column mergeDuplicates="true">
+						<Text text="Category" />
+					</Column>
+					<Column mergeDuplicates="true">
+						<Text text="Tax" />
+					</Column>
+					<Column>
+						<Text text="Name of Tax" />
+					</Column>
+					<Column width="100px"></Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier text="{category}"/>
+							<ObjectIdentifier text="{tax}"/>
+							<ObjectIdentifier text="{name_of_tax}"/>
+							<HBox>
+								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
+							</HBox>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+		<Page
+			id="paginaObjeto"
+			showHeader="false">
+			<content>
+				<VBox class="sapUiSmallMargin">
+					<f:Form 
+						id="formularioObjeto" 
+						editable="true">
+						<f:title>
+							<core:Title text="Name of Tax"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer title="Cadastro">
+								<f:formElements>
+									<f:FormElement>
+										<f:label>
+											<Label text="Classification" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectClassification" items="{/DominioTaxClassification}" change="onTrocarClassification" selectedKey="{/objeto/classification}">
+												<core:Item text="{classification}" key="{id_dominio_tax_classification}" />
+												<!--<core:Item text="" />
+												<core:Item text="Tax Borne" />
+												<core:Item text="Tax Collected" />-->
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Category" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectCategory" items="{/TaxCategory}" change="onTrocarCategory" selectedKey="{/objeto/category}">
+												<core:Item text="{category}" key="{id_tax_category}" />
+												<!--<core:Item text="" />
+												<core:Item text="Tax on profits" />
+												<core:Item text="Tax on people" />
+												<core:Item text="Tax on mining" />-->
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Tax" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectTax" items="{/Tax}" selectedKey="{/objeto/tax}">
+												<core:Item text="{tax}" key="{id_tax}" />
+												<!--<core:Item text="" />
+												<core:Item text="Tax 1" />
+												<core:Item text="Tax 2" />
+												<core:Item text="Tax 3" />-->
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Name of Tax" labelFor="inputNameOfTax" />
+										</f:label>
+										<f:fields>
+											<Input type="Text" id="inputNameOfTax" value="{/objeto/nameOfTax}" required="true" />
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form>
+						<f:title>
+							<core:Title text="Países" />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:formElements>
+									<f:FormElement>
+										<table:Table rows="{/DominioPais}" id="tablePais" selectionMode="None">
+											<table:extension>
+												<Toolbar>
+													<ToolbarSpacer/>
+													<SearchField 
+														id="searchPais"
+														width="15rem" 
+														search="onTextSearch" 
+														value="{/filterValue}" />
+												</Toolbar>
+											</table:extension>
+											<table:columns>
+												<table:Column width="45px">
+													<table:template>
+														<CheckBox selected="{selecionado}" />
+													</table:template>
+												</table:Column>
+												<table:Column>
+													<Label text="País" />
+													<table:template>
+														<Text text="{pais}" />
+													</table:template>
+												</table:Column>
+											</table:columns>
+										</table:Table>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+				</VBox>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button 
+						text="Salvar" 
+						type="Accept" 
+						press="onSalvar"/>
+					<Button 
+						text="Cancelar" 
+						type="Reject" 
+						press="onCancelar"/>
+				</Toolbar>
+			</footer>
+		</Page>
+	</NavContainer>
+</mvc:View>

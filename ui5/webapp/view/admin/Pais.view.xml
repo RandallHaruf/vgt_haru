@@ -1,0 +1,250 @@
+<core:View
+	controllerName="ui5ns.ui5.controller.admin.Pais"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: {
+						path: 'id'
+					}
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="Países"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<columns>
+					<Column>
+						<Text text="Nome" />
+					</Column>
+					<Column>
+						<Text text="Status" />
+					</Column>
+					<Column>
+						<Text text="Alíquota Vigente" />
+					</Column>
+					<Column>
+						<Text text="Valor da Alíquota" />
+					</Column>
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier title="{nomePais}" />
+							<Text text="{descricaoStatus}" />
+							<Text text="{nomeAliquota}" />
+							<Text text="{valorAliquota}%" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+		<Page
+			id="paginaObjeto"
+			showHeader="false">
+			<content>
+				<VBox class="sapUiSmallMargin">
+					<f:Form 
+						id="formularioObjeto" 
+						editable="true">
+						<f:title>
+							<core:Title text="País"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer title="Cadastro">
+								<f:formElements>
+									<f:FormElement>
+										<f:label>
+											<Label text="País" labelFor="selectPais" />
+										</f:label>
+										<f:fields>
+											<ComboBox id="comboboxtPais" items="{path: '/DominioPais'}" selectedKey="{/objeto/idDominioPais}" required="true">
+												<core:Item text="{pais}" key="{id_dominio_pais}" />
+											</ComboBox>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Região" labelFor="selectRegiao" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectRegiao" items="{/DominioPaisRegiao}" selectedKey="{/objeto/idRegiao}">
+												<core:Item text="{regiao}" key="{id_dominio_pais_regiao}" />
+												<!--<core:Item text="America" key="1" />
+												<core:Item text="Europa" key="2" />
+												<core:Item text="Ásia" key="3" />
+												<core:Item text="África" key="4" />
+												<core:Item text="Oceania" key="5" />
+												<core:Item text="Antártida" key="6" />-->
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Status" labelFor="selectStatus" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectStatus" items="{path: '/DominioPaisStatus'}" selectedKey="{/objeto/idStatus}">
+												<core:Item text="{status}" key="{id_dominio_pais_status}" />
+											</Select>
+											<!--<Select id="selectStatus">
+												<items>
+													<core:Item text=""/>
+													<core:Item text="Paraíso Fiscal" key="1"/>
+													<core:Item text="Tributação Favorecida" key="2"/>
+													<core:Item text="Regime Fiscal Privilegiado" key="3"/>
+													<core:Item text="Normal" key="4"/>
+													<core:Item text="Outros" key="5"/>
+												</items>
+											</Select>-->
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Prescrição Prejuízo" labelFor="inputPrescricaoPrejuizo" />
+										</f:label>
+										<f:fields>
+											<Input type="Number" id="inputPrescricaoPrejuizo" value="{/objeto/prescricaoPrejuizo}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Limitação de Utilização do prejuízo" labelFor="inputLimiteUtilizacaoPrejuizo" />
+										</f:label>
+										<f:fields>
+											<Input id="inputLimiteUtilizacaoPrejuizo" value="{/objeto/limiteUtilizacaoPrejuizo}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Prescrição Crédito" labelFor="inputPrescricaoCredito" />
+										</f:label>
+										<f:fields>
+											<Input type="Number" id="inputPrescricaoCredito" value="{/objeto/prescricaoCredito}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="Alíquota Vigente" labelFor="selectAliquotaVigente" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectAliquotaVigente" items="{/Aliquotas}" selectedKey="{/objeto/fkAliquota}">
+												<core:Item text="{nome} - {valor}%" key="{id_aliquota}" />
+												<!--<items>
+													<core:Item text=""/>
+													<core:Item text="Alíquota 1 - 28%" key="1"/>
+													<core:Item text="Alíquota 2 - 25%" key="2"/>
+													<core:Item text="Alíquota 3 - 22%" key="2"/>
+												</items>-->
+											</Select>
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form editable="true" visible="{/showHistoricoAliquotas}">
+						<f:title>
+							<core:Title text="Histórico de Alíquotas" />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:formElements>
+									<f:FormElement>
+										<f:fields>
+											<ScrollContainer
+												horizontal="true"
+												vertical="true"
+												width="100%"
+												height="400px">
+												<Table	
+													items="{/objeto/historicoAliquotas}" 
+													sticky="ColumnHeaders">
+													<columns>
+														<Column vAlign="Middle">
+															<Text text="Nome" />
+														</Column>
+														<Column vAlign="Middle">
+															<Text text="Valor" />
+														</Column>
+														<Column>
+															<Text text="Data Início" />
+														</Column>
+														<Column>
+															<Text text="Data Fim" />
+														</Column>
+													</columns>
+													<items>
+														<ColumnListItem>
+															<cells>
+																<Text text="{nome}" />
+																<Text text="{valor}%" />
+																<DatePicker valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
+																<DatePicker valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
+															</cells>
+														</ColumnListItem>
+													</items>
+												</Table>
+											</ScrollContainer>
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+				</VBox>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button 
+						text="Salvar" 
+						type="Accept" 
+						press="onSalvar"/>
+					<Button 
+						text="Cancelar" 
+						type="Reject" 
+						press="onCancelar"/>
+				</Toolbar>
+			</footer>
+		</Page>
+	</NavContainer>
+</core:View>

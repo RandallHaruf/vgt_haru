@@ -1,0 +1,442 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.ttc.ResumoTrimestre"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns="sap.m"
+	class="viewTTCResumoTrimestre">
+	<f:DynamicPage
+		class="semContentPadding"
+		toggleHeaderOnTitleClick="false"
+		preserveHeaderStateOnScroll="true">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="{i18n>viewTTCMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTTCMenu2}" press="navToPage2" />
+						<Link text="{i18n>viewTTCMenu3}" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="{i18n>viewTTCResumoTrimestreTituloPagina}"/>
+				</f:heading>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/Empresa/nome}" />
+				</f:expandedContent>
+				<f:navigationActions>
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTTCResumoTrimestreBotaoRequisicaoToolTip}" text="{i18n>viewTTCResumoTrimestreBotaoRequisicao}" press="navToRequisicoes" />
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<VBox>
+				<FlexBox
+					alignItems="Center"
+					justifyContent="End"
+					class="sapUiSmallMarginTop">
+					<items>
+						<VBox 
+							class="sapUiLargeMarginEnd">
+							<Select
+								id="selectAnoCalendario"
+								change="onTrocarAnoCalendario"
+								tooltip="{i18n>viewTTCResumoTrimestreBotaoAnoToolTip}"
+								items="{/DominioAnoCalendario}"
+								selectedKey="{/AnoCalendarioSelecionado}">
+								<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+							</Select>
+						</VBox>
+					</items>
+				</FlexBox>
+				
+				<l:BlockLayout>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<ScrollContainer
+								horizontal="true"
+								vertical="true"
+								width="100%"
+								height="293px">
+								<Table 
+									id="tabelaPrimeiroPeriodo"
+									inset="false"
+									items="{/Resumo/PrimeiroPeriodo}"
+									class="bordered tabelaPeriodoMinHeight"
+									sticky="ColumnHeaders">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<Title text="{i18n>viewGeralPeriodo1}" level="H2"/>
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<Column mergeDuplicates="true">
+											<Text text="{i18n>viewGeralMoeda}" />
+										</Column>
+										<Column 
+											hAlign="Begin">
+											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes01}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes02}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes03}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="Total" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Text text="{moeda}" />
+												<Text text="{categoria}" />
+												<ObjectNumber
+													number="{
+														path: 'primeiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'segundoValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'terceiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'total',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</ScrollContainer>
+							<Toolbar class="bordered" id="toolbarPrimeiroPeriodo">
+								<!--<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralBotaoVisualizar}" type="Default" press="onVisualizarPeriodo"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralBotaoReabertura}" press="onReabrirPeriodo"/>
+								</content>-->
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<ScrollContainer
+								horizontal="true"
+								vertical="true"
+								width="100%"
+								height="293px">
+								<Table 
+									id="tabelaSegundoPeriodo"
+									inset="false"
+									items="{/Resumo/SegundoPeriodo}"
+									class="bordered tabelaPeriodoMinHeight"
+									sticky="ColumnHeaders">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<Title text="{i18n>viewGeralPeriodo2}" level="H2"/>
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<Column mergeDuplicates="true">
+											<Text text="{i18n>viewGeralMoeda}" />
+										</Column>
+										<Column>
+											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes04}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes05}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes06}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="Total" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Text text="{moeda}" />
+												<Text text="{categoria}" />
+												<ObjectNumber
+													number="{
+														path: 'primeiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'segundoValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'terceiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'total',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</ScrollContainer>
+							<Toolbar class="bordered" id="toolbarSegundoPeriodo">
+								<!--<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralBotaoVisualizar}" type="Default" press="onVisualizarPeriodo"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralBotaoReabertura}" press="onReabrirPeriodo"/>
+								</content>-->
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<ScrollContainer
+								horizontal="true"
+								vertical="true"
+								width="100%"
+								height="293px">
+								<Table 
+									id="tabelaTerceiroPeriodo"
+									inset="false"
+									items="{/Resumo/TerceiroPeriodo}"
+									class="bordered tabelaPeriodoMinHeight"
+									sticky="ColumnHeaders">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<Title text="{i18n>viewGeralPeriodo3}" level="H2"/>
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<Column mergeDuplicates="true">
+											<Text text="{i18n>viewGeralMoeda}" />
+										</Column>
+										<Column>
+											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes07}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes08}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes09}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="Total" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Text text="{moeda}" />
+												<Text text="{categoria}" />
+												<ObjectNumber
+													number="{
+														path: 'primeiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'segundoValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'terceiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'total',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</ScrollContainer>
+							<Toolbar class="bordered" id="toolbarTerceiroPeriodo">
+								<!--<content>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralBotaoVisualizar}" type="Default" press="onVisualizarPeriodo"/>
+									<Button icon="sap-icon://permission" text="{i18n>viewGeralBotaoReabertura}" press="onReabrirPeriodo"/>
+								</content>-->
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+							<ScrollContainer
+								horizontal="true"
+								vertical="true"
+								width="100%"
+								height="293px">
+								<Table 
+									id="tabelaQuartoPeriodo"
+									inset="false"
+									items="{/Resumo/QuartoPeriodo}"
+									class="bordered tabelaPeriodoMinHeight"
+									sticky="ColumnHeaders">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<Title text="{i18n>viewGeralPeriodo4}" level="H2"/>
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<Column mergeDuplicates="true">
+											<Text text="{i18n>viewGeralMoeda}" />
+										</Column>
+										<Column>
+											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes10}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes11}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="{i18n>viewGeralMes12}" />
+										</Column>
+										<Column
+											hAlign="End">
+											<Text text="Total" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Text text="{moeda}" />
+												<Text text="{categoria}" />
+												<ObjectNumber
+													number="{
+														path: 'primeiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'segundoValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'terceiroValor',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+												<ObjectNumber
+													number="{
+														path: 'total',
+														type: 'sap.ui.model.type.Float',
+														formatOptions: {
+															maxFractionDigits: 2
+														}
+													}" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</ScrollContainer>
+							<Toolbar class="bordered" id="toolbarQuartoPeriodo">
+								<!--<content>
+									<Title text="Faltam x dias"/>
+									<ToolbarSpacer/>
+									<Button icon="sap-icon://edit" text="{i18n>viewGeralBotaoEditar}" type="Accept" press="onEditarPeriodo"/>
+									<Button icon="sap-icon://paper-plane" text="{i18n>viewGeralBotaoFechamento}" press="onSubmeterPeriodo"/>
+								</content>-->
+							</Toolbar>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+				</l:BlockLayout>
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

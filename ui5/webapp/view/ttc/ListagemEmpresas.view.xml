@@ -1,0 +1,117 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.ttc.ListagemEmpresas"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.f"
+	xmlns="sap.m">
+	<f:DynamicPage>
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="{i18n>viewTTCMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTTCMenu2}" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="{i18n>viewTTCListagemEmpresaTituloPagina}"/>
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<Table 
+				id="tabelaEmpresas"
+				inset="false"
+				items="{
+					path: '/Empresa',
+					sorter: [{
+						path: 'nome'
+					}, {
+						path: 'moeda'
+					}]
+				}">
+				<headerToolbar>
+					<Toolbar>
+						<content>
+							<ToolbarSpacer />
+							<Select
+								id="selectAnoCalendario"
+								tooltip="{i18n>viewGeralAnoCalendario}"
+								change="onTrocarAnoCalendario"
+								items="{/DominioAnoCalendario}"
+								selectedKey="{/AnoCalendarioSelecionado}">
+								<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+							</Select>
+						</content>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column mergeDuplicates="true">
+						<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" />
+					</Column>
+					<Column>
+						<Title text="{i18n>viewGeralMoeda}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="End">
+						<Title text="{i18n>viewGeralBorne}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="End">
+						<Title text="{i18n>viewGeralCollected}" titleStyle="H4" />
+					</Column>
+					<Column hAlign="End">
+						<Title text="Total" titleStyle="H4" />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Link text="{nome}" press="onSelecionarEmpresa" class="celulaDestacada" />
+							<Text text="{moeda}" />
+							<ObjectNumber
+								number="{
+									path: 'borne',
+									type: 'sap.ui.model.type.Float',
+									formatOptions: {
+										maxFractionDigits: 2
+									}
+								}"/>
+							<ObjectNumber
+								number="{
+									path: 'collected',
+									type: 'sap.ui.model.type.Float',
+									formatOptions: {
+										maxFractionDigits: 2
+									}
+								}"/>
+							<ObjectNumber
+								number="{
+									path: 'total',
+									type: 'sap.ui.model.type.Float',
+									formatOptions: {
+										maxFractionDigits: 2
+									}
+								}"/>
+						</cells>
+					</ColumnListItem>
+					<!--<ColumnListItem
+						type="Navigation"
+						press="onSelecionarEmpresa">
+						<cells>
+							<Text text="{nome}" class="celulaDestacada" />
+							<Text text="{moeda}" />
+							<ObjectNumber
+								number="{borne}"/>
+							<ObjectNumber
+								number="{collected}"/>
+							<ObjectNumber
+								number="{total}"/>
+						</cells>
+					</ColumnListItem>-->
+				</items>
+			</Table>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>
