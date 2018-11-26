@@ -103,6 +103,15 @@ sap.ui.define(
 			onReabrirPeriodo: function (oPeriodo) {
 				var that = this;
 				
+				var oParams = {};
+				
+				oParams.oPeriodo = oPeriodo;
+				oParams.oEmpresa = that.getModel().getProperty("/Empresa");
+				oParams.oAnoCalendario = {
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
+				};
+				
 				var oForm = new sap.ui.layout.form.Form({
 					editable: true
 				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
@@ -114,7 +123,7 @@ sap.ui.define(
 				var oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralEmpresa}"
 				}).addField(new sap.m.Text({
-					text: "Empresa A"
+					text: "{/Empresa/nome}"
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
@@ -122,7 +131,7 @@ sap.ui.define(
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralPeriodo}"
 				}).addField(new sap.m.Text({
-					text: "1º Trimestre"
+					text: oPeriodo.id_periodo + " {i18n>viewGeralTrimestre}"
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
