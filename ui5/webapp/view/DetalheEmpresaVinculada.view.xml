@@ -39,7 +39,7 @@
 							<form:FormElement label="Número HFM/SAP">
 								<form:fields>
 									<!--<Input id="inputHFMSAP"/>-->
-									<Text text="{/empresa/hfmsap}" />
+									<Text text="{/empresa/num_hfm_sap}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="TIN (Tax Identification Number)">
@@ -51,7 +51,7 @@
 							<form:FormElement label="Jurisdição TIN">
 								<form:fields>
 									<!--<Input id="inputJurisdicaoTIN"/>-->
-									<Text text="{/empresa/jurisdicaoTIN}" />
+									<Text text="{/empresa/jurisdicao_tin}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="NI (Tax Identification Number)">
@@ -63,7 +63,7 @@
 							<form:FormElement label="Jurisdição NI">
 								<form:fields>
 									<!--<Input id="inputJurisdicaoNI"/>-->
-									<Text text="{/empresa/jurisdicaoNI}" />
+									<Text text="{/empresa/jurisdicao_ni}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="Endereço">
@@ -95,14 +95,14 @@
 											<core:Item text="Canadá" key="2"/>
 										</items>
 									</Select>-->
-									<Text text="{/empresa/tipoSocietario}" />
+									<Text text="{/empresa/id_dominio_empresa_tipo_societario}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="FY Start/End Date">
 								<form:fields>
 									<!--<DatePicker id="datepickerStartDate" placeholder="Insira uma data..."/>
 									<DatePicker id="datepickerEndDate" placeholder="Insira uma data..."/>-->
-									<Text text="{/empresa/fyStartDate} - {/empresa/fyEndDate}" />
+									<Text text="{/empresa/fy_start_date} - {/empresa/fy_end_date}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="Status da empresa">
@@ -128,19 +128,19 @@
 											<core:Item text="Alíquota 3 - 22%" key="2"/>
 										</items>
 									</Select>-->
-									<Text text="{/empresa/aliquotaVigente}" />
+									<Text text="{/empresa/id_aliquota}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="LBC Nome">
 								<form:fields>
 									<!--<Input id="inputLBCResponsavel"/>-->
-									<Text text="{/empresa/lbcNome}" />
+									<Text text="{/empresa/lbc_nome}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="LBC Email">
 								<form:fields>
 									<!--<Input id="inputLBCEmail"/>-->
-									<Text text="{/empresa/lbcEmail}" />
+									<Text text="{/empresa/lbc_email}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="Comentários">

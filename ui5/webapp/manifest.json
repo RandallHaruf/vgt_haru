@@ -103,7 +103,7 @@
 					]
 				},
 				{
-					"pattern": "detalheEmpresaVinculada",
+					"pattern": "detalheEmpresaVinculada/{parametros}",
 					"name": "detalheEmpresaVinculada",
 					"target": "detalheEmpresaVinculada"
 				},

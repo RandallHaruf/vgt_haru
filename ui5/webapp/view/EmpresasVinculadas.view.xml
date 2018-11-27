@@ -24,6 +24,7 @@
 		</f:title>
 		<f:content>
 			<Table 
+				id="empresaTabela"
 				inset="false"
 				items="{
 					path: '/Registros'

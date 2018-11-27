@@ -8,6 +8,7 @@ sap.ui.define(
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
 					empresa: {
+						/*
 						nome: "Empresa A",
 						hfmsap: "23654321",
 						tin: "3213211",
@@ -24,8 +25,10 @@ sap.ui.define(
 						lbcNome: "João da Silva",
 						lbcEmail: "joao.silva@email.com",
 						comentarios: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+						*/
 					}
 				}));
+				this.getRouter().getRoute("detalheEmpresaVinculada").attachPatternMatched(this._onRouteMatched, this);
 			},
 			
 			navToHome: function () {
@@ -34,6 +37,12 @@ sap.ui.define(
 			
 			navToPage2: function () {
 				this.getRouter().navTo("empresasVinculadas");
+			},
+			
+			_onRouteMatched: function (oEvent) {
+				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				
+				this.getModel().setProperty("/empresa", oParametros.empresa);
 			}
 		});
 	}
