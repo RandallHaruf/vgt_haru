@@ -95,7 +95,7 @@
 											<core:Item text="Canadá" key="2"/>
 										</items>
 									</Select>-->
-									<Text text="{/empresa/id_dominio_empresa_tipo_societario}" />
+									<Text text="{/empresa/tipo_societario}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="FY Start/End Date">
@@ -128,7 +128,7 @@
 											<core:Item text="Alíquota 3 - 22%" key="2"/>
 										</items>
 									</Select>-->
-									<Text text="{/empresa/id_aliquota}" />
+									<Text text="{/empresa/nome_aliquota}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="LBC Nome">

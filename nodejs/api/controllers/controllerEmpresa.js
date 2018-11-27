@@ -192,14 +192,19 @@ module.exports = {
 
 	deepQuery: function (req, res) {
 		var sStatement = 
-			'select * '
+			'select empresa.*, pais.*, dominioPais.*, status.*, societario.*,'
+			+ 'aliquota."id_aliquota", aliquota."nome" "nome_aliquota", aliquota."valor", aliquota."data_inicio", aliquota."data_fim", aliquota."fk_dominio_aliquota_tipo.id_dominio_aliquota_tipo" '
 			+ 'from "VGT.EMPRESA" empresa '
 			+ 'left outer join "VGT.PAIS" pais '
 			+ 'on empresa."fk_pais.id_pais" = pais."id_pais" '
 			+ 'left outer join "VGT.DOMINIO_PAIS" dominioPais '
 			+ 'on pais."fk_dominio_pais.id_dominio_pais" = dominioPais."id_dominio_pais" '
 			+ 'left outer join "VGT.DOMINIO_EMPRESA_STATUS" status '
-			+ 'on empresa."fk_dominio_empresa_status.id_dominio_empresa_status" = status."id_dominio_empresa_status" ';
+			+ 'on empresa."fk_dominio_empresa_status.id_dominio_empresa_status" = status."id_dominio_empresa_status" '
+			+ 'left outer join "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO" societario '
+			+ 'on empresa."fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario" = societario."id_dominio_empresa_tipo_societario" '
+			+ 'left outer join "VGT.ALIQUOTA" aliquota '
+			+ 'on empresa."fk_aliquota.id_aliquota" = aliquota."id_aliquota" ';
 
 		model.execute({
 			statement: sStatement
