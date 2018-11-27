@@ -104,19 +104,58 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade RelacionamentoTaxPackagePeriodo");
+		var sStatement =
+			'select * '
+			+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+			+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+			+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+			+ 'inner join "VGT.PERIODO" periodo '
+			+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" ';
+			/*where
+			taxPackage."fk_empresa.id_empresa" = ?
+			and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ?
+			and periodo."fk_dominio_modulo.id_dominio_modulo" = ? */
 
-		/*var sStatement = 'select * from "DUMMY"';
+		var oWhere = [];
+		var aParams = [];
+
+		if (req.query.empresa) {
+			oWhere.push(' taxPackage."fk_empresa.id_empresa" = ? ');
+			aParams.push(req.query.empresa);
+		}
+
+		if (req.query.anoCalendario) {
+			oWhere.push(' periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? ');
+			aParams.push(req.query.anoCalendario);
+		}
+
+		if (req.query.modulo) {
+			oWhere.push(' periodo."fk_dominio_modulo.id_dominio_modulo" = ? ');
+			aParams.push(req.query.modulo);
+		}
+
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+
+		sStatement += ' order by periodo."numero_ordem" ';
 
 		model.execute({
-		statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };

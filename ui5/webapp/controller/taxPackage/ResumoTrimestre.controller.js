@@ -251,7 +251,7 @@ sap.ui.define(
 			},
 			
 			_atualizarDados: function () {
-				sap.m.MessageToast.show("Empresa: " + this.getModel().getProperty("/Empresa").nome + " - Ano Calendario: " +  this.getModel().getProperty("/AnoCalendarioSelecionado"));
+				sap.m.MessageToast.show("Empresa: " + this.getModel().getProperty("/Empresa").nome + "\nAno Calendario: " +  this.getModel().getProperty("/AnoCalendarioSelecionado"));
 			}
 		});
 	}
