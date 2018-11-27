@@ -1,8 +1,9 @@
 sap.ui.define(
 	[
-		"ui5ns/ui5/controller/BaseController"
+		"ui5ns/ui5/controller/BaseController",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController) {
+	function (BaseController, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.ResumoTrimestre", {
 			pressDialog: null,
 			
@@ -59,6 +60,8 @@ sap.ui.define(
 						}
 					]
 				}));
+				
+				this.getRouter().getRoute("taxPackageResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
 			},	
 			
 			navToHome: function () {
@@ -71,6 +74,10 @@ sap.ui.define(
 			
 			onNavBack: function () {
 				this.getRouter().navTo("taxPackageListagemEmpresas");
+			},
+			
+			onTrocarAnoCalendario: function (oEvent) {
+				this._atualizarDados();	
 			},
 			
 			onEditar: function (oEvent) {
@@ -224,6 +231,27 @@ sap.ui.define(
 				}
 
 				this.pressDialog2.open();
+			},
+			
+			_onRouteMatched: function (oEvent) {
+				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				
+				this.getModel().setProperty("/Empresa", oParametros.empresa);
+				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.idAnoCalendario);
+				
+				var that = this;
+				
+				NodeAPI.listarRegistros("/DominioAnoCalendario", function (response) {
+					if (response) {
+						that.getModel().setProperty("/DominioAnoCalendario", response);
+						
+						that._atualizarDados();
+					}	
+				});
+			},
+			
+			_atualizarDados: function () {
+				sap.m.MessageToast.show("Empresa: " + this.getModel().getProperty("/Empresa").nome + " - Ano Calendario: " +  this.getModel().getProperty("/AnoCalendarioSelecionado"));
 			}
 		});
 	}

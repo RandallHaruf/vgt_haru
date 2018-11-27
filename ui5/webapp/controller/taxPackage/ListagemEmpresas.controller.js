@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"sap/ui/core/routing/History",
 		"sap/ui/model/json/JSONModel",
-		"ui5ns/ui5/model/formatter"
+		"ui5ns/ui5/model/formatter",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, History, JSONModel, formatter) {
+	function (BaseController, History, JSONModel, formatter, NodeAPI) {
 		"use strict";
 	
 		BaseController.extend("ui5ns.ui5.controller.taxPackage.ListagemEmpresas", {
@@ -15,7 +16,7 @@ sap.ui.define(
 			onInit: function () {
 				var oModel = new JSONModel({
 					Companies: [
-						{
+						/*{
 							name: "CompanyA",
 							primeiroTrimestre: "sap-icon://accept",
 							segundoTrimestre: "sap-icon://decline",
@@ -23,11 +24,14 @@ sap.ui.define(
 							quartoTrimestre: "sap-icon://decline",
 							anual: "sap-icon://decline",
 							qteRetificadoras: 0
-						}
+						}*/
 					]
 				});
 				
 				this.setModel(oModel, "companies");
+				this.setModel(new sap.ui.model.json.JSONModel({}));
+				
+				this.getRouter().getRoute("taxPackageListagemEmpresas").attachPatternMatched(this._onRouteMatched, this);                 
 			},
 			
 			navToHome: function () {
@@ -44,11 +48,57 @@ sap.ui.define(
 			
 			onTrocarAnoCalendario: function () {
 				//alert("Trocou ano calendário");
-				sap.m.MessageToast.show("Trocou ano calendário");
+				//sap.m.MessageToast.show("Trocou ano calendário");
+				this._atualizarDados();
 			},
 			
-			onSelecionarEmpresa: function () {
-				this.getRouter().navTo("taxPackageResumoTrimestre");
+			onSelecionarEmpresa: function (oEvent) {
+				var oParametros = {
+					empresa: this.getModel("companies").getObject(oEvent.getSource().getBindingContext("companies").getPath()),
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+				};
+				
+				this.getRouter().navTo("taxPackageResumoTrimestre", {
+					parametros: JSON.stringify(oParametros)
+				});
+			},
+			
+			_onRouteMatched: function (oEvent) {
+				var that = this;
+				
+				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
+					if (response) {
+						that.getModel().setProperty("/DominioAnoCalendario", response);
+						
+						var oAnoCorrente = response.find(function (element) {
+							return element.ano_calendario === (new Date()).getFullYear();
+						});
+					
+						if (oAnoCorrente) {
+							that.getModel().setProperty("/AnoCalendarioSelecionado", oAnoCorrente.id_dominio_ano_calendario);      
+							
+							that._atualizarDados();
+						}
+					}
+				});
+			},
+			
+			_atualizarDados: function () {
+				var sIdAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado");
+				
+				var that = this;
+				
+				this.byId("tabelaEmpresas").setBusyIndicatorDelay(100);
+				this.byId("tabelaEmpresas").setBusy(true);
+				
+				// Passar parametro 'empresas' com um array de IDs para filtrar as empresas do usuário logado!!!
+				NodeAPI.listarRegistros("Empresa", function (response) {
+					if (response) {
+						that.getModel("companies").setProperty("/Companies", response);
+					}	
+					
+					that.byId("tabelaEmpresas").setBusy(false);
+				});
 			}
 		});
 	}

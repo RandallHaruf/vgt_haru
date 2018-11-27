@@ -5,10 +5,7 @@
 	xmlns:f="sap.f"
 	xmlns:l="sap.ui.layout"
 	xmlns="sap.m">
-	<f:DynamicPage
-		title="Tax Package - Listagem Empresas"
-		showNavButton="true"
-		navButtonPress="onNavBack">
+	<f:DynamicPage>
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
@@ -28,12 +25,12 @@
 		</f:title>
 		<f:content>
 			<Table 
-				id="companyTable"
+				id="tabelaEmpresas"
 				inset="false"
 				items="{
 					path: 'companies>/Companies',
 					sorter: [{
-						path: 'name'
+						path: 'nome'
 					}, {
 						path: 'currency'
 					}]
@@ -44,13 +41,12 @@
 							<!--<Title text="Empresas" level="H2"/>-->
 							<ToolbarSpacer />
 							<Select
+								id="selectAnoCalendario"
 								tooltip="{i18n>viewGeralAnoCalendario}"
-								change="onTrocarAnoCalendario">
-								<items>
-									<core:Item text="2018"/>
-									<core:Item text="2017"/>
-									<core:Item text="2016"/>
-								</items>
+								change="onTrocarAnoCalendario"
+								items="{/DominioAnoCalendario}"
+								selectedKey="{/AnoCalendarioSelecionado}">
+								<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
 							</Select>
 						</content>
 					</Toolbar>
@@ -91,7 +87,7 @@
 						type="Navigation"
 						press="onSelecionarEmpresa">
 						<cells>
-							<Text text="{companies>name}" class="celulaDestacada" />
+							<Text text="{companies>nome}" class="celulaDestacada" />
 							
 							<core:Icon src="{companies>primeiroTrimestre}" 
 								color="{

@@ -199,7 +199,7 @@
 					]
 				},
 				{
-					"pattern": "taxPackageResumoTrimestre",
+					"pattern": "taxPackageResumoTrimestre/{parametros}",
 					"name": "taxPackageResumoTrimestre",
 					"target": [
 						"taxPackageResumoTrimestre"

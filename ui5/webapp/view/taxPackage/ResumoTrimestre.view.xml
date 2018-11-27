@@ -6,9 +6,6 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m">
 	<f:DynamicPage
-		title="Tax Package - Resumo Trimestre"
-		showNavButton="true"
-		navButtonPress="onNavBack"
 		class="semContentPadding"
 		toggleHeaderOnTitleClick="false"
 		preserveHeaderStateOnScroll="true">
@@ -25,8 +22,7 @@
 					<Title text="{i18n>viewTAXResumoTrimestreTituloPagina}"/>
 				</f:heading>
 				<f:expandedContent>
-					<!--<ObjectAttribute title="Empresa" text="Vale"/>-->
-					<ObjectIdentifier title="Vale" />
+					<ObjectIdentifier title="{/Empresa/nome}" />
 				</f:expandedContent>
 				<f:navigationActions>
 					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXResumoTrimestreBotaoRequisicaoToolTip}" text="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" press="navToRequisicoes" />
@@ -43,16 +39,13 @@
 					<items>
 						<VBox 
 							class="sapUiLargeMarginEnd">
-							<!--<Label 
-								text="Ano Calendário"/>-->
-							<Select
-								change="onCurrencyChange"
-								tooltip="{i18n>viewGeralAnoCalendario}">
-								<items>
-									<core:Item text="2018"/>
-									<core:Item text="2017"/>
-									<core:Item text="2016"/>
-								</items>
+								<Select
+									id="selectAnoCalendario"
+									change="onTrocarAnoCalendario"
+									tooltip="{i18n>viewTTCResumoTrimestreBotaoAnoToolTip}"
+									items="{/DominioAnoCalendario}"
+									selectedKey="{/AnoCalendarioSelecionado}">
+								<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
 							</Select>
 						</VBox>
 					</items>
