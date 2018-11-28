@@ -426,19 +426,24 @@ context VGT {
             fk_periodo                    : association[0..1]    to VGT.TAX_RECONCILIATION;
     };
 
-    /*@@layout{"layoutInfo":{"x":-2228,"y":-230.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2348,"y":-10.5}}*/
     entity USUARIO {
         key id_usuario : Integer;
             nome       : String(200);
+            email      : String(200);
+            contato    : String(200);
+            user       : String(200);
+            pass       : String(200);
+            ind_ativo  : Boolean;
     };
 
-    /*@@layout{"layoutInfo":{"x":-1992,"y":-335.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2288,"y":-194.5}}*/
     entity REL_USUARIO_MODULO {
         fk_usuario        : association[*, 0..1] to VGT.USUARIO { id_usuario };
         fk_dominio_modulo : association[*, 0..1] to VGT.DOMINIO_MODULO { id_dominio_modulo };
     };
 
-    /*@@layout{"layoutInfo":{"x":-734,"y":568.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2037,"y":188.5}}*/
     entity REL_USUARIO_EMPRESA {
         fk_usuario : association[*, 0..1] to VGT.USUARIO { id_usuario };
         fk_empresa : association[*, 0..1] to VGT.EMPRESA { id_empresa };

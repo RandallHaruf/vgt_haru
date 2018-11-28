@@ -15,7 +15,19 @@ function send_Not_Email(numOrdem, anoCal, qtdDia) {
 	var Qter = numOrdem;
 	
 	db.executeStatement({
-	statement: 'Select Empr."nome", Empr."lbc_nome", Empr."lbc_email" From "VGT.REL_EMPRESA_PERIODO" REmp left join "VGT.PERIODO" Per on Per."id_periodo" = REmp."fk_periodo.id_periodo" left join "VGT.DOMINIO_ANO_CALENDARIO" DACal on DACal."id_dominio_ano_calendario" = Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" join "VGT.EMPRESA" Empr on Empr."id_empresa" = REmP."fk_empresa.id_empresa" Where REmp."ind_ativo" = true And Per."fk_dominio_modulo.id_dominio_modulo" = 1 And Per."numero_ordem" = ? And DACal."ano_calendario" = ?',
+	statement: 
+		'Select Empr."nome", Empr."lbc_nome", Empr."lbc_email" '
+		+ ' From "VGT.REL_EMPRESA_PERIODO" REmp '
+		+ ' left join "VGT.PERIODO" Per '
+		+ ' on Per."id_periodo" = REmp."fk_periodo.id_periodo" '
+		+ ' left join "VGT.DOMINIO_ANO_CALENDARIO" DACal '
+		+ ' on DACal."id_dominio_ano_calendario" = Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" '
+		+ ' join "VGT.EMPRESA" Empr '
+		+ ' on Empr."id_empresa" = REmP."fk_empresa.id_empresa" '
+		+ ' Where REmp."ind_ativo" = true '
+		+ ' And Per."fk_dominio_modulo.id_dominio_modulo" = 1 '
+		+ ' And Per."numero_ordem" = ? '
+		+ ' And DACal."ano_calendario" = ?',
 	parameters:[Qter, anoCal]
 	}, function (err, results) {
 		if (err) {

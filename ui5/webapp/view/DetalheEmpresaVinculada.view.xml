@@ -128,7 +128,7 @@
 											<core:Item text="Alíquota 3 - 22%" key="2"/>
 										</items>
 									</Select>-->
-									<Text text="{/empresa/nome_aliquota}" />
+									<Text text="{/empresa/valor}% - {/empresa/nome_aliquota}" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement label="LBC Nome">
