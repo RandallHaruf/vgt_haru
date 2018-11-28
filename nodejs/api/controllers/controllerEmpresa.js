@@ -205,11 +205,32 @@ module.exports = {
 			+ 'left outer join "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO" societario '
 			+ 'on empresa."fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario" = societario."id_dominio_empresa_tipo_societario" '
 			+ 'left outer join "VGT.ALIQUOTA" aliquota '
-			+ 'on empresa."fk_aliquota.id_aliquota" = aliquota."id_aliquota" '
-			+ 'Order By  empresa."nome"';
+			+ 'on empresa."fk_aliquota.id_aliquota" = aliquota."id_aliquota" ';
+			
+		var oWhere = [];
+		var aParams = [];
+
+		if (req.params.idRegistro) {
+			oWhere.push(' empresa."id_empresa" = ? ');
+			aParams.push(req.params.idRegistro);
+		}
+
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+		
+		sStatement += ' Order By empresa."nome"';
 
 		model.execute({
-			statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));

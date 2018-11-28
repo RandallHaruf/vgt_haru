@@ -97,7 +97,7 @@ sap.ui.define(
 								});
 							}
 							else {
-								jQuery.ajax(Constants.urlBackend + "Diferenca", {
+								jQuery.ajax(Constants.urlBackend + "DiferencaOpcao", {
 									type: "POST",
 									data: {
 										nome: oInputNome.getValue(),
@@ -132,7 +132,7 @@ sap.ui.define(
 			onAbrirObjeto: function (oEvent) {
 				var that = this;
 				
-				var iIdDiferenca = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_diferenca"];
+				var iIdDiferenca = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_diferenca_opcao"];
 				var sNomeCorrente = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
 				var iFkTipoCorrente = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_dominio_diferenca_tipo"];
 				
@@ -197,7 +197,7 @@ sap.ui.define(
 								});
 							}
 							else {
-								jQuery.ajax(Constants.urlBackend + "Diferenca/" + iIdDiferenca, {
+								jQuery.ajax(Constants.urlBackend + "DiferencaOpcao/" + iIdDiferenca, {
 									type: "PUT",
 									data: {
 										nome: oInputNome.getValue(),
@@ -248,7 +248,7 @@ sap.ui.define(
 			onExcluir: function (oEvent) {
 				var that = this;
 				//var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-				var iIdDiferenca = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_diferenca"];
+				var iIdDiferenca = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_diferenca_opcao"];
 				
 				jQuery.sap.require("sap.m.MessageBox");
 				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir este item?" , {
@@ -257,7 +257,7 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Diferença: " + nome);	
 							
-							jQuery.ajax(Constants.urlBackend + "Diferenca/" + iIdDiferenca, {
+							jQuery.ajax(Constants.urlBackend + "DiferencaOpcao/" + iIdDiferenca, {
 								type: "DELETE",
 								success: function (response) {
 									that._carregarObjetos();
@@ -281,7 +281,7 @@ sap.ui.define(
 				
 				var that = this;
 				
-				jQuery.ajax(Constants.urlBackend + "DeepQuery/Diferenca", {
+				jQuery.ajax(Constants.urlBackend + "DeepQuery/DiferencaOpcao", {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {

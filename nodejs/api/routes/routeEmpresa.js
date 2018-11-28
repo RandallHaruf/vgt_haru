@@ -12,4 +12,5 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().delete("/Empresa/:idRegistro", controller.excluirRegistro));
 
 	aRoutes.push(express.Router().get("/DeepQuery/Empresa", controller.deepQuery));
+	aRoutes.push(express.Router().get("/DeepQuery/Empresa/:idRegistro", controller.deepQuery));
 };
