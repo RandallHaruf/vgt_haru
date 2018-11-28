@@ -200,7 +200,14 @@ sap.ui.define(
 			},
 			
 			navToRequisicoes: function () {
-				this.getRouter().navTo("ttcRequisicaoReabertura");
+				var oParametros = {
+					empresa: this.getModel().getProperty("/Empresa"),
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+				};
+				
+				this.getRouter().navTo("ttcRequisicaoReabertura", {
+					parametros: JSON.stringify(oParametros)
+				});
 			},
 			
 			_onRouteMatched: function (oEvent) {

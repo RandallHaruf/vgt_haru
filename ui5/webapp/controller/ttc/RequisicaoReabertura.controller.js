@@ -1,16 +1,17 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/model/formatter"
+		"ui5ns/ui5/model/formatter",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, formatter) {
+	function (BaseController, formatter, NodeAPI) {
 		BaseController.extend("ui5ns.ui5.controller.ttc.RequisicaoReabertura", {
 			formatter: formatter,
 			
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
 					requisicoes: [
-						{
+						/*{
 							id: 1,
 							empresa: "Empresa A",
 							trimestre: "1º Trimestre",
@@ -52,9 +53,10 @@ sap.ui.define(
 								cor: "orange",
 								tooltip: "Em andamento"
 							}
-						}	
+						}*/	
 					]
 				}));
+				this.getRouter().getRoute("ttcRequisicaoReabertura").attachPatternMatched(this._onRouteMatched, this);
 			},
 			
 			onNovoObjeto: function (oEvent) {
@@ -82,6 +84,26 @@ sap.ui.define(
 				this.getRouter().navTo("ttcResumoTrimestre", {
 					oEmpresa: JSON.stringify(oEmpresaSelecionada)
 				}); 
+			},
+			_onRouteMatched: function (oEvent) {
+				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				
+				this.getModel().setProperty("/empresa", oParametros.empresa);
+				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
+				
+				NodeAPI.listarRegistros("/RequisicaoReabertura?empresa=?&anoCalendario=?&status=?", function(response){
+					if (response) {
+					//that.getModel().setProperty("/DominioAnoCalendario", response);
+					
+					//that._atualizarDados();
+					}
+				});
+				/*NodeAPI.listarRegistros("DeepQuery/Empresa", function(response){
+				if (response){
+					that.getModel().setProperty("/Registros", response);
+				}
+					that.byId("empresaTabela").setBusy(false);
+				});*/
 			}
 		});
 	}

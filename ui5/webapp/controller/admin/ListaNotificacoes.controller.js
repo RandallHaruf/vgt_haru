@@ -15,7 +15,7 @@ sap.ui.define(
 			},
 			
 			onResponder: function (oEvent) {
-				if (!this.pressDialog) {
+				//if (!this.pressDialog) {
 					var oForm = new sap.ui.layout.form.Form({
 						editable: true
 					}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
@@ -80,29 +80,32 @@ sap.ui.define(
 					
 					oForm.addFormContainer(oFormContainer);
 					
-					this.pressDialog = new sap.m.Dialog({
+					var pressDialog = new sap.m.Dialog({
 						title: "Resposta Requisição",
 						content: oForm,
 						beginButton: new sap.m.Button({
 							text: "enviar",
 							press: function () {
 								sap.m.MessageToast.show("Enviar resposta");
-								this.pressDialog.close();
+								pressDialog.close();
 							}.bind(this)
 						}),
 						endButton: new sap.m.Button({
 							text: "sair",
 							press: function () {
-								this.pressDialog.close();
+								pressDialog.close();
 							}.bind(this)
-						})
+						}),
+						afterClose: function () {
+							pressDialog.destroy();
+						}
 					});
 	
 					// to get access to the global model
-					this.getView().addDependent(this.pressDialog);
-				}
+					this.getView().addDependent(pressDialog);
+				//}
 
-				this.pressDialog.open();
+				pressDialog.open();
 			},
 			
 			_carregarObjetos: function () {

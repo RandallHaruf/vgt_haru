@@ -255,7 +255,7 @@
 					]
 				},
 				{
-					"pattern": "ttcRequisicaoReabertura",
+					"pattern": "ttcRequisicaoReabertura/{parametros}",
 					"name": "ttcRequisicaoReabertura",
 					"target": [
 						"ttcRequisicaoReabertura"
