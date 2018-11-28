@@ -55,7 +55,7 @@
 					<l:BlockLayoutRow>
 						<l:BlockLayoutCell>
 							<Table 
-								id="firstQuarterTable"
+								id="tabelaPrimeiroPeriodo"
 								inset="false"
 								items="{/trimestres/PrimeiroTrimestre}"
 								class="bordered ">
@@ -101,17 +101,17 @@
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Toolbar class="bordered ">
-								<content>
+							<Toolbar class="bordered" id="toolbarPrimeiroPeriodo">
+								<!--<content>
 									<ToolbarSpacer/>
 									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
 									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
-								</content>
+								</content>-->
 							</Toolbar>
 						</l:BlockLayoutCell>
 						<l:BlockLayoutCell>
 							<Table 
-								id="tabelaSegundoTrimestre"
+								id="tabelaSegundoPeriodo"
 								inset="false"
 								items="{/trimestres/SegundoTrimestre}"
 								class="bordered ">
@@ -157,19 +157,19 @@
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Toolbar class="bordered ">
-								<content>
+							<Toolbar class="bordered" id="toolbarSegundoPeriodo">
+								<!--<content>
 									<ToolbarSpacer/>
 									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
 									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
-								</content>
+								</content>-->
 							</Toolbar>
 						</l:BlockLayoutCell>
 					</l:BlockLayoutRow>
 					<l:BlockLayoutRow>
 						<l:BlockLayoutCell>
 							<Table 
-								id="tabelaTerceiroTrimestre"
+								id="tabelaTerceiroPeriodo"
 								inset="false"
 								items="{/trimestres/TerceiroTrimestre}"
 								class="bordered ">
@@ -215,17 +215,17 @@
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Toolbar class="bordered ">
-								<content>
+							<Toolbar class="bordered" id="toolbarTerceiroPeriodo">
+								<!--<content>
 									<ToolbarSpacer/>
 									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
 									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
-								</content>
+								</content>-->
 							</Toolbar>
 						</l:BlockLayoutCell>
 						<l:BlockLayoutCell>
 							<Table 
-								id="tabelaQuartoTrimestre"
+								id="tabelaQuartoPeriodo"
 								inset="false"
 								items="{/trimestres/QuartoTrimestre}"
 								class="bordered ">
@@ -271,13 +271,13 @@
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Toolbar class="bordered ">
-								<content>
+							<Toolbar class="bordered" id="toolbarQuartoPeriodo">
+								<!--<content>
 									<Title text="{i18n>viewGeralFaltamXDias}"/>
 									<ToolbarSpacer/>
 									<Button icon="sap-icon://edit" text="{i18n>viewGeralEditar}" type="Accept" press="onEditar"/>
 									<Button icon="sap-icon://paper-plane" text="{i18n>viewGeralEncerramento}" press="onFecharPeriodo"/>
-								</content>
+								</content>-->
 							</Toolbar>
 						</l:BlockLayoutCell>
 					</l:BlockLayoutRow>
@@ -330,13 +330,13 @@
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Toolbar class="bordered ">
-								<content>
+							<Toolbar class="bordered" id="toolbarAnual">
+								<!--<content>
 									<ToolbarSpacer/>
 									<Button icon="sap-icon://attachment" text="{i18n>viewGeralAnexarDocumentacao}" type="Accept" press="onAnexarDeclaracao"/>
 									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
 									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
-								</content>
+								</content>-->
 							</Toolbar>
 						</l:BlockLayoutCell>
 						<l:BlockLayoutCell>
@@ -387,13 +387,13 @@
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Toolbar class="bordered ">
-								<content>
+							<Toolbar class="bordered" id="toolbarRetificadora">
+								<!--<content>
 									<ToolbarSpacer/>
 									<Button icon="sap-icon://attachment" text="{i18n>viewGeralAnexarDocumentacao}" type="Accept" press="onAnexarDeclaracao"/>
 									<Button icon="sap-icon://show-edit" text="{i18n>viewGeralVisualizar}" type="Default" press="onVisualizarTrimestre"/>
 									<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onRequisicaoReabertura"/>
-								</content>
+								</content>-->
 							</Toolbar>
 						</l:BlockLayoutCell>
 					</l:BlockLayoutRow>

@@ -93,6 +93,8 @@ sap.ui.define(
 				
 				this._initItemsToReport();
 				this._initTaxReconciliation();               
+				
+				this.getRouter().getRoute("taxPackageEdicaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
 			},
 			
 			onNovaAdicao: function (oEvent) {
@@ -814,6 +816,16 @@ sap.ui.define(
 				});
 	
 				dialog.open();
+			},
+			
+			_onRouteMatched: function (oEvent) {
+				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+
+				this.getModel().setProperty("/Empresa", oParametros.oEmpresa);
+				this.getModel().setProperty("/Periodo", oParametros.oPeriodo);
+				this.getModel().setProperty("/AnoCalendario", oParametros.oAnoCalendario);
+				
+				alert("Empresa: " + oParametros.oEmpresa.nome + "\nPeriodo: " + oParametros.oPeriodo.periodo + "\nAnoCalendario: " + oParametros.oAnoCalendario.anoCalendario);
 			}
 		});
 	}

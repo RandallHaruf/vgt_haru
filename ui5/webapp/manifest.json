@@ -206,7 +206,7 @@
 					]
 				},
 				{
-					"pattern": "taxPackageEdicaoTrimestre",
+					"pattern": "taxPackageEdicaoTrimestre/{parametros}",
 					"name": "taxPackageEdicaoTrimestre",
 					"target": [
 						"taxPackageEdicaoTrimestre"
