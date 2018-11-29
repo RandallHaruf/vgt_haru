@@ -1116,6 +1116,17 @@ sap.ui.define(
 				console.table(aDiferencaPermanente);
 				console.table(aDiferencaTemporaria);
 				
+				var oTaxPackage = {
+					moeda: this.getModel().getProperty("/Moeda"),
+					taxReconciliation: this.getModel().getProperty("/TaxReconciliation")	
+				};
+				
+				NodeAPI.criarRegistro("InserirTaxPackage", {
+					taxPackage: JSON.stringify(oTaxPackage)
+				}, function (response) {
+					console.log(response);
+				});
+				
 				if (callback) {
 					callback(JSON.stringify({
 						success: true

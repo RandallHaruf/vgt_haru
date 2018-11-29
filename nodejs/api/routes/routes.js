@@ -36,6 +36,7 @@ module.exports = function (app) {
 	var routeRelEmpresaPeriodo = require("./routeRelEmpresaPeriodo");
 	var routeRelTaxPackagePeriodo = require("./routeRelTaxPackagePeriodo");
 	var routeCambioTTC = require("./routeCambioTTC");
+	var routeTaxPackage = require("./routeTaxPackage");
 	var routeRequisicaoReabertura = require("./routeRequisicaoReabertura");
 	
 	var aRoutes = [];	
@@ -72,6 +73,7 @@ module.exports = function (app) {
 	routeRelEmpresaPeriodo(aRoutes);
 	routeRelTaxPackagePeriodo(aRoutes);
 	routeCambioTTC(aRoutes);
+	routeTaxPackage(aRoutes);
 	routeRequisicaoReabertura(aRoutes);
 	
 	app.use("/node", aRoutes);
