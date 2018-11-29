@@ -338,9 +338,13 @@ context VGT {
             rf_total_losses_utilized                               : Decimal(19, 4);
             rf_taxable_income_loss_after_losses                    : Decimal(19, 4);
             rf_income_tax_before_other_taxes_and_credits           : Decimal(19, 4);
+            rf_other_taxes										   : Decimal(19, 4);
+            rf_incentivos_fiscais								   : Decimal(19, 4);
             rf_total_other_taxes_and_tax_credits                   : Decimal(19, 4);
             rf_net_local_tax                                       : Decimal(19, 4);
+            rf_wht												   : Decimal(19, 4);
             rf_overpayment_from_prior_year_applied_to_current_year : Decimal(19, 4);
+            rf_total_interim_taxes_payments_antecipacoes		   : Decimal(19, 4);
             rf_tax_due_overpaid                                    : Decimal(19, 4);
             it_income_tax_as_per_the_statutory_financials          : Decimal(19, 4);
             it_income_tax_as_per_the_tax_return                    : Decimal(19, 4);

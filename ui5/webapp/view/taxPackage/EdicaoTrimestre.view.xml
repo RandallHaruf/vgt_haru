@@ -15,7 +15,7 @@
 					<Title text="Tax Package - Edição de Trimestre"/>
 				</f2:heading>
 				<f2:snappedContent>
-					<ObjectIdentifier title="Vale" />
+					<ObjectIdentifier title="{/Empresa/nome}" />
 				</f2:snappedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -28,18 +28,18 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<ObjectIdentifier title="Vale" />
+											<ObjectIdentifier title="{/Empresa/nome}" />
 										</l:HorizontalLayout>
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout class="sapUiMediumMarginEnd">
-												<ObjectAttribute title="TIN" text="1231123123"/>
-												<ObjectAttribute title="Moeda" text="USD"/>
-												<ObjectAttribute title="Ano Calendário" text="2018"/>
-												<ObjectAttribute title="Período de Referência" text="1º Trimestre"/>
+												<ObjectAttribute title="TIN" text="{/Empresa/tin}"/>
+												<ObjectAttribute title="Moeda" text="{/Periodo/fk_dominio_moeda.id_dominio_moeda}"/>
+												<ObjectAttribute title="Ano Calendário" text="{/AnoCalendario/anoCalendario}"/>
+												<ObjectAttribute title="Período de Referência" text="{/Periodo/periodo}"/>
 											</l:VerticalLayout>
 											<l:VerticalLayout>
-												<ObjectAttribute title="Start Date" text="10/02/2017"/>
-												<ObjectAttribute title="End Date" text="10/03/2018"/>
+												<ObjectAttribute title="Start Date" text="{/Empresa/fy_start_date}"/>
+												<ObjectAttribute title="End Date" text="{/Empresa/fy_end_date}"/>
 												<ObjectAttribute title="CIT Type" text="Estimativa"/>
 												<ObjectAttribute title="Prepared by" text="João Silva - joao.silva@email.com" />
 											</l:VerticalLayout>
@@ -78,14 +78,75 @@
 					</IconTabFilter>
 					<IconTabSeparator icon="" />
 					<IconTabFilter text="Tax Reconciliation">
-						<ScrollContainer horizontal="true" vertical="true" height="100%" class="sapUiNoContentPadding">
+						<ScrollContainer 
+							horizontal="true" 
+							vertical="true" 
+							height="100%" 
+							class="sapUiNoContentPadding">
 							<Panel headerText="Resultado Contábil" expandable="true" expanded="true" id="containerResultadoContabil2">
 								<HBox alignItems="Center" class="sapUiSmallMarginBottom">
 									<Text text="Moeda" class="sapUiSmallMarginEnd"/>
-									<Select>
+									<!--<Select>
 										<core:Item text="USD"/>
-									</Select>
+									</Select>-->
+									<ComboBox
+										items="{
+											path: '/DominioMoeda', 
+											templateShareable: false
+										}"
+										selectedKey="{/Moeda}">
+										<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
+									</ComboBox>
 								</HBox>
+								<Table
+									items="{
+										path: '/TaxReconciliation',
+										sorter: [{
+											path: 'periodo'
+										}]
+									}"
+									class="bordered celulasSeparadas">
+									<columns>
+										<Column vAlign="Middle" width="10rem">
+											<Text text=""/>
+										</Column>
+										<Column width="10rem">
+											<Text text="Statutory GAAP Profit / (loss) before tax" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Current Income Tax – Current Year" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Current Income Tax – Previous Year" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Deferred Income Tax" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Non- Recoverable WHT" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Statutory provision for income tax" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Statutory GAAP profit / (loss) after tax" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<ObjectIdentifier title="{periodo}" />
+												<Input type="Number" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_current_income_tax_current_year}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_current_income_tax_previous_year}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_deferred_income_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_non_recoverable_wht}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_statutory_provision_for_income_tax}" editable="false" />
+												<Input type="Number" value="{rc_statutory_gaap_profit_loss_after_tax}" editable="false" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
 								<!--<Table 
 									items="{/taxReconciliation/resultadoContabil}"
 									class="bordered celulasSeparadas">
@@ -120,6 +181,138 @@
 								</Table>-->
 							</Panel>
 							<Panel id="containerAdicoesExclusoes2" headerText="Adições e Exclusões" expandable="true" expanded="true">
+								<VBox class="sapUiSmallMarginBottom">
+									<HBox alignItems="Center">
+										<Text width="13rem" text="Total Diferenças Permanentes: " />
+										<Input type="Number" editable="false" value="{/TotalDiferencaPermanente}" />
+									</HBox>
+									<HBox alignItems="Center">
+										<Text width="13rem" text="Total Diferenças Temporárias: " />
+										<Input type="Number" editable="false" value="{/TotalDiferencaTemporaria}" />
+									</HBox>
+								</VBox>
+								<Table
+									class="celulasSeparadas sapUiMediumMarginBottom"
+									items="{/DiferencasPermanentes}">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovaDiferencaPermanente" />
+												<ObjectIdentifier text="Permanent Differences" />
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<Column width="3rem" />
+										<Column width="10rem" hAlign="Center">
+											<Text text="Tipo" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="Outro" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="1º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="2º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="3º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="4º Trimestre"  />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="Anual" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="Retificadora" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem> 
+											<cells>
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirPermanente" enabled="{= ${nova} ? true : false}" />
+												<Select
+													items="{
+														path: '/DiferencaOpcao/Permanente',
+														templateShareable: false
+													}" 
+													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}">
+													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
+												</Select>
+												<Input value="{outro}" />
+												<Input value="{valor1}" editable="{= ${/Periodo/numero_ordem} === 1 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor2}" editable="{= ${/Periodo/numero_ordem} === 2 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor3}" editable="{= ${/Periodo/numero_ordem} === 3 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor4}" editable="{= ${/Periodo/numero_ordem} === 4 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valorAnual}" editable="{= ${/Periodo/numero_ordem} === 5 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valorRetificadora}" editable="{= ${/Periodo/numero_ordem} >= 6 ? true : false}" change="onAplicarRegras" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+								<Table
+									class="celulasSeparadas sapUiSmallMarginBottom"
+									items="{/DiferencasTemporarias}">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovaDiferencaTemporaria" />
+												<ObjectIdentifier text="Temporary Differences" />
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<Column width="3rem" />
+										<Column width="10rem" hAlign="Center">
+											<Text text="Tipo" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="Outro" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="1º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="2º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="3º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="4º Trimestre" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="Anual" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="Retificadora"/>
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirTemporaria" enabled="{= ${nova} ? true : false}" />
+												<Select
+													items="{
+														path: '/DiferencaOpcao/Temporaria',
+														templateShareable: false
+													}"
+													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}">
+													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
+												</Select>
+												<Input value="{outro}" />
+												<Input value="{valor1}" editable="{= ${/Periodo/numero_ordem} === 1 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor2}" editable="{= ${/Periodo/numero_ordem} === 2 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor3}" editable="{= ${/Periodo/numero_ordem} === 3 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor4}" editable="{= ${/Periodo/numero_ordem} === 4 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valorAnual}" editable="{= ${/Periodo/numero_ordem} === 5 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valorRetificadora}" editable="{= ${/Periodo/numero_ordem} >= 6 ? true : false}" change="onAplicarRegras" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
 								<!--<Table 
 									items="{/taxReconciliation/adicoesExclusoes/permanentDifferences/itens}"
 									class="bordered celulasSeparadas">
@@ -159,8 +352,145 @@
 									</items>
 								</Table>-->
 							</Panel>
-							<Panel headerText="Resultado Fiscal" expandable="true" expanded="true" id="containerResultadoFiscal2"></Panel>
-							<Panel headerText="Income Tax" expandable="true" expanded="true" id="containerIncomeTax2"></Panel>
+							<Panel headerText="Resultado Fiscal" expandable="true" expanded="true" id="containerResultadoFiscal2">
+								<Table
+									items="{
+										path: '/TaxReconciliation',
+										sorter: [{
+											path: 'periodo'
+										}]
+									}"
+									class="bordered celulasSeparadas">
+									<columns>
+										<Column vAlign="Middle" width="10rem">
+											<Text text=""/>
+										</Column>
+										<Column width="10rem">
+											<Text text="Taxable income / (loss) before losses and tax credits" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Total losses utilized" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Taxable income / (loss) after losses" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Income tax before other taxes and credits" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Other taxes" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Incentivos Fiscais" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Total other taxes and tax credits" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Net local tax" />
+										</Column>
+										<Column width="10rem">
+											<Text text="WHT" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Overpayment from prior year applied to current year" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Total interim taxes payments (antecipações)" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Tax due / (overpaid)" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<ObjectIdentifier title="{periodo}" />
+												<Input type="Number" value="{rf_taxable_income_loss_before_losses_and_tax_credits}" editable="false" />
+												<Input type="Number" value="{rf_total_losses_utilized}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{rf_taxable_income_loss_after_losses}" editable="false" />
+												<Input type="Number" value="{rf_income_tax_before_other_taxes_and_credits}" editable="false" />
+												<HBox>
+													<Input type="Number" value="{rf_other_taxes}" editable="false" />
+													<Button text="detalhes" enabled="{ind_ativo}" />
+												</HBox>
+												<HBox>
+													<Input type="Number" value="{rf_incentivos_fiscais}" editable="false" />
+													<Button text="detalhes" enabled="{ind_ativo}" />
+												</HBox>
+												<Input type="Number" value="{rf_total_other_taxes_and_tax_credits}" editable="false"/>
+												<Input type="Number" value="{rf_net_local_tax}" editable="false" />
+												<HBox>
+													<Input type="Number" value="{rf_wht}" editable="false" />
+													<Button text="detalhes" enabled="{ind_ativo}" />
+												</HBox>
+												<Input type="Number" value="{rf_overpayment_from_prior_year_applied_to_current_year}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<HBox>
+													<Input type="Number" value="{rf_total_interim_taxes_payments_antecipacoes}" editable="false" />
+													<Button text="detalhes" enabled="{ind_ativo}" />
+												</HBox>
+												<Input type="Number" value="{rf_tax_due_overpaid}" editable="false" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</Panel>
+							<Panel headerText="Income Tax" expandable="true" expanded="true" id="containerIncomeTax2">
+								<Table
+									items="{
+										path: '/TaxReconciliation',
+										sorter: [{
+											path: 'periodo'
+										}]
+									}"
+									class="bordered celulasSeparadas">
+									<columns>
+										<Column vAlign="Middle" width="10rem">
+											<Text text=""/>
+										</Column>
+										<Column width="10rem">
+											<Text text="Income Tax – as per the statutory financials" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Income Tax – as per the tax return" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Jurisdiction tax rate – average" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Staturory tax rate – average" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Effective tax rate - as per the statutory financials" />
+										</Column>
+										<Column width="10rem">
+											<Text text="Effective tax rate - as per the tax return" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<ObjectIdentifier title="{periodo}" />
+												<Input type="Number" value="{it_income_tax_as_per_the_statutory_financials}" editable="false" />
+												<Input type="Number" value="{it_income_tax_as_per_the_tax_return}" editable="false" />
+												<Input type="Number" value="{it_jurisdiction_tax_rate_average}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{it_statutory_tax_rate_average}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{it_effective_tax_rate_as_per_the_statutory_financials}" editable="false" />
+												<Input type="Number" value="{it_effective_tax_rate_as_per_the_tax_return}" editable="false" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+								<VBox>
+									<ObjectIdentifier 
+										class="sapUiMediumMarginTop"
+										title="Please provide details if Tax Return's Income differs from FS" />
+									<TextArea
+										rows="5"
+										width="100%"
+										value="{/IncomeTaxDetails}" />
+								</VBox>
+							</Panel>
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon="" />

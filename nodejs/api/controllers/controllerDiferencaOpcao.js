@@ -5,7 +5,16 @@ var model = require("../models/modelDiferencaOpcao");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		var aParams = [];
+		
+		if (req.query.tipo) {
+			aParams.push({
+				coluna: model.colunas.fkDominioDiferencaTipo,
+				valor: Number(req.query.tipo)
+			});
+		} 
+		
+		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {

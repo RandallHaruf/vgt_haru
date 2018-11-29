@@ -1,14 +1,54 @@
 sap.ui.define(
 	[	
-		"ui5ns/ui5/controller/BaseController"
+		"ui5ns/ui5/controller/BaseController",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController) {
+	function (BaseController, NodeAPI) {
 		"use strict";
 		
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
-					taxReconciliation: {
+					DiferencaOpcao: {
+						Permanente: [],
+						Temporaria: []
+					},
+					DiferencasPermanentes: [],
+					DiferencasTemporarias: [],
+					TotalDiferencaPermanente: 0,
+					TotalDiferencaTemporaria: 0,
+					Moeda: null,
+					TaxReconciliation: [{
+						periodo: "1º Trimestre",
+						rc_statutory_gaap_profit_loss_before_tax: 0,
+						rc_current_income_tax_current_year: 0,
+						rc_current_income_tax_previous_year: 0,
+						rc_deferred_income_tax: 0,
+						rc_non_recoverable_wht: 0,
+						rc_statutory_provision_for_income_tax: 0, 
+						rc_statutory_gaap_profit_loss_after_tax: 0,
+						rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+						rf_total_losses_utilized: 0,
+						rf_taxable_income_loss_after_losses: 0,
+						rf_income_tax_before_other_taxes_and_credits: 0,
+						rf_other_taxes: 0,
+						rf_incentivos_fiscais: 0,
+						rf_total_other_taxes_and_tax_credits: 0,
+						rf_net_local_tax: 0,
+						rf_wht: 0,
+						rf_overpayment_from_prior_year_applied_to_current_year: 0,
+						rf_total_interim_taxes_payments_antecipacoes: 0,
+						rf_tax_due_overpaid: 0,
+						it_income_tax_as_per_the_statutory_financials: 0,
+						it_income_tax_as_per_the_tax_return: 0,
+						it_jurisdiction_tax_rate_average: 0,
+						it_statutory_tax_rate_average: 0,
+						it_effective_tax_rate_as_per_the_statutory_financials: 0,
+						it_effective_tax_rate_as_per_the_tax_return: 0,
+						ind_ativo: true
+					}],
+					IncomeTaxDetails: null,
+					/*taxReconciliation: {
 						resultadoContabil: [],
 						adicoesExclusoes: {
 							permanentDifferences: {
@@ -40,7 +80,7 @@ sap.ui.define(
 						},
 						resultadoFiscal: [],
 						incomeTax: []
-					},
+					},*/
 					lossSchedule: [
 						{
 							fiscalYear: 2017,
@@ -92,9 +132,184 @@ sap.ui.define(
 				}));
 				
 				this._initItemsToReport();
-				this._initTaxReconciliation();               
+				//this._initTaxReconciliation();               
 				
 				this.getRouter().getRoute("taxPackageEdicaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+			},
+			
+			onAplicarRegras: function (oEvent) {
+				this._onAplicarFormulasRC();
+				this._onCalcularTotalDiferenca();
+				this._onAplicarFormulasRF();
+				this._onAplicarFormulasIT();
+				this.getModel().refresh();
+			},
+			
+			_onAplicarFormulasRC: function () {
+				//var oResultadoContabil = oEvent.getSource().getBindingContext().getObject();
+				var oResultadoContabil = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+					return obj.ind_ativo === true;
+				}); 
+				
+				var fValor1 = oResultadoContabil.rc_statutory_gaap_profit_loss_before_tax ? Number(oResultadoContabil.rc_statutory_gaap_profit_loss_before_tax) : 0,
+					fValor2 = oResultadoContabil.rc_current_income_tax_current_year ? Number(oResultadoContabil.rc_current_income_tax_current_year) : 0,
+					fValor3 = oResultadoContabil.rc_current_income_tax_previous_year ? Number(oResultadoContabil.rc_current_income_tax_previous_year) : 0,
+					fValor4 = oResultadoContabil.rc_deferred_income_tax ? Number(oResultadoContabil.rc_deferred_income_tax) : 0,
+					fValor5 = oResultadoContabil.rc_non_recoverable_wht ? Number(oResultadoContabil.rc_non_recoverable_wht) : 0;
+				
+				oResultadoContabil.rc_statutory_provision_for_income_tax = fValor2 + fValor3 + fValor4 + fValor5;
+				
+				var fValor6 = oResultadoContabil.rc_statutory_provision_for_income_tax ? oResultadoContabil.rc_statutory_provision_for_income_tax : 0;
+				
+				oResultadoContabil.rc_statutory_gaap_profit_loss_after_tax = fValor1 - fValor6;
+			},
+			
+			_onAplicarFormulasRF: function () {
+				var oResultadoFiscal = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+					return obj.ind_ativo === true;
+				}); 	
+				
+				var fValor1 = oResultadoFiscal.rc_statutory_gaap_profit_loss_before_tax ? Number(oResultadoFiscal.rc_statutory_gaap_profit_loss_before_tax) : 0,
+					fTotalDiferencaPermanente = this.getModel().getProperty("/TotalDiferencaPermanente") ? Number(this.getModel().getProperty("/TotalDiferencaPermanente")) : 0,
+					fTotalDiferencaTemporaria = this.getModel().getProperty("/TotalDiferencaTemporaria") ? Number(this.getModel().getProperty("/TotalDiferencaTemporaria")) : 0;
+					
+				oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits = fValor1 + fTotalDiferencaPermanente + fTotalDiferencaTemporaria;
+				
+				oResultadoFiscal.rf_total_losses_utilized = (oResultadoFiscal.rf_total_losses_utilized ? Math.abs(Number(oResultadoFiscal.rf_total_losses_utilized)) : 0) * -1;
+				
+				oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits + oResultadoFiscal.rf_total_losses_utilized;
+				
+				var fValor2 = oResultadoFiscal.rf_other_taxes ? Number(oResultadoFiscal.rf_other_taxes) : 0,
+					fValor3 = oResultadoFiscal.rf_incentivos_fiscais ? Number(oResultadoFiscal.rf_incentivos_fiscais) : 0;
+				
+				oResultadoFiscal.rf_total_other_taxes_and_tax_credits = fValor2 + fValor3;
+				
+				oResultadoFiscal.rf_net_local_tax = oResultadoFiscal.rf_total_other_taxes_and_tax_credits + oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits;
+				
+				var fValor4 =  oResultadoFiscal.rf_net_local_tax,
+					fValor5 = oResultadoFiscal.rf_wht ? Number(oResultadoFiscal.rf_wht) : 0,
+					fValor6 = oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year ? Number(oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year) : 0,
+					fValor7 = oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes ? Number(oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes) : 0;
+					
+				oResultadoFiscal.rf_tax_due_overpaid = fValor4 + fValor5 + fValor6 + fValor7;
+			},
+			
+			_onAplicarFormulasIT: function () {
+				var oIncomeTax = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+					return obj.ind_ativo === true;
+				}); 
+				
+				var fValor1 = oIncomeTax.rc_current_income_tax_current_year ? Number(oIncomeTax.rc_current_income_tax_current_year) : 0,
+					fValor2 = oIncomeTax.rf_income_tax_before_other_taxes_and_credits ? Number(oIncomeTax.rf_income_tax_before_other_taxes_and_credits) : 0;
+				
+				oIncomeTax.it_income_tax_as_per_the_statutory_financials = fValor1;
+				oIncomeTax.it_income_tax_as_per_the_tax_return = fValor2;
+				
+				var fValor3 = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) : 0,
+					fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
+				
+				if (fValor3 !== 0) {
+					oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = fValor1 / fValor3;
+					oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = fValor4 / fValor3;
+				}
+				else {
+					if (fValor1 > 0) {
+						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 1;	
+					}
+					if (fValor4 > 0) {
+						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = 1;
+					}
+				}
+			},
+			
+			_onCalcularTotalDiferenca: function () {
+				var sChaveProcurar = "",
+					fTotalDiferencaPermanente = 0,
+					fTotalDiferencaTemporaria = 0,
+					iNumeroOrdemPeriodo = this.getModel().getProperty("/Periodo").numero_ordem;
+				
+				switch (true) {
+					case iNumeroOrdemPeriodo === 1:
+						sChaveProcurar = "valor1";
+						break;
+					case iNumeroOrdemPeriodo === 2:
+						sChaveProcurar = "valor2";
+						break;
+					case iNumeroOrdemPeriodo === 3:
+						sChaveProcurar = "valor3";
+						break;
+					case iNumeroOrdemPeriodo === 4:
+						sChaveProcurar = "valor4";
+						break;
+					case iNumeroOrdemPeriodo === 5:
+						sChaveProcurar = "valorAnual";
+						break;
+					case iNumeroOrdemPeriodo >= 6:
+						sChaveProcurar = "valorRetificadora";
+						break;
+				}
+				
+				if (sChaveProcurar) {
+					var aDiferencasPermanentes = this.getModel().getProperty("/DiferencasPermanentes"),
+						aDiferencasTemporarias = this.getModel().getProperty("/DiferencasTemporarias");
+						
+					for (var i = 0, length = aDiferencasPermanentes.length; i < length; i++) {
+						var oDiferencaPermanente = aDiferencasPermanentes[i],
+							fValor = oDiferencaPermanente[sChaveProcurar] ? Number(oDiferencaPermanente[sChaveProcurar]) : 0;
+						
+						fTotalDiferencaPermanente += fValor;
+					}
+					
+					for (var i = 0, length = aDiferencasTemporarias.length; i < length; i++) {
+						var oDiferencaTemporaria = aDiferencasTemporarias[i],
+							fValor = oDiferencaTemporaria[sChaveProcurar] ? Number(oDiferencaTemporaria[sChaveProcurar]) : 0;
+						
+						fTotalDiferencaTemporaria += fValor;
+					}
+				}
+				
+				this.getModel().setProperty("/TotalDiferencaPermanente", fTotalDiferencaPermanente);
+				this.getModel().setProperty("/TotalDiferencaTemporaria", fTotalDiferencaTemporaria);
+			},
+			
+			onNovaDiferencaPermanente: function (oEvent) {
+				this.getModel().getProperty("/DiferencasPermanentes").unshift({
+					"fk_diferenca_opcao.id_diferenca_opcao": null,
+					"outro": null,
+					"valor1": 0,
+					"valor2": 0,
+					"valor3": 0,
+					"valor4": 0,
+					"valor5": 0,
+					"valor6": 0,
+					"nova": true
+				});
+				this.getModel().refresh();
+			},
+			
+			onExcluirPermanente: function (oEvent) {
+				var oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+				this._onExcluirDiferenca(oExcluir, "/DiferencasPermanentes");
+			},
+			
+			onNovaDiferencaTemporaria: function (oEvent) {
+				this.getModel().getProperty("/DiferencasTemporarias").unshift({
+					"fk_diferenca_opcao.id_diferenca_opcao": null,
+					"outro": null,
+					"valor1": 0,
+					"valor2": 0,
+					"valor3": 0,
+					"valor4": 0,
+					"valor5": 0,
+					"valor6": 0,
+					"nova": true
+				});
+				this.getModel().refresh();
+			},
+			
+			onExcluirTemporaria: function (oEvent) {
+				var oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+				this._onExcluirDiferenca(oExcluir, "/DiferencasTemporarias");
 			},
 			
 			onNovaAdicao: function (oEvent) {
@@ -154,23 +369,40 @@ sap.ui.define(
 							}
 							
 							that.getModel().setProperty(sProperty, aData);
+							that.onAplicarRegras();
 						}
 					}
 				});	
 			},
 			
 			onSalvarFechar: function (oEvent) {
-				this.getRouter().navTo("taxPackageResumoTrimestre");
+				var that = this;
+				
+				this._salvar(oEvent, function (response) {
+					if (response.success) {
+						that._navToResumoTrimestre();
+					}
+					else {
+						sap.m.MessageToast.show("Erro ao salvar");
+					}
+				});
 			},
 			
 			onSalvar: function (oEvent) {
-				sap.m.MessageToast.show("On Salvar");
+				this._salvar(oEvent, function (response) {
+					if (response.success) {
+						sap.m.MessageToast.show("Salvo com sucesso");
+					}
+					else {
+						sap.m.MessageToast.show("Erro ao salvar");
+					}
+				});
 			},
 			
 			onCancelar: function (oEvent) {
 				var that = this;
 				this._confirmarCancelamento(function () {
-					that.getRouter().navTo("taxPackageResumoTrimestre");
+					that._navToResumoTrimestre();
 				});
 			},
 			
@@ -786,7 +1018,7 @@ sap.ui.define(
 			navToPage3: function () {
 				var that = this;
 				this._confirmarCancelamento(function () {
-					that.getRouter().navTo("taxPackageResumoTrimestre");
+					that._navToResumoTrimestre();
 				});
 			},
 			
@@ -825,7 +1057,98 @@ sap.ui.define(
 				this.getModel().setProperty("/Periodo", oParametros.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParametros.oAnoCalendario);
 				
-				alert("Empresa: " + oParametros.oEmpresa.nome + "\nPeriodo: " + oParametros.oPeriodo.periodo + "\nAnoCalendario: " + oParametros.oAnoCalendario.anoCalendario);
+				//alert("Empresa: " + oParametros.oEmpresa.nome + "\nPeriodo: " + oParametros.oPeriodo.periodo + "\nAnoCalendario: " + oParametros.oAnoCalendario.anoCalendario);
+				
+				var that = this;
+				
+				NodeAPI.listarRegistros("DominioMoeda", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/DominioMoeda", response);
+					}
+				});
+				
+				NodeAPI.listarRegistros("DiferencaOpcao?tipo=1", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/DiferencaOpcao/Permanente", response);
+					}
+				});
+				
+				NodeAPI.listarRegistros("DiferencaOpcao?tipo=2", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/DiferencaOpcao/Temporaria", response);
+					}
+				});
+			},
+			
+			_salvar: function (oEvent, callback) {
+				var oButton = oEvent.getSource();
+				
+				oButton.setEnabled(false);
+				
+				this._inserir(function (response) {
+					oButton.setEnabled(true);
+					
+					if (callback) {
+						callback(JSON.parse(response));
+					}
+				});
+			},
+			
+			_inserir: function (callback) {
+				var sIdMoeda = this.getModel().getProperty("/Moeda");
+				var sIncomeTaxDetails = this.getModel().getProperty("/IncomeTaxDetails");
+				
+				var oTaxReconciliation = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+					return obj.ind_ativo === true;
+				});
+				
+				var aDiferencaPermanente = this.getModel().getProperty("/DiferencasPermanentes"),
+					aDiferencaTemporaria = this.getModel().getProperty("/DiferencasTemporarias");
+				
+				console.log("######## INSERIR ########");
+				console.log("- Moeda TP: " + sIdMoeda);
+				console.log("- Tax Reconciliation: \n");
+				console.log("	-- Income Tax Details: " + sIncomeTaxDetails + "\n");
+				console.table(oTaxReconciliation);
+				console.table(aDiferencaPermanente);
+				console.table(aDiferencaTemporaria);
+				
+				if (callback) {
+					callback(JSON.stringify({
+						success: true
+					}));
+				}
+			},
+			
+			_navToResumoTrimestre: function () {
+				this._limparModel();
+				
+				var oParametros = {
+					empresa: this.getModel().getProperty("/Empresa"),
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario
+				};
+				
+				this.getRouter().navTo("taxPackageResumoTrimestre", {
+					parametros: JSON.stringify(oParametros)
+				});
+			},
+			
+			_limparModel: function () {
+				this.getModel().setProperty("/Moeda", null);
+				/*this.getModel().setProperty("/TaxReconciliation", [{
+					periodo: "1º Trimestre",
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rc_current_income_tax_current_year: 0,
+					rc_current_income_tax_previous_year: 0,
+					rc_deferred_income_tax: 0,
+					rc_non_recoverable_wht: 0,
+					rc_statutory_provision_for_income_tax: 0, 
+					rc_statutory_gaap_profit_loss_after_tax: 0,
+					ind_ativo: true
+				}]);*/
 			}
 		});
 	}
