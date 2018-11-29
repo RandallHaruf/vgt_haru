@@ -133,15 +133,15 @@
 					<ColumnListItem
 						press="onAbrirObjeto">
 						<cells>
-							<ObjectIdentifier title="{id}" />
-							<Text text="{empresa}" />
-							<Text text="{trimestre}" />
-							<Text text="{dataRequisicao}" />
+							<ObjectIdentifier title="{id_requisicao_reabertura}" />
+							<Text text="{nome}" />
+							<Text text="{periodo}" />
+							<Text text="{data_requisicao}" />
 							<Text text="{anoRequisicao}" />
-							<Text text="{usuario}" />
+							<Text text="{nome_usuario}" />
 							<Text text="{justificativa}" />
 							<Text text="{resposta}" />
-							<core:Icon src="{status/icone}" color="{status/cor}" tooltip="{status/tooltip}" size="2rem" />
+							<core:Icon src="{oStatus/icone}" color="{oStatus/cor}" tooltip="{oStatus/tooltip}" size="2rem" />
 						</cells>
 					</ColumnListItem>
 				</items>

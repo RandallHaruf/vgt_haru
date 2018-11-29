@@ -135,19 +135,46 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade RequisicaoReabertura");
+		var sStatement = 
+			' SELECT ReqReab.*, ReqStatus.*, empresa.*, per.* '
+			+ ' FROM "VGT.REQUISICAO_REABERTURA" ReqReab '
+			+ ' Left Outer Join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ReqStatus '
+			+ ' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" '
+			+ ' Left Outer Join "VGT.EMPRESA" empresa '
+			+ ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" '
+			+ ' Left Outer Join "VGT.PERIODO" Per '
+			+ ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" ';
+			
+		var oWhere = [];
+		var aParams = [];
 
-		/*var sStatement = 'select * from "DUMMY"';
+		if (req.query.empresa) {
+			oWhere.push(' empresa."id_empresa" = ? ');
+			aParams.push(req.query.empresa.id_empresa);
+		}
+
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+		
+		//sStatement += ' Order By empresa."nome"';
 
 		model.execute({
-		statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };

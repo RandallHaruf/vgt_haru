@@ -86,14 +86,50 @@ sap.ui.define(
 				}); 
 			},
 			_onRouteMatched: function (oEvent) {
+				var that = this;
+				
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
 				
-				NodeAPI.listarRegistros("/RequisicaoReabertura?empresa=?&anoCalendario=?&status=?", function(response){
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura", function(response){
 					if (response) {
-					//that.getModel().setProperty("/DominioAnoCalendario", response);
+						//var vIcone, vCor, vTooltip;
+						
+						/*Object.keys(response).forEach(function(key) {
+							switch (response[key].id_dominio_requisicao_reabertura_status) {
+								case 1:
+									vIcone = "sap-icon://lateness";
+									vCor = "orange";
+									vTooltip = "Aguardando";
+								case 2:
+									vIcone = "sap-icon://accept";
+									vCor = "green";
+									vTooltip = "Aprovado";
+								case 3:
+									vIcone = "sap-icon://decline";
+									vCor = "red";
+									vTooltip = "Reprovado";
+								default:
+									vIcone = "";
+									vCor = "";
+									vTooltip = "";
+							};					
+							Object.assign(response[key],{vStatus: {icone: vIcone, cor: vCor, tooltip: vTooltip}});
+						});*/
+						
+						for (var i = 0; i < response.length; i++) {
+							if (response[i].id_dominio_requisicao_reabertura_status === 1) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://lateness",
+							      cor: "orange",
+							      tooltip: "Aguardando"
+							    };
+							}
+						}
+						
+						that.getModel().setProperty("/requisicoes", response);
 					
 					//that._atualizarDados();
 					}
