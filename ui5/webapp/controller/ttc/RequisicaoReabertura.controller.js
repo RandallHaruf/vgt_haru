@@ -59,6 +59,12 @@ sap.ui.define(
 				this.getRouter().getRoute("ttcRequisicaoReabertura").attachPatternMatched(this._onRouteMatched, this);
 			},
 			
+			onTrocarStatus: function (oEvent) {
+				// sap.m.MessageToast.show("Ano selecionado: " + oEvent.getSource().getSelectedItem().getText());
+				
+				this._atualizarDados();
+			},
+			
 			onNovoObjeto: function (oEvent) {
 				this.getRouter().navTo("ttcFormularioNovaRequisicaoReabertura");
 			},
@@ -79,46 +85,41 @@ sap.ui.define(
 			_navToResumoTrimestre: function () {
 				//this._limparModel();
 				
-				var oEmpresaSelecionada = this.getModel().getProperty("/Empresa");
+				var oEmpresaSelecionada = this.getModel().getProperty("/empresa");
+				var sIdAnoCalendario = this.getModel().getProperty("/idAnoCalendario");
 			
 				this.getRouter().navTo("ttcResumoTrimestre", {
-					oEmpresa: JSON.stringify(oEmpresaSelecionada)
+					oEmpresa: JSON.stringify(oEmpresaSelecionada),
+					idAnoCalendario: sIdAnoCalendario
 				}); 
 			},
+			
 			_onRouteMatched: function (oEvent) {
 				var that = this;
 				
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
-				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
+				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);
 				
-				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura", function(response){
+				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
 					if (response) {
-						//var vIcone, vCor, vTooltip;
+						response.unshift({});
+						that.getModel().setProperty("/RequisicaoReaberturaStatus", response);
 						
-						/*Object.keys(response).forEach(function(key) {
-							switch (response[key].id_dominio_requisicao_reabertura_status) {
-								case 1:
-									vIcone = "sap-icon://lateness";
-									vCor = "orange";
-									vTooltip = "Aguardando";
-								case 2:
-									vIcone = "sap-icon://accept";
-									vCor = "green";
-									vTooltip = "Aprovado";
-								case 3:
-									vIcone = "sap-icon://decline";
-									vCor = "red";
-									vTooltip = "Reprovado";
-								default:
-									vIcone = "";
-									vCor = "";
-									vTooltip = "";
-							};					
-							Object.assign(response[key],{vStatus: {icone: vIcone, cor: vCor, tooltip: vTooltip}});
-						});*/
-						
+						that._atualizarDados();
+					}
+				});
+			},
+			
+			_atualizarDados: function (oEvent) {
+				var that = this;
+				
+				var oEmpresa = this.getModel().getProperty("/empresa");
+				var sIdStatus = this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") ? this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") : "";
+				
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura?status=" + sIdStatus +"&empresa=" + oEmpresa.id_empresa , function(response){
+					if (response) {
 						for (var i = 0; i < response.length; i++) {
 							if (response[i].id_dominio_requisicao_reabertura_status === 1) {
 							    response[i].oStatus = {
@@ -126,21 +127,25 @@ sap.ui.define(
 							      cor: "orange",
 							      tooltip: "Aguardando"
 							    };
+							} else if (response[i].id_dominio_requisicao_reabertura_status === 2) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://decline",
+							      cor: "red",
+							      tooltip: "Reprovado"
+							    };
+							} else if (response[i].id_dominio_requisicao_reabertura_status === 3) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://decline",
+							      cor: "red",
+							      tooltip: "Reprovado"
+							    };
 							}
 						}
-						
 						that.getModel().setProperty("/requisicoes", response);
-					
-					//that._atualizarDados();
 					}
 				});
-				/*NodeAPI.listarRegistros("DeepQuery/Empresa", function(response){
-				if (response){
-					that.getModel().setProperty("/Registros", response);
-				}
-					that.byId("empresaTabela").setBusy(false);
-				});*/
 			}
+			
 		});
 	}
 );

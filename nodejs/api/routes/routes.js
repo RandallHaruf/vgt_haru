@@ -38,6 +38,7 @@ module.exports = function (app) {
 	var routeCambioTTC = require("./routeCambioTTC");
 	var routeTaxPackage = require("./routeTaxPackage");
 	var routeRequisicaoReabertura = require("./routeRequisicaoReabertura");
+	var routeRequisicaoReaberturaStatus = require("./routeRequisicaoReaberturaStatus");
 	
 	var aRoutes = [];	
 	
@@ -75,6 +76,7 @@ module.exports = function (app) {
 	routeCambioTTC(aRoutes);
 	routeTaxPackage(aRoutes);
 	routeRequisicaoReabertura(aRoutes);
+	routeRequisicaoReaberturaStatus(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

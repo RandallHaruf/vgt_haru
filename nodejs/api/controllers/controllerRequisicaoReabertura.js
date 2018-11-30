@@ -150,7 +150,12 @@ module.exports = {
 
 		if (req.query.empresa) {
 			oWhere.push(' empresa."id_empresa" = ? ');
-			aParams.push(req.query.empresa.id_empresa);
+			aParams.push(req.query.empresa);
+		}
+		
+		if (req.query.status) {
+			oWhere.push(' ReqStatus."id_dominio_requisicao_reabertura_status" = ? ');
+			aParams.push(req.query.status);
 		}
 
 		if (oWhere.length > 0) {
