@@ -78,9 +78,14 @@
 							press="onNovoObjeto" 
 							text="novo"
 							type="Emphasized"/>-->
-						<Select tooltip="Status">
-							<core:Item text="Aguardando" />
-						</Select>
+						<Select
+								id="selectStatus"
+								tooltip="Status"
+								change="onTrocarStatus"
+								items="{/RequisicaoReaberturaStatus}"
+								selectedKey="{/RequisicaoReaberturaStatusSelecionado}">
+								<core:Item text="{status}" key="{id_dominio_requisicao_reabertura_status}" />
+							</Select>
 					</Toolbar>
 				</headerToolbar>
 		
