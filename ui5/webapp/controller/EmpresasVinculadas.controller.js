@@ -39,7 +39,7 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("DeepQuery/Empresa", function(response){
 					if (response){
-						that.getModel().setProperty("/requisicoes", response);
+						that.getModel().setProperty("/Registros", response);
 					}
 					that.byId("empresaTabela").setBusy(false);
 				});

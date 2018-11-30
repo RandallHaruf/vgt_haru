@@ -204,7 +204,7 @@ function pegarResumoEmpresa (aPagamentosBorne, aPagamentosCollected) {
 				id_empresa: oTotalMoedaBorne.id_empresa,
 				nome: oTotalMoedaBorne.nome,
 				moeda: oTotalMoedaBorne.acronimo,
-				borne: oTotalMoedaBorne.total
+				borne: Number(oTotalMoedaBorne.total)
 			});
 		}
 	}
@@ -225,7 +225,7 @@ function pegarResumoEmpresa (aPagamentosBorne, aPagamentosCollected) {
 				id_empresa: oTotalMoedaCollected.id_empresa,
 				nome: oTotalMoedaCollected.nome,
 				moeda: oTotalMoedaCollected.acronimo,
-				collected: oTotalMoedaCollected.total
+				collected: Number(oTotalMoedaCollected.total)
 			});
 		}
 	}
