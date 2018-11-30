@@ -4,7 +4,78 @@ var db = require("../db");
 
 module.exports = {
 	listarTaxPackage: function (req, res) {
-		
+		if (req.query.idRelTaxPackagePeriodo) {
+			var sIdRelTaxPackagePeriodo = req.query.idRelTaxPackagePeriodo;
+			
+			// Carrega o tax reconciliation
+			var sQuery = 
+				'select * from "VGT.TAX_RECONCILIATION" taxRecon '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxRecon."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where taxRecon."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?';
+			var aParams = [sIdRelTaxPackagePeriodo];
+			
+			var resultTaxRecon = db.executeStatementSync(sQuery, aParams);
+			
+			for (var i = 0, length = resultTaxRecon.length; i < length; i++) {
+				resultTaxRecon[i].ind_ativo = (resultTaxRecon[i].ind_ativo === 1);
+			}
+			
+			// Carrega a moeda
+			sQuery = 
+				'select taxPackage."fk_dominio_moeda.id_dominio_moeda" '
+				+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+				+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+				+ 'where '
+				+ 'rel."id_rel_tax_package_periodo" = ?';
+			aParams = [sIdRelTaxPackagePeriodo];
+			
+			var resultMoeda = db.executeStatementSync(sQuery, aParams);
+			
+			// Carrega as diferencas
+			var oTaxReconciliation = resultTaxRecon[0];
+			
+			sQuery =
+				'select * '
+				+ 'from "VGT.DIFERENCA" diferenca '
+				+ 'inner join "VGT.DIFERENCA_OPCAO" diferencaOpcao '
+				+ 'on diferenca."fk_diferenca_opcao.id_diferenca_opcao" = diferencaOpcao."id_diferenca_opcao" '
+				+ 'inner join "VGT.DOMINIO_DIFERENCA_TIPO" dominioTipo '
+				+ 'on diferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo" = dominioTipo."id_dominio_diferenca_tipo" '
+				+ 'where '
+				+ 'diferenca."fk_tax_reconciliation.id_tax_reconciliation" = ?';
+			aParams = [oTaxReconciliation.id_tax_reconciliation];
+				
+			var resultDiferenca = db.executeStatementSync(sQuery, aParams);
+			
+			for (var i = 0, length = resultDiferenca.length; i < length; i++) {
+				var oDiferenca = resultDiferenca[i];
+				
+				oDiferenca.valor1 = oTaxReconciliation.numero_ordem === 1 ? oDiferenca.valor : null;
+				oDiferenca.valor2 = oTaxReconciliation.numero_ordem === 2 ? oDiferenca.valor : null;
+				oDiferenca.valor3 = oTaxReconciliation.numero_ordem === 3 ? oDiferenca.valor : null;
+				oDiferenca.valor4 = oTaxReconciliation.numero_ordem === 4 ? oDiferenca.valor : null;
+				oDiferenca.valor5 = oTaxReconciliation.numero_ordem === 5 ? oDiferenca.valor : null;
+				oDiferenca.valor6 = oTaxReconciliation.numero_ordem >= 6 ? oDiferenca.valor : null;
+			}
+			
+			res.send(JSON.stringify({
+				taxReconciliation: resultTaxRecon,
+				diferencaPermanente: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 1),
+				diferencaTemporaria: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 2)
+			}));
+		}
+		else {
+			res.send(JSON.stringify({
+				success: false,
+				error: {
+					message: "É preciso estipular o id do relacionamento do tax package com o período selecionado."
+				}
+			}));
+		}
 	},
 	inserirTaxPackage: function (req, res) {
 		if (req.body.taxPackage) {
@@ -61,31 +132,31 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 		sQuery = 
 			'update "VGT.TAX_RECONCILIATION" ' 
 				+ 'set "rc_statutory_gaap_profit_loss_before_tax" = ?, '
-				+ 'set "rc_current_income_tax_current_year" = ?, '
-				+ 'set "rc_current_income_tax_previous_year" = ?, '
-				+ 'set "rc_deferred_income_tax" = ?, '
-				+ 'set "rc_non_recoverable_wht" = ?, '
-				+ 'set "rc_statutory_provision_for_income_tax" = ?, '
-				+ 'set "rc_statutory_gaap_profit_loss_after_tax" = ?, '
-				+ 'set "rf_taxable_income_loss_before_losses_and_tax_credits" = ?, '
-				+ 'set "rf_total_losses_utilized" = ?,  '
-				+ 'set "rf_taxable_income_loss_after_losses" = ?, '
-				+ 'set "rf_income_tax_before_other_taxes_and_credits" = ?, '
-				+ 'set "rf_other_taxes" = ?, '
-				+ 'set "rf_incentivos_fiscais" = ?, '
-				+ 'set "rf_total_other_taxes_and_tax_credits" = ?, '				
-				+ 'set "rf_net_local_tax" = ?, '
-				+ 'set "rf_wht" = ?, '
-				+ 'set "rf_overpayment_from_prior_year_applied_to_current_year" = ?, '
-				+ 'set "rf_total_interim_taxes_payments_antecipacoes" = ?, '
-				+ 'set "rf_tax_due_overpaid" = ?, '
-				+ 'set "it_income_tax_as_per_the_statutory_financials" = ?, '
-				+ 'set "it_income_tax_as_per_the_tax_return" = ?, '
-				+ 'set "it_jurisdiction_tax_rate_average" = ?, '
-				+ 'set "it_statutory_tax_rate_average" = ?, '
-				+ 'set "it_effective_tax_rate_as_per_the_statutory_financials" = ?, '
-				+ 'set "it_effective_tax_rate_as_per_the_tax_return" = ?, '
-				+ 'set "it_details_if_tax_returns_income_differs_from_fs"  = ? '
+				+ '"rc_current_income_tax_current_year" = ?, '
+				+ '"rc_current_income_tax_previous_year" = ?, '
+				+ '"rc_deferred_income_tax" = ?, '
+				+ '"rc_non_recoverable_wht" = ?, '
+				+ '"rc_statutory_provision_for_income_tax" = ?, '
+				+ '"rc_statutory_gaap_profit_loss_after_tax" = ?, '
+				+ '"rf_taxable_income_loss_before_losses_and_tax_credits" = ?, '
+				+ '"rf_total_losses_utilized" = ?,  '
+				+ '"rf_taxable_income_loss_after_losses" = ?, '
+				+ '"rf_income_tax_before_other_taxes_and_credits" = ?, '
+				+ '"rf_other_taxes" = ?, '
+				+ '"rf_incentivos_fiscais" = ?, '
+				+ '"rf_total_other_taxes_and_tax_credits" = ?, '				
+				+ '"rf_net_local_tax" = ?, '
+				+ '"rf_wht" = ?, '
+				+ '"rf_overpayment_from_prior_year_applied_to_current_year" = ?, '
+				+ '"rf_total_interim_taxes_payments_antecipacoes" = ?, '
+				+ '"rf_tax_due_overpaid" = ?, '
+				+ '"it_income_tax_as_per_the_statutory_financials" = ?, '
+				+ '"it_income_tax_as_per_the_tax_return" = ?, '
+				+ '"it_jurisdiction_tax_rate_average" = ?, '
+				+ '"it_statutory_tax_rate_average" = ?, '
+				+ '"it_effective_tax_rate_as_per_the_statutory_financials" = ?, '
+				+ '"it_effective_tax_rate_as_per_the_tax_return" = ?, '
+				+ '"it_details_if_tax_returns_income_differs_from_fs"  = ? '
 				+ 'where "id_tax_reconciliation" = ?';
 				
 		aParams = [
@@ -231,9 +302,9 @@ function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenc
 			sQuery = 
 				'update "VGT.DIFERENCA" '
 					+ 'set "outro" = ?, '
-					+ 'set "fk_diferenca_opcao.id_diferenca_opcao" = ?, '
-					+ 'set "fk_tax_reconciliation.id_tax_reconciliation" = ?, '
-					+ 'set "valor" = ? '
+					+ '"fk_diferenca_opcao.id_diferenca_opcao" = ?, '
+					+ '"fk_tax_reconciliation.id_tax_reconciliation" = ?, '
+					+ '"valor" = ? '
 				+ 'where "id_diferenca" = ? ';
 						
 			aParams = [oDiferenca.outro, oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"], sFkTaxReconciliation, oDiferenca[sChaveValorDiferenca], oDiferenca.id_diferenca];

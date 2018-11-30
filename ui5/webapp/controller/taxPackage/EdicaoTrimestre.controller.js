@@ -1081,6 +1081,25 @@ sap.ui.define(
 						that.getModel().setProperty("/DiferencaOpcao/Temporaria", response);
 					}
 				});
+				
+				this._atualizarDados();
+			},
+			
+			_atualizarDados: function () {
+				var that = this,
+					sIdRelTaxPackagePeriodo = this.getModel().getProperty("/Periodo").id_rel_tax_package_periodo;
+				
+				NodeAPI.listarRegistros("TaxPackage?idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo, function (response) {
+					if (response) {
+						var oTaxReconAtivo = response.taxReconciliation.find(obj => obj.ind_ativo);
+						that.getModel().setProperty("/TaxReconciliation", response.taxReconciliation);
+						that.getModel().setProperty("/IncomeTaxDetails", oTaxReconAtivo.it_details_if_tax_returns_income_differs_from_fs);
+						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
+						that.getModel().setProperty("/DiferencasTemporarias", response.diferencaTemporaria);
+						
+						that.onAplicarRegras();
+					}	
+				});
 			},
 			
 			_salvar: function (oEvent, callback) {
@@ -1155,6 +1174,9 @@ sap.ui.define(
 			
 			_limparModel: function () {
 				this.getModel().setProperty("/Moeda", null);
+				this.getModel().setProperty("/TaxReconciliation", {});
+				this.getModel().setProperty("/DiferencasPermanentes", []);
+				this.getModel().setProperty("/DiferencasTemporarias", []);
 				/*this.getModel().setProperty("/TaxReconciliation", [{
 					periodo: "1º Trimestre",
 					rc_statutory_gaap_profit_loss_before_tax: 0,
