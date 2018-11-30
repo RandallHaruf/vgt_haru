@@ -317,8 +317,6 @@ context VGT {
     entity RESPOSTA_ITEM_TO_REPORT {
         id_resposta_item_to_report : Integer;
         fk_rel_tax_package_periodo : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
-        fk_tax_package             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
-        fk_periodo                 : association[0..1]    to VGT.REL_TAX_PACKAGE_PERIODO;
         fk_item_to_report          : association[*, 0..1] to VGT.ITEM_TO_REPORT { id_item_to_report };
         ind_se_aplica              : Boolean;
         resposta                   : String(4000);
@@ -338,13 +336,13 @@ context VGT {
             rf_total_losses_utilized                               : Decimal(19, 4);
             rf_taxable_income_loss_after_losses                    : Decimal(19, 4);
             rf_income_tax_before_other_taxes_and_credits           : Decimal(19, 4);
-            rf_other_taxes										   : Decimal(19, 4);
-            rf_incentivos_fiscais								   : Decimal(19, 4);
+            rf_other_taxes                                         : Decimal(19, 4);
+            rf_incentivos_fiscais                                  : Decimal(19, 4);
             rf_total_other_taxes_and_tax_credits                   : Decimal(19, 4);
             rf_net_local_tax                                       : Decimal(19, 4);
-            rf_wht												   : Decimal(19, 4);
+            rf_wht                                                 : Decimal(19, 4);
             rf_overpayment_from_prior_year_applied_to_current_year : Decimal(19, 4);
-            rf_total_interim_taxes_payments_antecipacoes		   : Decimal(19, 4);
+            rf_total_interim_taxes_payments_antecipacoes           : Decimal(19, 4);
             rf_tax_due_overpaid                                    : Decimal(19, 4);
             it_income_tax_as_per_the_statutory_financials          : Decimal(19, 4);
             it_income_tax_as_per_the_tax_return                    : Decimal(19, 4);
@@ -354,8 +352,6 @@ context VGT {
             it_effective_tax_rate_as_per_the_tax_return            : Decimal(19, 4);
             it_details_if_tax_returns_income_differs_from_fs       : String(2000);
             fk_rel_tax_package_periodo                             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
-            fk_tax_package                                         : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
-            fk_periodo                                             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
     };
 
     /*@@layout{"layoutInfo":{"x":-1988,"y":335.5}}*/
@@ -396,20 +392,15 @@ context VGT {
             obs                          : String(500);
             tipo                         : Integer;
             fk_rel_tax_package_periodo   : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
-            fk_tax_package               : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
-            fk_periodo                   : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
     };
 
     /*@@layout{"layoutInfo":{"x":-1823,"y":776.5}}*/
     entity ANTECIPACAO {
-        key id_antecipacao             : Integer64;
-            valor                      : Decimal(19, 4);
-            descricao                  : String(500);
-            fk_tax_reconciliation      : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
-            fk_rel_tax_package_periodo : association[*, 0..1] to VGT.TAX_RECONCILIATION;
-            fk_tax_package             : association[*, 0..1] to VGT.TAX_RECONCILIATION;
-            fk_periodo                 : association[*, 0..1] to VGT.TAX_RECONCILIATION;
-            fk_pagamento               : association[*, 0..1] to VGT.PAGAMENTO { id_pagamento };
+        key id_antecipacao        : Integer64;
+            valor                 : Decimal(19, 4);
+            descricao             : String(500);
+            fk_tax_reconciliation : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
+            fk_pagamento          : association[*, 0..1] to VGT.PAGAMENTO { id_pagamento };
     };
 
     /*@@layout{"layoutInfo":{"x":-1483,"y":-214.5}}*/
@@ -425,9 +416,6 @@ context VGT {
             valor                         : Decimal(19, 4);
             fk_dominio_tipo_taxa_multipla : association[*, 0..1] to VGT.DOMINIO_TIPO_TAXA_MULTIPLA { id_dominio_tipo_taxa_multipla };
             fk_tax_reconciliation         : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
-            fk_rel_tax_package_periodo    : association[0..1]    to VGT.TAX_RECONCILIATION;
-            fk_tax_package                : association[0..1]    to VGT.TAX_RECONCILIATION;
-            fk_periodo                    : association[0..1]    to VGT.TAX_RECONCILIATION;
     };
 
     /*@@layout{"layoutInfo":{"x":-2348,"y":-10.5}}*/

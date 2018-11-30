@@ -1117,8 +1117,14 @@ sap.ui.define(
 				console.table(aDiferencaTemporaria);
 				
 				var oTaxPackage = {
+					empresa: this.getModel().getProperty("/Empresa"),
+					periodo: this.getModel().getProperty("/Periodo"),
+					anoCalendario: this.getModel().getProperty("/AnoCalendario"),
 					moeda: this.getModel().getProperty("/Moeda"),
-					taxReconciliation: this.getModel().getProperty("/TaxReconciliation")	
+					taxReconciliationRcRfIt: this.getModel().getProperty("/TaxReconciliation"),
+					incomeTaxDetails: this.getModel().getProperty("/IncomeTaxDetails"),
+					diferencasPermanentes: aDiferencaPermanente,
+					diferencasTemporarias: aDiferencaTemporaria
 				};
 				
 				NodeAPI.criarRegistro("InserirTaxPackage", {
