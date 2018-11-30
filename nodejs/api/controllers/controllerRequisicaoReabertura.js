@@ -1,6 +1,17 @@
 "use strict";
 
+var db = require("../db");
 var model = require("../models/modelRequisicaoReabertura");
+
+function inserirRequisicao (oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo) {
+	// Inclui a requisição nova
+	var aParams = [sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo],
+		sQuery = ' INSERT INTO '
+		+ ' "VGT.REQUISICAO_REABERTURA" '
+		+ ' VALUES("identity_VGT.REQUISICAO_REABERTURA_id_requisicao_reabertura".nextval, ?, ?, ?, ?, ?, ?, ?, ?) ';
+		
+	model.executeSync(sQuery, aParams, { connection: oConnection });
+}
 
 module.exports = {
 
@@ -28,42 +39,81 @@ module.exports = {
 	},
 
 	criarRegistro: function (req, res) {
+		if (req.body.pagamentos) {
+			var sDataRequisicao = req.body.dataRequisicao,
+				sIdUsuario = req.body.idUsuario,
+				sNomeUsuario = req.body.nomeUsuario,
+				sJustificativa = req.body.justificativa,
+				sResposta = req.body.resposta,
+				sStatus = req.body.fkDominioRequisicaoReaberturaStatus,
+				sIdEmpresa = req.body.fkEmpresa,
+				sIdPeriodo = req.body.fkPeriodo;
+				
+			var response = {
+				success: true
+			};
+			
+			var oConnection;
 
-		var aParams = [{
-			coluna: model.colunas.id
-		}, {
-			coluna: model.colunas.dataRequisicao,
-			valor: req.body.dataRequisicao ? req.body.dataRequisicao : null
-		}, {
-			coluna: model.colunas.idUsuario,
-			valor: req.body.idUsuario ? Number(req.body.idUsuario) : null
-		}, {
-			coluna: model.colunas.nomeUsuario,
-			valor: req.body.nomeUsuario ? req.body.nomeUsuario : null
-		}, {
-			coluna: model.colunas.justificativa,
-			valor: req.body.justificativa ? req.body.justificativa : null
-		}, {
-			coluna: model.colunas.resposta,
-			valor: req.body.resposta ? req.body.resposta : null
-		}, {
-			coluna: model.colunas.fkDominioRequisicaoReaberturaStatus,
-			valor: req.body.fkDominioRequisicaoReaberturaStatus ? Number(req.body.fkDominioRequisicaoReaberturaStatus) : null
-		}, {
-			coluna: model.colunas.fkEmpresa,
-			valor: req.body.fkEmpresa ? Number(req.body.fkEmpresa) : null
-		}, {
-			coluna: model.colunas.fkPeriodo,
-			valor: req.body.fkPeriodo ? Number(req.body.fkPeriodo) : null
-		}];
-
-		model.inserir(aParams, function (err, result) {
-			if (err) {
-				res.send(JSON.stringify(err));
-			} else {
-				res.send(JSON.stringify(result));
+			try {
+				oConnection = db.getConnection();
+				oConnection.setAutoCommit(false);
+				
+				inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo);
+			
+				oConnection.commit();
+			} catch (e) {
+				console.log(e);
+				response.success = false;
+				response.error = e;
+				if (oConnection) {
+					oConnection.rollback();
+				}
+			} finally {
+				if (oConnection) {
+					oConnection.setAutoCommit(true);
+					oConnection.close();
+				}
 			}
-		});
+
+			res.send(JSON.stringify(response));
+		} else {
+			var aParams = [{
+				coluna: model.colunas.id
+			}, {
+				coluna: model.colunas.dataRequisicao,
+				valor: req.body.dataRequisicao ? req.body.dataRequisicao : null
+			}, {
+				coluna: model.colunas.idUsuario,
+				valor: req.body.idUsuario ? Number(req.body.idUsuario) : null
+			}, {
+				coluna: model.colunas.nomeUsuario,
+				valor: req.body.nomeUsuario ? req.body.nomeUsuario : null
+			}, {
+				coluna: model.colunas.justificativa,
+				valor: req.body.justificativa ? req.body.justificativa : null
+			}, {
+				coluna: model.colunas.resposta,
+				valor: req.body.resposta ? req.body.resposta : null
+			}, {
+				coluna: model.colunas.fkDominioRequisicaoReaberturaStatus,
+				valor: req.body.fkDominioRequisicaoReaberturaStatus ? Number(req.body.fkDominioRequisicaoReaberturaStatus) : null
+			}, {
+				coluna: model.colunas.fkEmpresa,
+				valor: req.body.fkEmpresa ? Number(req.body.fkEmpresa) : null
+			}, {
+				coluna: model.colunas.fkPeriodo,
+				valor: req.body.fkPeriodo ? Number(req.body.fkPeriodo) : null
+			}];
+	
+			model.inserir(aParams, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				} else {
+					res.send(JSON.stringify(result));
+				}
+			});
+		}
 	},
 
 	lerRegistro: function (req, res) {

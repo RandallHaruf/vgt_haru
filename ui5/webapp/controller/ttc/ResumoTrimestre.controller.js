@@ -4,6 +4,7 @@ sap.ui.define(
 		"sap/ui/model/json/JSONModel",
 		"ui5ns/ui5/lib/NodeAPI"
 	],
+	
 	function (BaseController, JSONModel, NodeAPI) {
 		"use strict";
 
@@ -99,6 +100,20 @@ sap.ui.define(
 
 				dialog.open();
 			},
+			
+			_formatDate: function (date) {
+				var that = this;
+			    
+			    var d = new Date(date),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+			
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+			
+			    return [year, month, day].join('-');
+			},
 
 			onReabrirPeriodo: function (oPeriodo) {
 				var that = this;
@@ -111,6 +126,8 @@ sap.ui.define(
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
 					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
 				};
+				
+				//sIdEmpresa = that.getModel().getProperty("/Empresa");
 				
 				var oForm = new sap.ui.layout.form.Form({
 					editable: true
@@ -136,11 +153,13 @@ sap.ui.define(
 
 				oFormContainer.addFormElement(oFormElement);
 
+				var oTextArea = new sap.m.TextArea({
+					rows: 5
+				});
+				
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralJustificativa}"
-				}).addField(new sap.m.TextArea({
-					rows: 5
-				}));
+				}).addField(oTextArea);
 
 				oFormContainer.addFormElement(oFormElement);
 
@@ -152,7 +171,23 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
-							sap.m.MessageToast.show("Salvar requisição para o período: " + oPeriodo.id_periodo);
+							NodeAPI.criarRegistro("RequisicaoReabertura", {
+								dataRequisicao: this._formatDate(new Date()),
+								idUsuario: "2",
+								nomeUsuario: "Juliana",
+								justificativa: oTextArea.getValue(),
+								resposta: "",
+								fkDominioRequisicaoReaberturaStatus: "1",
+								fkEmpresa: oParams.oEmpresa.id_empresa,
+								fkPeriodo: oPeriodo.id_periodo
+							}, function (response) {
+								that.byId("dynamicPage").setBusy(false);
+								if (callback) {
+									callback(response);
+								}
+							});
+							sap.m.MessageToast.show("Solicitação salva com sucesso !");
+							//sap.m.MessageToast.show("Salvar requisição para o período: "  );
 							dialog.close();
 						}.bind(this)
 					}),
