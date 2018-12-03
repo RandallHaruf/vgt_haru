@@ -347,7 +347,7 @@ function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToRe
 						+ 'set "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?, '
 						+ '"fk_item_to_report.id_item_to_report" = ?, '
 						+ '"ind_se_aplica" = ?, '
-						+ '"resposta" = ?) '
+						+ '"resposta" = ? '
 						+ 'where '
 						+ '"id_resposta_item_to_report" = ? ';
 			
@@ -416,7 +416,7 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 	for (var i = 0, length = result.length; i < length; i++) {
 		var sIdAnoFiscalPersistido = result[i]["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"];
 		
-		var sIdAnoFiscalEnviado = result.find(function (sIdEnviado) {
+		var sIdAnoFiscalEnviado = aAnoFiscal.find(function (sIdEnviado) {
 			return Number(sIdEnviado) === sIdAnoFiscalPersistido;
 		});
 		

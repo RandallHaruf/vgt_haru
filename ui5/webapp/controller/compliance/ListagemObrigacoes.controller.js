@@ -3,20 +3,22 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/models",
 		"sap/ui/model/Filter",
-		"sap/m/MessageToast"
+		"sap/m/MessageToast",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, models, Filter, MessageToast) {
+	function (BaseController, models, Filter, MessageToast, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemObrigacoes", {
 			
-			onInit: function () {
+			onInit: function (oEvent) {
 				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
-				
-				//this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);	
+			    this.setModel(new sap.ui.model.json.JSONModel({})); 
+				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);	
 			},
 			
-			/*_onRouteMatched: function (oEvent) {
-				
-			},*/
+			_onRouteMatched: function (oEvent) {
+				this.carregarFiltroEmpresa();
+				this.carregarFiltroAnoCalendario();
+			},
 			
 			onFiltrar: function (oEvent) {
 				if (!this._filtrosRapidos) {
@@ -71,6 +73,21 @@ sap.ui.define(
 			
 			onNavBack: function () {
 				this.getRouter().navTo("selecaoModulo");
+			},
+			carregarFiltroEmpresa: function () {
+				var that = this;
+				NodeAPI.listarRegistros("Empresa", function (response) {
+					response.unshift({ id: null, descricao: "" });
+					that.getModel().setProperty("/Empresa", response);
+				});
+			},
+			
+			carregarFiltroAnoCalendario : function(){
+				var that = this;
+					NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
+					response.unshift({ id: null, descricao: "" });
+					that.getModel().setProperty("/DominioAnoCalendario", response);
+				});
 			}
 		});
 	}

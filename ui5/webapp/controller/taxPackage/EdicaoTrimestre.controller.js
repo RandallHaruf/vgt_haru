@@ -406,7 +406,7 @@ sap.ui.define(
 				});
 			},
 			
-			_initItemsToReport: function () {
+			_initItemsToReport: function (sIdRelTaxPackagePeriodo) {
 				var that = this; 
 				
 				this.byId("containerItemsToReport2").removeAllContent();
@@ -460,8 +460,10 @@ sap.ui.define(
 							oModel.push(obj);
 						}
 						
-						that.getModel().setProperty("/ComponentesItemToReport", oModel);
 						that.byId("containerItemsToReport2").addContent(oVBox);
+						that.getModel().setProperty("/ComponentesItemToReport", oModel);
+						
+						that._carregarDadosItemToReport(sIdRelTaxPackagePeriodo);
 					}	
 				});
 				
@@ -509,6 +511,62 @@ sap.ui.define(
 				}
 				
 				this.byId("containerItemsToReport2").addContent(oVBox);*/
+			},
+			
+			_carregarDadosItemToReport: function (sIdRelTaxPackagePeriodo) {
+				var that = this,
+					aComponenteItemToReport = this.getModel().getProperty("/ComponentesItemToReport");
+				
+				NodeAPI.listarRegistros("RespostaItemToReport?relTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo, function (response) {
+					if (response) {
+						for (var i = 0, length = response.length; i < length; i++) {
+							var oRespostaItemToReport = response[i];
+							
+							var oComponenteItemToReport = aComponenteItemToReport.find(function (obj) {
+								return oRespostaItemToReport["fk_item_to_report.id_item_to_report"] === obj.idItemToReport;	
+							});
+							
+							if (oComponenteItemToReport) {
+								var sIdRadioButtonSim = oComponenteItemToReport.idRadioButtonSim,
+									sIdRadioButtonNao = oComponenteItemToReport.idRadioButtonNao,
+									sIdMultiComboBox = oComponenteItemToReport.idMultiComboBox,
+									sIdTextArea = oComponenteItemToReport.idTextArea;
+									
+								if (sIdRadioButtonSim) {
+								sap.ui.getCore().byId(sIdRadioButtonSim).setSelected(oRespostaItemToReport.ind_se_aplica ? true : false);
+								sap.ui.getCore().byId(sIdRadioButtonNao).setSelected(oRespostaItemToReport.ind_se_aplica ? false : true);
+								}
+								
+								if (sIdTextArea) {
+									sap.ui.getCore().byId(sIdTextArea).setValue(oRespostaItemToReport.resposta);
+								}
+								
+								oComponenteItemToReport.id_resposta_item_to_report = oRespostaItemToReport.id_resposta_item_to_report;
+								
+								if (sIdMultiComboBox) {
+									that._carregarRelacionamentoRespostaItemToReportAnoFiscal(oRespostaItemToReport, sIdMultiComboBox);
+								}
+							}
+						}		
+					}
+				});
+			},
+			
+			_carregarRelacionamentoRespostaItemToReportAnoFiscal: function (oRespostaItemToReport, sIdMultiComboBox) {
+				var sEntidade = "RelacionamentoRespostaItemToReportAnoFiscal?respostaItemToReport=" + oRespostaItemToReport.id_resposta_item_to_report,
+					oMultiComboBox = sap.ui.getCore().byId(sIdMultiComboBox);
+				
+				NodeAPI.listarRegistros(sEntidade, function (response) {
+					if (response) {
+						var aIdAnoFiscal = [];
+						
+						for (var i = 0, length = response.length; i < length; i++) {
+							aIdAnoFiscal.push(response[i]["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"].toString());
+						}
+						
+						oMultiComboBox.setSelectedKeys(aIdAnoFiscal);
+					}
+				});
 			},
 			
 			_initTaxReconciliation: function () {
@@ -1145,8 +1203,7 @@ sap.ui.define(
 						that.getModel().setProperty("/DominioAnoFiscal", response);
 					}	
 				});
-				              
-		    	this._initItemsToReport();  
+				
 				this._atualizarDados();
 			},
 			
@@ -1166,6 +1223,8 @@ sap.ui.define(
 						that.onAplicarRegras();
 					}	
 				});
+				
+				that._initItemsToReport(sIdRelTaxPackagePeriodo);
 			},
 			
 			_salvar: function (oEvent, callback) {
@@ -1246,6 +1305,10 @@ sap.ui.define(
 					
 					if (oComponenteItemToReport.idTextArea) {
 						oRespostaItemToReport.resposta = sap.ui.getCore().byId(oComponenteItemToReport.idTextArea).getValue();
+					}
+					
+					if (oComponenteItemToReport.id_resposta_item_to_report) {
+						oRespostaItemToReport.id_resposta_item_to_report = oComponenteItemToReport.id_resposta_item_to_report;
 					}
 					
 					aRespostaItemToReport.push(oRespostaItemToReport);

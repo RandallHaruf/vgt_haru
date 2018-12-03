@@ -5,7 +5,17 @@ var model = require("../models/modelRespostaItemToReport");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		
+		var aParams = [];
+		
+		if (req.query.relTaxPackagePeriodo) {
+			aParams.push({
+				coluna: model.colunas.fkRelTaxPackagePeriodo,
+				valor: req.query.relTaxPackagePeriodo
+			});
+		}
+		
+		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
