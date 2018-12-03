@@ -46,10 +46,10 @@
 		
 				<columns>
 					<Column>
-						<Text text="Nome" />
+						<Text text="{i18n>viewEmpresasNome}" />
 					</Column>
 					<Column>
-						<Text text="País" />
+						<Text text="{i18n>viewEmpresasPais}" />
 					</Column>
 					<Column>
 						<Text text="Status" />
@@ -85,11 +85,11 @@
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
 						<f:formContainers>
-							<f:FormContainer title="Cadastro">
+							<f:FormContainer title="{i18n>viewEmpresasPais}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="Nome" labelFor="inputNomeEmpresa" />
+											<Label text="{i18n>viewEmpresasNome}" labelFor="inputNomeEmpresa" />
 										</f:label>
 										<f:fields>
 											<Input id="inputNomeEmpresa" value="{/objeto/nome}" required="true" />
@@ -97,7 +97,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Número HFM/SAP" labelFor="inputHFMSAP" />
+											<Label text="{i18n>viewEmpresasNumeroHFM}" labelFor="inputHFMSAP" />
 										</f:label>
 										<f:fields>
 											<Input id="inputHFMSAP" value="{/objeto/num_hfm_sap}" required="true" />
@@ -108,7 +108,7 @@
 											<Input id="inputTIN" value="{/objeto/tin}" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="Jurisdição TIN">
+									<f:FormElement label="{i18n>viewEmpresasJurisdicao}">
 										<f:fields>
 											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" />
 										</f:fields>
@@ -120,7 +120,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Jurisdição NI" labelFor="inputJurisdicaoNI" />
+											<Label text="{i18n>viewEmpresasJurisdicao}" labelFor="inputJurisdicaoNI" />
 										</f:label>
 										<f:fields>
 											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}" required="true" />
@@ -136,7 +136,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="País" labelFor="comboboxPais" />
+											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais" />
 										</f:label>
 										<f:fields>
 											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
