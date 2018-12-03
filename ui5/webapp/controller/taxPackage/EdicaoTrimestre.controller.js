@@ -131,7 +131,7 @@ sap.ui.define(
 					]
 				}));
 				
-				this._initItemsToReport();
+				//this._initItemsToReport();
 				//this._initTaxReconciliation();               
 				
 				this.getRouter().getRoute("taxPackageEdicaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
@@ -407,7 +407,65 @@ sap.ui.define(
 			},
 			
 			_initItemsToReport: function () {
-				var aItemsToReport = [
+				var that = this; 
+				
+				this.byId("containerItemsToReport2").removeAllContent();
+				
+				var oModel = [];
+				
+				NodeAPI.listarRegistros("ItemToReport", function (response) {
+					if (response) {
+						//alert(JSON.stringify(response));
+						var oItemToReport, oHBox, oRadioButton, oMultiComboBox, oTextArea, oVBox = new sap.m.VBox();
+						
+						for (var i = 0, length = response.length; i < length; i++) {
+							var obj = {};
+							
+							oItemToReport = response[i];
+							obj.idItemToReport = oItemToReport.id_item_to_report;
+							
+							oHBox = new sap.m.HBox({ alignItems: "Center" });
+							oHBox.addItem(new sap.m.Text({ text: oItemToReport.pergunta }));
+							
+							if (oItemToReport.flag_sim_nao) {
+								oRadioButton = new sap.m.RadioButton({ groupName: "group" + i, text: "Sim" });
+								obj.idRadioButtonSim = oRadioButton.getId();
+								oHBox.addItem(oRadioButton);
+								
+								oRadioButton = new sap.m.RadioButton({ groupName: "group" + i, text: "Não", selected: true }); 
+								obj.idRadioButtonNao = oRadioButton.getId();
+								oHBox.addItem(oRadioButton);
+							}
+							
+							oVBox.addItem(oHBox);
+							
+							if (oItemToReport.flag_ano) {
+								oMultiComboBox = new sap.m.MultiComboBox({ width: "50%" })
+									.bindItems({
+										templateShareable: false,
+										path: "/DominioAnoFiscal",
+										template: new sap.ui.core.ListItem({
+											key: "{id_dominio_ano_fiscal}",
+											text: "{ano_fiscal}"
+										})
+									});
+								obj.idMultiComboBox = oMultiComboBox.getId();
+								oVBox.addItem(oMultiComboBox);
+							}
+							
+							oTextArea = new sap.m.TextArea({ width: "100%", rows: 5 }).addStyleClass("sapUiMediumMarginBottom");
+							obj.idTextArea = oTextArea.getId();
+							oVBox.addItem(oTextArea);	
+							
+							oModel.push(obj);
+						}
+						
+						that.getModel().setProperty("/ComponentesItemToReport", oModel);
+						that.byId("containerItemsToReport2").addContent(oVBox);
+					}	
+				});
+				
+				/*var aItemsToReport = [
 					"What is the first fiscal year still open to scrutiny by the tax authorities? If YES, please indicate which year(s).",
 					"Is there a tax audit ongoing as at the reporting date? If YES, pleas indicate which year(s).",
 					"Was a tax audit completed during the last year before the reporting date?  If YES, pleas indicate which year(s).",
@@ -450,7 +508,7 @@ sap.ui.define(
 					}
 				}
 				
-				this.byId("containerItemsToReport2").addContent(oVBox);
+				this.byId("containerItemsToReport2").addContent(oVBox);*/
 			},
 			
 			_initTaxReconciliation: function () {
@@ -1082,6 +1140,13 @@ sap.ui.define(
 					}
 				});
 				
+				NodeAPI.listarRegistros("DominioAnoFiscal", function (response) {
+					if (response) {
+						that.getModel().setProperty("/DominioAnoFiscal", response);
+					}	
+				});
+				              
+		    	this._initItemsToReport();  
 				this._atualizarDados();
 			},
 			
@@ -1091,7 +1156,8 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("TaxPackage?idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo, function (response) {
 					if (response) {
-						var oTaxReconAtivo = response.taxReconciliation.find(obj => obj.ind_ativo);
+						//var oTaxReconAtivo = response.taxReconciliation.find(obj => obj.ind_ativo);
+						var oTaxReconAtivo = response.taxReconciliation.find(function (obj) { return obj.ind_ativo; });
 						that.getModel().setProperty("/TaxReconciliation", response.taxReconciliation);
 						that.getModel().setProperty("/IncomeTaxDetails", oTaxReconAtivo.it_details_if_tax_returns_income_differs_from_fs);
 						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
@@ -1125,9 +1191,12 @@ sap.ui.define(
 				});
 				
 				var aDiferencaPermanente = this.getModel().getProperty("/DiferencasPermanentes"),
-					aDiferencaTemporaria = this.getModel().getProperty("/DiferencasTemporarias");
+					aDiferencaTemporaria = this.getModel().getProperty("/DiferencasTemporarias"),
+					aRespostaItemToReport = this._formatarRespostaItemToReport();
 				
 				console.log("######## INSERIR ########");
+				console.log("- Items To Report: ");
+				console.table(aRespostaItemToReport);
 				console.log("- Moeda TP: " + sIdMoeda);
 				console.log("- Tax Reconciliation: \n");
 				console.log("	-- Income Tax Details: " + sIncomeTaxDetails + "\n");
@@ -1143,20 +1212,46 @@ sap.ui.define(
 					taxReconciliationRcRfIt: this.getModel().getProperty("/TaxReconciliation"),
 					incomeTaxDetails: this.getModel().getProperty("/IncomeTaxDetails"),
 					diferencasPermanentes: aDiferencaPermanente,
-					diferencasTemporarias: aDiferencaTemporaria
+					diferencasTemporarias: aDiferencaTemporaria,
+					respostaItemToReport: aRespostaItemToReport
 				};
 				
 				NodeAPI.criarRegistro("InserirTaxPackage", {
 					taxPackage: JSON.stringify(oTaxPackage)
 				}, function (response) {
-					console.log(response);
+					if (callback) {
+						callback(response);
+					}
 				});
+			},
+			
+			_formatarRespostaItemToReport: function () {
+				var aComponenteItemToReport = this.getModel().getProperty("/ComponentesItemToReport");
 				
-				if (callback) {
-					callback(JSON.stringify({
-						success: true
-					}));
+				var aRespostaItemToReport = [];
+				
+				for (var i = 0, length = aComponenteItemToReport.length; i < length; i++) {
+					var oComponenteItemToReport = aComponenteItemToReport[i],	
+						oRespostaItemToReport = {
+							fkItemToReport: oComponenteItemToReport.idItemToReport
+						};
+					
+					if (oComponenteItemToReport.idRadioButtonSim) {
+						oRespostaItemToReport.ind_se_aplica = sap.ui.getCore().byId(oComponenteItemToReport.idRadioButtonSim).getSelected();
+					}
+					
+					if (oComponenteItemToReport.idMultiComboBox) {
+						oRespostaItemToReport.relAnoFiscal = sap.ui.getCore().byId(oComponenteItemToReport.idMultiComboBox).getSelectedKeys();   
+					}
+					
+					if (oComponenteItemToReport.idTextArea) {
+						oRespostaItemToReport.resposta = sap.ui.getCore().byId(oComponenteItemToReport.idTextArea).getValue();
+					}
+					
+					aRespostaItemToReport.push(oRespostaItemToReport);
 				}
+				
+				return aRespostaItemToReport;
 			},
 			
 			_navToResumoTrimestre: function () {

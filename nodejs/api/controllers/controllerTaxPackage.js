@@ -89,7 +89,8 @@ module.exports = {
 				sIncomeTaxDetails = oTaxPackage.incomeTaxDetails,
 				aDiferencaPermanente = oTaxPackage.diferencasPermanentes,
 				aDiferencaTemporaria = oTaxPackage.diferencasTemporarias,
-				iNumeroOrdemPeriodo = oTaxPackage.periodo.numero_ordem;
+				iNumeroOrdemPeriodo = oTaxPackage.periodo.numero_ordem,
+				aRespostaItemToReport = oTaxPackage.respostaItemToReport;
 			
 			atualizarMoeda(sIdTaxPackage, sIdMoeda);
 			
@@ -99,6 +100,8 @@ module.exports = {
 			
 			inserirDiferenca(sIdTaxReconciliation, aDiferencaPermanente, sChaveValorDiferenca);
 			inserirDiferenca(sIdTaxReconciliation, aDiferencaTemporaria, sChaveValorDiferenca);
+			
+			inserirRespostaItemToReport(sIdRelTaxPackagePeriodo, aRespostaItemToReport);
 			
 			res.send(JSON.stringify({
 				success: true
@@ -327,6 +330,101 @@ function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenc
 			aParams = [oDiferenca.outro, oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"], sFkTaxReconciliation, oDiferenca[sChaveValorDiferenca]];
 			
 			db.executeStatementSync(sQuery, aParams);					
+		}
+	}
+}
+
+function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToReport) {
+	var sQuery, aParams, result;
+	
+	for (var i = 0, length = aRespostaItemToReport.length; i < length; i++) {
+		var oRespostaItemToReport = aRespostaItemToReport[i],
+			sIdRespostaItemToReport;
+		
+		if (oRespostaItemToReport.id_resposta_item_to_report) {
+			// update
+			sQuery = 'update "VGT.RESPOSTA_ITEM_TO_REPORT" '
+						+ 'set "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?, '
+						+ '"fk_item_to_report.id_item_to_report" = ?, '
+						+ '"ind_se_aplica" = ?, '
+						+ '"resposta" = ?) '
+						+ 'where '
+						+ '"id_resposta_item_to_report" = ? ';
+			
+			var bSeAplica = oRespostaItemToReport.ind_se_aplica ? oRespostaItemToReport.ind_se_aplica : false;
+			
+			aParams = [sFkRelTaxPackagePeriodo, oRespostaItemToReport.fkItemToReport, bSeAplica, oRespostaItemToReport.resposta, oRespostaItemToReport.id_resposta_item_to_report];
+			
+			db.executeStatementSync(sQuery, aParams);
+			
+			sIdRespostaItemToReport = oRespostaItemToReport.id_resposta_item_to_report;
+		}
+		else {
+			// insert
+			sQuery = 'insert into "VGT.RESPOSTA_ITEM_TO_REPORT"( '
+						+ '"id_resposta_item_to_report", '
+						+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo", '
+						+ '"fk_item_to_report.id_item_to_report", '
+						+ '"ind_se_aplica", '
+						+ '"resposta") '
+					+ 'values ('
+						+ '"identity_VGT.RESPOSTA_ITEM_TO_REPORT_id_resposta_item_to_report".nextval, '
+						+ '?, ?, ?, ?)';
+			
+			var bSeAplica = oRespostaItemToReport.ind_se_aplica ? oRespostaItemToReport.ind_se_aplica : false;
+			
+			aParams = [sFkRelTaxPackagePeriodo, oRespostaItemToReport.fkItemToReport, bSeAplica, oRespostaItemToReport.resposta];
+			
+			result = db.executeStatementSync(sQuery, aParams);
+			
+			if (result === 1) {
+				sQuery = 'select MAX("id_resposta_item_to_report") "generated_id" from "VGT.RESPOSTA_ITEM_TO_REPORT"';
+				
+				result = db.executeStatementSync(sQuery, []);
+				
+				sIdRespostaItemToReport = result[0].generated_id;
+			}	
+		}
+		
+		inserirAnoFiscalRespostaItemToReport(sIdRespostaItemToReport, oRespostaItemToReport.relAnoFiscal ? oRespostaItemToReport.relAnoFiscal : []);
+	}
+}
+
+function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFiscal) {
+	var sQuery, aParams, result;
+	
+	sQuery = 'select * from "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" where "fk_resposta_item_to_report.id_resposta_item_to_report" = ? ';
+	aParams = [sFkRespostaItemToReport];
+	
+	result = db.executeStatementSync(sQuery, aParams);
+	
+	for (var i = 0, length = aAnoFiscal.length; i < length; i++) {
+		var sIdAnoFiscalEnviado = aAnoFiscal[i];
+		
+		var oRel = result.find(function (obj) {
+			return Number(obj["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]) === Number(sIdAnoFiscalEnviado);
+		});
+		
+		if (!oRel) {
+			sQuery = 'insert into "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL"("fk_resposta_item_to_report.id_resposta_item_to_report", "fk_dominio_ano_fiscal.id_dominio_ano_fiscal") values (?, ?)';
+			aParams = [sFkRespostaItemToReport, sIdAnoFiscalEnviado];
+			
+			db.executeStatementSync(sQuery, aParams);
+		}
+	}
+	
+	for (var i = 0, length = result.length; i < length; i++) {
+		var sIdAnoFiscalPersistido = result[i]["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"];
+		
+		var sIdAnoFiscalEnviado = result.find(function (sIdEnviado) {
+			return Number(sIdEnviado) === sIdAnoFiscalPersistido;
+		});
+		
+		if (!sIdAnoFiscalEnviado) {
+			sQuery = 'delete from "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" where "fk_resposta_item_to_report.id_resposta_item_to_report" = ? and "fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ?';
+			aParams = [sFkRespostaItemToReport, sIdAnoFiscalPersistido];
+			
+			db.executeStatementSync(sQuery, aParams);
 		}
 	}
 }
