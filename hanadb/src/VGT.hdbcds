@@ -1,6 +1,6 @@
 context VGT {
 
-    /*@@layout{"layoutInfo":{"x":363,"y":1719.5}}*/
+    /*@@layout{"layoutInfo":{"x":195,"y":1717.5}}*/
     entity DOMINIO_PAIS {
         key id_dominio_pais : Integer not null;
             pais            : String(200);
@@ -418,6 +418,12 @@ context VGT {
             fk_tax_reconciliation         : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
     };
 
+    /*@@layout{"layoutInfo":{"x":-2602,"y":-11.5}}*/
+    entity DOMINIO_ACESSO_USUARIO {
+        key id_tipo_acesso : Integer;
+            descricao      : String(30);
+    };
+
     /*@@layout{"layoutInfo":{"x":-2348,"y":-10.5}}*/
     entity USUARIO {
         key id_usuario     : Integer;
@@ -442,9 +448,24 @@ context VGT {
         fk_empresa : association[*, 0..1] to VGT.EMPRESA { id_empresa };
     };
 
-    /*@@layout{"layoutInfo":{"x":-2602,"y":-11.5}}*/
-    entity DOMINIO_ACESSO_USUARIO {
-        key id_tipo_acesso : Integer;
-            descricao      : String(30);
+	/*@@layout{"layoutInfo":{"x":170,"y":651.5}}*/
+    entity DOMINIO_STATUS_OBRIGACAO {
+        key id_status_obrigacao : Integer64;
+            descricao           : String(30);
     };
+
+    /*@@layout{"layoutInfo":{"x":-131,"y":655.5}}*/
+    entity OBRIGACAO {
+        key id_obrigacao        : Integer;
+            prazo_entrega       : LocalDate;
+            extensao            : LocalDate;
+            obrigacao_inicial   : Boolean;
+            suporte_contratado  : Boolean;
+            suporte             : String(400);
+            observacoes         : String(400);
+            fk_status_obrigacao : association[*, 0..1] to VGT.DOMINIO_STATUS_OBRIGACAO { id_status_obrigacao };
+            fk_pais_obrigacao   : association[*, 0..1] to VGT.DOMINIO_PAIS { id_dominio_pais };
+    };
+
+    
 };
