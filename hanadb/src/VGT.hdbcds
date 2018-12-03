@@ -420,14 +420,14 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":-2348,"y":-10.5}}*/
     entity USUARIO {
-        key id_usuario : Integer;
-            nome       : String(200);
-            email      : String(200);
-            contato    : String(200);
-            user       : String(200);
-            pass       : String(200);
-            ind_ativo  : Boolean;
-            acesso     : String(10);
+        key id_usuario     : Integer;
+            nome           : String(200);
+            email          : String(200);
+            contato        : String(200);
+            user           : String(200);
+            pass           : String(200);
+            ind_ativo      : Boolean;
+            fk_tipo_acesso : association[*, 0..1] to VGT.DOMINIO_ACESSO_USUARIO { id_tipo_acesso };
     };
 
     /*@@layout{"layoutInfo":{"x":-2288,"y":-194.5}}*/
@@ -440,5 +440,11 @@ context VGT {
     entity REL_USUARIO_EMPRESA {
         fk_usuario : association[*, 0..1] to VGT.USUARIO { id_usuario };
         fk_empresa : association[*, 0..1] to VGT.EMPRESA { id_empresa };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2602,"y":-11.5}}*/
+    entity DOMINIO_ACESSO_USUARIO {
+        key id_tipo_acesso : Integer;
+            descricao      : String(30);
     };
 };
