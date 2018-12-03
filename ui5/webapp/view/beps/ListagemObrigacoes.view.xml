@@ -96,22 +96,26 @@
 									id="cabecalhoTabelaObrigacoes" 
 									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
 								<ToolbarSpacer />
-								<Select
+							<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
+									id="selectEmpresa" items="{/Empresa}" selectedKey="{/objeto/idempresa}"
 									change="onTrocarEmpresa">
 									<items>
-										<core:Item text="Empresa A"/>
+										<core:Item text="{nome}" key="{id_empresa}" />
+										<!--<core:Item text="Empresa A"/>
 										<core:Item text="Empresa B"/>
-										<core:Item text="Empresa C"/>
+										<core:Item text="Empresa C"/>-->
 									</items>
 								</Select>
 								<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
+									id="selectAnoCalendario" items="{/DominioAnoCalendario}" selectedKey="{/AnoCalendarioSelecionado}"
 									change="onTrocarAnoCalendario">
 									<items>
-										<core:Item text="2018"/>
+										<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+										<!--<core:Item text="2018"/>
 										<core:Item text="2017"/>
-										<core:Item text="2016"/>
+										<core:Item text="2016"/>-->
 									</items>
 								</Select>
 								<Button 
