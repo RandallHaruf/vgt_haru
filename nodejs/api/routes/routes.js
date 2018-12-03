@@ -35,10 +35,12 @@ module.exports = function (app) {
 	var routeRelEmpresaObrigacaoAcessoria = require("./routeRelEmpresaObrigacaoAcessoria");
 	var routeRelEmpresaPeriodo = require("./routeRelEmpresaPeriodo");
 	var routeRelTaxPackagePeriodo = require("./routeRelTaxPackagePeriodo");
+	var routeRelRespostaItemToReportAnoFiscal = require("./routeRelRespostaItemToReportAnoFiscal");
 	var routeCambioTTC = require("./routeCambioTTC");
 	var routeTaxPackage = require("./routeTaxPackage");
 	var routeRequisicaoReabertura = require("./routeRequisicaoReabertura");
 	var routeRequisicaoReaberturaStatus = require("./routeRequisicaoReaberturaStatus");
+	var routeRespostaItemToReport = require("./routeRespostaItemToReport");
 	
 	var aRoutes = [];	
 	
@@ -77,6 +79,8 @@ module.exports = function (app) {
 	routeTaxPackage(aRoutes);
 	routeRequisicaoReabertura(aRoutes);
 	routeRequisicaoReaberturaStatus(aRoutes);
+	routeRespostaItemToReport(aRoutes);
+	routeRelRespostaItemToReportAnoFiscal(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
