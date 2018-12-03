@@ -60,7 +60,7 @@ context VGT {
             jurisdicao            : String(100);
     };
 
-    /*@@layout{"layoutInfo":{"x":-1088,"y":1769.5}}*/
+    /*@@layout{"layoutInfo":{"x":-1409,"y":1962.5}}*/
     entity DOMINIO_ANO_FISCAL {
         key id_dominio_ano_fiscal : Integer not null;
             ano_fiscal            : Integer;
@@ -424,16 +424,16 @@ context VGT {
             descricao      : String(30);
     };
 
-    /*@@layout{"layoutInfo":{"x":-2348,"y":-10.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2279,"y":128.5}}*/
     entity USUARIO {
-        key id_usuario     : Integer;
-            nome           : String(200);
-            email          : String(200);
-            contato        : String(200);
-            user           : String(200);
-            pass           : String(200);
-            ind_ativo      : Boolean;
-            fk_tipo_acesso : association[*, 0..1] to VGT.DOMINIO_ACESSO_USUARIO { id_tipo_acesso };
+        key id_usuario             : Integer;
+            nome                   : String(200);
+            email                  : String(200);
+            contato                : String(200);
+            user                   : String(200);
+            pass                   : String(200);
+            ind_ativo              : Boolean;
+            fk_dominio_tipo_acesso : association[*, 0..1] to VGT.DOMINIO_ACESSO_USUARIO { id_tipo_acesso };
     };
 
     /*@@layout{"layoutInfo":{"x":-2288,"y":-194.5}}*/
@@ -448,24 +448,47 @@ context VGT {
         fk_empresa : association[*, 0..1] to VGT.EMPRESA { id_empresa };
     };
 
-	/*@@layout{"layoutInfo":{"x":170,"y":651.5}}*/
+    /*@@layout{"layoutInfo":{"x":170,"y":651.5}}*/
     entity DOMINIO_STATUS_OBRIGACAO {
         key id_status_obrigacao : Integer64;
             descricao           : String(30);
     };
 
-    /*@@layout{"layoutInfo":{"x":-131,"y":655.5}}*/
-    entity OBRIGACAO {
-        key id_obrigacao        : Integer;
-            prazo_entrega       : LocalDate;
-            extensao            : LocalDate;
-            obrigacao_inicial   : Boolean;
-            suporte_contratado  : Boolean;
-            suporte             : String(400);
-            observacoes         : String(400);
-            fk_status_obrigacao : association[*, 0..1] to VGT.DOMINIO_STATUS_OBRIGACAO { id_status_obrigacao };
-            fk_pais_obrigacao   : association[*, 0..1] to VGT.DOMINIO_PAIS { id_dominio_pais };
+    /*@@layout{"layoutInfo":{"x":170,"y":746.5}}*/
+    entity DOMINIO_PERIODICIDADE_OBRIGACAO {
+        key id_periodicidade_obrigacao : Integer;
+            descricao                  : String(30);
     };
 
+	/*@@layout{"layoutInfo":{"x":122,"y":1027.5}}*/
+    entity DOCUMENTO {
+        key id_documento : Integer;
+            caminho      : String(50);
+            ind_ativo    : Boolean;
+            fk_usuario   : association[*, 0..1] to VGT.USUARIO { id_usuario };
+    };
     
+    /*@@layout{"layoutInfo":{"x":-131,"y":655.5}}*/
+    entity OBRIGACAO {
+        key id_obrigacao                       : Integer;
+            prazo_entrega                      : LocalDate;
+            extensao                           : LocalDate;
+            obrigacao_inicial                  : Boolean;
+            suporte_contratado                 : Boolean;
+            suporte                            : String(400);
+            observacoes                        : String(400);
+            fk_dominio_status_obrigacao        : association[*, 0..1] to VGT.DOMINIO_STATUS_OBRIGACAO { id_status_obrigacao };
+            fk_dominio_pais                    : association[*, 0..1] to VGT.DOMINIO_PAIS { id_dominio_pais };
+            fk_dominio_periodicidade_obrigacao : association[*, 0..1] to VGT.DOMINIO_PERIODICIDADE_OBRIGACAO { id_periodicidade_obrigacao };
+            fk_empresa                         : association[*, 0..1] to VGT.EMPRESA { id_empresa };
+            fk_obrigacao_acessoria             : association[*, 0..1] to VGT.OBRIGACAO_ACESSORIA { id_obrigacao_acessoria };
+            fk_dominio_ano_fiscal              : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
+    };
+    
+    /*@@layout{"layoutInfo":{"x":-109,"y":1028.5}}*/
+    entity OBRIGACAO_DOCUMENTO {
+        fk_obrigacao : association[*, 0..1] to VGT.OBRIGACAO { id_obrigacao };
+        fk_documento : association[*, 0..1] to VGT.DOCUMENTO { id_documento };
+    };
+
 };
