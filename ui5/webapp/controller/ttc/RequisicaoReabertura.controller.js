@@ -129,9 +129,9 @@ sap.ui.define(
 							    };
 							} else if (response[i].id_dominio_requisicao_reabertura_status === 2) {
 							    response[i].oStatus = {
-								  icone: "sap-icon://decline",
-							      cor: "red",
-							      tooltip: "Reprovado"
+								  icone: "sap-icon://accept",
+							      cor: "green",
+							      tooltip: "Aprovado"
 							    };
 							} else if (response[i].id_dominio_requisicao_reabertura_status === 3) {
 							    response[i].oStatus = {

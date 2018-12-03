@@ -427,6 +427,7 @@ context VGT {
             user       : String(200);
             pass       : String(200);
             ind_ativo  : Boolean;
+            acesso     : String(10);
     };
 
     /*@@layout{"layoutInfo":{"x":-2288,"y":-194.5}}*/

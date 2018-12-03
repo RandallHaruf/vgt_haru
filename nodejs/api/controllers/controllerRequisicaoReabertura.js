@@ -2,6 +2,7 @@
 
 var db = require("../db");
 var model = require("../models/modelRequisicaoReabertura");
+var disparaEmail = require("../../jobs/sendEmails");
 
 function inserirRequisicao (oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo) {
 	// Inclui a requisição nova
@@ -186,14 +187,16 @@ module.exports = {
 
 	deepQuery: function (req, res) {
 		var sStatement = 
-			' SELECT ReqReab.*, ReqStatus.*, empresa.*, per.* '
+			' SELECT ReqReab.*, ReqStatus.*, Empresa.*, Per.*, Ano_Cal.*  '
 			+ ' FROM "VGT.REQUISICAO_REABERTURA" ReqReab '
 			+ ' Left Outer Join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ReqStatus '
 			+ ' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" '
-			+ ' Left Outer Join "VGT.EMPRESA" empresa '
+			+ ' Left Outer Join "VGT.EMPRESA" Empresa '
 			+ ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" '
 			+ ' Left Outer Join "VGT.PERIODO" Per '
-			+ ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" ';
+			+ ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" '
+			+ ' Left Outer Join "VGT.DOMINIO_ANO_CALENDARIO" Ano_Cal '
+			+ ' On Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = Ano_Cal."id_dominio_ano_calendario" ';
 			
 		var oWhere = [];
 		var aParams = [];
