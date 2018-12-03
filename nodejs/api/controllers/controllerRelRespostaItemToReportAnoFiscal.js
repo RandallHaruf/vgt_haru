@@ -5,7 +5,16 @@ var model = require("../models/modelRelRespostaItemToReportAnoFiscal");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		var aParams = [];
+		
+		if (req.query.respostaItemToReport) {
+			aParams.push({
+				coluna: model.colunas.fkRespostaItemToReport,
+				valor: req.query.respostaItemToReport
+			});
+		}
+		
+		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
