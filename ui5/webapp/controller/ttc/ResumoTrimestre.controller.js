@@ -179,7 +179,8 @@ sap.ui.define(
 								resposta: "",
 								fkDominioRequisicaoReaberturaStatus: "1",
 								fkEmpresa: oParams.oEmpresa.id_empresa,
-								fkPeriodo: oPeriodo.id_periodo
+								fkPeriodo: oPeriodo.id_periodo,
+								nomeEmpresa:oParams.oEmpresa.nome
 							}, function (response) {
 								that.byId("dynamicPage").setBusy(false);
 								if (callback) {

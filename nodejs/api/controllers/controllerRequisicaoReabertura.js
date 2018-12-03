@@ -4,14 +4,35 @@ var db = require("../db");
 var model = require("../models/modelRequisicaoReabertura");
 var disparaEmail = require("../../jobs/sendEmails");
 
-function inserirRequisicao (oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo) {
+function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa,
+	sIdPeriodo, sNomeEmpresa) {
 	// Inclui a requisição nova
 	var aParams = [sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo],
-		sQuery = ' INSERT INTO '
-		+ ' "VGT.REQUISICAO_REABERTURA" '
-		+ ' VALUES("identity_VGT.REQUISICAO_REABERTURA_id_requisicao_reabertura".nextval, ?, ?, ?, ?, ?, ?, ?, ?) ';
-		
-	model.executeSync(sQuery, aParams, { connection: oConnection });
+		sQuery = ' INSERT INTO ' + ' "VGT.REQUISICAO_REABERTURA" ' +
+		' VALUES("identity_VGT.REQUISICAO_REABERTURA_id_requisicao_reabertura".nextval, ?, ?, ?, ?, ?, ?, ?, ?) ';
+
+	model.executeSync(sQuery, aParams, {
+		connection: oConnection
+	});
+
+	/*
+	// EMAIL DE AVISO PARA SOLICITACAO DE REABERTURA DE TRIMESTRE TTC
+	vSubj = 'TTC - Period Reopening – ' + sNomeEmpresa + ' - Quarter';
+	vHtml =	'<!DOCTYPE html><html><body><p>Dear Administrator,<br><br>A user is requesting to reopen a closed period in the TTC module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required<br><br>Thank you in advance.<br><br>Global Tax Team</p></body></html>';
+
+	disparaEmail.sendEmail({
+		to: "fms.catarino@gmail.com",
+		subject: vSubj,
+		body: {
+			isHtml: true,
+			content: vHtml
+		}
+	}, function (vSuc) {
+		console.log('OKK = ' + vSuc);
+	}, function (vErr) {
+		console.log('ERROR = ' + vErr);
+	});
+	*/
 }
 
 module.exports = {
@@ -48,20 +69,21 @@ module.exports = {
 				sResposta = req.body.resposta,
 				sStatus = req.body.fkDominioRequisicaoReaberturaStatus,
 				sIdEmpresa = req.body.fkEmpresa,
-				sIdPeriodo = req.body.fkPeriodo;
-				
+				sIdPeriodo = req.body.fkPeriodo,
+				sNomeEmpresa = req.body.nomeEmpresa
+
 			var response = {
 				success: true
 			};
-			
+
 			var oConnection;
 
 			try {
 				oConnection = db.getConnection();
 				oConnection.setAutoCommit(false);
-				
+
 				inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo);
-			
+
 				oConnection.commit();
 			} catch (e) {
 				console.log(e);
@@ -106,7 +128,7 @@ module.exports = {
 				coluna: model.colunas.fkPeriodo,
 				valor: req.body.fkPeriodo ? Number(req.body.fkPeriodo) : null
 			}];
-	
+
 			model.inserir(aParams, function (err, result) {
 				if (err) {
 					res.send(JSON.stringify(err));
@@ -186,18 +208,15 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		var sStatement = 
-			' SELECT ReqReab.*, ReqStatus.*, Empresa.*, Per.*, Ano_Cal.*  '
-			+ ' FROM "VGT.REQUISICAO_REABERTURA" ReqReab '
-			+ ' Left Outer Join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ReqStatus '
-			+ ' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" '
-			+ ' Left Outer Join "VGT.EMPRESA" Empresa '
-			+ ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" '
-			+ ' Left Outer Join "VGT.PERIODO" Per '
-			+ ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" '
-			+ ' Left Outer Join "VGT.DOMINIO_ANO_CALENDARIO" Ano_Cal '
-			+ ' On Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = Ano_Cal."id_dominio_ano_calendario" ';
-			
+		var sStatement =
+			' SELECT ReqReab.*, ReqStatus.*, Empresa.*, Per.*, Ano_Cal.*  ' + ' FROM "VGT.REQUISICAO_REABERTURA" ReqReab ' +
+			' Left Outer Join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ReqStatus ' +
+			' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" ' +
+			' Left Outer Join "VGT.EMPRESA" Empresa ' + ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" ' +
+			' Left Outer Join "VGT.PERIODO" Per ' + ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" ' +
+			' Left Outer Join "VGT.DOMINIO_ANO_CALENDARIO" Ano_Cal ' +
+			' On Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = Ano_Cal."id_dominio_ano_calendario" ';
+
 		var oWhere = [];
 		var aParams = [];
 
@@ -205,7 +224,7 @@ module.exports = {
 			oWhere.push(' empresa."id_empresa" = ? ');
 			aParams.push(req.query.empresa);
 		}
-		
+
 		if (req.query.status) {
 			oWhere.push(' ReqStatus."id_dominio_requisicao_reabertura_status" = ? ');
 			aParams.push(req.query.status);
@@ -221,7 +240,7 @@ module.exports = {
 				sStatement += oWhere[i];
 			}
 		}
-		
+
 		//sStatement += ' Order By empresa."nome"';
 
 		model.execute({
