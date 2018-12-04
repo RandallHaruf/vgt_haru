@@ -11,11 +11,11 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Empresas Vinculadas" enabled="false" />
+						<Link text="{i18n>viewDaEmpresaVinculadaEmpresasVinculadas}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Empresas Vinculadas" />
+					<Title text="{i18n>viewDaEmpresaVinculadaEmpresasVinculadas}" />
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
@@ -31,7 +31,7 @@
 				}">
 				<columns>
 					<Column>
-						<Title text="Empresas" titleStyle="H4" />
+						<Title text="{i18n>viewDaEmpresaVinculadaEmpresa}" titleStyle="H4" />
 					</Column>
 				</columns>
 				<items>
