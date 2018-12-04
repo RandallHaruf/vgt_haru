@@ -84,8 +84,8 @@
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
-						<f:formContainers>
-							<f:FormContainer title="{i18n>viewEmpresasPais}">
+					<f:formContainers>
+							<f:FormContainer title="{i18n>viewEmpresasCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
@@ -108,7 +108,7 @@
 											<Input id="inputTIN" value="{/objeto/tin}" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="{i18n>viewEmpresasJurisdicao}">
+									<f:FormElement label="{i18n>viewEmpresasJurisdicaoT}">
 										<f:fields>
 											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" />
 										</f:fields>
@@ -120,7 +120,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasJurisdicao}" labelFor="inputJurisdicaoNI" />
+											<Label text="{i18n>viewEmpresasJurisdicaoN}" labelFor="inputJurisdicaoNI" />
 										</f:label>
 										<f:fields>
 											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}" required="true" />
@@ -128,7 +128,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Endereço" labelFor="inputEndereco" />
+											<Label text="{i18n>viewEmpresasEndereco}" labelFor="inputEndereco" />
 										</f:label>
 										<f:fields>
 											<Input id="inputEndereco" value="{/objeto/endereco}" required="true" />
@@ -157,7 +157,7 @@
 											</Select>
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement>
+								<f:FormElement>
 										<f:label>
 											<Label text="FY Start/End Date" />
 										</f:label>
@@ -180,7 +180,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Status da empresa" labelFor="selectStatus" class="sapMLabelRequired" />
+											<Label text="{i18n>viewEmpresasStatusDaEmpresa}" labelFor="selectStatus" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select id="selectStatus" items="{/DominioEmpresaStatus}" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}">
@@ -190,7 +190,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Alíquota Vigente" labelFor="selectAliquota" />
+											<Label text="{i18n>viewEmpresasAliquotaVigente}" labelFor="selectAliquota" />
 										</f:label>
 										<f:fields>
 											<Select id="selectAliquota" items="{/Aliquota}" selectedKey="{/objeto/fk_aliquota.id_aliquota}">
@@ -200,7 +200,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="LBC Nome" labelFor="inputLBCResponsavel" />
+											<Label text="LBC {i18n>viewEmpresasNome}" labelFor="inputLBCResponsavel" />
 										</f:label>
 										<f:fields>
 											<Input id="inputLBCResponsavel" value="{/objeto/lbc_nome}" required="true" />
@@ -214,7 +214,7 @@
 											<Input id="inputLBCEmail" type="Email" value="{/objeto/lbc_email}" required="true" change="onTrocarEmail" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="Comentários">
+									<f:FormElement label="{i18n>viewEmpresasComentarios}">
 										<f:fields>
 											<TextArea 
 												id="textAreaComentarios" 
@@ -229,7 +229,7 @@
 						id="formularioVinculoObrigacoes"
 						editable="true">
 						<f:title>
-							<core:Title text="Obrigações Acessórias"/>
+							<core:Title text="{i18n>viewEmpresasObrigacoesAcessorias}"  />
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -256,13 +256,13 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="Tipo" />
+												<Label text="{i18n>viewEmpresasTipo}" />
 												<table:template>
 													<Text text="{tipo}" />
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="Nome" />
+												<Label text="{i18n>viewEmpresasNome}" />
 												<table:template>
 													<Text text="{nome}" />
 												</table:template>
@@ -273,7 +273,7 @@
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>
-					<Panel headerText="Histórico de Obrigações" expandable="true" class="sapUiNoContentPadding">
+					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding">
 						<content>
 							<f:Form editable="true" visible="{/showHistorico}">
 								<!--<f:title>
@@ -305,16 +305,16 @@
 															sticky="ColumnHeaders">
 															<columns>
 																<Column>
-																	<Text text="Tipo" />
+																	<Text text="{i18n>viewEmpresasTipo}" />
 																</Column>
 																<Column>
-																	<Text text="Nome" />
+																	<Text text="{i18n>viewEmpresasNome}" />
 																</Column>
 																<Column>
-																	<Text text="Data Início" />
+																	<Text text="{i18n>viewEmpresasDataI}" />
 																</Column>
 																<Column>
-																	<Text text="Data Fim" />
+																	<Text text="{i18n>viewEmpresasDataF}" />
 																</Column>
 															</columns>
 															<items>
@@ -337,7 +337,7 @@
 							</f:Form>
 						</content>
 					</Panel>
-					<Panel headerText="Histórico de Alíquotas" expandable="true" class="sapUiNoContentPadding">
+					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding">
 						<content>
 							<f:Form editable="true" visible="{/showHistorico}">
 								<!--<f:title>
@@ -362,13 +362,13 @@
 															sticky="ColumnHeaders">
 															<columns>
 																<Column vAlign="Middle">
-																	<Text text="Nome" />
+																	<Text text="{i18n>viewEmpresasNome}" />
 																</Column>
 																<Column>
-																	<Text text="Data Início" />
+																	<Text text="{i18n>viewEmpresasDataI}" />
 																</Column>
 																<Column>
-																	<Text text="Data Fim" />
+																	<Text text="{i18n>viewEmpresasDataF}" />
 																</Column>
 															</columns>
 															<items>
@@ -396,11 +396,11 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
-						text="Salvar" 
+						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
-						text="Cancelar" 
+						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>
 				</Toolbar>
