@@ -30,7 +30,7 @@ var oSketch = {
 			number: true
 		},
 		fkDominioPais: {
-			nome: "fk_dominio_pais.id_pais",
+			nome: "fk_dominio_pais.id_dominio_pais",
 			number: true
 		},
 		fkDominioPeriocidadeObrigacao: {
@@ -45,12 +45,8 @@ var oSketch = {
 			nome: "fk_obrigacao_acessoria.id_obrigacao_acessoria",
 			number: true
 		},
-		fkObrigacaoAcessoria: {
-			nome: "fk_obrigacao_acessoria.id_obrigacao_acessoria",
-			number: true
-		},
 		fkAnoFiscal: {
-			nome: "fk_Ano_Fiscal.id_dominio_fiscal",
+			nome: "fk_dominio_ano_fiscal.id_dominio_ano_fiscal",
 			number: true
 		},
 	} 	
