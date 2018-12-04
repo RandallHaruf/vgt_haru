@@ -210,9 +210,9 @@ module.exports = {
 		var oWhere = [];
 		var aParams = [];
 
-		if (req.params.idRegistro) {
+		if (req.query.idRegistro) {
 			oWhere.push(' empresa."id_empresa" = ? ');
-			aParams.push(req.params.idRegistro);
+			aParams.push(req.query.idRegistro);
 		}
 
 		if (oWhere.length > 0) {
