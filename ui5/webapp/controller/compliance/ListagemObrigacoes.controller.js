@@ -53,11 +53,13 @@ sap.ui.define(
 			},
 			
 			onTrocarAnoCalendario: function (oEvent) {
-				MessageToast.show("Filtrar tabela por ano calendário: " + oEvent.getSource().getSelectedItem().getText());	
+				//MessageToast.show("Filtrar tabela por ano calendário: " + oEvent.getSource().getSelectedItem().getText());	
+				this._atualizarDados();
 			},
 			
 			onTrocarEmpresa: function (oEvent) {
-				MessageToast.show("Filtrar tabela por empresas: " + oEvent.getSource().getSelectedItem().getText());	
+				//MessageToast.show("Filtrar tabela por empresas: " + oEvent.getSource().getSelectedItem().getText());
+				this._atualizarDados();
 			},
 			
 			onBuscarDocumentos: function (oEvent) {
@@ -94,7 +96,10 @@ sap.ui.define(
 			_atualizarDados: function () {
 				var that = this;
 				
-				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1", function (response) { // 1 COMPLIANCE
+				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado")? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
+				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado")? this.getModel().getProperty("/AnoCalendarioSelecionado") : "";
+				
+				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario, function (response) { // 1 COMPLIANCE
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";

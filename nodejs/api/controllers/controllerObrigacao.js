@@ -170,24 +170,24 @@ module.exports = {
 			var oWhere = [];
 			var aParams = [];
 	
-			if (req.params.idEmpresa) {
+			if (req.query.idEmpresa) {
 				oWhere.push(' tblEmpresa."id_empresa" = ? ');
-				aParams.push(req.params.idRegistro);
+				aParams.push(req.query.idEmpresa);
 			}
 			
-			if (req.params.idTipo) {
+			if (req.query.idTipo) {
 				oWhere.push(' tblObrigacaoAcessoria."id_obrigacao_acessoria" = ? ');
-				aParams.push(req.params.idRegistro);
+				aParams.push(req.query.idTipo);
 			}
 			
-			if (req.params.idStatus) {
+			if (req.query.idStatus) {
 				oWhere.push(' tblObrigacao."fk_dominio_status_obrigacao.id_status_obrigacao" = ? ');
-				aParams.push(req.params.idRegistro);
+				aParams.push(req.query.idStatus);
 			}
 			
-			if (req.params.idAnoFiscal) {
+			if (req.query.idAnoFiscal) {
 				oWhere.push(' tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ? ');
-				aParams.push(req.params.idRegistro);
+				aParams.push(req.query.idAnoFiscal);
 			}
 	
 			if (oWhere.length > 0) {

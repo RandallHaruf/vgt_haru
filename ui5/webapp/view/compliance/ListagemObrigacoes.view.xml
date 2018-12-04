@@ -98,7 +98,7 @@
 								<ToolbarSpacer />
 								<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
-									id="selectEmpresa" items="{/Empresa}" selectedKey="{/objeto/idempresa}"
+									id="selectEmpresa" items="{/Empresa}" selectedKey="{/IdEmpresaSelecionado}"
 									change="onTrocarEmpresa">
 									<items>
 										<core:Item text="{nome}" key="{id_empresa}" />
