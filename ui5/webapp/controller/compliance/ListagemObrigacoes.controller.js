@@ -18,6 +18,7 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
+				this._atualizarDados();
 			},
 			
 			onFiltrar: function (oEvent) {
@@ -87,6 +88,19 @@ sap.ui.define(
 					NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
 					response.unshift({ id: null, descricao: "" });
 					that.getModel().setProperty("/DominioAnoCalendario", response);
+				});
+			},
+			
+			_atualizarDados: function () {
+				var that = this;
+				
+				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1", function (response) { // 1 COMPLIANCE
+					if (response) {
+						for (var i = 0, length = response.length; i < length; i++) {
+							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
+						}
+						that.getModel().setProperty("/Obrigacao", response);	
+					}
 				});
 			}
 		});

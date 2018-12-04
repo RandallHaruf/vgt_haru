@@ -39,60 +39,44 @@
 							<f:formElements>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
 									<f:fields>
-										<Select id="selectEmpresas">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Empresa A" key="1"/>
-												<core:Item text="Empresa B" key="2"/>
-												<core:Item text="Empresa C" key="2"/>
-											</items>
+										<Select id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}">
+											<core:Item text="{nome}" key="{id_empresa}" />
 										</Select>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
-										<Input type="Text" value="{nomePais}" />
+										<ComboBox items="{/DominioPais}" selectedKey="{/Obrigacao/fkDominioPais}">
+											<core:Item text="{pais}" key="{id_dominio_pais}" />
+										</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
 									<f:fields>
-										<Select id="selectTipo">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Tipo 1" key="1"/>
-												<core:Item text="Tipo 2" key="2"/>
-												<core:Item text="Tipo 3" key="2"/>
-											</items>
+										<Select items="{/ObrigacaoAcessoria}" selectedKey="{/Obrigacao/fkObrigacaoAcessoria}">
+											<core:Item text="{nome}" key="{id_obrigacao_acessoria}" />
 										</Select>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
 									<f:fields>
-										<Select id="selectPeriodicidade">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Periodicidade 1" key="1"/>
-												<core:Item text="Periodicidade 2" key="2"/>
-												<core:Item text="Periodicidade 3" key="2"/>
-											</items>
+										<Select items="{/DominioPeriodicidade}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
+											<core:Item text="{nome}" key="{id_dominio_periodicidade}" />
 										</Select>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-										<Select id="selectAnoFiscal">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="2018"/>
-												<core:Item text="2017"/>
-												<core:Item text="2016"/>
-											</items>
+										<Select items="{/DominioAnoFiscal}" selectedKey="{/Obrigacao/fkAnoFiscal}">
+											<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
 										</Select>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
+											value="{/Obrigacao/prazo_entrega}"
+											valueFormat="yyyy-MM-dd"
 											id="datepickerPrazoEntrega" 
 											placeholder="{i18n>placeholderDatepicker}"/>
 									</f:fields>
@@ -100,31 +84,35 @@
 								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
 									<f:fields>
 										<DatePicker 
+											value="{/Obrigacao/extensao}"
+											valueFormat="yyyy-MM-dd"
 											id="datepickerExtensao" 
 											placeholder="{i18n>placeholderDatepicker}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada"/>
+										<CheckBox id="checkObrigacaoIniciada" selected="{/Obrigacao/obrigacao_inicial}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="Suporte Contratado">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado"/>
+										<CheckBox id="checkSuporteContratado" selected="{/Obrigacao/suporte_contratado}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
 										<TextArea 
+											value="{/Obrigacao/suporte}"
 											id="textAreaSuporte"
 											rows="5" 
-											enabled="false"/>
+											enabled="{= ${/Obrigacao/suporte_contratado} ? true : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelObservacoes}">
 									<f:fields>
 										<TextArea 
+											value="{/Obrigacao/observacoes}"
 											id="textAreaObservacoes" 
 											rows="5"/>
 									</f:fields>

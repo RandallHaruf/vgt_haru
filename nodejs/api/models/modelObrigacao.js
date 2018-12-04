@@ -34,7 +34,7 @@ var oSketch = {
 			number: true
 		},
 		fkDominioPeriocidadeObrigacao: {
-			nome: "fk_dominio_periocidade_obrigacao.id_periocidade_obrigacao",
+			nome: "fk_dominio_periodicidade_obrigacao.id_periodicidade_obrigacao",
 			number: true
 		},
 		fkEmpresa: {

@@ -79,9 +79,9 @@
 					<Table
 						id="tabelaObrigacoes"
 						items="{
-							path: 'viewModel>/obrigacoes',
+							path: '/Obrigacao',
 							sorter: {
-								path: 'empresa',
+								path: 'nome',
 								group: true
 							}
 						}"
@@ -177,15 +177,15 @@
 								type="Navigation"
 								press="onDetalharObrigacao">
 								<cells>
-									<ObjectIdentifier title="{viewModel>tipo}"/>
-									<Text text="{viewModel>prazoEntrega}"/>
-									<Text text="{viewModel>extensao}"/>
-									<Text text="{viewModel>anoFiscal}"/>
-									<Text text="{viewModel>pais}"/>
-									<Text text="{viewModel>periodicidade}"/>
+									<ObjectIdentifier title="{TBLOBRIGACAOACESSORIANOME}"/>
+									<Text text="{prazo_entrega}"/>
+									<Text text="{extensao}"/>
+									<Text text="{ano_fiscal}"/>
+									<Text text="{pais}"/>
+									<Text text="{descricao}"/>
 									<!--core:Icon src="{viewModel>suporteContratado}"/-->
-									<Text text="{viewModel>suporteContratado}"/>
-									<Text text="{viewModel>status}"/>
+									<Text text="{suporte_contratado}"/>
+									<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
 								</cells>
 							</ColumnListItem>
 						</items>
