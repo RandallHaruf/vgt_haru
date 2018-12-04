@@ -24,7 +24,8 @@ sap.ui.define([
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioJurisdicao, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioMoeda, this);
-			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioTipoTransacao, this);		
+			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioTipoTransacao, this);
+			
 			/*
 			this.aKeys = ["empresa", "classification", "category", "tax", "nameOfTax", "nameOfGov", "jurisdicao", "anoFiscal", "description", "dateOfPayment",
 						"currency", "currencyRate", "typeOfTransaction", "otherSpecify", "principal", "interest", "fine", "value", "valueUSD", "numberOfDocument", "beneficiaryCompany"];
@@ -41,7 +42,6 @@ sap.ui.define([
 			this.oModel.setProperty("/Filter/text", "Filtered by None");
 			this.addSnappedLabel();
 			*/
-
 		},
 		
 		navToHome: function () {
@@ -72,11 +72,12 @@ sap.ui.define([
 			this.getPage().setShowFooter(!this.getPage().getShowFooter());
 		},
 		onSelectChange: function (oEvent) {
+/*			
 			//sap.m.MessageToast.show(this.getModel().getProperty(this.getSelectedItemText(this.getSelect("selectEmpresa"))));
-/*
+*/			
 			var aCurrentFilterValues = [];
-
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectEmpresa));
+/*			
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectClassification));
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectCategory));
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTax));
@@ -86,9 +87,9 @@ sap.ui.define([
 			//aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectDateOfPayment));
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectCurrency));
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTypeOfTransaction));
-	
-			this.filterTable(aCurrentFilterValues);
 */			
+			this.filterTable(aCurrentFilterValues);
+			
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -162,7 +163,6 @@ sap.ui.define([
 		
 		onImprimir: function (oEvent) {
 			sap.m.MessageToast.show(this.getModel().getProperty("/IdEmpresasSelecionadas"));
-			//.m.MessageToast.show(this.getModel().getProperty("/IdEmpresasSelecionadas")).toString());
 		},
 		
 		_onRouteEmpresa: function (oEvent) {
