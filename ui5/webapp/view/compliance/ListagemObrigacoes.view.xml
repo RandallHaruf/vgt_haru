@@ -35,45 +35,45 @@
 				<items>
 					<IconTabFilter
 						showAll="true"
-						count="{viewModel>/tabFilters/todas}"
+						count=""
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"
-						key="todas" />
+						key="0" />
 					<IconTabSeparator />
 					<IconTabFilter
 						icon="sap-icon://sys-help"
 						iconColor="Default"
-						count="{viewModel>/tabFilters/naoIniciada}"
+						count=""
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
-						key="naoIniciada" />
+						key="1" />
 					<IconTabFilter
 						icon="sap-icon://lateness"
 						iconColor="Neutral"
-						count="{viewModel>/tabFilters/emAndamento}"
+						count=""
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
-						key="emAndamento" />
+						key="2" />
 					<IconTabFilter
 						icon="sap-icon://alert"
 						iconColor="Negative"
-						count="{viewModel>/tabFilters/emAtraso}"
+						count=""
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
-						key="emAtraso" />
+						key="3" />
 					<IconTabFilter
 						icon="sap-icon://accept"
 						iconColor="Positive"
-						count="{viewModel>/tabFilters/entregueNoPrazo}"
+						count=""
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
-						key="entregueNoPrazo" />
+						key="4" />
 					<IconTabFilter
 						icon="sap-icon://customer-history"
 						iconColor="Critical"
-						count="{viewModel>/tabFilters/entregueForaPrazo}"
+						count=""
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
-						key="entregueForaPrazo" />
+						key="5" />
 				</items>
 				<content>
 					<Table

@@ -49,7 +49,8 @@ sap.ui.define(
 			},
 			
 			onTerminouAtualizar: function (oEvent) {             
-				MessageToast.show("Atualizar contadores");	
+				//MessageToast.show("Atualizar contadores");	
+				this._atualizarDados();
 			},
 			
 			onTrocarAnoCalendario: function (oEvent) {
@@ -98,13 +99,19 @@ sap.ui.define(
 				
 				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado")? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
 				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado")? this.getModel().getProperty("/AnoCalendarioSelecionado") : "";
+				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
 				
-				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario, function (response) { // 1 COMPLIANCE
+				if(oStatus == '0'){
+					oStatus = '';
+				};
+				
+				
+				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario+"&idStatus="+oStatus, function (response) { // 1 COMPLIANCE
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
 						}
-						that.getModel().setProperty("/Obrigacao", response);	
+						that.getModel().setProperty("/Obrigacao", response);
 					}
 				});
 			}
