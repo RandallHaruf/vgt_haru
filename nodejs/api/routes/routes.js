@@ -41,6 +41,7 @@ module.exports = function (app) {
 	var routeRequisicaoReabertura = require("./routeRequisicaoReabertura");
 	var routeRequisicaoReaberturaStatus = require("./routeRequisicaoReaberturaStatus");
 	var routeRespostaItemToReport = require("./routeRespostaItemToReport");
+	var routeSchedule = require("./routeSchedule");
 	
 	var aRoutes = [];	
 	
@@ -81,6 +82,7 @@ module.exports = function (app) {
 	routeRequisicaoReaberturaStatus(aRoutes);
 	routeRespostaItemToReport(aRoutes);
 	routeRelRespostaItemToReportAnoFiscal(aRoutes);
+	routeSchedule(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

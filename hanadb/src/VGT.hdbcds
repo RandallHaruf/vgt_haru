@@ -379,19 +379,19 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":-1032,"y":463.5}}*/
     entity SCHEDULE {
-        key id_schedule                  : Integer64;
-            fy                           : Integer;
-            year_of_expiration           : Integer;
-            opening_balance              : Decimal(19, 4);
-            current_year_credit          : Decimal(19, 4);
-            current_year_credit_utilized : Decimal(19, 4);
-            adjustments                  : Decimal(19, 4);
-            justificativa                : String(500);
-            current_year_credit_expired  : Decimal(19, 4);
-            closing_balance              : Decimal(19, 4);
-            obs                          : String(500);
-            tipo                         : Integer;
-            fk_rel_tax_package_periodo   : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+        key id_schedule                 : Integer64;
+            fy                          : Integer;
+            year_of_expiration          : Integer;
+            opening_balance             : Decimal(19, 4);
+            current_year_value          : Decimal(19, 4);
+            current_year_value_utilized : Decimal(19, 4);
+            adjustments                 : Decimal(19, 4);
+            justificativa               : String(500);
+            current_year_value_expired  : Decimal(19, 4);
+            closing_balance             : Decimal(19, 4);
+            obs                         : String(500);
+            fk_rel_tax_package_periodo  : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+            fk_dominio_schedule_tipo    : association[0..1]    to VGT.DOMINIO_SCHEDULE_TIPO { id_dominio_schedule_tipo };
     };
 
     /*@@layout{"layoutInfo":{"x":-1823,"y":776.5}}*/
@@ -460,14 +460,14 @@ context VGT {
             descricao                  : String(30);
     };
 
-	/*@@layout{"layoutInfo":{"x":122,"y":1027.5}}*/
+    /*@@layout{"layoutInfo":{"x":122,"y":1027.5}}*/
     entity DOCUMENTO {
         key id_documento : Integer;
             caminho      : String(50);
             ind_ativo    : Boolean;
             fk_usuario   : association[*, 0..1] to VGT.USUARIO { id_usuario };
     };
-    
+
     /*@@layout{"layoutInfo":{"x":-131,"y":655.5}}*/
     entity OBRIGACAO {
         key id_obrigacao                       : Integer;
@@ -484,11 +484,16 @@ context VGT {
             fk_obrigacao_acessoria             : association[*, 0..1] to VGT.OBRIGACAO_ACESSORIA { id_obrigacao_acessoria };
             fk_dominio_ano_fiscal              : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
     };
-    
+
     /*@@layout{"layoutInfo":{"x":-109,"y":1028.5}}*/
     entity OBRIGACAO_DOCUMENTO {
         fk_obrigacao : association[*, 0..1] to VGT.OBRIGACAO { id_obrigacao };
         fk_documento : association[*, 0..1] to VGT.DOCUMENTO { id_documento };
     };
 
+    /*@@layout{"layoutInfo":{"x":-706,"y":611.5}}*/
+    entity DOMINIO_SCHEDULE_TIPO {
+        key id_dominio_schedule_tipo : Integer64;
+            tipo                     : String(100);
+    };
 };
