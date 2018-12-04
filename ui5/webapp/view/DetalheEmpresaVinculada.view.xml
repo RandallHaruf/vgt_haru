@@ -6,12 +6,12 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome"/>
-						<Link text="Empresas Vinculadas" press="navToPage2"/>
-						<Link text="Detalhe Empresa" enabled="false"/>
+						<Link text="{i18n>viewDetalhesDaEmpresaVinculadaEmpresasVinculadas}" press="navToPage2"/>
+						<Link text="{i18n>viewDetalhesDaEmpresaVinculadaDetalheEmpresa}" enabled="false"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Detalhe da Empresa"/>
+					<Title text="{i18n>viewDetalhesDaEmpresaVinculadaDetalheDaEmpresa}"/>
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
@@ -21,7 +21,7 @@
 		<f:content>
 			<form:Form id="formularioEmpresa" editable="true">
 				<form:title>
-					<core:Title text="Cadastro"/>
+					<core:Title text="{i18n>viewDetalhesDaEmpresaVinculadaCadastro}"/>
 				</form:title>
 				<form:layout>
 					<form:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -30,49 +30,49 @@
 				<form:formContainers>
 					<form:FormContainer>
 						<form:formElements>
-							<form:FormElement label="Nome">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaoNome}">
 								<form:fields>
 									<!--<Input id="inputNomeEmpresa" value="{/objeto/nome}"/>-->
 									<Text text="{/empresa/nome}" /> 
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Número HFM/SAP">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaNúmero} HFM/SAP">
 								<form:fields>
 									<!--<Input id="inputHFMSAP"/>-->
 									<Text text="{/empresa/num_hfm_sap}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="TIN (Tax Identification Number)">
+							<form:FormElement label="TIN (Tax {i18n>viewDetalhesDaEmpresaVinculadaIdentificationNumber})">
 								<form:fields>
 									<!--<Input id="inputTIN"/>-->
 									<Text text="{/empresa/tin}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Jurisdição TIN">
+							<form:FormElement label="{i18n>viewRelatorioJurisdicao} TIN">
 								<form:fields>
 									<!--<Input id="inputJurisdicaoTIN"/>-->
 									<Text text="{/empresa/jurisdicao_tin}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="NI (Tax Identification Number)">
+							<form:FormElement label="NI (Tax {i18n>viewDetalhesDaEmpresaVinculadaIdentificationNumber})">
 								<form:fields>
 									<!--<Input id="inputNI"/>-->
 									<Text text="{/empresa/ni}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Jurisdição NI">
+							<form:FormElement label="{i18n>viewRelatorioJurisdicao} NI">
 								<form:fields>
 									<!--<Input id="inputJurisdicaoNI"/>-->
 									<Text text="{/empresa/jurisdicao_ni}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Endereço">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaEndereco}">
 								<form:fields>
 									<!--<Input id="inputEndereco"/>-->
 									<Text text="{/empresa/endereco}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="País">
+							<form:FormElement label="{i18n>viewRelatorioPais}">
 								<form:fields>
 									<!--<ComboBox id="selectPais">
 										<items>
@@ -85,7 +85,7 @@
 									<Text text="{/empresa/pais}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Tipo Societário">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaTipoSocietário}">
 								<form:fields>
 									<!--<Select id="selectTipoSocietario">
 										<items>
@@ -98,14 +98,14 @@
 									<Text text="{/empresa/tipo_societario}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="FY Start/End Date">
+							<form:FormElement label="{i18n>viewRelatorioAnoFiscal}">
 								<form:fields>
 									<!--<DatePicker id="datepickerStartDate" placeholder="Insira uma data..."/>
 									<DatePicker id="datepickerEndDate" placeholder="Insira uma data..."/>-->
 									<Text text="{/empresa/fy_start_date} - {/empresa/fy_end_date}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Status da empresa">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaStatusDaempresa}">
 								<form:fields>
 									<!--<Select id="selectStatus">
 										<items>
@@ -118,7 +118,7 @@
 									<Text text="{/empresa/status}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Alíquota Vigente da Empresa">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaAlíquotaVigenteDaEmpresa}">
 								<form:fields>
 									<!--<Select id="selectAliquotaVigente">
 										<items>
@@ -131,7 +131,7 @@
 									<Text text="{/empresa/valor}% - {/empresa/nome_aliquota}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="LBC Nome">
+							<form:FormElement label="LBC {i18n>viewDetalhesDaEmpresaVinculadaoNome}">
 								<form:fields>
 									<!--<Input id="inputLBCResponsavel"/>-->
 									<Text text="{/empresa/lbc_nome}" />
@@ -143,7 +143,7 @@
 									<Text text="{/empresa/lbc_email}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="Comentários">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaComentários}">
 								<form:fields>
 									<TextArea rows="5" value="{/empresa/comentarios}" enabled="false" />
 								</form:fields>

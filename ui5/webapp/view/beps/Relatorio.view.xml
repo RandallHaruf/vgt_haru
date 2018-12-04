@@ -8,7 +8,7 @@
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
 						<Link text="Listagem Obrigações" press="navToPage2" />
-						<Link text="Relatório" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
@@ -16,19 +16,22 @@
 				</f:heading>
 				<f:actions>
 					<Button
-							text="Imprimir"
+							text="{i18n>viewRelatorioImprimir}"
 							type="Transparent"
 							icon="sap-icon://print" />
 					<Button
-							text="Exportar CSV"
+							text="{i18n>viewRelatorioExportar} CSV"
 							type="Transparent"/>
 					<Button
-							text="Exportar TXT"
+							text="{i18n>viewRelatorioExportar} TXT"
 							type="Transparent" />
 					<Button
-						text="Exportar XLS"
-						type="Transparent"/>
+							text="{i18n>viewRelatorioExportar} XLS"
+							type="Transparent"/>
 				</f:actions>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
 				<!--<f:navigationActions>
 					<Button
 						text="Voltar"
@@ -44,21 +47,21 @@
 				<f:content>
 					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
-							<fb:FilterItem name="A" label="Empresa">
+							<fb:FilterItem name="A" label="{i18n>viewGeralEmpresa}">
 								<fb:control>
 									<Select id="selectEmpresa" forceSelection="true" change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
 										<core:Item key="{key}" text="{value}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="Classification">
+							<fb:FilterItem name="B" label="{i18n>viewRelatorioClassificacao}">
 								<fb:control>
 									<Select id="selectClassification" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesClassification' }">
 										<core:Item key="{key}" text="{value}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="C" label="Category">
+							<fb:FilterItem name="C" label="{i18n>viewRelatorioCategoria}">
 								<fb:control>
 									<Select id="selectCategory" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesCategory' }">
 										<core:Item key="{key}" text="{value}"/>
@@ -72,40 +75,40 @@
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="E" label="Name of Tax">
+							<fb:FilterItem name="E" label="{i18n>viewRelatorioNome} of Tax">
 								<fb:control>
 									<Select id="selectNameOfTax" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesNameOfTax' }">
 										<core:Item key="{key}" text="{value}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="F" label="Jurisdição">
+							<fb:FilterItem name="F" label="{i18n>viewRelatorioJurisdicao}">
 								<fb:control>
 									<Select id="selectJurisdicao" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesJurisdicao' }">
 										<core:Item key="{key}" text="{value}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="G" label="Ano Fiscal">
+							<fb:FilterItem name="G" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
 									<Select id="selectAnoFiscal" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesAnoFiscal' }">
 										<core:Item key="{key}" text="{value}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="H" label="Date of Payment">
+							<fb:FilterItem name="H" label="{i18n>ViewRelatorioDataDePagamento}">
 								<fb:control>
 									<DatePicker/>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="I" label="Currency">
+							<fb:FilterItem name="I" label="{i18n>ViewRelatorioCurrency}">
 								<fb:control>
 									<Select id="selectCurrency" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesCurrency' }">
 										<core:Item key="{key}" text="{value}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="J" label="Type of Transaction">
+							<fb:FilterItem name="J" label="{i18n>ViewRelatorioTipoDeTransacao}">
 								<fb:control>
 									<Select id="selectTypeOfTransaction" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesTypeOfTransaction' }">
 										<core:Item key="{key}" text="{value}"/>
@@ -123,67 +126,67 @@
 				<Table items="{ path: '/Pagamentos' }">
 					<columns>
 						<Column width="6rem">
-							<Text text="Empresa"/>
+							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Classification"/>
+							<Text text="{i18n>viewRelatorioClassificacao}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Category"/>
+							<Text text="{i18n>viewRelatorioCategoria}"/>
 						</Column>
 						<Column width="10rem">
 							<Text text="Tax"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Name of Tax"/>
+							<Text text="{i18n>viewRelatorioNome} of Tax"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Name of Government administration/body (payee name)"/>
+							<Text text="{i18n>viewRelatorioNomeDoOrgao}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Jurisdição"/>
+							<Text text="{i18n>viewRelatorioJurisdicao}"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
-							<Text text="Ano Fiscal"/>
+							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Description"/>
+							<Text text="{i18n>ViewRelatorioDescricao}"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
-							<Text text="Date of Payment"/>
+							<Text text="{i18n>ViewRelatorioDataDePagamento}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Currency"/>
+							<Text text="{i18n>ViewRelatorioCurrency}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Currency Rate"/>
+							<Text text="{i18n>viewRelatorioTaxadecambio}"/>
 						</Column>
 						<Column width="15rem">
-							<Text text="Type of Transaction"/>
+							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"/>
 						</Column>
 						<Column width="15rem">
-							<Text text="Other (specify)"/>
+							<Text text="{i18n>viewRelatorioOutros}"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
 							<Text text="Principal"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
-							<Text text="Interest"/>
+							<Text text="{i18n>viewRelatorioInteresse}"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
-							<Text text="Fine"/>
+							<Text text="{i18n>viewRelatorioMulta}"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
-							<Text text="Value"/>
+							<Text text="{i18n>viewRelatorioValor}"/>
 						</Column>
 						<Column width="10rem" hAlign="End">
-							<Text text="Value USD"/>
+							<Text text="{i18n>viewRelatorioValor} USD"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Number of Document"/>
+							<Text text="{i18n>viewRelatorioNumeroDoDocumento}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Beneficiary Company"/>
+							<Text text="{i18n>viewRelatorioBeneficiarioDaCompanhia}"/>
 						</Column>
 					</columns>
 					<items>
