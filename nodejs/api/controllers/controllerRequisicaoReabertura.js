@@ -15,10 +15,10 @@ function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuari
 		connection: oConnection
 	});
 
-	/*
+	/**/
 	// EMAIL DE AVISO PARA SOLICITACAO DE REABERTURA DE TRIMESTRE TTC
-	vSubj = 'TTC - Period Reopening – ' + sNomeEmpresa + ' - Quarter';
-	vHtml =	'<!DOCTYPE html><html><body><p>Dear Administrator,<br><br>A user is requesting to reopen a closed period in the TTC module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required<br><br>Thank you in advance.<br><br>Global Tax Team</p></body></html>';
+	let vSubj = 'TTC - Period Reopening – ' + sNomeEmpresa + ' - Quarter';
+	let vHtml =	'<!DOCTYPE html><html><body><p>Dear Administrator,<br><br>A user is requesting to reopen a closed period in the TTC module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required<br><br>Thank you in advance.<br><br>Global Tax Team</p></body></html>';
 
 	disparaEmail.sendEmail({
 		to: "fms.catarino@gmail.com",
@@ -32,7 +32,7 @@ function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuari
 	}, function (vErr) {
 		console.log('ERROR = ' + vErr);
 	});
-	*/
+	/**/
 }
 
 module.exports = {
