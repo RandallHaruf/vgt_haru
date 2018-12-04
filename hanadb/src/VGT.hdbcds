@@ -377,6 +377,12 @@ context VGT {
             fk_periodo                 : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
     };
 
+	/*@@layout{"layoutInfo":{"x":-706,"y":611.5}}*/
+    entity DOMINIO_SCHEDULE_TIPO {
+        key id_dominio_schedule_tipo : Integer64;
+            tipo                     : String(100);
+    };
+
     /*@@layout{"layoutInfo":{"x":-1032,"y":463.5}}*/
     entity SCHEDULE {
         key id_schedule                 : Integer64;
@@ -489,11 +495,5 @@ context VGT {
     entity OBRIGACAO_DOCUMENTO {
         fk_obrigacao : association[*, 0..1] to VGT.OBRIGACAO { id_obrigacao };
         fk_documento : association[*, 0..1] to VGT.DOCUMENTO { id_documento };
-    };
-
-    /*@@layout{"layoutInfo":{"x":-706,"y":611.5}}*/
-    entity DOMINIO_SCHEDULE_TIPO {
-        key id_dominio_schedule_tipo : Integer64;
-            tipo                     : String(100);
     };
 };
