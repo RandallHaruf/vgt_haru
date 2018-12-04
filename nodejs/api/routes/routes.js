@@ -44,6 +44,7 @@ module.exports = function (app) {
 	var routeSchedule = require("./routeSchedule");
 	var routeObrigacao = require("./routeObrigacao");
 	var routeDomPeriodicidadeObrigacao = require("./routeDomPeriodicidadeObrigacao");
+	var routeUsuario = require("./routeUsuario");
 	
 	var aRoutes = [];	
 	
@@ -87,6 +88,7 @@ module.exports = function (app) {
 	routeSchedule(aRoutes);
 	routeObrigacao(aRoutes);
 	routeDomPeriodicidadeObrigacao(aRoutes);
+	routeUsuario(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
