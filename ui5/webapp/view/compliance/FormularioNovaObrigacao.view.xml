@@ -60,8 +60,8 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
 									<f:fields>
-										<Select items="{/DominioPeriodicidade}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
-											<core:Item text="{nome}" key="{id_dominio_periodicidade}" />
+										<Select items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
+											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}" />
 										</Select>
 									</f:fields>
 								</f:FormElement>

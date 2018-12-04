@@ -6,7 +6,7 @@ sap.ui.define(
 	function (BaseController, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.compliance.FormularioNovaObrigacao", {
 			onInit: function () {
-				this.setModel(new sap.ui.model.json.JSONModel({
+				var oModel = new sap.ui.model.json.JSONModel({
 					Obrigacao: {
 						fkEmpresa: null,
 						fkDominioPais: null,
@@ -21,7 +21,12 @@ sap.ui.define(
 						observacoes: null,
 						fkDominioStatusObrigacao: 1
 					}
-				})); 
+				});
+				
+				oModel.setSizeLimit(300);
+				
+				this.setModel(oModel); 
+				
 				this.getRouter().getRoute("complianceFormularioNovaObrigacao").attachPatternMatched(this._onRouteMatched, this);	
 			},
 			
@@ -61,7 +66,7 @@ sap.ui.define(
 				this._carregarSelect("Empresa");
 				this._carregarSelect("DominioPais");
 				this._carregarSelect("ObrigacaoAcessoria");
-				this._carregarSelect("DominioPeriodicidade");
+				this._carregarSelect("DomPeriodicidadeObrigacao");
 				this._carregarSelect("DominioAnoFiscal");
 			},
 			
