@@ -11,11 +11,11 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Comunicação" enabled="false" />
+						<Link text="{i18n>viewGeralComunicacao}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Comunicação"/>
+					<Title text="{i18n>viewGeralComunicacao}"/>
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
@@ -24,12 +24,12 @@
 		</f:title>
 		<f:content>
 			<VBox>
-				<Label text="Assunto" class="sapUiMediumMarginTop" />
+				<Label text="{i18n>viewGeralAssunto}" class="sapUiMediumMarginTop" />
 				<Input width="300px" />
-				<Label text="Corpo" class="sapUiMediumMarginTop" />
+				<Label text="{i18n>viewGeralCorpo}" class="sapUiMediumMarginTop" />
 				<TextArea rows="5" width="100%" />
 				<HBox justifyContent="End">
-					<Button text="Enviar" press="onEnviarMensagem"/>
+					<Button text="{i18n>viewGeralEnviar}" press="onEnviarMensagem"/>
 				</HBox>
 			</VBox>
 		</f:content>
