@@ -77,7 +77,7 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="D" label="Tax">
+							<fb:FilterItem name="D" label="{i18n>viewRelatorioT}">
 								<fb:control>
 									<!--<MultiComboBox id="selectTax" change="onSelectChange"  items="{ path: '/OpcoesTax' }">
 										<core:Item key="{key}" text="{value}"/>-->
@@ -86,7 +86,7 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="E" label="{i18n>viewRelatorioNome} of Tax">
+							<fb:FilterItem name="E" label="{i18n>viewRelatorioNomeT}">
 								<fb:control>
 									<!--<MultiComboBox id="selectNameOfTax" change="onSelectChange"  items="{ path: '/OpcoesNameOfTax' }">
 										<core:Item key="{key}" text="{value}"/>-->
@@ -173,7 +173,7 @@
 							<Text text="Tax"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioNome} of Tax"/>
+							<Text text="{i18n>viewRelatorioNomeT}"/>
 						</Column>
 						<Column width="10rem">
 							<Text text="{i18n>viewRelatorioNomeDoOrgao}"/>

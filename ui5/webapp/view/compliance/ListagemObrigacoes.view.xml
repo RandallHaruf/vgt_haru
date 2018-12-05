@@ -5,21 +5,17 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m"
 	class="viewComplianceListagemObrigacoes">
-	<f:DynamicPage
-		title="{i18n>viewComplianceListagemObrigacoesTituloPagina}"
-		showNavButton="true"
-		navButtonPress="onNavBack"
-		class="semContentPadding">
+	<f:DynamicPage>
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Obrigações" enabled="false" />
+						<Link text="{i18n>ViewComplianceListagemObrigacoesL}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Compliance - Listagem Obrigações"/>
+					<Title text="{i18n>viewComplianceListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />

@@ -8,28 +8,28 @@
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
 						<Link text="Tax Package" press="navToPage2" />
-						<Link text="Relatório" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
 					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório Tax Package" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
-					<Button
-						text="Imprimir"
+				<Button
+						text="{i18n>viewRelatorioImprimir}"
 						type="Transparent"
 						icon="sap-icon://print" />
 					<Button
-						text="Exportar CSV"
+						text="{i18n>viewRelatorioExportar} CSV"
 						type="Transparent"/>
 					<Button
-						text="Exportar TXT"
+						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />
 					<Button
-						text="Exportar XLS"
+						text="{i18n>viewRelatorioExportar} XLS"
 						type="Transparent"/>
 					<Button
-						text="Exportar PDF"
+						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>
 				</f:actions>
 				<f:navigationActions>
@@ -43,28 +43,28 @@
 				<f:content>
 					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
-							<fb:FilterItem name="A" label="Empresa">
+							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
 									<MultiComboBox id="selectEmpresa" change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
 										<core:Item key="{key}" text="{value}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="Aba">
+							<fb:FilterItem name="B" label="{i18n>viewRelatorioAba}">
 								<fb:control>
 									<MultiComboBox id="selectAba" change="onSelectChange" items="{ path: '/OpcoesAba' }">
 										<core:Item key="{key}" text="{value}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="C" label="Ano Calendário">
+							<fb:FilterItem name="C" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
 									<MultiComboBox id="selectAnoCalendario" change="onSelectChange" items="{ path: '/OpcoesAnoCalendario' }">
 										<core:Item key="{key}" text="{value}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="D" label="Período de Referência">
+							<fb:FilterItem name="D" label="{i18n>viewRelatorioPeriodoDeReferencia}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodo" change="onSelectChange" items="{ path: '/OpcoesPeriodo' }">
 										<core:Item key="{key}" text="{value}"/>

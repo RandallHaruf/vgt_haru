@@ -13,12 +13,12 @@
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" enabled="false" />
-						<Link text="Listagem Obrigações" enabled="false" />
-						<Link text="Formulário Detalhe Obrigação" enabled="false" />
+						<Link text="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}" enabled="false" />
+						<Link text="{i18n>viewComplianceFormularioDetalhesObrigacaoFormulárioDetalheObrigação}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="Compliance - Formulário de Detalhe de Obrigação"/>
+					<Title text="{i18n>viewComplianceFormularioDetalhesObrigacaoComplianceFormulárioDeDetalheDeObrigação}"/>
 				</f2:heading>
 				<f2:snappedContent>
 					<ObjectIdentifier title="Vale" />
@@ -38,7 +38,7 @@
 										</l:HorizontalLayout>
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout>
-												<ObjectAttribute title="Ano Calendário" text="2018"/>
+												<ObjectAttribute title="{i18n>viewComplianceFormularioDetalhesObrigacaoAnoCalendário}" text="2018"/>
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
 									</l:VerticalLayout>
@@ -118,7 +118,7 @@
 										<CheckBox id="checkObrigacaoIniciada"/>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="Suporte Contratado">
+								<f:FormElement label="{i18n>viewComplianceFormularioObrigacoesColunaSuporteContratado}">
 									<f:fields>
 										<CheckBox id="checkSuporteContratado"/>
 									</f:fields>
