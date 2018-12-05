@@ -547,64 +547,64 @@
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/lossSchedule}" 
-								visibleRowCount="4" 
+								rows="{/LossSchedule}" 
+								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
 								enableColumnReordering="false">
 								<t:columns>
-									<t:Column width="7.5rem">
+									<t:Column width="8.5rem">
 										<Label text="FY" />
 										<t:template>
-											<Text text="{fiscalYear}" />
+											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="8.5rem">
 										<Label text="Year of Expiration" />
 										<t:template>
-											<Text text="{yearOfExpiration}" />
+											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="8.5rem">
+									<t:Column width="12rem">
 										<Label text="Opening Balance" />
 										<t:template>
-											<Text text="{openingBalance}" />
+											<Text text="{opening_balance}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="9rem">
+									<t:Column width="12rem">
 										<Label text="Current Year Loss" />
 										<t:template>
-											<Text text="{currentYearLoss}" />
+											<Text text="{current_year_value}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
 										<Label text="Current Year Loss Utilized" />
 										<t:template>
-											<Text text="{currentYearLossUtilized}" />
+											<Text text="{current_year_value_utilized}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="7.5rem">
+									<t:Column width="12rem">
 										<Label text="Adjustments" />
 										<t:template>
-											<Input value="{adjustments}" />
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="Justificativa" />
 										<t:template>
-											<Input value="{justificativa}" />
+											<Input type="Text" value="{justificativa}" enabled="{= ${adjustments} ? true : false}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
 										<Label text="Current Year Loss Expired" />
 										<t:template>
-											<Text text="{currentYearLossExpired}" />
+											<Text text="{current_year_value_expired}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="7.5rem">
+									<t:Column width="12rem">
 										<Label text="Closing Balance" />
 										<t:template>
-											<Text text="{closingBalance}" />
+											<Text text="{closing_balance}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
@@ -619,27 +619,28 @@
 										<Text text="Total" />
 										<HBox>
 											<Text text="Opening Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<!--<Text text="999.999.999,99" textAlign="End" width="7rem" />-->
+											<Text text="{/TotalLossSchedule/opening_balance}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Loss" width="12rem" />
-											<Text text="99.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/current_year_value}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Loss Utilized" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/current_year_value_utilized}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Adjustments" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/adjustments}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Loss Expired" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/current_year_value_expired}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Closing Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/closing_balance}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
 								</t:footer>
@@ -700,64 +701,64 @@
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/creditSchedule}" 
-								visibleRowCount="4" 
+								rows="{/CreditSchedule}" 
+								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
 								enableColumnReordering="false">
 								<t:columns>
-									<t:Column width="7.5rem">
+									<t:Column width="8.5rem">
 										<Label text="FY" />
 										<t:template>
-											<Text text="{fiscalYear}" />
+											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="8.5rem">
 										<Label text="Year of Expiration" />
 										<t:template>
-											<Text text="{yearOfExpiration}" />
+											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="8.5rem">
+									<t:Column width="12rem">
 										<Label text="Opening Balance" />
 										<t:template>
-											<Text text="{openingBalance}" />
+											<Text text="{opening_balance}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="9rem">
+									<t:Column width="12rem">
 										<Label text="Current Year Credit" />
 										<t:template>
-											<Text text="{currentYearCredit}" />
+											<Text text="{current_year_value}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
 										<Label text="Current Year Credit Utilized" />
 										<t:template>
-											<Text text="{currentYearCreditUtilized}" />
+											<Text text="{current_year_value_utilized}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="7.5rem">
+									<t:Column width="12rem">
 										<Label text="Adjustments" />
 										<t:template>
-											<Input value="{adjustments}" />
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="Justificativa" />
 										<t:template>
-											<Input value="{justificativa}" />
+											<Input value="{justificativa}" enabled="{= ${adjustments} ? true : false}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
 										<Label text="Current Year Credit Expired" />
 										<t:template>
-											<Text text="{currentYearCreditExpired}" />
+											<Text text="{current_year_value_expired}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="7.5rem">
+									<t:Column width="12rem">
 										<Label text="Closing Balance" />
 										<t:template>
-											<Text text="{closingBalance}" />
+											<Text text="{closing_balance}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
@@ -772,27 +773,28 @@
 										<Text text="Total" />
 										<HBox>
 											<Text text="Opening Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<!--<Text text="999.999.999,99" textAlign="End" width="7rem" />-->
+											<Text text="{/TotalCreditSchedule/opening_balance}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Credit" width="12rem" />
-											<Text text="99.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/current_year_value}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Credit Utilized" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/current_year_value_utilized}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Adjustments" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/adjustments}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Credit Expired" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/current_year_value_expired}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Closing Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/closing_balance}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
 								</t:footer>

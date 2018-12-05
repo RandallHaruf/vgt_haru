@@ -44,6 +44,17 @@ sap.ui.define(
 				this.getRouter().navTo("selecaoModulo");
 			},
 			
+			navToListagemRequisicoes: function () {
+				var oParametros = {
+					empresa: this.getModel().getProperty("/Empresa"),
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+				};
+				
+				this.getRouter().navTo("complianceListagemRequisicoes", {
+					parametros: JSON.stringify(oParametros)
+				});
+			},
+			
 			onNavToReport: function () {
 				this.getRouter().navTo("complianceRelatorio");	
 			},

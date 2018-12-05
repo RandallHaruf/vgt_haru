@@ -18,8 +18,8 @@
 					<Title text="{i18n>viewComplianceListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:navigationActions>
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
-					<!--Button icon="sap-icon://manager-insight" tooltip="Relatório" text="Relatório" press="onNavToReport" /-->
 				</f:navigationActions>
 			</f:DynamicPageTitle>
 		</f:title>

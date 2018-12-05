@@ -45,6 +45,8 @@ module.exports = function (app) {
 	var routeObrigacao = require("./routeObrigacao");
 	var routeDomPeriodicidadeObrigacao = require("./routeDomPeriodicidadeObrigacao");
 	var routeUsuario = require("./routeUsuario");
+	var routeReportTTC = require("./routeReportTTC");
+	var routeTaxReconciliation = require("./routeTaxReconciliation");
 	
 	var aRoutes = [];	
 	
@@ -89,6 +91,8 @@ module.exports = function (app) {
 	routeObrigacao(aRoutes);
 	routeDomPeriodicidadeObrigacao(aRoutes);
 	routeUsuario(aRoutes);
+	routeReportTTC(aRoutes);
+	routeTaxReconciliation(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

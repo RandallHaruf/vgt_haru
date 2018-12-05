@@ -5,7 +5,24 @@ var model = require("../models/modelSchedule");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		
+		var aParams = [];
+		
+		if (req.query.tipo) {
+			aParams.push({
+				coluna: model.colunas.fkDominioScheduleTipo,
+				valor: req.query.tipo
+			});
+		}
+		
+		if (req.query.idRelTaxPackagePeriodo) {
+			aParams.push({
+				coluna: model.colunas.fkRelTaxPackagePeriodo,
+				valor: req.query.idRelTaxPackagePeriodo
+			});
+		}
+		
+		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
@@ -28,11 +45,11 @@ module.exports = {
 			coluna: model.colunas.openingBalance,
 			valor: req.body.openingBalance ? req.body.openingBalance : null
 		}, {
-			coluna: model.colunas.currentYear,
-			valor: req.body.currentYear ? req.body.currentYear : null
+			coluna: model.colunas.currentYearValue,
+			valor: req.body.currentYearValue ? req.body.currentYearValue : null
 		}, {
-			coluna: model.colunas.resposta,
-			valor: req.body.resposta ? req.body.resposta : null
+			coluna: model.colunas.currentYearValueUtilized,
+			valor: req.body.currentYearValueUtilized ? req.body.currentYearValueUtilized : null
 		}, {
 			coluna: model.colunas.adjustments,
 			valor: req.body.adjustments ? req.body.adjustments : null
@@ -95,11 +112,11 @@ module.exports = {
 			coluna: model.colunas.openingBalance,
 			valor: req.body.openingBalance ? req.body.openingBalance : null
 		}, {
-			coluna: model.colunas.currentYear,
-			valor: req.body.currentYear ? req.body.currentYear : null
+			coluna: model.colunas.currentYearValue,
+			valor: req.body.currentYearValue ? req.body.currentYearValue : null
 		}, {
-			coluna: model.colunas.resposta,
-			valor: req.body.resposta ? req.body.resposta : null
+			coluna: model.colunas.currentYearValueUtilized,
+			valor: req.body.currentYearValueUtilized ? req.body.currentYearValueUtilized : null
 		}, {
 			coluna: model.colunas.adjustments,
 			valor: req.body.adjustments ? req.body.adjustments : null
