@@ -54,6 +54,12 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkAnoFiscal,
 			valor: req.body.fkAnoFiscal ? Number(req.body.fkAnoFiscal) : null
+		}, {
+			coluna: model.colunas.fkDominioAprovacaoObrigacao,
+			valor: req.body.fkDominioAprovacaoObrigacao ? Number(req.body.fkDominioAprovacaoObrigacao) : null
+		}, {
+			coluna: model.colunas.motivoReprovacao,
+			valor: req.body.motivoReprovacao ? req.body.motivoReprovacao : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -121,6 +127,12 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkAnoFiscal,
 			valor: req.body.fkAnoFiscal ? Number(req.body.fkAnoFiscal) : null
+		}, {
+			coluna: model.colunas.fkDominioAprovacaoObrigacao,
+			valor: req.body.fkDominioAprovacaoObrigacao ? Number(req.body.fkDominioAprovacaoObrigacao) : null
+		}, {
+			coluna: model.colunas.motivoReprovacao,
+			valor: req.body.motivoReprovacao ? req.body.motivoReprovacao : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -172,6 +184,7 @@ module.exports = {
 			' left Outer Join "VGT.OBRIGACAO_ACESSORIA" tblObrigacaoAcessoria ' +
 			' On tblObrigacao."fk_obrigacao_acessoria.id_obrigacao_acessoria" = tblObrigacaoAcessoria."id_obrigacao_acessoria" ' +
 			' left Outer Join "VGT.DOMINIO_ANO_FISCAL" tblAnoFiscal ' +
+<<<<<<< HEAD
 			' On tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = tblAnoFiscal."id_dominio_ano_fiscal" ';
 
 		var oWhere = [];
@@ -203,6 +216,46 @@ module.exports = {
 			for (var i = 0; i < oWhere.length; i++) {
 				if (i !== 0) {
 					sStatement += " and ";
+=======
+			' On tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = tblAnoFiscal."id_dominio_ano_fiscal" ' ;
+			
+			var oWhere = [];
+			var aParams = [];
+	
+			if (req.query.idEmpresa) {
+				oWhere.push(' tblEmpresa."id_empresa" = ? ');
+				aParams.push(req.query.idEmpresa);
+			}
+			
+			if (req.query.idTipo) {
+				oWhere.push(' tblObrigacaoAcessoria."id_obrigacao_acessoria" = ? ');
+				aParams.push(req.query.idTipo);
+			}
+			
+			if (req.query.idStatus) {
+				oWhere.push(' tblObrigacao."fk_dominio_status_obrigacao.id_status_obrigacao" = ? ');
+				aParams.push(req.query.idStatus);
+			}
+			
+			if (req.query.idAnoFiscal) {
+				oWhere.push(' tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ? ');
+				aParams.push(req.query.idAnoFiscal);
+			}
+			
+			if (req.query.idAprovacao) {
+				oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? ');
+				aParams.push(req.query.idAprovacao);
+			}
+	
+			if (oWhere.length > 0) {
+				sStatement += "where ";
+	
+				for (var i = 0; i < oWhere.length; i++) {
+					if (i !== 0) {
+						sStatement += " and ";
+					}
+					sStatement += oWhere[i];
+>>>>>>> refs/heads/master
 				}
 				sStatement += oWhere[i];
 			}

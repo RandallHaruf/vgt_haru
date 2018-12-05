@@ -49,6 +49,13 @@ var oSketch = {
 			nome: "fk_dominio_ano_fiscal.id_dominio_ano_fiscal",
 			number: true
 		},
+		fkDominioAprovacaoObrigacao: {
+			nome: "fk_dominio_aprovacao_obrigacao",
+			number: true
+		},
+		motivoReprovacao: {
+			nome: "motivo_reprovacao"
+		}
 	} 	
 };
 
