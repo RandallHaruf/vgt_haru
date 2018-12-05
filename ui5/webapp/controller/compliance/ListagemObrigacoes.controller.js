@@ -117,7 +117,7 @@ sap.ui.define(
 				};
 				
 				
-				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario+"&idStatus="+oStatus, function (response) { // 1 COMPLIANCE
+				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario+"&idStatus="+oStatus+"&idAprovacao=2", function (response) { // 1 COMPLIANCE
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
