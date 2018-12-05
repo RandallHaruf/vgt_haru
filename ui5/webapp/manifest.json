@@ -136,7 +136,7 @@
 					]
 				},
 				{
-					"pattern": "complianceFormularioDetalhesObrigacao",
+					"pattern": "complianceFormularioDetalhesObrigacao/{parametros}",
 					"name": "complianceFormularioDetalhesObrigacao",
 					"target": [
 						"complianceFormularioDetalhesObrigacao"
