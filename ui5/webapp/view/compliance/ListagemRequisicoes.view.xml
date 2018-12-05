@@ -1,28 +1,23 @@
-<mvc:View
-	controllerName="ui5ns.ui5.controller.compliance.ListagemRequisicoes"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout"
-	xmlns:f="sap.f"
-	xmlns="sap.m">
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemRequisicoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns="sap.m">
 	<f:DynamicPage>
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Obrigações" press="navToPage1" />
-						<Link text="Listagem de Requisição de Obrigações" enabled="false" />
+						<Link text="Home" press="navToHome"/>
+						<Link text="Listagem Obrigações" press="navToPage1"/>
+						<Link text="Listagem de Requisição de Obrigações" enabled="false"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
 					<Title text="Compliance - Listagem de Requisição de Obrigações"/>
 				</f:heading>
 				<f:navigationActions>
-					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 				<f:expandedContent>
-					<ObjectIdentifier title="Vale" />
+					<ObjectIdentifier title="Vale"/>
 				</f:expandedContent>
 			</f:DynamicPageTitle>
 		</f:title>
@@ -51,97 +46,46 @@
 			</f:DynamicPageHeader>
 		</f:header>-->
 		<f:content>
-			<Table
-				id="tabelaObjetos"
-				items="{
-					path: '/requisicoes'
-				}"
-				growing="true"
-				enableBusyIndicator="true"
-				growingScrollToLoad="true"
-				updateFinished="onTerminouAtualizar">
-		
-				<headerToolbar>
-					<Toolbar>
-						<Title 
-							id="cabecalhoTabelaObjetos" 
-							text="{i18n>viewTTCRequisicaoReaberturaTituloTabela}"/>
-						<ToolbarSpacer />
-						<!--<Button 
-							id="botaoNovoObjeto" 
-							icon="sap-icon://add" 
-							press="onNovoObjeto" 
-							text="novo"
-							type="Emphasized"/>-->
-						<Select
-								id="selectStatus"
-								tooltip="Status"
-								change="onTrocarStatus"
-								items="{/RequisicaoReaberturaStatus}"
-								selectedKey="{/RequisicaoReaberturaStatusSelecionado}">
-								<core:Item text="{status}" key="{id_dominio_requisicao_reabertura_status}" />
-							</Select>
-					</Toolbar>
-				</headerToolbar>
-		
+			<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
+				growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 				<columns>
 					<Column>
-						<Text text="{i18n>viewGeralIdRequisicao}" />
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 					</Column>
-					<Column
-						minScreenWidth="XXLarge"
-						demandPopin="true"
-						hAlign="Center">
-						<Text text="{i18n>viewGeralEmpresa}" />
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
 					</Column>
-					<Column
-						minScreenWidth="Desktop"
-						demandPopin="true"
-						hAlign="Center">
-						<Text text="{i18n>viewGeralTrimestre}" />
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
 					</Column>
-					<Column
-						minScreenWidth="Desktop"
-						demandPopin="true"
-						hAlign="Center">
-						<Text text="{i18n>viewGeralDataRequisicao}" />
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 					</Column>
-					<Column
-						minScreenWidth="Desktop"
-						demandPopin="true"
-						hAlign="Center">
-						<Text text="{i18n>viewGeralAno}" />
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 					</Column>
-					<Column
-						minScreenWidth="Desktop"
-						demandPopin="true"
-						hAlign="Center">
-						<Text text="{i18n>viewGeralUsuario}" />
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
 					</Column>
-					<Column hAlign="Center">
-						<Text text="{i18n>viewGeralJustificativa}" />
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
 					</Column>
-					<Column hAlign="Center">
-						<Text text="{i18n>viewGeralResposta}" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Status" />
+					<Column>
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 					</Column>
 				</columns>
-		
 				<items>
-					<ColumnListItem
-						press="onAbrirObjeto">
+					<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 						<cells>
-							<ObjectIdentifier title="{id_requisicao_reabertura}" />
-							<Text text="{nome}" />
-							<Text text="{periodo}" />
-							<Text text="{data_requisicao}" />
-							<Text text="{ano_calendario}" />
-							<Text text="{nome_usuario}" />
-							<Text text="{justificativa}" />
-							<Text text="{resposta}" />
-							<core:Icon src="{oStatus/icone}" color="{oStatus/cor}" tooltip="{oStatus/tooltip}" size="2rem" />
+							<ObjectIdentifier title="{TBLOBRIGACAOACESSORIANOME}"/>
+							<Text text="{prazo_entrega}"/>
+							<Text text="{extensao}"/>
+							<Text text="{ano_fiscal}"/>
+							<Text text="{pais}"/>
+							<Text text="{descricao}"/>
+							<!--core:Icon src="{viewModel>suporteContratado}"/-->
+							<Text text="{suporte_contratado}"/>
+							<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
 						</cells>
 					</ColumnListItem>
 				</items>

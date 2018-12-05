@@ -115,33 +115,21 @@ sap.ui.define(
 			_atualizarDados: function (oEvent) {
 				var that = this;
 				
-				var oEmpresa = this.getModel().getProperty("/empresa");
-				var sIdStatus = this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") ? this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") : "";
+				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado")? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
+				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado")? this.getModel().getProperty("/AnoCalendarioSelecionado") : "";
+				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
 				
-				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura?status=" + sIdStatus +"&empresa=" + oEmpresa.id_empresa , function(response){
+				if(oStatus == '0'){
+					oStatus = '';
+				};
+				
+				
+				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario+"&idStatus="+oStatus, function (response) { // 1 COMPLIANCE
 					if (response) {
-						for (var i = 0; i < response.length; i++) {
-							if (response[i].id_dominio_requisicao_reabertura_status === 1) {
-							    response[i].oStatus = {
-								  icone: "sap-icon://lateness",
-							      cor: "orange",
-							      tooltip: "Aguardando"
-							    };
-							} else if (response[i].id_dominio_requisicao_reabertura_status === 2) {
-							    response[i].oStatus = {
-								  icone: "sap-icon://accept",
-							      cor: "green",
-							      tooltip: "Aprovado"
-							    };
-							} else if (response[i].id_dominio_requisicao_reabertura_status === 3) {
-							    response[i].oStatus = {
-								  icone: "sap-icon://decline",
-							      cor: "red",
-							      tooltip: "Reprovado"
-							    };
-							}
+						for (var i = 0, length = response.length; i < length; i++) {
+							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
 						}
-						that.getModel().setProperty("/requisicoes", response);
+						that.getModel().setProperty("/Obrigacao", response);
 					}
 				});
 			}

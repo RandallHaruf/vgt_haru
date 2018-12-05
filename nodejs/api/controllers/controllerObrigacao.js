@@ -167,14 +167,7 @@ module.exports = {
 			' tblObrigacaoAcessoria."id_obrigacao_acessoria" tblObrigacaoAcessoriaID , ' +
 			' tblObrigacaoAcessoria."nome" tblObrigacaoAcessoriaNome , ' + ' tblObrigacaoAcessoria."data_inicio" tblObrigacaoAcessoriaDTInicio , ' +
 			' tblObrigacaoAcessoria."fk_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" tblObrigacaoAcessoriaIdTipo ,  ' +
-			' tblObrigacaoAcessoria."data_fim" tblObrigacaoAcessoriaDTFim , ' + ' tblAnoFiscal.*, ' +
-			' ( Select Count(*) From "VGT.OBRIGACAO") "Total", ' +
-			' ( Select Count(*) From "VGT.OBRIGACAO" Where "fk_dominio_status_obrigacao.id_status_obrigacao"=1) "NIniciada", ' +
-			' ( Select Count(*) From "VGT.OBRIGACAO" Where "fk_dominio_status_obrigacao.id_status_obrigacao"=2) "Aguardado", ' +
-			' ( Select Count(*) From "VGT.OBRIGACAO" Where "fk_dominio_status_obrigacao.id_status_obrigacao"=3) "Atraso", ' +
-			' ( Select Count(*) From "VGT.OBRIGACAO" Where "fk_dominio_status_obrigacao.id_status_obrigacao"=4) "Entregue", ' +
-			' ( Select Count(*) From "VGT.OBRIGACAO" Where "fk_dominio_status_obrigacao.id_status_obrigacao"=5) "EntregueFP" ' +
-			' from "VGT.OBRIGACAO" tblObrigacao ' +
+			' tblObrigacaoAcessoria."data_fim" tblObrigacaoAcessoriaDTFim , ' + ' tblAnoFiscal.* ' + ' from "VGT.OBRIGACAO" tblObrigacao ' +
 			' left outer join "VGT.DOMINIO_STATUS_OBRIGACAO" tblStatusObrigacao ' +
 			' on tblObrigacao."fk_dominio_status_obrigacao.id_status_obrigacao" = tblStatusObrigacao."id_status_obrigacao" ' +
 			' left outer join "VGT.DOMINIO_PAIS" tblPais ' + ' on tblObrigacao."fk_dominio_pais.id_dominio_pais" = tblPais."id_dominio_pais" ' +
@@ -184,7 +177,6 @@ module.exports = {
 			' left Outer Join "VGT.OBRIGACAO_ACESSORIA" tblObrigacaoAcessoria ' +
 			' On tblObrigacao."fk_obrigacao_acessoria.id_obrigacao_acessoria" = tblObrigacaoAcessoria."id_obrigacao_acessoria" ' +
 			' left Outer Join "VGT.DOMINIO_ANO_FISCAL" tblAnoFiscal ' +
-<<<<<<< HEAD
 			' On tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = tblAnoFiscal."id_dominio_ano_fiscal" ';
 
 		var oWhere = [];
@@ -210,52 +202,17 @@ module.exports = {
 			aParams.push(req.query.idAnoFiscal);
 		}
 
+		if (req.query.idAprovacao) {
+			oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? ');
+			aParams.push(req.query.idAprovacao);
+		}
+
 		if (oWhere.length > 0) {
 			sStatement += "where ";
 
 			for (var i = 0; i < oWhere.length; i++) {
 				if (i !== 0) {
 					sStatement += " and ";
-=======
-			' On tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = tblAnoFiscal."id_dominio_ano_fiscal" ' ;
-			
-			var oWhere = [];
-			var aParams = [];
-	
-			if (req.query.idEmpresa) {
-				oWhere.push(' tblEmpresa."id_empresa" = ? ');
-				aParams.push(req.query.idEmpresa);
-			}
-			
-			if (req.query.idTipo) {
-				oWhere.push(' tblObrigacaoAcessoria."id_obrigacao_acessoria" = ? ');
-				aParams.push(req.query.idTipo);
-			}
-			
-			if (req.query.idStatus) {
-				oWhere.push(' tblObrigacao."fk_dominio_status_obrigacao.id_status_obrigacao" = ? ');
-				aParams.push(req.query.idStatus);
-			}
-			
-			if (req.query.idAnoFiscal) {
-				oWhere.push(' tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ? ');
-				aParams.push(req.query.idAnoFiscal);
-			}
-			
-			if (req.query.idAprovacao) {
-				oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? ');
-				aParams.push(req.query.idAprovacao);
-			}
-	
-			if (oWhere.length > 0) {
-				sStatement += "where ";
-	
-				for (var i = 0; i < oWhere.length; i++) {
-					if (i !== 0) {
-						sStatement += " and ";
-					}
-					sStatement += oWhere[i];
->>>>>>> refs/heads/master
 				}
 				sStatement += oWhere[i];
 			}
