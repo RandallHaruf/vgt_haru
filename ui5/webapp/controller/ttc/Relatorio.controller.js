@@ -169,7 +169,7 @@ sap.ui.define([
 			var that = this;
 			NodeAPI.listarRegistros("Empresa", function (resposta) {
 				if (resposta) {
-					that.getModel().setProperty("/Empresa", resposta);
+					that.getModel().setProperty("/DeepQuery/Empresa?idRegistro=1", resposta);
 				}
 			});
 		},
