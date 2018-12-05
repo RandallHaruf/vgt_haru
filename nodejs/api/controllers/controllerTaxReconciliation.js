@@ -256,6 +256,11 @@ module.exports = {
 				oWhere.push(' Perid."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? ');
 				aParams.push(req.query.anoCalendario);
 			}
+			
+			if (req.query.empresa) {
+				oWhere.push(' TaxPac."fk_empresa.id_empresa" = ? ');
+				aParams.push(req.query.empresa);
+			}
 	
 			if (oWhere.length > 0) {
 				sStatement += "where ";
