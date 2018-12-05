@@ -26,7 +26,8 @@ var oSketch = {
             nome: "id_ativo"
         },
         fkDominioDiferencaTipo: {
-            nome: "fk_dominio_tipo_acesso"
+            nome: "fk_dominio_tipo_acesso",
+            number: true
         }        
 	}
 };

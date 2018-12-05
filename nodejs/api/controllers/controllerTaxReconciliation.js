@@ -236,19 +236,47 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade TaxReconciliation");
+		//res.send("TODO: DeepQuery da Entidade Obrigacao");
 
-		/*var sStatement = 'select * from "DUMMY"';
-
-		model.execute({
-		statement: sStatement
-		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+		var sStatement =
+			  'Select TaxRec.*,RTP_Per.*,TaxPac.*,Perid.*,Moeda.* From "VGT.TAX_RECONCILIATION" TaxRec '
+			+ 'LEFT OUTER JOIN "VGT.REL_TAX_PACKAGE_PERIODO" RTP_Per '
+			+ 'On TaxRec."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = RTP_Per."id_rel_tax_package_periodo" '
+			+ 'LEFT OUTER JOIN "VGT.TAX_PACKAGE" TaxPac '
+            + 'ON RTP_Per."fk_tax_package.id_tax_package" = TaxPac."id_tax_package" '
+            + 'LEFT OUTER JOIN "VGT.PERIODO" Perid '
+			+ 'ON RTP_Per."fk_periodo.id_periodo" = Perid."id_periodo" '
+            + 'LEFT OUTER JOIN "VGT.DOMINIO_MOEDA" Moeda '
+			+ 'ON TaxPac."fk_dominio_moeda.id_dominio_moeda" = Moeda."id_dominio_moeda" ';
+			
+			var oWhere = [];
+			var aParams = [];
+	
+			if (req.query.anoCalendario) {
+				oWhere.push(' Perid."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? ');
+				aParams.push(req.query.anoCalendario);
+			}
+	
+			if (oWhere.length > 0) {
+				sStatement += "where ";
+	
+				for (var i = 0; i < oWhere.length; i++) {
+					if (i !== 0) {
+						sStatement += " and ";
+					}
+					sStatement += oWhere[i];
+				}
+			}
+			
+			model.execute({
+				statement: sStatement,
+				parameters: aParams
+			}, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				} else {
+					res.send(JSON.stringify(result));
+				}
+			});
 	}
 };
