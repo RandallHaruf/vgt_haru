@@ -54,6 +54,12 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkAnoFiscal,
 			valor: req.body.fkAnoFiscal ? Number(req.body.fkAnoFiscal) : null
+		}, {
+			coluna: model.colunas.fkDominioAprovacaoObrigacao,
+			valor: req.body.fkDominioAprovacaoObrigacao ? Number(req.body.fkDominioAprovacaoObrigacao) : null
+		}, {
+			coluna: model.colunas.motivoReprovacao,
+			valor: req.body.motivoReprovacao ? req.body.motivoReprovacao : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -121,6 +127,12 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkAnoFiscal,
 			valor: req.body.fkAnoFiscal ? Number(req.body.fkAnoFiscal) : null
+		}, {
+			coluna: model.colunas.fkDominioAprovacaoObrigacao,
+			valor: req.body.fkDominioAprovacaoObrigacao ? Number(req.body.fkDominioAprovacaoObrigacao) : null
+		}, {
+			coluna: model.colunas.motivoReprovacao,
+			valor: req.body.motivoReprovacao ? req.body.motivoReprovacao : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -188,6 +200,11 @@ module.exports = {
 			if (req.query.idAnoFiscal) {
 				oWhere.push(' tblObrigacao."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ? ');
 				aParams.push(req.query.idAnoFiscal);
+			}
+			
+			if (req.query.idAprovacao) {
+				oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? ');
+				aParams.push(req.query.idAprovacao);
 			}
 	
 			if (oWhere.length > 0) {

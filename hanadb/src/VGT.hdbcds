@@ -116,7 +116,7 @@ context VGT {
             fk_dominio_aliquota_tipo : association[*, 0..1] to VGT.DOMINIO_ALIQUOTA_TIPO { id_dominio_aliquota_tipo };
     };
 
-    /*@@layout{"layoutInfo":{"x":333,"y":870.5}}*/
+    /*@@layout{"layoutInfo":{"x":415,"y":880.5}}*/
     entity PAIS {
         key id_pais                    : Integer not null;
             prescricao_prejuizo        : Integer;
@@ -377,7 +377,7 @@ context VGT {
             fk_periodo                 : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
     };
 
-	/*@@layout{"layoutInfo":{"x":-706,"y":611.5}}*/
+    /*@@layout{"layoutInfo":{"x":-706,"y":611.5}}*/
     entity DOMINIO_SCHEDULE_TIPO {
         key id_dominio_schedule_tipo : Integer64;
             tipo                     : String(100);
@@ -489,11 +489,19 @@ context VGT {
             fk_empresa                         : association[*, 0..1] to VGT.EMPRESA { id_empresa };
             fk_obrigacao_acessoria             : association[*, 0..1] to VGT.OBRIGACAO_ACESSORIA { id_obrigacao_acessoria };
             fk_dominio_ano_fiscal              : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
+            fk_dominio_aprovacao_obrigacao     : association[*, 0..1] to VGT.DOMINIO_APROVACAO_OBRIGACAO { id_aprovacao_obrigacao };
+            motivo_reprovacao                  : String(400);
     };
 
     /*@@layout{"layoutInfo":{"x":-109,"y":1028.5}}*/
     entity OBRIGACAO_DOCUMENTO {
         fk_obrigacao : association[*, 0..1] to VGT.OBRIGACAO { id_obrigacao };
         fk_documento : association[*, 0..1] to VGT.DOCUMENTO { id_documento };
+    };
+
+    /*@@layout{"layoutInfo":{"x":170,"y":863.5}}*/
+    entity DOMINIO_APROVACAO_OBRIGACAO {
+        key id_aprovacao_obrigacao : Integer;
+            descricao_aprovacao    : String(30);
     };
 };
