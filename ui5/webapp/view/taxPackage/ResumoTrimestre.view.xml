@@ -64,7 +64,7 @@
 										<content>
 											<Title text="{i18n>viewGeralPeriodo1}" level="H2"/>
 											<ToolbarSpacer />
-											<Text text="USD" />
+											<Text text="{/MoedaPrimeiroTrimestre}" />
 										</content>
 									</Toolbar>
 								</headerToolbar>
@@ -90,13 +90,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{primeiroValor}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
-												number="{segundoValor}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
 											<ObjectNumber
-												number="{terceiroValor}" />
+												number="{rf_net_local_tax}" />
 											<ObjectNumber
-												number="{quartoValor}" />
+												number="{rf_tax_due_overpaid}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -120,7 +120,7 @@
 										<content>
 											<Title text="{i18n>viewGeralPeriodo2}" level="H2"/>
 											<ToolbarSpacer />
-											<Text text="USD" />
+											<Text text="{/MoedaSegundoTrimestre}" />
 										</content>
 									</Toolbar>
 								</headerToolbar>
@@ -146,13 +146,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{primeiroValor}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
-												number="{segundoValor}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
 											<ObjectNumber
-												number="{terceiroValor}" />
+												number="{rf_net_local_tax}" />
 											<ObjectNumber
-												number="{quartoValor}" />
+												number="{rf_tax_due_overpaid}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -178,7 +178,7 @@
 										<content>
 											<Title text="{i18n>viewGeralPeriodo3}" level="H2"/>
 											<ToolbarSpacer />
-											<Text text="USD" />
+											<Text text="{/MoedaTerceiroTrimestre}" />
 										</content>
 									</Toolbar>
 								</headerToolbar>
@@ -204,13 +204,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{primeiroValor}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
-												number="{segundoValor}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
 											<ObjectNumber
-												number="{terceiroValor}" />
+												number="{rf_net_local_tax}" />
 											<ObjectNumber
-												number="{quartoValor}" />
+												number="{rf_tax_due_overpaid}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -234,7 +234,7 @@
 										<content>
 											<Title text="{i18n>viewGeralPeriodo4}" level="H2"/>
 											<ToolbarSpacer />
-											<Text text="USD" />
+											<Text text="{/MoedaQuartoTrimestre}" />
 										</content>
 									</Toolbar>
 								</headerToolbar>
@@ -260,13 +260,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{primeiroValor}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
-												number="{segundoValor}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
 											<ObjectNumber
-												number="{terceiroValor}" />
+												number="{rf_net_local_tax}" />
 											<ObjectNumber
-												number="{quartoValor}" />
+												number="{rf_tax_due_overpaid}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -293,7 +293,7 @@
 										<content>
 											<Title text="{i18n>viewGeralPeriodo5}" level="H2"/>
 											<ToolbarSpacer />
-											<Text text="BRL" />
+											<Text text="{/MoedaAnual}" />
 										</content>
 									</Toolbar>
 								</headerToolbar>
@@ -319,13 +319,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{primeiroValor}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
-												number="{segundoValor}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
 											<ObjectNumber
-												number="{terceiroValor}" />
+												number="{rf_net_local_tax}" />
 											<ObjectNumber
-												number="{quartoValor}" />
+												number="{rf_tax_due_overpaid}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -350,7 +350,7 @@
 										<content>
 											<Title text="{i18n>viewGeralPeriodo6}" level="H2"/>
 											<ToolbarSpacer />
-											<Text text="BRL" />
+											<Text text="{/MoedaRetificadora}" />
 										</content>
 									</Toolbar>
 								</headerToolbar>
@@ -376,13 +376,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{primeiroValor}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
-												number="{segundoValor}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
 											<ObjectNumber
-												number="{terceiroValor}" />
+												number="{rf_net_local_tax}" />
 											<ObjectNumber
-												number="{quartoValor}" />
+												number="{rf_tax_due_overpaid}" />
 										</cells>
 									</ColumnListItem>
 								</items>
