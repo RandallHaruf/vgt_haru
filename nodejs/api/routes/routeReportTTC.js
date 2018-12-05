@@ -11,6 +11,6 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().put("/ReportTTC/:idRegistro", controller.atualizarRegistro));
 	aRoutes.push(express.Router().delete("/ReportTTC/:idRegistro", controller.excluirRegistro));
 
-	aRoutes.push(express.Router().get("/DeepQuery/ReportTTC", controller.deepQuery));
+	aRoutes.push(express.Router().get("/DeepQuery/ReportTTC", controller.deepQuery)); 
 	aRoutes.push(express.Router().get("/DeepQuery/ReportTTC/:idRegistro", controller.deepQuery));
 };
