@@ -52,57 +52,73 @@
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa"  change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectEmpresa"  change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectEmpresa" selectionFinish="onImprimir" selectionChange="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+										<core:Item key="{id_empresa}" text="{nome}"/>									
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewRelatorioClassificacao}">
 								<fb:control>
-									<MultiComboBox id="selectClassification" change="onSelectChange"  items="{ path: '/OpcoesClassification' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectClassification" change="onSelectChange"  items="{ path: '/OpcoesClassification' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectClassification" selectionChange="onSelectChange"  items="{ path: '/DominioTaxClassification' }">
+										<core:Item key="{id_dominio_tax_classification}" text="{classification}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewRelatorioCategoria}">
 								<fb:control>
-									<MultiComboBox id="selectCategory" change="onSelectChange"  items="{ path: '/OpcoesCategory' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectCategory" change="onSelectChange"  items="{ path: '/OpcoesCategory' }" >
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectCategory" selectionChange="onSelectChange"  items="{ path: '/TaxCategory' }" selectedKeys="{/IdTaxCategorySelecionadas}">
+										<core:Item key="{id_tax_category}" text="{category}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="Tax">
 								<fb:control>
-									<MultiComboBox id="selectTax" change="onSelectChange"  items="{ path: '/OpcoesTax' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectTax" change="onSelectChange"  items="{ path: '/OpcoesTax' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectTax" selectionChange="onSelectChange"  items="{ path: '/Tax' }" selectedKeys="{/IdTaxSelecionadas}" >
+										<core:Item key="{id_tax}" text="{tax}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="{i18n>viewRelatorioNome} of Tax">
 								<fb:control>
-									<MultiComboBox id="selectNameOfTax" change="onSelectChange"  items="{ path: '/OpcoesNameOfTax' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectNameOfTax" change="onSelectChange"  items="{ path: '/OpcoesNameOfTax' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectNameOfTax" selectionChange="onSelectChange"  items="{ path: '/NameOfTax' }" selectedKeys="{/IdNameOfTaxSelecionadas}" >
+										<core:Item key="{id_name_of_tax}" text="{name_of_tax}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewRelatorioJurisdicao}">
 								<fb:control>
-									<MultiComboBox id="selectJurisdicao" change="onSelectChange"  items="{ path: '/OpcoesJurisdicao' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectJurisdicao" change="onSelectChange"  items="{ path: '/OpcoesJurisdicao' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectJurisdicao" selectionChange="onSelectChange"  items="{ path: '/DominioJurisdicao' }" selectedKeys="{/IdDominioJurisdicaoSelecionadas}" >
+										<core:Item key="{id_dominio_jurisdicao}" text="{jurisdicao}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewRelatorioPais}">
 								<fb:control>
-									<MultiComboBox id="selectPais" change="onSelectChange"  items="{ path: '/OpcoesPais' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectPais" change="onSelectChange"  items="{ path: '/OpcoesPais' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectPais" selectionChange="onSelectChange"  items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}" >
+										<core:Item key="{id_dominio_pais}" text="{pais}"/>											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="H" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" change="onSelectChange"  items="{ path: '/OpcoesAnoFiscal' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectAnoFiscal" change="onSelectChange"  items="{ path: '/OpcoesAnoFiscal' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectAnoFiscal" selectionChange="onSelectChange"  items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
+										<core:Item key="{id_dominio_ano_fiscal}" text="{ano_fiscal}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -118,15 +134,19 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
 								<fb:control>
-									<MultiComboBox id="selectCurrency" change="onSelectChange"  items="{ path: '/OpcoesCurrency' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectCurrency" change="onSelectChange"  items="{ path: '/OpcoesCurrency' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectCurrency" selectionChange="onSelectChange"  items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
+										<core:Item key="{id_dominio_moeda}" text="{acronimo}"/>											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="L" label="{i18n>ViewRelatorioTipoDeTransacao}">
 								<fb:control>
-									<MultiComboBox id="selectTypeOfTransaction" change="onSelectChange"  items="{ path: '/OpcoesTypeOfTransaction' }">
-										<core:Item key="{key}" text="{value}"/>
+									<!--<MultiComboBox id="selectTypeOfTransaction" change="onSelectChange"  items="{ path: '/OpcoesTypeOfTransaction' }">
+										<core:Item key="{key}" text="{value}"/>-->
+									<MultiComboBox id="selectTypeOfTransaction" selectionChange="onSelectChange"  items="{ path: '/DominioTipoTransacao' }" selectedKeys="{/IdDominioTipoTransacaoSelecionadas}" >
+										<core:Item key="{id_dominio_tipo_transacao}" text="{tipo_transacao}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>

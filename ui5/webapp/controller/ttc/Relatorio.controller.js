@@ -14,7 +14,6 @@ sap.ui.define([
 			this.oModel.loadData(jQuery.sap.getModulePath("ui5ns.ui5.model.mock", "/relatorioTTC.json"), null, false);
 			this.getView().setModel(this.oModel);*/
 			this.getView().setModel(new sap.ui.model.json.JSONModel({}));
-			
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteNameOfTax, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteTaxCategory, this);
