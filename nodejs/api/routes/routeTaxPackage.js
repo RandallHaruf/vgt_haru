@@ -6,4 +6,5 @@ module.exports = function (aRoutes) {
 	
 	aRoutes.push(express.Router().get("/TaxPackage", controller.listarTaxPackage)); 
 	aRoutes.push(express.Router().post("/InserirTaxPackage", controller.inserirTaxPackage));
+	aRoutes.push(express.Router().get("/ScheduleParaNovoPeriodo", controller.criarScheduleParaNovoPeriodo));
 };

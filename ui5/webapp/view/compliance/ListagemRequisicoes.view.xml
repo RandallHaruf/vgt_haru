@@ -1,0 +1,95 @@
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemRequisicoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns="sap.m">
+	<f:DynamicPage>
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome"/>
+						<Link text="Listagem Obrigações" press="navToPage1"/>
+						<Link text="Listagem de Requisição de Obrigações" enabled="false"/>
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<Title text="Compliance - Listagem de Requisição de Obrigações"/>
+				</f:heading>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
+				</f:navigationActions>
+				<f:expandedContent>
+					<ObjectIdentifier title="Vale"/>
+				</f:expandedContent>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!--<f:header>
+			<f:DynamicPageHeader pinnable="false">
+				<f:content>
+					<FlexBox alignItems="Start" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+						<items>
+							<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
+								<content>
+									<l:VerticalLayout>
+										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
+											<ObjectIdentifier title="Vale" />
+										</l:HorizontalLayout>
+										<l:HorizontalLayout allowWrapping="true">
+											<l:VerticalLayout>
+												<ObjectAttribute title="Ano Calendário" text="2018"/>
+											</l:VerticalLayout>
+										</l:HorizontalLayout>
+									</l:VerticalLayout>
+								</content>
+							</Panel>
+						</items>
+					</FlexBox>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>-->
+		<f:content>
+			<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
+				growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
+				<columns>
+					<Column>
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Navigation" press="onDetalharObrigacao">
+						<cells>
+							<ObjectIdentifier title="{TBLOBRIGACAOACESSORIANOME}"/>
+							<Text text="{prazo_entrega}"/>
+							<Text text="{extensao}"/>
+							<Text text="{ano_fiscal}"/>
+							<Text text="{pais}"/>
+							<Text text="{descricao}"/>
+							<!--core:Icon src="{viewModel>suporteContratado}"/-->
+							<Text text="{suporte_contratado}"/>
+							<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

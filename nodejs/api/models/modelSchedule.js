@@ -16,10 +16,10 @@ var oSketch = {
 		openingBalance: {
 			nome: "opening_balance"
 		},
-		currentYear: {
+		currentYearValue: {
 			nome: "current_year_value"
 		},
-		resposta: {
+		currentYearValueUtilized: {
 			nome: "current_year_value_utilized"
 		},
 		adjustments: {

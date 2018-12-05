@@ -43,7 +43,7 @@
 							<Select
 								id="selectAnoCalendario"
 								change="onTrocarAnoCalendario"
-								tooltip="{i18n>viewTTCResumoTrimestreBotaoAnoToolTip}"
+								tooltip="{i18n>viewTTCResumoTrimestreBotaoToolTip}"
 								items="{/DominioAnoCalendario}"
 								selectedKey="{/AnoCalendarioSelecionado}">
 								<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
