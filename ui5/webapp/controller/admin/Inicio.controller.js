@@ -210,6 +210,9 @@ sap.ui.define(
 							title: "Visualizar Beps",
 							key: "bepsModulo"
 						},  {
+							title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
+							key: "cadastroObrigacoes"
+						},  {
 							title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
 							key: "cadastroObrigacoes"
 						}]

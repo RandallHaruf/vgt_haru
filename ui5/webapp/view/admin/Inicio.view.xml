@@ -82,6 +82,9 @@
 					<ScrollContainer id="bepsModulo" horizontal="false" vertical="true" height="100%">
 						<Text text="Redirecionar para visualização do Beps"></Text>
 					</ScrollContainer>
+					<ScrollContainer id="cadastroTipoObrigacoes" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroTipoObrigacoesComplianceBeps" id="cadastroTipoObrigacoesXMLView" />
+					</ScrollContainer>
 					<ScrollContainer id="cadastroObrigacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps" id="cadastroObrigacoesXMLView" />
 					</ScrollContainer>
