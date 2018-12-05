@@ -115,6 +115,13 @@
 					]
 				},
 				{
+					"pattern": "complianceListagemRequisicoes/{parametros}",
+					"name": "complianceListagemRequisicoes",
+					"target": [
+						"complianceListagemRequisicoes"
+					]
+				},
+				{
 					"pattern": "complianceRelatorio",
 					"name": "complianceRelatorio",
 					"target": [
@@ -307,6 +314,11 @@
 				"complianceListagemObrigacoes": {
 					"viewName": "compliance/ListagemObrigacoes",
 					"viewId": "complianceListagemObrigacoes",
+					"viewLevel": 2
+				},
+				"complianceListagemRequisicoes": {
+					"viewName": "compliance/ListagemRequisicoes",
+					"viewId": "complianceListagemRequisicoes",
 					"viewLevel": 2
 				},
 				"complianceRelatorio": {
