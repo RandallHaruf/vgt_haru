@@ -63,7 +63,7 @@
 								<fb:control>
 									<!--<MultiComboBox id="selectClassification" change="onSelectChange"  items="{ path: '/OpcoesClassification' }">
 										<core:Item key="{key}" text="{value}"/>-->
-									<MultiComboBox id="selectClassification" selectionChange="onSelectChange"  items="{ path: '/DominioTaxClassification' }">
+									<MultiComboBox id="selectClassification" selectionChange="onSelectChange"  items="{ path: '/DominioTaxClassification' }" selectedKeys="{/IdDominioTaxClassificationSelecionadas}">
 										<core:Item key="{id_dominio_tax_classification}" text="{classification}"/>										
 									</MultiComboBox>
 								</fb:control>
