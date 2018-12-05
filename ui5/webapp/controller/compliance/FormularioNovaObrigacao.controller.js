@@ -19,7 +19,9 @@ sap.ui.define(
 						suporte_contratado: null,
 						suporte: null,
 						observacoes: null,
-						fkDominioStatusObrigacao: 1
+						fkDominioStatusObrigacao: 1,
+						fkDominioAprovacaoObrigacao: 1,
+						motivoReprovacao: null
 					}
 				});
 				
@@ -95,7 +97,9 @@ sap.ui.define(
 					suporte_contratado: null,
 					suporte: null, 
 					observacoes: null,
-					fkDominioStatusObrigacao: 1
+					fkDominioStatusObrigacao: 1,
+					fkDominioAprovacaoObrigacao:1,
+					motivoReprovacao: null
 				});
 			}
 		});

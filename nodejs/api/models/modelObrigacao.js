@@ -50,7 +50,7 @@ var oSketch = {
 			number: true
 		},
 		fkDominioAprovacaoObrigacao: {
-			nome: "fk_dominio_aprovacao_obrigacao",
+			nome: "fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao",
 			number: true
 		},
 		motivoReprovacao: {
