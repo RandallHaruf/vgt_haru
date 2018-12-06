@@ -33,15 +33,15 @@
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout class="sapUiMediumMarginEnd">
 												<ObjectAttribute title="TIN" text="{/Empresa/tin}"/>
-												<ObjectAttribute title="Moeda" text="{/Periodo/fk_dominio_moeda.id_dominio_moeda}"/>
-												<ObjectAttribute title="Ano Calendário" text="{/AnoCalendario/anoCalendario}"/>
-												<ObjectAttribute title="Período de Referência" text="{/Periodo/periodo}"/>
+												<ObjectAttribute title="{i18n>viewGeralMoeda}" text="{/Periodo/fk_dominio_moeda.id_dominio_moeda}"/>
+												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="{/AnoCalendario/anoCalendario}"/>
+												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/Periodo/periodo}"/>
 											</l:VerticalLayout>
 											<l:VerticalLayout>
-												<ObjectAttribute title="Start Date" text="{/Empresa/fy_start_date}"/>
-												<ObjectAttribute title="End Date" text="{/Empresa/fy_end_date}"/>
-												<ObjectAttribute title="CIT Type" text="Estimativa"/>
-												<ObjectAttribute title="Prepared by" text="João Silva - joao.silva@email.com" />
+												<ObjectAttribute title="{i18n>ViewGeralDataInício}" text="{/Empresa/fy_start_date}"/>
+												<ObjectAttribute title="{i18n>ViewGeralDataFim}" text="{/Empresa/fy_end_date}"/>
+												<ObjectAttribute title="{i18n>viewEdiçãoTrimestreCITType}" text="Estimativa"/>
+												<ObjectAttribute title="{i18n>viewEdiçãoTrimestrePreparadoPor}" text="João Silva - joao.silva@email.com" />
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
 									</l:VerticalLayout>
@@ -56,7 +56,7 @@
 			<IconTabBar id="idIconTabBarInlineMode" upperCase="true" expandable="false" stretchContentHeight="true"
 				class="sapUiNoContentPadding">
 				<items>
-					<IconTabFilter text="Items to Report">
+					<IconTabFilter text="{i18n>viewEdiçãoTrimestreItensParaReportar}">
 						<ScrollContainer id="containerItemsToReport2" horizontal="true" vertical="true" height="100%" class="sapUiResponsiveContentPadding">
 							<!--<VBox id="containerItemsToReport">
 								<HBox alignItems="Center">
@@ -111,13 +111,13 @@
 											<Text text=""/>
 										</Column>
 										<Column width="10rem">
-											<Text text="Statutory GAAP Profit / (loss) before tax" />
+											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Current Income Tax – Current Year" />
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAtual}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Current Income Tax – Previous Year" />
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAnterior}" />
 										</Column>
 										<Column width="10rem">
 											<Text text="Deferred Income Tax" />
@@ -129,20 +129,20 @@
 											<Text text="Statutory provision for income tax" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Statutory GAAP profit / (loss) after tax" />
+											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" />
 										</Column>
 									</columns>
 									<items>
 										<ColumnListItem>
 											<cells>
 												<ObjectIdentifier title="{i18n>viewGeralPeriodo}" />
-												<Input type="Number" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
-												<Input type="Number" value="{rc_current_income_tax_current_year}" editable="{ind_ativo}" change="onAplicarRegras" />
-												<Input type="Number" value="{rc_current_income_tax_previous_year}" editable="{ind_ativo}" change="onAplicarRegras" />
-												<Input type="Number" value="{rc_deferred_income_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
-												<Input type="Number" value="{rc_non_recoverable_wht}" editable="{ind_ativo}" change="onAplicarRegras" />
-												<Input type="Number" value="{rc_statutory_provision_for_income_tax}" editable="false" />
-												<Input type="Number" value="{rc_statutory_gaap_profit_loss_after_tax}" editable="false" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_current_income_tax_current_year}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_current_income_tax_previous_year}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_deferred_income_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_non_recoverable_wht}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_statutory_provision_for_income_tax}" editable="false" />
+												<Input type="{i18n>viewGeralNúmero}" value="{rc_statutory_gaap_profit_loss_after_tax}" editable="false" />
 											</cells>
 										</ColumnListItem>
 									</items>

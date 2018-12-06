@@ -6,7 +6,7 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m">
 	<f:DynamicPage
-		title="Tax Package - Listagem de Requisição de Reabertura"
+		title="{i18n>viewTPRequisicaoReaberturaTituloPagina}"
 		showNavButton="true"
 		navButtonPress="onNavBack"
 		toggleHeaderOnTitleClick="false">
@@ -15,13 +15,13 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Empresas" press="navToPage2" />
-						<Link text="Resumo Trimestre" press="navToPage3" />
-						<Link text="Requisição Reabertura" enabled="false" />
+						<Link text="{i18n>viewTPListagemEmpresaListaDeEmpresa}" press="navToPage2" />
+						<Link text="{i18n>viewTPRequisicaoReaberturaTituloResumoTrimestre}" press="navToPage3" />
+						<Link text="{i18n>viewTPRequisicaoReaberturaTituloTabela}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Tax Package - Listagem de Requisição de Reabertura"/>
+					<Title text="{i18n>viewTPRequisicaoReaberturaTituloPagina}"/>
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
@@ -66,7 +66,7 @@
 					<Toolbar>
 						<Title 
 							id="cabecalhoTabelaObjetos" 
-							text="Requisições de Reabertura"/>
+							text="{i18n>viewTPRequisicaoReaberturaTituloTabela}"/>
 						<ToolbarSpacer />
 						<!--<Button 
 							id="botaoNovoObjeto" 
@@ -87,33 +87,33 @@
 					<Column
 						minScreenWidth="XXLarge"
 						demandPopin="true">
-						<Text text="Empresa" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaEmpresa}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
 						demandPopin="true">
-						<Text text="Trimestre" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaTrimestre}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
 						demandPopin="true">
-						<Text text="Data da Requisição" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaDataDERequisicao}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
 						demandPopin="true">
-						<Text text="Ano" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaAno}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
 						demandPopin="true">
-						<Text text="Usuário" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaUsuario}" />
 					</Column>
 					<Column>
-						<Text text="Justificativa" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaJustificativa}" />
 					</Column>
 					<Column>
-						<Text text="Resposta" />
+						<Text text="{i18n>viewTPRequisicaoReaberturaResposta}" />
 					</Column>
 					<Column hAlign="Center">
 						<Text text="Status" />

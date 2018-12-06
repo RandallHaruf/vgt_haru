@@ -1,26 +1,65 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/jQueryMask"
 	],
-	function (BaseController, NodeAPI) {
+	function (BaseController, NodeAPI, jQueryMask) {
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.ResumoTrimestre", {
 			pressDialog: null,
 			
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
+					MoedaPrimeiroTrimestre: null,
+					MoedaSegundoTrimestre: null,
+					MoedaTerceiroTrimestre: null,
+					MoedaQuartoTrimestre: null,
+					MoedaAnual: null,
+					MoedaRetificadora: null,
 					"trimestres": {
-						"PrimeiroTrimestre": [],
-						"SegundoTrimestre": [],
-						"TerceiroTrimestre": [],
-						"QuartoTrimestre": []
+						PrimeiroTrimestre: [{
+							rc_statutory_gaap_profit_loss_before_tax: 0,
+							rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+							rf_net_local_tax: 0,
+							rf_tax_due_overpaid: 0
+						}],
+						SegundoTrimestre: [{
+							rc_statutory_gaap_profit_loss_before_tax: 0,
+							rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+							rf_net_local_tax: 0,
+							rf_tax_due_overpaid: 0
+						}],
+						TerceiroTrimestre: [{
+							rc_statutory_gaap_profit_loss_before_tax: 0,
+							rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+							rf_net_local_tax: 0,
+							rf_tax_due_overpaid: 0
+						}],
+						QuartoTrimestre: [{
+							rc_statutory_gaap_profit_loss_before_tax: 0,
+							rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+							rf_net_local_tax: 0,
+							rf_tax_due_overpaid: 0
+						}]
 					},
-					"anual": [],
-					"retificadora": []
+					"anual":[{
+						rc_statutory_gaap_profit_loss_before_tax: 0,
+						rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+						rf_net_local_tax: 0,
+						rf_tax_due_overpaid: 0
+					}],
+					"retificadora": [{
+						rc_statutory_gaap_profit_loss_before_tax: 0,
+						rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+						rf_net_local_tax: 0,
+						rf_tax_due_overpaid: 0
+					}]
 				}));
 				
 				this.getRouter().getRoute("taxPackageResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
-			},	
+				
+				jQuery(".money span").mask("000.000.000.000.000,00", {reverse: true});
+			},
 			
 			onTrocarAnoCalendario: function (oEvent) {
 				this._atualizarDados();	
@@ -215,7 +254,50 @@ sap.ui.define(
 			_carregarResumo: function (sIdEmpresa, sIdAnoCalendario) {
 				this._setTableBusy(true);
 				
-				this.getModel().setProperty("/trimestres/PrimeiroTrimestre", [{
+				var that = this,
+					sEntidade = "DeepQuery/TaxReconciliation?anoCalendario=" + sIdAnoCalendario + "&empresa=" + sIdEmpresa;
+				
+				this._limparResumo();
+				
+				NodeAPI.listarRegistros(sEntidade, function (response) {
+					if (response) {
+						for (var i = 0, length = response.length; i < length; i++) {
+							var oTaxReconciliation = response[i];
+							
+							switch (true) {
+								case oTaxReconciliation.numero_ordem === 1:
+									that.getModel().setProperty("/trimestres/PrimeiroTrimestre", [oTaxReconciliation]);
+									that.getModel().setProperty("/MoedaPrimeiroTrimestre", oTaxReconciliation.acronimo);
+									break;
+								case oTaxReconciliation.numero_ordem === 2:
+									that.getModel().setProperty("/trimestres/SegundoTrimestre", [oTaxReconciliation]);
+									that.getModel().setProperty("/MoedaSegundoTrimestre", oTaxReconciliation.acronimo);
+									break;
+								case oTaxReconciliation.numero_ordem === 3:
+									that.getModel().setProperty("/trimestres/TerceiroTrimestre", [oTaxReconciliation]);
+									that.getModel().setProperty("/MoedaTerceiroTrimestre", oTaxReconciliation.acronimo);
+									break;
+								case oTaxReconciliation.numero_ordem === 4:
+									that.getModel().setProperty("/trimestres/QuartoTrimestre", [oTaxReconciliation]);
+									that.getModel().setProperty("/MoedaQuartoTrimestre", oTaxReconciliation.acronimo);
+									break;
+								case oTaxReconciliation.numero_ordem === 5:
+									that.getModel().setProperty("/anual", [oTaxReconciliation]);
+									that.getModel().setProperty("/MoedaAnual", oTaxReconciliation.acronimo);
+									break;
+								case oTaxReconciliation.numero_ordem >= 6:
+									// PEGAR A ULTIMA RETIFICADORA APENAS
+									that.getModel().setProperty("/retificadora", [oTaxReconciliation]);
+									that.getModel().setProperty("/MoedaRetificadora", oTaxReconciliation.acronimo);
+									break;
+							}
+						}
+					}	
+					
+					that._setTableBusy(false);
+				});
+				
+				/*this.getModel().setProperty("/trimestres/PrimeiroTrimestre", [{
 					"primeiroValor": "999.999.999,99",
 					"segundoValor": "999.999.999,99",
 					"terceiroValor": "999.999.999,99",
@@ -255,9 +337,57 @@ sap.ui.define(
 					"segundoValor": "999.999.999,99",
 					"terceiroValor": "999.999.999,99",
 					"quartoValor": "999.999.999,99"
+				}]);*/
+			},
+			
+			_limparResumo: function () {
+				this.getModel().setProperty("/MoedaPrimeiroTrimestre", "");
+				this.getModel().setProperty("/trimestres/PrimeiroTrimestre", [{
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+					rf_net_local_tax: 0,
+					rf_tax_due_overpaid: 0
 				}]);
 				
-				this._setTableBusy(false);
+				this.getModel().setProperty("/MoedaSegundoTrimestre", "");
+				this.getModel().setProperty("/trimestres/SegundoTrimestre", [{
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+					rf_net_local_tax: 0,
+					rf_tax_due_overpaid: 0
+				}]);
+				
+				this.getModel().setProperty("/MoedaTerceiroTrimestre", "");
+				this.getModel().setProperty("/trimestres/TerceiroTrimestre", [{
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+					rf_net_local_tax: 0,
+					rf_tax_due_overpaid: 0
+				}]);
+				
+				this.getModel().setProperty("/MoedaQuartoTrimestre", "");
+				this.getModel().setProperty("/trimestres/QuartoTrimestre", [{
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+					rf_net_local_tax: 0,
+					rf_tax_due_overpaid: 0
+				}]);
+				
+				this.getModel().setProperty("/MoedaAnual", "");
+				this.getModel().setProperty("/anual", [{
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+					rf_net_local_tax: 0,
+					rf_tax_due_overpaid: 0
+				}]);
+				
+				this.getModel().setProperty("/MoedaRetificadora", "");
+				this.getModel().setProperty("/retificadora", [{
+					rc_statutory_gaap_profit_loss_before_tax: 0,
+					rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+					rf_net_local_tax: 0,
+					rf_tax_due_overpaid: 0
+				}]);
 			},
 			
 			_carregarToolbar: function (sIdEmpresa, sIdAnoCalendario) {
