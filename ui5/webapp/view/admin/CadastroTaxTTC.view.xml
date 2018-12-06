@@ -40,7 +40,7 @@
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
 							press="onNovoObjeto" 
-							text="novo"
+							text="{i18n>viewGeralNovo}"
 							type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>
@@ -87,11 +87,11 @@
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
 						<f:formContainers>
-							<f:FormContainer title="Cadastro">
+							<f:FormContainer title="{i18n>viewGeralCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="Classification" class="sapMLabelRequired" />
+											<Label text="{i18n>viewGeralClassificacao}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select items="{/DominioTaxClassification}" change="onTrocarClassification" selectedKey="{/objeto/fkClassification}" id="selectClassification">
@@ -104,7 +104,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Category" class="sapMLabelRequired" />
+											<Label text="{i18n>viewRelatorioCategoria}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select items="{/TaxCategory}" selectedKey="{/objeto/fkCategory}" id="selectCategory">
@@ -118,7 +118,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Tax" labelFor="inputTax" />
+											<Label text="{i18n>viewGeralTaxa}" labelFor="inputTax" />
 										</f:label>
 										<f:fields>
 											<Input id="inputTax" type="Text" value="{/objeto/tax}" required="true" />
