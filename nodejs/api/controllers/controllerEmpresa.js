@@ -353,15 +353,16 @@ function vincularPeriodos(sIdEmpresa) {
 					
 					// Adiciona um relacionamento entre o tax package recem adicionado e o periodo
 					sQuery = 'insert into "VGT.REL_TAX_PACKAGE_PERIODO"("id_rel_tax_package_periodo", "fk_tax_package.id_tax_package", "fk_periodo.id_periodo", "ind_ativo", "status_envio", "data_envio") '
-							+ 'values("identity_VGT.REL_TAX_PACKAGE_PERIODO_id_rel_tax_package_periodo".nextval, ?, ?, ?, 1, null)';
+							+ 'values("identity_VGT.REL_TAX_PACKAGE_PERIODO_id_rel_tax_package_periodo".nextval, ?, ?, ?, ?, null)';
 					aParams = [sIdTaxPackage, oPeriodo.id_periodo];
 					
-					// Seta a flag de periodo ativo caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
+					// Seta a flag de periodo ativo e o status não iniciado caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
 					if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
-						aParams = [sIdTaxPackage, oPeriodo.id_periodo, true];
+						aParams = [sIdTaxPackage, oPeriodo.id_periodo, 2, true];
 					}
+					// Se não, seta flag ativo para falso e status para fechado mas não enviado
 					else {
-						aParams = [sIdTaxPackage, oPeriodo.id_periodo, false];
+						aParams = [sIdTaxPackage, oPeriodo.id_periodo, 1, false];
 					}
 					
 					model.executeSync(sQuery, aParams);

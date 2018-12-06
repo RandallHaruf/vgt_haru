@@ -53,8 +53,15 @@ sap.ui.define(
 			},
 			
 			onSelecionarEmpresa: function (oEvent) {
+				var oEmpresa = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+				delete oEmpresa.iconeStatusPrimeiroPeriodo;
+				delete oEmpresa.iconeStatusSegundoPeriodo;
+				delete oEmpresa.iconeStatusTerceiroPeriodo;
+				delete oEmpresa.iconeStatusQuartoPeriodo;
+				delete oEmpresa.iconeStatusAnual;
+				
 				var oParametros = {
-					empresa: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()),
+					empresa: oEmpresa,
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 				
@@ -94,11 +101,40 @@ sap.ui.define(
 				// Passar parametro 'empresas' com um array de IDs para filtrar as empresas do usuário logado!!!
 				NodeAPI.listarRegistros("TaxPackageListagemEmpresas?anoCalendario=" + sIdAnoCalendario, function (response) {
 					if (response && response.success) {
+						for (var i = 0, length = response.result.length; i < length; i++) {
+							var obj = response.result[i];
+							obj.iconeStatusPrimeiroPeriodo = that._resolverIcone(obj.status_primeiro_periodo);
+							obj.iconeStatusSegundoPeriodo = that._resolverIcone(obj.status_segundo_periodo);
+							obj.iconeStatusTerceiroPeriodo = that._resolverIcone(obj.status_terceiro_periodo);
+							obj.iconeStatusQuartoPeriodo = that._resolverIcone(obj.status_quarto_periodo);
+							obj.iconeStatusAnual = that._resolverIcone(obj.status_anual);
+						}
 						that.getModel().setProperty("/Empresa", response.result);
 					}	
 					
 					that.byId("tabelaEmpresas").setBusy(false);
 				});
+			},
+			
+			_resolverIcone: function (iStatus) {
+				var sIcone;
+				
+				switch (iStatus) {
+					case 1: // fechado não enviado
+						sIcone = "sap-icon://decline";
+						break;
+					case 2: // não iniciado
+						sIcone = "sap-icon://begin";
+						break;
+					case 3: // em andamento
+						sIcone = "sap-icon://process";
+						break;
+					case 4: // enviado
+						sIcone = "sap-icon://approvals";
+						break;
+				}
+				
+				return sIcone;
 			}
 		});
 	}

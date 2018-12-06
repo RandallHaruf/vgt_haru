@@ -87,38 +87,38 @@
 						<cells>
 							<Text text="{empresa}" class="celulaDestacada" />
 							
-							<core:Icon src="" 
+							<core:Icon src="{iconeStatusPrimeiroPeriodo}" 
 								color="{
 									parts: [
-										'status_primeiro_periodo'
+										'iconeStatusPrimeiroPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}" />
-							<core:Icon src="" 
+							<core:Icon src="{iconeStatusSegundoPeriodo}" 
 								color="{
 									parts: [
-										'status_segundo_periodo'
+										'iconeStatusSegundoPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
-							<core:Icon src="" 
+							<core:Icon src="{iconeStatusTerceiroPeriodo}" 
 								color="{
 									parts: [
-										'status_terceiro_periodo'
+										'iconeStatusTerceiroPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
-							<core:Icon src="" 
+							<core:Icon src="{iconeStatusQuartoPeriodo}" 
 								color="{
 									parts: [
-										'status_quarto_periodo'
+										'iconeStatusQuartoPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
-							<core:Icon src="" 
+							<core:Icon src="{iconeStatusAnual}" 
 								color="{
 									parts: [
-										'status_anual'
+										'iconeStatusAnual'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
