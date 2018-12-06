@@ -74,13 +74,15 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				var idEmpresa = result[0].generated_id;
+				
+				vincularPeriodos(idEmpresa);
+				
 				// Se foi enviado junto a request de inserir uma empresa uma lista de ids de obrigações,
 				//  é preciso inserir registros na tabela de vínculo entre empresa e obrigação acessória
 				if (req.body.obrigacoes) {
-					var idEmpresa = result[0].generated_id;
 					var oObrigacoes = JSON.parse(req.body.obrigacoes);
 
-					vincularPeriodos(idEmpresa);
 					vincularObrigacoes(idEmpresa, oObrigacoes);
 				}
 
@@ -266,41 +268,105 @@ function pegarNumeroOrdemPeriodoCorrente(iAnoCorrente) {
 }
 
 function vincularPeriodos(sIdEmpresa) {
-	var iAnoCorrente = (new Date()).getFullYear(),
-		aParams = [iAnoCorrente],
-		sQuery = 
-			'select anoCalendario."ano_calendario", '
-			+ 'periodo."id_periodo",  '
-			+ 'periodo."fk_dominio_modulo.id_dominio_modulo", '
-			+ 'periodo."numero_ordem" '
-			+ 'from "VGT.PERIODO"	periodo '
-			+ 'inner join "VGT.DOMINIO_ANO_CALENDARIO" anoCalendario '
-			+ 'on periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = anoCalendario."id_dominio_ano_calendario" '
-			+ 'where '
-			+ 'anoCalendario."ano_calendario" <= ? '
-			+ 'order by 1, 3, 4 ';
-			
-	var result = model.executeSync(sQuery, aParams);
+	// Pega o ano corrente e o numero de ordem do período corrente
+	var iAnoCorrente = (new Date()).getFullYear();
+	var iNumeroOrdemPeriodoCorrente = pegarNumeroOrdemPeriodoCorrente(iAnoCorrente);
+	
+	var sQuery, aParams, result;
+	
+	// Vincular períodos do TTC ---------------------------------------
+	
+	// Seleciona todos os periodos vinculados ao TTC
+	sQuery = 
+		'select * from "VGT.PERIODO" periodo '
+		+ 'inner join "VGT.DOMINIO_ANO_CALENDARIO" anoCalendario  '
+		+ 'on periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = anoCalendario."id_dominio_ano_calendario" '
+		+ 'where "fk_dominio_modulo.id_dominio_modulo" = 1';
+	
+	result = model.executeSync(sQuery);
 	
 	if (result && result.length > 0) {
-		
-		var iNumeroOrdemPeriodoCorrente = pegarNumeroOrdemPeriodoCorrente(iAnoCorrente);
-		
-		if (iNumeroOrdemPeriodoCorrente !== -1) {
-			for (var i = 0, length = result.length; i < length; i++) {
-				var oPeriodo = result[i];
-				
-				sQuery = 'insert into "VGT.REL_EMPRESA_PERIODO"("fk_empresa.id_empresa", "fk_periodo.id_periodo", "ind_ativo") values(?, ?, ?)';
-				
-				if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
-					aParams = [sIdEmpresa, oPeriodo.id_periodo, true];
-				}
-				else {
-					aParams = [sIdEmpresa, oPeriodo.id_periodo, false];
-				}
-				
-				model.executeSync(sQuery, aParams);
+		// Percorre todos os periodos
+		for (var i = 0, length = result.length; i < length; i++) {
+			var oPeriodo = result[i];
+			
+			// Adiciona um relacionamento do periodo com a empresa
+			sQuery = 'insert into "VGT.REL_EMPRESA_PERIODO"("fk_empresa.id_empresa", "fk_periodo.id_periodo", "ind_ativo", "ind_enviado") values(?, ?, ?, ?)';
+			
+			// Seta a flag de periodo ativo caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
+			if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
+				aParams = [sIdEmpresa, oPeriodo.id_periodo, true, false];
 			}
+			else {
+				aParams = [sIdEmpresa, oPeriodo.id_periodo, false, false];
+			}
+			
+			model.executeSync(sQuery, aParams);
+		}
+	}
+	
+	// Vincular períodos do TAX PACKAGE -------------------------------------
+	
+	// Recupera o numero de anos calendarios cadastrados
+	sQuery = 'select count(*) "qte_ano" from "VGT.DOMINIO_ANO_CALENDARIO"';
+	
+	result = model.executeSync(sQuery);
+	
+	if (result) {
+		var iQteAnoCalendario = result[0]["qte_ano"];
+		
+		// Seleciona todos os periodos vinculados ao TAX PACKAGE
+		sQuery = 
+			'select * from "VGT.PERIODO" periodo '
+			+ 'inner join "VGT.DOMINIO_ANO_CALENDARIO" anoCalendario  '
+			+ 'on periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = anoCalendario."id_dominio_ano_calendario" '
+			+ 'where "fk_dominio_modulo.id_dominio_modulo" = 2';
+		result = model.executeSync(sQuery);
+		var aPeriodo = result;
+		
+		// Percorre todos os IDs de ano calendario
+		for (var i = 1; i <= iQteAnoCalendario; i++) {
+			
+			// Insere um tax package vinculado ao ano calendario e a empresa
+			sQuery = 'insert into "VGT.TAX_PACKAGE"("id_tax_package", "fk_empresa.id_empresa", "fk_dominio_moeda.id_dominio_moeda") values("identity_VGT.TAX_PACKAGE_id_tax_package".nextval, ?, null)';
+			aParams = [sIdEmpresa];
+			
+			result = model.executeSync(sQuery, aParams);
+			
+			if (result === 1) {
+				
+				// Recupera o id do tax package recem adicionado
+				sQuery = 'select MAX("id_tax_package") "generated_id" from "VGT.TAX_PACKAGE"';
+				
+				result = model.executeSync(sQuery);
+				
+				var sIdTaxPackage = result[0].generated_id;
+				
+				// Pega todos os periodos que tenham relacionamento com o ano calendario
+				var aPeriodoAno = aPeriodo.filter(function (obj) {
+					return obj["fk_dominio_ano_calendario.id_dominio_ano_calendario"] === i;	
+				});
+				
+				for (var j = 0, length = aPeriodoAno.length; j < length; j++) {
+					
+					var oPeriodo = aPeriodoAno[j];
+					
+					// Adiciona um relacionamento entre o tax package recem adicionado e o periodo
+					sQuery = 'insert into "VGT.REL_TAX_PACKAGE_PERIODO"("id_rel_tax_package_periodo", "fk_tax_package.id_tax_package", "fk_periodo.id_periodo", "ind_ativo", "status_envio", "data_envio") '
+							+ 'values("identity_VGT.REL_TAX_PACKAGE_PERIODO_id_rel_tax_package_periodo".nextval, ?, ?, ?, 1, null)';
+					aParams = [sIdTaxPackage, oPeriodo.id_periodo];
+					
+					// Seta a flag de periodo ativo caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
+					if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
+						aParams = [sIdTaxPackage, oPeriodo.id_periodo, true];
+					}
+					else {
+						aParams = [sIdTaxPackage, oPeriodo.id_periodo, false];
+					}
+					
+					model.executeSync(sQuery, aParams);
+				}
+			}	
 		}
 	}
 }

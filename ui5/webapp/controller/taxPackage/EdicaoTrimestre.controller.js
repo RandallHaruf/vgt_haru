@@ -8,7 +8,7 @@ sap.ui.define(
 		
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
 			onInit: function () {
-				this.setModel(new sap.ui.model.json.JSONModel({
+				/*this.setModel(new sap.ui.model.json.JSONModel({
 					TotalLossSchedule: {
 						opening_balance: 0,
 						current_year_value: 0,
@@ -66,39 +66,6 @@ sap.ui.define(
 						ind_ativo: true
 					}],
 					IncomeTaxDetails: null,
-					/*taxReconciliation: {
-						resultadoContabil: [],
-						adicoesExclusoes: {
-							permanentDifferences: {
-								itens: [],
-								opcoes: [
-									{
-										id: 1,
-										texto: "Meals and entertaining including gifts"
-									},
-									{
-										id: 2,
-										texto: "Amortization"
-									}
-								]
-							},
-							temporaryDifferences: {
-								itens: [],
-								opcoes: [
-									{
-										id: 1,
-										texto: "Tangible fixed assets"
-									},
-									{
-										id: 2,
-										texto: "Intangible assets"
-									}
-								]
-							}
-						},
-						resultadoFiscal: [],
-						incomeTax: []
-					},*/
 					lossSchedule: [
 						{
 							fiscalYear: 2017,
@@ -111,19 +78,7 @@ sap.ui.define(
 							currentYearLossExpired: 0,
 							closingBalance: 0,
 							obs: ""
-						}/*, 
-						{
-							fiscalYear: "",
-							yearOfExpiration: "Total",
-							openingBalance: 0,
-							currentYearLoss: 0,
-							currentYearLossUtilized: 0,
-							adjustments: 0,
-							justificativa: "",
-							currentYearLossExpired: 0,
-							closingBalance: 0,
-							obs: ""
-						}*/
+						}
 					],
 					creditSchedule: [
 						{
@@ -147,7 +102,10 @@ sap.ui.define(
 							ano: 2017
 						}
 					]
-				}));
+				}));*/
+				
+				this.setModel(new sap.ui.model.json.JSONModel({}));
+				this._zerarModel();
 				
 				//this._initItemsToReport();
 				//this._initTaxReconciliation();               
@@ -167,82 +125,89 @@ sap.ui.define(
 			
 			_onAplicarFormulasRC: function () {
 				//var oResultadoContabil = oEvent.getSource().getBindingContext().getObject();
-				var oResultadoContabil = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
-					return obj.ind_ativo === true;
-				}); 
-				
-				var fValor1 = oResultadoContabil.rc_statutory_gaap_profit_loss_before_tax ? Number(oResultadoContabil.rc_statutory_gaap_profit_loss_before_tax) : 0,
-					fValor2 = oResultadoContabil.rc_current_income_tax_current_year ? Number(oResultadoContabil.rc_current_income_tax_current_year) : 0,
-					fValor3 = oResultadoContabil.rc_current_income_tax_previous_year ? Number(oResultadoContabil.rc_current_income_tax_previous_year) : 0,
-					fValor4 = oResultadoContabil.rc_deferred_income_tax ? Number(oResultadoContabil.rc_deferred_income_tax) : 0,
-					fValor5 = oResultadoContabil.rc_non_recoverable_wht ? Number(oResultadoContabil.rc_non_recoverable_wht) : 0;
-				
-				oResultadoContabil.rc_statutory_provision_for_income_tax = fValor2 + fValor3 + fValor4 + fValor5;
-				
-				var fValor6 = oResultadoContabil.rc_statutory_provision_for_income_tax ? oResultadoContabil.rc_statutory_provision_for_income_tax : 0;
-				
-				oResultadoContabil.rc_statutory_gaap_profit_loss_after_tax = fValor1 - fValor6;
+				if (this.getModel().getProperty("/TaxReconciliation")) {
+					var oResultadoContabil = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+						return obj.ind_ativo === true;
+					}); 
+					
+					var fValor1 = oResultadoContabil.rc_statutory_gaap_profit_loss_before_tax ? Number(oResultadoContabil.rc_statutory_gaap_profit_loss_before_tax) : 0,
+						fValor2 = oResultadoContabil.rc_current_income_tax_current_year ? Number(oResultadoContabil.rc_current_income_tax_current_year) : 0,
+						fValor3 = oResultadoContabil.rc_current_income_tax_previous_year ? Number(oResultadoContabil.rc_current_income_tax_previous_year) : 0,
+						fValor4 = oResultadoContabil.rc_deferred_income_tax ? Number(oResultadoContabil.rc_deferred_income_tax) : 0,
+						fValor5 = oResultadoContabil.rc_non_recoverable_wht ? Number(oResultadoContabil.rc_non_recoverable_wht) : 0;
+					
+					oResultadoContabil.rc_statutory_provision_for_income_tax = fValor2 + fValor3 + fValor4 + fValor5;
+					
+					var fValor6 = oResultadoContabil.rc_statutory_provision_for_income_tax ? oResultadoContabil.rc_statutory_provision_for_income_tax : 0;
+					
+					oResultadoContabil.rc_statutory_gaap_profit_loss_after_tax = fValor1 - fValor6;
+				}
 			},
 			
 			_onAplicarFormulasRF: function () {
-				var oResultadoFiscal = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
-					return obj.ind_ativo === true;
-				}); 	
-				
-				var fValor1 = oResultadoFiscal.rc_statutory_gaap_profit_loss_before_tax ? Number(oResultadoFiscal.rc_statutory_gaap_profit_loss_before_tax) : 0,
-					fTotalDiferencaPermanente = this.getModel().getProperty("/TotalDiferencaPermanente") ? Number(this.getModel().getProperty("/TotalDiferencaPermanente")) : 0,
-					fTotalDiferencaTemporaria = this.getModel().getProperty("/TotalDiferencaTemporaria") ? Number(this.getModel().getProperty("/TotalDiferencaTemporaria")) : 0;
+				if (this.getModel().getProperty("/TaxReconciliation")) {
+					var oResultadoFiscal = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+						return obj.ind_ativo === true;
+					}); 	
 					
-				oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits = fValor1 + fTotalDiferencaPermanente + fTotalDiferencaTemporaria;
-				
-				oResultadoFiscal.rf_total_losses_utilized = (oResultadoFiscal.rf_total_losses_utilized ? Math.abs(Number(oResultadoFiscal.rf_total_losses_utilized)) : 0) * -1;
-				
-				oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits + oResultadoFiscal.rf_total_losses_utilized;
-				
-				var fValor2 = oResultadoFiscal.rf_other_taxes ? Number(oResultadoFiscal.rf_other_taxes) : 0,
-					fValor3 = oResultadoFiscal.rf_incentivos_fiscais ? Number(oResultadoFiscal.rf_incentivos_fiscais) : 0;
-				
-				oResultadoFiscal.rf_total_other_taxes_and_tax_credits = fValor2 + fValor3;
-				
-				oResultadoFiscal.rf_net_local_tax = oResultadoFiscal.rf_total_other_taxes_and_tax_credits + oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits;
-				
-				var fValor4 =  oResultadoFiscal.rf_net_local_tax ? Number(oResultadoFiscal.rf_net_local_tax): 0,
-					fValor5 = oResultadoFiscal.rf_wht ? Number(oResultadoFiscal.rf_wht) : 0,
-					fValor6 = oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year ? Number(oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year) : 0,
-					fValor7 = oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes ? Number(oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes) : 0;
+					var fValor1 = oResultadoFiscal.rc_statutory_gaap_profit_loss_before_tax ? Number(oResultadoFiscal.rc_statutory_gaap_profit_loss_before_tax) : 0,
+						fTotalDiferencaPermanente = this.getModel().getProperty("/TotalDiferencaPermanente") ? Number(this.getModel().getProperty("/TotalDiferencaPermanente")) : 0,
+						fTotalDiferencaTemporaria = this.getModel().getProperty("/TotalDiferencaTemporaria") ? Number(this.getModel().getProperty("/TotalDiferencaTemporaria")) : 0;
+						
+					oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits = fValor1 + fTotalDiferencaPermanente + fTotalDiferencaTemporaria;
 					
-				oResultadoFiscal.rf_tax_due_overpaid = fValor4 + fValor5 + fValor6 + fValor7;
+					oResultadoFiscal.rf_total_losses_utilized = (oResultadoFiscal.rf_total_losses_utilized ? Math.abs(Number(oResultadoFiscal.rf_total_losses_utilized)) : 0) * -1;
+					
+					oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits + oResultadoFiscal.rf_total_losses_utilized;
+					
+					var fValor2 = oResultadoFiscal.rf_other_taxes ? Number(oResultadoFiscal.rf_other_taxes) : 0,
+						fValor3 = oResultadoFiscal.rf_incentivos_fiscais ? Number(oResultadoFiscal.rf_incentivos_fiscais) : 0;
+					
+					oResultadoFiscal.rf_total_other_taxes_and_tax_credits = fValor2 + fValor3;
+					
+					oResultadoFiscal.rf_net_local_tax = oResultadoFiscal.rf_total_other_taxes_and_tax_credits + oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits;
+					
+					var fValor4 =  oResultadoFiscal.rf_net_local_tax ? Number(oResultadoFiscal.rf_net_local_tax): 0,
+						fValor5 = oResultadoFiscal.rf_wht ? Number(oResultadoFiscal.rf_wht) : 0,
+						fValor6 = oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year ? Number(oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year) : 0,
+						fValor7 = oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes ? Number(oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes) : 0;
+						
+					oResultadoFiscal.rf_tax_due_overpaid = fValor4 + fValor5 + fValor6 + fValor7;
+				}
 			},
 			
 			_onAplicarFormulasIT: function () {
-				var oIncomeTax = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
-					return obj.ind_ativo === true;
-				}); 
-				
-				var fValor1 = oIncomeTax.rc_current_income_tax_current_year ? Number(oIncomeTax.rc_current_income_tax_current_year) : 0,
-					fValor2 = oIncomeTax.rf_income_tax_before_other_taxes_and_credits ? Number(oIncomeTax.rf_income_tax_before_other_taxes_and_credits) : 0;
-				
-				oIncomeTax.it_income_tax_as_per_the_statutory_financials = fValor1;
-				oIncomeTax.it_income_tax_as_per_the_tax_return = fValor2;
-				
-				var fValor3 = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) : 0,
-					fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
-				
-				if (fValor3 !== 0) {
-					oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = fValor1 / fValor3;
-					oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = fValor4 / fValor3;
-				}
-				else {
-					if (fValor1 > 0) {
-						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 1;	
+				if (this.getModel().getProperty("/TaxReconciliation")) {
+					var oIncomeTax = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+						return obj.ind_ativo === true;
+					}); 
+					
+					var fValor1 = oIncomeTax.rc_current_income_tax_current_year ? Number(oIncomeTax.rc_current_income_tax_current_year) : 0,
+						fValor2 = oIncomeTax.rf_income_tax_before_other_taxes_and_credits ? Number(oIncomeTax.rf_income_tax_before_other_taxes_and_credits) : 0;
+					
+					oIncomeTax.it_income_tax_as_per_the_statutory_financials = fValor1;
+					oIncomeTax.it_income_tax_as_per_the_tax_return = fValor2;
+					
+					var fValor3 = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) : 0,
+						fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
+					
+					if (fValor3 !== 0) {
+						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = fValor1 / fValor3;
+						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = fValor4 / fValor3;
 					}
-					if (fValor4 > 0) {
-						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = 1;
+					else {
+						if (fValor1 > 0) {
+							oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 1;	
+						}
+						if (fValor4 > 0) {
+							oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = 1;
+						}
 					}
 				}
 			},
 			
 			_onAplicarFormulasSchedule: function () {
+				
 				var oTaxReconciliation = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
 					return obj.ind_ativo === true;
 				}); 
@@ -272,6 +237,7 @@ sap.ui.define(
 						oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;
 					}
 				}
+				
 				// Credit Schedule
 				if (this.getModel().getProperty("/CreditSchedule")) {
 					var oCreditSchedule = this.getModel().getProperty("/CreditSchedule").find(function (obj) {
@@ -1310,6 +1276,8 @@ sap.ui.define(
 			},
 			
 			_onRouteMatched: function (oEvent) {
+				this._zerarModel();
+				
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 
 				this.getModel().setProperty("/Empresa", oParametros.oEmpresa);
@@ -1362,6 +1330,7 @@ sap.ui.define(
 						that.getModel().setProperty("/IncomeTaxDetails", oTaxReconAtivo.it_details_if_tax_returns_income_differs_from_fs);
 						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
 						that.getModel().setProperty("/DiferencasTemporarias", response.diferencaTemporaria);
+						that.getModel().setProperty("/Moeda", response.moeda);
 						
 						that.onAplicarRegras();
 					}	
@@ -1495,6 +1464,151 @@ sap.ui.define(
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
 					parametros: JSON.stringify(oParametros)
 				});
+			},
+			
+			_zerarModel: function () {
+				this.getModel().setData({
+					TotalLossSchedule: {
+						opening_balance: 0,
+						current_year_value: 0,
+						current_year_value_utilized: 0,
+						adjustments: 0,
+						current_year_value_expired: 0,
+						closing_balance: 0,
+					},
+					LossSchedule: [],
+					TotalCreditSchedule: {
+						opening_balance: 0,
+						current_year_value: 0,
+						current_year_value_utilized: 0,
+						adjustments: 0,
+						current_year_value_expired: 0,
+						closing_balance: 0,
+					},
+					CreditSchedule: [],
+					DiferencaOpcao: {
+						Permanente: [],
+						Temporaria: []
+					},
+					DiferencasPermanentes: [],
+					DiferencasTemporarias: [],
+					TotalDiferencaPermanente: 0,
+					TotalDiferencaTemporaria: 0,
+					Moeda: null,
+					TaxReconciliation: [{
+						periodo: "X Trimestre",
+						rc_statutory_gaap_profit_loss_before_tax: 0,
+						rc_current_income_tax_current_year: 0,
+						rc_current_income_tax_previous_year: 0,
+						rc_deferred_income_tax: 0,
+						rc_non_recoverable_wht: 0,
+						rc_statutory_provision_for_income_tax: 0, 
+						rc_statutory_gaap_profit_loss_after_tax: 0,
+						rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+						rf_total_losses_utilized: 0,
+						rf_taxable_income_loss_after_losses: 0,
+						rf_income_tax_before_other_taxes_and_credits: 0,
+						rf_other_taxes: 0,
+						rf_incentivos_fiscais: 0,
+						rf_total_other_taxes_and_tax_credits: 0,
+						rf_net_local_tax: 0,
+						rf_wht: 0,
+						rf_overpayment_from_prior_year_applied_to_current_year: 0,
+						rf_total_interim_taxes_payments_antecipacoes: 0,
+						rf_tax_due_overpaid: 0,
+						it_income_tax_as_per_the_statutory_financials: 0,
+						it_income_tax_as_per_the_tax_return: 0,
+						it_jurisdiction_tax_rate_average: 0,
+						it_statutory_tax_rate_average: 0,
+						it_effective_tax_rate_as_per_the_statutory_financials: 0,
+						it_effective_tax_rate_as_per_the_tax_return: 0,
+						ind_ativo: true
+					}],
+					IncomeTaxDetails: null,
+					/*taxReconciliation: {
+						resultadoContabil: [],
+						adicoesExclusoes: {
+							permanentDifferences: {
+								itens: [],
+								opcoes: [
+									{
+										id: 1,
+										texto: "Meals and entertaining including gifts"
+									},
+									{
+										id: 2,
+										texto: "Amortization"
+									}
+								]
+							},
+							temporaryDifferences: {
+								itens: [],
+								opcoes: [
+									{
+										id: 1,
+										texto: "Tangible fixed assets"
+									},
+									{
+										id: 2,
+										texto: "Intangible assets"
+									}
+								]
+							}
+						},
+						resultadoFiscal: [],
+						incomeTax: []
+					},*/
+					lossSchedule: [
+						{
+							fiscalYear: 2017,
+							yearOfExpiration: 2017,
+							openingBalance: 0,
+							currentYearLoss: 0,
+							currentYearLossUtilized: 0,
+							adjustments: 0,
+							justificativa: "",
+							currentYearLossExpired: 0,
+							closingBalance: 0,
+							obs: ""
+						}/*, 
+						{
+							fiscalYear: "",
+							yearOfExpiration: "Total",
+							openingBalance: 0,
+							currentYearLoss: 0,
+							currentYearLossUtilized: 0,
+							adjustments: 0,
+							justificativa: "",
+							currentYearLossExpired: 0,
+							closingBalance: 0,
+							obs: ""
+						}*/
+					],
+					creditSchedule: [
+						{
+							fiscalYear: 2017,
+							yearOfExpiration: 2017,
+							openingBalance: 0,
+							currentYearCredit: 0,
+							currentYearCreditUtilized: 0,
+							adjustments: 0,
+							justificativa: "",
+							currentYearCreditExpired: 0,
+							closingBalance: 0,
+							obs: ""
+						}
+					],
+					opcoesAno: [
+						{
+							ano: 2018
+						},
+						{
+							ano: 2017
+						}
+					]
+				});
+				
+				this.getModel().refresh();
 			},
 			
 			_limparModel: function () {

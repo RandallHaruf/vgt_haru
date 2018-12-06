@@ -323,6 +323,8 @@ sap.ui.define(
 				
 				var obj = this.getModel().getProperty("/objeto");
 				
+				this.byId("btnSalvar").setEnabled(false);
+				
 				NodeAPI.criarRegistro("Empresa", {
 					nome: obj["nome"],
 					numHFMSAP: obj["num_hfm_sap"],
@@ -342,6 +344,8 @@ sap.ui.define(
 					fkPais: obj["fk_pais.id_pais"],
 					obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())
 				}, function (response) {
+					that.byId("btnSalvar").setEnabled(true);
+					
 					// Se foi selecionada uma alíquota válida na criação da empresa
 					if (obj["fk_aliquota.id_aliquota"] && obj["fk_aliquota.id_aliquota"] > 0) {
 						// Cria seu registro inicial de histórico

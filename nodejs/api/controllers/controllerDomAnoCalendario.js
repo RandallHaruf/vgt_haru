@@ -9,7 +9,10 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
-				res.send(JSON.stringify(result));
+				var iAnoCorrente = (new Date()).getFullYear();
+				res.send(JSON.stringify(result.filter(function(obj) {
+					return obj.ano_calendario <= iAnoCorrente;
+				})));
 			}
 		});
 	},

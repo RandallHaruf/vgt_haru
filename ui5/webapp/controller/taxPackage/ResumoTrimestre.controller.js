@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/jQueryMask"
 	],
-	function (BaseController, NodeAPI) {
+	function (BaseController, NodeAPI, jQueryMask) {
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.ResumoTrimestre", {
 			pressDialog: null,
 			
@@ -56,6 +57,8 @@ sap.ui.define(
 				}));
 				
 				this.getRouter().getRoute("taxPackageResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+				
+				jQuery(".money span").mask("000.000.000.000.000,00", {reverse: true});
 			},
 			
 			onTrocarAnoCalendario: function (oEvent) {

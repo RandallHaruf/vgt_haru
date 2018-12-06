@@ -90,6 +90,7 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
+												class="money"
 												number="{rc_statutory_gaap_profit_loss_before_tax}" />
 											<ObjectNumber
 												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />

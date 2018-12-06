@@ -396,6 +396,7 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
+						id="btnSalvar"
 						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>

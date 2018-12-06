@@ -23,50 +23,58 @@ module.exports = {
 				resultTaxRecon[i].ind_ativo = (resultTaxRecon[i].ind_ativo === 1);
 			}
 			
-			// Carrega a moeda
-			sQuery = 
-				'select taxPackage."fk_dominio_moeda.id_dominio_moeda" '
-				+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
-				+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
-				+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
-				+ 'where '
-				+ 'rel."id_rel_tax_package_periodo" = ?';
-			aParams = [sIdRelTaxPackagePeriodo];
-			
-			var resultMoeda = db.executeStatementSync(sQuery, aParams);
-			
-			// Carrega as diferencas
 			var oTaxReconciliation = resultTaxRecon[0];
 			
-			sQuery =
-				'select * '
-				+ 'from "VGT.DIFERENCA" diferenca '
-				+ 'inner join "VGT.DIFERENCA_OPCAO" diferencaOpcao '
-				+ 'on diferenca."fk_diferenca_opcao.id_diferenca_opcao" = diferencaOpcao."id_diferenca_opcao" '
-				+ 'inner join "VGT.DOMINIO_DIFERENCA_TIPO" dominioTipo '
-				+ 'on diferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo" = dominioTipo."id_dominio_diferenca_tipo" '
-				+ 'where '
-				+ 'diferenca."fk_tax_reconciliation.id_tax_reconciliation" = ?';
-			aParams = [oTaxReconciliation.id_tax_reconciliation];
+			if (oTaxReconciliation && oTaxReconciliation.id_tax_reconciliation) {
+				// Carrega a moeda
+				sQuery = 
+					'select taxPackage."fk_dominio_moeda.id_dominio_moeda" '
+					+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+					+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+					+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+					+ 'where '
+					+ 'rel."id_rel_tax_package_periodo" = ?';
+				aParams = [sIdRelTaxPackagePeriodo];
 				
-			var resultDiferenca = db.executeStatementSync(sQuery, aParams);
-			
-			for (var i = 0, length = resultDiferenca.length; i < length; i++) {
-				var oDiferenca = resultDiferenca[i];
+				var resultMoeda = db.executeStatementSync(sQuery, aParams);
 				
-				oDiferenca.valor1 = oTaxReconciliation.numero_ordem === 1 ? oDiferenca.valor : null;
-				oDiferenca.valor2 = oTaxReconciliation.numero_ordem === 2 ? oDiferenca.valor : null;
-				oDiferenca.valor3 = oTaxReconciliation.numero_ordem === 3 ? oDiferenca.valor : null;
-				oDiferenca.valor4 = oTaxReconciliation.numero_ordem === 4 ? oDiferenca.valor : null;
-				oDiferenca.valor5 = oTaxReconciliation.numero_ordem === 5 ? oDiferenca.valor : null;
-				oDiferenca.valor6 = oTaxReconciliation.numero_ordem >= 6 ? oDiferenca.valor : null;
+				// Carrega as diferencas
+				sQuery =
+					'select * '
+					+ 'from "VGT.DIFERENCA" diferenca '
+					+ 'inner join "VGT.DIFERENCA_OPCAO" diferencaOpcao '
+					+ 'on diferenca."fk_diferenca_opcao.id_diferenca_opcao" = diferencaOpcao."id_diferenca_opcao" '
+					+ 'inner join "VGT.DOMINIO_DIFERENCA_TIPO" dominioTipo '
+					+ 'on diferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo" = dominioTipo."id_dominio_diferenca_tipo" '
+					+ 'where '
+					+ 'diferenca."fk_tax_reconciliation.id_tax_reconciliation" = ?';
+				aParams = [oTaxReconciliation.id_tax_reconciliation];
+					
+				var resultDiferenca = db.executeStatementSync(sQuery, aParams);
+				
+				for (var i = 0, length = resultDiferenca.length; i < length; i++) {
+					var oDiferenca = resultDiferenca[i];
+					
+					oDiferenca.valor1 = oTaxReconciliation.numero_ordem === 1 ? oDiferenca.valor : null;
+					oDiferenca.valor2 = oTaxReconciliation.numero_ordem === 2 ? oDiferenca.valor : null;
+					oDiferenca.valor3 = oTaxReconciliation.numero_ordem === 3 ? oDiferenca.valor : null;
+					oDiferenca.valor4 = oTaxReconciliation.numero_ordem === 4 ? oDiferenca.valor : null;
+					oDiferenca.valor5 = oTaxReconciliation.numero_ordem === 5 ? oDiferenca.valor : null;
+					oDiferenca.valor6 = oTaxReconciliation.numero_ordem >= 6 ? oDiferenca.valor : null;
+				}
+				
+				var response = JSON.stringify({
+					taxReconciliation: resultTaxRecon,
+					diferencaPermanente: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 1),
+					diferencaTemporaria: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 2),
+					moeda: resultMoeda && resultMoeda.length > 0 ? resultMoeda[0]["fk_dominio_moeda.id_dominio_moeda"] : null
+				});
+			}
+			else {
+				response = JSON.stringify(null);
 			}
 			
-			res.send(JSON.stringify({
-				taxReconciliation: resultTaxRecon,
-				diferencaPermanente: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 1),
-				diferencaTemporaria: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 2)
-			}));
+			res.send(response);
 		}
 		else {
 			res.send(JSON.stringify({
@@ -638,6 +646,7 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 
 function inserirSchedule(oSchedule) {
 	
+	
 	var sQuery, aParams;
 	
 	if (oSchedule.id_schedule) {
@@ -674,7 +683,20 @@ function inserirSchedule(oSchedule) {
 	}
 	else {
 		sQuery  = 
-			'INSERT INTO "VGT.SCHEDULE" VALUES( '
+			'INSERT INTO "VGT.SCHEDULE"("id_schedule", '
+			+ '"fy", '
+			+ '"year_of_expiration", '
+			+ '"opening_balance", '
+			+ '"adjustments", '
+			+ '"justificativa", '
+			+ '"closing_balance", '
+			+ '"obs", '
+			+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo", '
+			+ '"current_year_value", '
+			+ '"current_year_value_utilized", '
+			+ '"current_year_value_expired", '
+			+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo") '
+			+ ' VALUES( '
 			+ '"identity_VGT.SCHEDULE_id_schedule".nextval, '
 			+ '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) '; 
 			/*id_schedule <BIGINT>*/
