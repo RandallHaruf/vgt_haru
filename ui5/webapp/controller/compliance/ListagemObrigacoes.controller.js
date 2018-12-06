@@ -83,7 +83,13 @@ sap.ui.define(
 			},
 			
 			onDetalharObrigacao: function (oEvent) {
-				this.getRouter().navTo("complianceFormularioDetalhesObrigacao");
+				var oParametros = {
+				Obrigacao: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())
+				};
+				
+				this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {
+					parametros: JSON.stringify(oParametros)
+				});
 			},
 			
 			onNavBack: function () {

@@ -5,7 +5,7 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m"
 	class="viewComplianceListagemObrigacoes">
-	<f:DynamicPage>
+	<f:DynamicPage class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>

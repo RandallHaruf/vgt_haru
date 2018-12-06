@@ -13,15 +13,15 @@
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" enabled="false" />
-						<Link text="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}" enabled="false" />
-						<Link text="{i18n>viewComplianceFormularioDetalhesObrigacaoFormulárioDetalheObrigação}" enabled="false" />
+						<Link text="Listagem Obrigações" enabled="false" />
+						<Link text="Formulário Detalhe Obrigação" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="{i18n>viewComplianceFormularioDetalhesObrigacaoComplianceFormulárioDeDetalheDeObrigação}"/>
+					<Title text="Compliance - Formulário de Detalhe de Obrigação"/>
 				</f2:heading>
 				<f2:snappedContent>
-					<ObjectIdentifier title="Vale" />
+					<ObjectIdentifier title="{/Obrigacao/nome}" />
 				</f2:snappedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -34,13 +34,13 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<ObjectIdentifier title="Vale" />
+											<ObjectIdentifier title="{/Obrigacao/nome}" />
 										</l:HorizontalLayout>
-										<l:HorizontalLayout allowWrapping="true">
+										<!--<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout>
-												<ObjectAttribute title="{i18n>viewComplianceFormularioDetalhesObrigacaoAnoCalendário}" text="2018"/>
+												<ObjectAttribute title="Ano Calendário" text="2018"/>
 											</l:VerticalLayout>
-										</l:HorizontalLayout>
+										</l:HorizontalLayout>-->
 									</l:VerticalLayout>
 								</content>
 							</Panel>
@@ -65,76 +65,80 @@
 							<f:formElements>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
 									<f:fields>
-										<Select id="selectTipo">
+										<Text text="{/Obrigacao/TBLOBRIGACAOACESSORIANOME}" />
+										<!--<Select >
 											<items>
 												<core:Item text=""/>
 												<core:Item text="Tipo 1" key="1"/>
 												<core:Item text="Tipo 2" key="2"/>
 												<core:Item text="Tipo 3" key="2"/>
 											</items>
-										</Select>
+										</Select> -->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
 									<f:fields>
-										<Select id="selectPeriodicidade">
+										<Text text="{/Obrigacao/descricao}" />
+										<!--<Select id="selectPeriodicidade">
 											<items>
 												<core:Item text=""/>
 												<core:Item text="Periodicidade 1" key="1"/>
 												<core:Item text="Periodicidade 2" key="2"/>
 												<core:Item text="Periodicidade 3" key="2"/>
 											</items>
-										</Select>
+										</Select> -->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-										<Select id="selectAnoFiscal">
+										<Text text="{/Obrigacao/ano_fiscal}" />
+										<!--<Select id="selectAnoFiscal">
 											<items>
 												<core:Item text=""/>
 												<core:Item text="2018"/>
 												<core:Item text="2017"/>
 												<core:Item text="2016"/>
 											</items>
-										</Select>
+										</Select> -->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
-										<DatePicker 
+										<Text text="{/Obrigacao/prazo_entrega}" />
+										<!--<DatePicker 
 											id="datepickerPrazoEntrega" 
-											placeholder="{i18n>placeholderDatepicker}"/>
+											placeholder="{i18n>placeholderDatepicker}"/>-->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
 									<f:fields>
-										<DatePicker 
-											id="datepickerExtensao" 
-											placeholder="{i18n>placeholderDatepicker}"/>
+										<Text text="{/Obrigacao/extensao}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada"/>
+										<CheckBox id="checkObrigacaoIniciada" selected="{/Obrigacao/obrigacao_inicial}" />
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>viewComplianceFormularioObrigacoesColunaSuporteContratado}">
+								<f:FormElement label="Suporte Contratado">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado"/>
+										<CheckBox id="checkSuporteContratado" selected="{/Obrigacao/suporte_contratado}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
-										<TextArea 
+											<TextArea 
+											value="{/Obrigacao/suporte}"
 											id="textAreaSuporte"
 											rows="5" 
-											enabled="false"/>
+											enabled="{= ${/Obrigacao/suporte_contratado} ? true : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelObservacoes}">
 									<f:fields>
 										<TextArea 
-											id="textAreaObservacoes" 
+											id="textAreaObservacoes"
+											value="{/Obrigacao/observacoes}"
 											rows="5"/>
 									</f:fields>
 								</f:FormElement>
