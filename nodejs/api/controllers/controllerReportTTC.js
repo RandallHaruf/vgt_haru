@@ -170,7 +170,7 @@ module.exports = {
 	},
 	
 	deepQuery: function (req, res) { 
-		
+	
 		var sStatement = 
 			'SELECT '
 			+'empresa."nome" as Empresa, '
@@ -195,58 +195,57 @@ module.exports = {
 			+'inner join "VGT.DOMINIO_ANO_FISCAL" as dominio_ano_fiscal on dominio_ano_fiscal."id_dominio_ano_fiscal" = pagamento."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" '
 			+'inner join "VGT.DOMINIO_MOEDA" as dominio_moeda on dominio_moeda."id_dominio_moeda" = pagamento."fk_dominio_moeda.id_dominio_moeda" '
 			+'inner join "VGT.DOMINIO_TIPO_TRANSACAO" as dominio_tipo_transacao on dominio_tipo_transacao."id_dominio_tipo_transacao" = pagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"';
-			//where empresa."nome" = 'Apple'
-							
-			
 			
 		var oWhere = [];
 		var aParams = [];
-		var aEntrada = JSON.parse(req.query.parametros);
+		var stringtemporaria = "";
+		var filtro = ""
+		//var aEntrada = [["1","2","3"],["1","2"],["1"],["1","2","3"],["1","2","3"],null,null,null,null,null]
+		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
 		for (var i = 0; i < aEntrada.length; i++) {
 			if (aEntrada[i] !== null){
+				stringtemporaria = "";
 				for (var k = 0; k < aEntrada[i].length; k++) {
 					switch (i){
 						case 0:
-							oWhere.push(' empresa."id_empresa" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' empresa."id_empresa" = ? ';
 							break;
 						case 1:
-							oWhere.push(' dominio_tax_classification."id_dominio_tax_classification" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' dominio_tax_classification."id_dominio_tax_classification" = ? ';
 							break;
 						case 2:
-							oWhere.push(' tax_category."id_tax_category" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' tax_category."id_tax_category" = ? ';
 							break;
 						case 3:
-							oWhere.push(' tax."id_tax" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' tax."id_tax" = ? ';
 							break;
 						case 4:
-							oWhere.push(' name_of_tax."id_name_of_tax" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' name_of_tax."id_name_of_tax" = ? ';
 							break;
 						case 5:
-							oWhere.push(' jurisdicao."id_dominio_jurisdicao" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' jurisdicao."id_dominio_jurisdicao" = ? ';
 							break;
 						case 6:
-							oWhere.push(' dominio_pais."id_dominio_pais" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' dominio_pais."id_dominio_pais" = ? ';
 							break;
 						case 7:
-							oWhere.push(' dominio_ano_fiscal."id_dominio_ano_fiscal" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' dominio_ano_fiscal."id_dominio_ano_fiscal" = ? ';
 							break;
 						case 8:
-							oWhere.push(' dominio_moeda."id_dominio_moeda" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' dominio_moeda."id_dominio_moeda" = ? ';
 							break;
 						case 9:
-							oWhere.push(' dominio_tipo_transacao."id_dominio_tipo_transacao" = ? ');
-							aParams.push(aEntrada[i][k]);
+							filtro = ' dominio_tipo_transacao."id_dominio_tipo_transacao" = ? ';
 							break;
+					}
+					if(aEntrada[i].length == 1){
+						oWhere.push(filtro);
+						aParams.push(aEntrada[i][k]);								
+					}	
+					else{
+						k == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : k == aEntrada[i].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')',oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro 
+						aParams.push(aEntrada[i][k]);
 					}
 				}	
 			}

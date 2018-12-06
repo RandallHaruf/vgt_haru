@@ -4,8 +4,9 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/json/JSONModel",
 	"ui5ns/ui5/controller/BaseController",
-	"ui5ns/ui5/lib/NodeAPI"
-], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI) {
+	"ui5ns/ui5/lib/NodeAPI",
+	"ui5ns/ui5/model/Constants"
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
@@ -72,7 +73,8 @@ sap.ui.define([
 			this.getPage().setShowFooter(!this.getPage().getShowFooter());
 		},
 		onSelectChange: function (oEvent) {
-/*			
+
+	/*			
 			//sap.m.MessageToast.show(this.getModel().getProperty(this.getSelectedItemText(this.getSelect("selectEmpresa"))));
 */	
 /*
@@ -250,18 +252,17 @@ sap.ui.define([
 		_atualizarDados: function () {
 			var that = this;
 			
-			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas") : null;
-			var oDominioTaxClassification = this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas")? this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas") : null;
-			var oTaxCategory = this.getModel().getProperty("/IdTaxCategorySelecionadas")? this.getModel().getProperty("/IdTaxCategorySelecionadas") : null;
-			var oTax = this.getModel().getProperty("/IdTaxSelecionadas")? this.getModel().getProperty("/IdTaxSelecionadas") : null;
-			var oNameOfTax = this.getModel().getProperty("/IdNameOfTaxSelecionadas")? this.getModel().getProperty("/IdNameOfTaxSelecionadas") : null;
-			var oDominioJurisdicao = this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas")? this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas") : null;
-			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null;
-			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null;
-			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null;
-			var oDominioTipoTransacao = this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") : null;
-			
-			
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioTaxClassification = this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas")? this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas") : null : null;
+			var oTaxCategory = this.getModel().getProperty("/IdTaxCategorySelecionadas")? this.getModel().getProperty("/IdTaxCategorySelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdTaxCategorySelecionadas") : null : null;
+			var oTax = this.getModel().getProperty("/IdTaxSelecionadas")? this.getModel().getProperty("/IdTaxSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdTaxSelecionadas") : null : null;
+			var oNameOfTax = this.getModel().getProperty("/IdNameOfTaxSelecionadas")? this.getModel().getProperty("/IdNameOfTaxSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdNameOfTaxSelecionadas") : null : null;
+			var oDominioJurisdicao = this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas")? this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas") : null : null;
+			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
+			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
+			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
+			var oDominioTipoTransacao = this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") : null : null;
+
 			var oWhere = [];
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);
@@ -274,15 +275,25 @@ sap.ui.define([
 			oWhere.push(oDominioMoeda);
 			oWhere.push(oDominioTipoTransacao);
 			
-			NodeAPI.listarRegistros("DeepQuery/ReportTCC?parametros=" + JSON.stringify(oWhere), function (response) { // 1 COMPLIANCE
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					alert(response);
+				}
+			});	
+			
+			/*NodeAPI.listarRegistros("DeepQuery/ReportTTC?parametros=" + JSON.stringify(oWhere), function (response) { // 1 COMPLIANCE
 				if (response) {
-					/*for (var i = 0, length = response.length; i < length; i++) {
+					for (var i = 0, length = response.length; i < length; i++) {
 						response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
-					}*/
+					}
 					that.getModel().setProperty("/ReportTTC", response);
 					sap.m.MessageToast.show(response);
 				}
-			});
+			});*/
 		}		
 	});
 });
