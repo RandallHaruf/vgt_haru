@@ -226,7 +226,7 @@ sap.ui.define([
 			var oDataFim = this.getModel().getProperty("/DataPagamentoFim")? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ? vetorFim[0] = this.getModel().getProperty("/DataPagamentoFim") : null : null;
 
 
-			var oWhere = [];
+			var oWhere = []; 
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);
 			oWhere.push(oTaxCategory);

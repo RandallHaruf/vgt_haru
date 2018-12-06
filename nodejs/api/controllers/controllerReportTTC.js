@@ -248,7 +248,7 @@ module.exports = {
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);
 						aParams.push(aEntrada[i][k]);								
-					}	
+					}	 
 					else{
 						k == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : k == aEntrada[i].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
 						aParams.push(aEntrada[i][k]);

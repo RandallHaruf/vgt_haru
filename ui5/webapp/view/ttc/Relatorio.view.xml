@@ -136,7 +136,7 @@
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>
-		<!-- DynamicPage Content -->
+		<!-- DynamicPage Content  -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table items="{ path: '/ReportTTC', sorter: [{path:'DataPagamento'}] }">
