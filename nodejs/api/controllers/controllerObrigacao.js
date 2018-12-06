@@ -203,9 +203,27 @@ module.exports = {
 		}
 
 		if (req.query.idAprovacao) {
+			var sCondicao="";
+			sCondicao += (' (tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ' + req.query.idAprovacao);	
+			if(req.query.idNegado){
+				sCondicao += (' or tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ' + req.query.idNegado +  ')');
+			}
+			else{
+				sCondicao += ")";
+				
+			}
+			oWhere.push(sCondicao);
+			/*
+			
+			if (req.query.idAprovacao === '3'){
+			oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? or 1 ');	
+			} else {
 			oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? ');
-			aParams.push(req.query.idAprovacao);
+			}*/
+			/*aParams.push(req.query.idAprovacao);*/
 		}
+		
+		
 
 		if (oWhere.length > 0) {
 			sStatement += "where ";
@@ -217,7 +235,12 @@ module.exports = {
 				sStatement += oWhere[i];
 			}
 		}
-
+		/*if (req.query.idNegado) {
+		
+		oWhere.push(' tblObrigacao."fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao" = ? ');
+			aParams.push(req.query.idNegado);
+		}
+		*/
 		sStatement += ' Order By tblEmpresa."id_empresa"';
 
 		model.execute({

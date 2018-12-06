@@ -73,19 +73,27 @@
 					<Column>
 						<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 					</Column>
+					<Column hAlign="Center">
+						<Text text="{i18n>viewGeralResposta}" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Status" />
+					</Column>
 				</columns>
 				<items>
 					<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 						<cells>
-							<ObjectIdentifier title="{TBLOBRIGACAOACESSORIANOME}"/>
-							<Text text="{prazo_entrega}"/>
-							<Text text="{extensao}"/>
-							<Text text="{ano_fiscal}"/>
-							<Text text="{pais}"/>
-							<Text text="{descricao}"/>
-							<!--core:Icon src="{viewModel>suporteContratado}"/-->
-							<Text text="{suporte_contratado}"/>
-							<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
+									<ObjectIdentifier title="{TBLOBRIGACAOACESSORIANOME}"/>
+									<Text text="{prazo_entrega}"/>
+									<Text text="{extensao}"/>
+									<Text text="{ano_fiscal}"/>
+									<Text text="{pais}"/>
+									<Text text="{descricao}"/>
+									<!--core:Icon src="{viewModel>suporteContratado}"/-->
+									<Text text="{suporte_contratado}"/>
+									<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
+									<Text text="{motivo_reprovacao}" />
+									<core:Icon src="{oStatus/icone}" color="{oStatus/cor}" tooltip="{oStatus/tooltip}" size="2rem" />
 						</cells>
 					</ColumnListItem>
 				</items>

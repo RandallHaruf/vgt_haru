@@ -1,13 +1,16 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/model/formatter",
+		"ui5ns/ui5/model/models",
+		/*"ui5ns/ui5/model/formatter",*/
+		"sap/m/MessageToast",
 		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, formatter, NodeAPI) {
-		BaseController.extend("ui5ns.ui5.controller.compliance.ListagemRequisicoes", {
-			formatter: formatter,
+	function (BaseController,models,/* formatter,*/ MessageToast, NodeAPI) {
+		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemRequisicoes", {
+		//	formatter: formatter,
 			
+			/*
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
 					requisicoes: [
@@ -54,21 +57,34 @@ sap.ui.define(
 								tooltip: "Em andamento"
 							}
 						}*/	
-					]
+					/*]
 				}));
-				this.getRouter().getRoute("ttcRequisicaoReabertura").attachPatternMatched(this._onRouteMatched, this);
+				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 			},
+			*/
+			onInit: function (oEvent) {
 			
+				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
+			    this.setModel(new sap.ui.model.json.JSONModel({})); 
+				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);	
+			},
+			/*
 			onTrocarStatus: function (oEvent) {
 				// sap.m.MessageToast.show("Ano selecionado: " + oEvent.getSource().getSelectedItem().getText());
 				
 				this._atualizarDados();
 			},
+			*/
 			
+			onDetalharObrigacao: function (oEvent) {
+				this.getRouter().navTo("complianceFormularioDetalhesObrigacao");
+			},
+			
+			/*
 			onNovoObjeto: function (oEvent) {
 				this.getRouter().navTo("ttcFormularioNovaRequisicaoReabertura");
 			},
-			
+			*/
 			navToHome: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},
@@ -93,7 +109,7 @@ sap.ui.define(
 					idAnoCalendario: sIdAnoCalendario
 				}); 
 			},
-			
+			/*
 			_onRouteMatched: function (oEvent) {
 				var that = this;
 				
@@ -102,32 +118,59 @@ sap.ui.define(
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);
 				
-				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
+				NodeAPI.listarRegistros("complianceListagemObrigacoes", function (response) {
 					if (response) {
 						response.unshift({});
-						that.getModel().setProperty("/RequisicaoReaberturaStatus", response);
+						that.getModel().setProperty("/complianceListagemObrigacoes", response);
 						
 						that._atualizarDados();
 					}
 				});
+			}, */
+			
+			_onRouteMatched: function (oEvent) {
+				this._atualizarDados(oEvent);
+			},
+			
+			onTerminouAtualizar: function (oEvent) {             
+				this._atualizarDados(oEvent);
 			},
 			
 			_atualizarDados: function (oEvent) {
 				var that = this;
 				
-				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado")? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
-				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado")? this.getModel().getProperty("/AnoCalendarioSelecionado") : "";
-				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
+				//var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado")? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
+				//var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado")? this.getModel().getProperty("/AnoCalendarioSelecionado") : "";
+				//var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
 				
-				if(oStatus == '0'){
+				/*if(oStatus == '0'){
 					oStatus = '';
-				};
+				};*/
 				
-				
-				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario+"&idStatus="+oStatus, function (response) { // 1 COMPLIANCE
+				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idAprovacao=1&idNegado=3", function (response) { // 1 COMPLIANCE
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
-							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
+							if (response[i]["fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao"] === 1) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://lateness",
+							      cor: "orange",
+							      tooltip: "Aguardando"
+							    };
+							} else if (response[i]["fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao"] === 2) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://accept",
+							      cor: "green",
+							      tooltip: "Aprovado"
+							    };
+							} else if (response[i]["fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao"] === 3) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://decline",
+							      cor: "red",
+							      tooltip: "Reprovado"
+							    };
+						}
+						
+						response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
 						}
 						that.getModel().setProperty("/Obrigacao", response);
 					}
