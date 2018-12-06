@@ -57,7 +57,7 @@
 				</f:Form>-->
 				<f:Form editable="true" class="sapUiMediumMarginTop">
 					<f:title>
-						<core:Title text="Histórico de Câmbio" />
+						<core:Title text="{i18n>viewCambioHistoricoDeCambio}" />
 					</f:title>
 					<f:layout>
 						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -71,10 +71,10 @@
 										<Table items="{/historico}">
 											<columns>
 												<Column>
-													<Text text="Arquivo" />
+													<Text text="{i18n>viewCambioArquivo}" />
 												</Column>
 												<Column>
-													<Text text="Data" />
+													<Text text="{i18n>viewCambioData}" />
 												</Column>
 											</columns>
 											<items>

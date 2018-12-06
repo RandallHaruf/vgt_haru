@@ -67,7 +67,7 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 				this._carregarSelect("Empresa");
 				this._carregarSelect("DominioPais");
-				this._carregarSelect("ObrigacaoAcessoria");
+				this._carregarSelect("ObrigacaoAcessoria?tipo=2");
 				this._carregarSelect("DomPeriodicidadeObrigacao");
 				this._carregarSelect("DominioAnoFiscal");
 			},
