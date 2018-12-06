@@ -474,6 +474,9 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				for (var i = 0, length = result.length; i < length; i++) {
+					result[i].ind_nao_aplicavel = result[i].ind_nao_aplicavel ? true : false;
+				}
 				res.send(JSON.stringify(result));
 			}
 		});
