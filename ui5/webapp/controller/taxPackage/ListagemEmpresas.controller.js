@@ -14,9 +14,9 @@ sap.ui.define(
 			formatter: formatter,
 			
 			onInit: function () {
-				var oModel = new JSONModel({
+				/*var oModel = new JSONModel({
 					Companies: [
-						/*{
+						{
 							name: "CompanyA",
 							primeiroTrimestre: "sap-icon://accept",
 							segundoTrimestre: "sap-icon://decline",
@@ -24,11 +24,11 @@ sap.ui.define(
 							quartoTrimestre: "sap-icon://decline",
 							anual: "sap-icon://decline",
 							qteRetificadoras: 0
-						}*/
+						}
 					]
 				});
 				
-				this.setModel(oModel, "companies");
+				this.setModel(oModel, "companies");*/
 				this.setModel(new sap.ui.model.json.JSONModel({}));
 				
 				this.getRouter().getRoute("taxPackageListagemEmpresas").attachPatternMatched(this._onRouteMatched, this);                 
@@ -54,7 +54,7 @@ sap.ui.define(
 			
 			onSelecionarEmpresa: function (oEvent) {
 				var oParametros = {
-					empresa: this.getModel("companies").getObject(oEvent.getSource().getBindingContext("companies").getPath()),
+					empresa: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()),
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 				
@@ -92,9 +92,9 @@ sap.ui.define(
 				this.byId("tabelaEmpresas").setBusy(true);
 				
 				// Passar parametro 'empresas' com um array de IDs para filtrar as empresas do usuário logado!!!
-				NodeAPI.listarRegistros("Empresa", function (response) {
-					if (response) {
-						that.getModel("companies").setProperty("/Companies", response);
+				NodeAPI.listarRegistros("TaxPackageListagemEmpresas?anoCalendario=" + sIdAnoCalendario, function (response) {
+					if (response && response.success) {
+						that.getModel().setProperty("/Empresa", response.result);
 					}	
 					
 					that.byId("tabelaEmpresas").setBusy(false);

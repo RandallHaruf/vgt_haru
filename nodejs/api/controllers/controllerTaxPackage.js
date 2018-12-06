@@ -330,6 +330,122 @@ module.exports = {
 				"fk_dominio_schedule_tipo.id_dominio_schedule_tipo": 1
 			}		
 		]));*/
+	},
+	
+	listagemEmpresas: function (req, res) {
+		if (req.query.anoCalendario) {
+			var sQuery = 
+				'select empresa."id_empresa", '
+				+ 'empresa."nome" "empresa",  '
+				+ 'primeiro_periodo."status_envio" "status_primeiro_periodo",  '
+				+ 'segundo_periodo."status_envio" "status_segundo_periodo", '
+				+ 'terceiro_periodo."status_envio" "status_terceiro_periodo", '
+				+ 'quarto_periodo."status_envio" "status_quarto_periodo", '
+				+ 'anual."status_envio" "status_anual", '
+				+ 'count(retificadoras."id_rel_tax_package_periodo") "qte_retificadoras" '
+				+ 'from "VGT.EMPRESA" empresa '
+				+ 'left outer join ( '
+				+ 'select *  '
+				+ 'from "VGT.TAX_PACKAGE" taxPackage '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where '
+				+ 'periodo."numero_ordem" = 1 '
+				+ ') primeiro_periodo '
+				+ 'on empresa."id_empresa" = primeiro_periodo."fk_empresa.id_empresa" '
+				+ 'left outer join ( '
+				+ 'select *  '
+				+ 'from "VGT.TAX_PACKAGE" taxPackage '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where '
+				+ 'periodo."numero_ordem" = 2 '
+				+ ') segundo_periodo '
+				+ 'on empresa."id_empresa" = segundo_periodo."fk_empresa.id_empresa" '
+				+ 'left outer join ( '
+				+ 'select *  '
+				+ 'from "VGT.TAX_PACKAGE" taxPackage '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where '
+				+ 'periodo."numero_ordem" = 3 '
+				+ ') terceiro_periodo '
+				+ 'on empresa."id_empresa" = terceiro_periodo."fk_empresa.id_empresa" '
+				+ 'left outer join ( '
+				+ 'select * ' 
+				+ 'from "VGT.TAX_PACKAGE" taxPackage '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where '
+				+ 'periodo."numero_ordem" = 4 '
+				+ ') quarto_periodo '
+				+ 'on empresa."id_empresa" = quarto_periodo."fk_empresa.id_empresa" '
+				+ 'left outer join ( '
+				+ 'select * ' 
+				+ 'from "VGT.TAX_PACKAGE" taxPackage '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where '
+				+ 'periodo."numero_ordem" = 5 '
+				+ ') anual '
+				+ 'on empresa."id_empresa" = anual."fk_empresa.id_empresa" '
+				+ 'left outer join ( '
+				+ 'select *  '
+				+ 'from "VGT.TAX_PACKAGE" taxPackage '
+				+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
+				+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'where '
+				+ 'periodo."numero_ordem" >= 6 '
+				+ ') retificadoras '
+				+ 'on empresa."id_empresa" = retificadoras."fk_empresa.id_empresa" '
+				+ 'where  '
+				+ 'primeiro_periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+				+ 'and segundo_periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+				+ 'and terceiro_periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+				+ 'and quarto_periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+				+ 'and anual."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+				+ 'and retificadoras."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+				+ 'group by empresa."id_empresa", empresa."nome", primeiro_periodo."status_envio", segundo_periodo."status_envio", terceiro_periodo."status_envio", quarto_periodo."status_envio", anual."status_envio"  ',
+			aParams = [req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario];
+			
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParams
+			}, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify({
+						success: false,
+						error: err
+					}));
+				}
+				else {
+					res.send(JSON.stringify({
+						success: true,
+						result: result
+					}));
+				}
+			});
+		}
+		else {
+			res.send(JSON.stringify({
+				success: false,
+				error: {
+					message: "Não foi enviado ano calendário como filtro"
+				}
+			}));
+		}
 	}
 };
 

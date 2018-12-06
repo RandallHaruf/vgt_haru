@@ -28,11 +28,9 @@
 				id="tabelaEmpresas"
 				inset="false"
 				items="{
-					path: 'companies>/Companies',
+					path: '/Empresa',
 					sorter: [{
-						path: 'nome'
-					}, {
-						path: 'currency'
+						path: 'empresa'
 					}]
 				}">
 				<headerToolbar>
@@ -87,46 +85,46 @@
 						type="Navigation"
 						press="onSelecionarEmpresa">
 						<cells>
-							<Text text="{companies>nome}" class="celulaDestacada" />
+							<Text text="{empresa}" class="celulaDestacada" />
 							
-							<core:Icon src="{companies>primeiroTrimestre}" 
+							<core:Icon src="" 
 								color="{
 									parts: [
-										'companies>primeiroTrimestre'
+										'status_primeiro_periodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}" />
-							<core:Icon src="{companies>segundoTrimestre}" 
+							<core:Icon src="" 
 								color="{
 									parts: [
-										'companies>segundoTrimestre'
+										'status_segundo_periodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
-							<core:Icon src="{companies>terceiroTrimestre}" 
+							<core:Icon src="" 
 								color="{
 									parts: [
-										'companies>terceiroTrimestre'
+										'status_terceiro_periodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
-							<core:Icon src="{companies>quartoTrimestre}" 
+							<core:Icon src="" 
 								color="{
 									parts: [
-										'companies>quartoTrimestre'
+										'status_quarto_periodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
-							<core:Icon src="{companies>anual}" 
+							<core:Icon src="" 
 								color="{
 									parts: [
-										'companies>anual'
+										'status_anual'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
 								}"/>
 							
 							<ObjectNumber
-								number="{companies>qteRetificadoras}"/>
+								number="{qte_retificadoras}"/>
 						</cells>
 					</ColumnListItem>
 				</items>
