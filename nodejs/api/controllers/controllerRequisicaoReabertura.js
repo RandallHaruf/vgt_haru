@@ -70,7 +70,7 @@ module.exports = {
 				sStatus = req.body.fkDominioRequisicaoReaberturaStatus,
 				sIdEmpresa = req.body.fkEmpresa,
 				sIdPeriodo = req.body.fkPeriodo,
-				sNomeEmpresa = req.body.nomeEmpresa
+				sNomeEmpresa = req.body.nomeEmpresa;
 
 			var response = {
 				success: true
