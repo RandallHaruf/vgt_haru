@@ -125,10 +125,38 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idTipo=1&idEmpresa="+oEmpresa+"&idAnoFiscal="+oAnoCalendario+"&idStatus="+oStatus+"&idAprovacao=2", function (response) { // 1 COMPLIANCE
 					if (response) {
+						var Todos=0,NaoIniciada = 0,Aguardando = 0,EmAtraso = 0,EntregueNoPrazo = 0,EntregueForaPrazo = 0;
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
+							switch(response[i]["fk_dominio_status_obrigacao.id_status_obrigacao"]){
+								case 1:
+									NaoIniciada++;	
+									break;
+								case 2:
+									Aguardando++;
+									break;
+								case 3:
+									EmAtraso++;
+									break;
+								case 4:
+									EntregueNoPrazo++;
+									break;
+								case 5:
+									EntregueForaPrazo++;
+									break;
+							}
+							Todos++;
 						}
+						that.getModel().setProperty("/Contadores", {
+							modelTodos: Todos,
+							modelNaoIniciada: NaoIniciada,
+							modelAguardando: Aguardando,
+							modelEmAtraso: EmAtraso,
+							modelEntregueNoPrazo: EntregueNoPrazo,
+							modelEntregueForaPrazo: EntregueForaPrazo
+						});
 						that.getModel().setProperty("/Obrigacao", response);
+						
 					}
 				});
 			}

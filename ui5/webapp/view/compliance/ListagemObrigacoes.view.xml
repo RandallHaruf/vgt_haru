@@ -31,42 +31,42 @@
 				<items>
 					<IconTabFilter
 						showAll="true"
-						count=""
+						count="{/Contadores/modelTodos}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"
 						key="0" />
 					<IconTabSeparator />
 					<IconTabFilter
 						icon="sap-icon://sys-help"
 						iconColor="Default"
-						count=""
+						count="{/Contadores/modelNaoIniciada}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
 						key="1" />
 					<IconTabFilter
 						icon="sap-icon://lateness"
 						iconColor="Neutral"
-						count=""
+						count="{/Contadores/modelAguardando}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
 						key="2" />
 					<IconTabFilter
 						icon="sap-icon://alert"
 						iconColor="Negative"
-						count=""
+						count="{/Contadores/modelEmAtraso}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
 						key="3" />
 					<IconTabFilter
 						icon="sap-icon://accept"
 						iconColor="Positive"
-						count=""
+						count="{/Contadores/modelEntregueNoPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
 						key="4" />
 					<IconTabFilter
 						icon="sap-icon://customer-history"
 						iconColor="Critical"
-						count=""
+						count="{/Contadores/modelEntregueForaPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
 						key="5" />
