@@ -11,10 +11,6 @@ sap.ui.define([
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
 		onInit: function () {
-			/*this.oModel = new JSONModel();
-			this.oModel.loadData(jQuery.sap.getModulePath("ui5ns.ui5.model.mock", "/relatorioTTC.json"), null, false);
-			this.getView().setModel(this.oModel);*/
-			
 			this.getView().setModel(new sap.ui.model.json.JSONModel({}));
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteNameOfTax, this);
@@ -26,23 +22,6 @@ sap.ui.define([
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioMoeda, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioTipoTransacao, this);
-			//this._atualizarDados();
-			/*
-			this.aKeys = ["empresa", "classification", "category", "tax", "nameOfTax", "nameOfGov", "jurisdicao", "anoFiscal", "description", "dateOfPayment",
-						"currency", "currencyRate", "typeOfTransaction", "otherSpecify", "principal", "interest", "fine", "value", "valueUSD", "numberOfDocument", "beneficiaryCompany"];
-			this.oSelectEmpresa = this.getSelect("/IdEmpresasSelecionadas");
-			this.oSelectClassification = this.getSelect("selectClassification");
-			this.oSelectCategory = this.getSelect("selectCategory");
-			this.oSelectTax = this.getSelect("selectTax");
-			this.oSelecNameOftTax = this.getSelect("selectNameOfTax");
-			this.oSelectJurisdicao = this.getSelect("selectJurisdicao");
-			this.oSelectAnoFiscal = this.getSelect("selectAnoFiscal");
-			//this.oSelectDateOfPayment = this.getSelect("selectDateOfPayment");
-			this.oSelectCurrency = this.getSelect("selectCurrency");
-			this.oSelectTypeOfTransaction = this.getSelect("selectTypeOfTransaction");
-			this.oModel.setProperty("/Filter/text", "Filtered by None");
-			this.addSnappedLabel();
-			*/
 		},
 		
 		navToHome: function () {
@@ -73,26 +52,7 @@ sap.ui.define([
 			this.getPage().setShowFooter(!this.getPage().getShowFooter());
 		},
 		onSelectChange: function (oEvent) {
-
-	/*			
-			//sap.m.MessageToast.show(this.getModel().getProperty(this.getSelectedItemText(this.getSelect("selectEmpresa"))));
-*/	
-/*
-			var aCurrentFilterValues = [];
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectEmpresa));
-			
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectClassification));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectCategory));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTax));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelecNameOftTax));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectJurisdicao));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectAnoFiscal));
-			//aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectDateOfPayment));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectCurrency));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTypeOfTransaction));
-			
-			this.filterTable(aCurrentFilterValues);
-*/			
+			this._atualizarDados();
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -165,7 +125,6 @@ sap.ui.define([
 		},
 		
 		onImprimir: function (oEvent) {
-			this._atualizarDados();
 			//sap.m.MessageToast.show(this.getModel().getProperty("/IdEmpresasSelecionadas"));
 		},
 		
@@ -251,7 +210,8 @@ sap.ui.define([
 		},
 		_atualizarDados: function () {
 			var that = this;
-			
+			var vetorInicio = [];
+			var vetorFim = [];
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioTaxClassification = this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas")? this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas") : null : null;
 			var oTaxCategory = this.getModel().getProperty("/IdTaxCategorySelecionadas")? this.getModel().getProperty("/IdTaxCategorySelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdTaxCategorySelecionadas") : null : null;
@@ -262,6 +222,9 @@ sap.ui.define([
 			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
 			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
 			var oDominioTipoTransacao = this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") : null : null;
+			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio")? this.getModel().getProperty("/DataPagamentoInicio") !== null ? vetorInicio[0] = this.getModel().getProperty("/DataPagamentoInicio") : null : null;
+			var oDataFim = this.getModel().getProperty("/DataPagamentoFim")? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ? vetorFim[0] = this.getModel().getProperty("/DataPagamentoFim") : null : null;
+
 
 			var oWhere = [];
 			oWhere.push(oEmpresa);
@@ -274,6 +237,8 @@ sap.ui.define([
 			oWhere.push(oDominioAnoFiscal);
 			oWhere.push(oDominioMoeda);
 			oWhere.push(oDominioTipoTransacao);
+			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
+			oWhere.push(oDataFim === null? oDataFim : vetorFim);			
 			
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
 				type: "POST",
@@ -281,19 +246,9 @@ sap.ui.define([
 					parametros: JSON.stringify(oWhere)
 				},
 				success: function (response) {
-					alert(response);
+					that.getModel().setProperty("/ReportTTC", JSON.parse(response));
 				}
 			});	
-			
-			/*NodeAPI.listarRegistros("DeepQuery/ReportTTC?parametros=" + JSON.stringify(oWhere), function (response) { // 1 COMPLIANCE
-				if (response) {
-					for (var i = 0, length = response.length; i < length; i++) {
-						response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
-					}
-					that.getModel().setProperty("/ReportTTC", response);
-					sap.m.MessageToast.show(response);
-				}
-			});*/
 		}		
 	});
 });

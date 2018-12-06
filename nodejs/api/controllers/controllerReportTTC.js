@@ -173,17 +173,17 @@ module.exports = {
 	
 		var sStatement = 
 			'SELECT '
-			+'empresa."nome" as Empresa, '
-			+'dominio_tax_classification."classification" as DominioTaxClassification, '
-			+'tax_category."category" as TaxCategory, '
-			+'tax."tax" as Tax, '
-			+'name_of_tax."name_of_tax" as NameOfTax, '
-			+'jurisdicao."jurisdicao" as DominioJurisdicao, '
-			+'dominio_pais."pais" as DominioPais, '
-			+'dominio_ano_fiscal."ano_fiscal" as DominioAnoFiscal, '
-			+'dominio_moeda."acronimo" as DominioMoeda, '
-			+'dominio_tipo_transacao."tipo_transacao" as DominioTipoTransacao, '
-			+'pagamento."data_pagamento" as DataPagamento '
+			+'empresa."nome" as "Empresa", '
+			+'dominio_tax_classification."classification" as "DominioTaxClassification", '
+			+'tax_category."category" as "TaxCategory", '
+			+'tax."tax" as "Tax", '
+			+'name_of_tax."name_of_tax" as "NameOfTax", '
+			+'jurisdicao."jurisdicao" as "DominioJurisdicao", '
+			+'dominio_pais."pais" as "DominioPais", '
+			+'dominio_ano_fiscal."ano_fiscal" as "DominioAnoFiscal", '
+			+'dominio_moeda."acronimo" as "DominioMoeda", '
+			+'dominio_tipo_transacao."tipo_transacao" as "DominioTipoTransacao", '
+			+'pagamento."data_pagamento" as "DataPagamento" '
 			+'FROM "VGT.EMPRESA" as empresa '
 			+'inner join "VGT.PAGAMENTO" as pagamento on pagamento."fk_empresa.id_empresa" = empresa."id_empresa" '
 			+'inner join "VGT.NAME_OF_TAX" as name_of_tax on name_of_tax."id_name_of_tax" = pagamento."fk_name_of_tax.id_name_of_tax" '
@@ -199,7 +199,7 @@ module.exports = {
 		var oWhere = [];
 		var aParams = [];
 		var stringtemporaria = "";
-		var filtro = ""
+		var filtro = "";
 		//var aEntrada = [["1","2","3"],["1","2"],["1"],["1","2","3"],["1","2","3"],null,null,null,null,null]
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
@@ -238,13 +238,19 @@ module.exports = {
 						case 9:
 							filtro = ' dominio_tipo_transacao."id_dominio_tipo_transacao" = ? ';
 							break;
+						case 10:
+							filtro = ' pagamento."data_pagamento" >= ? ';
+							break;	
+						case 11:
+							filtro = ' pagamento."data_pagamento" <= ? ';
+							break;							
 					}
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);
 						aParams.push(aEntrada[i][k]);								
 					}	
 					else{
-						k == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : k == aEntrada[i].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')',oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro 
+						k == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : k == aEntrada[i].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
 						aParams.push(aEntrada[i][k]);
 					}
 				}	

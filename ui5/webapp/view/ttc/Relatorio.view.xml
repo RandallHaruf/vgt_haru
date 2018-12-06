@@ -12,7 +12,7 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório TTC" save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="  " save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<Button
@@ -109,12 +109,12 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamentoInício}">
 								<fb:control>
-									<DatePicker/>
+									<DatePicker value="{/DataPagamentoInicio}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="J" label="{i18n>ViewRelatorioDataDePagamentoFim}">
 								<fb:control>
-									<DatePicker/>
+									<DatePicker value="{/DataPagamentoFim}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
@@ -139,7 +139,7 @@
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/Pagamentos' }">
+				<Table items="{ path: '/ReportTTC', sorter: [{path:'DataPagamento'}] }">
 					<columns>
 						<Column width="6rem">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
@@ -151,88 +151,44 @@
 							<Text text="{i18n>viewRelatorioCategoria}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Tax"/>
+							<Text text="{i18n>viewRelatorioT}"/>
 						</Column>
 						<Column width="10rem">
 							<Text text="{i18n>viewRelatorioNomeT}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioNomeDoOrgao}"/>
-						</Column>
-						<Column width="10rem">
 							<Text text="{i18n>viewRelatorioJurisdicao}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioPais}" />
+							<Text text="{i18n>viewRelatorioPais}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioEstado}" />
+							<Text text="{i18n>viewRelatorioAnoFiscal}" />
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioCidade}" />
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+							<Text text="{i18n>ViewRelatorioCurrency}" />
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioDescricao}"/>
+							<Text text="{i18n>ViewRelatorioTipoDeTransacao}" />
 						</Column>
 						<Column width="10rem" hAlign="End">
 							<Text text="{i18n>ViewRelatorioDataDePagamento}"/>
-						</Column>
-						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioCurrency}"/>
-						</Column>
-						<Column width="15rem">
-							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"/>
-						</Column>
-						<Column width="15rem">
-							<Text text="{i18n>viewRelatorioOutros}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="Principal"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioInteresse}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioMulta}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioValue}"/>
-						</Column>
-						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioNumeroDoDocumento}"/>
-						</Column>
-						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioBeneficiarioDaCompanhia}"/>
 						</Column>
 					</columns>
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text text="{empresa}"/>
-								<Text text="{classification}"/>
-								<Text text="{category}"/>
-								<Text text="{tax}"/>
-								<Text text="{nameOfTax}"/>
-								<Text text="{nameOfGov}"/>
-								<Text text="{jurisdicao}"/>
-								<Text text="{pais}" />
-								<Text text="{state}" />
-								<Text text="{city}" />
-								<Text text="{anoFiscal}"/>
-								<Text text="{description}"/>
-								<Text text="{dateOfPayment}"/>
-								<Text text="{currency}"/>
-								<Text text="{typeOfTransaction}"/>
-								<Text text="{otherSpecify}"/>
-								<Text text="{principal}"/>
-								<Text text="{interest}"/>
-								<Text text="{fine}"/>
-								<Text text="{value}"/>
-								<Text text="{numberOfDocument}"/>
-								<Text text="{beneficiaryCompany}"/>
+								<Text text="{Empresa}"/>
+								<Text text="{DominioTaxClassification}"/>
+								<Text text="{TaxCategory}"/>
+								<Text text="{Tax}"/>
+								<Text text="{NameOfTax}"/>
+								<Text text="{DominioJurisdicao}"/>
+								<Text text="{DominioPais}"/>
+								<Text text="{DominioAnoFiscal}" />
+								<Text text="{DominioMoeda}" />
+								<Text text="{DominioTipoTransacao}" />
+								<Text text="{DataPagamento}"/>
 							</cells>
 						</ColumnListItem>
 					</items>
