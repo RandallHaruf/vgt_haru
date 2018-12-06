@@ -35,23 +35,23 @@
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
 							press="onNovoObjeto" 
-							text="novo"
+							text="{i18n>viewPaisNovo}"
 							type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>
 		
 				<columns>
 					<Column>
-						<Text text="Nome" />
+						<Text text="{i18n>viewGeralNome}" />
 					</Column>
 					<Column>
 						<Text text="Status" />
 					</Column>
 					<Column>
-						<Text text="Alíquota Vigente" />
+						<Text text="{i18n>viewGeralAliquotaVigente}" />
 					</Column>
 					<Column>
-						<Text text="Valor da Alíquota" />
+						<Text text="{i18n>viewGeralValueAliquot}" />
 					</Column>
 				</columns>
 		
@@ -78,18 +78,18 @@
 						id="formularioObjeto" 
 						editable="true">
 						<f:title>
-							<core:Title text="País"/>
+							<core:Title text="{i18n>viewGeralPais}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
 						<f:formContainers>
-							<f:FormContainer title="Cadastro">
+							<f:FormContainer title="{i18n>viewGeralCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="País" labelFor="selectPais" />
+											<Label text="{i18n>viewGeralPais}" labelFor="selectPais" />
 										</f:label>
 										<f:fields>
 											<ComboBox id="comboboxtPais" items="{path: '/DominioPais'}" selectedKey="{/objeto/idDominioPais}" required="true">
@@ -99,7 +99,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Região" labelFor="selectRegiao" class="sapMLabelRequired" />
+											<Label text="{i18n>viewPaisRegião}" labelFor="selectRegiao" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select id="selectRegiao" items="{/DominioPaisRegiao}" selectedKey="{/objeto/idRegiao}">
@@ -135,7 +135,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Prescrição Prejuízo" labelFor="inputPrescricaoPrejuizo" />
+											<Label text="{i18n>viewPaisPrescriçãoloss}" labelFor="inputPrescricaoPrejuizo" />
 										</f:label>
 										<f:fields>
 											<Input type="Number" id="inputPrescricaoPrejuizo" value="{/objeto/prescricaoPrejuizo}" required="true" />
@@ -143,7 +143,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Limitação de Utilização do prejuízo" labelFor="inputLimiteUtilizacaoPrejuizo" />
+											<Label text="{i18n>viewPaisLimitaçãoDeUtilizaçãoDoprejuízo}" labelFor="inputLimiteUtilizacaoPrejuizo" />
 										</f:label>
 										<f:fields>
 											<Input id="inputLimiteUtilizacaoPrejuizo" value="{/objeto/limiteUtilizacaoPrejuizo}" required="true" />
@@ -151,7 +151,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Prescrição Crédito" labelFor="inputPrescricaoCredito" />
+											<Label text="{i18n>viewPaisPrescriçãoCrédito}" labelFor="inputPrescricaoCredito" />
 										</f:label>
 										<f:fields>
 											<Input type="Number" id="inputPrescricaoCredito" value="{/objeto/prescricaoCredito}" required="true" />
@@ -159,7 +159,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Alíquota Vigente" labelFor="selectAliquotaVigente" class="sapMLabelRequired" />
+											<Label text="{i18n>viewGeralAliquotaVigente}" labelFor="selectAliquotaVigente" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select id="selectAliquotaVigente" items="{/Aliquotas}" selectedKey="{/objeto/fkAliquota}">
@@ -179,7 +179,7 @@
 					</f:Form>
 					<f:Form editable="true" visible="{/showHistoricoAliquotas}">
 						<f:title>
-							<core:Title text="Histórico de Alíquotas" />
+							<core:Title text="{i18n>viewGeralHistóricoAliquotas}" />
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -200,16 +200,16 @@
 													sticky="ColumnHeaders">
 													<columns>
 														<Column vAlign="Middle">
-															<Text text="Nome" />
+															<Text text="{i18n>viewGeralNome}" />
 														</Column>
 														<Column vAlign="Middle">
 															<Text text="Valor" />
 														</Column>
 														<Column>
-															<Text text="Data Início" />
+															<Text text="{i18n>ViewGeralDataInício}" />
 														</Column>
 														<Column>
-															<Text text="Data Fim" />
+															<Text text="{i18n>ViewGeralDataFim}" />
 														</Column>
 													</columns>
 													<items>
@@ -236,11 +236,11 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
-						text="Salvar" 
+						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
-						text="Cancelar" 
+						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>
 				</Toolbar>
