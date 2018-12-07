@@ -18,13 +18,7 @@ sap.ui.define([
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteObrigacaoAcessoria, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDomPeriodicidadeObrigacao, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
-			
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteTax, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioTaxClassification, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioJurisdicao, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioMoeda, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioTipoTransacao, this);
-			
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioStatusObrigacao, this);
 		},
 
 		navToHome: function () {
@@ -181,6 +175,14 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioAnoFiscal", resposta);
 				}
 			});
+		},	
+		_onRouteDominioStatusObrigacao: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioStatusObrigacao", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioStatusObrigacao", resposta);
+				}
+			});
 		},		
 		_onRouteDominioObrigacaoAcessoriaTipo: function (oEvent) {
 			var that = this;
@@ -189,56 +191,58 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", resposta);
 				}
 			});
-		}/*,
-		_onRouteDomPeriodicidadeObrigacao: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("TaxCategory", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/TaxCategory", resposta);
-				}
-			});
 		},
-		_onRouteTax: function (oEvent) {
+		_atualizarDados: function () {
+			/*
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioPais, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteObrigacaoAcessoria, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDomPeriodicidadeObrigacao, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioStatusObrigacao, this);
+			*/
 			var that = this;
-			NodeAPI.listarRegistros("Tax", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/Tax", resposta);
-				}
-			});
-		},
-		_onRouteDominioTaxClassification: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioTaxClassification", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioTaxClassification", resposta);
-				}
-			});
-		},
+			var vetorInicio = [];
+			var vetorFim = [];
+			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
+			var oObrigacaoAcessoria = this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas") : null : null;
+			var oDomPeriodicidadeObrigacao = this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas") : null : null;
+			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
+			var oDataPrazoEntrega = this.getModel().getProperty("/DataPrazoEntrega")? this.getModel().getProperty("/DataPrazoEntrega") !== null ? vetorInicio[0] = this.getModel().getProperty("/DataPrazoEntrega") : null : null;
+			var oDataExtensao = this.getModel().getProperty("/DataExtensao")? this.getModel().getProperty("/DataExtensao")[0] !== null ? vetorFim[0] = this.getModel().getProperty("/DataExtensao") : null : null;
+			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
 
-		_onRouteDominioJurisdicao: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioJurisdicao", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioJurisdicao", resposta);
-				}
-			});
-		},
+			var oCheckObrigacao = this.getModel().getProperty("CheckObrigacao")? this.getModel().getProperty("CheckObrigacao")[0] !== undefined ? this.getModel().getProperty("CheckObrigacao") : null : null;
+			var oCheckSuporteContratado = this.getModel().getProperty("CheckSuporteContratado")? this.getModel().getProperty("CheckSuporteContratado")[0] !== undefined ? this.getModel().getProperty("CheckSuporteContratado") : null : null;			
+
+			var oWhere = []; 
+			oWhere.push(oDominioObrigacaoAcessoriaTipo);
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioPais);
+			oWhere.push(oObrigacaoAcessoria);
+			oWhere.push(oDomPeriodicidadeObrigacao);
+			oWhere.push(oDominioAnoFiscal);
+			oWhere.push(oDominioPais);
+			oWhere.push(oDominioAnoFiscal);
+			oWhere.push(oDataPrazoEntrega === null ? oDataPrazoEntrega : vetorInicio);
+			oWhere.push(oDataExtensao === null? oDataExtensao : vetorFim);
+			oWhere.push(oDominioStatusObrigacao);			
+			oWhere.push(oCheckObrigacao);
+			oWhere.push(oCheckSuporteContratado);
 			
-		_onRouteDominioMoeda: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioMoeda", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioMoeda", resposta);
+			
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					that.getModel().setProperty("/ReportTTC", JSON.parse(response));
 				}
-			});
-		},
-		_onRouteDominioTipoTransacao: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioTipoTransacao", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioTipoTransacao", resposta);
-				}
-			});
-		}*/		
+			});	
+		}			
 	});
 });
