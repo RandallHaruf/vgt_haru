@@ -110,6 +110,11 @@ sap.ui.define(
 				// Passar parametro 'empresas' com um array de IDs para filtrar as empresas do usuário logado!!!
 				NodeAPI.listarRegistros("ResumoEmpresaTTC?anoCalendario=" + sIdAnoCalendario, function (response) {
 					if (response) {
+						for(var i = 0; i < response.length; i++){
+							response[i]["collected"] = parseInt(response[i]["collected"],10);
+							response[i]["total"] = parseInt(response[i]["total"],10);
+							response[i]["borne"] = parseInt(response[i]["borne"],10);
+						}
 						that.getModel().setProperty("/Empresa", response);
 					}	
 					
