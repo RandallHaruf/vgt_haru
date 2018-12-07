@@ -47,6 +47,7 @@ module.exports = function (app) {
 	var routeUsuario = require("./routeUsuario");
 	var routeReportTTC = require("./routeReportTTC");
 	var routeTaxReconciliation = require("./routeTaxReconciliation");
+	var routeDominioStatusObrigacao = require("./routeDominioStatusObrigacao");
 	
 	var aRoutes = [];	
 	
@@ -93,6 +94,7 @@ module.exports = function (app) {
 	routeUsuario(aRoutes);
 	routeReportTTC(aRoutes);
 	routeTaxReconciliation(aRoutes);
+	routeDominioStatusObrigacao(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
