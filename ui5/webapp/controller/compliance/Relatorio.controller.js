@@ -233,13 +233,13 @@ sap.ui.define([
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
 			
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
 				success: function (response) {
-					that.getModel().setProperty("/ReportTTC", JSON.parse(response));
+					that.getModel().setProperty("/ReportObrigacao", JSON.parse(response));
 				}
 			});	
 		}			

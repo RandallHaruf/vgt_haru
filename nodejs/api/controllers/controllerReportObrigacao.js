@@ -1,9 +1,9 @@
 "use strict";
 
-var model = require("../models/modelReportObrigacao");
+//var model = require("../models/modelReportObrigacao");
 
 module.exports = {
-
+/*
 	listarRegistros: function (req, res) {
 		model.listar([], function (err, result) {
 			if (err) {
@@ -156,7 +156,7 @@ module.exports = {
 			}
 		});
 	},
-
+*/
 	deepQuery: function (req, res) {
 		res.send("TODO: DeepQuery da Entidade ReportObrigacao");
 
