@@ -49,7 +49,7 @@
 						<fb:filterItems>
 							<fb:FilterItem name="J" label="{i18n>viewComplianceListagemObrigacoesColunaTipo}">
 								<fb:control>
-									<Select id="selectDominio" forceSelection="true" change="onSelectChange" items="{ path: '/DominioObrigacao' }">
+									<Select id="selectDominio" forceSelection="true" change="onSelectChange" items="{ path: '/DominioObrigacaoAcessoriaTipo' }">
 										<core:Item key="{aaa}" text="{nome}"/>
 									</Select>
 								</fb:control>
@@ -70,14 +70,14 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}">
 								<fb:control>
-									<Select id="selectTipo" change="onSelectChange" forceSelection="true" items="{ path: '/DominioObrigacaoAcessoria' }">
+									<Select id="selectTipo" change="onSelectChange" forceSelection="true" items="{ path: '/ObrigacaoAcessoria' }">
 										<core:Item key="{id_obrigacao_acessoria}" text="{nome}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 								<fb:control>
-									<Select id="selectPeriodicidade" change="onSelectChange" forceSelection="true" items="{ path: '/DominioPeriodicidadeObrigacao' }">
+									<Select id="selectPeriodicidade" change="onSelectChange" forceSelection="true" items="{ path: '/DomPeriodicidadeObrigacao' }">
 										<core:Item key="{id_periodicidade_obrigacao}" text="{descricao}"/>
 									</Select>
 								</fb:control>

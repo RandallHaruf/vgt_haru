@@ -2,30 +2,29 @@ sap.ui.define([
 	"jquery.sap.global",
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/Filter",
-	"sap/ui/model/json/JSONModel"
-], function (jQuery, Controller, Filter, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"ui5ns/ui5/controller/BaseController",
+	"ui5ns/ui5/lib/NodeAPI",
+	"ui5ns/ui5/model/Constants"
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants) {
 	"use strict";
 
-	return Controller.extend("ui5ns.ui5.controller.compliance.Relatorio", {
+	return BaseController.extend("ui5ns.ui5.controller.compliance.Relatorio", {
 		onInit: function () {
-			this.oModel = new JSONModel();
-			this.oModel.loadData(jQuery.sap.getModulePath("ui5ns.ui5.model.mock", "/relatorioTTC.json"), null, false);
-			this.getView().setModel(this.oModel);
-		
-			this.aKeys = ["empresa", "classification", "category", "tax", "nameOfTax", "nameOfGov", "jurisdicao", "anoFiscal", "description", "dateOfPayment",
-						"currency", "currencyRate", "typeOfTransaction", "otherSpecify", "principal", "interest", "fine", "value", "valueUSD", "numberOfDocument", "beneficiaryCompany"];
-			this.oSelectEmpresa = this.getSelect("selectEmpresa");
-			this.oSelectClassification = this.getSelect("selectClassification");
-			this.oSelectCategory = this.getSelect("selectCategory");
-			this.oSelectTax = this.getSelect("selectTax");
-			this.oSelecNameOftTax = this.getSelect("selectNameOfTax");
-			this.oSelectJurisdicao = this.getSelect("selectJurisdicao");
-			this.oSelectAnoFiscal = this.getSelect("selectAnoFiscal");
-			//this.oSelectDateOfPayment = this.getSelect("selectDateOfPayment");
-			this.oSelectCurrency = this.getSelect("selectCurrency");
-			this.oSelectTypeOfTransaction = this.getSelect("selectTypeOfTransaction");
-			this.oModel.setProperty("/Filter/text", "Filtered by None");
-			this.addSnappedLabel();
+			this.getView().setModel(new sap.ui.model.json.JSONModel({}));
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioPais, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteObrigacaoAcessoria, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDomPeriodicidadeObrigacao, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
+			
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteTax, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioTaxClassification, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioJurisdicao, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioMoeda, this);
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioTipoTransacao, this);
+			
 		},
 
 		navToHome: function () {
@@ -57,6 +56,7 @@ sap.ui.define([
 		},
 		onSelectChange: function (oEvent) {
 			//sap.m.MessageToast.show(this.oSelectEmpresa.getSelectedItem().getKey());
+			/*
 			var aCurrentFilterValues = [];
 
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectEmpresa));
@@ -71,6 +71,7 @@ sap.ui.define([
 			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTypeOfTransaction));
 	
 			this.filterTable(aCurrentFilterValues);
+			*/
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -140,6 +141,104 @@ sap.ui.define([
 			return new sap.m.Label({
 				text: "{/Filter/text}"
 			});
-		}
+		},
+		_onRouteEmpresa: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("Empresa", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/Empresa", resposta);
+				}
+			});
+		},
+		_onRouteDominioPais: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioPais", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioPais", resposta);
+				}
+			});
+		},
+		_onRouteObrigacaoAcessoria: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("ObrigacaoAcessoria", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/ObrigacaoAcessoria", resposta);
+				}
+			});
+		},	
+		_onRouteDomPeriodicidadeObrigacao: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DomPeriodicidadeObrigacao", resposta);
+				}
+			});
+		},		
+		_onRouteDominioAnoFiscal: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioAnoFiscal", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioAnoFiscal", resposta);
+				}
+			});
+		},		
+		_onRouteDominioObrigacaoAcessoriaTipo: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioObrigacaoAcessoriaTipo", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", resposta);
+				}
+			});
+		}/*,
+		_onRouteDomPeriodicidadeObrigacao: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("TaxCategory", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/TaxCategory", resposta);
+				}
+			});
+		},
+		_onRouteTax: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("Tax", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/Tax", resposta);
+				}
+			});
+		},
+		_onRouteDominioTaxClassification: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioTaxClassification", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioTaxClassification", resposta);
+				}
+			});
+		},
+
+		_onRouteDominioJurisdicao: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioJurisdicao", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioJurisdicao", resposta);
+				}
+			});
+		},
+			
+		_onRouteDominioMoeda: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioMoeda", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioMoeda", resposta);
+				}
+			});
+		},
+		_onRouteDominioTipoTransacao: function (oEvent) {
+			var that = this;
+			NodeAPI.listarRegistros("DominioTipoTransacao", function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioTipoTransacao", resposta);
+				}
+			});
+		}*/		
 	});
 });
