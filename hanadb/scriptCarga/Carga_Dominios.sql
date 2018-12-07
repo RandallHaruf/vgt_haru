@@ -479,6 +479,11 @@ insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (1,'Aguardando');
 insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (2,'Aprovado');
 insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (3,'Reprovado');
 
+-- VGT.DOMINIO_TIPO_TAXA_MULTIPLA
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (1, 'Other Taxes');
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (2, 'Incentivos Fiscais');
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (3, 'WHT');
+
 -- VGT.DOMINIO_ANO_CALENDARIO
 insert into "VGT.DOMINIO_ANO_CALENDARIO"("id_dominio_ano_calendario", "ano_calendario") values(1, 2010);
 insert into "VGT.DOMINIO_ANO_CALENDARIO"("id_dominio_ano_calendario", "ano_calendario") values(2, 2011);

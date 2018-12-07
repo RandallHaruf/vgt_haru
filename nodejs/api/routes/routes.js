@@ -48,6 +48,8 @@ module.exports = function (app) {
 	var routeReportTTC = require("./routeReportTTC");
 	var routeTaxReconciliation = require("./routeTaxReconciliation");
 	var routeDominioStatusObrigacao = require("./routeDominioStatusObrigacao");
+	var routeReportObrigacao = require("./routeReportObrigacao");
+	var routeTaxaMultipla = require("./routeTaxaMultipla");
 	
 	var aRoutes = [];	
 	
@@ -95,6 +97,8 @@ module.exports = function (app) {
 	routeReportTTC(aRoutes);
 	routeTaxReconciliation(aRoutes);
 	routeDominioStatusObrigacao(aRoutes);
+	routeReportObrigacao(aRoutes);
+	routeTaxaMultipla(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
