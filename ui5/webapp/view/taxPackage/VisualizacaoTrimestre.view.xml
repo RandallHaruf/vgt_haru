@@ -17,13 +17,13 @@
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Empresas" press="navToPage2" />
-						<Link text="Resumo Trimestre" press="navToPage3" />
-						<Link text="Detalhe Trimestre" enabled="false" />
+						<Link text="{i18n>viewTaxPackageListagemEmpresaListagem}" press="navToPage2" />
+						<Link text="{i18n>viewTaxPackageResumoTrimestre}" press="navToPage3" />
+						<Link text="{i18n>viewTaxPackageVisualizacaoTrimestreDetalhes}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="Tax Package - Detalhe do Trimestre"/>
+					<Title text="{i18n>viewTaxPackageVisualizacaoTrimestreDetalhes}"/>
 				</f2:heading>
 				<f2:navigationActions>
 					<Button icon="sap-icon://permission" text="Reabertura" press="onReabrir"/>
@@ -48,14 +48,14 @@
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout class="sapUiMediumMarginEnd">
 												<ObjectAttribute title="TIN" text="1231123123"/>
-												<ObjectAttribute title="Moeda" text="USD"/>
-												<ObjectAttribute title="Ano Calendário" text="2018"/>
-												<ObjectAttribute title="Período de Referência" text="1º Trimestre "/>
+												<ObjectAttribute title="{i18n>viewGeralMoeda}" text="USD"/>
+												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="2018"/>
+												<ObjectAttribute title="{i18n>viewRelatorioPeriodoDeReferencia}" text="1º Trimestre "/>
 											</l:VerticalLayout>
 											<l:VerticalLayout>
-												<ObjectAttribute title="FY Start Date" text="10/02/2017"/>
-												<ObjectAttribute title="FY End Date" text="10/03/2018"/>
-												<ObjectAttribute title="CIT Type" text="Estimativa"/>
+												<ObjectAttribute title="FY {i18n>ViewGeralDataInício}" text="10/02/2017"/>
+												<ObjectAttribute title="FY {i18n>ViewGeralDataFim}" text="10/03/2018"/>
+												<ObjectAttribute title="{i18n>viewGeralTipo}CIT " text="Estimativa"/>
 												<ObjectAttribute title="Prepared by" text="João Silva - joao.silva@email.com" />
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
@@ -75,7 +75,7 @@
 				class="sapUiNoContentPadding"
 				stretchContentHeight="true">
 				<items>
-					<IconTabFilter text="Items to Report">
+					<IconTabFilter text="{i18n>viewTaxPackageVisualizacaoTrimestreItensParaReportar}">
 						<ScrollContainer
 							id="containerItemsToReport"
 							horizontal="true"

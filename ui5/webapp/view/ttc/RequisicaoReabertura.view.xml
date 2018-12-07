@@ -6,7 +6,7 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m">
 	<f:DynamicPage
-		title="TTC - Listagem de Requisição de Reabertura"
+		title="{i18n>viewTTCRequisicaoReaberturaTituloPagina}"
 		showNavButton="true"
 		navButtonPress="onNavBack"
 		toggleHeaderOnTitleClick="false">

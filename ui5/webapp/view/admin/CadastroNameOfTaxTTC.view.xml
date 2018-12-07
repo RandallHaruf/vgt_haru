@@ -49,13 +49,13 @@
 		
 				<columns>
 					<Column mergeDuplicates="true">
-						<Text text="Category" />
+						<Text text="{i18n>viewGeralCategoria}" />
 					</Column>
 					<Column mergeDuplicates="true">
-						<Text text="Tax" />
+						<Text text="{i18n>viewGeralTaxa}" />
 					</Column>
 					<Column>
-						<Text text="Name of Tax" />
+						<Text text="{i18n>viewGeralNomeT}" />
 					</Column>
 					<Column width="100px"></Column>
 				</columns>
