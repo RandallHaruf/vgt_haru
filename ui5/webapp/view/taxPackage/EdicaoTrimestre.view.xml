@@ -412,17 +412,17 @@
 												<Input type="Number" value="{rf_income_tax_before_other_taxes_and_credits}" editable="false" />
 												<HBox>
 													<Input type="Number" value="{rf_other_taxes}" editable="false" />
-													<Button text="detalhes" enabled="{ind_ativo}" />
+													<Button text="detalhes" enabled="{ind_ativo}" press="onEditarOtherTaxes" />
 												</HBox>
 												<HBox>
 													<Input type="Number" value="{rf_incentivos_fiscais}" editable="false" />
-													<Button text="detalhes" enabled="{ind_ativo}" />
+													<Button text="detalhes" enabled="{ind_ativo}" press="onEditarIncentivosFiscais" />
 												</HBox>
 												<Input type="Number" value="{rf_total_other_taxes_and_tax_credits}" editable="false"/>
 												<Input type="Number" value="{rf_net_local_tax}" editable="false" />
 												<HBox>
 													<Input type="Number" value="{rf_wht}" editable="false" />
-													<Button text="detalhes" enabled="{ind_ativo}" />
+													<Button text="detalhes" enabled="{ind_ativo}" press="onEditarWHT" />
 												</HBox>
 												<Input type="Number" value="{rf_overpayment_from_prior_year_applied_to_current_year}" editable="{ind_ativo}" change="onAplicarRegras" />
 												<HBox>

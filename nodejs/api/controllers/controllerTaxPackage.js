@@ -101,7 +101,10 @@ module.exports = {
 				iNumeroOrdemPeriodo = oTaxPackage.periodo.numero_ordem,
 				aRespostaItemToReport = oTaxPackage.respostaItemToReport,
 				oLossSchedule = oTaxPackage.lossSchedule,
-				oCreditSchedule = oTaxPackage.creditSchedule;
+				oCreditSchedule = oTaxPackage.creditSchedule,
+				aOtherTax = oTaxPackage.otherTaxes,
+				aIncentivoFiscal = oTaxPackage.incentivosFiscais,
+				aWHT = oTaxPackage.wht;
 			
 			atualizarMoeda(sIdTaxPackage, sIdMoeda);
 			
@@ -116,6 +119,8 @@ module.exports = {
 			
 			inserirSchedule(oLossSchedule);
 			inserirSchedule(oCreditSchedule);
+			
+			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT);
 			
 			res.send(JSON.stringify({
 				success: true
@@ -816,8 +821,6 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 }
 
 function inserirSchedule(oSchedule) {
-	
-	
 	var sQuery, aParams;
 	
 	if (oSchedule.id_schedule) {
@@ -900,4 +903,67 @@ function inserirSchedule(oSchedule) {
 	}
 	
 	db.executeStatementSync(sQuery, aParams);
+}
+
+function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT) {
+	var aTaxaMultipla = aOtherTax.concat(aIncentivoFiscal);
+	aTaxaMultipla = aTaxaMultipla.concat(aWHT);
+	
+	var sQuery, aParams;
+	
+	sQuery = 'select * from "VGT.TAXA_MULTIPLA" where "fk_tax_reconciliation.id_tax_reconciliation" = ? ';
+	aParams = [sFkTaxReconciliation];
+	
+	var result = db.executeStatementSync(sQuery, aParams),
+		aTaxaMultiplaPersistida = [];
+	
+	if (result && result.length > 0) {
+		aTaxaMultiplaPersistida = result;
+	}
+	
+	for (var i = 0, length = aTaxaMultiplaPersistida.length; i < length; i++) {
+		var oTaxaMultiplaPersistida = aTaxaMultiplaPersistida[i];
+		
+		var oTaxaMultiplaEnviada = aTaxaMultipla.find(function (obj) {
+			return oTaxaMultiplaPersistida.id_taxa_multipla === obj.id_taxa_multipla;
+		});
+		
+		if (!oTaxaMultiplaEnviada) {
+			sQuery = 'delete from "VGT.TAXA_MULTIPLA" where "id_taxa_multipla" = ?';
+			aParams = [oTaxaMultiplaPersistida.id_taxa_multipla];
+			
+			db.executeStatementSync(sQuery, aParams);
+		}
+	}
+	
+	for (var i = 0, length = aTaxaMultipla.length; i < length; i++) {
+		var oTaxaMultipla = aTaxaMultipla[i];
+		
+		if (oTaxaMultipla.id_taxa_multipla) {
+			// update
+			sQuery = 
+				'update "VGT.TAXA_MULTIPLA" set '
+				+ '"descricao" = ?, '
+				+ '"valor" = ?, '
+				+ '"fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla" = ?, '
+				+ '"fk_tax_reconciliation.id_tax_reconciliation" = ? '
+				+ 'where '
+				+ '"id_taxa_multipla" = ? ';
+			aParams = [oTaxaMultipla.descricao, oTaxaMultipla.valor, oTaxaMultipla["fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla"], sFkTaxReconciliation, oTaxaMultipla.id_taxa_multipla];
+		}
+		else {
+			// insert
+			sQuery = 
+				'insert into "VGT.TAXA_MULTIPLA"( '
+				+ '"id_taxa_multipla", '
+				+ '"descricao", '
+				+ '"valor", '
+				+ '"fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla", '
+				+ '"fk_tax_reconciliation.id_tax_reconciliation") values ('
+				+ '"identity_VGT.TAXA_MULTIPLA_id_taxa_multipla".nextval, ?, ?, ?, ?)';
+			aParams = [oTaxaMultipla.descricao, oTaxaMultipla.valor, oTaxaMultipla["fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla"], sFkTaxReconciliation];
+		}
+		
+		db.executeStatementSync(sQuery, aParams);
+	}
 }
