@@ -229,10 +229,9 @@ sap.ui.define([
 			oWhere.push(oDominioAnoFiscal);
 			oWhere.push(oDataPrazoEntrega === null ? oDataPrazoEntrega : vetorInicio);
 			oWhere.push(oDataExtensao === null? oDataExtensao : vetorFim);
-			oWhere.push(oDominioStatusObrigacao);			
+			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
-			
 			
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
 				type: "POST",
