@@ -32,7 +32,7 @@
 					<Toolbar>
 						<Title 
 							id="cabecalhoTabelaObjetos" 
-							text="Obrigações Acessórias"/>
+							text="{i18n>formularioObrigacaoTituloObrigacao}"/>
 						<ToolbarSpacer />
 						<Button 
 							id="botaoNovoObjeto" 
@@ -74,18 +74,18 @@
 						id="formularioObjeto" 
 						editable="true">
 						<f:title>
-							<core:Title text="Obrigação Acessória"/>
+							<core:Title text="{i18n>formularioObrigacaoTituloObrigacao}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
 						<f:formContainers>
-							<f:FormContainer title="Cadastro">
+							<f:FormContainer title="{i18n>viewGeralCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="Nome" labelFor="inputNome" />
+											<Label text="{i18n>viewGeralNome}" labelFor="inputNome" />
 										</f:label>
 										<f:fields>
 											<Input type="Text" id="inputNome" value="{/objeto/nome}" required="true" />
@@ -93,7 +93,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Data Início" labelFor="dataInicio" />
+											<Label text="{i18n>ViewGeralDataInício}" labelFor="dataInicio" />
 										</f:label>
 										<f:fields>
 											<DatePicker id="dataInicio" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
@@ -101,15 +101,15 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Data Fim" labelFor="dataFim" />
+											<Label text="{i18n>ViewGeralDataFim}" labelFor="dataFim" />
 										</f:label>
 										<f:fields>
 											<DatePicker id="dataFim" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="Tipo">
+									<f:FormElement label="{i18n>viewGeralTipo}">
 										<f:label>
-											<Label text="Tipo" class="sapMLabelRequired" />
+											<Label text="{i18n>viewGeralTipo}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select id="selectStatus" selectedKey="{/objeto/fkDominioObrigacaoAcessoriaTipo}" items="{/DominioObrigacaoAcessoriaTipo}">
@@ -132,11 +132,11 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
-						text="Salvar" 
+						text="{i18n>formularioObrigacaoBotaoSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
-						text="Cancelar" 
+						text="{i18n>formularioObrigacaoBotaoCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>
 				</Toolbar>

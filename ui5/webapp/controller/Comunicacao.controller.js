@@ -6,7 +6,7 @@ sap.ui.define(
 		return BaseController.extend("ui5ns.ui5.controller.Comunicacao", {
 			
 			onEnviarMensagem: function (oEvent) {
-				sap.m.MessageToast.show("Enviar Mensagem");	
+				sap.m.MessageToast.show(this.getResourceBundle().getText("viewEnviarMensagem"));	
 			},
 			
 			navToHome: function () {
