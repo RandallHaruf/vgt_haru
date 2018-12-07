@@ -17,7 +17,7 @@ sap.ui.define(
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
-				sap.m.MessageToast.show("Ano Selecionado: " + oEvent.getSource().getSelectedItem().getText());	
+				sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreAnoSelecionado ") + oEvent.getSource().getSelectedItem().getText());
 				
 				this._atualizarDados();
 			},
@@ -187,7 +187,7 @@ sap.ui.define(
 									callback(response);
 								}
 							});
-							sap.m.MessageToast.show("Solicitação salva com sucesso !");
+							sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreToast"));
 							//sap.m.MessageToast.show("Salvar requisição para o período: "  );
 							dialog.close();
 						}.bind(this)
