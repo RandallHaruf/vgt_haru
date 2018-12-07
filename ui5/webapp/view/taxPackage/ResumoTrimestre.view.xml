@@ -22,7 +22,7 @@
 					<Title text="{i18n>viewTAXResumoTrimestreTituloPagina}"/>
 				</f:heading>
 				<f:expandedContent>
-					<ObjectIdentifier title="{/Empresa/nome}" />
+					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f:expandedContent>
 				<f:navigationActions>
 					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXResumoTrimestreBotaoRequisicaoToolTip}" text="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" press="navToRequisicoes" />
