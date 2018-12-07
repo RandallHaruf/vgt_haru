@@ -449,7 +449,8 @@ module.exports = {
 								for (var k = 0; k < aResumoEmpresa.length; k++) {
 									var oResumoEmpresa2 = aResumoEmpresa[k];
 									
-									if (!oResumoEmpresa2.moeda) {
+									if (oResumoEmpresa2.id_empresa === oResumoEmpresa.id_empresa 
+											&& !oResumoEmpresa2.moeda) {
 										aResumoEmpresa.splice(k, 1);
 									}
 								}
