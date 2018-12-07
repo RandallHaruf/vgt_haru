@@ -53,7 +53,7 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
 									<f:fields>
-										<Select items="{/ObrigacaoAcessoria}" selectedKey="{/Obrigacao/fkObrigacaoAcessoria}">
+										<Select items="{/ObrigacaoAcessoria?tipo=2}" selectedKey="{/Obrigacao/fkObrigacaoAcessoria}">
 											<core:Item text="{nome}" key="{id_obrigacao_acessoria}" />
 										</Select>
 									</f:fields>
