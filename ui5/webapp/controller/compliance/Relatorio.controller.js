@@ -49,23 +49,7 @@ sap.ui.define([
 			this.getPage().setShowFooter(!this.getPage().getShowFooter());
 		},
 		onSelectChange: function (oEvent) {
-			//sap.m.MessageToast.show(this.oSelectEmpresa.getSelectedItem().getKey());
-			/*
-			var aCurrentFilterValues = [];
-
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectEmpresa));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectClassification));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectCategory));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTax));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelecNameOftTax));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectJurisdicao));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectAnoFiscal));
-			//aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectDateOfPayment));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectCurrency));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectTypeOfTransaction));
-	
-			this.filterTable(aCurrentFilterValues);
-			*/
+			this._atualizarDados();
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -193,30 +177,25 @@ sap.ui.define([
 			});
 		},
 		_atualizarDados: function () {
-			/*
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioPais, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteObrigacaoAcessoria, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDomPeriodicidadeObrigacao, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioStatusObrigacao, this);
-			*/
 			var that = this;
-			var vetorInicio = [];
-			var vetorFim = [];
+			var vetorInicioEntrega = [];
+			var vetorInicioExtensao = [];
+			var vetorFimEntrega = [];
+			var vetorFimExtensao = [];			
 			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
 			var oObrigacaoAcessoria = this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas") : null : null;
 			var oDomPeriodicidadeObrigacao = this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas") : null : null;
 			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
-			var oDataPrazoEntrega = this.getModel().getProperty("/DataPrazoEntrega")? this.getModel().getProperty("/DataPrazoEntrega") !== null ? vetorInicio[0] = this.getModel().getProperty("/DataPrazoEntrega") : null : null;
-			var oDataExtensao = this.getModel().getProperty("/DataExtensao")? this.getModel().getProperty("/DataExtensao")[0] !== null ? vetorFim[0] = this.getModel().getProperty("/DataExtensao") : null : null;
+			var oDataPrazoEntregaInicio = this.getModel().getProperty("/DataPrazoEntregaInicio")? this.getModel().getProperty("/DataPrazoEntregaInicio") !== null ? vetorInicioEntrega[0] = this.getModel().getProperty("/DataPrazoEntregaInicio") : null : null;
+			var oDataPrazoEntregaFim = this.getModel().getProperty("/DataPrazoEntregaFim")? this.getModel().getProperty("/DataPrazoEntregaFim") !== null ? vetorFimEntrega[0] = this.getModel().getProperty("/DataPrazoEntregaFim") : null : null;			
+			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = this.getModel().getProperty("/DataExtensaoInicio") : null : null;
+			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = this.getModel().getProperty("/DataExtensaoFim") : null : null;			
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
 
-			var oCheckObrigacao = this.getModel().getProperty("CheckObrigacao")? this.getModel().getProperty("CheckObrigacao")[0] !== undefined ? this.getModel().getProperty("CheckObrigacao") : null : null;
-			var oCheckSuporteContratado = this.getModel().getProperty("CheckSuporteContratado")? this.getModel().getProperty("CheckSuporteContratado")[0] !== undefined ? this.getModel().getProperty("CheckSuporteContratado") : null : null;			
+			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial")? this.getModel().getProperty("/CheckObrigacaoInicial")[0] !== undefined ? this.getModel().getProperty("/CheckObrigacaoInicial") : null : null;
+			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado")? this.getModel().getProperty("/CheckSuporteContratado")[0] !== undefined ? this.getModel().getProperty("/CheckSuporteContratado") : null : null;			
 
 			var oWhere = []; 
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
@@ -225,20 +204,27 @@ sap.ui.define([
 			oWhere.push(oObrigacaoAcessoria);
 			oWhere.push(oDomPeriodicidadeObrigacao);
 			oWhere.push(oDominioAnoFiscal);
-			oWhere.push(oDominioPais);
-			oWhere.push(oDominioAnoFiscal);
-			oWhere.push(oDataPrazoEntrega === null ? oDataPrazoEntrega : vetorInicio);
-			oWhere.push(oDataExtensao === null? oDataExtensao : vetorFim);
+			oWhere.push(oDataPrazoEntregaInicio === null ? oDataPrazoEntregaInicio : vetorInicioEntrega);
+			oWhere.push(oDataPrazoEntregaFim === null ? oDataPrazoEntregaFim : vetorFimEntrega);			
+			oWhere.push(oDataExtensaoInicio === null? oDataExtensaoInicio : vetorInicioExtensao);
+			oWhere.push(oDataExtensaoFim === null? oDataExtensaoFim : vetorFimExtensao);			
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
 			
+			//var that = this;
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
 				success: function (response) {
+					/*var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						var oRegistro = aRegistro[i];
+						oRegistro.obrigacao_inicial_text = oRegistro.obrigacao_inicial ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao");
+						oRegistro.suporte_contratado_text = oRegistro.suporte_contratado ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao");
+					}*/
 					that.getModel().setProperty("/ReportObrigacao", JSON.parse(response));
 				}
 			});	

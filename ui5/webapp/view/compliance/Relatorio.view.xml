@@ -91,14 +91,24 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
-									<DatePicker value="{/DataPrazoEntrega}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+									<DatePicker value="{/DataPrazoEntregaInicio}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+								</fb:control>
+							</fb:FilterItem>		
+							<fb:FilterItem name="L" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
+								<fb:control>
+									<DatePicker value="{/DataPrazoEntregaFim}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>							
 							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
 								<fb:control>
-									<DatePicker value="{/DataExtensao}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+									<DatePicker value="{/DataExtensaoInicio}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="M" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
+								<fb:control>
+									<DatePicker value="{/DataExtensaoFim}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+								</fb:control>
+							</fb:FilterItem>							
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">
 								<fb:control>
 									<MultiComboBox id="selectStatus" selectionChange="onSelectChange" items="{ path: '/DominioStatusObrigacao' }" selectedKeys="{/IdDominioStatusObrigacaoSelecionadas}">
@@ -108,12 +118,12 @@
 							</fb:FilterItem>							
 							<fb:FilterItem name="H" label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 								<fb:control>
-									<CheckBox text="" selected="{CheckObrigacao}" select="onSelectChange" />
+									<CheckBox id="CheckObrigacaoInicial" selected="{/CheckObrigacaoInicial}" select="onSelectChange" />
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="I" label="{i18n>viewFormularioNovaObrigacaoSC}">
 								<fb:control>
-									<CheckBox text="" selected="{CheckSuporteContratado}" select="onSelectChange" />
+									<CheckBox id="CheckSuporteContratado" selected="{/CheckSuporteContratado}" select="onSelectChange" />
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
@@ -124,96 +134,64 @@
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/Pagamentos' }">
+				<Table items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
 					<columns>
 						<Column width="6rem">
-							<Text text="{i18n>viewRelatorioEmpresa}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioClassificacao}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioCategoria}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="Tax"/>
+							<Text text="{i18n>viewEmpresasObrigacoesAcessorias}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioNomeT}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioNomeDoOrgao}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioJurisdicao}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioDescricao}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>ViewRelatorioDataDePagamento}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioCurrency}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioTaxadecambio}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
 						</Column>
 						<Column width="15rem">
 							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"/>
 						</Column>
-						<Column width="15rem">
-							<Text text="{i18n>viewRelatorioOutros}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="Principal"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioInteresse}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioMulta}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioValue}"/>
-						</Column>
-						<Column width="10rem" hAlign="End">
-							<Text text="{i18n>viewRelatorioValue} USD"/>
-						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioNumeroDoDocumento}"/>
-						</Column>
-						<Column width="10rem">
-							<Text text="{i18n>viewRelatorioBeneficiarioDaCompanhia}"/>
-						</Column>
+							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+						</Column>						
 					</columns>
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text text="{empresa}"/>
-								<Text text="{classification}"/>
-								<Text text="{category}"/>
-								<Text text="{tax}"/>
-								<Text text="{nameOfTax}"/>
-								<Text text="{nameOfGov}"/>
-								<Text text="{jurisdicao}"/>
-								<Text text="{anoFiscal}"/>
-								<Text text="{description}"/>
-								<Text text="{dateOfPayment}"/>
-								<Text text="{currency}"/>
-								<Text text="{currencyRate}"/>
-								<Text text="{typeOfTransaction}"/>
-								<Text text="{otherSpecify}"/>
-								<Text text="{principal}"/>
-								<Text text="{interest}"/>
-								<Text text="{fine}"/>
-								<Text text="{value}"/>
-								<Text text="{valueUSD}"/>
-								<Text text="{numberOfDocument}"/>
-								<Text text="{beneficiaryCompany}"/>
+								<Text text="{tipo}"/>
+								<Text text="{nome}"/>
+								<Text text="{pais}"/>
+								<Text text="{tblObrigacaoAcessoriaNome}"/>
+								<Text text="{descricao}"/>
+								<Text text="{ano_fiscal}"/>
+								<Text text="{prazo_entrega}"/>
+								<Text text="{extensao}"/>
+								<Text text="{tblStatusObrigacaoDescricao}"/>
+								<Text text="{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}" />
+								<Text text="{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"/>
+								<Text text="{suporte}"/>
+								<Text text="{observacoes}"/>								
 							</cells>
 						</ColumnListItem>
 					</items>
