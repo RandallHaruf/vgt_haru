@@ -47,72 +47,73 @@
 				<f:content>
 					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
+							<fb:FilterItem name="J" label="{i18n>viewComplianceListagemObrigacoesColunaTipo}">
+								<fb:control>
+									<Select id="selectDominio" forceSelection="true" change="onSelectChange" items="{ path: '/DominioObrigacaoAcessoriaTipo' }">
+										<core:Item key="{aaa}" text="{nome}"/>
+									</Select>
+								</fb:control>
+							</fb:FilterItem>							
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<Select id="selectEmpresa" forceSelection="true" change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
-										<core:Item key="{key}" text="{value}"/>
+									<Select id="selectEmpresa" forceSelection="true" change="onSelectChange" items="{ path: '/Empresa' }">
+										<core:Item key="{id_empresa}" text="{nome}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="{i18n>viewRelatorioClassificacao}">
+							<fb:FilterItem name="B" label="{i18n>viewComplianceListagemObrigacoesColunaPais}">
 								<fb:control>
-									<Select id="selectClassification" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesClassification' }">
-										<core:Item key="{key}" text="{value}"/>
+									<Select id="selectPais" change="onSelectChange" forceSelection="true" items="{ path: '/DominioPais' }">
+										<core:Item key="{id_dominio_pais}" text="{pais}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="C" label="{i18n>viewRelatorioCategoria}">
+							<fb:FilterItem name="C" label="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}">
 								<fb:control>
-									<Select id="selectCategory" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesCategory' }">
-										<core:Item key="{key}" text="{value}"/>
+									<Select id="selectTipo" change="onSelectChange" forceSelection="true" items="{ path: '/ObrigacaoAcessoria' }">
+										<core:Item key="{id_obrigacao_acessoria}" text="{nome}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="D" label="{i18n>viewRelatorioT}">
+							<fb:FilterItem name="D" label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 								<fb:control>
-									<Select id="selectTax" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesTax' }">
-										<core:Item key="{key}" text="{value}"/>
+									<Select id="selectPeriodicidade" change="onSelectChange" forceSelection="true" items="{ path: '/DomPeriodicidadeObrigacao' }">
+										<core:Item key="{id_periodicidade_obrigacao}" text="{descricao}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="E" label="{i18n>viewRelatorioNomeT}">
+							<fb:FilterItem name="E" label="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}">
 								<fb:control>
-									<Select id="selectNameOfTax" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesNameOfTax' }">
-										<core:Item key="{key}" text="{value}"/>
+									<Select id="selectAnoFiscal" change="onSelectChange" forceSelection="true" items="{ path: '/DominioAnoFiscal' }">
+										<core:Item key="{id_dominio_ano_fiscal}" text="{ano_fiscal}"/>
 									</Select>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="F" label="{i18n>viewRelatorioJurisdicao}">
+							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
-									<Select id="selectJurisdicao" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesJurisdicao' }">
-										<core:Item key="{key}" text="{value}"/>
-									</Select>
+									<DatePicker value="{/DataPrazoEntrega}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+								</fb:control>
+							</fb:FilterItem>							
+							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
+								<fb:control>
+									<DatePicker value="{/DataExtensao}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="G" label="{i18n>viewRelatorioAnoFiscal}">
+							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">
 								<fb:control>
-									<Select id="selectAnoFiscal" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesAnoFiscal' }">
-										<core:Item key="{key}" text="{value}"/>
+									<Select id="selectStatus" change="onSelectChange" forceSelection="true" items="{ path: '/DominioObrigacaoStatus' }">
+										<core:Item key="{xxxx}" text="{xxxx}"/>
 									</Select>
 								</fb:control>
-							</fb:FilterItem>
-							<fb:FilterItem name="H" label="{i18n>ViewRelatorioDataDePagamento}">
+							</fb:FilterItem>							
+							<fb:FilterItem name="H" label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 								<fb:control>
-									<DatePicker/>
+									<CheckBox text="" selected="{/CheckObrigacao}" select="onSelectChange" />
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="I" label="{i18n>ViewRelatorioCurrency}">
+							<fb:FilterItem name="I" label="{i18n>viewFormularioNovaObrigacaoSC}">
 								<fb:control>
-									<Select id="selectCurrency" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesCurrency' }">
-										<core:Item key="{key}" text="{value}"/>
-									</Select>
-								</fb:control>
-							</fb:FilterItem>
-							<fb:FilterItem name="J" label="{i18n>ViewRelatorioTipoDeTransacao}">
-								<fb:control>
-									<Select id="selectTypeOfTransaction" change="onSelectChange" forceSelection="true" items="{ path: '/OpcoesTypeOfTransaction' }">
-										<core:Item key="{key}" text="{value}"/>
-									</Select>
+									<CheckBox text="" selected="{/CheckSuporteContratado}" select="onSelectChange" />
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>

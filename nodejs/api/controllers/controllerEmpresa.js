@@ -358,11 +358,11 @@ function vincularPeriodos(sIdEmpresa) {
 					
 					// Seta a flag de periodo ativo e o status não iniciado caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
 					if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
-						aParams = [sIdTaxPackage, oPeriodo.id_periodo, 2, true];
+						aParams = [sIdTaxPackage, oPeriodo.id_periodo, true, 2]; 
 					}
 					// Se não, seta flag ativo para falso e status para fechado mas não enviado
 					else {
-						aParams = [sIdTaxPackage, oPeriodo.id_periodo, 1, false];
+						aParams = [sIdTaxPackage, oPeriodo.id_periodo, false, 1];
 					}
 					
 					model.executeSync(sQuery, aParams);

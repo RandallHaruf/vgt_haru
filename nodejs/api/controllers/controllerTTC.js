@@ -50,6 +50,7 @@ function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario) {
 			+ 'on tax."fk_category.id_tax_category" = taxCategory."id_tax_category" '
 			+ 'inner join "VGT.REL_EMPRESA_PERIODO" rel '
 			+ 'on pagamento."fk_periodo.id_periodo" = rel."fk_periodo.id_periodo" '
+			+ 'and rel."fk_empresa.id_empresa" = ?'
 			+ 'inner join "VGT.PERIODO" periodo '
 			+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
 			+ 'where '
@@ -60,13 +61,13 @@ function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario) {
 			+ 'and pagamento."fk_empresa.id_empresa" = ? ';
 				
 		var oDataInicioFim1 = pegarDataInicioFimMes(aMeses[0]);
-		var aParams1 = [oDataInicioFim1.dataInicio, oDataInicioFim1.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
+		var aParams1 = [sIdEmpresa, oDataInicioFim1.dataInicio, oDataInicioFim1.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
 		
 		var oDataInicioFim2 = pegarDataInicioFimMes(aMeses[1]);
-		var aParams2 = [oDataInicioFim2.dataInicio, oDataInicioFim2.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
+		var aParams2 = [sIdEmpresa, oDataInicioFim2.dataInicio, oDataInicioFim2.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
 		
 		var oDataInicioFim3 = pegarDataInicioFimMes(aMeses[2]);
-		var aParams3 = [oDataInicioFim3.dataInicio, oDataInicioFim3.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
+		var aParams3 = [sIdEmpresa, oDataInicioFim3.dataInicio, oDataInicioFim3.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
 		
 		var result1 = db.executeStatementSync(sQuery, aParams1);
 		if (result1 && result1.length > 0) {
@@ -433,6 +434,27 @@ module.exports = {
 					}	
 					else {
 						var aResumoEmpresa = pegarResumoEmpresa(result, result2);
+						
+						// Percorre o resumo e caso algum apareça mais de uma 
+						// vez para a mesma empresa, vasculha o array por
+						// entradas sem moeda e as remove
+						for (var j = 0; j < aResumoEmpresa.length; j++) {
+							var oResumoEmpresa = aResumoEmpresa[j];
+							
+							var aRegistros = aResumoEmpresa.filter(function (obj) { 
+								return obj.id_empresa === oResumoEmpresa.id_empresa; 
+							});
+							
+							if (aRegistros && aRegistros.length >= 2) {
+								for (var k = 0; k < aResumoEmpresa.length; k++) {
+									var oResumoEmpresa2 = aResumoEmpresa[k];
+									
+									if (!oResumoEmpresa2.moeda) {
+										aResumoEmpresa.splice(k, 1);
+									}
+								}
+							}
+						}
 						
 						res.send(JSON.stringify(aResumoEmpresa));
 					}

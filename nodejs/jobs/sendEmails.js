@@ -35,7 +35,7 @@ module.exports = {
 		var oMailOptions = {
 			from: sSender,
 			to: oProperties.to,
-			subject: oProperties.subject,
+			subject: oProperties.subject
 		};
 
 		var sBodyType = oProperties.body.isHtml ? "html" : "text";		

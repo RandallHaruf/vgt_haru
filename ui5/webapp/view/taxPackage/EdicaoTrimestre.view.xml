@@ -15,7 +15,7 @@
 					<Title text="Tax Package - {i18n>viewTAXMenu4}"/>
 				</f2:heading>
 				<f2:snappedContent>
-					<ObjectIdentifier title="{/Empresa/nome}" />
+					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f2:snappedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -28,7 +28,7 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<ObjectIdentifier title="{/Empresa/nome}" />
+											<ObjectIdentifier title="{/Empresa/empresa}" />
 										</l:HorizontalLayout>
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout class="sapUiMediumMarginEnd">
