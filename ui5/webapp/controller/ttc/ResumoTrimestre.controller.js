@@ -148,7 +148,7 @@ sap.ui.define(
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralPeriodo}"
 				}).addField(new sap.m.Text({
-					text: oPeriodo.id_periodo + " {i18n>viewGeralTrimestre}"
+					text: oPeriodo.periodo 
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
