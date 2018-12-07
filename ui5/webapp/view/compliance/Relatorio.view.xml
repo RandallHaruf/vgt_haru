@@ -91,24 +91,16 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
-									<DatePicker value="{/DataPrazoEntregaInicio}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
-								</fb:control>
-							</fb:FilterItem>		
-							<fb:FilterItem name="L" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
-								<fb:control>
-									<DatePicker value="{/DataPrazoEntregaFim}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
-								</fb:control>
-							</fb:FilterItem>							
-							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
-								<fb:control>
-									<DatePicker value="{/DataExtensaoInicio}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+									<DateRangeSelection	id="PrazoEntrega" dateValue="{/DataPrazoEntregaInicio}"	secondDateValue="{/DataPrazoEntregaFim}" 
+									displayFormat="yyyy-MM-dd" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="M" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
+							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
 								<fb:control>
-									<DatePicker value="{/DataExtensaoFim}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+									<DateRangeSelection	id="Extensao" dateValue="{/DataExtensaoInicio}"	secondDateValue="{/DataExtensaoFim}" 
+									displayFormat="yyyy-MM-dd" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
 								</fb:control>
-							</fb:FilterItem>							
+							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">
 								<fb:control>
 									<MultiComboBox id="selectStatus" selectionChange="onSelectChange" items="{ path: '/DominioStatusObrigacao' }" selectedKeys="{/IdDominioStatusObrigacaoSelecionadas}">
@@ -182,12 +174,12 @@
 								<Text text="{tipo}"/>
 								<Text text="{nome}"/>
 								<Text text="{pais}"/>
-								<Text text="{tblObrigacaoAcessoriaNome}"/>
+								<Text text="{TBLOBRIGACAOACESSORIANOME}"/>
 								<Text text="{descricao}"/>
 								<Text text="{ano_fiscal}"/>
 								<Text text="{prazo_entrega}"/>
 								<Text text="{extensao}"/>
-								<Text text="{tblStatusObrigacaoDescricao}"/>
+								<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
 								<Text text="{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}" />
 								<Text text="{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"/>
 								<Text text="{suporte}"/>

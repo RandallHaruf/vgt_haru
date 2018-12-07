@@ -196,7 +196,20 @@ sap.ui.define([
 
 			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial")? this.getModel().getProperty("/CheckObrigacaoInicial")[0] !== undefined ? this.getModel().getProperty("/CheckObrigacaoInicial") : null : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado")? this.getModel().getProperty("/CheckSuporteContratado")[0] !== undefined ? this.getModel().getProperty("/CheckSuporteContratado") : null : null;			
-
+			
+			if(oDataPrazoEntregaInicio !== null){
+				vetorInicioEntrega[0] = oDataPrazoEntregaInicio.getFullYear().toString() + "-" +(oDataPrazoEntregaInicio.getMonth() +1).toString().padStart(2,'0') + "-" +oDataPrazoEntregaInicio.getDate().toString().padStart(2,'0');
+			}
+			if(oDataPrazoEntregaFim !== null){
+				vetorFimEntrega[0] = oDataPrazoEntregaFim.getFullYear().toString() + "-" +(oDataPrazoEntregaFim.getMonth() +1).toString().padStart(2,'0') + "-" +oDataPrazoEntregaFim.getDate().toString().padStart(2,'0');
+			}
+			if(oDataExtensaoInicio !== null){
+				vetorInicioExtensao[0] = oDataExtensaoInicio.getFullYear().toString() + "-" +(oDataExtensaoInicio.getMonth() +1).toString().padStart(2,'0') + "-" +oDataExtensaoInicio.getDate().toString().padStart(2,'0');
+			}
+			if(oDataExtensaoFim !== null){
+				vetorFimExtensao[0] = oDataExtensaoFim.getFullYear().toString() + "-" +(oDataExtensaoFim.getMonth() +1).toString().padStart(2,'0') + "-" +oDataExtensaoFim.getDate().toString().padStart(2,'0');
+			}	
+			
 			var oWhere = []; 
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
@@ -205,7 +218,7 @@ sap.ui.define([
 			oWhere.push(oDomPeriodicidadeObrigacao);
 			oWhere.push(oDominioAnoFiscal);
 			oWhere.push(oDataPrazoEntregaInicio === null ? oDataPrazoEntregaInicio : vetorInicioEntrega);
-			oWhere.push(oDataPrazoEntregaFim === null ? oDataPrazoEntregaFim : vetorFimEntrega);			
+			oWhere.push(oDataPrazoEntregaFim === null ? oDataPrazoEntregaFim : vetorFimEntrega);
 			oWhere.push(oDataExtensaoInicio === null? oDataExtensaoInicio : vetorInicioExtensao);
 			oWhere.push(oDataExtensaoFim === null? oDataExtensaoFim : vetorFimExtensao);			
 			oWhere.push(oDominioStatusObrigacao);
