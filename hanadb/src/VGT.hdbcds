@@ -85,7 +85,7 @@ context VGT {
             ano_calendario            : Integer;
     };
 
-    /*@@layout{"layoutInfo":{"x":-2096,"y":1754.5}}*/
+    /*@@layout{"layoutInfo":{"x":-1606,"y":1371.5}}*/
     entity DOMINIO_REQUISICAO_REABERTURA_STATUS {
         key id_dominio_requisicao_reabertura_status : Integer not null;
             status                                  : String(50);
@@ -195,7 +195,7 @@ context VGT {
             fk_dominio_diferenca_tipo : association[*, 0..1] to VGT.DOMINIO_DIFERENCA_TIPO { id_dominio_diferenca_tipo };
     };
 
-    /*@@layout{"layoutInfo":{"x":-1638,"y":1270.5}}*/
+    /*@@layout{"layoutInfo":{"x":-1721,"y":1111.5}}*/
     entity PERIODO {
         key id_periodo                : Integer not null;
             periodo                   : String(50);
@@ -503,5 +503,17 @@ context VGT {
     entity OBRIGACAO_DOCUMENTO {
         fk_obrigacao : association[*, 0..1] to VGT.OBRIGACAO { id_obrigacao };
         fk_documento : association[*, 0..1] to VGT.DOCUMENTO { id_documento };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1597,"y":912.5}}*/
+    entity REQUISICAO_REABERTURA_TAX_PACKAGE {
+        id_requisicao_reabertura_tax_tackage    : Integer;
+        data_requisicao                         : LocalDate;
+        id_usuario                              : Integer;
+        nome_usuario                            : String(50);
+        justificativa                           : String(50);
+        resposta                                : String(50);
+        fk_dominio_requisicao_reabertura_status : association[*, 0..1] to VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS { id_dominio_requisicao_reabertura_status };
+        fk_id_rel_tax_package_periodo           : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
     };
 };

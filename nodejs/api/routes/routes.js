@@ -50,6 +50,7 @@ module.exports = function (app) {
 	var routeDominioStatusObrigacao = require("./routeDominioStatusObrigacao");
 	var routeReportObrigacao = require("./routeReportObrigacao");
 	var routeTaxaMultipla = require("./routeTaxaMultipla");
+	var routeRequisicaoReaberturaTaxPackage = require("./routeRequisicaoReaberturaTaxPackage");
 	
 	var aRoutes = [];	
 	
@@ -99,6 +100,7 @@ module.exports = function (app) {
 	routeDominioStatusObrigacao(aRoutes);
 	routeReportObrigacao(aRoutes);
 	routeTaxaMultipla(aRoutes);
+	routeRequisicaoReaberturaTaxPackage(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
