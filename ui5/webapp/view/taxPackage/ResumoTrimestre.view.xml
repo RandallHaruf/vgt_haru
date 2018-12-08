@@ -91,13 +91,13 @@
 										<cells>
 											<ObjectNumber
 												class="money"
-												number="{rc_statutory_gaap_profit_loss_before_tax}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
 											<ObjectNumber
-												number="{rf_net_local_tax}" />
+												number="{rf_net_local_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_tax_due_overpaid}" />
+												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -147,13 +147,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{rc_statutory_gaap_profit_loss_before_tax}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
 											<ObjectNumber
-												number="{rf_net_local_tax}" />
+												number="{rf_net_local_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_tax_due_overpaid}" />
+												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -205,13 +205,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{rc_statutory_gaap_profit_loss_before_tax}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
 											<ObjectNumber
-												number="{rf_net_local_tax}" />
+												number="{rf_net_local_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_tax_due_overpaid}" />
+												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -261,13 +261,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{rc_statutory_gaap_profit_loss_before_tax}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
 											<ObjectNumber
-												number="{rf_net_local_tax}" />
+												number="{rf_net_local_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_tax_due_overpaid}" />
+												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -320,13 +320,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{rc_statutory_gaap_profit_loss_before_tax}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
 											<ObjectNumber
-												number="{rf_net_local_tax}" />
+												number="{rf_net_local_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_tax_due_overpaid}" />
+												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -377,13 +377,13 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												number="{rc_statutory_gaap_profit_loss_before_tax}" />
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
 											<ObjectNumber
-												number="{rf_net_local_tax}" />
+												number="{rf_net_local_tax}" class="money" />
 											<ObjectNumber
-												number="{rf_tax_due_overpaid}" />
+												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
 									</ColumnListItem>
 								</items>
