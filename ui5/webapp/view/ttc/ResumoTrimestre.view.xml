@@ -110,7 +110,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'segundoValor',
@@ -118,7 +118,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'terceiroValor',
@@ -126,7 +126,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'total',
@@ -134,7 +134,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -205,7 +205,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'segundoValor',
@@ -213,7 +213,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'terceiroValor',
@@ -221,7 +221,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'total',
@@ -229,7 +229,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -300,7 +300,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'segundoValor',
@@ -308,7 +308,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'terceiroValor',
@@ -316,7 +316,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'total',
@@ -324,7 +324,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -395,7 +395,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'segundoValor',
@@ -403,7 +403,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'terceiroValor',
@@ -411,7 +411,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 												<ObjectNumber
 													number="{
 														path: 'total',
@@ -419,7 +419,7 @@
 														formatOptions: {
 															maxFractionDigits: 2
 														}
-													}" />
+													}" class="money" />
 											</cells>
 										</ColumnListItem>
 									</items>

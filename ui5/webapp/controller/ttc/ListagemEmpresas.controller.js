@@ -113,9 +113,9 @@ sap.ui.define(
 				NodeAPI.listarRegistros("ResumoEmpresaTTC?anoCalendario=" + sIdAnoCalendario, function (response) {
 					if (response) {
 						for(var i = 0; i < response.length; i++){
-							response[i]["collected"] = parseInt(response[i]["collected"],10);
-							response[i]["total"] = parseInt(response[i]["total"],10);
-							response[i]["borne"] = parseInt(response[i]["borne"],10);
+							response[i]["collected"] = response[i]["collected"] ? parseInt(response[i]["collected"],10) : 0;
+							response[i]["total"] = response[i]["total"] ? parseInt(response[i]["total"],10) : 0;
+							response[i]["borne"] = response[i]["borne"] ? parseInt(response[i]["borne"],10) : 0;
 						}
 						that.getModel().setProperty("/Empresa", response);
 					}	

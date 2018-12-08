@@ -2,10 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/jQueryMask"
 	],
-	
-	function (BaseController, JSONModel, NodeAPI) {
+	function (BaseController, JSONModel, NodeAPI,JQueryMask) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ResumoTrimestre", {
@@ -14,6 +14,7 @@ sap.ui.define(
 				this.setModel(new JSONModel());
 				
 				this.getRouter().getRoute("ttcResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+				jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
@@ -429,6 +430,9 @@ sap.ui.define(
 					
 					if (response) {
 						for (var i = 0; i < response.length; i++) {
+							
+							//response[i][""] = 
+							
 							var oPeriodo = response[i];
 							
 							if (oPeriodo.ind_ativo) {
@@ -445,6 +449,21 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario, function (response) {
 					if (response) {
+						var aKeys = Object.keys(response);
+						for (var i = 0, length = aKeys.length; i< length ; i++) {
+							var sKey = aKeys[i];
+							
+							var aPagamento = response[sKey];
+							
+							for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
+								var oPagamento = aPagamento[j];
+								
+								oPagamento["primeiroValor"] = oPagamento["primeiroValor"] ? parseInt(oPagamento["primeiroValor"],10) : 0;
+								oPagamento["segundoValor"] = oPagamento["segundoValor"] ? parseInt(oPagamento["segundoValor"],10) : 0;
+								oPagamento["terceiroValor"] = oPagamento["terceiroValor"] ? parseInt(oPagamento["terceiroValor"],10) : 0;
+								oPagamento["total"] = oPagamento["total"] ? parseInt(oPagamento["total"],10) : 0;
+							}
+						}
 						that.getModel().setProperty("/Resumo", response);
 					}	
 					
