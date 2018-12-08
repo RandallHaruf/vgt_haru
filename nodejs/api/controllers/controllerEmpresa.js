@@ -212,9 +212,9 @@ module.exports = {
 		var oWhere = [];
 		var aParams = [];
 
-		if (req.query.idRegistro) {
+		if (req.params.idRegistro) {
 			oWhere.push(' empresa."id_empresa" = ? ');
-			aParams.push(req.query.idRegistro);
+			aParams.push(req.params.idRegistro);
 		}
 
 		if (oWhere.length > 0) {

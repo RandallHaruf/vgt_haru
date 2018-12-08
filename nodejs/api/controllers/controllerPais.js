@@ -224,8 +224,28 @@ module.exports = {
 			+ 'left outer join "VGT.DOMINIO_PAIS_REGIAO" dom_pais_regiao '
 			+ 'on pais."fk_dominio_pais_regiao.id_dominio_pais_regiao" = dom_pais_regiao."id_dominio_pais_regiao" ';
 		
+		var oWhere = [];
+		var aParams = [];
+
+		if (req.params.idRegistro) {
+			oWhere.push(' pais."id_pais" = ? ');
+			aParams.push(req.params.idRegistro);
+		}
+
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+		
 		pais.execute({
-			statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));

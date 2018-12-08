@@ -107,17 +107,21 @@
 										<core:Item key="{id_status_obrigacao}" text="{descricao}"/>
 									</MultiComboBox>
 								</fb:control>
-							</fb:FilterItem>							
+							</fb:FilterItem>
 							<fb:FilterItem name="H" label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 								<fb:control>
-									<CheckBox id="CheckObrigacaoInicial" selected="{/CheckObrigacaoInicial}" select="onSelectChange" />
+									<ComboBox items="{path: '/ObrigacaoIniciada'}" selectionChange="onSelectChange" selectedKey="{/CheckObrigacaoInicial}">
+										<core:Item key="{key}" text="{value}" />
+									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="I" label="{i18n>viewFormularioNovaObrigacaoSC}">
 								<fb:control>
-									<CheckBox id="CheckSuporteContratado" selected="{/CheckSuporteContratado}" select="onSelectChange" />
+									<ComboBox items="{path: '/SuporteContratado'}" selectionChange="onSelectChange" selectedKey="{/CheckSuporteContratado}">
+										<core:Item key="{key}" text="{value}" />
+									</ComboBox>
 								</fb:control>
-							</fb:FilterItem>
+							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
 				</f:content>
