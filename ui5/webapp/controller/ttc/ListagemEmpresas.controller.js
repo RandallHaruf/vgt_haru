@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/jQueryMask"
 	],
-	function (BaseController, JSONModel, NodeAPI) {
+	function (BaseController, JSONModel, NodeAPI,JQueryMask) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ListagemEmpresas", {
