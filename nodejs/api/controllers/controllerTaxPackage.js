@@ -104,7 +104,8 @@ module.exports = {
 				oCreditSchedule = oTaxPackage.creditSchedule,
 				aOtherTax = oTaxPackage.otherTaxes,
 				aIncentivoFiscal = oTaxPackage.incentivosFiscais,
-				aWHT = oTaxPackage.wht;
+				aWHT = oTaxPackage.wht,
+				aOutrasAntecipacoes = oTaxPackage.outrasAntecipacoes;
 			
 			atualizarMoeda(sIdTaxPackage, sIdMoeda);
 			
@@ -120,7 +121,7 @@ module.exports = {
 			inserirSchedule(oLossSchedule);
 			inserirSchedule(oCreditSchedule);
 			
-			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT);
+			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes);
 			
 			res.send(JSON.stringify({
 				success: true
@@ -905,9 +906,10 @@ function inserirSchedule(oSchedule) {
 	db.executeStatementSync(sQuery, aParams);
 }
 
-function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT) {
+function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes) {
 	var aTaxaMultipla = aOtherTax.concat(aIncentivoFiscal);
 	aTaxaMultipla = aTaxaMultipla.concat(aWHT);
+	aTaxaMultipla = aTaxaMultipla.concat(aOutrasAntecipacoes);
 	
 	var sQuery, aParams;
 	
