@@ -90,12 +90,12 @@
 									<ColumnListItem>
 										<cells>
 											<ObjectNumber
-												class="money"
-												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money" />
+												
+												number="{rc_statutory_gaap_profit_loss_before_tax}" class="money"  />
 											<ObjectNumber
-												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money" />
+												number="{rf_taxable_income_loss_before_losses_and_tax_credits}" class="money"  />
 											<ObjectNumber
-												number="{rf_net_local_tax}" class="money" />
+												number="{rf_net_local_tax}" class="money"  />
 											<ObjectNumber
 												number="{rf_tax_due_overpaid}" class="money" />
 										</cells>
