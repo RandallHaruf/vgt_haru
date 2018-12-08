@@ -23,10 +23,10 @@ var oSketch = {
             nome: "pass"
         },
         indAtivo: {
-            nome: "id_ativo"
+            nome: "ind_ativo"
         },
-        fkDominioDiferencaTipo: {
-            nome: "fk_dominio_tipo_acesso",
+        fkDominioTipoAcesso: {
+            nome: "fk_dominio_tipo_acesso.id_tipo_acesso",
             number: true
         }        
 	}

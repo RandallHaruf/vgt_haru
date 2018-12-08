@@ -25,9 +25,9 @@
 		<f:content>
 			<VBox>
 				<Label text="{i18n>viewGeralAssunto}" class="sapUiMediumMarginTop" />
-				<Input width="300px" />
+				<Input width="300px" value="{/assunto}"/>
 				<Label text="{i18n>viewGeralCorpo}" class="sapUiMediumMarginTop" />
-				<TextArea rows="5" width="100%" />
+				<TextArea rows="5" width="100%" value="{/corpo}" />
 				<HBox justifyContent="End">
 					<Button text="{i18n>viewGeralEnviar}" press="onEnviarMensagem"/>
 				</HBox>

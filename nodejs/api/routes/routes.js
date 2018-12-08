@@ -51,6 +51,7 @@ module.exports = function (app) {
 	var routeReportObrigacao = require("./routeReportObrigacao");
 	var routeTaxaMultipla = require("./routeTaxaMultipla");
 	var routeRequisicaoReaberturaTaxPackage = require("./routeRequisicaoReaberturaTaxPackage");
+	var routeEmailSend = require("./routeEmailSend");
 	
 	var aRoutes = [];	
 	
@@ -101,6 +102,7 @@ module.exports = function (app) {
 	routeReportObrigacao(aRoutes);
 	routeTaxaMultipla(aRoutes);
 	routeRequisicaoReaberturaTaxPackage(aRoutes);
+	routeEmailSend(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

@@ -37,8 +37,8 @@ module.exports = {
 			coluna: model.colunas.indAtivo,
 			valor: req.body.indAtivo ? req.body.indAtivo : null
 		}, {
-			coluna: model.colunas.fkDominioDiferencaTipo,
-			valor: req.body.fkDominioDiferencaTipo ? req.body.fkDominioDiferencaTipo : null
+			coluna: model.colunas.fkDominioTipoAcesso,
+			valor: req.body.fkDominioTipoAcesso ? req.body.fkDominioTipoAcesso : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -89,8 +89,8 @@ module.exports = {
 			coluna: model.colunas.indAtivo,
 			valor: req.body.indAtivo ? req.body.indAtivo : null
 		}, {
-			coluna: model.colunas.fkDominioDiferencaTipo,
-			valor: req.body.fkDominioDiferencaTipo ? req.body.fkDominioDiferencaTipo : null
+			coluna: model.colunas.fkDominioTipoAcesso,
+			valor: req.body.fkDominioTipoAcesso ? req.body.fkDominioTipoAcesso : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
