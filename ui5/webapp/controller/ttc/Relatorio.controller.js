@@ -11,7 +11,13 @@ sap.ui.define([
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
 		onInit: function () {
-			this.getView().setModel(new sap.ui.model.json.JSONModel({}));
+				var oModel = new sap.ui.model.json.JSONModel({
+
+				});
+				
+				oModel.setSizeLimit(5000);
+				this.getView().setModel(oModel);
+			//this.getView().setModel(new sap.ui.model.json.JSONModel({}));
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteNameOfTax, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteTaxCategory, this);
@@ -222,10 +228,9 @@ sap.ui.define([
 			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
 			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
 			var oDominioTipoTransacao = this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") : null : null;
-			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio")? this.getModel().getProperty("/DataPagamentoInicio") !== null ? vetorInicio[0] = this.getModel().getProperty("/DataPagamentoInicio") : null : null;
-			var oDataFim = this.getModel().getProperty("/DataPagamentoFim")? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ? vetorFim[0] = this.getModel().getProperty("/DataPagamentoFim") : null : null;
-
-
+			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio")? this.getModel().getProperty("/DataPagamentoInicio")[0] !== null ? vetorInicio[0] = (this.getModel().getProperty("/DataPagamentoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPagamentoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPagamentoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataFim = this.getModel().getProperty("/DataPagamentoFim")? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ? vetorFim[0] = (this.getModel().getProperty("/DataPagamentoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPagamentoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate().toString().padStart(2,'0')) : null : null;
+			
 			var oWhere = []; 
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);

@@ -109,18 +109,14 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamentoInício}">
 								<fb:control>
-									<DatePicker value="{/DataPagamentoInicio}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
+									<DateRangeSelection	id="DataPagamento" dateValue="{/DataPagamentoInicio}"	secondDateValue="{/DataPagamentoFim}" 
+									displayFormat="yyyy-MM-dd" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
 								</fb:control>
-							</fb:FilterItem>
-							<fb:FilterItem name="J" label="{i18n>ViewRelatorioDataDePagamentoFim}">
-								<fb:control>
-									<DatePicker value="{/DataPagamentoFim}" valueFormat="yyyy-MM-dd" change="onSelectChange"/>
-								</fb:control>
-							</fb:FilterItem>
+							</fb:FilterItem>								
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
 								<fb:control>
-									<MultiComboBox id="selectCurrency" selectionChange="onSelectChange"  items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
-										<core:Item key="{id_dominio_moeda}" text="{acronimo}"/>											
+									<MultiComboBox id="selectCurrency" selectionChange="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
+										<core:Item key="{id_dominio_moeda}" text="{acronimo} - {nome}" />											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
