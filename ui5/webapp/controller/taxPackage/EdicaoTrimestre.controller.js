@@ -253,10 +253,232 @@ sap.ui.define(
 				this._dialogTaxaMultipla("WHT", "/WHT", 3); 
 			},
 
+			onEditarAntecipacoes: function (oEvent) {
+				/* Criação do scroll container */
+				var oScrollContainer = new sap.m.ScrollContainer({
+					horizontal: true,
+					vertical: true,
+					height: "400px"
+				}).addStyleClass("sapUiNoContentPadding");
+				
+				/* Criação do painel com os valores declarados do TTC */ 
+				var oPanelTTC = new sap.m.Panel({
+					expandable: true,
+					expanded: false,
+					headerText: "Valores declarados no TTC",
+					width: "auto"
+				}).addStyleClass("sapUiResponsiveMargin sapUiNoContentPadding");
+				
+				/* Scroll Container da tabela do TTC que pode ser mt grande */
+				var oScrollContainerTTC = new sap.m.ScrollContainer({
+					horizontal: true
+				}).addStyleClass("sapUiNoContentPadding");
+				
+				/* Criação da tabela de inserção */
+				var oTable = new sap.m.Table();
+				
+				/* Colunas da tabela */
+				oTable.addColumn(new sap.m.Column({
+					width: "50px"
+				}));
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Name of Tax"
+				})));
+				
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Data do Pagamento"
+				})));
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Moeda"
+				})));
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Principal"
+				})));
+				
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Juros"
+				})));
+				
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Multa"
+				})));
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "150px"
+				}).setHeader(new sap.m.Text({
+					text: "Valor"
+				})));
+
+				/* Template das células */
+				var oCheckBox = new sap.m.CheckBox();
+				
+				var oTextNameOfTax = new sap.m.Text({
+					text: "{name_of_tax}"
+				});
+				
+				var oTextDataPagamento = new sap.m.Text({
+					text: "{data_pagamento}"
+				});
+				
+				var oTextAcronimo = new sap.m.Text({
+					text: "{acronimo}"
+				});
+				
+				var oTextPrincipal = new sap.m.Text({
+					text: "{principal}"
+				});
+				
+				var oTextJuros = new sap.m.Text({
+					text: "{juros}"
+				});
+				
+				var oTextMulta = new sap.m.Text({
+					text: "{multa}"
+				});
+				
+				var oTextValor = new sap.m.Text({
+					text: "{total}"
+				});
+				
+				var oTemplate = new sap.m.ColumnListItem({
+					cells: [oCheckBox, oTextNameOfTax, oTextDataPagamento, oTextAcronimo, oTextPrincipal, oTextJuros, oTextMulta, oTextValor]
+				});
+
+				oTable.bindItems({
+					path: "/PagamentosTTC",
+					template: oTemplate
+				});
+
+				oPanelTTC.addContent(oTable);
+				
+				/* Criação do painel com os outros pagamentos declarados */
+				var oPanelOutros = new sap.m.Panel({
+					expandable: true,
+					expanded: false,
+					headerText: "Outros pagamentos",
+					width: "auto"
+				}).addStyleClass("sapUiResponsiveMargin sapUiNoContentPadding");
+				
+				/* Criação da tabela de inserção */
+				oTable = new sap.m.Table();
+
+				/* Toolbar com título da tabela e botão de nova taxa */
+				var oToolbar = new sap.m.Toolbar();
+				
+				oToolbar.addContent(new sap.m.Button({
+					text: "Nova",
+					icon: "sap-icon://add",
+					type: "Emphasized"
+				}).attachPress(oTable, function () { this._adicionarTaxaMultipla( "/OutrasAntecipacoes", 4); }, this));
+				
+				oTable.setHeaderToolbar(oToolbar);
+
+				/* Colunas da tabela */
+				oTable.addColumn(new sap.m.Column({
+					width: "50px"
+				}));
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle"
+				}).setHeader(new sap.m.Text({
+					text: "Descrição"
+				})));
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle"
+				}).setHeader(new sap.m.Text({
+					text: "Valor"
+				})));
+
+				/* Template das células */
+				var oBtnExcluir = new sap.m.Button({
+					icon: "sap-icon://delete",
+					type: "Reject"
+				}).attachPress(oTable, function (oEvent2) { this._excluirTaxaMultipla(oEvent2, "/OutrasAntecipacoes"); }, this);
+				
+				var oInputDescricao = new sap.m.Input({
+					value: "{descricao}"
+				});
+				
+				var oInputValor = new sap.m.Input({
+					type: "Number",
+					value: "{valor}"
+				});
+				
+				oTemplate = new sap.m.ColumnListItem({
+					cells: [oBtnExcluir, oInputDescricao, oInputValor]
+				});
+
+				oTable.bindItems({
+					path:  "/OutrasAntecipacoes",
+					template: oTemplate
+				});
+
+				oScrollContainerTTC.addContent(oTable);
+				oPanelOutros.addContent(oScrollContainerTTC);
+
+				/* Adiciona os paineis ao container de rolagem */
+				oScrollContainer.addContent(oPanelTTC);
+				oScrollContainer.addContent(oPanelOutros);
+
+				var that = this;
+
+				/* Criação do diálogo com base na tabela */
+				var dialog = new sap.m.Dialog({
+					contentWidth: "700px",
+					showHeader: false,
+					type: "Message",
+					content: oScrollContainer,
+					beginButton: new sap.m.Button({
+						text: "Fechar",
+						press: function () {
+							dialog.close();
+							that.onAplicarRegras();
+						}
+					}),
+					/*endButton: new sap.m.Button({
+						text: "Cancelar",
+						press: function () {
+							dialog.close();
+						}
+					}),*/
+					afterClose: function () {
+						dialog.destroy();
+					}
+				}).addStyleClass("sapUiNoContentPadding");
+			
+				this.getView().addDependent(dialog);
+	
+				dialog.open();
+			},
+
 			onAplicarRegras: function (oEvent) {
 				this._onAplicarFormulasRC();
 				this._onCalcularTotalDiferenca();
 				this._onCalcularTotalTaxasMultiplas();
+				this._onCalcularTotalAntecipacoes();
 				this._onAplicarFormulasRF();
 				this._onAplicarFormulasIT();
 				this._onAplicarFormulasSchedule();
@@ -604,7 +826,30 @@ sap.ui.define(
 				
 				return iTotalTaxaMultipla;
 			},
-
+			
+			_onCalcularTotalAntecipacoes: function () {
+				if (this.getModel().getProperty("/TaxReconciliation")) {
+					var oTaxReconciliation = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+						return obj.ind_ativo === true;
+					});
+					
+					if (oTaxReconciliation) {
+						var aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes"),
+							fTotalAntecipacao = 0;
+						
+						// @TP16 REALIZAR A CONTA DAS ANTECIPACOES QUE SAO RESULTANTES DO TTC
+						
+						if (aOutrasAntecipacoes) {
+							for (var i = 0, length = aOutrasAntecipacoes.length; i < length; i++) {
+								fTotalAntecipacao += (aOutrasAntecipacoes[i].valor ? Number(aOutrasAntecipacoes[i].valor) : 0);
+							} 
+							
+							oTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes = fTotalAntecipacao;
+						}
+					}
+				}
+			},
+			
 			onNovaDiferencaPermanente: function (oEvent) {
 				this.getModel().getProperty("/DiferencasPermanentes").unshift({
 					"fk_diferenca_opcao.id_diferenca_opcao": null,
@@ -1526,13 +1771,30 @@ sap.ui.define(
 						that.onAplicarRegras();
 						
 						that._carregarTaxasMultiplas(oTaxReconAtivo.id_tax_reconciliation);
-						that._carregarTaxRate();
+						that._carregarAntecipacoes();
 					}
 				});
 
 				this._carregarSchedule(1, "/LossSchedule", sIdRelTaxPackagePeriodo);
 				this._carregarSchedule(2, "/CreditSchedule", sIdRelTaxPackagePeriodo);
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
+				this._carregarTaxRate();
+				this._carregarPagamentosTTC();
+			},
+			
+			_carregarAntecipacoes: function () {
+				// @TP16
+			},
+			
+			_carregarPagamentosTTC: function () {
+				var that = this,
+					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
+				
+				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa, function (response) {
+					if (response) {
+						that.getModel().setProperty("/PagamentosTTC", response);
+					}
+				});
 			},
 			
 			_carregarTaxRate: function () {
@@ -1584,7 +1846,8 @@ sap.ui.define(
 					aRespostaItemToReport = this._formatarRespostaItemToReport(),
 					aOtherTax = this.getModel().getProperty("/OtherTaxes"),
 					aIncentivosFiscais = this.getModel().getProperty("/IncentivosFiscais"),
-					aWHT = this.getModel().getProperty("/WHT");
+					aWHT = this.getModel().getProperty("/WHT"),
+					aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes");
 
 				var oLossSchedule = this.getModel().getProperty("/LossSchedule").find(function (obj) {
 						return obj.ind_corrente === true;
@@ -1611,6 +1874,8 @@ sap.ui.define(
 				console.table(aIncentivosFiscais);
 				console.log("   -- WHT\n");
 				console.table(aWHT);
+				console.log("   -- Outras Antecipações\n");
+				console.table(aOutrasAntecipacoes);
 				console.log("- Loss Schedule: ");
 				console.table(oLossSchedule);
 				console.log("- Credit Schedule: ");
@@ -1630,7 +1895,8 @@ sap.ui.define(
 					creditSchedule: oCreditSchedule,
 					otherTaxes: aOtherTax,
 					incentivosFiscais: aIncentivosFiscais,
-					wht: aWHT
+					wht: aWHT,
+					outrasAntecipacoes: aOutrasAntecipacoes
 				};
 
 				NodeAPI.criarRegistro("InserirTaxPackage", {
@@ -1690,6 +1956,8 @@ sap.ui.define(
 
 			_zerarModel: function () {
 				this.getModel().setData({
+					PagamentosTTC: [],
+					OutrasAntecipacoes: [],
 					OtherTaxes: [],
 					IncentivosFiscais: [],
 					WHT: [],
@@ -1928,9 +2196,14 @@ sap.ui.define(
 							return obj["fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla"] === 3;
 						});
 						
+						var aOutrasAntecipacoes = response.filter(function (obj) {
+							return obj["fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla"] === 4;
+						});
+						
 						that.getModel().setProperty("/OtherTaxes", aOtherTax);
 						that.getModel().setProperty("/IncentivosFiscais", aIncentivoFiscal);
 						that.getModel().setProperty("/WHT", aWHT);
+						that.getModel().setProperty("/OutrasAntecipacoes", aOutrasAntecipacoes);
 						
 						that.onAplicarRegras();
 					}	
