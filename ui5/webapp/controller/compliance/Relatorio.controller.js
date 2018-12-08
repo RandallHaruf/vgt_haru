@@ -11,7 +11,28 @@ sap.ui.define([
 
 	return BaseController.extend("ui5ns.ui5.controller.compliance.Relatorio", {
 		onInit: function () {
-			this.getView().setModel(new sap.ui.model.json.JSONModel({}));
+			this.getView().setModel(new sap.ui.model.json.JSONModel({
+				"ObrigacaoIniciada": [{
+					"key": null,
+					"value": null
+				}, {
+					"key": 1,
+					"value": this.getResourceBundle().getText("viewGeralSim")
+				}, {
+					"key": 0,
+					"value": this.getResourceBundle().getText("viewGeralNao")
+				}],
+				"SuporteContratado": [{
+					"key": null,
+					"value": null
+				}, {
+					"key": 1,
+					"value": this.getResourceBundle().getText("viewGeralSim")
+				}, {
+					"key": 0,
+					"value": this.getResourceBundle().getText("viewGeralNao")
+				}]				
+			}));
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioPais, this);
@@ -194,8 +215,8 @@ sap.ui.define([
 			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = this.getModel().getProperty("/DataExtensaoFim") : null : null;			
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
 
-			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial")? this.getModel().getProperty("/CheckObrigacaoInicial")[0] !== undefined ? this.getModel().getProperty("/CheckObrigacaoInicial") : null : null;
-			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado")? this.getModel().getProperty("/CheckSuporteContratado")[0] !== undefined ? this.getModel().getProperty("/CheckSuporteContratado") : null : null;			
+			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial") ? this.getModel().getProperty("/CheckObrigacaoInicial") === undefined ? null : this.getModel().getProperty("/CheckObrigacaoInicial") == "1" ? ["true"] : ["false"] : null;
+			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
 			
 			if(oDataPrazoEntregaInicio !== null){
 				vetorInicioEntrega[0] = oDataPrazoEntregaInicio.getFullYear().toString() + "-" +(oDataPrazoEntregaInicio.getMonth() +1).toString().padStart(2,'0') + "-" +oDataPrazoEntregaInicio.getDate().toString().padStart(2,'0');
