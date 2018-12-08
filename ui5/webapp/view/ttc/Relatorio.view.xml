@@ -171,9 +171,36 @@
 						<Column width="10rem">
 							<Text text="{i18n>ViewRelatorioTipoDeTransacao}" />
 						</Column>
-						<Column width="10rem" hAlign="End">
+						<Column width="10rem">
 							<Text text="{i18n>ViewRelatorioDataDePagamento}"/>
+						</Column>		
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}"/>
 						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}"/>
+						</Column>			
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -189,6 +216,15 @@
 								<Text text="{DominioMoeda}" />
 								<Text text="{DominioTipoTransacao}" />
 								<Text text="{DataPagamento}"/>
+								<Text text="{ProjetoPagamento}"/>
+								<Text text="{DescricaoPagamento}"/>
+								<Text text="{TipoTransacaoOutrosPagamento}"/>
+								<Text text="{PrincipalPagamento}"/>
+								<Text text="{JurosPagamento}"/>
+								<Text text="{MultaPagamento}" />
+								<Text text="{TotalPagamento}" />
+								<Text text="{NumeroDocumentoPagamento}" />
+								<Text text="{EntidadeBeneficiariaPagamento}"/>							
 							</cells>
 						</ColumnListItem>
 					</items>

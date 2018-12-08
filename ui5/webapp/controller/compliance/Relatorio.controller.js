@@ -209,28 +209,15 @@ sap.ui.define([
 			var oObrigacaoAcessoria = this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas") : null : null;
 			var oDomPeriodicidadeObrigacao = this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas") : null : null;
 			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
-			var oDataPrazoEntregaInicio = this.getModel().getProperty("/DataPrazoEntregaInicio")? this.getModel().getProperty("/DataPrazoEntregaInicio") !== null ? vetorInicioEntrega[0] = this.getModel().getProperty("/DataPrazoEntregaInicio") : null : null;
-			var oDataPrazoEntregaFim = this.getModel().getProperty("/DataPrazoEntregaFim")? this.getModel().getProperty("/DataPrazoEntregaFim") !== null ? vetorFimEntrega[0] = this.getModel().getProperty("/DataPrazoEntregaFim") : null : null;			
-			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = this.getModel().getProperty("/DataExtensaoInicio") : null : null;
-			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = this.getModel().getProperty("/DataExtensaoFim") : null : null;			
+			var oDataPrazoEntregaInicio = this.getModel().getProperty("/DataPrazoEntregaInicio")? this.getModel().getProperty("/DataPrazoEntregaInicio") !== null ? vetorInicioEntrega[0] = (this.getModel().getProperty("/DataPrazoEntregaInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPrazoEntregaInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPrazoEntregaInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataPrazoEntregaFim = this.getModel().getProperty("/DataPrazoEntregaFim")? this.getModel().getProperty("/DataPrazoEntregaFim") !== null ? vetorFimEntrega[0] = (this.getModel().getProperty("/DataPrazoEntregaFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPrazoEntregaFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPrazoEntregaFim").getDate().toString().padStart(2,'0')) : null : null;			
+			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataExtensaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataExtensaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoFim").getDate().toString().padStart(2,'0')) : null : null;			
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
-
 			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial") ? this.getModel().getProperty("/CheckObrigacaoInicial") === undefined ? null : this.getModel().getProperty("/CheckObrigacaoInicial") == "1" ? ["true"] : ["false"] : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
-			
-			if(oDataPrazoEntregaInicio !== null){
-				vetorInicioEntrega[0] = oDataPrazoEntregaInicio.getFullYear().toString() + "-" +(oDataPrazoEntregaInicio.getMonth() +1).toString().padStart(2,'0') + "-" +oDataPrazoEntregaInicio.getDate().toString().padStart(2,'0');
-			}
-			if(oDataPrazoEntregaFim !== null){
-				vetorFimEntrega[0] = oDataPrazoEntregaFim.getFullYear().toString() + "-" +(oDataPrazoEntregaFim.getMonth() +1).toString().padStart(2,'0') + "-" +oDataPrazoEntregaFim.getDate().toString().padStart(2,'0');
-			}
-			if(oDataExtensaoInicio !== null){
-				vetorInicioExtensao[0] = oDataExtensaoInicio.getFullYear().toString() + "-" +(oDataExtensaoInicio.getMonth() +1).toString().padStart(2,'0') + "-" +oDataExtensaoInicio.getDate().toString().padStart(2,'0');
-			}
-			if(oDataExtensaoFim !== null){
-				vetorFimExtensao[0] = oDataExtensaoFim.getFullYear().toString() + "-" +(oDataExtensaoFim.getMonth() +1).toString().padStart(2,'0') + "-" +oDataExtensaoFim.getDate().toString().padStart(2,'0');
-			}	
-			
+
+
 			var oWhere = []; 
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
@@ -238,10 +225,10 @@ sap.ui.define([
 			oWhere.push(oObrigacaoAcessoria);
 			oWhere.push(oDomPeriodicidadeObrigacao);
 			oWhere.push(oDominioAnoFiscal);
-			oWhere.push(oDataPrazoEntregaInicio === null ? oDataPrazoEntregaInicio : vetorInicioEntrega);
-			oWhere.push(oDataPrazoEntregaFim === null ? oDataPrazoEntregaFim : vetorFimEntrega);
-			oWhere.push(oDataExtensaoInicio === null? oDataExtensaoInicio : vetorInicioExtensao);
-			oWhere.push(oDataExtensaoFim === null? oDataExtensaoFim : vetorFimExtensao);			
+			oWhere.push(oDataPrazoEntregaInicio === null ? null : vetorInicioEntrega);
+			oWhere.push(oDataPrazoEntregaFim === null ? null : vetorFimEntrega);
+			oWhere.push(oDataExtensaoInicio === null? null : vetorInicioExtensao);
+			oWhere.push(oDataExtensaoFim === null? null : vetorFimExtensao);			
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
