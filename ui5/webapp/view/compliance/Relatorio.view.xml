@@ -95,13 +95,13 @@
 							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
 									<DateRangeSelection	id="PrazoEntrega" dateValue="{/DataPrazoEntregaInicio}"	secondDateValue="{/DataPrazoEntregaFim}" 
-									displayFormat="yyyy-MM-dd" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
+									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
 								<fb:control>
 									<DateRangeSelection	id="Extensao" dateValue="{/DataExtensaoInicio}"	secondDateValue="{/DataExtensaoFim}" 
-									displayFormat="yyyy-MM-dd" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
+									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">

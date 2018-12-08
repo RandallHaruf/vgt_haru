@@ -252,7 +252,11 @@ sap.ui.define([
 					parametros: JSON.stringify(oWhere)
 				},
 				success: function (response) {
-					that.getModel().setProperty("/ReportTTC", JSON.parse(response));
+					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i].DataPagamento = aRegistro[i].DataPagamento.substring(8,10)+"/"+aRegistro[i].DataPagamento.substring(5,7)+"/"+aRegistro[i].DataPagamento.substring(4,0);
+					}		
+					that.getModel().setProperty("/ReportTTC", aRegistro);
 				}
 			});	
 		}		

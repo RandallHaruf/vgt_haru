@@ -110,7 +110,7 @@
 							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamentoInício}">
 								<fb:control>
 									<DateRangeSelection	id="DataPagamento" dateValue="{/DataPagamentoInicio}"	secondDateValue="{/DataPagamentoFim}" 
-									displayFormat="yyyy-MM-dd" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
+									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>								
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">

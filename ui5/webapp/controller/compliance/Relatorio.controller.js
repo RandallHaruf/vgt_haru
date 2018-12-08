@@ -232,21 +232,19 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
-			
-			//var that = this;
+
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
 				success: function (response) {
-					/*var aRegistro = JSON.parse(response);
+					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						var oRegistro = aRegistro[i];
-						oRegistro.obrigacao_inicial_text = oRegistro.obrigacao_inicial ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao");
-						oRegistro.suporte_contratado_text = oRegistro.suporte_contratado ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao");
-					}*/
-					that.getModel().setProperty("/ReportObrigacao", JSON.parse(response));
+						aRegistro[i].prazo_entrega = aRegistro[i].prazo_entrega.substring(8,10)+"/"+aRegistro[i].prazo_entrega.substring(5,7)+"/"+aRegistro[i].prazo_entrega.substring(4,0);
+						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);						
+					}		
+					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 				}
 			});	
 		}			
