@@ -154,7 +154,7 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
-							sap.m.MessageToast.show("Salvar requisição para o período: " + oPeriodo.id_periodo);
+							sap.m.MessageToast.show(this.getResourceBundle().getText("viewTaxPackageResumoTrimestreEnviarDeclaracao") + oPeriodo.periodo);
 							dialog.close();
 						}.bind(this)
 					}),
@@ -541,7 +541,7 @@ sap.ui.define(
 				// <Button icon="sap-icon://attachment" text="{i18n>viewGeralAnexarDocumentacao}" type="Accept" press="onAnexarDeclaracao"/>
 				var oButton = new sap.m.Button({
 					icon: "sap-icon://attachment",
-					text: "Baixar Declaração"/*that.getResourceBundle().getText("viewGeralAnexarDocumentacao")*/,
+					text: that.getResourceBundle().getText("viewTaxPackageResumoTrimestreBaixarDeclaracao"),
 					type: "Accept"
 				}).attachPress(function () { that.onBaixarDeclaracao(oPeriodo); });
 				
