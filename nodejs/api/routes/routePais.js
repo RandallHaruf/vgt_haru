@@ -13,4 +13,5 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().delete("/Pais/:idPais", pais.excluirRegistro));
 
 	aRoutes.push(express.Router().get("/DeepQuery/Pais", pais.deepQuery));
+	aRoutes.push(express.Router().get("/DeepQuery/Pais/:idRegistro", pais.deepQuery));
 };
