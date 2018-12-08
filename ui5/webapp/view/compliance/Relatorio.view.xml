@@ -7,12 +7,12 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Obrigações" press="navToPage2" />
+						<!--<Link text="Listagem Obrigações" press="navToPage2" />-->
 						<Link text="Relatório" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório Compliance" save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório Compliance/Beps" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<Button
@@ -32,6 +32,9 @@
 							text="{i18n>viewRelatorioExportar} PDF"
 							type="Transparent"/>
 				</f:actions>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>				
 				<!--<f:navigationActions>
 					<Button
 						text="Voltar"

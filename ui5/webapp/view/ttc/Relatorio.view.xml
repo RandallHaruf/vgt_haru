@@ -7,12 +7,12 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="TTC" press="navToPage2" />
+						<!--<Link text="TTC" press="navToPage2" />-->
 						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="  " save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório TTC" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<Button

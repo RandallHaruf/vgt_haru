@@ -14,8 +14,8 @@
 						<items>
 							<MenuItem text="TTC" id="acessoRapidoRelatorioTTC" />
 							<MenuItem text="Tax Package" id="acessoRapidoRelatorioTaxPackage" />
-							<MenuItem text="Compliance" id="acessoRapidoRelatorioCompliance" />
-							<MenuItem text="Beps" id="acessoRapidoRelatorioBeps" />
+							<MenuItem text="Compliance/Beps" id="acessoRapidoRelatorioCompliance" />
+							<!--<MenuItem text="Beps" id="acessoRapidoRelatorioBeps" />-->
 						</items>
 					</MenuItem>
 					<!--<MenuItem text="Req. Reabertura" icon="sap-icon://permission">

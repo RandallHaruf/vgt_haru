@@ -5,8 +5,9 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"ui5ns/ui5/controller/BaseController",
 	"ui5ns/ui5/lib/NodeAPI",
-	"ui5ns/ui5/model/Constants"
-], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants) {
+	"ui5ns/ui5/model/Constants",
+	"ui5ns/ui5/lib/Utils"
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Utils) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
