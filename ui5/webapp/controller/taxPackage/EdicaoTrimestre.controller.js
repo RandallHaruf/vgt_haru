@@ -352,14 +352,14 @@ sap.ui.define(
 						fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
 
 					if (fValor3 !== 0) {
-						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = fValor1 / fValor3;
-						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = fValor4 / fValor3;
+						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = Number(parseFloat(fValor1 / fValor3).toFixed(2)) * 100;
+						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = Number(parseFloat(fValor4 / fValor3).toFixed(2)) * 100;
 					} else {
 						if (fValor1 > 0) {
-							oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 1;
+							oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 100;
 						}
 						if (fValor4 > 0) {
-							oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = 1;
+							oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = 100;
 						}
 					}
 					

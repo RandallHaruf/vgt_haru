@@ -461,10 +461,10 @@
 											<Text text="Staturory tax rate – average (%)" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Effective tax rate - as per the statutory financials" />
+											<Text text="Effective tax rate - as per the statutory financials (%)" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Effective tax rate - as per the tax return" />
+											<Text text="Effective tax rate - as per the tax return (%)" />
 										</Column>
 									</columns>
 									<items>
