@@ -20,7 +20,7 @@
 					<Title text="{i18n>viewTTCVisualizacaoTrimestreTituloPagina}"/>
 				</f:heading>
 				<f:navigationActions>
-					<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onReabrir"/>
+					<Button icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onReabrirPeriodo"/>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>
 				<f:snappedContent>

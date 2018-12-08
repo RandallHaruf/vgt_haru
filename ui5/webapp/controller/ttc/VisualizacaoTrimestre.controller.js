@@ -102,7 +102,7 @@ sap.ui.define(
 				this.getRouter().getRoute("ttcVisualizacaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
 			},
 		
-			onReabrir: function () {
+			/*onReabrir: function () {
 				if (!this.pressDialog) {
 					var oForm = new sap.ui.layout.form.Form({
 						editable: true
@@ -163,8 +163,112 @@ sap.ui.define(
 				}
 
 				this.pressDialog.open();	
-			},
+			},*/
 		
+			_formatDate: function (date) {
+				var that = this;
+			    
+			    var d = new Date(date),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+			
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+			
+			    return [year, month, day].join('-');
+			},
+			
+			onReabrirPeriodo: function (oPeriodo) {
+				var that = this;
+				
+				var oParams = {};
+				
+				oParams.oPeriodo = that.getModel().getProperty("/Periodo");
+				oParams.oEmpresa = that.getModel().getProperty("/Empresa");
+				/*oParams.oAnoCalendario = {
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
+				};*/
+				
+				//sIdEmpresa = that.getModel().getProperty("/Empresa");
+				
+				var oForm = new sap.ui.layout.form.Form({
+					editable: true
+				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
+					singleContainerFullSize: false
+				}));
+
+				var oFormContainer = new sap.ui.layout.form.FormContainer();
+
+				var oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralEmpresa}"
+				}).addField(new sap.m.Text({
+					text: "{/Empresa/nome}"
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralPeriodo}"
+				}).addField(new sap.m.Text({
+					text: "{/Periodo/periodo}" 
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+
+				var oTextArea = new sap.m.TextArea({
+					rows: 5
+				});
+				
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralJustificativa}"
+				}).addField(oTextArea);
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oForm.addFormContainer(oFormContainer);
+
+				var dialog = new sap.m.Dialog({
+					title: "{i18n>viewGeralNovaRequisicao}",
+					content: oForm,
+					beginButton: new sap.m.Button({
+						text: "{i18n>viewGeralSalvar}",
+						press: function () {
+							NodeAPI.criarRegistro("RequisicaoReabertura", {
+								dataRequisicao: this._formatDate(new Date()),
+								idUsuario: "1",
+								nomeUsuario: "Haru_Int",
+								justificativa: oTextArea.getValue(),
+								resposta: "",
+								fkDominioRequisicaoReaberturaStatus: "1",
+								fkEmpresa: oParams.oEmpresa.id_empresa,
+								fkPeriodo: oParams.oPeriodo.id_periodo,
+								nomeEmpresa:oParams.oEmpresa.nome
+							});
+							sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreToast"));
+							//sap.m.MessageToast.show("Salvar requisição para o período: "  );
+							dialog.close();
+						}.bind(this)
+					}),
+					endButton: new sap.m.Button({
+						text: "{i18n>viewGeralSair}",
+						press: function () {
+							dialog.close();
+						}.bind(this)
+					}),
+					afterClose: function () {
+						that.getView().removeDependent(dialog);
+						dialog.destroy();
+					}
+				});
+
+				// to get access to the global model
+				this.getView().addDependent(dialog);
+
+				dialog.open();
+			},
+			
 			navToHome: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},

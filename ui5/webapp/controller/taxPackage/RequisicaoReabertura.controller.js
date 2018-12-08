@@ -1,13 +1,15 @@
 sap.ui.define(
 	[
-		"ui5ns/ui5/controller/BaseController"
+		"ui5ns/ui5/controller/BaseController",
+		"ui5ns/ui5/model/formatter",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController) {
+	function (BaseController, formatter, NodeAPI) {
 		BaseController.extend("ui5ns.ui5.controller.taxPackage.RequisicaoReabertura", {
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
 					requisicoes: [
-						{
+						/*{
 							id: 1,
 							empresa: "Empresa A",
 							trimestre: "1º Trimestre",
@@ -49,9 +51,10 @@ sap.ui.define(
 								cor: "orange",
 								tooltip: "Em andamento"
 							}
-						}		
+						}*/		
 					]
 				}));
+				this.getRouter().getRoute("taxPackageRequisicaoReabertura").attachPatternMatched(this._onRouteMatched, this);
 			},
 			
 			onNovoObjeto: function (oEvent) {
@@ -68,6 +71,70 @@ sap.ui.define(
 			
 			navToPage3: function () {
 				this.getRouter().navTo("taxPackageResumoTrimestre");
+			},
+			
+			_navToResumoTrimestre: function () {
+				//this._limparModel();
+				
+				var oEmpresaSelecionada = this.getModel().getProperty("/empresa");
+				var sIdAnoCalendario = this.getModel().getProperty("/idAnoCalendario");
+			
+				this.getRouter().navTo("taxPackageResumoTrimestre", {
+					oEmpresa: JSON.stringify(oEmpresaSelecionada),
+					idAnoCalendario: sIdAnoCalendario
+				}); 
+			},
+			
+			_onRouteMatched: function (oEvent) {
+				var that = this;
+				
+				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				
+				this.getModel().setProperty("/empresa", oParametros.empresa);
+				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);
+				
+				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/RequisicaoReaberturaStatus", response);
+						
+						that._atualizarDados();
+					}
+				});
+			},
+			
+			_atualizarDados: function (oEvent) {
+				var that = this;
+				
+				var oEmpresa = this.getModel().getProperty("/empresa");
+				var sIdStatus = this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") ? this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") : "";
+				
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura?status=" + sIdStatus +"&empresa=" + oEmpresa.id_empresa , function(response){
+					if (response) {
+						for (var i = 0; i < response.length; i++) {
+							if (response[i].id_dominio_requisicao_reabertura_status === 1) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://lateness",
+							      cor: "orange",
+							      tooltip: "Aguardando"
+							    };
+							} else if (response[i].id_dominio_requisicao_reabertura_status === 2) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://accept",
+							      cor: "green",
+							      tooltip: "Aprovado"
+							    };
+							} else if (response[i].id_dominio_requisicao_reabertura_status === 3) {
+							    response[i].oStatus = {
+								  icone: "sap-icon://decline",
+							      cor: "red",
+							      tooltip: "Reprovado"
+							    };
+							}
+						}
+						that.getModel().setProperty("/requisicoes", response);
+					}
+				});
 			}
 		});
 	}
