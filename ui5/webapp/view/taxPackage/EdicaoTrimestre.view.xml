@@ -455,10 +455,10 @@
 											<Text text="Income Tax – as per the tax return" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Jurisdiction tax rate – average" />
+											<Text text="Jurisdiction tax rate – average (%)" />
 										</Column>
 										<Column width="10rem">
-											<Text text="Staturory tax rate – average" />
+											<Text text="Staturory tax rate – average (%)" />
 										</Column>
 										<Column width="10rem">
 											<Text text="Effective tax rate - as per the statutory financials" />
@@ -473,8 +473,8 @@
 												<ObjectIdentifier title="{periodo}" />
 												<Input type="Number" value="{it_income_tax_as_per_the_statutory_financials}" editable="false" />
 												<Input type="Number" value="{it_income_tax_as_per_the_tax_return}" editable="false" />
-												<Input type="Number" value="{it_jurisdiction_tax_rate_average}" editable="{ind_ativo}" change="onAplicarRegras" />
-												<Input type="Number" value="{it_statutory_tax_rate_average}" editable="{ind_ativo}" change="onAplicarRegras" />
+												<Input type="Number" value="{it_jurisdiction_tax_rate_average}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{it_statutory_tax_rate_average}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{it_effective_tax_rate_as_per_the_statutory_financials}" editable="false" />
 												<Input type="Number" value="{it_effective_tax_rate_as_per_the_tax_return}" editable="false" />
 											</cells>
@@ -486,6 +486,7 @@
 										class="sapUiMediumMarginTop"
 										title="Please provide details if Tax Return's Income differs from FS" />
 									<TextArea
+										id="textAreaIncomeTaxDetails"
 										rows="5"
 										width="100%"
 										value="{/IncomeTaxDetails}" />

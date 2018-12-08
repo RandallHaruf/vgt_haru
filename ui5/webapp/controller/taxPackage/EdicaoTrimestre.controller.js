@@ -310,7 +310,15 @@ sap.ui.define(
 
 					oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits +
 						oResultadoFiscal.rf_total_losses_utilized;
-
+				
+					oResultadoFiscal.it_statutory_tax_rate_average = oResultadoFiscal.it_statutory_tax_rate_average ? Number(oResultadoFiscal.it_statutory_tax_rate_average) : 0;
+					if (oResultadoFiscal.rf_taxable_income_loss_after_losses > 0 && oResultadoFiscal.it_statutory_tax_rate_average > 0) {
+						oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = oResultadoFiscal.rf_taxable_income_loss_after_losses * (oResultadoFiscal.it_statutory_tax_rate_average/100);	
+					}
+					else {
+						oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 0;
+					}
+				
 					var fValor2 = oResultadoFiscal.rf_other_taxes ? Number(oResultadoFiscal.rf_other_taxes) : 0,
 						fValor3 = oResultadoFiscal.rf_incentivos_fiscais ? Number(oResultadoFiscal.rf_incentivos_fiscais) : 0;
 
@@ -335,14 +343,12 @@ sap.ui.define(
 					});
 
 					var fValor1 = oIncomeTax.rc_current_income_tax_current_year ? Number(oIncomeTax.rc_current_income_tax_current_year) : 0,
-						fValor2 = oIncomeTax.rf_income_tax_before_other_taxes_and_credits ? Number(oIncomeTax.rf_income_tax_before_other_taxes_and_credits) :
-						0;
+						fValor2 = oIncomeTax.rf_income_tax_before_other_taxes_and_credits ? Number(oIncomeTax.rf_income_tax_before_other_taxes_and_credits) : 0;
 
 					oIncomeTax.it_income_tax_as_per_the_statutory_financials = fValor1;
 					oIncomeTax.it_income_tax_as_per_the_tax_return = fValor2;
 
-					var fValor3 = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) :
-						0,
+					var fValor3 = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) : 0,
 						fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
 
 					if (fValor3 !== 0) {
@@ -354,6 +360,39 @@ sap.ui.define(
 						}
 						if (fValor4 > 0) {
 							oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = 1;
+						}
+					}
+					
+					var fValor5 = oIncomeTax.it_income_tax_as_per_the_statutory_financials,
+						fValor6 = oIncomeTax.it_income_tax_as_per_the_tax_return;
+						
+					// Se os impostos forem iguais
+					if (fValor5 === fValor6) {
+						// Não pede detalhes
+						this.byId("textAreaIncomeTaxDetails").setEnabled(false);	
+					}
+					// Se qualquer um dos dois forem 0
+					else if (fValor5 === 0 || fValor6 === 0) {
+						// pede detalhes
+						this.byId("textAreaIncomeTaxDetails").setEnabled(true);	
+					}
+					else {
+						var variacao = fValor5 / fValor6;
+					
+						// Se a variação entre eles for menor que 0
+						if (variacao < 0) {
+							// pede detalhes
+							this.byId("textAreaIncomeTaxDetails").setEnabled(true);	
+						}
+						// Se eles exibirem 20% de diferença para mais ou para menos
+						else if (variacao >= 1.2 || variacao <= 0.8) {
+							// pede detalhe
+							this.byId("textAreaIncomeTaxDetails").setEnabled(true);		
+						}
+						// Se não
+						else {
+							// não pede detalhe
+							this.byId("textAreaIncomeTaxDetails").setEnabled(false);		
 						}
 					}
 				}
@@ -1487,6 +1526,7 @@ sap.ui.define(
 						that.onAplicarRegras();
 						
 						that._carregarTaxasMultiplas(oTaxReconAtivo.id_tax_reconciliation);
+						that._carregarTaxRate();
 					}
 				});
 
@@ -1494,6 +1534,28 @@ sap.ui.define(
 				this._carregarSchedule(2, "/CreditSchedule", sIdRelTaxPackagePeriodo);
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
 			},
+			
+			_carregarTaxRate: function () {
+				var that = this;
+				
+				var oTaxReconAtivo = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+					return obj.ind_ativo;
+				});
+				
+				NodeAPI.listarRegistros("/DeepQuery/Pais/" + this.getModel().getProperty("/Empresa").id_pais, function (response) {
+					if (response) {
+						oTaxReconAtivo.it_jurisdiction_tax_rate_average = response[0].valorAliquota ? Number(response[0].valorAliquota) : 0;
+						that.onAplicarRegras();
+					}
+				});
+				
+				NodeAPI.listarRegistros("/DeepQuery/Empresa/" + this.getModel().getProperty("/Empresa").id_empresa, function (response) {
+					if (response) {
+						oTaxReconAtivo.it_statutory_tax_rate_average = response[0].valor ? Number(response[0].valor) : 0;
+						that.onAplicarRegras();
+					}
+				});
+			},           
 
 			_salvar: function (oEvent, callback) {
 				var oButton = oEvent.getSource();
