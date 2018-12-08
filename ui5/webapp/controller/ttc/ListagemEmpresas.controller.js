@@ -13,6 +13,7 @@ sap.ui.define(
 				this.setModel(new JSONModel());
 				
 				this.getRouter().getRoute("ttcListagemEmpresas").attachPatternMatched(this._onRouteMatched, this);                         
+				jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {

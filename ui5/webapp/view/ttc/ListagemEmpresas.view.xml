@@ -77,7 +77,7 @@
 									formatOptions: {
 										maxFractionDigits: 2
 									}
-								}"/>
+								}" class="money"/>
 							<ObjectNumber
 								number="{
 									path: 'collected',
@@ -85,7 +85,7 @@
 									formatOptions: {
 										maxFractionDigits: 2
 									}
-								}"/>
+								}" class="money"/>
 							<ObjectNumber
 								number="{
 									path: 'total',
@@ -93,7 +93,7 @@
 									formatOptions: {
 										maxFractionDigits: 2
 									}
-								}"/>
+								}" class="money"/>
 						</cells>
 					</ColumnListItem>
 					<!--<ColumnListItem
