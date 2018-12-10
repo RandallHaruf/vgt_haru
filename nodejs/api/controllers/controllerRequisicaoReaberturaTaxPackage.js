@@ -118,7 +118,7 @@ module.exports = {
 	deepQuery: function (req, res) {
 
 		var sStatement =
-			  ' select tblRequisicaoTaxPackage.*,tblRequisicaoTaxPackageStatus.*,tblTaxPackagePeriodo.*,tblTaxPackage.*,tblPeriodo.*,tblEmpresa.* from "VGT.REQUISICAO_REABERTURA_TAX_PACKAGE" tblRequisicaoTaxPackage '
+			  ' select tblRequisicaoTaxPackage.*,tblRequisicaoTaxPackageStatus.*,tblTaxPackagePeriodo.*,tblTaxPackage.*,tblPeriodo.*,tblEmpresa.*,tblAnoCalendario.* from "VGT.REQUISICAO_REABERTURA_TAX_PACKAGE" tblRequisicaoTaxPackage '
 			+ ' inner join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" tblRequisicaoTaxPackageStatus '
 			+ ' on tblRequisicaoTaxPackage."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = tblRequisicaoTaxPackageStatus."id_dominio_requisicao_reabertura_status" '
 			+ ' inner join "VGT.REL_TAX_PACKAGE_PERIODO" tblTaxPackagePeriodo '
