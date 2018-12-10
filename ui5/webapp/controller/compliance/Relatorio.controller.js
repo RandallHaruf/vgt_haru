@@ -33,13 +33,15 @@ sap.ui.define([
 					"value": this.getResourceBundle().getText("viewGeralNao")
 				}]				
 			}));
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
+			/*this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioPais, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteObrigacaoAcessoria, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDomPeriodicidadeObrigacao, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioStatusObrigacao, this);
+			*/
+			this._atualizarDados();
 		},
 
 		navToHome: function () {
@@ -197,6 +199,14 @@ sap.ui.define([
 				}
 			});
 		},
+		_onRouteDominioObrigacaoAcessoriaTipo2: function (oEvent,registro) {
+			var that = this;
+			NodeAPI.listarRegistros("deepQuery/DominioObrigacaoAcessoriaTipo?idRegistro="+registro, function (resposta) {
+				if (resposta) {
+					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", resposta);
+				}
+			});
+		},		
 		_atualizarDados: function () {
 			var that = this;
 			var vetorInicioEntrega = [];
@@ -232,7 +242,8 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
-
+			oWhere.push(null);	
+			
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -242,11 +253,99 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i].prazo_entrega = aRegistro[i].prazo_entrega.substring(8,10)+"/"+aRegistro[i].prazo_entrega.substring(5,7)+"/"+aRegistro[i].prazo_entrega.substring(4,0);
-						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);						
+						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);			
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 				}
 			});	
+			
+			/*PARAMETRO DO DISTINCT
+			"tipo": Distinct para Obrigacoes
+			"nome": Nomes das Empresas
+			"pais": Pais
+			"TBLOBRIGACAOACESSORIANOME": Listagem de Obrigacoes
+			"descricao": Periodicidade
+			"ano_fiscal": Ano Fiscal
+			"TBLSTATUSOBRIGACAODESCRICAO": Status
+			*/
+			
+			oWhere[13] = ["tipo"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", aRegistro);
+				}
+			});		
+			oWhere[13] = ["nome"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/Empresa", aRegistro);
+				}
+			});				
+			oWhere[13] = ["pais"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioPais", aRegistro);
+				}
+			});		
+			oWhere[13] = ["TBLOBRIGACAOACESSORIANOME"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/ObrigacaoAcessoria", aRegistro);
+				}
+			});	
+			oWhere[13] = ["descricao"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
+				}
+			});	
+			oWhere[13] = ["ano_fiscal"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
+				}
+			});		
+			oWhere[13] = ["TBLSTATUSOBRIGACAODESCRICAO"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioStatusObrigacao", aRegistro);
+				}
+			});				
 		}			
 	});
 });

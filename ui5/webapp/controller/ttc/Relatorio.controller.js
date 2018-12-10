@@ -29,6 +29,8 @@ sap.ui.define([
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioMoeda, this);
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._onRouteDominioTipoTransacao, this);
+			
+			this._atualizarDados();
 		},
 		
 		navToHome: function () {

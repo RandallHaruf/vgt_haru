@@ -84,19 +84,43 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade DominioObrigacaoAcessoriaTipo");
 
-		/*var sStatement = 'select * from "DUMMY"';
+		var sStatement = 
+			'SELECT ' 
+			+ '"id_dominio_obrigacao_acessoria_tipo" , '
+			+'"tipo" '
+			+'FROM "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" as tipoObrigacao ';
+			
+		var oWhere = [];
+		var aParams = [];
+
+		if (req.query.idRegistro) {
+			oWhere.push(' tipoObrigacao."id_dominio_obrigacao_acessoria_tipo" = ? ');
+			aParams.push(req.query.idRegistro);
+		}
+
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+		
+		//sStatement += ' Order By empresa."nome"';
 
 		model.execute({
-		statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };

@@ -52,42 +52,42 @@
 						<fb:filterItems>
 							<fb:FilterItem name="J" label="{i18n>viewComplianceListagemObrigacoesColunaTipo}">
 								<fb:control>
-									<MultiComboBox id="selectDominio" selectionChange="onSelectChange" items="{ path: '/DominioObrigacaoAcessoriaTipo' }" selectedKeys="{/IdDominioObrigacaoAcessoriaTipoSelecionadas}">
+									<MultiComboBox id="selectDominio" selectionFinish="onSelectChange" items="{ path: '/DominioObrigacaoAcessoriaTipo' }" selectedKeys="{/IdDominioObrigacaoAcessoriaTipoSelecionadas}">
 										<core:Item key="{id_dominio_obrigacao_acessoria_tipo}" text="{tipo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>							
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa"  selectionChange="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+									<MultiComboBox id="selectEmpresa"  selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
 										<core:Item key="{id_empresa}" text="{nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewComplianceListagemObrigacoesColunaPais}">
 								<fb:control>
-									<MultiComboBox id="selectPais" selectionChange="onSelectChange" items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}">
+									<MultiComboBox id="selectPais" selectionFinish="onSelectChange" items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}">
 										<core:Item key="{id_dominio_pais}" text="{pais}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}">
 								<fb:control>
-									<MultiComboBox id="selectTipo" selectionChange="onSelectChange" items="{ path: '/ObrigacaoAcessoria' }" selectedKeys="{/IdObrigacaoAcessoriaSelecionadas}">
+									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/ObrigacaoAcessoria' }" selectedKeys="{/IdObrigacaoAcessoriaSelecionadas}">
 										<core:Item key="{id_obrigacao_acessoria}" text="{nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 								<fb:control>
-									<MultiComboBox id="selectPeriodicidade" selectionChange="onSelectChange" items="{ path: '/DomPeriodicidadeObrigacao' }" selectedKeys="{/IdDomPeriodicidadeObrigacaoSelecionadas}">
+									<MultiComboBox id="selectPeriodicidade" selectionFinish="onSelectChange" items="{ path: '/DomPeriodicidadeObrigacao' }" selectedKeys="{/IdDomPeriodicidadeObrigacaoSelecionadas}">
 										<core:Item key="{id_periodicidade_obrigacao}" text="{descricao}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionChange="onSelectChange" items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}">
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange" items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}">
 										<core:Item key="{id_dominio_ano_fiscal}" text="{ano_fiscal}"/>
 									</MultiComboBox>
 								</fb:control>
@@ -106,7 +106,7 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">
 								<fb:control>
-									<MultiComboBox id="selectStatus" selectionChange="onSelectChange" items="{ path: '/DominioStatusObrigacao' }" selectedKeys="{/IdDominioStatusObrigacaoSelecionadas}">
+									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/DominioStatusObrigacao' }" selectedKeys="{/IdDominioStatusObrigacaoSelecionadas}">
 										<core:Item key="{id_status_obrigacao}" text="{descricao}"/>
 									</MultiComboBox>
 								</fb:control>
