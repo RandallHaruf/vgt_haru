@@ -342,6 +342,12 @@ function vincularPeriodos(sIdEmpresa) {
 				
 				var sIdTaxPackage = result[0].generated_id;
 				
+				// Adiciona o agregado de diferencas padrao
+				sQuery = 'insert into "VGT.AGREGADO_DIFERENCA"("id_agregado_diferenca", "fk_tax_package.id_tax_package") values("identity_VGT.AGREGADO_DIFERENCA_id_agregado_diferenca".nextval, ?)';
+				aParams = [sIdTaxPackage];
+				
+				model.executeSync(sQuery, aParams);
+				
 				// Pega todos os periodos que tenham relacionamento com o ano calendario
 				var aPeriodoAno = aPeriodo.filter(function (obj) {
 					return obj["fk_dominio_ano_calendario.id_dominio_ano_calendario"] === i;	

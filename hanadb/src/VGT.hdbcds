@@ -361,6 +361,7 @@ context VGT {
             fk_diferenca_opcao    : association[*, 0..1] to VGT.DIFERENCA_OPCAO { id_diferenca_opcao };
             fk_tax_reconciliation : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
             valor                 : Integer;
+            fk_agregado_diferenca : association[*, 0..1] to VGT.AGREGADO_DIFERENCA { id_agregado_diferenca };
     };
 
     /*@@layout{"layoutInfo":{"x":-2052,"y":1335.5}}*/
@@ -505,7 +506,7 @@ context VGT {
         fk_documento : association[*, 0..1] to VGT.DOCUMENTO { id_documento };
     };
 
-    /*@@layout{"layoutInfo":{"x":-1597,"y":912.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2117,"y":820.5}}*/
     entity REQUISICAO_REABERTURA_TAX_PACKAGE {
         id_requisicao_reabertura_tax_tackage    : Integer;
         data_requisicao                         : LocalDate;
@@ -515,5 +516,11 @@ context VGT {
         resposta                                : String(50);
         fk_dominio_requisicao_reabertura_status : association[*, 0..1] to VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS { id_dominio_requisicao_reabertura_status };
         fk_id_rel_tax_package_periodo           : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1988,"y":651.5}}*/
+    entity AGREGADO_DIFERENCA {
+            fk_tax_package        : association[*, 0..1] to VGT.TAX_PACKAGE { id_tax_package };
+        key id_agregado_diferenca : Integer64 not null;
     };
 };

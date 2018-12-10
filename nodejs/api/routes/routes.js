@@ -53,6 +53,7 @@ module.exports = function (app) {
 	var routeRequisicaoReaberturaTaxPackage = require("./routeRequisicaoReaberturaTaxPackage");
 	var routeEmailSend = require("./routeEmailSend");
 	var routeAntecipacao = require("./routeAntecipacao");
+	var routeDiferenca = require("./routeDiferenca");
 	
 	var aRoutes = [];	
 	
@@ -105,6 +106,7 @@ module.exports = function (app) {
 	routeRequisicaoReaberturaTaxPackage(aRoutes);
 	routeEmailSend(aRoutes);
 	routeAntecipacao(aRoutes);
+	routeDiferenca(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

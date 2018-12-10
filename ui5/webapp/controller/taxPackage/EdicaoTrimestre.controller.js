@@ -529,8 +529,7 @@ sap.ui.define(
 					oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits = fValor1 + fTotalDiferencaPermanente +
 						fTotalDiferencaTemporaria;
 
-					oResultadoFiscal.rf_total_losses_utilized = (oResultadoFiscal.rf_total_losses_utilized ? Math.abs(Number(oResultadoFiscal.rf_total_losses_utilized)) :
-						0) * -1;
+					oResultadoFiscal.rf_total_losses_utilized = (oResultadoFiscal.rf_total_losses_utilized ? Math.abs(Number(oResultadoFiscal.rf_total_losses_utilized)) : 0) * -1;
 
 					oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits +
 						oResultadoFiscal.rf_total_losses_utilized;
@@ -1786,12 +1785,30 @@ sap.ui.define(
 					}
 					
 					that._carregarPagamentosTTC(sIdTaxReconciliation);
+					that._carregarHistorico();
 				});
 
 				this._carregarSchedule(1, "/LossSchedule", sIdRelTaxPackagePeriodo);
 				this._carregarSchedule(2, "/CreditSchedule", sIdRelTaxPackagePeriodo);
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
 				this._carregarTaxRate();
+			},
+			
+			_carregarHistorico: function () {
+				var that = this,
+					sIdTaxPackage = this.getModel().getProperty("/Periodo").id_tax_package,
+					sNumeroOrdem = this.getModel().getProperty("/Periodo").numero_ordem,
+					sEntidade = "DeepQuery/TaxReconciliation?taxPackage=" + sIdTaxPackage + "&numeroOrdem=" + sNumeroOrdem + "&historico=true";
+				
+				NodeAPI.listarRegistros(sEntidade, function (response) {
+					if (response) {
+						for (var i = 0, length = response.length; i < length; i++) {
+							response[i].ind_ativo = false;
+						}
+						that.getModel().setProperty("/TaxReconciliation", that.getModel().getProperty("/TaxReconciliation").concat(response));
+						that.getModel().refresh();
+					}
+				});
 			},
 			
 			_carregarAntecipacoes: function (sIdTaxReconciliation) {

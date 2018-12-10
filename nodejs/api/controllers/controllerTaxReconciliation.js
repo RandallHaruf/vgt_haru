@@ -261,6 +261,22 @@ module.exports = {
 				oWhere.push(' TaxPac."fk_empresa.id_empresa" = ? ');
 				aParams.push(req.query.empresa);
 			}
+			
+			if (req.query.taxPackage) {
+				oWhere.push(' TaxPac."id_tax_package" = ? ');
+				aParams.push(req.query.taxPackage);
+			}
+			
+			if (req.query.numeroOrdem) {
+				if (req.query.historico) {
+					oWhere.push(' Perid."numero_ordem" < ? ');
+					aParams.push(req.query.numeroOrdem);
+				}
+				else {
+					oWhere.push(' Perid."numero_ordem" = ? ');
+					aParams.push(req.query.numeroOrdem);
+				}
+			}
 	
 			if (oWhere.length > 0) {
 				sStatement += "where ";
@@ -273,6 +289,8 @@ module.exports = {
 				}
 			}
 			
+			sStatement += ' order by Perid."numero_ordem" ';
+			
 			model.execute({
 				statement: sStatement,
 				parameters: aParams
@@ -280,6 +298,17 @@ module.exports = {
 				if (err) {
 					res.send(JSON.stringify(err));
 				} else {
+					if (req.query.historico) {
+						for (var i = 0; i < result.length; i++) {
+							var oTaxRecon = result[i];
+							
+							// Remove todas as retificadoras que não a última
+							if (oTaxRecon.numero_ordem >= 6 && i < result.length - 1) {
+								result.splice(i, 1);
+							}
+						}
+					}
+					
 					res.send(JSON.stringify(result));
 				}
 			});
