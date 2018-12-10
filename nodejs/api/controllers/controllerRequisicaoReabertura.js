@@ -214,8 +214,6 @@ module.exports = {
 			' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" ' +
 			' Left Outer Join "VGT.EMPRESA" Empresa ' + ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" ' +
 			' Left Outer Join "VGT.PERIODO" Per ' + ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" ' +
-			' Left Outer join "VGT.DOMINIO_ANO_CALENDARIO" tblAnoCalendario ' +
-			' on Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblAnoCalendario."id_dominio_ano_calendario" ' +
 			' Left Outer Join "VGT.DOMINIO_ANO_CALENDARIO" Ano_Cal ' +
 			' On Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = Ano_Cal."id_dominio_ano_calendario" ';
 

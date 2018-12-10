@@ -127,6 +127,8 @@ module.exports = {
 			+ ' on tblTaxPackagePeriodo."fk_tax_package.id_tax_package" = tblTaxPackage."id_tax_package" '
 			+ ' inner join "VGT.PERIODO" tblPeriodo '
 			+ ' on tblTaxPackagePeriodo."fk_periodo.id_periodo" = tblPeriodo."id_periodo" '
+			+ ' inner join "VGT.DOMINIO_ANO_CALENDARIO" tblAnoCalendario '
+			+ ' on tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblAnoCalendario."id_dominio_ano_calendario" '
 			+ ' inner join "VGT.EMPRESA" tblEmpresa'
 			+ ' on tblTaxPackage."fk_empresa.id_empresa" = tblEmpresa."id_empresa" ';
 
