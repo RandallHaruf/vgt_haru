@@ -18,7 +18,8 @@
 					<Button
 							text="{i18n>viewRelatorioImprimir}"
 							type="Transparent"
-							icon="sap-icon://print" />
+							icon="sap-icon://print" 
+							press="onImprimir"/>
 					<Button
 							text="{i18n>viewRelatorioExportar} CSV"
 							type="Transparent"
@@ -129,6 +130,10 @@
 							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
+					<Button
+					text="Gerar {i18n>viewGeralRelatorio}"
+					type="Emphasized"
+					press="onGerarRelatorio"/>				
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>

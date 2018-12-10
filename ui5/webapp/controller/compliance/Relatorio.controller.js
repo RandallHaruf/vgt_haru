@@ -38,14 +38,6 @@ sap.ui.define([
 					"value": this.getResourceBundle().getText("viewGeralNao")
 				}]				
 			}));
-			/*this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioObrigacaoAcessoriaTipo, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioPais, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteObrigacaoAcessoria, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDomPeriodicidadeObrigacao, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioAnoFiscal, this);
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteDominioStatusObrigacao, this);
-			*/
 			this._atualizarDados();
 		},
 
@@ -60,7 +52,12 @@ sap.ui.define([
 		onNavBack: function (oEvent) {
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("complianceListagemObrigacoes");                                  	
 		},
-
+		onImprimir: function (oEvent) {
+			this._geraRelatorio();                                  	
+		},
+		onGerarRelatorio: function (oEvent) {
+			this._geraRelatorio();                                  	
+		},		
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
 		},
@@ -248,7 +245,7 @@ sap.ui.define([
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
 			oWhere.push(null);	
-			
+			/* ----- ESTE TRECHO DE CODIGO FOI PARA A FUNCAO geraRelatorio
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -264,8 +261,8 @@ sap.ui.define([
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 				}
-			});	
-			this.getResourceBundle("viewComplianceListagemObrigacoesTextoFiltro1");
+			});	*/
+
 			/*PARAMETRO DO DISTINCT
 			"tipo": Distinct para Obrigacoes
 			"nome": Nomes das Empresas
@@ -455,6 +452,59 @@ sap.ui.define([
 			}).then(function() {
 				oExport.destroy();
 			});
+		},
+		_geraRelatorio: function () {
+			var that = this;
+			var vetorInicioEntrega = [];
+			var vetorInicioExtensao = [];
+			var vetorFimEntrega = [];
+			var vetorFimExtensao = [];			
+			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
+			var oObrigacaoAcessoria = this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas") : null : null;
+			var oDomPeriodicidadeObrigacao = this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas") : null : null;
+			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
+			var oDataPrazoEntregaInicio = this.getModel().getProperty("/DataPrazoEntregaInicio")? this.getModel().getProperty("/DataPrazoEntregaInicio") !== null ? vetorInicioEntrega[0] = (this.getModel().getProperty("/DataPrazoEntregaInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPrazoEntregaInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPrazoEntregaInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataPrazoEntregaFim = this.getModel().getProperty("/DataPrazoEntregaFim")? this.getModel().getProperty("/DataPrazoEntregaFim") !== null ? vetorFimEntrega[0] = (this.getModel().getProperty("/DataPrazoEntregaFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPrazoEntregaFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPrazoEntregaFim").getDate().toString().padStart(2,'0')) : null : null;			
+			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataExtensaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataExtensaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoFim").getDate().toString().padStart(2,'0')) : null : null;			
+			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
+			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial") ? this.getModel().getProperty("/CheckObrigacaoInicial") === undefined ? null : this.getModel().getProperty("/CheckObrigacaoInicial") == "1" ? ["true"] : ["false"] : null;
+			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
+
+			var oWhere = []; 
+			oWhere.push(oDominioObrigacaoAcessoriaTipo);
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioPais);
+			oWhere.push(oObrigacaoAcessoria);
+			oWhere.push(oDomPeriodicidadeObrigacao);
+			oWhere.push(oDominioAnoFiscal);
+			oWhere.push(oDataPrazoEntregaInicio === null ? null : vetorInicioEntrega);
+			oWhere.push(oDataPrazoEntregaFim === null ? null : vetorFimEntrega);
+			oWhere.push(oDataExtensaoInicio === null? null : vetorInicioExtensao);
+			oWhere.push(oDataExtensaoFim === null? null : vetorFimExtensao);			
+			oWhere.push(oDominioStatusObrigacao);
+			oWhere.push(oCheckObrigacao);
+			oWhere.push(oCheckSuporteContratado);
+			oWhere.push(null);	
+			
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i].prazo_entrega = aRegistro[i].prazo_entrega.substring(8,10)+"/"+aRegistro[i].prazo_entrega.substring(5,7)+"/"+aRegistro[i].prazo_entrega.substring(4,0);
+						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);
+						aRegistro[i].obrigacao_inicial = aRegistro[i].obrigacao_inicial === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
+						aRegistro[i].suporte_contratado = aRegistro[i].suporte_contratado === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
+					}		
+					that.getModel().setProperty("/ReportObrigacao", aRegistro);
+				}
+			});	
 		}		
 	});
 });
