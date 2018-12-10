@@ -5,8 +5,13 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"ui5ns/ui5/controller/BaseController",
 	"ui5ns/ui5/lib/NodeAPI",
-	"ui5ns/ui5/model/Constants"
-], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants) {
+	"ui5ns/ui5/model/Constants",
+	"sap/ui/core/util/Export",
+	"sap/ui/core/util/ExportTypeCSV",	
+	"sap/m/TablePersoController",
+	"sap/m/MessageBox",
+	"ui5ns/ui5/lib/Utils"	
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Export, ExportTypeCSV, TablePersoController,MessageBox,Utils) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.compliance.Relatorio", {
@@ -253,12 +258,14 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i].prazo_entrega = aRegistro[i].prazo_entrega.substring(8,10)+"/"+aRegistro[i].prazo_entrega.substring(5,7)+"/"+aRegistro[i].prazo_entrega.substring(4,0);
-						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);			
+						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);
+						aRegistro[i].obrigacao_inicial = aRegistro[i].obrigacao_inicial === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
+						aRegistro[i].suporte_contratado = aRegistro[i].suporte_contratado === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 				}
 			});	
-			
+			this.getResourceBundle("viewComplianceListagemObrigacoesTextoFiltro1");
 			/*PARAMETRO DO DISTINCT
 			"tipo": Distinct para Obrigacoes
 			"nome": Nomes das Empresas
@@ -346,6 +353,108 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioStatusObrigacao", aRegistro);
 				}
 			});				
-		}			
+		},
+		onDataExport : sap.m.Table.prototype.exportData || function(oEvent) {
+
+			var oExport = new Export({
+
+				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
+				exportType : new ExportTypeCSV({
+					separatorChar : ";"
+				}),
+
+				// Pass in the model created above
+				models : this.getView().getModel(),
+
+				// binding information for the rows aggregation
+				rows : {
+					path : "/ReportObrigacao"
+				},
+
+				// column definitions with column name and binding info for the content
+				
+				columns : [{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaTipo"),
+					template : {
+						content : "{tipo}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
+					template : {
+						content : "{nome}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPais"),
+					template : {
+						content : "{pais}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewComplianceFormularioDetalhesObrigacaoListagemObrigações"),
+					template : {
+						content : "{TBLOBRIGACAOACESSORIANOME}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPeriodicidade"),
+					template : {
+						content : "{descricao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaAnoFiscal"),
+					template : {
+						content : "{ano_fiscal}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPrazoEntrega"),
+					template : {
+						content : "{prazo_entrega}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaExtensao"),
+					template : {
+						content : "{extensao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaStatus"),
+					template : {
+						content : "{TBLSTATUSOBRIGACAODESCRICAO}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesBotaoRequisicao"),
+					template : {
+						content : "{obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaSuporteContratado"),
+					template : {
+						content : "{suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+					}
+				},{
+					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					template : {
+						content : "{suporte}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
+					template : {
+						content : "{observacoes}"
+					}
+				}]
+			});
+			
+			// download exported file
+			oExport.saveFile(
+				Utils.dateNowParaArquivo()
+				+"_"
+				+this.getResourceBundle().getText("viewGeralRelatorio") 
+				+"_" 
+				+ this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina")
+				+"_"
+				+this.getResourceBundle().getText("viewSelecaoModuloBotaoBeps")
+				).catch(function(oError) {
+				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
+			}).then(function() {
+				oExport.destroy();
+			});
+		}		
 	});
 });

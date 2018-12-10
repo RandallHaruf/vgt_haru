@@ -21,13 +21,15 @@
 							icon="sap-icon://print" />
 					<Button
 							text="{i18n>viewRelatorioExportar} CSV"
-							type="Transparent"/>
+							type="Transparent"
+							press="onDataExport"/>
 					<Button
 							text="{i18n>viewRelatorioExportar} TXT"
 							type="Transparent" />
 					<Button
 							text="{i18n>viewRelatorioExportar} XLS"
-							type="Transparent"/>
+							type="Transparent"
+							press="onDataExport"/>
 					<Button
 							text="{i18n>viewRelatorioExportar} PDF"
 							type="Transparent"/>
@@ -186,9 +188,11 @@
 								<Text text="{ano_fiscal}"/>
 								<Text text="{prazo_entrega}"/>
 								<Text text="{extensao}"/>
-								<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
+								<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/><!--
 								<Text text="{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}" />
-								<Text text="{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"/>
+								<Text text="{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"/>-->
+								<Text text="{obrigacao_inicial}" />
+								<Text text="{suporte_contratado}"/>								
 								<Text text="{suporte}"/>
 								<Text text="{observacoes}"/>								
 							</cells>

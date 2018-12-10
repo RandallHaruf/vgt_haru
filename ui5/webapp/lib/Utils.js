@@ -25,7 +25,12 @@ sap.ui.define(
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "/" +(Data.getMonth() +1).toString().padStart(2,"0") + "/" + Data.getFullYear().toString();
 				return fDataNoPadrao;
-			}
+			},
+			dateNowParaArquivo: function (){
+				var Data = new Date();
+				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "_" +(Data.getMonth() +1).toString().padStart(2,"0") + "_" + Data.getFullYear().toString();
+				return fDataNoPadrao;
+			}			
 		};
 	}
 	

@@ -22,13 +22,15 @@
 						press="onImprimir" />
 					<Button
 						text="{i18n>viewRelatorioExportar} CSV"
-						type="Transparent"/>
+						type="Transparent"
+						press="onDataExport"/>
 					<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />
 					<Button
 						text="{i18n>viewRelatorioExportar} XLS"
-						type="Transparent"/>
+						type="Transparent"
+						press="onDataExport"/>
 					<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>

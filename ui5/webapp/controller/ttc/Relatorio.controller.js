@@ -6,8 +6,12 @@ sap.ui.define([
 	"ui5ns/ui5/controller/BaseController",
 	"ui5ns/ui5/lib/NodeAPI",
 	"ui5ns/ui5/model/Constants",
-	"ui5ns/ui5/lib/Utils"
-], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Utils) {
+	"ui5ns/ui5/lib/Utils",
+	"sap/ui/core/util/Export",
+	"sap/ui/core/util/ExportTypeCSV",
+	"sap/m/TablePersoController",
+	"sap/m/MessageBox"	
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Utils,Export, ExportTypeCSV,TablePersoController,MessageBox) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
@@ -261,6 +265,141 @@ sap.ui.define([
 					that.getModel().setProperty("/ReportTTC", aRegistro);
 				}
 			});	
+		},
+		onDataExport : sap.m.Table.prototype.exportData || function(oEvent) {
+
+			var oExport = new Export({
+
+				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
+				exportType : new ExportTypeCSV({
+					separatorChar : ";"
+				}),
+
+				// Pass in the model created above
+				models : this.getView().getModel(),
+
+				// binding information for the rows aggregation
+				rows : {
+					path : "/ReportTTC"
+				},
+
+				// column definitions with column name and binding info for the content
+
+				columns : [{
+					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
+					template : {
+						content : "{Empresa}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewRelatorioClassificacao"),
+					template : {
+						content : "{DominioTaxClassification}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewRelatorioCategoria"),
+					template : {
+						content : "{TaxCategory}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewRelatorioT"),
+					template : {
+						content : "{Tax}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewRelatorioNomeT"),
+					template : {
+						content : "{NameOfTax}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewRelatorioJurisdicao"),
+					template : {
+						content : "{DominioJurisdicao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewRelatorioPais"),
+					template : {
+						content : "{DominioPais}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
+					template : {
+						content : "{DominioAnoFiscal}"
+					}
+				},{
+					name : this.getResourceBundle().getText("ViewRelatorioCurrency"),
+					template : {
+						content : "{DominioMoeda}"
+					}
+				},{
+					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					template : {
+						content : "{DominioTipoTransacao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("ViewRelatorioDataDePagamento"),
+					template : {
+						content : "{DataPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaProjeto"),
+					template : {
+						content : "{ProjetoPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaDescription"),
+					template : {
+						content : "{DescricaoPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaOther"),
+					template : {
+						content : "{TipoTransacaoOutrosPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaPrincipal"),
+					template : {
+						content : "{PrincipalPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaInterest"),
+					template : {
+						content : "{JurosPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaFine"),
+					template : {
+						content : "{MultaPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaValue"),
+					template : {
+						content : "{TotalPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaNumberDocument"),
+					template : {
+						content : "{NumeroDocumentoPagamento}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaBeneficiary"),
+					template : {
+						content : "{EntidadeBeneficiariaPagamento}"
+					}
+				}]
+			});
+
+			// download exported file
+			oExport.saveFile(
+				Utils.dateNowParaArquivo()
+				+"_"
+				+this.getResourceBundle().getText("viewGeralRelatorio") 
+				+"_" 
+				+ this.getResourceBundle().getText("viewAdminInicioMenuTTC")
+				).catch(function(oError) {
+				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
+			}).then(function() {
+				oExport.destroy();
+			});
 		}		
 	});
 });
