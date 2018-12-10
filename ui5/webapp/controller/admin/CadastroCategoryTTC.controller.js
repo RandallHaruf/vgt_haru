@@ -16,7 +16,7 @@ sap.ui.define(
 					title: "Confirm",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							sap.m.MessageToast.show("Desabilitar Category: " + nome);	
+							sap.m.MessageToast.show(this.getResourceBundle().getText("viewAdminCadastroCategoriaTTCDesabilitarCategory")  + nome);	
 						}
 					}
 				});

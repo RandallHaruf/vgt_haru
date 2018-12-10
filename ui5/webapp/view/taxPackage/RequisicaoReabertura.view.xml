@@ -15,7 +15,7 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="{i18n>viewTPListagemEmpresaListaDeEmpresa}" press="navToPage2" />
+						<Link text="{i18n>viewTPListagemEmpresaListaDeEmpresas}" press="navToPage2" />
 						<Link text="{i18n>viewTPRequisicaoReaberturaTituloResumoTrimestre}" press="navToPage3" />
 						<Link text="{i18n>viewTPRequisicaoReaberturaTituloTabela}" enabled="false" />
 					</Breadcrumbs>

@@ -13,14 +13,14 @@
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" enabled="false" />
-						<Link text="Listagem Empresas" enabled="false" />
-						<Link text="Resumo Trimestre" enabled="false" />
-						<Link text="Requisição Reabertura" enabled="false" />
-						<Link text="Formulário Nova Requisição" enabled="false" />
+						<Link text="{i18n>viewFormularioNovaReaquisiçãoReaberturaListagemEmpresas}" enabled="false" />
+						<Link text="{i18n>viewFormularioNovaReaquisiçãoReaberturaResumoTrimestre}" enabled="false" />
+						<Link text="{i18n>viewFormularioNovaReaquisiçãoReaberturaRequisiçãoReabertura}" enabled="false" />
+						<Link text="{i18n>viewFormularioNovaReaquisiçãoReaberturaFormulárioNovaRequisição}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="Tax Package - Formulário de Requisição de Reabertura"/>
+					<Title text="{i18n>viewFormularioNovaReaquisiçãoReaberturaTaxPackageFormuláriodeRequisiçãodeReabertura}"/>
 				</f2:heading>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -29,7 +29,7 @@
 				id="formularioEmpresa" 
 				editable="true">
 				<f:title>
-					<core:Title text="Nova Requisição"/>
+					<core:Title text="{i18n>viewFormularioNovaReaquisiçãoReaberturaNovaRequisição}"/>
 				</f:title>
 				<f:layout>
 					<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -38,25 +38,25 @@
 				<f:formContainers>
 					<f:FormContainer>
 						<f:formElements>
-							<f:FormElement label="Empresa">
+							<f:FormElement label="{i18n>viewFormularioNovaReaquisiçãoReaberturaEmpresa}">
 								<f:fields>
 									<Text text="Empresa A" />
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="Trimestre">
+							<f:FormElement label="{i18n>viewFormularioNovaReaquisiçãoReaberturaTrimestre}">
 								<f:fields>
 									<Select id="selectTrimestre">
 										<items>
 											<core:Item text=""/>
-											<core:Item text="1º Trimestre" key="1"/>
-											<core:Item text="2º Trimestre" key="2"/>
-											<core:Item text="3º Trimestre" key="3"/>
-											<core:Item text="4º Trimestre" key="4"/>
+											<core:Item text="1º {i18n>viewGeralTrimestre}" key="1"/>
+											<core:Item text="2º {i18n>viewGeralTrimestre}" key="2"/>
+											<core:Item text="3º {i18n>viewGeralTrimestre}" key="3"/>
+											<core:Item text="4º {i18n>viewGeralTrimestre}" key="4"/>
 										</items>
 									</Select>
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="Justificativa">
+							<f:FormElement label="{i18n>viewFormularioNovaReaquisiçãoReaberturaJustificativa}">
 								<f:fields>
 									<TextArea id="textAreaJustificativa" rows="5"/>
 								</f:fields>
@@ -70,11 +70,11 @@
 			<Toolbar>
 				<ToolbarSpacer/>
 				<Button 
-					text="Salvar" 
+					text="{i18n>formularioObrigacaoBotaoSalvar}" 
 					type="Accept" 
 					press="onSalvar"/>
 				<Button 
-					text="Cancelar" 
+					text="{i18n>formularioObrigacaoBotaoCancelar}r" 
 					type="Reject" 
 					press="onCancelar"/>
 			</Toolbar>
