@@ -510,6 +510,33 @@ module.exports = {
 				}
 			}));
 		}
+	},
+	
+	listarAgregadoDiferencaCorrente: function (req, res) {
+		if (req.query.taxPackage) {
+			var sQuery = 'select MAX("id_agregado_diferenca") "id_corrente" from "VGT.AGREGADO_DIFERENCA" where "fk_tax_package.id_tax_package" = ?',
+				aParam = [req.query.taxPackage];
+				
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParam
+			}, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				}	
+				else {
+					if (result && result.length > 0) {
+						res.send(JSON.stringify(result[0]));
+					}
+					else {
+						res.send(JSON.stringify({}));
+					}
+				}
+			});
+		}
+		else {
+			res.send(null);
+		}
 	}
 };
 

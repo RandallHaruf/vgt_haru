@@ -868,7 +868,8 @@ sap.ui.define(
 					"valor4": 0,
 					"valor5": 0,
 					"valor6": 0,
-					"nova": true
+					"nova": true,
+					"fk_agregado_diferenca.id_agregado_diferenca": this.getModel().getProperty("/AgregadoDiferenca")
 				});
 				this.getModel().refresh();
 			},
@@ -888,7 +889,8 @@ sap.ui.define(
 					"valor4": 0,
 					"valor5": 0,
 					"valor6": 0,
-					"nova": true
+					"nova": true,
+					"fk_agregado_diferenca.id_agregado_diferenca": this.getModel().getProperty("/AgregadoDiferenca")
 				});
 				this.getModel().refresh();
 			},
@@ -1792,6 +1794,17 @@ sap.ui.define(
 				this._carregarSchedule(2, "/CreditSchedule", sIdRelTaxPackagePeriodo);
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
 				this._carregarTaxRate();
+				this._carregarAgregadoDiferenca();
+			},
+			
+			_carregarAgregadoDiferenca: function () {
+				var that = this,
+					sIdTaxPackage = this.getModel().getProperty("/Periodo").id_tax_package;
+				NodeAPI.listarRegistros("AgregadoDiferencaCorrente?taxPackage=" + sIdTaxPackage, function (response) {
+					if (response && response.id_corrente) {
+						that.getModel().setProperty("/AgregadoDiferenca");
+					}
+				});
 			},
 			
 			_carregarHistorico: function () {
@@ -1956,13 +1969,13 @@ sap.ui.define(
 					outrasAntecipacoes: aOutrasAntecipacoes
 				};
 
-				NodeAPI.criarRegistro("InserirTaxPackage", {
+				/*NodeAPI.criarRegistro("InserirTaxPackage", {
 					taxPackage: JSON.stringify(oTaxPackage)
 				}, function (response) {
 					if (callback) {
 						callback(response);
 					}
-				});
+				});*/
 			},
 
 			_formatarRespostaItemToReport: function () {
@@ -2013,6 +2026,7 @@ sap.ui.define(
 
 			_zerarModel: function () {
 				this.getModel().setData({
+					AgregadoDiferenca: null,
 					PagamentosTTC: [],
 					OutrasAntecipacoes: [],
 					OtherTaxes: [],
