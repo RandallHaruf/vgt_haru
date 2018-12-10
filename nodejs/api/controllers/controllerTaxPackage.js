@@ -105,6 +105,7 @@ module.exports = {
 				aOtherTax = oTaxPackage.otherTaxes,
 				aIncentivoFiscal = oTaxPackage.incentivosFiscais,
 				aWHT = oTaxPackage.wht,
+				aAntecipacao = oTaxPackage.antecipacoes,
 				aOutrasAntecipacoes = oTaxPackage.outrasAntecipacoes;
 			
 			atualizarMoeda(sIdTaxPackage, sIdMoeda);
@@ -122,6 +123,8 @@ module.exports = {
 			inserirSchedule(oCreditSchedule);
 			
 			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes);
+			
+			inserirAntecipacoes(sIdTaxReconciliation, aAntecipacao);
 			
 			res.send(JSON.stringify({
 				success: true
@@ -967,5 +970,47 @@ function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFisca
 		}
 		
 		db.executeStatementSync(sQuery, aParams);
+	}
+}
+
+function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
+	var sQuery, aParams;
+	
+	for (var i = 0, length = aAntecipacao.length; i < length; i++) {
+		var oAntecipacao = aAntecipacao[i];
+		
+		if (!oAntecipacao.id_antecipacao) {
+			sQuery = 
+				'insert into "VGT.ANTECIPACAO"( '
+				+ '"id_antecipacao", '
+				+ '"fk_pagamento.id_pagamento", '
+				+ '"fk_tax_reconciliation.id_tax_reconciliation") values ('
+				+ '"identity_VGT.ANTECIPACAO_id_antecipacao".nextval, ?, ?)';
+			aParams = [oAntecipacao.id_pagamento, sFkTaxReconciliation];
+			
+			db.executeStatementSync(sQuery, aParams);
+		}
+	}
+	
+	sQuery = 'select * from "VGT.ANTECIPACAO" where "fk_tax_reconciliation.id_tax_reconciliation" = ?';
+	aParams = [sFkTaxReconciliation];
+	
+	var result = db.executeStatementSync(sQuery, aParams);
+	
+	if (result) {
+		for (var i = 0, length = result.length; i < length; i++) {
+			var oAntecipacaoPersistida = result[i];
+			
+			var oAntecipacaoEnviada = aAntecipacao.find(function (obj) {
+				return obj.id_antecipacao === oAntecipacaoPersistida.id_antecipacao;
+			});
+			
+			if (oAntecipacaoEnviada && !oAntecipacaoEnviada.selecionado) {
+				sQuery = 'delete from "VGT.ANTECIPACAO" where "id_antecipacao" = ?';
+				aParams = [oAntecipacaoPersistida.id_antecipacao];
+				
+				db.executeStatementSync(sQuery, aParams);
+			}
+		}
 	}
 }

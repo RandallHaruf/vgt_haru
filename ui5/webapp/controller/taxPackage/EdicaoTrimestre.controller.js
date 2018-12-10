@@ -332,7 +332,9 @@ sap.ui.define(
 				})));
 
 				/* Template das células */
-				var oCheckBox = new sap.m.CheckBox();
+				var oCheckBox = new sap.m.CheckBox({
+					selected: "{selecionado}"
+				});
 				
 				var oTextNameOfTax = new sap.m.Text({
 					text: "{name_of_tax}"
@@ -834,18 +836,25 @@ sap.ui.define(
 					});
 					
 					if (oTaxReconciliation) {
-						var aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes"),
+						var aAntecipacao = this.getModel().getProperty("/PagamentosTTC"),
+							aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes"),
 							fTotalAntecipacao = 0;
 						
 						// @TP16 REALIZAR A CONTA DAS ANTECIPACOES QUE SAO RESULTANTES DO TTC
+						
+						if (aAntecipacao) {
+							for (var i = 0, length = aAntecipacao.length; i < length; i++) {
+								fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i].total) ? Number(aAntecipacao[i].total) : 0);
+							} 
+						}
 						
 						if (aOutrasAntecipacoes) {
 							for (var i = 0, length = aOutrasAntecipacoes.length; i < length; i++) {
 								fTotalAntecipacao += (aOutrasAntecipacoes[i].valor ? Number(aOutrasAntecipacoes[i].valor) : 0);
 							} 
-							
-							oTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes = fTotalAntecipacao;
 						}
+						
+						oTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes = fTotalAntecipacao;
 					}
 				}
 			},
@@ -1757,6 +1766,8 @@ sap.ui.define(
 					sIdRelTaxPackagePeriodo = this.getModel().getProperty("/Periodo").id_rel_tax_package_periodo;
 
 				NodeAPI.listarRegistros("TaxPackage?idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo, function (response) {
+					var sIdTaxReconciliation;
+					
 					if (response) {
 						//var oTaxReconAtivo = response.taxReconciliation.find(obj => obj.ind_ativo);
 						var oTaxReconAtivo = response.taxReconciliation.find(function (obj) {
@@ -1771,28 +1782,53 @@ sap.ui.define(
 						that.onAplicarRegras();
 						
 						that._carregarTaxasMultiplas(oTaxReconAtivo.id_tax_reconciliation);
-						that._carregarAntecipacoes();
+						sIdTaxReconciliation = oTaxReconAtivo.id_tax_reconciliation;
 					}
+					
+					that._carregarPagamentosTTC(sIdTaxReconciliation);
 				});
 
 				this._carregarSchedule(1, "/LossSchedule", sIdRelTaxPackagePeriodo);
 				this._carregarSchedule(2, "/CreditSchedule", sIdRelTaxPackagePeriodo);
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
 				this._carregarTaxRate();
-				this._carregarPagamentosTTC();
 			},
 			
-			_carregarAntecipacoes: function () {
-				// @TP16
+			_carregarAntecipacoes: function (sIdTaxReconciliation) {
+				var that = this;
+				NodeAPI.listarRegistros("Antecipacao?taxReconciliation=" + sIdTaxReconciliation, function (response) {
+					if (response) {
+						var aPagamento = that.getModel().getProperty("/PagamentosTTC");
+						
+						for (var i = 0, length = response.length; i < length; i++) {
+							var oAntecipacao = response[i];
+							
+							var oPagamento = aPagamento.find(function (obj) {
+								return obj.id_pagamento === oAntecipacao["fk_pagamento.id_pagamento"];
+							});
+							
+							if (oPagamento) {
+								oPagamento.selecionado = true;
+								oPagamento.id_antecipacao = oAntecipacao.id_antecipacao;
+							}
+						}
+						
+						that.onAplicarRegras();
+					}	
+				});
 			},
 			
-			_carregarPagamentosTTC: function () {
+			_carregarPagamentosTTC: function (sIdTaxReconciliation) {
 				var that = this,
 					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
 				
 				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa, function (response) {
 					if (response) {
 						that.getModel().setProperty("/PagamentosTTC", response);
+						
+						if (sIdTaxReconciliation) {
+							that._carregarAntecipacoes(sIdTaxReconciliation);
+						}
 					}
 				});
 			},
@@ -1847,6 +1883,7 @@ sap.ui.define(
 					aOtherTax = this.getModel().getProperty("/OtherTaxes"),
 					aIncentivosFiscais = this.getModel().getProperty("/IncentivosFiscais"),
 					aWHT = this.getModel().getProperty("/WHT"),
+					aAntecipacao = this.getModel().getProperty("/PagamentosTTC"),
 					aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes");
 
 				var oLossSchedule = this.getModel().getProperty("/LossSchedule").find(function (obj) {
@@ -1874,6 +1911,8 @@ sap.ui.define(
 				console.table(aIncentivosFiscais);
 				console.log("   -- WHT\n");
 				console.table(aWHT);
+				console.log("   -- Antecipações\n");
+				console.table(aAntecipacao);
 				console.log("   -- Outras Antecipações\n");
 				console.table(aOutrasAntecipacoes);
 				console.log("- Loss Schedule: ");
@@ -1896,6 +1935,7 @@ sap.ui.define(
 					otherTaxes: aOtherTax,
 					incentivosFiscais: aIncentivosFiscais,
 					wht: aWHT,
+					antecipacoes: aAntecipacao,
 					outrasAntecipacoes: aOutrasAntecipacoes
 				};
 
