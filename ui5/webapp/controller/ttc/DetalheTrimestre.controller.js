@@ -894,9 +894,11 @@ sap.ui.define(
 					
 					for(var j = 0; j< aAllTaxas.length; j++){
 						if(aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"]){
-							if(aAllTaxas[j]["tax"].toLowerCase() == "Tax Withheld on payments to overseas group companies".toLowerCase()){
-							boolEntidadeBeneficiaria = true;
-							}	
+							if(aAllTaxas[j]["tax"] !== null && aAllTaxas[j]["tax"] != undefined && aAllTaxas[j]["tax"] != ""){
+								if(aAllTaxas[j]["tax"].toLowerCase() == "Tax Withheld on payments to overseas group companies".toLowerCase()){
+								boolEntidadeBeneficiaria = true;
+								}	
+							}
 						}
 					}
 					//var achouValor = aAllTaxas.find()
@@ -905,8 +907,10 @@ sap.ui.define(
 							|| !oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]
 							|| !oPagamento["fk_dominio_moeda.id_dominio_moeda"]
 							|| !oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"]
-							|| (boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria)
+							|| ((boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria))
 							|| !oPagamento["fk_dominio_pais.id_dominio_pais"]
+							|| !oPagamento.principal
+							|| !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
 							|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
 							|| !oPagamento.data_pagamento
 							|| !oPagamento.name_of_tax
