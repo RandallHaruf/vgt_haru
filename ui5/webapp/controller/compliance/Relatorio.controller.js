@@ -78,7 +78,7 @@ sap.ui.define([
 		},
 		onSelectChange: function (oEvent) {
 			this._atualizarDados();
-			this._geraRelatorio();
+			//this._geraRelatorio();
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -149,69 +149,7 @@ sap.ui.define([
 				text: "{/Filter/text}"
 			});
 		},
-/*		
-		_onRouteEmpresa: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("Empresa", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/Empresa", resposta);
-				}
-			});
-		},
-		
-		_onRouteDominioPais: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioPais", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioPais", resposta);
-				}
-			});
-		},
-		
-		_onRouteObrigacaoAcessoria: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("ObrigacaoAcessoria", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/ObrigacaoAcessoria", resposta);
-				}
-			});
-		},	
-		
-		_onRouteDomPeriodicidadeObrigacao: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DomPeriodicidadeObrigacao", resposta);
-				}
-			});
-		},		
-		
-		_onRouteDominioAnoFiscal: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioAnoFiscal", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioAnoFiscal", resposta);
-				}
-			});
-		},	
-		
-		_onRouteDominioStatusObrigacao: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioStatusObrigacao", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioStatusObrigacao", resposta);
-				}
-			});
-		},		
-		
-		_onRouteDominioObrigacaoAcessoriaTipo: function (oEvent) {
-			var that = this;
-			NodeAPI.listarRegistros("DominioObrigacaoAcessoriaTipo", function (resposta) {
-				if (resposta) {
-					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", resposta);
-				}
-			});
-		},
+/*
 		
 		_onRouteDominioObrigacaoAcessoriaTipo2: function (oEvent,registro) {
 			var that = this;
@@ -484,7 +422,9 @@ sap.ui.define([
 
 				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
 				exportType : new ExportType({
-					fileExtension : "txt"
+					fileExtension : "txt",
+					mimeType : "text/plain",
+					charset : "utf-8"
 				}),
 
 				// Pass in the model created above

@@ -261,11 +261,16 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i].DataPagamento = aRegistro[i].DataPagamento.substring(8,10)+"/"+aRegistro[i].DataPagamento.substring(5,7)+"/"+aRegistro[i].DataPagamento.substring(4,0);
+						aRegistro[i].JurosPagamento = aRegistro[i].JurosPagamento? Number(aRegistro[i].JurosPagamento).toFixed(2) : "0.00" ;
+						aRegistro[i].MultaPagamento = aRegistro[i].MultaPagamento? Number(aRegistro[i].MultaPagamento).toFixed(2) : "0.00" ;
+						aRegistro[i].PrincipalPagamento = aRegistro[i].PrincipalPagamento? Number(aRegistro[i].PrincipalPagamento).toFixed(2) : "0.00" ;
+						aRegistro[i].TotalPagamento = aRegistro[i].TotalPagamento? Number(aRegistro[i].TotalPagamento).toFixed(2) : "0.00" ;
 					}		
 					that.getModel().setProperty("/ReportTTC", aRegistro);
 				}
 			});	
 		},
+		
 		onDataExport : sap.m.Table.prototype.exportData || function(oEvent) {
 
 			var oExport = new Export({

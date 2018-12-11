@@ -15,26 +15,26 @@
 					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório Compliance/Beps" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
-					<Button
+					<!--<Button
 							text="{i18n>viewRelatorioImprimir}"
 							type="Transparent"
 							icon="sap-icon://print" 
-							press="onImprimir"/>
+							press="onImprimir"/>-->
 					<Button
 							text="{i18n>viewRelatorioExportar} CSV"
 							type="Transparent"
 							press="onDataExportCSV"/>
-					<Button
+					<!--<Button
 							text="{i18n>viewRelatorioExportar} TXT"
 							type="Transparent" 
-							press="onDataExportTXT"/>
+							press="onDataExportTXT"/>-->
 					<Button
 							text="{i18n>viewRelatorioExportar} XLS"
 							type="Transparent"
 							press="onDataExportCSV"/>
-					<Button
+					<!--<Button
 							text="{i18n>viewRelatorioExportar} PDF"
-							type="Transparent"/>
+							type="Transparent"/>-->
 				</f:actions>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
