@@ -8,7 +8,7 @@ module.exports = function (app) {
 	var routePais = require("./routePais");
 	var routeEmpresa = require("./routeEmpresa");
 	var routeAliquota = require("./routeAliquota");
-	var routeDiferenca = require("./routeDiferencaOpcao");
+	var routeDiferencaOpcao = require("./routeDiferencaOpcao"); 
 	var routeNameOfTax = require("./routeNameOfTax");
 	var routeTax = require("./routeTax");
 	var routeTaxCategory = require("./routeTaxCategory");
@@ -61,7 +61,7 @@ module.exports = function (app) {
 	routePais(aRoutes);
 	routeEmpresa(aRoutes);
 	routeAliquota(aRoutes);
-	routeDiferenca(aRoutes);
+	routeDiferencaOpcao(aRoutes);
 	routeNameOfTax(aRoutes);
 	routeTax(aRoutes);
 	routeTaxCategory(aRoutes);

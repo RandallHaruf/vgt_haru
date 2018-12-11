@@ -22,17 +22,8 @@ module.exports = {
 			coluna: model.colunas.outro,
 			valor: req.body.outro ? req.body.outro : null
 		}, {
-			coluna: model.colunas.valor,
-			valor: req.body.valor ? req.body.valor : null
-		}, {
-			coluna: model.colunas.fkTaxReconciliation,
-			valor: req.body.fkTaxReconciliation ? Number(req.body.fkTaxReconciliation) : null
-		}, {
-			coluna: model.colunas.fkPagamento,
-			valor: req.body.fkPagamento ? Number(req.body.fkPagamento) : null
-		}, {
-			coluna: model.colunas.fkAgregadoDiferenca,
-			valor: req.body.fkAgregadoDiferenca ? Number(req.body.fkAgregadoDiferenca) : null
+			coluna: model.colunas.fkDiferencaOpcao,
+			valor: req.body.fkDiferencaOpcao ? Number(req.body.fkDiferencaOpcao) : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -68,17 +59,8 @@ module.exports = {
 			coluna: model.colunas.outro,
 			valor: req.body.outro ? req.body.outro : null
 		}, {
-			coluna: model.colunas.valor,
-			valor: req.body.valor ? req.body.valor : null
-		}, {
-			coluna: model.colunas.fkTaxReconciliation,
-			valor: req.body.fkTaxReconciliation ? Number(req.body.fkTaxReconciliation) : null
-		}, {
-			coluna: model.colunas.fkPagamento,
-			valor: req.body.fkPagamento ? Number(req.body.fkPagamento) : null
-		}, {
-			coluna: model.colunas.fkAgregadoDiferenca,
-			valor: req.body.fkAgregadoDiferenca ? Number(req.body.fkAgregadoDiferenca) : null
+			coluna: model.colunas.fkDiferencaOpcao,
+			valor: req.body.fkDiferencaOpcao ? Number(req.body.fkDiferencaOpcao) : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {

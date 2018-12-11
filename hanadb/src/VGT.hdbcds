@@ -48,7 +48,7 @@ context VGT {
             classification                : String(30);
     };
 
-    /*@@layout{"layoutInfo":{"x":-2585,"y":360.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2753,"y":378.5}}*/
     entity DOMINIO_DIFERENCA_TIPO {
         key id_dominio_diferenca_tipo : Integer not null;
             tipo                      : String(50);
@@ -188,7 +188,7 @@ context VGT {
             flag_ano          : Boolean;
     };
 
-    /*@@layout{"layoutInfo":{"x":-2286,"y":350.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2421,"y":390.5}}*/
     entity DIFERENCA_OPCAO {
         key id_diferenca_opcao        : Integer not null;
             nome                      : String(200);
@@ -354,14 +354,11 @@ context VGT {
             fk_rel_tax_package_periodo                             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
     };
 
-    /*@@layout{"layoutInfo":{"x":-1988,"y":335.5}}*/
+    /*@@layout{"layoutInfo":{"x":-2139,"y":366.5}}*/
     entity DIFERENCA {
-        key id_diferenca          : Integer64;
-            outro                 : String(10);
-            fk_diferenca_opcao    : association[*, 0..1] to VGT.DIFERENCA_OPCAO { id_diferenca_opcao };
-            fk_tax_reconciliation : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
-            valor                 : Integer;
-            fk_agregado_diferenca : association[*, 0..1] to VGT.AGREGADO_DIFERENCA { id_agregado_diferenca };
+        key id_diferenca       : Integer64;
+            outro              : String(200);
+            fk_diferenca_opcao : association[*, 0..1] to VGT.DIFERENCA_OPCAO { id_diferenca_opcao };
     };
 
     /*@@layout{"layoutInfo":{"x":-2052,"y":1335.5}}*/
@@ -518,9 +515,10 @@ context VGT {
         fk_id_rel_tax_package_periodo           : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
     };
 
-    /*@@layout{"layoutInfo":{"x":-1988,"y":651.5}}*/
-    entity AGREGADO_DIFERENCA {
-            fk_tax_package        : association[*, 0..1] to VGT.TAX_PACKAGE { id_tax_package };
-        key id_agregado_diferenca : Integer64 not null;
+    /*@@layout{"layoutInfo":{"x":-1816,"y":421.5}}*/
+    entity REL_TAX_RECONCILIATION_DIFERENCA {
+        key fk_tax_reconciliation : association[0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
+        key fk_diferenca          : association[0..1] to VGT.DIFERENCA { id_diferenca };
+            valor                 : Decimal(19, 4);
     };
 };

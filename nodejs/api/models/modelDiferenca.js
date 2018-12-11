@@ -10,19 +10,8 @@ var oSketch = {
 		outro: {
 			nome: "outro"
 		},
-		valor: {
-			nome: "valor"
-		},
-		fkTaxReconciliation: {
+		fkDiferencaOpcao: {
 			nome: "fk_diferenca_opcao.id_diferenca_opcao",
-			number: true
-		},
-		fkPagamento: {
-			nome: "fk_tax_reconciliation.id_tax_reconciliation",
-			number: true
-		},
-		fkAgregadoDiferenca: {
-			nome: "fk_agregado_diferenca.id_agregado_diferenca",
 			number: true
 		}
 	}

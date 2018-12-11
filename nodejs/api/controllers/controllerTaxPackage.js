@@ -41,6 +41,120 @@ module.exports = {
 				// Carrega as diferencas
 				sQuery =
 					'select * '
+					+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+					+ 'inner join "VGT.PERIODO" periodo '
+					+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+					+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+					+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+					+ 'where '
+					+ 'rel."id_rel_tax_package_periodo" = ? ';
+				aParams = [sIdRelTaxPackagePeriodo];
+				
+				var resultRel = db.executeStatementSync(sQuery, aParams);
+				
+				var resultDiferenca = [];
+				var aDiferenca = [];
+				
+				if (resultRel) {
+					sQuery =
+						'select * '
+						+ 'from "VGT.DIFERENCA" diferenca '
+						+ 'left outer join "VGT.DIFERENCA_OPCAO" diferencaOpcao '
+						+ 'on diferenca."fk_diferenca_opcao.id_diferenca_opcao" = diferencaOpcao."id_diferenca_opcao" '
+						+ 'left outer join "VGT.DOMINIO_DIFERENCA_TIPO" dominioTipo '
+						+ 'on diferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo" = dominioTipo."id_dominio_diferenca_tipo" '
+						+ 'inner join "VGT.REL_TAX_RECONCILIATION_DIFERENCA" rel '
+						+ 'on diferenca."id_diferenca" = rel."fk_diferenca.id_diferenca" '
+						+ 'inner join "VGT.TAX_RECONCILIATION" taxRecon '
+						+ 'on rel."fk_tax_reconciliation.id_tax_reconciliation" = taxRecon."id_tax_reconciliation" '
+						+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" relTaxPackagePeriodo '
+						+ 'on taxRecon."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = relTaxPackagePeriodo."id_rel_tax_package_periodo" '
+						+ 'inner join "VGT.PERIODO" periodo '
+						+ 'on relTaxPackagePeriodo."fk_periodo.id_periodo" = periodo."id_periodo" '
+						+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+						+ 'on relTaxPackagePeriodo."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+						+ 'where '
+						+ 'periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+						+ 'and periodo."numero_ordem" <= ? '
+						+ 'and taxPackage."fk_empresa.id_empresa" = ? ';
+						
+					aParams = [resultRel[0]["fk_dominio_ano_calendario.id_dominio_ano_calendario"], resultRel[0].numero_ordem, resultRel[0]["fk_empresa.id_empresa"]];
+					
+					resultDiferenca = db.executeStatementSync(sQuery, aParams);
+					
+					for (var i = 0; i < resultDiferenca.length; i++) {
+						if (resultDiferenca[i].numero_ordem >= 6 && i < resultDiferenca - 1) {
+							resultDiferenca.splice(i, 1);
+						}
+					}
+					
+					for (var i = 0; i < resultDiferenca.length; i++) {
+						var oDiferenca = resultDiferenca[i];
+						
+						var oDiferencaEncontrada = aDiferenca.find(function (obj) {
+							return obj.id_diferenca === oDiferenca.id_diferenca;	
+						});
+						
+						if (oDiferencaEncontrada) {
+							switch (true) {
+								case oDiferenca.numero_ordem === 1:
+									oDiferencaEncontrada.valor1 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 2:
+									oDiferencaEncontrada.valor2 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 3:
+									oDiferencaEncontrada.valor3 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 4:
+									oDiferencaEncontrada.valor4 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 5:
+									oDiferencaEncontrada.valor5 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem >= 6:
+									oDiferencaEncontrada.valor6 = oDiferenca.valor;
+									break;
+							}
+						}
+						else {
+							switch (true) {
+								case oDiferenca.numero_ordem === 1:
+									oDiferenca.valor1 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 2:
+									oDiferenca.valor2 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 3:
+									oDiferenca.valor3 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 4:
+									oDiferenca.valor4 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem === 5:
+									oDiferenca.valor5 = oDiferenca.valor;
+									break;
+								case oDiferenca.numero_ordem >= 6:
+									oDiferenca.valor6 = oDiferenca.valor;
+									break;
+							}
+							
+							aDiferenca.push(oDiferenca);
+						}
+					}
+					/*for (var i = 0; i < resultDiferenca.length; i++) {
+						var oDiferenca = resultDiferenca[i];
+						
+						oDiferenca.valor1 = oDiferenca.numero_ordem === 1 ? oDiferenca.valor : null;
+						oDiferenca.valor2 = oDiferenca.numero_ordem === 2 ? oDiferenca.valor : null;
+						oDiferenca.valor3 = oDiferenca.numero_ordem === 3 ? oDiferenca.valor : null;
+						oDiferenca.valor4 = oDiferenca.numero_ordem === 4 ? oDiferenca.valor : null;
+						oDiferenca.valor5 = oDiferenca.numero_ordem === 5 ? oDiferenca.valor : null;
+						oDiferenca.valor6 = oDiferenca.numero_ordem >= 6 ? oDiferenca.valor : null;	
+					}*/
+				}
+				/*sQuery =
+					'select * '
 					+ 'from "VGT.DIFERENCA" diferenca '
 					+ 'inner join "VGT.DIFERENCA_OPCAO" diferencaOpcao '
 					+ 'on diferenca."fk_diferenca_opcao.id_diferenca_opcao" = diferencaOpcao."id_diferenca_opcao" '
@@ -61,12 +175,12 @@ module.exports = {
 					oDiferenca.valor4 = oTaxReconciliation.numero_ordem === 4 ? oDiferenca.valor : null;
 					oDiferenca.valor5 = oTaxReconciliation.numero_ordem === 5 ? oDiferenca.valor : null;
 					oDiferenca.valor6 = oTaxReconciliation.numero_ordem >= 6 ? oDiferenca.valor : null;
-				}
+				}*/
 				
 				var response = JSON.stringify({
 					taxReconciliation: resultTaxRecon,
-					diferencaPermanente: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 1),
-					diferencaTemporaria: resultDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 2),
+					diferencaPermanente: aDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 1),
+					diferencaTemporaria: aDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 2),
 					moeda: resultMoeda && resultMoeda.length > 0 ? resultMoeda[0]["fk_dominio_moeda.id_dominio_moeda"] : null
 				});
 			}
@@ -510,33 +624,6 @@ module.exports = {
 				}
 			}));
 		}
-	},
-	
-	listarAgregadoDiferencaCorrente: function (req, res) {
-		if (req.query.taxPackage) {
-			var sQuery = 'select MAX("id_agregado_diferenca") "id_corrente" from "VGT.AGREGADO_DIFERENCA" where "fk_tax_package.id_tax_package" = ?',
-				aParam = [req.query.taxPackage];
-				
-			db.executeStatement({
-				statement: sQuery,
-				parameters: aParam
-			}, function (err, result) {
-				if (err) {
-					res.send(JSON.stringify(err));
-				}	
-				else {
-					if (result && result.length > 0) {
-						res.send(JSON.stringify(result[0]));
-					}
-					else {
-						res.send(JSON.stringify({}));
-					}
-				}
-			});
-		}
-		else {
-			res.send(null);
-		}
 	}
 };
 
@@ -722,6 +809,62 @@ function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenc
 	for (var i = 0, length = aDiferenca.length; i < length; i++) {
 		var oDiferenca = aDiferenca[i];
 		
+		// Se a diferença ja existe
+		if (oDiferenca.id_diferenca) {
+			sQuery = 
+				'select * from "VGT.REL_TAX_RECONCILIATION_DIFERENCA" rel '
+				+ 'where '
+				+ 'rel."fk_diferenca.id_diferenca" = ? '
+				+ 'and rel."fk_tax_reconciliation.id_tax_reconciliation" = ?';
+			aParams = [oDiferenca.id_diferenca, sFkTaxReconciliation];
+			
+			var result = db.executeStatementSync(sQuery, aParams);
+			
+			// Caso o relacionamento com o tax reconciliation corrente ja existe, atualiza ele
+			if (result && result.length > 0) {
+				sQuery = 'update "VGT.REL_TAX_RECONCILIATION_DIFERENCA" set "valor" = ? where "fk_tax_reconciliation.id_tax_reconciliation" = ? and "fk_diferenca.id_diferenca" = ?';
+				aParams = [oDiferenca[sChaveValorDiferenca], sFkTaxReconciliation, oDiferenca.id_diferenca];
+				db.executeStatementSync(sQuery, aParams);
+			}
+			// Se nao, insere o relacionamento
+			else {
+				sQuery = 'insert into "VGT.REL_TAX_RECONCILIATION_DIFERENCA"("fk_tax_reconciliation.id_tax_reconciliation", "fk_diferenca.id_diferenca", "valor") values(?, ?, ?)';
+				aParams = [sFkTaxReconciliation, oDiferenca.id_diferenca, oDiferenca[sChaveValorDiferenca]];
+				db.executeStatementSync(sQuery, aParams);
+			}
+			
+			// Atualiza outro e fk_tipo
+			sQuery = 'update "VGT.DIFERENCA" set "outro" = ?, "fk_diferenca_opcao.id_diferenca_opcao" = ? where "id_diferenca" = ?';
+			aParams = [oDiferenca.outro, oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] ? oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] : null, oDiferenca.id_diferenca];
+			
+			db.executeStatementSync(sQuery, aParams);
+		}
+		else {
+			// cria a diferenca e o relacioanemtno
+			sQuery = 'insert into "VGT.DIFERENCA"("id_diferenca", "outro", "fk_diferenca_opcao.id_diferenca_opcao") values ("identity_VGT.DIFERENCA_id_diferenca".nextval, ?, ?)';
+			aParams = [oDiferenca.outro, oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] ? oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] : null];
+			
+			db.executeStatementSync(sQuery, aParams);
+			
+			sQuery = 'select MAX("id_diferenca") "id_diferenca_criada" from "VGT.DIFERENCA"';
+			
+			var result = db.executeStatementSync(sQuery);
+			
+			sQuery = 'insert into "VGT.REL_TAX_RECONCILIATION_DIFERENCA"("fk_tax_reconciliation.id_tax_reconciliation", "fk_diferenca.id_diferenca", "valor") values(?, ?, ?)';
+				
+			aParams = [sFkTaxReconciliation, result[0].id_diferenca_criada, oDiferenca[sChaveValorDiferenca]];
+			
+			db.executeStatementSync(sQuery, aParams);
+		}
+	}
+}
+
+/*function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenca) {
+	var sQuery, aParams;
+	
+	for (var i = 0, length = aDiferenca.length; i < length; i++) {
+		var oDiferenca = aDiferenca[i];
+		
 		if (oDiferenca.id_diferenca) {
 			// update		
 			sQuery = 
@@ -754,7 +897,7 @@ function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenc
 			db.executeStatementSync(sQuery, aParams);					
 		}
 	}
-}
+}*/
 
 function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToReport) {
 	var sQuery, aParams, result;
