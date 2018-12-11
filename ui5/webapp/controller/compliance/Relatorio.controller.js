@@ -7,11 +7,12 @@ sap.ui.define([
 	"ui5ns/ui5/lib/NodeAPI",
 	"ui5ns/ui5/model/Constants",
 	"sap/ui/core/util/Export",
+	"sap/ui/core/util/ExportType",	
 	"sap/ui/core/util/ExportTypeCSV",	
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
 	"ui5ns/ui5/lib/Utils"	
-], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Export, ExportTypeCSV, TablePersoController,MessageBox,Utils) {
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Export, ExportType ,ExportTypeCSV, TablePersoController,MessageBox,Utils) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.compliance.Relatorio", {
@@ -39,6 +40,8 @@ sap.ui.define([
 				}]				
 			}));
 			this._atualizarDados();
+			
+			//this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
 		},
 
 		navToHome: function () {
@@ -56,7 +59,7 @@ sap.ui.define([
 			this._geraRelatorio();                                  	
 		},
 		onGerarRelatorio: function (oEvent) {
-			this._geraRelatorio();                                  	
+			this._geraRelatorio(); 
 		},		
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
@@ -75,6 +78,7 @@ sap.ui.define([
 		},
 		onSelectChange: function (oEvent) {
 			this._atualizarDados();
+			this._geraRelatorio();
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -145,6 +149,7 @@ sap.ui.define([
 				text: "{/Filter/text}"
 			});
 		},
+/*		
 		_onRouteEmpresa: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("Empresa", function (resposta) {
@@ -153,6 +158,7 @@ sap.ui.define([
 				}
 			});
 		},
+		
 		_onRouteDominioPais: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("DominioPais", function (resposta) {
@@ -161,6 +167,7 @@ sap.ui.define([
 				}
 			});
 		},
+		
 		_onRouteObrigacaoAcessoria: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("ObrigacaoAcessoria", function (resposta) {
@@ -169,6 +176,7 @@ sap.ui.define([
 				}
 			});
 		},	
+		
 		_onRouteDomPeriodicidadeObrigacao: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (resposta) {
@@ -177,6 +185,7 @@ sap.ui.define([
 				}
 			});
 		},		
+		
 		_onRouteDominioAnoFiscal: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("DominioAnoFiscal", function (resposta) {
@@ -185,6 +194,7 @@ sap.ui.define([
 				}
 			});
 		},	
+		
 		_onRouteDominioStatusObrigacao: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("DominioStatusObrigacao", function (resposta) {
@@ -193,6 +203,7 @@ sap.ui.define([
 				}
 			});
 		},		
+		
 		_onRouteDominioObrigacaoAcessoriaTipo: function (oEvent) {
 			var that = this;
 			NodeAPI.listarRegistros("DominioObrigacaoAcessoriaTipo", function (resposta) {
@@ -201,6 +212,7 @@ sap.ui.define([
 				}
 			});
 		},
+		
 		_onRouteDominioObrigacaoAcessoriaTipo2: function (oEvent,registro) {
 			var that = this;
 			NodeAPI.listarRegistros("deepQuery/DominioObrigacaoAcessoriaTipo?idRegistro="+registro, function (resposta) {
@@ -208,7 +220,8 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", resposta);
 				}
 			});
-		},		
+		},	
+*/		
 		_atualizarDados: function () {
 			var that = this;
 			var vetorInicioEntrega = [];
@@ -229,7 +242,6 @@ sap.ui.define([
 			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial") ? this.getModel().getProperty("/CheckObrigacaoInicial") === undefined ? null : this.getModel().getProperty("/CheckObrigacaoInicial") == "1" ? ["true"] : ["false"] : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
 
-
 			var oWhere = []; 
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
@@ -245,23 +257,10 @@ sap.ui.define([
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
 			oWhere.push(null);	
+			
 			/* ----- ESTE TRECHO DE CODIGO FOI PARA A FUNCAO geraRelatorio
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
-				type: "POST",
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i].prazo_entrega = aRegistro[i].prazo_entrega.substring(8,10)+"/"+aRegistro[i].prazo_entrega.substring(5,7)+"/"+aRegistro[i].prazo_entrega.substring(4,0);
-						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);
-						aRegistro[i].obrigacao_inicial = aRegistro[i].obrigacao_inicial === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
-						aRegistro[i].suporte_contratado = aRegistro[i].suporte_contratado === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
-					}		
-					that.getModel().setProperty("/ReportObrigacao", aRegistro);
-				}
-			});	*/
+			this._preencheReportObrigacao(oWhere);
+			*/
 
 			/*PARAMETRO DO DISTINCT
 			"tipo": Distinct para Obrigacoes
@@ -273,7 +272,7 @@ sap.ui.define([
 			"TBLSTATUSOBRIGACAODESCRICAO": Status
 			*/
 			
-			oWhere[13] = ["tipo"];
+			oWhere[13] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -284,7 +283,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", aRegistro);
 				}
 			});		
-			oWhere[13] = ["nome"];
+			oWhere[13] = ["tblEmpresa.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -295,7 +294,7 @@ sap.ui.define([
 					that.getModel().setProperty("/Empresa", aRegistro);
 				}
 			});				
-			oWhere[13] = ["pais"];
+			oWhere[13] = ["tblDominioPais.pais"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -306,7 +305,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioPais", aRegistro);
 				}
 			});		
-			oWhere[13] = ["TBLOBRIGACAOACESSORIANOME"];
+			oWhere[13] = ["tblObrigacaoAcessoria.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -317,7 +316,7 @@ sap.ui.define([
 					that.getModel().setProperty("/ObrigacaoAcessoria", aRegistro);
 				}
 			});	
-			oWhere[13] = ["descricao"];
+			oWhere[13] = ["tblDominioPeriodicidadeObrigacao.descricao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -328,7 +327,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 				}
 			});	
-			oWhere[13] = ["ano_fiscal"];
+			oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -339,7 +338,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
 				}
 			});		
-			oWhere[13] = ["TBLSTATUSOBRIGACAODESCRICAO"];
+			oWhere[13] = ["tblDominioStatusObrigacao.descricao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -349,9 +348,34 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					that.getModel().setProperty("/DominioStatusObrigacao", aRegistro);
 				}
+			});	
+			oWhere[13] = ["tblObrigacao.prazo_entrega"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/ObrigacaoPrazoMin", Utils.bancoParaJsDate(aRegistro[0]["min(tblObrigacao.prazo_entrega)"]));
+					that.getModel().setProperty("/ObrigacaoPrazoMax", Utils.bancoParaJsDate(aRegistro[0]["max(tblObrigacao.prazo_entrega)"]));	
+				}
+			});	
+			oWhere[13] = ["tblObrigacao.extensao"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/ObrigacaoExtensaoMin", Utils.bancoParaJsDate(aRegistro[0]["min(tblObrigacao.extensao)"]));
+					that.getModel().setProperty("/ObrigacaoExtensaoMax", Utils.bancoParaJsDate(aRegistro[0]["max(tblObrigacao.extensao)"]));	
+				}
 			});				
 		},
-		onDataExport : sap.m.Table.prototype.exportData || function(oEvent) {
+		
+		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
 
 			var oExport = new Export({
 
@@ -369,71 +393,71 @@ sap.ui.define([
 				},
 
 				// column definitions with column name and binding info for the content
-				
+
 				columns : [{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaTipo"),
 					template : {
-						content : "{tipo}"
+						content : "{tblDominioObrigacaoAcessoriaTipo.tipo}"
 					}
 				}, {
 					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
 					template : {
-						content : "{nome}"
+						content : "{tblEmpresa.nome}"
 					}
 				}, {
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPais"),
 					template : {
-						content : "{pais}"
+						content : "{tblDominioPais.pais}"
 					}
 				}, {
 					name : this.getResourceBundle().getText("viewComplianceFormularioDetalhesObrigacaoListagemObrigações"),
 					template : {
-						content : "{TBLOBRIGACAOACESSORIANOME}"
+						content : "{tblObrigacaoAcessoria.nome}"
 					}
 				}, {
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPeriodicidade"),
 					template : {
-						content : "{descricao}"
+						content : "{tblDominioPeriodicidadeObrigacao.descricao}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaAnoFiscal"),
 					template : {
-						content : "{ano_fiscal}"
+						content : "{tblDominioAnoFiscal.ano_fiscal}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPrazoEntrega"),
 					template : {
-						content : "{prazo_entrega}"
+						content : "{tblObrigacao.prazo_entrega}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaExtensao"),
 					template : {
-						content : "{extensao}"
+						content : "{tblObrigacao.extensao}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaStatus"),
 					template : {
-						content : "{TBLSTATUSOBRIGACAODESCRICAO}"
+						content : "{tblDominioStatusObrigacao.descricao}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesBotaoRequisicao"),
 					template : {
-						content : "{obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+						content : "{tblObrigacao.obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaSuporteContratado"),
 					template : {
-						content : "{suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+						content : "{tblObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
 					}
 				},{
 					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
 					template : {
-						content : "{suporte}"
+						content : "{tblObrigacao.suporte}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
 					template : {
-						content : "{observacoes}"
+						content : "{tblObrigacao.observacoes}"
 					}
 				}]
 			});
@@ -453,12 +477,122 @@ sap.ui.define([
 				oExport.destroy();
 			});
 		},
+		
+		onDataExportTXT : sap.m.Table.prototype.exportData || function(oEvent) {
+
+			var oExport = new Export({
+
+				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
+				exportType : new ExportType({
+					fileExtension : "txt"
+				}),
+
+				// Pass in the model created above
+				models : this.getView().getModel(),
+
+				// binding information for the rows aggregation
+				rows : {
+					path : "/ReportObrigacao"
+				},
+
+				// column definitions with column name and binding info for the content
+
+				columns : [{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaTipo"),
+					template : {
+						content : "{tblDominioObrigacaoAcessoriaTipo.tipo}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
+					template : {
+						content : "{tblEmpresa.nome}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPais"),
+					template : {
+						content : "{tblDominioPais.pais}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewComplianceFormularioDetalhesObrigacaoListagemObrigações"),
+					template : {
+						content : "{tblObrigacaoAcessoria.nome}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPeriodicidade"),
+					template : {
+						content : "{tblDominioPeriodicidadeObrigacao.descricao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaAnoFiscal"),
+					template : {
+						content : "{tblDominioAnoFiscal.ano_fiscal}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPrazoEntrega"),
+					template : {
+						content : "{tblObrigacao.prazo_entrega}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaExtensao"),
+					template : {
+						content : "{tblObrigacao.extensao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaStatus"),
+					template : {
+						content : "{tblDominioStatusObrigacao.descricao}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesBotaoRequisicao"),
+					template : {
+						content : "{tblObrigacao.obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaSuporteContratado"),
+					template : {
+						content : "{tblObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+					}
+				},{
+					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					template : {
+						content : "{tblObrigacao.suporte}"
+					}
+				},{
+					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
+					template : {
+						content : "{tblObrigacao.observacoes}"
+					}
+				}]
+			});
+			
+			// download exported file
+			oExport.saveFile(
+				Utils.dateNowParaArquivo()
+				+"_"
+				+this.getResourceBundle().getText("viewGeralRelatorio") 
+				+"_" 
+				+ this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina")
+				+"_"
+				+this.getResourceBundle().getText("viewSelecaoModuloBotaoBeps")
+				).catch(function(oError) {
+				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
+			}).then(function() {
+				oExport.destroy();
+			});
+		},		
+		
 		_geraRelatorio: function () {
-			var that = this;
+			/*
+			Esta função gera um array de arrays para serem passados como argumento posteriormente para a função de preencher o relatorio.
+			Para nao passar um argumento aquela posicao de array deve ficar nula.
+			Ex.:
+			[null,null,null,["1","2"],["35"],null,null,["5","8","12","7"]]
+			*/
 			var vetorInicioEntrega = [];
 			var vetorInicioExtensao = [];
 			var vetorFimEntrega = [];
-			var vetorFimExtensao = [];			
+			var vetorFimExtensao = [];	
+			
 			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
@@ -487,8 +621,12 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oCheckObrigacao);
 			oWhere.push(oCheckSuporteContratado);
-			oWhere.push(null);	
 			
+			this._preencheReportObrigacao(oWhere);
+		},
+		
+		_preencheReportObrigacao: function (oWhere){
+			var that = this;
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				data: {
@@ -497,14 +635,14 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i].prazo_entrega = aRegistro[i].prazo_entrega.substring(8,10)+"/"+aRegistro[i].prazo_entrega.substring(5,7)+"/"+aRegistro[i].prazo_entrega.substring(4,0);
-						aRegistro[i].extensao = aRegistro[i].extensao.substring(8,10)+"/"+aRegistro[i].extensao.substring(5,7)+"/"+aRegistro[i].extensao.substring(4,0);
-						aRegistro[i].obrigacao_inicial = aRegistro[i].obrigacao_inicial === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
-						aRegistro[i].suporte_contratado = aRegistro[i].suporte_contratado === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
+						aRegistro[i]["tblObrigacao.prazo_entrega"] = aRegistro[i]["tblObrigacao.prazo_entrega"].substring(8,10)+"/"+aRegistro[i]["tblObrigacao.prazo_entrega"].substring(5,7)+"/"+aRegistro[i]["tblObrigacao.prazo_entrega"].substring(4,0);
+						aRegistro[i]["tblObrigacao.extensao"] = aRegistro[i]["tblObrigacao.extensao"].substring(8,10)+"/"+aRegistro[i]["tblObrigacao.extensao"].substring(5,7)+"/"+aRegistro[i]["tblObrigacao.extensao"].substring(4,0);
+						aRegistro[i]["tblObrigacao.obrigacao_inicial"] = aRegistro[i]["tblObrigacao.obrigacao_inicial"] === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
+						aRegistro[i]["tblObrigacao.suporte_contratado"] = aRegistro[i]["tblObrigacao.suporte_contratado"] === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 				}
-			});	
-		}		
+			});				
+		}
 	});
 });

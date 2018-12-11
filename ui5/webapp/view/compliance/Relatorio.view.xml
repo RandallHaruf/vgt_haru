@@ -23,14 +23,15 @@
 					<Button
 							text="{i18n>viewRelatorioExportar} CSV"
 							type="Transparent"
-							press="onDataExport"/>
+							press="onDataExportCSV"/>
 					<Button
 							text="{i18n>viewRelatorioExportar} TXT"
-							type="Transparent" />
+							type="Transparent" 
+							press="onDataExportTXT"/>
 					<Button
 							text="{i18n>viewRelatorioExportar} XLS"
 							type="Transparent"
-							press="onDataExport"/>
+							press="onDataExportCSV"/>
 					<Button
 							text="{i18n>viewRelatorioExportar} PDF"
 							type="Transparent"/>
@@ -56,61 +57,61 @@
 							<fb:FilterItem name="J" label="{i18n>viewComplianceListagemObrigacoesColunaTipo}">
 								<fb:control>
 									<MultiComboBox id="selectDominio" selectionFinish="onSelectChange" items="{ path: '/DominioObrigacaoAcessoriaTipo' }" selectedKeys="{/IdDominioObrigacaoAcessoriaTipoSelecionadas}">
-										<core:Item key="{id_dominio_obrigacao_acessoria_tipo}" text="{tipo}"/>
+										<core:Item key="{tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo}" text="{tblDominioObrigacaoAcessoriaTipo.tipo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>							
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
 									<MultiComboBox id="selectEmpresa"  selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
-										<core:Item key="{id_empresa}" text="{nome}"/>
+										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewComplianceListagemObrigacoesColunaPais}">
 								<fb:control>
 									<MultiComboBox id="selectPais" selectionFinish="onSelectChange" items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}">
-										<core:Item key="{id_dominio_pais}" text="{pais}"/>
+										<core:Item key="{tblDominioPais.id_dominio_pais}" text="{tblDominioPais.pais}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}">
 								<fb:control>
 									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/ObrigacaoAcessoria' }" selectedKeys="{/IdObrigacaoAcessoriaSelecionadas}">
-										<core:Item key="{id_obrigacao_acessoria}" text="{nome}"/>
+										<core:Item key="{tblObrigacaoAcessoria.id_obrigacao_acessoria}" text="{tblObrigacaoAcessoria.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodicidade" selectionFinish="onSelectChange" items="{ path: '/DomPeriodicidadeObrigacao' }" selectedKeys="{/IdDomPeriodicidadeObrigacaoSelecionadas}">
-										<core:Item key="{id_periodicidade_obrigacao}" text="{descricao}"/>
+										<core:Item key="{tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao}" text="{tblDominioPeriodicidadeObrigacao.descricao}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}">
 								<fb:control>
 									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange" items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}">
-										<core:Item key="{id_dominio_ano_fiscal}" text="{ano_fiscal}"/>
+										<core:Item key="{tblDominioAnoFiscal.id_dominio_ano_fiscal}" text="{tblDominioAnoFiscal.ano_fiscal}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
 									<DateRangeSelection	id="PrazoEntrega" dateValue="{/DataPrazoEntregaInicio}"	secondDateValue="{/DataPrazoEntregaFim}" 
-									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
+									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoPrazoMin}" maxDate="{/ObrigacaoPrazoMax}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
 								<fb:control>
 									<DateRangeSelection	id="Extensao" dateValue="{/DataExtensaoInicio}"	secondDateValue="{/DataExtensaoFim}" 
-									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
+									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoExtensaoMin}" maxDate="{/ObrigacaoExtensaoMax}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">
 								<fb:control>
 									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/DominioStatusObrigacao' }" selectedKeys="{/IdDominioStatusObrigacaoSelecionadas}">
-										<core:Item key="{id_status_obrigacao}" text="{descricao}"/>
+										<core:Item key="{tblDominioStatusObrigacao.id_status_obrigacao}" text="{tblDominioStatusObrigacao.descricao}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -145,61 +146,61 @@
 						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewEmpresasObrigacoesAcessorias}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
 						</Column>
 						<Column width="15rem">
 							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="15rem">
 							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
 						</Column>						
 					</columns>
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text text="{tipo}"/>
-								<Text text="{nome}"/>
-								<Text text="{pais}"/>
-								<Text text="{TBLOBRIGACAOACESSORIANOME}"/>
-								<Text text="{descricao}"/>
-								<Text text="{ano_fiscal}"/>
-								<Text text="{prazo_entrega}"/>
-								<Text text="{extensao}"/>
-								<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/><!--
+								<Text text="{tblDominioObrigacaoAcessoriaTipo.tipo}"/>
+								<Text text="{tblEmpresa.nome}"/>
+								<Text text="{tblDominioPais.pais}"/>
+								<Text text="{tblObrigacaoAcessoria.nome}"/>
+								<Text text="{tblDominioPeriodicidadeObrigacao.descricao}"/>
+								<Text text="{tblDominioAnoFiscal.ano_fiscal}"/>
+								<Text text="{tblObrigacao.prazo_entrega}"/>
+								<Text text="{tblObrigacao.extensao}"/>
+								<Text text="{tblDominioStatusObrigacao.descricao}"/><!--
 								<Text text="{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}" />
 								<Text text="{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"/>-->
-								<Text text="{obrigacao_inicial}" />
-								<Text text="{suporte_contratado}"/>								
-								<Text text="{suporte}"/>
-								<Text text="{observacoes}"/>								
+								<Text text="{tblObrigacao.obrigacao_inicial}" />
+								<Text text="{tblObrigacao.suporte_contratado}"/>								
+								<Text text="{tblObrigacao.suporte}"/>
+								<Text text="{tblObrigacao.observacoes}"/>								
 							</cells>
 						</ColumnListItem>
 					</items>
