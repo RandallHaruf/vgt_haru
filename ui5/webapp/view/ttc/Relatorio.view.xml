@@ -55,89 +55,93 @@
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa" selectionChange="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
-										<core:Item key="{id_empresa}" text="{nome}"/>									
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>									
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewRelatorioClassificacao}">
 								<fb:control>
-									<MultiComboBox id="selectClassification" selectionChange="onSelectChange"  items="{ path: '/DominioTaxClassification' }" selectedKeys="{/IdDominioTaxClassificationSelecionadas}">
-										<core:Item key="{id_dominio_tax_classification}" text="{classification}"/>										
+									<MultiComboBox id="selectClassification" selectionFinish="onSelectChange"  items="{ path: '/DominioTaxClassification' }" selectedKeys="{/IdDominioTaxClassificationSelecionadas}">
+										<core:Item key="{tblDominioTaxClassification.id_dominio_tax_classification}" text="{tblDominioTaxClassification.classification}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewRelatorioCategoria}">
 								<fb:control>
-									<MultiComboBox id="selectCategory" selectionChange="onSelectChange"  items="{ path: '/TaxCategory' }" selectedKeys="{/IdTaxCategorySelecionadas}">
-										<core:Item key="{id_tax_category}" text="{category}"/>
+									<MultiComboBox id="selectCategory" selectionFinish="onSelectChange"  items="{ path: '/TaxCategory' }" selectedKeys="{/IdTaxCategorySelecionadas}">
+										<core:Item key="{tblTaxCategory.id_tax_category}" text="{tblTaxCategory.category}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewRelatorioT}">
 								<fb:control>
-									<MultiComboBox id="selectTax" selectionChange="onSelectChange"  items="{ path: '/Tax' }" selectedKeys="{/IdTaxSelecionadas}" >
-										<core:Item key="{id_tax}" text="{tax}"/>										
+									<MultiComboBox id="selectTax" selectionFinish="onSelectChange"  items="{ path: '/Tax' }" selectedKeys="{/IdTaxSelecionadas}" >
+										<core:Item key="{tblTax.id_tax}" text="{tblTax.tax}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="{i18n>viewRelatorioNomeT}">
 								<fb:control>
-									<MultiComboBox id="selectNameOfTax" selectionChange="onSelectChange"  items="{ path: '/NameOfTax' }" selectedKeys="{/IdNameOfTaxSelecionadas}" >
-										<core:Item key="{id_name_of_tax}" text="{name_of_tax}"/>										
+									<MultiComboBox id="selectNameOfTax" selectionFinish="onSelectChange"  items="{ path: '/NameOfTax' }" selectedKeys="{/IdNameOfTaxSelecionadas}" >
+										<core:Item key="{tblNameOfTax.id_name_of_tax}" text="{tblNameOfTax.name_of_tax}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewRelatorioJurisdicao}">
 								<fb:control>
-									<MultiComboBox id="selectJurisdicao" selectionChange="onSelectChange"  items="{ path: '/DominioJurisdicao' }" selectedKeys="{/IdDominioJurisdicaoSelecionadas}" >
-										<core:Item key="{id_dominio_jurisdicao}" text="{jurisdicao}"/>																				
+									<MultiComboBox id="selectJurisdicao" selectionFinish="onSelectChange"  items="{ path: '/DominioJurisdicao' }" selectedKeys="{/IdDominioJurisdicaoSelecionadas}" >
+										<core:Item key="{tblDominioJurisdicao.id_dominio_jurisdicao}" text="{tblDominioJurisdicao.jurisdicao}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewRelatorioPais}">
 								<fb:control>
-									<MultiComboBox id="selectPais" selectionChange="onSelectChange"  items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}" >
-										<core:Item key="{id_dominio_pais}" text="{pais}"/>											
+									<MultiComboBox id="selectPais" selectionFinish="onSelectChange"  items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}" >
+										<core:Item key="{tblDominioPais.id_dominio_pais}" text="{tblDominioPais.pais}"/>											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="H" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionChange="onSelectChange"  items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
-										<core:Item key="{id_dominio_ano_fiscal}" text="{ano_fiscal}"/>																				
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
+										<core:Item key="{tblDominioAnoFiscal.id_dominio_ano_fiscal}" text="{tblDominioAnoFiscal.ano_fiscal}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamentoInício}">
 								<fb:control>
 									<DateRangeSelection	id="DataPagamento" dateValue="{/DataPagamentoInicio}"	secondDateValue="{/DataPagamentoFim}" 
-									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange"/>
+									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/DataPagamentoMin}" maxDate="{/DataPagamentoMax}"/>
 								</fb:control>
 							</fb:FilterItem>								
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
 								<fb:control>
-									<MultiComboBox id="selectCurrency" selectionChange="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
-										<core:Item key="{id_dominio_moeda}" text="{acronimo} - {nome}" />											
+									<MultiComboBox id="selectCurrency" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
+										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}" />											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="L" label="{i18n>ViewRelatorioTipoDeTransacao}">
 								<fb:control>
-									<MultiComboBox id="selectTypeOfTransaction" selectionChange="onSelectChange"  items="{ path: '/DominioTipoTransacao' }" selectedKeys="{/IdDominioTipoTransacaoSelecionadas}" >
-										<core:Item key="{id_dominio_tipo_transacao}" text="{tipo_transacao}"/>																				
+									<MultiComboBox id="selectTypeOfTransaction" selectionFinish="onSelectChange"  items="{ path: '/DominioTipoTransacao' }" selectedKeys="{/IdDominioTipoTransacaoSelecionadas}" >
+										<core:Item key="{tblDominioTipoTransacao.id_dominio_tipo_transacao}" text="{tblDominioTipoTransacao.tipo_transacao}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
 					</fb:FilterBar>
+					<Button
+					text="Gerar {i18n>viewGeralRelatorio}"
+					type="Emphasized"
+					press="onGerarRelatorio"/>						
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>
 		<!-- DynamicPage Content  -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/ReportTTC', sorter: [{path:'DataPagamento'}] }">
+				<Table items="{ path: '/ReportTTC', sorter: [{path:'tblPagamento.data_pagamento'}] }">
 					<columns>
 						<Column width="6rem">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
@@ -203,26 +207,26 @@
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text text="{Empresa}"/>
-								<Text text="{DominioTaxClassification}"/>
-								<Text text="{TaxCategory}"/>
-								<Text text="{Tax}"/>
-								<Text text="{NameOfTax}"/>
-								<Text text="{DominioJurisdicao}"/>
-								<Text text="{DominioPais}"/>
-								<Text text="{DominioAnoFiscal}" />
-								<Text text="{DominioMoeda}" />
-								<Text text="{DominioTipoTransacao}" />
-								<Text text="{DataPagamento}"/>
-								<Text text="{ProjetoPagamento}"/>
-								<Text text="{DescricaoPagamento}"/>
-								<Text text="{TipoTransacaoOutrosPagamento}"/>
-								<Text text="{PrincipalPagamento}"/>
-								<Text text="{JurosPagamento}"/>
-								<Text text="{MultaPagamento}" />
-								<Text text="{TotalPagamento}" />
-								<Text text="{NumeroDocumentoPagamento}" />
-								<Text text="{EntidadeBeneficiariaPagamento}"/>							
+								<Text text="{tblEmpresa.nome}"/>
+								<Text text="{tblDominioTaxClassification.classification}"/>
+								<Text text="{tblTaxCategory.category}"/>
+								<Text text="{tblTax.tax}"/>
+								<Text text="{tblNameOfTax.name_of_tax}"/>
+								<Text text="{tblDominioJurisdicao.jurisdicao}"/>
+								<Text text="{tblDominioPais.pais}"/>
+								<Text text="{tblDominioAnoFiscal.ano_fiscal}" />
+								<Text text="{tblDominioMoeda.acronimo}" />
+								<Text text="{tblDominioTipoTransacao.tipo_transacao}" />
+								<Text text="{tblPagamento.data_pagamento}"/>
+								<Text text="{tblPagamento.projeto}"/>
+								<Text text="{tblPagamento.descricao}"/>
+								<Text text="{tblPagamento.tipo_transacao_outros}"/>
+								<Text text="{tblPagamento.principal}"/>
+								<Text text="{tblPagamento.juros}"/>
+								<Text text="{tblPagamento.multa}" />
+								<Text text="{tblPagamento.total}" />
+								<Text text="{tblPagamento.numero_documento}" />
+								<Text text="{tblPagamento.entidade_beneficiaria}"/>							
 							</cells>
 						</ColumnListItem>
 					</items>

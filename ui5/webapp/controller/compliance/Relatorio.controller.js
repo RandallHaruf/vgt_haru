@@ -200,16 +200,6 @@ sap.ui.define([
 			this._preencheReportObrigacao(oWhere);
 			*/
 
-			/*PARAMETRO DO DISTINCT
-			"tipo": Distinct para Obrigacoes
-			"nome": Nomes das Empresas
-			"pais": Pais
-			"TBLOBRIGACAOACESSORIANOME": Listagem de Obrigacoes
-			"descricao": Periodicidade
-			"ano_fiscal": Ano Fiscal
-			"TBLSTATUSOBRIGACAODESCRICAO": Status
-			*/
-			
 			oWhere[13] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
