@@ -292,10 +292,10 @@ sap.ui.define(
 					title: "Confirmação",
 					type: "Message",
 					content: new sap.m.Text({
-						text: "Você tem certeza que deseja excluir a linha?"
+						text: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsVocetemcertezaquedesejaexcluiralinha")
 					}),
 					beginButton: new sap.m.Button({
-						text: "Sim",
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
 						press: function () {
 							for (var i = 0; i < aDadosPagamentos.length; i++) {
 								if (aDadosPagamentos[i] === oExcluir) {
@@ -309,7 +309,7 @@ sap.ui.define(
 						}
 					}),
 					endButton: new sap.m.Button({
-						text: "Cancelar",
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
 						press: function () {
 							dialog.close();
 						}
@@ -511,13 +511,13 @@ sap.ui.define(
 
 			_confirmarCancelamento: function (onConfirm) {
 				var dialog = new sap.m.Dialog({
-					title: "Confirmação",
+					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 					type: "Message",
 					content: new sap.m.Text({
-						text: "Você tem certeza que deseja cancelar a edição?"
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewDetalhesTrimestreJStextsVocêtemcertezaquedesejacancelaraedição")
 					}),
 					beginButton: new sap.m.Button({
-						text: "Sim",
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
 						press: function () {
 							dialog.close();
 							if (onConfirm) {
@@ -526,7 +526,7 @@ sap.ui.define(
 						}
 					}),
 					endButton: new sap.m.Button({
-						text: "Cancelar",
+						text:  this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
 						press: function () {
 							dialog.close();
 						}
@@ -814,13 +814,13 @@ sap.ui.define(
 				
 				if (!this._isFormularioValido()) {
 					dialog = new sap.m.Dialog({
-						title: "Atenção",
+						title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsAtencao"),
 						type: "Message",
 						content: new sap.m.Text({
-							text: "Todos os campos marcados são de preenchimento obrigatório"
+							text: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório")
 						}),
 						endButton: new sap.m.Button({
-							text: "Fechar",
+							text:  this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsFechar"),
 							press: function () {
 								dialog.close();
 							}
