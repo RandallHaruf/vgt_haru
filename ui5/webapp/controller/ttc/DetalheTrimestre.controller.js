@@ -267,9 +267,16 @@ sap.ui.define(
 				// O índice do objeto duplicado é o índice do objeto original + 1
 				var index = Number(sPath.substring(sPath.lastIndexOf("/") + 1, sPath.length)) + 1;
 
+				//Limpa Valores não utilizados do objeto copiado
+				oObject["data_pagamento"] = "";
+				oObject["juros"] = "";
+				oObject["multa"] = "";
+				oObject["total"] = "0";
+				oObject["numero_documento"] = "";
+				
 				// Insere o objeto duplicado no índice
 				aDadosPagamentos.splice(index, 0, oObject);
-
+				
 				this.getModel().refresh();
 			},
 
@@ -347,6 +354,7 @@ sap.ui.define(
 				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				oPagamento["fk_category.id_tax_category"] = oTax["fk_category.id_tax_category"];
 
+
 				var that = this;
 
 				// Limpa as opções de name of tax..
@@ -366,6 +374,7 @@ sap.ui.define(
 						}
 					});
 				}
+				
 			},
 			
 			onCalcularTotal: function (oEvent) {
@@ -420,13 +429,19 @@ sap.ui.define(
 			
 				var that = this;
 
+				NodeAPI.listarRegistros("Pais/" + this.getModel().getProperty("/Empresa")["fk_pais.id_pais"] , function (response) { // Pegando pais pela fk da empresa
+					if (response) {
+						that.getModel().setProperty("/Pais", response);
+					}
+				});
+
 				NodeAPI.listarRegistros("TaxCategory?classification=1", function (response) { // Classification=Borne
 					if (response) {
 						response.unshift({});
 						that.getModel().setProperty("/Borne/TaxCategory", response);
 					}
 				});
-
+				
 				NodeAPI.listarRegistros("TaxCategory?classification=2", function (response) { // Classification=Collected
 					if (response) {
 						response.unshift({});
@@ -711,7 +726,7 @@ sap.ui.define(
 					"fk_dominio_tipo_transacao.id_dominio_tipo_transacao": null,
 					"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": null,
 					"fk_jurisdicao.id_dominio_jurisdicao": null,
-					"fk_dominio_pais.id_dominio_pais": null,
+					"fk_dominio_pais.id_dominio_pais": this.getModel().getProperty("/Pais")[0]["fk_dominio_pais.id_dominio_pais"],
 					"fk_name_of_tax.id_name_of_tax": null,
 					"fk_empresa.id_empresa": this.getModel().getProperty("/Empresa").id_empresa,
 					"fk_periodo.id_periodo": this.getModel().getProperty("/Periodo").id_periodo,
@@ -815,7 +830,7 @@ sap.ui.define(
 	
 					dialog.open();
 				}
-				else if (!this._existemPagamentosObrigatorios()) {
+				/*else if (!this._existemPagamentosObrigatorios()) {
 					dialog = new sap.m.Dialog({
 						title: "Atenção",
 						type: "Message",
@@ -851,7 +866,7 @@ sap.ui.define(
 					});
 	
 					dialog.open();
-				}
+				}*/
 				else {
 					oButton.setEnabled(false);
 				
@@ -874,20 +889,30 @@ sap.ui.define(
 				for (var i = 0, length = aPagamentos.length; i < length && bValido; i++) {
 					var oPagamento = aPagamentos[i];
 					
+					var boolEntidadeBeneficiaria = false;
+					var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));
+					
+					for(var j = 0; j< aAllTaxas.length; j++){
+						if(aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"]){
+							if(aAllTaxas[j]["tax"].toLowerCase() == "Tax Withheld on payments to overseas group companies".toLowerCase()){
+							boolEntidadeBeneficiaria = true;
+							}	
+						}
+					}
+					//var achouValor = aAllTaxas.find()
 					if ((!oPagamento.ind_nao_aplicavel
 							&& (!oPagamento["fk_tax.id_tax"]
-							|| !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
 							|| !oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]
 							|| !oPagamento["fk_dominio_moeda.id_dominio_moeda"]
 							|| !oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"]
-							|| !oPagamento.entidade_beneficiaria
-							|| !oPagamento.estado
-							|| !oPagamento.cidade
+							|| (boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria)
+							|| !oPagamento["fk_dominio_pais.id_dominio_pais"]
+							|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
 							|| !oPagamento.data_pagamento
 							|| !oPagamento.name_of_tax
 							|| !Validador.isNumber(oPagamento.principal)))
-						|| (oPagamento.ind_nao_aplicavel
-							&& (!oPagamento["fk_tax.id_tax"]
+							|| (!oPagamento.ind_nao_aplicavel 
+								&& (!oPagamento["fk_tax.id_tax"] 
 								|| !oPagamento.name_of_tax))) {
 						bValido = false;
 					}
@@ -920,6 +945,12 @@ sap.ui.define(
 				}
 				
 				return bExiste;
+			},
+			onTipoTransacaoChange: function (oEvent) {
+				var oPagamento = oEvent.getSource().getBindingContext().getObject();
+				if (oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 2) {
+					oPagamento[""] = (Math.abs(oPagamento[""])) * -1;
+				}
 			}
 		});
 	}

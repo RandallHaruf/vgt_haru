@@ -97,8 +97,8 @@
 									<Column width="9rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
 									</Column>
-									<Column width="9rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
+									<Column width="9rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" class="sapMLabelRequired" />
@@ -246,6 +246,7 @@
 													path: '/DominioTipoTransacao',
 													templateShareable: false
 												}"
+												change="onTipoTransacaoChange" 
 												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
@@ -332,7 +333,7 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="9rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" class="sapMLabelRequired" />
@@ -397,8 +398,9 @@
 												enabled="false">
 												<core:Item text="{category}" key="{id_tax_category}" />
 											</Select>
+											<!--enabled="{= ${ind_nao_aplicavel} ? false : true }"-->
 											<Select
-												enabled="{= ${ind_nao_aplicavel} ? false : true }"
+												
 												items="{
 													path: '/Collected/Tax',
 													templateShareable: false
@@ -407,8 +409,8 @@
 												change="onTrocarTax">
 												<core:Item text="{tax}" key="{id_tax}" />
 											</Select>
+											<!--enabled="{= ${ind_nao_aplicavel} ? false : true }"-->
 											<ComboBox 
-												enabled="{= ${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: 'opcoesNameOfTax',
 													templateShareable: false
