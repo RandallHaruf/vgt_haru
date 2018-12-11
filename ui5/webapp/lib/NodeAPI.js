@@ -9,6 +9,19 @@ sap.ui.define(
 		
 		return {
 			
+			pListarRegistros: function (sEntidade) {
+				return new Promise(function (resolve, reject) {
+					jQuery.ajax(urlBackend + sEntidade, {
+						type: "GET",
+						dataType: "json"
+					}).then(function (response) {
+						resolve(response);
+					}, function (err) {
+						reject(err);
+					});
+				});
+			},
+			
 			listarRegistros: function (sEntidade, callback) {
 				return jQuery.ajax(urlBackend + sEntidade, {
 					type: "GET",

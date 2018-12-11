@@ -1055,7 +1055,18 @@ sap.ui.define(
 								obj.idMultiComboBox = oMultiComboBox.getId();
 								oVBox.addItem(oMultiComboBox);
 							}
-
+							
+							//var oVBoxHistorico = new sap.m.VBox();
+							var oPainelHistorico = new sap.m.Panel({
+								expandable: true,
+								expanded: false,
+								headerText: "Histórico"
+							}).addStyleClass("sapUiNoContentPadding sapUiSmallMarginBottom");
+							var oList = new sap.m.List();
+							oPainelHistorico.addContent(oList);
+							obj.idPainelHistorico = oList.getId();
+							oVBox.addItem(oPainelHistorico);
+							
 							oTextArea = new sap.m.TextArea({
 								width: "100%",
 								rows: 5
@@ -1156,6 +1167,65 @@ sap.ui.define(
 						}
 					}
 				});
+				
+				var sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa,
+					sIdAnoCalendario = this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
+					sNumeroOrdemPeriodo = this.getModel().getProperty("/Periodo").numero_ordem,
+					sEntidade = "DeepQuery/RespostaItemToReport?historico=true&empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario + "&numeroOrdem=" + sNumeroOrdemPeriodo;
+				
+				NodeAPI.pListarRegistros(sEntidade)
+					.then(function (response) {
+						if (response) {
+							for (var i = 0, length = response.length; i < length; i++) {
+								var oRespostaItemToReport = response[i];
+								
+								var oComponenteItemToReport = aComponenteItemToReport.find(function (obj) {
+									return oRespostaItemToReport["fk_item_to_report.id_item_to_report"] === obj.idItemToReport;
+								});
+	
+								if (oComponenteItemToReport) {
+									if (oRespostaItemToReport.resposta) {
+										var sIdPainelHistorico = oComponenteItemToReport.idPainelHistorico,
+											sLabel;
+										
+										switch (oRespostaItemToReport.numero_ordem) {
+											case 1:
+												sLabel = "1º Período";
+												break;
+											case 2:
+												sLabel = "2º Período";
+												break;
+											case 3:
+												sLabel = "3º Período";
+												break;
+											case 4:
+												sLabel = "4º Período";
+												break;
+											case 5:
+												sLabel = "Anual";
+												break;
+										}
+										
+										var oCustomListItem = new sap.m.CustomListItem();
+										var oVBox = new sap.m.VBox().addStyleClass("sapUiSmallMarginBegin sapUiSmallMarginTopBottom");
+										
+										oVBox.addItem(new sap.m.Title({
+											level: "H3",
+											text: sLabel
+										}));
+										
+										oVBox.addItem(new sap.m.Text({
+											text: oRespostaItemToReport.resposta
+										}));
+										
+										oCustomListItem.addContent(oVBox);
+										
+										sap.ui.getCore().byId(sIdPainelHistorico).addItem(oCustomListItem);
+									}
+								}
+							}
+						}
+					});
 			},
 
 			_carregarRelacionamentoRespostaItemToReportAnoFiscal: function (oRespostaItemToReport, sIdMultiComboBox) {
