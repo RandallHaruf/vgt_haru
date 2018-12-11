@@ -4,7 +4,7 @@ var db = require("../db");
 var oSketch = {
 	colunas: {
 		id: {
-			nome: "id_requisicao_reabertura_tax_package",
+			nome: "id_requisicao_reabertura_tax_tackage",
 			identity: true
 		},
 		dataRequisicao: {
