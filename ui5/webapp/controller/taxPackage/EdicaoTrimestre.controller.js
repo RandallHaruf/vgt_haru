@@ -1009,7 +1009,7 @@ sap.ui.define(
 						var oItemToReport, oHBox, oRadioButton, oMultiComboBox, oTextArea, oVBox = new sap.m.VBox();
 
 						for (var i = 0, length = response.length; i < length; i++) {
-							var obj = {};
+							var obj = {}, oVBoxInterno = new sap.m.VBox().addStyleClass("bordered sapUiLargeMarginBottom sapUiContentPadding");
 
 							oItemToReport = response[i];
 							obj.idItemToReport = oItemToReport.id_item_to_report;
@@ -1019,7 +1019,7 @@ sap.ui.define(
 							});
 							oHBox.addItem(new sap.m.Text({
 								text: oItemToReport.pergunta
-							}));
+							}).addStyleClass("negrito"));
 
 							if (oItemToReport.flag_sim_nao) {
 								oRadioButton = new sap.m.RadioButton({
@@ -1038,7 +1038,7 @@ sap.ui.define(
 								oHBox.addItem(oRadioButton);
 							}
 
-							oVBox.addItem(oHBox);
+							oVBoxInterno.addItem(oHBox);
 
 							if (oItemToReport.flag_ano) {
 								oMultiComboBox = new sap.m.MultiComboBox({
@@ -1053,7 +1053,7 @@ sap.ui.define(
 										})
 									});
 								obj.idMultiComboBox = oMultiComboBox.getId();
-								oVBox.addItem(oMultiComboBox);
+								oVBoxInterno.addItem(oMultiComboBox);
 							}
 							
 							//var oVBoxHistorico = new sap.m.VBox();
@@ -1065,14 +1065,16 @@ sap.ui.define(
 							var oList = new sap.m.List();
 							oPainelHistorico.addContent(oList);
 							obj.idPainelHistorico = oList.getId();
-							oVBox.addItem(oPainelHistorico);
+							oVBoxInterno.addItem(oPainelHistorico);
 							
 							oTextArea = new sap.m.TextArea({
 								width: "100%",
 								rows: 5
-							}).addStyleClass("sapUiMediumMarginBottom");
+							});
 							obj.idTextArea = oTextArea.getId();
-							oVBox.addItem(oTextArea);
+							oVBoxInterno.addItem(oTextArea);
+							
+							oVBox.addItem(oVBoxInterno);
 
 							oModel.push(obj);
 						}
