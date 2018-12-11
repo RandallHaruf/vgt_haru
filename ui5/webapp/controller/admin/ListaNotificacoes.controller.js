@@ -421,6 +421,7 @@ sap.ui.define(
 								fkDominioRequisicaoReaberturaStatus: oSelect.getSelectedKey(),
 								fkEmpresa: oItemSelecionadoTTC["fk_empresa.id_empresa"],
 								fkPeriodo: oItemSelecionadoTTC["fk_periodo.id_periodo"],
+								reabrirPeriodo: true
 							}, function (response) {
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();

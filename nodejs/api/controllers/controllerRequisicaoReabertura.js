@@ -189,6 +189,18 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				
+				// Atualiza o periodo caso tenha sido aprovação do admin
+				if (req.body.reabrirPeriodo && req.body.fkDominioRequisicaoReaberturaStatus && Number(req.body.fkDominioRequisicaoReaberturaStatus) === 2) { 
+					var sQuery = 'update "VGT.REL_EMPRESA_PERIODO" set "ind_ativo" = ?, "ind_enviado" = ? where "fk_empresa.id_empresa" = ? and "fk_periodo.id_periodo" = ? ';
+					var aParam = [true, false, req.body.fkEmpresa, req.body.fkPeriodo];
+					
+					db.executeStatement({
+						statement: sQuery,
+						parameters: aParam
+					});
+				}
+				
 				res.send(JSON.stringify(result));
 			}
 		});
