@@ -220,17 +220,19 @@ sap.ui.define(
 					if (response.success) {
 						that._navToResumoTrimestre();
 					} else {
-						sap.m.MessageToast.show("Erro: " + response.error.message);
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreErro") + response.error.message);
 					}
 				});
 			},
 
-			onSalvar: function (oEvent) {
+			onSalvar: function (oEvent) {		var that = this;
+		
 				this._salvar(oEvent, function (response) {
+					
 					if (response.success) {
-						sap.m.MessageToast.show("Salvo com sucesso");
+					sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreSalvoSucesso"));
 					} else {
-						sap.m.MessageToast.show("Erro: " + response.error.message);
+					sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreErro") + response.error.message);
 					}
 				});
 			},
