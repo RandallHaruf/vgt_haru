@@ -12,7 +12,7 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório TTC" save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} TTC" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<Button
