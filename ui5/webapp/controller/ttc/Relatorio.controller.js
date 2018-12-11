@@ -16,6 +16,7 @@ sap.ui.define([
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
 		onInit: function () {
+			
 			var oModel = new sap.ui.model.json.JSONModel({
 			});
 			oModel.setSizeLimit(5000);
@@ -24,14 +25,36 @@ sap.ui.define([
 		},
 		
 		navToHome: function () {
+			//this._onClearSelecoes();
+			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("selecaoModulo");                                  	
 		},
 		
 		navToPage2: function () {
+			//this._onClearSelecoes();	
+			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");                                  	
 		},
 
+		_onClearSelecoes: function (oEvent){
+			this.getModel().setProperty("/IdEmpresasSelecionadas" , undefined);
+			this.getModel().setProperty("/IdDominioTaxClassificationSelecionadas", undefined);
+			this.getModel().setProperty("/IdTaxCategorySelecionadas", undefined);
+			this.getModel().setProperty("/IdTaxSelecionadas", undefined);
+			this.getModel().setProperty("/IdNameOfTaxSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioJurisdicaoSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioPaisSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioAnoFiscalSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioMoedaSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", undefined);
+			this.getModel().setProperty("/DataPagamentoInicio", undefined);
+			this.getModel().setProperty("/DataPagamentoFim", undefined);
+			this.getModel().setProperty("/ReportTTC", undefined);
+		},
 		onNavBack: function (oEvent) {
+			//this._onClearSelecoes();
+			//this._atualizarDados();
+			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");                                  	
 		},
 
@@ -40,6 +63,8 @@ sap.ui.define([
 		},
 
 		onExit: function () {
+			this._onClearSelecoes();
+			this._atualizarDados();
 			this.aKeys = [];
 			this.aFilters = [];
 			this.oModel = null;
@@ -332,10 +357,10 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"].substring(8,10)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(5,7)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(4,0);
-						aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(2).replace(".",",") : "0,00" ;
-						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(2).replace(".",",") : "0,00" ;
-						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i]["tblPagamento.principal"]).toFixed(2).replace(".",",") : "0,00" ;
-						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(2).replace(".",",") : "0,00" ;
+						aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(0) : "0" ;
+						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(0) : "0" ;
+						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i]["tblPagamento.principal"]).toFixed(0) : "0" ;
+						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(0) : "0" ;
 					}		
 					that.getModel().setProperty("/ReportTTC", aRegistro);
 				}

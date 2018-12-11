@@ -37,7 +37,7 @@
 							type="Transparent"/>-->
 				</f:actions>
 				<f:navigationActions>
-					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>				
 				<!--<f:navigationActions>
 					<Button

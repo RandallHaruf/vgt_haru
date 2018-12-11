@@ -45,14 +45,28 @@ sap.ui.define([
 		},
 
 		navToHome: function () {
+			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("selecaoModulo");    	
 		},
 		
 		navToPage2: function () {
+			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("complianceListagemObrigacoes");                                  	
 		},
-
+		_onClearSelecoes: function (oEvent){
+			this.getModel().setProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas" , undefined);
+			this.getModel().setProperty("/IdEmpresasSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioPaisSelecionadas", undefined);
+			this.getModel().setProperty("/IdObrigacaoAcessoriaSelecionadas", undefined);
+			this.getModel().setProperty("/IdDomPeriodicidadeObrigacaoSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioAnoFiscalSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioStatusObrigacaoSelecionadas", undefined);
+			this.getModel().setProperty("/CheckObrigacaoInicial", undefined);
+			this.getModel().setProperty("/CheckSuporteContratado", undefined);
+			this.getModel().setProperty("/ReportObrigacao", undefined);
+		},
 		onNavBack: function (oEvent) {
+			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("complianceListagemObrigacoes");                                  	
 		},
 		onImprimir: function (oEvent) {
@@ -66,6 +80,8 @@ sap.ui.define([
 		},
 
 		onExit: function () {
+			this._onClearSelecoes();
+			this._atualizarDados();			
 			this.aKeys = [];
 			this.aFilters = [];
 			this.oModel = null;
