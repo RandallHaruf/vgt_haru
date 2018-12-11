@@ -192,6 +192,7 @@
 													path: '/DominioJurisdicao',
 													templateShareable: false
 												}"
+												change="onTrocarJurisdicao"
 												selectedKey="{fk_jurisdicao.id_dominio_jurisdicao}">
 												<core:Item text="{jurisdicao}" key="{id_dominio_jurisdicao}" />
 											</Select>
@@ -206,10 +207,15 @@
 											</ComboBox>
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
-												value="{estado}" />
+												value="{estado}"
+												change="onPreencherEstado"
+												valueState="{estadoValueState}" />
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
-												value="{cidade}" />
+												value="{cidade}" 
+												change="onPreencherCidade"
+												valueState="{cidadeValueState}"
+												/>
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
 												value="{projeto}" />
@@ -283,7 +289,9 @@
 												value="{numero_documento}" />
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
-												value="{entidade_beneficiaria}" />
+												value="{entidade_beneficiaria}" 
+												valueState = "{entidadeValueState}"
+												/>
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -428,6 +436,7 @@
 													path: '/DominioJurisdicao',
 													templateShareable: false
 												}"
+												change="onTrocarJurisdicao"
 												selectedKey="{fk_jurisdicao.id_dominio_jurisdicao}">
 												<core:Item text="{jurisdicao}" key="{id_dominio_jurisdicao}" />
 											</Select>
@@ -442,10 +451,14 @@
 											</ComboBox>
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
-												value="{estado}" />
+												value="{estado}"
+												change="onPreencherEstado"
+												valueState="{estadoValueState}" />
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
-												value="{cidade}" />
+												value="{cidade}" 
+												change="onPreencherCidade"
+												valueState="{cidadeValueState}" />
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
 												value="{projeto}" />
@@ -518,7 +531,9 @@
 												value="{numero_documento}" />
 											<Input 
 												enabled="{= ${ind_nao_aplicavel} ? false : true }"
-												value="{entidade_beneficiaria}" />
+												value="{entidade_beneficiaria}"
+												change="onPreencherEntidade"
+												valueState = "{entidadeValueState}"/>
 										</cells>
 									</ColumnListItem>
 								</items>

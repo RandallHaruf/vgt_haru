@@ -118,6 +118,7 @@ sap.ui.define(
 				this._dadosPagamentosCollected = [];
 
 				var oModel = new sap.ui.model.json.JSONModel({
+					ValueState: sap.ui.core.ValueState.Error,
 					 MinDate: null,
 					 MaxDate: null,
 					"pagamentos": that._dadosPagamentos,
@@ -225,7 +226,8 @@ sap.ui.define(
 				});
 			},
 
-			onSalvar: function (oEvent) {		var that = this;
+			onSalvar: function (oEvent) {		
+                var that = this;
 		
 				this._salvar(oEvent, function (response) {
 					
@@ -255,6 +257,57 @@ sap.ui.define(
 				this._dadosPagamentosCollected.unshift(this._novoPagamento());
 
 				this.getModel().refresh();
+			},
+
+			onTrocarJurisdicao: function (oEvent) {
+				var oPagamento = oEvent.getSource().getBindingContext().getObject();
+				
+				var sIdJurisdicao = oEvent.getSource().getSelectedKey();
+				if(sIdJurisdicao == "1"){//Federal
+					oPagamento.estadoValueState = sap.ui.core.ValueState.None;
+					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
+				}
+				else if (sIdJurisdicao == "2"){ //Estadual
+					if(oPagamento["estado"] == "" || oPagamento["estado"] === null){
+						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
+					}
+					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
+				}
+				else if (sIdJurisdicao == "3") {//Municipal
+					if(oPagamento["estado"] == "" || oPagamento["estado"] === null){
+						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
+					}
+					if(oPagamento["cidade"] == "" || oPagamento["cidade"] === null){
+						oPagamento.cidadeValueState = sap.ui.core.ValueState.Error;
+					}
+				}
+				
+			},
+			onPreencherEstado: function (oEvent) {
+				var oPagamento = oEvent.getSource().getBindingContext().getObject();
+				var sTextoCampo = oEvent.getSource().getValue();
+				if(oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 2 || oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 3){
+					if(sTextoCampo != "" && sTextoCampo != undefined && sTextoCampo !== null){
+					oPagamento.estadoValueState = sap.ui.core.ValueState.None;
+					}
+					else{
+						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
+					}
+				}
+			},
+			onPreencherCidade: function (oEvent) {
+				var oPagamento = oEvent.getSource().getBindingContext().getObject();
+				var sTextoCampo = oEvent.getSource().getValue();
+				
+				if(oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 3){
+					if(sTextoCampo != "" && sTextoCampo != undefined && sTextoCampo != null){
+					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
+					}
+					else{
+						oPagamento.cidadeValueState = sap.ui.core.ValueState.Error;
+					}
+				}
+				
 			},
 
 			onDuplicarLinha: function (oEvent) {
@@ -346,16 +399,48 @@ sap.ui.define(
 					oPagamento["fk_dominio_pais.id_dominio_pais"] = null;
 				}
 			},
-
+			onPreencherEntidade: function (oEvent){
+				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+				var sEntidade = oEvent.getSource().getValue();
+				var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));
+				for(var j = 0; j< aAllTaxas.length; j++){
+					if(aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"]){
+						if(aAllTaxas[j]["tax"] !== null && aAllTaxas[j]["tax"] != undefined && aAllTaxas[j]["tax"] != ""){
+							if(aAllTaxas[j]["tax"].toLowerCase() == "Tax Withheld on payments to overseas group companies".toLowerCase()){
+								if(sEntidade == "" || sEntidade === null || sEntidade == undefined){
+									oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;			
+								}
+								else{
+									oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+								}
+							}	
+						}
+					}
+				}
+				
+			},
 			onTrocarTax: function (oEvent) {
 				// Pega o objeto do tax para ser capaz de recuperar a fk de category
 				var sTaxPath = oEvent.getSource().getSelectedItem().getBindingContext().getPath(),
 					oTax = this.getModel().getObject(sTaxPath);
-
+				
 				// Pega o objeto do pagamento e seta sua category como a category do tax selecionado
 				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				oPagamento["fk_category.id_tax_category"] = oTax["fk_category.id_tax_category"];
 
+				//Verifica se o campo de entidade deve ser marcado como obrigatorio ou nao...
+				if((oTax.tax) != undefined && (oTax.tax) !== null){
+					if ((oTax.tax).toLowerCase() === "Tax Withheld on payments to overseas group companies".toLowerCase()){
+						if (oPagamento["entidade_beneficiaria"] == "" || oPagamento["entidade_beneficiaria"] === null || oPagamento["entidade_beneficiaria"] === undefined) {
+							oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+						}
+					}
+					else {
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+					}
+				}
+				
+	
 
 				var that = this;
 
@@ -570,6 +655,10 @@ sap.ui.define(
 				).done(function (response1, response2) {
 					if (response1) {
 						for (var i = 0; i < response1[0].length; i++) {
+							// VERIFICAR JURISDICAO
+							response1[0][i].estadoValueState = sap.ui.core.ValueState.None;
+							response1[0][i].cidadeValueState = sap.ui.core.ValueState.None;
+							response1[0][i].entidadeValueState = sap.ui.core.ValueState.None;
 							/*response1[0][i].principal = response1[0][i].principal ? Number(response1[0][i].principal).toFixed(2) : 0;
 							response1[0][i].juros = response1[0][i].juros ? Number(response1[0][i].juros).toFixed(2) : 0;
 							response1[0][i].multa = response1[0][i].multa ? Number(response1[0][i].multa).toFixed(2) : 0;
@@ -735,7 +824,10 @@ sap.ui.define(
 					"opcoesNameOfTax": [],
 					"fk_category.id_tax_category": null,
 					"fk_tax.id_tax": null,
-					"name_of_tax": ""
+					"name_of_tax": "",
+					"estadoValueState": sap.ui.core.ValueState.None,
+					"cidadeValueState": sap.ui.core.ValueState.None,
+					"entidadeValueState": sap.ui.core.ValueState.None
 				};
 			},
 
@@ -891,9 +983,9 @@ sap.ui.define(
 				for (var i = 0, length = aPagamentos.length; i < length && bValido; i++) {
 					var oPagamento = aPagamentos[i];
 					
+					//Verifica a necessidade de Entidade
 					var boolEntidadeBeneficiaria = false;
 					var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));
-					
 					for(var j = 0; j< aAllTaxas.length; j++){
 						if(aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"]){
 							if(aAllTaxas[j]["tax"] !== null && aAllTaxas[j]["tax"] != undefined && aAllTaxas[j]["tax"] != ""){
@@ -903,6 +995,19 @@ sap.ui.define(
 							}
 						}
 					}
+					
+					//verifica a necessidade de Estado e cidade
+					var JurisdicaoTest = "";
+					if(oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1){
+						JurisdicaoTest = false;
+					}
+					else if (oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 2){
+						JurisdicaoTest = !oPagamento.estado;
+					}
+					else if (oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 3){
+						JurisdicaoTest = (!oPagamento.estado || !oPagamento.cidade);
+					}
+					
 					//var achouValor = aAllTaxas.find()
 					if ((!oPagamento.ind_nao_aplicavel
 							&& (!oPagamento["fk_tax.id_tax"]
@@ -913,7 +1018,8 @@ sap.ui.define(
 							|| !oPagamento["fk_dominio_pais.id_dominio_pais"]
 							|| !oPagamento.principal
 							|| !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
-							|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
+                            //|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
+                            || JurisdicaoTest
 							|| !oPagamento.data_pagamento
 							|| !oPagamento.name_of_tax
 							|| !Validador.isNumber(oPagamento.principal)))
