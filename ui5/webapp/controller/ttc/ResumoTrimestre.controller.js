@@ -46,13 +46,13 @@ sap.ui.define(
 					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
 				
 				var dialog = new sap.m.Dialog({
-					title: "Confirmação de Fechamento",
+					title: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSConfirmaçãodeFechamento"),
 					type: "Message",
 					content: new sap.m.Text({
-						text: "Você tem certeza que deseja fechar o período?"
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSVocêtemcertezaquedesejafecharoperíodo"),
 					}),
 					beginButton: new sap.m.Button({
-						text: "Submeter",
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSSubmeter"),
 						press: function () {
 							NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
 								idEmpresa: sIdEmpresa,
@@ -67,13 +67,13 @@ sap.ui.define(
 								}
 								else {
 									var dialog2 = new sap.m.Dialog({
-										title: "Aviso",
+										title: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
 										type: "Message",
 										content: new sap.m.Text({
 											text: json.message
 										}),
 										endButton: new sap.m.Button({
-											text: "Fechar",
+											text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
 											press: function () {
 												dialog2.close();
 											}
@@ -89,7 +89,7 @@ sap.ui.define(
 						}
 					}),
 					endButton: new sap.m.Button({
-						text: "Cancelar",
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
 						press: function () {
 							dialog.close();
 						}

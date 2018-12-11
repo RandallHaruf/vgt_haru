@@ -289,7 +289,7 @@ sap.ui.define(
 				var aDadosPagamentos = this._getDadosPagamentos(oEvent.getSource().getBindingContext().getPath());
 
 				var dialog = new sap.m.Dialog({
-					title: "Confirmação",
+					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 					type: "Message",
 					content: new sap.m.Text({
 						text: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsVocetemcertezaquedesejaexcluiralinha")
