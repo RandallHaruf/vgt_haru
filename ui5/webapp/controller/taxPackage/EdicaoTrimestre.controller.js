@@ -104,7 +104,11 @@ sap.ui.define(
 					]
 				}));*/
 
-				this.setModel(new sap.ui.model.json.JSONModel({}));
+				var oModel = new sap.ui.model.json.JSONModel({});
+				oModel.setSizeLimit(300);
+				
+				this.setModel(oModel);
+				
 				this._zerarModel();
 				
 				//this._initItemsToReport();
@@ -1788,12 +1792,12 @@ sap.ui.define(
 					
 					that._carregarPagamentosTTC(sIdTaxReconciliation);
 					that._carregarHistorico();
+					that._carregarTaxRate();
 				});
 
 				this._carregarSchedule(1, "/LossSchedule", sIdRelTaxPackagePeriodo);
 				this._carregarSchedule(2, "/CreditSchedule", sIdRelTaxPackagePeriodo);
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
-				this._carregarTaxRate();
 			},
 			
 			_carregarHistorico: function () {

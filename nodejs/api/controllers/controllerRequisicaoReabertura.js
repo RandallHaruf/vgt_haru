@@ -198,6 +198,10 @@ module.exports = {
 					db.executeStatement({
 						statement: sQuery,
 						parameters: aParam
+					}, function (err2) {
+						if (err) {
+							console.log(err2);
+						}
 					});
 				}
 				
