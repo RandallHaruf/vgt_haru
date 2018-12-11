@@ -9,6 +9,10 @@
 	display: none;
 }
 
+.myApp .negrito {
+	font-weight: bold;
+}
+
 .myApp .painelModulo {
     border-radius: 0.125rem;
     box-sizing: border-box;
