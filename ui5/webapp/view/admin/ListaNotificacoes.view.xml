@@ -3,134 +3,139 @@
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
 	<NavContainer id="myNav" class="fixNavContainer">
-		<VBox width="100%">
-			<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoObrigacao} ({/ContadorObrig/modelcountObrig})" width="auto" class="sapUiResponsiveMargin">
-				<Table
-					id="tabelaObrigacoes"
-					items="{
-						path: '/Obrigacao',
-						sorter: {
-							path: 'nome',
-							group: false
-						}
-					}"
-					growing="true"
-					enableBusyIndicator="true"
-					growingScrollToLoad="true"
-					updateFinished="onTerminouAtualizar">
-					<columns>
-						<Column>
-							<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
-						</Column>
-						<Column
-							minScreenWidth="Tablet"
-							demandPopin="true">
-							<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
-						</Column>
-						<Column
-							minScreenWidth="Tablet"
-							demandPopin="true">
-							<Text text="{i18n>viewNotificacaoColunaobservacao}" />
-						</Column>
-					</columns>
-		
-					<items>
-						<ColumnListItem
-							type="Navigation"
-							press="onDetalharObrigacao">
-							<cells>
-								<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoObrigacao} ( #{id_obrigacao})"/>
-								<Text text="-"/>
-								<Text text="{observacoes}"/>
-							</cells>
-						</ColumnListItem>
-					</items>
-				</Table>
-			</Panel>
-			<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoTTC} ({/ContadorTTC/modelcountTTC})" width="auto" class="sapUiResponsiveMargin">
-				<Table
-					items="{
-						path: '/RequisicaoReabertura',
-						sorter: {
-							path: 'nome',
-							group: false
-						}
-					}"
-					growing="true"
-					enableBusyIndicator="true"
-					growingScrollToLoad="true"
-					updateFinished="onTerminouAtualizar">
-					<columns>
-						<Column>
-							<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
-						</Column>
-						<Column
-							minScreenWidth="Tablet"
-							demandPopin="true">
-							<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
-						</Column>
-						<Column
-							minScreenWidth="Tablet"
-							demandPopin="true">
-							<Text text="{i18n>viewNotificacaoColunaobservacao}" />
-						</Column>
-					</columns>
-		
-					<items>
-						<ColumnListItem
-							type="Navigation"
-							press="onDetalharTTC">
-							<cells>
-								<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTTC}  ( #{id_requisicao_reabertura})"/>
-								<Text text="{data_requisicao}"/>
-								<Text text="{comentarios}"/>
-							</cells>
-						</ColumnListItem>
-					</items>
-				</Table>
-			</Panel>
-			<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoTaxPackage} ({/ContadorTax/modelcountTAX})" width="auto" class="sapUiResponsiveMargin">
-				<Table
-					items="{
-						path: '/RequisicaoReaberturaTaxPackage',
-						sorter: {
-							path: 'nome',
-							group: false
-						}
-					}"
-					growing="true"
-					enableBusyIndicator="true"
-					growingScrollToLoad="true"
-					updateFinished="onTerminouAtualizar">
-					<columns>
-						<Column>
-							<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
-						</Column>
-						<Column
-							minScreenWidth="Tablet"
-							demandPopin="true">
-							<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
-						</Column>
-						<Column
-							minScreenWidth="Tablet"
-							demandPopin="true">
-							<Text text="{i18n>viewNotificacaoColunaobservacao}" />
-						</Column>
-					</columns>
-		
-					<items>
-						<ColumnListItem
-							type="Navigation"
-							press="onDetalharTaxPackage">
-							<cells>
-								<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTaxPackage} ( #{id_requisicao_reabertura_tax_tackage})"/>
-								<Text text="{data_requisicao}"/>
-								<Text text="{justificativa}"/>
-							</cells>
-						</ColumnListItem>
-					</items>
-				</Table>
-			</Panel>
-		</VBox>
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<VBox width="100%">
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoObrigacao} ({/ContadorObrig/modelcountObrig})" width="auto" class="sapUiResponsiveMargin">
+					<Table
+						id="tabelaObrigacoes"
+						items="{
+							path: '/Obrigacao',
+							sorter: {
+								path: 'nome',
+								group: false
+							}
+						}"
+						growing="true"
+						enableBusyIndicator="true"
+						growingScrollToLoad="true"
+						updateFinished="onTerminouAtualizar">
+						<columns>
+							<Column>
+								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaobservacao}" />
+							</Column>
+						</columns>
+			
+						<items>
+							<ColumnListItem
+								type="Navigation"
+								press="onDetalharObrigacao">
+								<cells>
+									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoObrigacao} ( #{id_obrigacao})"/>
+									<Text text="-"/>
+									<Text text="{observacoes}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoTTC} ({/ContadorTTC/modelcountTTC})" width="auto" class="sapUiResponsiveMargin">
+					<Table
+						items="{
+							path: '/RequisicaoReabertura',
+							sorter: {
+								path: 'nome',
+								group: false
+							}
+						}"
+						growing="true"
+						enableBusyIndicator="true"
+						growingScrollToLoad="true"
+						updateFinished="onTerminouAtualizar">
+						<columns>
+							<Column>
+								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaobservacao}" />
+							</Column>
+						</columns>
+			
+						<items>
+							<ColumnListItem
+								type="Navigation"
+								press="onDetalharTTC">
+								<cells>
+									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTTC}  ( #{id_requisicao_reabertura})"/>
+									<Text text="{data_requisicao}"/>
+									<Text text="{comentarios}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoTaxPackage} ({/ContadorTax/modelcountTAX})" width="auto" class="sapUiResponsiveMargin">
+					<Table
+						items="{
+							path: '/RequisicaoReaberturaTaxPackage',
+							sorter: {
+								path: 'nome',
+								group: false
+							}
+						}"
+						growing="true"
+						enableBusyIndicator="true"
+						growingScrollToLoad="true"
+						updateFinished="onTerminouAtualizar">
+						<columns>
+							<Column>
+								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaobservacao}" />
+							</Column>
+						</columns>
+			
+						<items>
+							<ColumnListItem
+								type="Navigation"
+								press="onDetalharTaxPackage">
+								<cells>
+									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTaxPackage} ( #{id_requisicao_reabertura_tax_tackage})"/>
+									<Text text="{data_requisicao}"/>
+									<Text text="{justificativa}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+			</VBox>
+		</Page>
 	</NavContainer>
 </core:View>

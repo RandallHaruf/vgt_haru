@@ -74,46 +74,56 @@
 							press="onNovoObjeto" 
 							text="novo"
 							type="Emphasized"/>-->
-						<Select tooltip="Status">
-							<core:Item text="Aguardando" />
-						</Select>
+						<Select
+								id="selectStatus"
+								tooltip="Status"
+								change="onTrocarStatus"
+								items="{/RequisicaoReaberturaStatus}"
+								selectedKey="{/RequisicaoReaberturaStatusSelecionado}">
+								<core:Item text="{status}" key="{id_dominio_requisicao_reabertura_status}" />
+							</Select>
 					</Toolbar>
 				</headerToolbar>
 		
 				<columns>
 					<Column>
-						<Text text="ID Requisição" />
+						<Text text="{i18n>viewGeralIdRequisicao}" />
 					</Column>
 					<Column
 						minScreenWidth="XXLarge"
-						demandPopin="true">
-						<Text text="{i18n>viewTPRequisicaoReaberturaEmpresa}" />
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="{i18n>viewGeralEmpresa}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
-						demandPopin="true">
-						<Text text="{i18n>viewTPRequisicaoReaberturaTrimestre}" />
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="{i18n>viewGeralTrimestre}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
-						demandPopin="true">
-						<Text text="{i18n>viewTPRequisicaoReaberturaDataDERequisicao}" />
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="{i18n>viewGeralDataRequisicao}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
-						demandPopin="true">
-						<Text text="{i18n>viewTPRequisicaoReaberturaAno}" />
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="{i18n>viewGeralAno}" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"
-						demandPopin="true">
-						<Text text="{i18n>viewTPRequisicaoReaberturaUsuario}" />
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="{i18n>viewGeralUsuario}" />
 					</Column>
-					<Column>
-						<Text text="{i18n>viewTPRequisicaoReaberturaJustificativa}" />
+					<Column hAlign="Center">
+						<Text text="{i18n>viewGeralJustificativa}" />
 					</Column>
-					<Column>
-						<Text text="{i18n>viewTPRequisicaoReaberturaResposta}" />
+					<Column hAlign="Center">
+						<Text text="{i18n>viewGeralResposta}" />
 					</Column>
 					<Column hAlign="Center">
 						<Text text="Status" />
@@ -124,15 +134,15 @@
 					<ColumnListItem
 						press="onAbrirObjeto">
 						<cells>
-							<ObjectIdentifier title="{id}" />
-							<Text text="{empresa}" />
-							<Text text="{trimestre}" />
-							<Text text="{dataRequisicao}" />
-							<Text text="{anoRequisicao}" />
-							<Text text="{usuario}" />
+							<ObjectIdentifier title="{id_requisicao_reabertura_tax_tackage}" />
+							<Text text="{nome}" />
+							<Text text="{periodo}" />
+							<Text text="{data_requisicao}" />
+							<Text text="{ano_calendario}" />
+							<Text text="{nome_usuario}" />
 							<Text text="{justificativa}" />
 							<Text text="{resposta}" />
-							<core:Icon src="{status/icone}" color="{status/cor}" tooltip="{status/tooltip}" size="2rem" />
+							<core:Icon src="{oStatus/icone}" color="{oStatus/cor}" tooltip="{oStatus/tooltip}" size="2rem" />
 						</cells>
 					</ColumnListItem>
 				</items>

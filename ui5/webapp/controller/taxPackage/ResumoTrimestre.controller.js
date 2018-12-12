@@ -377,7 +377,16 @@ sap.ui.define(
 			},
 			
 			navToRequisicoes: function () {
-				this.getRouter().navTo("taxPackageRequisicaoReabertura");
+				//this.getRouter().navTo("taxPackageRequisicaoReabertura");
+				
+				var oParametros = {
+					empresa: this.getModel().getProperty("/Empresa"),
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+				};
+				
+				this.getRouter().navTo("taxPackageRequisicaoReabertura", {
+					parametros: encodeURIComponent(JSON.stringify(oParametros))
+				});
 			},
 			
 			_onRouteMatched: function (oEvent) {

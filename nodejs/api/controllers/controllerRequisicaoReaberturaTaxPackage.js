@@ -97,6 +97,22 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				
+				// Atualiza o periodo caso tenha sido aprovação do admin
+				if (req.body.reabrirPeriodo && req.body.fkDominioRequisicaoReaberturaStatus && Number(req.body.fkDominioRequisicaoReaberturaStatus) === 2) { 
+					var sQuery = 'update "VGT.REL_TAX_PACKAGE_PERIODO" set "ind_ativo" = ?, "status_envio" = ? where "id_rel_tax_package_periodo" = ? '; 
+					var aParam = [true, 2, req.body.fkIdRelTaxPackagePeriodo];
+					
+					model.execute({
+						statement: sQuery,
+						parameters: aParam
+					}, function (err2) {
+						if (err2) {
+							console.log(err2);
+						}
+					});
+				}
+				
 				res.send(JSON.stringify(result));
 			}
 		});
@@ -135,12 +151,16 @@ module.exports = {
 
 		var oWhere = [];
 		var aParams = [];
+		
+		if (req.query.empresa) {
+			oWhere.push(' tblEmpresa."id_empresa" = ? ');
+			aParams.push(req.query.empresa);
+		}
 
 		if (req.query.status) {
 			oWhere.push(' tblRequisicaoTaxPackageStatus."id_dominio_requisicao_reabertura_status" = ? ');
 			aParams.push(req.query.status);
 		}
-
 
 		if (oWhere.length > 0) {
 			sStatement += "where ";
@@ -152,7 +172,6 @@ module.exports = {
 				sStatement += oWhere[i];
 			}
 		}
-
 
 		model.execute({
 			statement: sStatement,

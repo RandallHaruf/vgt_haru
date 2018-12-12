@@ -276,7 +276,7 @@
 					]
 				},
 				{
-					"pattern": "taxPackageRequisicaoReabertura",
+					"pattern": "taxPackageRequisicaoReabertura/{parametros}",
 					"name": "taxPackageRequisicaoReabertura",
 					"target": [
 						"taxPackageRequisicaoReabertura"

@@ -6,6 +6,7 @@ sap.ui.define(
 	],
 	function (BaseController, formatter, NodeAPI) {
 		BaseController.extend("ui5ns.ui5.controller.taxPackage.RequisicaoReabertura", {
+			
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
 					requisicoes: [
@@ -57,6 +58,10 @@ sap.ui.define(
 				this.getRouter().getRoute("taxPackageRequisicaoReabertura").attachPatternMatched(this._onRouteMatched, this);
 			},
 			
+			onTrocarStatus: function (oEvent) {
+				this._atualizarDados();
+			},
+			
 			onNovoObjeto: function (oEvent) {
 				this.getRouter().navTo("taxPackageFormularioNovaRequisicaoReabertura");
 			},
@@ -70,25 +75,24 @@ sap.ui.define(
 			},
 			
 			navToPage3: function () {
-				this.getRouter().navTo("taxPackageResumoTrimestre");
+				this._navToResumoTrimestre();
 			},
 			
 			_navToResumoTrimestre: function () {
-				//this._limparModel();
-				
-				var oEmpresaSelecionada = this.getModel().getProperty("/empresa");
-				var sIdAnoCalendario = this.getModel().getProperty("/idAnoCalendario");
+				var oParametros = {
+					empresa: this.getModel().getProperty("/empresa"),
+					idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
+				};
 			
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
-					oEmpresa: JSON.stringify(oEmpresaSelecionada),
-					idAnoCalendario: sIdAnoCalendario
+					parametros: JSON.stringify(oParametros)
 				}); 
 			},
 			
 			_onRouteMatched: function (oEvent) {
 				var that = this;
 				
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = JSON.parse(decodeURIComponent(oEvent.getParameter("arguments").parametros));
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);
@@ -109,7 +113,7 @@ sap.ui.define(
 				var oEmpresa = this.getModel().getProperty("/empresa");
 				var sIdStatus = this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") ? this.getModel().getProperty("/RequisicaoReaberturaStatusSelecionado") : "";
 				
-				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura?status=" + sIdStatus +"&empresa=" + oEmpresa.id_empresa , function(response){
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoReaberturaTaxPackage?status=" + sIdStatus +"&empresa=" + oEmpresa.id_empresa , function(response){
 					if (response) {
 						for (var i = 0; i < response.length; i++) {
 							if (response[i].id_dominio_requisicao_reabertura_status === 1) {

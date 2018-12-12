@@ -12,6 +12,15 @@ sap.ui.define(
 
 				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
 				this.setModel(new sap.ui.model.json.JSONModel({}));
+				
+				var that = this;
+				
+				this.byId("paginaListagem").addEventDelegate({
+					onAfterShow: function (oEvent) {
+						that._atualizarDados();
+					}	
+				});
+				
 				//this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 				/*
 				oModel = new sap.ui.model.json.JSONModel({
@@ -570,6 +579,7 @@ sap.ui.define(
 								resposta:  oTextArea.getValue(),
 								fkDominioRequisicaoReaberturaStatus: oSelect.getSelectedKey(),
 								fkIdRelTaxPackagePeriodo: oItemSelecionadoTAX["fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo"],
+								reabrirPeriodo: true
 								}, function (response) {
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
