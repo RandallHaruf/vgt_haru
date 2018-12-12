@@ -1020,16 +1020,18 @@ sap.ui.define(
 							}).addStyleClass("negrito"));
 
 							if (oItemToReport.flag_sim_nao) {
+							
 								oRadioButton = new sap.m.RadioButton({
+										
 									groupName: "group" + i,
-									text: this.getResourceBundle().getText("viewGeralSim"),
+									text: that.getResourceBundle().getText("viewGeralSim"),
 								});
 								obj.idRadioButtonSim = oRadioButton.getId();
 								oHBox.addItem(oRadioButton);
 
 								oRadioButton = new sap.m.RadioButton({
 									groupName: "group" + i,
-									text: this.getResourceBundle().getText("viewGeralNao"),
+									text: that.getResourceBundle().getText("viewGeralNao"),
 									selected: true
 								});
 								obj.idRadioButtonNao = oRadioButton.getId();
