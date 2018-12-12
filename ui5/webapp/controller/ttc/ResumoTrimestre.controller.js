@@ -14,7 +14,6 @@ sap.ui.define(
 				this.setModel(new JSONModel());
 				
 				this.getRouter().getRoute("ttcResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
-				jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
@@ -458,13 +457,20 @@ sap.ui.define(
 							for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
 								var oPagamento = aPagamento[j];
 								
-								oPagamento["primeiroValor"] = oPagamento["primeiroValor"] ? parseInt(oPagamento["primeiroValor"],10) : 0;
-								oPagamento["segundoValor"] = oPagamento["segundoValor"] ? parseInt(oPagamento["segundoValor"],10) : 0;
-								oPagamento["terceiroValor"] = oPagamento["terceiroValor"] ? parseInt(oPagamento["terceiroValor"],10) : 0;
-								oPagamento["total"] = oPagamento["total"] ? parseInt(oPagamento["total"],10) : 0;
+								oPagamento["primeiroValor"] = (oPagamento["primeiroValor"] ? parseInt(oPagamento["primeiroValor"],10) : 0);
+								oPagamento["segundoValor"] = (oPagamento["segundoValor"] ? parseInt(oPagamento["segundoValor"],10) : 0);
+								oPagamento["terceiroValor"] = (oPagamento["terceiroValor"] ? parseInt(oPagamento["terceiroValor"],10) : 0);
+								oPagamento["total"] = (oPagamento["total"] ? parseInt(oPagamento["total"],10) : 0);
 							}
 						}
 						that.getModel().setProperty("/Resumo", response);
+						setTimeout(function(){
+							$.each($('.money span'),function(index,el){
+								var valor = $(el).text();
+								valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+								$(el).text(valor);
+							});	
+						}, 150);
 					}	
 					
 					that._setBusy(false);

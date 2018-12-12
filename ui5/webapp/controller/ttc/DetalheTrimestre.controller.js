@@ -678,6 +678,9 @@ sap.ui.define(
 					
 					if (response2) {
 						for (var j = 0; j < response2[0].length; j++) {
+							response2[0][j].estadoValueState = sap.ui.core.ValueState.None;
+							response2[0][j].cidadeValueState = sap.ui.core.ValueState.None;
+							response2[0][j].entidadeValueState = sap.ui.core.ValueState.None;
 							/*response1[0][j].principal = response1[0][j].principal ? Number(response1[0][j].principal).toFixed(2) : 0;
 							response1[0][j].juros = response1[0][j].juros ? Number(response1[0][j].juros).toFixed(2) : 0;
 							response1[0][j].multa = response1[0][j].multa ? Number(response1[0][j].multa).toFixed(2) : 0;

@@ -58,7 +58,7 @@ sap.ui.define(
 				
 				this.getRouter().getRoute("taxPackageResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
 				
-				jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
+				//jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
 			},
 			
 			onTrocarAnoCalendario: function (oEvent) {
@@ -426,9 +426,9 @@ sap.ui.define(
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i]["rc_statutory_gaap_profit_loss_before_tax"] = response[i]["rc_statutory_gaap_profit_loss_before_tax"] ? parseInt(response[i]["rc_statutory_gaap_profit_loss_before_tax"],10) : 0;
-							response[i]["rf_taxable_income_loss_before_losses_and_tax_credits"] = response[i]["rf_taxable_income_loss_before_losses_and_tax_credits"] ? parseInt(response[i]["rf_taxable_income_loss_before_losses_and_tax_credits"],10) : 0;
-							response[i]["rf_net_local_tax"] = response[i]["rf_net_local_tax"] ? parseInt(response[i]["rf_net_local_tax"],10) : 0;
-							response[i]["rf_tax_due_overpaid"] = response[i]["rf_tax_due_overpaid"] ? parseInt(response[i]["rf_tax_due_overpaid"],10) : 0;
+							response[i]["rf_taxable_income_loss_before_losses_and_tax_credits"] = (response[i]["rf_taxable_income_loss_before_losses_and_tax_credits"] ? parseInt(response[i]["rf_taxable_income_loss_before_losses_and_tax_credits"],10) : 0);
+							response[i]["rf_net_local_tax"] = (response[i]["rf_net_local_tax"] ? parseInt(response[i]["rf_net_local_tax"],10) : 0);
+							response[i]["rf_tax_due_overpaid"] = (response[i]["rf_tax_due_overpaid"] ? parseInt(response[i]["rf_tax_due_overpaid"],10) : 0);
 							
 							var oTaxReconciliation = response[i];
 							
@@ -460,6 +460,13 @@ sap.ui.define(
 									break;
 							}
 						}
+						setTimeout(function(){
+							$.each($('.money span'),function(index,el){
+								var valor = $(el).text();
+								valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+								$(el).text(valor);
+							});	
+						}, 150);
 					}	
 					
 					that._setTableBusy(false);
