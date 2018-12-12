@@ -22,17 +22,20 @@ sap.ui.define([
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
+			
+			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);
 		},
 		
 		navToHome: function () {
-			//this._onClearSelecoes();
-			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("selecaoModulo");                                  	
 		},
 		
-		navToPage2: function () {
-			//this._onClearSelecoes();	
+		_handleRouteMatched: function () {
 			this.onExit();
+		},	
+		
+		navToPage2: function () {
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");                                  	
 		},
 
@@ -52,9 +55,6 @@ sap.ui.define([
 			this.getModel().setProperty("/ReportTTC", undefined);
 		},
 		onNavBack: function (oEvent) {
-			//this._onClearSelecoes();
-			//this._atualizarDados();
-			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");                                  	
 		},
 
@@ -357,10 +357,10 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"].substring(8,10)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(5,7)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(4,0);
-						aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(0) : "0" ;
-						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(0) : "0" ;
-						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i]["tblPagamento.principal"]).toFixed(0) : "0" ;
-						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(0) : "0" ;
+						aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
+						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
+						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i]["tblPagamento.principal"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
+						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
 					}		
 					that.getModel().setProperty("/ReportTTC", aRegistro);
 				}

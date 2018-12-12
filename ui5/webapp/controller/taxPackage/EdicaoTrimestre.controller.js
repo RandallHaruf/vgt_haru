@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI) {
+	function (BaseController, NodeAPI, Utils) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
@@ -655,6 +656,12 @@ sap.ui.define(
 
 						oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;
 					}
+					
+					for (var i = 0, length = this.getModel().getProperty("/LossSchedule").length; i < length; i++) {
+						var oLossSchedule = this.getModel().getProperty("/LossSchedule")[i];
+						
+						oLossSchedule.justificativaEnabled = (oLossSchedule.ind_corrente && oLossSchedule.adjustments) ? true : false;
+					}
 				}
 
 				// Credit Schedule
@@ -680,6 +687,12 @@ sap.ui.define(
 							valor10 = oCreditSchedule.current_year_value_expired ? Number(oCreditSchedule.current_year_value_expired) : 0;
 
 						oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;
+					}
+					
+					for (var i = 0, length = this.getModel().getProperty("/CreditSchedule").length; i < length; i++) {
+						var oCreditSchedule = this.getModel().getProperty("/CreditSchedule")[i];
+						
+						oCreditSchedule.justificativaEnabled = (oCreditSchedule.ind_corrente && oCreditSchedule.adjustments) ? true : false;
 					}
 				}
 			},
@@ -1020,16 +1033,18 @@ sap.ui.define(
 							}).addStyleClass("negrito"));
 
 							if (oItemToReport.flag_sim_nao) {
+							
 								oRadioButton = new sap.m.RadioButton({
+										
 									groupName: "group" + i,
-									text: "Sim"
+									text: that.getResourceBundle().getText("viewGeralSim"),
 								});
 								obj.idRadioButtonSim = oRadioButton.getId();
 								oHBox.addItem(oRadioButton);
 
 								oRadioButton = new sap.m.RadioButton({
 									groupName: "group" + i,
-									text: "Não",
+									text: that.getResourceBundle().getText("viewGeralNao"),
 									selected: true
 								});
 								obj.idRadioButtonNao = oRadioButton.getId();
@@ -1798,6 +1813,10 @@ sap.ui.define(
 
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 
+				this.getModel().setProperty("/LabelDataInicio", Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_start_date));
+				this.getModel().setProperty("/LabelDataFim", Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_end_date));
+				this.getModel().setProperty("/LabelCITType", this._pegarLabelCITType(oParametros.oPeriodo.numero_ordem));
+				this.getModel().setProperty("/LabelPeriodo", this._pegarLabelPeriodoTaxReconciliation(oParametros.oPeriodo.numero_ordem));
 				this.getModel().setProperty("/Empresa", oParametros.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParametros.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParametros.oAnoCalendario);
@@ -1810,6 +1829,14 @@ sap.ui.define(
 					if (response) {
 						response.unshift({});
 						that.getModel().setProperty("/DominioMoeda", response);
+						
+						var oMoedaSelecionada = response.find(function (obj) {
+							return obj.id_dominio_moeda === oParametros.oPeriodo["fk_dominio_moeda.id_dominio_moeda"];
+						});
+						
+						if (oMoedaSelecionada) {
+							that.getModel().setProperty("/LabelMoeda", oMoedaSelecionada.acronimo);
+						}
 					}
 				});
 
@@ -1848,6 +1875,7 @@ sap.ui.define(
 						var oTaxReconAtivo = response.taxReconciliation.find(function (obj) {
 							return obj.ind_ativo;
 						});
+						oTaxReconAtivo.labelPeriodo = that._pegarLabelPeriodoTaxReconciliation(oTaxReconAtivo.numero_ordem);
 						that.getModel().setProperty("/TaxReconciliation", response.taxReconciliation);
 						that.getModel().setProperty("/IncomeTaxDetails", oTaxReconAtivo.it_details_if_tax_returns_income_differs_from_fs);
 						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
@@ -1870,6 +1898,62 @@ sap.ui.define(
 				this._initItemsToReport(sIdRelTaxPackagePeriodo);
 			},
 			
+			_pegarLabelCITType: function (iNumeroOrdem) {
+				var sLabel;
+				
+				//sLabelBanco = sLabelBanco.toLowerCase().trim();
+				switch (true) {
+					case iNumeroOrdem === 1://sLabelBanco.includes("1"):
+						sLabel = this.getResourceBundle().getText("viewEdiçãoTrimestreEstimativa");
+						break;
+					case iNumeroOrdem === 2://sLabelBanco.includes("2"):
+						sLabel = this.getResourceBundle().getText("viewEdiçãoTrimestreEstimativa");
+						break;
+					case iNumeroOrdem === 3://sLabelBanco.includes("3"):
+						sLabel = this.getResourceBundle().getText("viewEdiçãoTrimestreEstimativa");
+						break;
+					case iNumeroOrdem === 4://sLabelBanco.includes("4"):
+						sLabel = this.getResourceBundle().getText("viewEdiçãoTrimestreEstimativa");
+						break;
+					case iNumeroOrdem === 5://sLabelBanco === "anual":
+						sLabel = this.getResourceBundle().getText("viewGeralAnual");
+						break;
+					case iNumeroOrdem >= 6://sLabelBanco === "retificadora":
+						sLabel = this.getResourceBundle().getText("viewGeralRetificadora");
+						break;
+				}
+				
+				return sLabel;
+			},
+			
+			_pegarLabelPeriodoTaxReconciliation: function (iNumeroOrdem) {
+				var sLabelTraduzido;
+				
+				//sLabelBanco = sLabelBanco.toLowerCase().trim();
+				switch (true) {
+					case iNumeroOrdem === 1://sLabelBanco.includes("1"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo1");
+						break;
+					case iNumeroOrdem === 2://sLabelBanco.includes("2"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo2");
+						break;
+					case iNumeroOrdem === 3://sLabelBanco.includes("3"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo3");
+						break;
+					case iNumeroOrdem === 4://sLabelBanco.includes("4"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo4");
+						break;
+					case iNumeroOrdem === 5://sLabelBanco === "anual":
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo5");
+						break;
+					case iNumeroOrdem >= 6://sLabelBanco === "retificadora":
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo6");
+						break;
+				}
+				
+				return sLabelTraduzido;
+			},
+			
 			_carregarHistorico: function () {
 				var that = this,
 					sIdTaxPackage = this.getModel().getProperty("/Periodo").id_tax_package,
@@ -1880,6 +1964,7 @@ sap.ui.define(
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].ind_ativo = false;
+							response[i].labelPeriodo = that._pegarLabelPeriodoTaxReconciliation(response[i].numero_ordem);
 						}
 						that.getModel().setProperty("/TaxReconciliation", that.getModel().getProperty("/TaxReconciliation").concat(response));
 						that.getModel().refresh();
@@ -2264,11 +2349,30 @@ sap.ui.define(
 							response[i].ind_corrente = true;
 						}
 						that.getModel().setProperty(sProperty, response);
+						that._carregarHistoricoSchedule(sProperty, sTipo);
 						that.onAplicarRegras();
 					} else {
 						that._carregarScheduleInicial(sTipo, sProperty);
 					}
 				});
+			},
+			
+			_carregarHistoricoSchedule: function (sProperty, sTipo) {
+				var that = this,
+					oEmpresa = this.getModel().getProperty("/Empresa"),
+					oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
+
+				var oParam = {
+					empresa: oEmpresa,
+					anoCalendario: oAnoCalendario,
+					tipo: sTipo // Loss Schedule
+				};
+				
+				NodeAPI.pListarRegistros("HistoricoSchedule?parametros=" + JSON.stringify(oParam))
+					.then(function (response) {
+						that.getModel().setProperty(sProperty, that.getModel().getProperty(sProperty).concat(response));
+						that.onAplicarRegras();
+					});
 			},
 
 			_carregarScheduleInicial: function (sTipo, sProperty) {
@@ -2288,8 +2392,12 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros(sEntidade, function (response) {
 					if (response) {
+						for (var i = 0; i < response.length; i++) {
+							response[i].ind_corrente = true;
+						}
 						//console.table(response);
 						that.getModel().setProperty(sProperty, [response]);
+						that._carregarHistoricoSchedule(sProperty, sTipo);
 						that.onAplicarRegras();
 					}
 				});

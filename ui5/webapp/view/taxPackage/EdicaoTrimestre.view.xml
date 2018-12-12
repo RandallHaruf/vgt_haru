@@ -33,14 +33,14 @@
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout class="sapUiMediumMarginEnd">
 												<ObjectAttribute title="TIN" text="{/Empresa/tin}"/>
-												<ObjectAttribute title="{i18n>viewGeralMoeda}" text="{/Periodo/fk_dominio_moeda.id_dominio_moeda}"/>
+												<ObjectAttribute title="{i18n>viewGeralMoeda}" text="{/LabelMoeda}"/>
 												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="{/AnoCalendario/anoCalendario}"/>
-												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/Periodo/periodo}"/>
+												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/LabelPeriodo}"/>
 											</l:VerticalLayout>
 											<l:VerticalLayout>
-												<ObjectAttribute title="{i18n>ViewGeralDataInício}" text="{/Empresa/fy_start_date}"/>
-												<ObjectAttribute title="{i18n>ViewGeralDataFim}" text="{/Empresa/fy_end_date}"/>
-												<ObjectAttribute title="{i18n>viewEdiçãoTrimestreCITType}" text="Estimativa"/>
+												<ObjectAttribute title="{i18n>ViewGeralDataInício}" text="{/LabelDataInicio}"/>
+												<ObjectAttribute title="{i18n>ViewGeralDataFim}" text="{/LabelDataFim}"/>
+												<ObjectAttribute title="{i18n>viewEdiçãoTrimestreCITType}" text="{/LabelCITType}"/>
 												<ObjectAttribute title="{i18n>viewEdiçãoTrimestrePreparadoPor}" text="João Silva - joao.silva@email.com" />
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
@@ -135,7 +135,7 @@
 									<items>
 										<ColumnListItem>
 											<cells>
-												<ObjectIdentifier title="{i18n>viewGeralPeriodo}" />
+												<ObjectIdentifier title="{labelPeriodo}" />
 												<Input type="Number" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="{ind_ativo}" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_current_income_tax_current_year}" editable="{ind_ativo}" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_current_income_tax_previous_year}" editable="{ind_ativo}" change="onAplicarRegras" />
@@ -405,7 +405,7 @@
 									<items>
 										<ColumnListItem>
 											<cells>
-												<ObjectIdentifier title="{periodo}" />
+												<ObjectIdentifier title="{labelPeriodo}" />
 												<Input type="Number" value="{rf_taxable_income_loss_before_losses_and_tax_credits}" editable="false" />
 												<Input type="Number" value="{rf_total_losses_utilized}" editable="{ind_ativo}" change="onAplicarRegras" />
 												<Input type="Number" value="{rf_taxable_income_loss_after_losses}" editable="false" />
@@ -470,7 +470,7 @@
 									<items>
 										<ColumnListItem>
 											<cells>
-												<ObjectIdentifier title="{periodo}" />
+												<ObjectIdentifier title="{labelPeriodo}" />
 												<Input type="Number" value="{it_income_tax_as_per_the_statutory_financials}" editable="false" />
 												<Input type="Number" value="{it_income_tax_as_per_the_tax_return}" editable="false" />
 												<Input type="Number" value="{it_jurisdiction_tax_rate_average}" editable="false" change="onAplicarRegras" />
@@ -548,7 +548,12 @@
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/LossSchedule}" 
+								rows="{
+									path: '/LossSchedule',
+									sorter: [{
+										path: 'fy'
+									}]
+								}" 
 								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
@@ -587,13 +592,13 @@
 									<t:Column width="12rem">
 										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
 										<t:template>
-											<Input type="Number" value="{adjustments}" change="onAplicarRegras" />
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input type="Text" value="{justificativa}" enabled="{= ${adjustments} ? true : false}" />
+											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
@@ -611,7 +616,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
 										<t:template>
-											<Input value="{obs}" />
+											<Input value="{obs}" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 								</t:columns>
@@ -702,7 +707,12 @@
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/CreditSchedule}" 
+								rows="{
+									path: '/CreditSchedule',
+									sorter: [{
+										path: 'fy'
+									}]
+								}" 
 								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
@@ -741,13 +751,13 @@
 									<t:Column width="12rem">
 										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
 										<t:template>
-											<Input type="Number" value="{adjustments}" change="onAplicarRegras" />
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input value="{justificativa}" enabled="{= ${adjustments} ? true : false}" />
+											<Input value="{justificativa}" enabled="{justificativaEnabled}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
@@ -765,7 +775,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
 										<t:template>
-											<Input value="{obs}" />
+											<Input value="{obs}" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 								</t:columns>

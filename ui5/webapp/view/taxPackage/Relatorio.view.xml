@@ -15,22 +15,22 @@
 					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Tax Package" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
-				<Button
+					<!--<Button
 						text="{i18n>viewRelatorioImprimir}"
 						type="Transparent"
-						icon="sap-icon://print" />
+						icon="sap-icon://print" />-->
 					<Button
 						text="{i18n>viewRelatorioExportar} CSV"
 						type="Transparent"/>
-					<Button
+					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
-						type="Transparent" />
+						type="Transparent" />-->
 					<Button
 						text="{i18n>viewRelatorioExportar} XLS"
 						type="Transparent"/>
-					<Button
+					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
-						type="Transparent"/>
+						type="Transparent"/>-->
 				</f:actions>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
@@ -79,7 +79,7 @@
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/Registros' }">
+				<Table items="{ path: '/ReportTax' }">
 					<columns>
 						<Column></Column>
 					</columns>

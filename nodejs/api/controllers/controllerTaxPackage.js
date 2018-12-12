@@ -331,10 +331,11 @@ module.exports = {
 				}
 				
 				var iAnoCalendario = Number(oAnoCalendario.anoCalendario);
+				var iAnoCorrente = (new Date()).getFullYear();
 			
 				oSchedule = {
 					"fy": iAnoCalendario,
-					"year_of_expiration": iAnoCalendario + prescricao,
+					"year_of_expiration": iAnoCorrente + prescricao,
 					"opening_balance": (oSchedule && oSchedule.id_schedule) ? oSchedule.closing_balance : 0,
 					"current_year_value": 0,
 					"current_year_value_utilized": 0,
@@ -347,9 +348,82 @@ module.exports = {
 					"fk_dominio_schedule_tipo.id_dominio_schedule_tipo": Number(sIdTipoSchedule),
 					"ind_corrente": true
 				};
+				
+				
 			}
 			
 			res.send(JSON.stringify(oSchedule)); 
+		}
+		else {
+			res.send(JSON.stringify({
+				success: false,
+				error: {
+					message: "Não foram enviados os parâmetro obrigatórios"
+				}
+			}));
+		}
+	},
+	
+	listarHistoricoSchedule: function (req, res) {
+		if (req.query.parametros) {
+			var oParams = JSON.parse(req.query.parametros),
+				oEmpresa = oParams.empresa,
+				oAnoCalendario = oParams.anoCalendario,
+				sIdTipoSchedule = oParams.tipo,
+				aSchedule = [];
+			
+			var sQuery, aParams, result;
+			
+			sQuery = 'select * from "VGT.DOMINIO_ANO_CALENDARIO" where "ano_calendario" <= ?';
+			aParams = [oAnoCalendario.anoCalendario - 1];
+			
+			result = db.executeStatementSync(sQuery, aParams);
+			
+			if (result && result.length > 0) {
+				for (var i = 0, length = result.length; i < length; i++) {
+					var idAnoCalendario = result[i].id_dominio_ano_calendario;
+					
+					sQuery = 
+						'select * '
+						+ 'from "VGT.SCHEDULE" schedule '
+						+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+						+ 'on schedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" '
+						+ 'inner join "VGT.PERIODO" periodo '
+						+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+						+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+						+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+						+ 'where '
+						+ 'schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? ' 
+						+ 'and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+						+ 'and taxPackage."fk_empresa.id_empresa" = ? '
+						+ 'and periodo."fk_dominio_modulo.id_dominio_modulo" = 2 ' // tax package
+						+ 'and periodo."numero_ordem" = ( '
+							+ 'select MAX(periodo."numero_ordem") '
+							+ 'from "VGT.SCHEDULE" schedule '
+							+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+							+ 'on schedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" '
+							+ 'inner join "VGT.PERIODO" periodo '
+							+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+							+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+							+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+							+ 'where '
+							+ 'schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? '
+							+ 'and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+							+ 'and taxPackage."fk_empresa.id_empresa" = ? '
+							+ 'and periodo."fk_dominio_modulo.id_dominio_modulo" = 2 ' // tax package
+						+ ') ';
+					
+					aParams = [sIdTipoSchedule, idAnoCalendario, oEmpresa.id_empresa, sIdTipoSchedule, idAnoCalendario, oEmpresa.id_empresa];
+					
+					var result2 = db.executeStatementSync(sQuery, aParams);
+					
+					if (result2 && result2.length > 0) {
+						aSchedule.push(result2[0]);
+					}
+				}
+			}
+			
+			res.send(JSON.stringify(aSchedule)); 
 		}
 		else {
 			res.send(JSON.stringify({
