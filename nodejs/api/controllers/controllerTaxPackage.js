@@ -255,178 +255,101 @@ module.exports = {
 	},
 	
 	criarScheduleParaNovoPeriodo: function (req, res) {
-		/*if (req.query.idRelTaxPackagePeriodo && req.query.empresa && req.query.anoCalendario) {
-			console.log("@@@@ CRIAR SCHEDULE @@@@");
+		if (req.query.parametros) {
+			var oParams = JSON.parse(req.query.parametros),
+				oPeriodo = oParams.periodo,
+				oEmpresa = oParams.empresa,
+				oAnoCalendario = oParams.anoCalendario,
+				sIdTipoSchedule = oParams.tipo,
+				oSchedule;
 			
-			var sIdRelTaxPackagePeriodo = req.query.idRelTaxPackagePeriodo,
-				sIdEmpresa = req.query.empresa,
-				sIdAnoCalendario = req.query.anoCalendario;
-				
-			var sQuery = 'select * from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
-				+ 'inner join "VGT.PERIODO" periodo '
-				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
-				+ 'where rel."id_rel_tax_package_periodo" = ? ',
-				aParams = [sIdRelTaxPackagePeriodo];
-				
-			var result = db.executeStatementSync(sQuery, aParams);
+			var sQuery, aParams, result;
 			
-			if (result[0].numero_ordem === 1) {
-				// Se for o primeiro periodo do ano,
-				// Pesquisa o ultimo registro de schedule que existe cadastrado para todos os anos anteriores para essa empresa
-				// e copia eles, adicionando o closing balance do ultimo registro como opening balance do novo ano
-				console.log("É período de numero_ordem 1");
+			sQuery = 'select * from "VGT.DOMINIO_ANO_CALENDARIO" where "ano_calendario" = ?';
+			aParams = [oAnoCalendario.anoCalendario - 1];
+			
+			result = db.executeStatementSync(sQuery, aParams);
+			
+			if (result) {
+				var idAnoCalendarioAnterior = result[0].id_dominio_ano_calendario;
 				
-				sQuery = 'select * from "VGT.DOMINIO_ANO_FISCAL" '
-						+ 'where "ano_fiscal" <= (select "ano_fiscal" from "VGT.DOMINIO_ANO_FISCAL" where "id_dominio_ano_fiscal" =  ?) ';
-				aParams = [sIdAnoCalendario];
+				sQuery = 
+					'select * '
+					+ 'from "VGT.SCHEDULE" schedule '
+					+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+					+ 'on schedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" '
+					+ 'inner join "VGT.PERIODO" periodo '
+					+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+					+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+					+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+					+ 'where '
+					+ 'schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? ' 
+					+ 'and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+					+ 'and taxPackage."fk_empresa.id_empresa" = ? '
+					+ 'and periodo."fk_dominio_modulo.id_dominio_modulo" = 2 ' // tax package
+					+ 'and periodo."numero_ordem" = ( '
+						+ 'select MAX(periodo."numero_ordem") '
+						+ 'from "VGT.SCHEDULE" schedule '
+						+ 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+						+ 'on schedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" '
+						+ 'inner join "VGT.PERIODO" periodo '
+						+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+						+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+						+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+						+ 'where '
+						+ 'schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? '
+						+ 'and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
+						+ 'and taxPackage."fk_empresa.id_empresa" = ? '
+						+ 'and periodo."fk_dominio_modulo.id_dominio_modulo" = 2 ' // tax package
+					+ ') ';
+				
+				aParams = [sIdTipoSchedule, idAnoCalendarioAnterior, oEmpresa.id_empresa, sIdTipoSchedule, idAnoCalendarioAnterior, oEmpresa.id_empresa];
 				
 				result = db.executeStatementSync(sQuery, aParams);
 				
-				console.log("INSERIR SCHEDULE DOS ANOS: " + result);
-			}
-			else {
-				// Para todos os outros periodos, realiza a copia dos schedules do periodo anterior	
-				console.log("Não é período de numero_ordem 1");
+				if (result && result.length > 0) {
+					oSchedule = result[0];
+				}
 			}
 			
-			console.log("@@@@@@@@@@@@@@@@@");
-		}*/
-		if (req.query.parametros) {
-			var oParams = JSON.parse(req.query.parametros);
+			// Se não, é preciso criar um vazio com as informações do ano corrente pegando a prescrição cadastrada para o pais da empresa
+			sQuery = 'select * from "VGT.PAIS" where "id_pais" = ?';
+			aParams = [oEmpresa["fk_pais.id_pais"]];
 			
-			if (req.query.parametros) {
-				console.log("@@@@ CRIAR SCHEDULE @@@@");
+			result = db.executeStatementSync(sQuery, aParams);
+			
+			if (result) {
+				var prescricao;
 				
-				var oSchedule;
-				
-				var oParams = JSON.parse(req.query.parametros),
-					oPeriodo = oParams.periodo,
-					oEmpresa = oParams.empresa,
-					oAnoCalendario = oParams.anoCalendario,
-					sIdTipoSchedule = oParams.tipo;
-				
-				var sQuery, aParams, result;
-				
-				if (oPeriodo.numero_ordem === 1) {
-					// Cria com base no valor do ultimo schedule do ano anterior
-					sQuery = 'select * from "VGT.DOMINIO_ANO_CALENDARIO" where "ano_calendario" = ?';
-					aParams = [oAnoCalendario.anoCalendario - 1];
-					
-					result = db.executeStatementSync(sQuery, aParams);
-					
-					if (result) {
-						var idAnoCalendarioAnterior = result[0].id_dominio_ano_calendario;
-						
-						// Seleciona o schedule do ultimo periodo do ano calendario anterior
-						sQuery = 
-							'select *  '
-							+ 'from "VGT.SCHEDULE" '
-							+ 'where '
-								+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? ' // id dominio schedule tipo
-								+ 'and "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = (  '
-									+ 'select rel."id_rel_tax_package_periodo"  '
-									+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel  '
-										+ 'inner join "VGT.TAX_PACKAGE" taxPackage  '
-											+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package"  '
-									+ 'where  '
-										+ 'taxPackage."fk_empresa.id_empresa" = ?  ' // id empresa
-										+ 'and rel."fk_periodo.id_periodo" = (  '
-											+ 'select "id_periodo"  '
-											+ 'from "VGT.PERIODO"  '
-											+ 'where   '
-											+ '"fk_dominio_ano_calendario.id_dominio_ano_calendario" = ?   ' // id ano calendario
-											+ 'and "fk_dominio_modulo.id_dominio_modulo" = 2  ' // id módulo tax package
-											+ 'and "numero_ordem" = (  '
-												+ 'select MAX("numero_ordem")  '
-												+ 'from "VGT.PERIODO"  '
-												+ 'where "fk_dominio_ano_calendario.id_dominio_ano_calendario" = ?  ' // id ano calendario
-												+ 'and "fk_dominio_modulo.id_dominio_modulo" = 2 ' //id módulo tax package
-											+ ') ' 
-										+ ') '
-								+ ') ';
-						
-						aParams = [sIdTipoSchedule, oEmpresa.id_empresa, idAnoCalendarioAnterior, idAnoCalendarioAnterior];
-						
-						result = db.executeStatementSync(sQuery, aParams);
-						
-						if (result && result.length > 0) {
-							oSchedule = result[0];
-						}
-					}
+				if (Number(sIdTipoSchedule) === 1) {
+					// Pega prescricao de Loss
+					prescricao = result[0].prescricao_prejuizo ? result[0].prescricao_prejuizo : 0;
 				}
 				else {
-					// Cria com base no valor do schedule do periodo anterior do mesmo ano calendario
-					sQuery =
-						'select * '
-						+ 'from "VGT.SCHEDULE"  '
-						+ 'where '
-							+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? ' // id dominio schedule tipo
-							+ 'and "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ( '
-								+ 'select rel."id_rel_tax_package_periodo" '
-								+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
-									+ 'inner join "VGT.PERIODO" periodo '
-										+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
-								+ 'where  '
-									+ 'rel."fk_tax_package.id_tax_package" = ? ' // id tax package
-									+ 'and periodo."fk_dominio_modulo.id_dominio_modulo" = 2 ' // id módulo tax package
-									+ 'and periodo."numero_ordem" = ? ' // numero de ordem que se deseja recuperar o SCHEDULE
-							+ ') ';
-							
-					aParams = [sIdTipoSchedule, oPeriodo.id_tax_package, oPeriodo.numero_ordem - 1];
-					
-					result = db.executeStatementSync(sQuery, aParams);
-						
-					if (result && result.length > 0) {
-						oSchedule = result[0];
-					}
-				}			
-				
-				if (oSchedule && oSchedule.id_schedule) {
-					// Se foi possível recuperar um schedule anterior, deleta seu id
-					delete oSchedule.id_schedule;
+					// Pega prescricao de Credito
+					prescricao = result[0].prescricao_credito ? result[0].prescricao_credito : 0;
 				}
-				else {
-					// Se não, é preciso criar um vazio com as informações do ano corrente pegando a prescrição cadastrada para o pais da empresa
-					sQuery = 'select * from "VGT.PAIS" where "id_pais" = ?';
-					aParams = [oEmpresa["fk_pais.id_pais"]];
-					
-					result = db.executeStatementSync(sQuery, aParams);
-					
-					if (result) {
-						var prescricao;
-						
-						if (Number(sIdTipoSchedule) === 1) {
-							// Pega prescricao de Loss
-							prescricao = result[0].prescricao_prejuizo;
-						}
-						else {
-							// Pega prescricao de Credito
-							prescricao = result[0].prescricao_credito;
-						}
-						
-						var iAnoCorrente = (new Date()).getFullYear();
-					
-						oSchedule = {
-							"fy": iAnoCorrente,
-							"year_of_expiration": iAnoCorrente + prescricao,
-							"opening_balance": null,
-							"current_year_value": null,
-							"current_year_value_utilized": null,
-							"adjustments": null,
-							"justificativa": null,
-							"current_year_value_expired": null,
-							"closing_balance": null,
-							"obs": null,
-							"fk_rel_tax_package_periodo.id_rel_tax_package_periodo": oPeriodo.id_rel_tax_package_periodo,
-							"fk_dominio_schedule_tipo.id_dominio_schedule_tipo": Number(sIdTipoSchedule),
-							"ind_corrente": true
-						};
-					}
-				}
-				console.log("@@@@@@@@@@@@@@@@@");
 				
-				res.send(JSON.stringify(oSchedule));
+				var iAnoCalendario = Number(oAnoCalendario.anoCalendario);
+			
+				oSchedule = {
+					"fy": iAnoCalendario,
+					"year_of_expiration": iAnoCalendario + prescricao,
+					"opening_balance": (oSchedule && oSchedule.id_schedule) ? oSchedule.closing_balance : 0,
+					"current_year_value": 0,
+					"current_year_value_utilized": 0,
+					"adjustments": null,
+					"justificativa": null,
+					"current_year_value_expired": null,
+					"closing_balance": 0,
+					"obs": null,
+					"fk_rel_tax_package_periodo.id_rel_tax_package_periodo": oPeriodo.id_rel_tax_package_periodo,
+					"fk_dominio_schedule_tipo.id_dominio_schedule_tipo": Number(sIdTipoSchedule),
+					"ind_corrente": true
+				};
 			}
+			
+			res.send(JSON.stringify(oSchedule)); 
 		}
 		else {
 			res.send(JSON.stringify({
@@ -436,23 +359,6 @@ module.exports = {
 				}
 			}));
 		}
-		
-		/*res.send(JSON.stringify([
-			{
-				"fy": 2017,
-				"year_of_expiration": 2022,
-				"opening_balance": 100000,
-				"current_year_value": 2000,
-				"current_year_value_utilized": 50000,
-				"adjustments": 50000,
-				"justificativa": "Justificativa",
-				"current_year_value_expired": 20000,
-				"closing_balance": 200000,
-				"obs": "Observação",
-				"fk_rel_tax_package_periodo.id_rel_tax_package_periodo": 1,
-				"fk_dominio_schedule_tipo.id_dominio_schedule_tipo": 1
-			}		
-		]));*/
 	},
 	
 	listagemEmpresas: function (req, res) {
