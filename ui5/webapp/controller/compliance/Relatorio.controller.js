@@ -40,17 +40,19 @@ sap.ui.define([
 				}]				
 			}));
 			this._atualizarDados();
-			
-			//this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._onRouteEmpresa, this);
+			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);			
 		},
 
-		navToHome: function () {
+		_handleRouteMatched: function () {
 			this.onExit();
+		},	
+
+		navToHome: function () {
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("selecaoModulo");    	
 		},
 		
 		navToPage2: function () {
-			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("complianceListagemObrigacoes");                                  	
 		},
 		_onClearSelecoes: function (oEvent){
@@ -66,7 +68,6 @@ sap.ui.define([
 			this.getModel().setProperty("/ReportObrigacao", undefined);
 		},
 		onNavBack: function (oEvent) {
-			this.onExit();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("complianceListagemObrigacoes");                                  	
 		},
 		onImprimir: function (oEvent) {
