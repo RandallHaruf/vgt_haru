@@ -1022,14 +1022,14 @@ sap.ui.define(
 							if (oItemToReport.flag_sim_nao) {
 								oRadioButton = new sap.m.RadioButton({
 									groupName: "group" + i,
-									text: "Sim"
+									text: this.getResourceBundle().getText("viewGeralSim"),
 								});
 								obj.idRadioButtonSim = oRadioButton.getId();
 								oHBox.addItem(oRadioButton);
 
 								oRadioButton = new sap.m.RadioButton({
 									groupName: "group" + i,
-									text: "Não",
+									text: this.getResourceBundle().getText("viewGeralNao"),
 									selected: true
 								});
 								obj.idRadioButtonNao = oRadioButton.getId();
