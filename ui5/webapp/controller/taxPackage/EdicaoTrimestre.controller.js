@@ -314,7 +314,7 @@ sap.ui.define(
 					text: "Principal"
 				})));
 				
-				oTable.addColumn(new sap.m.Column({
+				/*oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
@@ -333,7 +333,7 @@ sap.ui.define(
 					width: "150px"
 				}).setHeader(new sap.m.Text({
 					text: "Valor"
-				})));
+				})));*/
 
 				/* Template das células */
 				var oCheckBox = new sap.m.CheckBox({
@@ -356,7 +356,7 @@ sap.ui.define(
 					text: "{principal}"
 				});
 				
-				var oTextJuros = new sap.m.Text({
+				/*var oTextJuros = new sap.m.Text({
 					text: "{juros}"
 				});
 				
@@ -366,10 +366,10 @@ sap.ui.define(
 				
 				var oTextValor = new sap.m.Text({
 					text: "{total}"
-				});
+				});*/
 				
 				var oTemplate = new sap.m.ColumnListItem({
-					cells: [oCheckBox, oTextNameOfTax, oTextDataPagamento, oTextAcronimo, oTextPrincipal, oTextJuros, oTextMulta, oTextValor]
+					cells: [oCheckBox, oTextNameOfTax, oTextDataPagamento, oTextAcronimo, oTextPrincipal/*, oTextJuros, oTextMulta, oTextValor*/]
 				});
 
 				oTable.bindItems({
@@ -843,11 +843,9 @@ sap.ui.define(
 							aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes"),
 							fTotalAntecipacao = 0;
 						
-						// @TP16 REALIZAR A CONTA DAS ANTECIPACOES QUE SAO RESULTANTES DO TTC
-						
 						if (aAntecipacao) {
 							for (var i = 0, length = aAntecipacao.length; i < length; i++) {
-								fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i].total) ? Number(aAntecipacao[i].total) : 0);
+								fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i].principal) ? Number(aAntecipacao[i].principal) : 0);
 							} 
 						}
 						
