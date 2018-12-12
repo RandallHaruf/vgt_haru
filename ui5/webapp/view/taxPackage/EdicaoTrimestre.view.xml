@@ -548,7 +548,12 @@
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/LossSchedule}" 
+								rows="{
+									path: '/LossSchedule',
+									sorter: [{
+										path: 'fy'
+									}]
+								}" 
 								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
@@ -587,13 +592,13 @@
 									<t:Column width="12rem">
 										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
 										<t:template>
-											<Input type="Number" value="{adjustments}" change="onAplicarRegras" />
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input type="Text" value="{justificativa}" enabled="{= ${adjustments} ? true : false}" />
+											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
@@ -611,7 +616,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
 										<t:template>
-											<Input value="{obs}" />
+											<Input value="{obs}" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 								</t:columns>
@@ -702,7 +707,12 @@
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/CreditSchedule}" 
+								rows="{
+									path: '/CreditSchedule',
+									sorter: [{
+										path: 'fy'
+									}]
+								}" 
 								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
@@ -741,13 +751,13 @@
 									<t:Column width="12rem">
 										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
 										<t:template>
-											<Input type="Number" value="{adjustments}" change="onAplicarRegras" />
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input value="{justificativa}" enabled="{= ${adjustments} ? true : false}" />
+											<Input value="{justificativa}" enabled="{justificativaEnabled}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
@@ -765,7 +775,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
 										<t:template>
-											<Input value="{obs}" />
+											<Input value="{obs}" enabled="{= ${ind_corrente} === true ? true : false}" />
 										</t:template>
 									</t:Column>
 								</t:columns>

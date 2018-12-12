@@ -655,6 +655,12 @@ sap.ui.define(
 
 						oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;
 					}
+					
+					for (var i = 0, length = this.getModel().getProperty("/LossSchedule").length; i < length; i++) {
+						var oLossSchedule = this.getModel().getProperty("/LossSchedule")[i];
+						
+						oLossSchedule.justificativaEnabled = (oLossSchedule.ind_corrente && oLossSchedule.adjustments) ? true : false;
+					}
 				}
 
 				// Credit Schedule
@@ -680,6 +686,12 @@ sap.ui.define(
 							valor10 = oCreditSchedule.current_year_value_expired ? Number(oCreditSchedule.current_year_value_expired) : 0;
 
 						oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;
+					}
+					
+					for (var i = 0, length = this.getModel().getProperty("/CreditSchedule").length; i < length; i++) {
+						var oCreditSchedule = this.getModel().getProperty("/CreditSchedule")[i];
+						
+						oCreditSchedule.justificativaEnabled = (oCreditSchedule.ind_corrente && oCreditSchedule.adjustments) ? true : false;
 					}
 				}
 			},
@@ -2266,11 +2278,30 @@ sap.ui.define(
 							response[i].ind_corrente = true;
 						}
 						that.getModel().setProperty(sProperty, response);
+						that._carregarHistoricoSchedule(sProperty, sTipo);
 						that.onAplicarRegras();
 					} else {
 						that._carregarScheduleInicial(sTipo, sProperty);
 					}
 				});
+			},
+			
+			_carregarHistoricoSchedule: function (sProperty, sTipo) {
+				var that = this,
+					oEmpresa = this.getModel().getProperty("/Empresa"),
+					oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
+
+				var oParam = {
+					empresa: oEmpresa,
+					anoCalendario: oAnoCalendario,
+					tipo: sTipo // Loss Schedule
+				};
+				
+				NodeAPI.pListarRegistros("HistoricoSchedule?parametros=" + JSON.stringify(oParam))
+					.then(function (response) {
+						that.getModel().setProperty(sProperty, that.getModel().getProperty(sProperty).concat(response));
+						that.onAplicarRegras();
+					});
 			},
 
 			_carregarScheduleInicial: function (sTipo, sProperty) {
@@ -2290,8 +2321,12 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros(sEntidade, function (response) {
 					if (response) {
+						for (var i = 0; i < response.length; i++) {
+							response[i].ind_corrente = true;
+						}
 						//console.table(response);
 						that.getModel().setProperty(sProperty, [response]);
+						that._carregarHistoricoSchedule(sProperty, sTipo);
 						that.onAplicarRegras();
 					}
 				});
