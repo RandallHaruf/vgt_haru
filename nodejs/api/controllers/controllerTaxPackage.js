@@ -530,8 +530,59 @@ module.exports = {
 				}
 			}));
 		}
+	},
+	
+	encerrarTrimestre: function (req, res) {
+		if (req.body.relTaxPackagePeriodo && isNumber(req.body.relTaxPackagePeriodo)) {
+				
+			//if (pagamentosObrigatoriosDeclarados(Number(req.body.idEmpresa), Number(req.body.idPeriodo))) {
+			var sQuery =
+				'update "VGT.REL_TAX_PACKAGE_PERIODO" '
+				+ 'set "ind_ativo" = ?, '
+				+ '"data_envio" = ?, '
+				+ '"status_envio" = ? '
+				+ 'where '
+				+ '"id_rel_tax_package_periodo" = ? ',
+				aParams = [false, jsDateObjectToSqlDateString(new Date()), 4 /* enviado */, Number(req.body.relTaxPackagePeriodo)];
+				
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParams
+			}, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				}	
+				else {
+					res.send(JSON.stringify({
+						success: true,
+						result: result
+					}));
+				}
+			});
+			/*} 
+			else {
+				res.send(JSON.stringify({
+					success: false,
+					message: "Não foi possível encerrar o período.\nExistem pagamentos obrigatórios para o seu país que não foram declarados ou marcados como N/A."
+				}));	
+			}*/
+		}
+		else {
+			res.send(JSON.stringify({
+				success: false,
+				message: "ID do relacionamento do Tax Package com o Período é obrigatório"
+			}));
+		}
 	}
 };
+
+function isNumber (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function jsDateObjectToSqlDateString (oDate) {
+	return oDate.getFullYear() + "-" + (oDate.getMonth() + 1) + "-" + oDate.getDate();
+}
 
 function atualizarMoeda (sIdTaxPackage, sFkMoeda) {
 	var sQuery = 'update "VGT.TAX_PACKAGE" set "fk_dominio_moeda.id_dominio_moeda" = ? where "id_tax_package" = ?',

@@ -85,7 +85,7 @@ sap.ui.define(
 			},
 			
 			onSubmeterPeriodo: function (oPeriodo) {
-				var dialog = new sap.m.Dialog({
+				/*var dialog = new sap.m.Dialog({
 					title: "Confirmação de Fechamento",
 					type: "Message",
 					content: new sap.m.Text({ text: "Você tem certeza que deseja fechar o período?" }),
@@ -108,7 +108,117 @@ sap.ui.define(
 					}
 				});
 	
-				dialog.open();	
+				dialog.open();	*/
+				var that = this, 
+					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
+				
+				var dialog = new sap.m.Dialog({
+					title: this.getResourceBundle().getText("viewResumoTrimestreJSTEXTSConfirmaçãodeFechamento"),
+					type: "Message",
+					content: new sap.m.Text({
+						text: this.getResourceBundle().getText("viewResumoTrimestreJSTEXTSVocêtemcertezaquedesejafecharoperíodo"),
+					}),
+					beginButton: new sap.m.Button({
+						text: this.getResourceBundle().getText("viewResumoTrimestreJSTEXTSSubmeter"),
+						press: function () {
+							NodeAPI.pAtualizarRegistro("EncerrarTrimestreTaxPackage", "", {
+								relTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
+							}).then(function (response) {
+								dialog.close();	
+								
+								var json = JSON.parse(response);
+								
+								if (json.success) {
+									that._atualizarDados();	
+								}
+								else {
+									var dialog2 = new sap.m.Dialog({
+										title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+										type: "Message",
+										content: new sap.m.Text({
+											text: json.message
+										}),
+										endButton: new sap.m.Button({
+											text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+											press: function () {
+												dialog2.close();
+											}
+										}),
+										afterClose: function () {
+											dialog2.destroy();
+										}
+									});
+					
+									dialog2.open();
+								}
+							}).catch(function (err) {
+								dialog.close();
+								
+								var dialog2 = new sap.m.Dialog({
+										title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+										type: "Message",
+										content: new sap.m.Text({
+											text: err.status + " - " + err.statusText
+										}),
+										endButton: new sap.m.Button({
+											text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+											press: function () {
+												dialog2.close();
+											}
+										}),
+										afterClose: function () {
+											dialog2.destroy();
+										}
+									});
+					
+									dialog2.open();
+							});
+							/*NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
+								idEmpresa: sIdEmpresa,
+								idPeriodo: oPeriodo.id_periodo
+							}, function (response) {
+								dialog.close();	
+								
+								var json = JSON.parse(response);
+								
+								if (json.success) {
+									that._atualizarDados();	
+								}
+								else {
+									var dialog2 = new sap.m.Dialog({
+										title: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+										type: "Message",
+										content: new sap.m.Text({
+											text: json.message
+										}),
+										endButton: new sap.m.Button({
+											text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+											press: function () {
+												dialog2.close();
+											}
+										}),
+										afterClose: function () {
+											dialog2.destroy();
+										}
+									});
+					
+									dialog2.open();
+								}
+							});*/
+						}
+					}),
+					endButton: new sap.m.Button({
+						text: this.getResourceBundle().getText("viewGeralCancelar"),
+						press: function () {
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+
+				dialog.open();
 			},
 			
 			onReabrirPeriodo: function (oPeriodo) {
