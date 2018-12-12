@@ -155,23 +155,23 @@ sap.ui.define(
 								dialog.close();
 								
 								var dialog2 = new sap.m.Dialog({
-										title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
-										type: "Message",
-										content: new sap.m.Text({
-											text: err.status + " - " + err.statusText
-										}),
-										endButton: new sap.m.Button({
-											text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
-											press: function () {
-												dialog2.close();
-											}
-										}),
-										afterClose: function () {
-											dialog2.destroy();
+									title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+									type: "Message",
+									content: new sap.m.Text({
+										text: err.status + " - " + err.statusText
+									}),
+									endButton: new sap.m.Button({
+										text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+										press: function () {
+											dialog2.close();
 										}
-									});
-					
-									dialog2.open();
+									}),
+									afterClose: function () {
+										dialog2.destroy();
+									}
+								});
+				
+								dialog2.open();
 							});
 							/*NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
 								idEmpresa: sIdEmpresa,
@@ -235,7 +235,7 @@ sap.ui.define(
 				var oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralEmpresa}"
 				}).addField(new sap.m.Text({
-					text: "{/Empresa/nome}"
+					text: "{/Empresa/empresa}"
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
@@ -243,16 +243,18 @@ sap.ui.define(
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralPeriodo}"
 				}).addField(new sap.m.Text({
-					text: oPeriodo.numero_ordem + " {i18n>viewGeralTrimestre}"
+					text: oPeriodo.periodo
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
 
+				var oTextArea = new sap.m.TextArea({
+					rows: 5
+				});
+				
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralJustificativa}"
-				}).addField(new sap.m.TextArea({
-					rows: 5
-				}));
+				}).addField(oTextArea);
 
 				oFormContainer.addFormElement(oFormElement);
 
@@ -264,8 +266,38 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
-							sap.m.MessageToast.show(this.getResourceBundle().getText("viewTaxPackageResumoTrimestreEnviarDeclaracao") + oPeriodo.periodo);
-							dialog.close();
+							NodeAPI.pCriarRegistro("RequisicaoReaberturaTaxPackage", {
+								dataRequisicao: this._formatDate(new Date()),
+								idUsuario: 2,
+								nomeUsuario: "Juliana",
+								justificativa: oTextArea.getValue(),
+								fkDominioRequisicaoReaberturaStatus: 1,
+								fkIdRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
+							}).then(function (response) {
+								dialog.close();
+								sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));	
+							}).catch(function (err) {
+								dialog.close();
+								
+								var dialog2 = new sap.m.Dialog({
+									title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+									type: "Message",
+									content: new sap.m.Text({
+										text: err.status + " - " + err.statusText
+									}),
+									endButton: new sap.m.Button({
+										text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+										press: function () {
+											dialog2.close();
+										}
+									}),
+									afterClose: function () {
+										dialog2.destroy();
+									}
+								});
+				
+								dialog2.open();
+							});
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({
@@ -284,6 +316,18 @@ sap.ui.define(
 				this.getView().addDependent(dialog);
 
 				dialog.open();
+			},
+			
+			_formatDate: function (date) {
+			    var d = new Date(date),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+			
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+			
+			    return [year, month, day].join('-');
 			},
 			
 			onAnexarDeclaracao: function (oPeriodo) {
