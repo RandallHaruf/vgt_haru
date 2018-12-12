@@ -521,4 +521,10 @@ context VGT {
         key fk_diferenca          : association[0..1] to VGT.DIFERENCA { id_diferenca };
             valor                 : Decimal(19, 4);
     };
+
+    /*@@layout{"layoutInfo":{"x":-1548,"y":899.5}}*/
+    entity DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO {
+        key id_dominio_rel_tax_package_periodo_status_envio : Integer64 not null;
+            status_envio                                    : String(100);
+    };
 };

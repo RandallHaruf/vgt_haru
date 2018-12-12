@@ -369,7 +369,12 @@ insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values
 insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values( 163 ,' UNID.MONET.EUROP.  ',' XEU   ');
 insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values( 164 ,' DOLAR OURO      ',' XAU   ');
 
+-- select * from "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO"
 
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(1, 'Fechado Não Enviado');
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(2, 'Não Iniciado');
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(3, 'Em andamento');
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(4, 'Enviado');
 
 -- select * from "VGT.DOMINIO_MODULO"
 insert into "VGT.DOMINIO_MODULO"("id_dominio_modulo", "modulo") values(1, 'TTC');
