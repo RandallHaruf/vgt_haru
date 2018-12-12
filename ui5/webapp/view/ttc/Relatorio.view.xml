@@ -132,7 +132,7 @@
 						</fb:filterItems>
 					</fb:FilterBar>
 					<Button
-					text="Gerar {i18n>viewGeralRelatorio}"
+					text="{i18n>viewGeralGerar} {i18n>viewGeralRelatorio}"
 					type="Emphasized"
 					press="onGerarRelatorio"/>						
 				</f:content>
