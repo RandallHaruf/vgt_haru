@@ -58,6 +58,19 @@ sap.ui.define(
 				});
 			},
 			
+			pAtualizarRegistro: function (sEntidade, sIdRegistro, oData) {
+				return new Promise(function (resolve, reject) {
+					jQuery.ajax(urlBackend + sEntidade + "/" + sIdRegistro, {
+						type: "PUT",
+						data: oData
+					}).then(function (response) {
+						resolve(response);
+					}, function (err) {
+						reject(err);
+					});		
+				});
+			},
+			
 			atualizarRegistro: function (sEntidade, sIdRegistro, oParameters, callback) {
 				jQuery.ajax(urlBackend + sEntidade + "/" + sIdRegistro, {
 					type: "PUT",
