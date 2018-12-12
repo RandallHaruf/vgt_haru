@@ -14,7 +14,7 @@ sap.ui.define(
 				this.setModel(new JSONModel());
 				
 				this.getRouter().getRoute("ttcListagemEmpresas").attachPatternMatched(this._onRouteMatched, this);                         
-				jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
+				//jQuery(".money span").mask("000.000.000.000.000", {reverse: true});
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
@@ -113,11 +113,18 @@ sap.ui.define(
 				NodeAPI.listarRegistros("ResumoEmpresaTTC?anoCalendario=" + sIdAnoCalendario, function (response) {
 					if (response) {
 						for(var i = 0; i < response.length; i++){
-							response[i]["collected"] = response[i]["collected"] ? parseInt(response[i]["collected"],10) : 0;
-							response[i]["total"] = response[i]["total"] ? parseInt(response[i]["total"],10) : 0;
-							response[i]["borne"] = response[i]["borne"] ? parseInt(response[i]["borne"],10) : 0;
+							response[i]["collected"] = (response[i]["collected"] ? parseInt(response[i]["collected"],10) : 0);
+							response[i]["total"] = (response[i]["total"] ? parseInt(response[i]["total"],10) : 0);
+							response[i]["borne"] = (response[i]["borne"] ? parseInt(response[i]["borne"],10) : 0);
 						}
 						that.getModel().setProperty("/Empresa", response);
+						setTimeout(function(){
+							$.each($('.money span'),function(index,el){
+								var valor = $(el).text();
+								valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+								$(el).text(valor);
+							});	
+						}, 150);
 					}	
 					
 					that.byId("tabelaEmpresas").setBusy(false);
