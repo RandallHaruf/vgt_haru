@@ -570,20 +570,20 @@ sap.ui.define(
 						return obj.ind_ativo === true;
 					});
 
-					var fValor1 = oIncomeTax.rc_current_income_tax_current_year ? Number(oIncomeTax.rc_current_income_tax_current_year) : 0,
+					var fRcStatutoryProvisionForIncomeTax = oIncomeTax.rc_statutory_provision_for_income_tax ? Number(oIncomeTax.rc_statutory_provision_for_income_tax) : 0,
 						fValor2 = oIncomeTax.rf_income_tax_before_other_taxes_and_credits ? Number(oIncomeTax.rf_income_tax_before_other_taxes_and_credits) : 0;
 
-					oIncomeTax.it_income_tax_as_per_the_statutory_financials = fValor1;
+					oIncomeTax.it_income_tax_as_per_the_statutory_financials = fRcStatutoryProvisionForIncomeTax;
 					oIncomeTax.it_income_tax_as_per_the_tax_return = fValor2;
 
-					var fValor3 = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) : 0,
+					var fRcStatutoryGaapProfitLossBeforeTax = oIncomeTax.rc_statutory_gaap_profit_loss_before_tax ? Number(oIncomeTax.rc_statutory_gaap_profit_loss_before_tax) : 0,
 						fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
 
-					if (fValor3 !== 0) {
-						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = Number(parseFloat(fValor1 / fValor3).toFixed(2)) * 100;
-						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = Number(parseFloat(fValor4 / fValor3).toFixed(2)) * 100;
+					if (fRcStatutoryGaapProfitLossBeforeTax !== 0) {
+						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = Number(parseFloat(fRcStatutoryProvisionForIncomeTax / fRcStatutoryGaapProfitLossBeforeTax).toFixed(2)) * 100;
+						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = Number(parseFloat(fValor4 / fRcStatutoryGaapProfitLossBeforeTax).toFixed(2)) * 100;
 					} else {
-						if (fValor1 > 0) {
+						if (fRcStatutoryProvisionForIncomeTax > 0) {
 							oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 100;
 						}
 						if (fValor4 > 0) {
