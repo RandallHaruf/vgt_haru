@@ -4,28 +4,25 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/json/JSONModel",
 	"ui5ns/ui5/controller/BaseController",
+	"ui5ns/ui5/lib/NodeAPI",
+	"ui5ns/ui5/model/Constants",	
 	"sap/ui/core/util/Export",
 	"sap/ui/core/util/ExportType",	
 	"sap/ui/core/util/ExportTypeCSV",	
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
 	"ui5ns/ui5/lib/Utils"	
-], function (jQuery, Controller, Filter, JSONModel, BaseController,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils) {
+], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.taxPackage.Relatorio", {
 		onInit: function () {
-			this.oModel = new JSONModel();
-			this.oModel.loadData(jQuery.sap.getModulePath("ui5ns.ui5.model.mock", "/relatorioTaxPackage.json"), null, false);
-			this.getView().setModel(this.oModel);
-		
-			this.aKeys = ["empresa", "aba", "anoCalendario", "periodoReferencia"];
-			this.oSelectEmpresa = this.getSelect("selectEmpresa");
-			this.oSelectAba = this.getSelect("selectAba");
-			this.oSelectAnoCalendario = this.getSelect("selectAnoCalendario");
-			this.oSelectPeriodoReferencia = this.getSelect("selectPeriodoReferencia");
-			this.oModel.setProperty("/Filter/text", "Filtered by None");
-			this.addSnappedLabel();
+			
+			var oModel = new sap.ui.model.json.JSONModel({
+			});
+			oModel.setSizeLimit(5000);
+			this.getView().setModel(oModel);
+			this._atualizarDados();
 			
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);			
@@ -55,21 +52,83 @@ sap.ui.define([
 			this.oModel = null;
 		},
 
+		_onClearSelecoes: function (oEvent){
+			this.getModel().setProperty("/IdEmpresasSelecionadas" , undefined);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
+			this.getModel().setProperty("/IdPeriodoSelecionadas", undefined);
+			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
+			this.getModel().setProperty("/ReportTaxPackage", undefined);
+		},
+
 		onSelectChange: function (oEvent) {
 			this._atualizarDados();			
-			//sap.m.MessageToast.show(this.oSelectEmpresa.getSelectedItem().getKey());
-			/*var aCurrentFilterValues = [];
+		},
 
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectEmpresa));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectAba));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectAnoCalendario));
-			aCurrentFilterValues.push(this.getSelectedItemText(this.oSelectPeriodoReferencia));
-	
-			this.filterTable(aCurrentFilterValues);*/
+		onImprimir: function (oEvent) {
+			//this._geraRelatorio(); 			
+		},
+		onGerarRelatorio: function (oEvent) {
+			this._geraRelatorioTax(); 
 		},
 
 		_atualizarDados: function () {
+			var that = this;
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
+			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
+			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
+
+			var oWhere = []; 
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioAnoCalendario);
+			oWhere.push(oPeriodoSelecionadas);
+			oWhere.push(oMoedaSelecionadas);
+			oWhere.push(null);
 			
+			oWhere[4] = ["tblEmpresa.nome"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/Empresa", aRegistro);
+				}
+			});	
+			oWhere[4] = ["tblDominioAnoCalendario.ano_calendario"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+				}
+			});	
+			oWhere[4] = ["tblPeriodo.id_periodo"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/Periodo", aRegistro);
+				}
+			});	
+			oWhere[4] = ["tblDominioMoeda.acronimo"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioMoeda", aRegistro);
+				}
+			});				
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
@@ -86,75 +145,49 @@ sap.ui.define([
 
 				// binding information for the rows aggregation
 				rows : {
-					path : "/ReportObrigacao"
+					path : "/ReportTaxPackage"
 				},
 
 				// column definitions with column name and binding info for the content
-
 				columns : [{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaTipo"),
-					template : {
-						content : "{tblDominioObrigacaoAcessoriaTipo.tipo}"
-					}
-				}, {
 					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
 					template : {
 						content : "{tblEmpresa.nome}"
 					}
 				}, {
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPais"),
-					template : {
-						content : "{tblDominioPais.pais}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewComplianceFormularioDetalhesObrigacaoListagemObrigações"),
-					template : {
-						content : "{tblObrigacaoAcessoria.nome}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPeriodicidade"),
-					template : {
-						content : "{tblDominioPeriodicidadeObrigacao.descricao}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaAnoFiscal"),
-					template : {
-						content : "{tblDominioAnoFiscal.ano_fiscal}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPrazoEntrega"),
-					template : {
-						content : "{tblObrigacao.prazo_entrega}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaExtensao"),
-					template : {
-						content : "{tblObrigacao.extensao}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaStatus"),
-					template : {
-						content : "{tblDominioStatusObrigacao.descricao}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesBotaoRequisicao"),
-					template : {
-						content : "{tblObrigacao.obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaSuporteContratado"),
-					template : {
-						content : "{tblObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
-					}
-				},{
-					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
-					template : {
-						content : "{tblObrigacao.suporte}"
-					}
-				},{
 					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
 					template : {
-						content : "{tblObrigacao.observacoes}"
+						content : "{tblDominioAnoCalendario.ano_calendario}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewGeralPeriodo"),
+					template : {
+						content : "{tblPeriodo.periodo}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewGeralMoeda"),
+					template : {
+						content : "{tblDominioMoeda.acronimo}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewTAXResumoTrimestreColunaStatutoryGAAP"),
+					template : {
+						content : "{tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewTAXResumoTrimestreColunaTaxableIncome"),
+					template : {
+						content : "{tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewTAXResumoTrimestreColunaNetLocalTax"),
+					template : {
+						content : "{tblTaxReconciliation.rf_net_local_tax}"
+					}
+				}, {
+					name : this.getResourceBundle().getText("viewTAXResumoTrimestreColunaTaxDue"),
+					template : {
+						content : "{tblTaxReconciliation.rf_tax_due_overpaid}"
 					}
 				}]
 			});
@@ -165,9 +198,7 @@ sap.ui.define([
 				+"_"
 				+this.getResourceBundle().getText("viewGeralRelatorio") 
 				+"_" 
-				+ this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina")
-				+"_"
-				+this.getResourceBundle().getText("viewSelecaoModuloBotaoBeps")
+				+ this.getResourceBundle().getText("viewGeralTaxa")
 				).catch(function(oError) {
 				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
 			}).then(function() {
@@ -175,13 +206,52 @@ sap.ui.define([
 			});
 		},	
 		
-		_exibeReport: function () {
-			
-			
+		_geraRelatorioTax: function () {
+
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
+			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
+			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
+
+			var oWhere = []; 
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioAnoCalendario);
+			oWhere.push(oPeriodoSelecionadas);
+			oWhere.push(oMoedaSelecionadas);
+
+			this._preencheReportTax(oWhere);			
 		},
 		
 		_preencheReportTax: function (oWhere){
-			
+			var that = this;
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTaxPackage", {
+				type: "POST",
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] = 
+							aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] 
+								? Number(aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
+								: "0" ;
+						aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] = 
+							aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] 
+								? Number(aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
+								: "0" ;
+						aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] = 
+							aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] 
+								? Number(aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
+								: "0" ;
+						aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] = 
+							aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] 
+								? Number(aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
+								: "0" ;
+					}						
+					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
+				}
+			});				
 		},		
 		
 		

@@ -21,13 +21,15 @@
 						icon="sap-icon://print" />-->
 					<Button
 						text="{i18n>viewRelatorioExportar} CSV"
-						type="Transparent"/>
+						type="Transparent"
+						press="onDataExportCSV"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="{i18n>viewRelatorioExportar} XLS"
-						type="Transparent"/>
+						type="Transparent"
+						press="onDataExportCSV"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -45,48 +47,82 @@
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa" change="onSelectChange" items="{ path: '/OpcoesEmpresa' }">
-										<core:Item key="{key}" text="{value}"/>
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="{i18n>viewRelatorioAba}">
+							<fb:FilterItem name="B" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAba" change="onSelectChange" items="{ path: '/OpcoesAba' }">
-										<core:Item key="{key}" text="{value}"/>
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="C" label="{i18n>viewGeralAnoCalendario}">
+							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
-									<MultiComboBox id="selectAnoCalendario" change="onSelectChange" items="{ path: '/OpcoesAnoCalendario' }">
-										<core:Item key="{key}" text="{value}"/>
+									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
+										<core:Item key="{tblPeriodo.id_periodo}" text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="D" label="{i18n>viewRelatorioPeriodoDeReferencia}">
+							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
 								<fb:control>
-									<MultiComboBox id="selectPeriodo" change="onSelectChange" items="{ path: '/OpcoesPeriodo' }">
-										<core:Item key="{key}" text="{value}"/>
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
+										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
 					</fb:FilterBar>
+					<Button
+					text="Gerar {i18n>viewGeralRelatorio}"
+					type="Emphasized"
+					press="onGerarRelatorio"/>						
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/ReportTax' }">
+				<Table items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column></Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewRelatorioEmpresa}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewGeralPeriodo}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewGeralMoeda}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}"/>
+						</Column>
+						<Column width="6rem">
+							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}"/>
+						</Column>			
 					</columns>
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text text="{empresa}"/>
+								<Text text="{tblEmpresa.nome}"/>
+								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+								<Text text="{tblPeriodo.periodo}"/>
+								<Text text="{tblDominioMoeda.acronimo}"/>
+								<Text text="{tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}"/>
+								<Text text="{tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}"/>
+								<Text text="{tblTaxReconciliation.rf_net_local_tax}"/>
+								<Text text="{tblTaxReconciliation.rf_tax_due_overpaid}"/>								
 							</cells>
 						</ColumnListItem>
 					</items>
