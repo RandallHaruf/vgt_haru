@@ -29,7 +29,7 @@
 				<Label text="{i18n>viewGeralCorpo}" class="sapUiMediumMarginTop" />
 				<TextArea rows="5" width="100%" value="{/corpo}" />
 				<HBox justifyContent="End">
-					<Button text="{i18n>viewGeralEnviar}" press="onEnviarMensagem"/>
+					<Button text="{i18n>viewGeralEnviar}" press="onEnviarMensagem" enabled="{/bEmailButton}"/>
 				</HBox>
 			</VBox>
 		</f:content>

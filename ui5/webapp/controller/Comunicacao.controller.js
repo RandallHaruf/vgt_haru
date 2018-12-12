@@ -9,24 +9,32 @@ sap.ui.define(
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
 					assunto:null,
-					corpo:null
+					corpo:null,
+					bEmailButton: true
 				}));
 				
 			},
 			onEnviarMensagem: function (oEvent) {
 				//sap.m.MessageToast.show(this.getResourceBundle().getText("viewEnviarMensagem"));
-				var assunto = this.getModel().getProperty("/assunto");
+				var assunto = "Comunicacao - " + this.getModel().getProperty("/assunto");
 				var corpo = this.getModel().getProperty("/corpo");
-				
+				var htmlBody = "<p>Dear Administrator,</p><p>" + corpo + "</p><p>Thank you in advance.</p><p>User</p>";
+				var emailCC = "";//Pegar aqui o email na sessão do usuário
+				this.getModel().setProperty("/bEmailButton", false);
+				var that = this;
 				jQuery.ajax({//Desativar botao
 					url: Constants.urlBackend + "EmailSend",
 					type: "POST",
 					data: {
 						_assunto: assunto,
-						_corpo: corpo
+						_corpo: htmlBody,
+						_emailCC: emailCC
 					},
 					success: function (response) {
-						alert(response);//Ativafr botao
+						that.getModel().setProperty("/corpo","");
+						that.getModel().setProperty("/assunto","");
+						that.getModel().setProperty("/bEmailButton", true);
+						sap.m.MessageToast.show("Email enviado com sucesso");
 					}
 				});
 				

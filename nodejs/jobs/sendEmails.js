@@ -15,8 +15,10 @@ var nodemailer = require("nodemailer");
 module.exports = {
 	sendEmail: (oProperties, onSuccess, onError) => {
 		
-		var sSender = "tenti@tenti.com.br";
-		var sSenderPassword = "T#nt1@2017";
+		/*var sSender = "tenti@tenti.com.br";
+		var sSenderPassword = "T#nt1@2017";*/
+		var sSender = "vgt@tenti.com.br";
+		var sSenderPassword = "Tenti@2018!";
 		
 		var oTransporter = nodemailer.createTransport({
 			host: "smtp.office365.com", // Office 365 server
@@ -31,10 +33,10 @@ module.exports = {
 			},
 			requireTLS: true
 		});
-
 		var oMailOptions = {
 			from: sSender,
 			to: oProperties.to,
+			cc: oProperties.cc,
 			subject: oProperties.subject
 		};
 
