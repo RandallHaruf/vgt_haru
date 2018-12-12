@@ -34,6 +34,19 @@ sap.ui.define(
 				});
 			},
 			
+			pCriarRegistro: function (sEntidade, oData) {
+				return new Promise(function (resolve, reject) {
+					jQuery.ajax(urlBackend + sEntidade, {
+						type: "POST",
+						data: oData
+					}).then(function (response) {
+						resolve(response);
+					}, function (err) {
+						reject(err);
+					});		
+				});
+			},
+			
 			criarRegistro: function (sEntidade, oData, callback) {
 				jQuery.ajax(urlBackend + sEntidade, {
 					type: "POST",
