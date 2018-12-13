@@ -540,7 +540,7 @@ context VGT {
             nome_arquivo : String(255);
     };
 
-	/*@@layout{"layoutInfo":{"x":889,"y":202.5}}*/
+    /*@@layout{"layoutInfo":{"x":889,"y":202.5}}*/
     entity DOMINIO_OBRIGACAO_STATUS {
         key id_dominio_obrigacao_status : Integer;
             descricao_obrigacao_status  : String(50);
@@ -548,17 +548,17 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":643,"y":401.5}}*/
     entity MODELO_OBRIGACAO {
-        key id_modelo                   : Integer;
-            nome_obrigacao              : String(200);
-            data_inicial                : LocalDate;
-            data_final                  : LocalDate;
-            prazo_entrega               : LocalDate;
-            fk_id_pais                  : association[*, 0..1] to VGT.PAIS { id_pais };
-            fk_dominio_periodicidade    : association[*, 0..1] to VGT.DOMINIO_PERIODICIDADE_OBRIGACAO { id_periodicidade_obrigacao };
-            fk_dominio_obrigacao_status : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
+        key id_modelo                      : Integer;
+            nome_obrigacao                 : String(200);
+            data_inicial                   : LocalDate;
+            data_final                     : LocalDate;
+            prazo_entrega                  : LocalDate;
+            fk_id_pais                     : association[*, 0..1] to VGT.PAIS { id_pais };
+            fk_id_dominio_periodicidade    : association[*, 0..1] to VGT.DOMINIO_PERIODICIDADE_OBRIGACAO { id_periodicidade_obrigacao };
+            fk_id_dominio_obrigacao_status : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
     };
 
-	/*@@layout{"layoutInfo":{"x":897,"y":622.5}}*/
+    /*@@layout{"layoutInfo":{"x":897,"y":622.5}}*/
     entity REL_MODELO_EMPRESA {
             fk_id_modelo_obrigacao         : association[*, 0..1] to VGT.MODELO_OBRIGACAO { id_modelo };
             fk_id_empresa                  : association[*, 0..1] to VGT.EMPRESA { id_empresa };
