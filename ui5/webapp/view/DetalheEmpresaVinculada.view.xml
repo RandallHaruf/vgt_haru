@@ -42,7 +42,7 @@
 									<Text text="{/empresa/num_hfm_sap}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="TIN (Tax {i18n>viewDetalhesDaEmpresaVinculadaIdentificationNumber})">
+							<form:FormElement label="TIN ({i18n>viewGeralTaxaD} {i18n>viewDetalhesDaEmpresaVinculadaIdentificationNumber})">
 								<form:fields>
 									<!--<Input id="inputTIN"/>-->
 									<Text text="{/empresa/tin}" />
@@ -54,7 +54,7 @@
 									<Text text="{/empresa/jurisdicao_tin}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="NI (Tax {i18n>viewDetalhesDaEmpresaVinculadaIdentificationNumber})">
+							<form:FormElement label="NI ({i18n>viewGeralTaxaD} {i18n>viewDetalhesDaEmpresaVinculadaIdentificationNumber})">
 								<form:fields>
 									<!--<Input id="inputNI"/>-->
 									<Text text="{/empresa/ni}" />
