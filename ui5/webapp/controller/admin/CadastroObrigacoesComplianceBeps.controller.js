@@ -52,8 +52,8 @@ sap.ui.define(
 			//-------------------
 			//-------------------
 			//trocar o nome desse registro
-			_nomeColunaIdentificadorNaListagemObjetos: "id_obrigacao_acessoria",
-			
+			//_nomeColunaIdentificadorNaListagemObjetos: "id_obrigacao_acessoria",
+			_nomeColunaIdentificadorNaListagemObjetos: "id_modelo",
 			//-------------------
 			//-------------------
 			//-------------------
@@ -66,14 +66,14 @@ sap.ui.define(
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: jQuery(sIdFormulario + " input[aria-required=true]"),
 					aDropdownObrigatorio: [
-						this.byId("selectStatus")/*,
-						this.byId("selectAnoFiscal"),
-						this.byId("selectPeriodicidade")*/
+						this.byId("selectStatus"),
+						this.byId("selectPais"),
+						this.byId("selectPeriodicidade")
 					],
 					oPeriodoObrigatorio: {
 						dataInicio: this.byId("dataInicio"),
-						dataFim: this.byId("dataFim")/*,
-						selectPrazoEntrega: this.byId("selectPrazoEntrega")*/
+						dataFim: this.byId("dataFim"),
+						selectPrazoEntrega: this.byId("selectPrazoEntrega")
 					}
 				});
 				
@@ -120,13 +120,6 @@ sap.ui.define(
 					}
 				});
 				//os dois node api foram adicionados recentemente para puxar os valores novos do formulario
-				NodeAPI.listarRegistros("DominioAnoFiscal", function (response) {
-					if (response) {
-						response.unshift({});
-						that.getModel().setProperty("/DominioAnoFiscal", response);
-						that._atualizarDados();
-					}
-				});
 				NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (response) {
 					if (response) {
 						response.unshift({});
@@ -134,7 +127,13 @@ sap.ui.define(
 						that._atualizarDados();
 					}
 				});				
-				
+				NodeAPI.listarRegistros("DominioPais", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/DominioPais", response);
+						that._atualizarDados();
+					}
+				});	
 				/*
 				jQuery.ajax("https://3cmwthhrqctaqsr8-app-nodejs.cfapps.us10.hana.ondemand.com/node/DominioPaisStatus", {
 					type: "GET",
@@ -160,13 +159,13 @@ sap.ui.define(
 					success: function (response) {
 						var oObjeto = response[0];
 						var obj = {
-							nome: oObjeto["nome"],
+							nome: oObjeto["nome_obrigacao"],
 							dataInicio: oObjeto["data_inicio"],
 							dataFim: oObjeto["data_fim"],
 							fkDominioObrigacaoAcessoriaTipo: oObjeto["fk_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
-							selectAnoFiscal: oObjeto["???????NOME DA CHAVE NA TABELA????????????"],
-							selectPeriodicidade: oObjeto["???????NOME DA CHAVE NA TABELA????????????"],
-							selectPrazoEntrega: oObjeto["???????NOME DA CHAVE NA TABELA????????????"]
+							selectPeriodicidade: oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],
+							selectPais: oObjeto["fk_id_pais.id_pais"],
+							selectPrazoEntrega: oObjeto["prazo_entrega"]
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
@@ -194,7 +193,7 @@ sap.ui.define(
 						dataInicio: obj.dataInicio,
 						dataFim: obj.dataFim,
 						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
-						selectAnoFiscal: obj.selectAnoFiscal,
+						selectPais: obj.selectPais,
 						selectPeriodicidade: obj.selectPeriodicidade,
 						selectPrazoEntrega: obj.selectPrazoEntrega						
 					},
@@ -220,7 +219,7 @@ sap.ui.define(
 						dataInicio: obj.dataInicio,
 						dataFim: obj.dataFim,
 						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
-						selectAnoFiscal: obj.selectAnoFiscal,
+						selectPais: obj.selectPais,						
 						selectPeriodicidade: obj.selectPeriodicidade,
 						selectPrazoEntrega: obj.selectPrazoEntrega	
 					},

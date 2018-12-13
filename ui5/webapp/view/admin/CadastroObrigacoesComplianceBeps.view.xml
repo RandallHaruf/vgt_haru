@@ -101,6 +101,16 @@
 											<Input type="Text" id="inputNome" value="{/objeto/nome}" required="true" />
 										</f:fields>
 									</f:FormElement>
+									<f:FormElement label="{i18n>viewGeralPais}">
+										<f:label>
+											<Label text="{i18n>viewGeralPais}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectPais" selectedKey="{/objeto/selectPais}" items="{/DominioPais}">
+												<core:Item text="{pais}" key="{id_dominio_pais}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>									
 									<f:FormElement>
 										<f:label>
 											<Label text="{i18n>ViewGeralDataInício}" labelFor="dataInicio" />
@@ -115,16 +125,6 @@
 										</f:label>
 										<f:fields>
 											<DatePicker id="dataFim" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement label="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}">
-										<f:label>
-											<Label text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectAnoFiscal" selectedKey="{/objeto/selectAnoFiscal}" items="{/DominioAnoFiscal}">
-												<core:Item text="{anofiscal}" key="{id_dominio_ano_fiscal}" />
-											</Select>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
