@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, Constants, Validador) {
+	function (BaseController, Constants, Validador,NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroObrigacoesComplianceBeps", {
 			
 			/* Métodos a implementar */
@@ -32,9 +33,10 @@ sap.ui.define(
 					title: "Confirm",
 					onClose: function (oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							//sap.m.MessageToast.show("Excluir Obrigação: " + nome);	
+							//sap.m.MessageToast.show("Excluir Obrigação: " + nome);
 							
-							jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + idExcluir, {
+							//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + idExcluir, {
+							jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + idExcluir, {
 								type: "DELETE",
 								success: function (response) {
 									that._carregarObjetos();
@@ -45,9 +47,18 @@ sap.ui.define(
 					}
 				});
 			},
-			
+			//-------------------
+			//-------------------
+			//-------------------
+			//-------------------
+			//trocar o nome desse registro
 			_nomeColunaIdentificadorNaListagemObjetos: "id_obrigacao_acessoria",
 			
+			//-------------------
+			//-------------------
+			//-------------------
+			//-------------------
+			//DESCOMENTAR A VALIDACAO DOS OUTROS CAMPOS
 			_validarFormulario: function () {
 				
 				var sIdFormulario = "#" + this.byId("formularioObjeto").getDomRef().id;
@@ -55,11 +66,14 @@ sap.ui.define(
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: jQuery(sIdFormulario + " input[aria-required=true]"),
 					aDropdownObrigatorio: [
-						this.byId("selectStatus")
+						this.byId("selectStatus")/*,
+						this.byId("selectAnoFiscal"),
+						this.byId("selectPeriodicidade")*/
 					],
 					oPeriodoObrigatorio: {
 						dataInicio: this.byId("dataInicio"),
-						dataFim: this.byId("dataFim")
+						dataFim: this.byId("dataFim")/*,
+						selectPrazoEntrega: this.byId("selectPrazoEntrega")*/
 					}
 				});
 				
@@ -84,8 +98,8 @@ sap.ui.define(
 				}]);*/
 				
 				var that = this;
-				
-				jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
+				//jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
+				jQuery.ajax(Constants.urlBackend + "DeepQuery/ModeloObrigacao", {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
@@ -105,6 +119,21 @@ sap.ui.define(
 						that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", response);
 					}
 				});
+				//os dois node api foram adicionados recentemente para puxar os valores novos do formulario
+				NodeAPI.listarRegistros("DominioAnoFiscal", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/DominioAnoFiscal", response);
+						that._atualizarDados();
+					}
+				});
+				NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (response) {
+					if (response) {
+						response.unshift({});
+						that.getModel().setProperty("/DomPeriodicidadeObrigacao", response);
+						that._atualizarDados();
+					}
+				});				
 				
 				/*
 				jQuery.ajax("https://3cmwthhrqctaqsr8-app-nodejs.cfapps.us10.hana.ondemand.com/node/DominioPaisStatus", {
@@ -117,15 +146,15 @@ sap.ui.define(
 				});*/
 			},
 			
-			_carregarObjetoSelecionado: function (iIdObjeto) {
+			_carregarObjetoSelecionado: function (iIdObjeto) {//CARREGAR O NOVO OBJETO DE OBRIGACAO ACESSORIA
 				/*this.getModel().setProperty("/objeto", {
 					id: iIdObjeto,
 					nome: "Nome da Obrigação"
 				});*/
-				
+				//CARREGAR O NOVO OBJETO DE OBRIGACAO ACESSORIA
 				var that = this;
-				
-				jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
+				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {				
+				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
@@ -134,7 +163,10 @@ sap.ui.define(
 							nome: oObjeto["nome"],
 							dataInicio: oObjeto["data_inicio"],
 							dataFim: oObjeto["data_fim"],
-							fkDominioObrigacaoAcessoriaTipo: oObjeto["fk_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"]
+							fkDominioObrigacaoAcessoriaTipo: oObjeto["fk_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
+							selectAnoFiscal: oObjeto["???????NOME DA CHAVE NA TABELA????????????"],
+							selectPeriodicidade: oObjeto["???????NOME DA CHAVE NA TABELA????????????"],
+							selectPrazoEntrega: oObjeto["???????NOME DA CHAVE NA TABELA????????????"]
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
@@ -154,13 +186,17 @@ sap.ui.define(
 				
 				var obj = this.getModel().getProperty("/objeto");
 				
-				jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
+				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
+				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {					
 					type: "PUT",
 					data: {
 						nome: obj.nome,
 						dataInicio: obj.dataInicio,
 						dataFim: obj.dataFim,
-						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
+						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
+						selectAnoFiscal: obj.selectAnoFiscal,
+						selectPeriodicidade: obj.selectPeriodicidade,
+						selectPrazoEntrega: obj.selectPrazoEntrega						
 					},
 					success: function (response) {
 						that._navToPaginaListagem();		
@@ -176,19 +212,25 @@ sap.ui.define(
 				
 				var obj = this.getModel().getProperty("/objeto");
 				
-				jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria", {
+				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria", {				
+				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao", {
 					type: "POST",
 					data: {
 						nome: obj.nome,
 						dataInicio: obj.dataInicio,
 						dataFim: obj.dataFim,
-						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
+						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
+						selectAnoFiscal: obj.selectAnoFiscal,
+						selectPeriodicidade: obj.selectPeriodicidade,
+						selectPrazoEntrega: obj.selectPrazoEntrega	
 					},
 					success: function (response) {
 						that._navToPaginaListagem();		
 					}
 				});
 			},
+			
+			
 			
 			_navToPaginaListagem: function () {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");

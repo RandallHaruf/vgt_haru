@@ -83,6 +83,16 @@
 						<f:formContainers>
 							<f:FormContainer title="{i18n>viewGeralCadastro}">
 								<f:formElements>
+									<f:FormElement label="{i18n>viewGeralTipo}">
+										<f:label>
+											<Label text="{i18n>viewGeralTipo}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectStatus" selectedKey="{/objeto/fkDominioObrigacaoAcessoriaTipo}" items="{/DominioObrigacaoAcessoriaTipo}">
+												<core:Item text="{tipo}" key="{id_dominio_obrigacao_acessoria_tipo}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>									
 									<f:FormElement>
 										<f:label>
 											<Label text="{i18n>viewGeralNome}" labelFor="inputNome" />
@@ -107,21 +117,34 @@
 											<DatePicker id="dataFim" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="{i18n>viewGeralTipo}">
+									<f:FormElement label="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}">
 										<f:label>
-											<Label text="{i18n>viewGeralTipo}" class="sapMLabelRequired" />
+											<Label text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
-											<Select id="selectStatus" selectedKey="{/objeto/fkDominioObrigacaoAcessoriaTipo}" items="{/DominioObrigacaoAcessoriaTipo}">
-												<core:Item text="{tipo}" key="{id_dominio_obrigacao_acessoria_tipo}" />
-												<!--<items>
-													<core:Item text=""/>
-													<core:Item text="Beps" key="1"/>
-													<core:Item text="Compliance" key="2"/>
-												</items>-->
+											<Select id="selectAnoFiscal" selectedKey="{/objeto/selectAnoFiscal}" items="{/DominioAnoFiscal}">
+												<core:Item text="{anofiscal}" key="{id_dominio_ano_fiscal}" />
 											</Select>
 										</f:fields>
 									</f:FormElement>
+									<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelPeriodicidade}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectPeriodicidade" selectedKey="{/objeto/selectPeriodicidade}" items="{/DomPeriodicidadeObrigacao}">
+												<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelPrazoEntrega}" labelFor="dataFim" />
+										</f:label>
+										<f:fields>
+											<DatePicker id="selectPrazoEntrega" valueFormat="yyyy-MM-dd" value="{/objeto/selectPrazoEntrega}" required="true" />
+										</f:fields>
+									</f:FormElement>									
 								</f:formElements>
 							</f:FormContainer>
 						</f:formContainers>

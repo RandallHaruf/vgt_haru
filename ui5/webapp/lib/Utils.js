@@ -1,6 +1,7 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/lib/Validador"
+		
 	],
 	function (Validador) {
 		return {
@@ -37,6 +38,33 @@ sap.ui.define(
 				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
 				return DataFinal;
 			},
+			traduzPeriodo: function (stringPeriodo){
+				/*Recebe valores
+				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
+				*/
+				var periodoTraduzido = "";
+				switch (stringPeriodo){
+					case "Semanal":
+						this.getResourceBundle().getText("viewGeralSemanal");
+						break;
+					case "Quinzenal":
+						this.getResourceBundle().getText("viewGeralQuinzenal");
+						break;
+					case "Trimestral":
+						this.getResourceBundle().getText("viewGeralTrimestral");
+						break;
+					case "Mensal":
+						this.getResourceBundle().getText("viewGeralMensal");
+						break;
+					case "Semestral":
+						this.getResourceBundle().getText("viewGeralSemestral");
+						break;
+					case "Anual":
+						this.getResourceBundle().getText("viewGeralAnual");
+						break;
+				}
+				return periodoTraduzido;
+			},			
 			dateNowParaArquivo: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "_" +(Data.getMonth() +1).toString().padStart(2,"0") + "_" + Data.getFullYear().toString();
