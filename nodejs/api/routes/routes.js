@@ -56,6 +56,9 @@ module.exports = function (app) {
 	var routeAntecipacao = require("./routeAntecipacao");
 	var routeDiferenca = require("./routeDiferenca");
 	var routeReportTaxPackage = require("./routeReportTaxPackage");
+	var routeModeloObrigacao = require("./routeModeloObrigacao");
+	var routeObrigacaoStatus = require("./routeObrigacaoStatus");
+	var routeRelModeloEmpresa = require("./routeRelModeloEmpresa");
 	
 	var aRoutes = [];	
 	
@@ -111,6 +114,9 @@ module.exports = function (app) {
 	routeAntecipacao(aRoutes);
 	routeDiferenca(aRoutes);
 	routeReportTaxPackage(aRoutes);
+	routeModeloObrigacao(aRoutes);
+	routeObrigacaoStatus(aRoutes);
+	routeRelModeloEmpresa(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
