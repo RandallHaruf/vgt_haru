@@ -554,13 +554,15 @@ sap.ui.define(
 
 					oResultadoFiscal.rf_net_local_tax = (oResultadoFiscal.rf_total_other_taxes_and_tax_credits ? Number(oResultadoFiscal.rf_total_other_taxes_and_tax_credits) : 0) 
 							+ (oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits ? Number(oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits) : 0);
+					
+					oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year = oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year ? Math.abs(oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year) * -1 : 0;
 
 					var fRfNetLocalTax = oResultadoFiscal.rf_net_local_tax ? Number(oResultadoFiscal.rf_net_local_tax) : 0,
 						fRfWHT = oResultadoFiscal.rf_wht ? Number(oResultadoFiscal.rf_wht) : 0,
 						fRfOverpaymentFromPriorYearAppliedToCurrentYear = oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year ? Number(oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year) : 0,
 						fRfTotalInterimTaxesPaymentsAntecipacoes = oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes ? Number(oResultadoFiscal.rf_total_interim_taxes_payments_antecipacoes) : 0;
 
-					oResultadoFiscal.rf_tax_due_overpaid = fRfNetLocalTax + fRfWHT + fRfOverpaymentFromPriorYearAppliedToCurrentYear - fRfTotalInterimTaxesPaymentsAntecipacoes;
+					oResultadoFiscal.rf_tax_due_overpaid = fRfNetLocalTax + fRfWHT + fRfOverpaymentFromPriorYearAppliedToCurrentYear + fRfTotalInterimTaxesPaymentsAntecipacoes;
 				}
 			},
 
@@ -826,8 +828,8 @@ sap.ui.define(
 						var iTotalWHT = this._onCalcularTotalTaxaMultipla("/WHT");
 						
 						oTaxReconciliation.rf_other_taxes = iTotalOtherTax;
-						oTaxReconciliation.rf_incentivos_fiscais = iTotalIncentivosFiscais;
-						oTaxReconciliation.rf_wht = iTotalWHT;
+						oTaxReconciliation.rf_incentivos_fiscais = Math.abs(iTotalIncentivosFiscais) * -1;
+						oTaxReconciliation.rf_wht = Math.abs(iTotalWHT) * -1;
 					}
 				}
 			},
@@ -868,7 +870,7 @@ sap.ui.define(
 							} 
 						}
 						
-						oTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes = fTotalAntecipacao;
+						oTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes = Math.abs(fTotalAntecipacao) * -1;
 					}
 				}
 			},
@@ -1073,7 +1075,7 @@ sap.ui.define(
 							var oPainelHistorico = new sap.m.Panel({
 								expandable: true,
 								expanded: false,
-								headerText: "Histórico"
+								headerText: that.getResourceBundle().getText("viewTaxPackageEdicaoTrimestreHistoricoItemToReport")
 							}).addStyleClass("sapUiNoContentPadding sapUiSmallMarginBottom");
 							var oList = new sap.m.List();
 							oPainelHistorico.addContent(oList);

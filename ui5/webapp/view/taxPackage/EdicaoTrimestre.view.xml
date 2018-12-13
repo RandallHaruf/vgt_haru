@@ -85,7 +85,7 @@
 							class="sapUiNoContentPadding">
 							<Panel headerText="{i18n>viewEdiçãoTrimestreResultadoContabil}" expandable="true" expanded="true" id="containerResultadoContabil2">
 								<HBox alignItems="Center" class="sapUiSmallMarginBottom">
-									<Text text="{i18nviewGeralMoeda}" class="sapUiSmallMarginEnd"/>
+									<Text text="{i18n>viewGeralMoeda}" class="sapUiSmallMarginEnd"/>
 									<!--<Select>
 										<core:Item text="USD"/>
 									</Select>-->
