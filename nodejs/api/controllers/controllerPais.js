@@ -23,6 +23,8 @@ module.exports = {
 		var iFkDomPaisStatus = req.body.fkDomPaisStatus ? Number(req.body.fkDomPaisStatus) : null;
 		var iFkAliquota = req.body.fkAliquota ? Number(req.body.fkAliquota) : null;
 		var iFkDomPaisRegiao = req.body.fkDomPaisRegiao ? Number(req.body.fkDomPaisRegiao) : null;
+		var bExtensaoCompliance = req.body.indExtensaoCompliance ? req.body.indExtensaoCompliance : null;
+		var bExtensaoBeps = req.body.indExtensaoBeps ? req.body.indExtensaoBeps : null;
 		
 		var aParams = [{
 			coluna: pais.colunas.id
@@ -36,6 +38,12 @@ module.exports = {
 			coluna: pais.colunas.prescricaoCredito,
 			valor: iPescricaoCredito
 		}, {
+			coluna: pais.colunas.indExtensaoCompliance,
+			valor: bExtensaoCompliance
+		}, {
+			coluna: pais.colunas.indExtensaoBeps,
+			valor: bExtensaoBeps
+		},   {
 			coluna: pais.colunas.fkDomPais,
 			valor: iFkDomPais
 		}, {
@@ -143,6 +151,8 @@ module.exports = {
 		var iFkDomPaisStatus = req.body.fkDomPaisStatus ? Number(req.body.fkDomPaisStatus) : null;
 		var iFkAliquota = req.body.fkAliquota ? Number(req.body.fkAliquota) : null;
 		var iFkDomPaisRegiao = req.body.fkDomPaisRegiao ? Number(req.body.fkDomPaisRegiao) : null;
+		var bExtensaoCompliance = req.body.indExtensaoCompliance ? req.body.indExtensaoCompliance : null;
+		var bExtensaoBeps = req.body.indExtensaoBeps ? req.body.indExtensaoBeps : null;
 		
 		var oCondition = {
 			coluna: pais.colunas.id,
@@ -158,6 +168,12 @@ module.exports = {
 		}, {
 			coluna: pais.colunas.prescricaoCredito,
 			valor: iPescricaoCredito
+		}, {
+			coluna: pais.colunas.indExtensaoCompliance,
+			valor: bExtensaoCompliance
+		}, {
+			coluna: pais.colunas.indExtensaoBeps,
+			valor: bExtensaoBeps
 		}, {
 			coluna: pais.colunas.fkDomPais,
 			valor: iFkDomPais

@@ -173,6 +173,22 @@
 											</Select>
 										</f:fields>
 									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewGeralExtensaoCompliance}" labelFor="checkExtensaoCompliance" />
+										</f:label>
+										<f:fields>
+											<CheckBox id="checkExtensaoCompliance" selected="{/objeto/indExtensaoComplianceFlag}" select="onAtualizarFlagCompliance" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewGeralExtensaoBeps}" labelFor="checkExtensaoBeps" />
+										</f:label>
+										<f:fields>
+											<CheckBox id="checkExtensaoBeps" selected="{/objeto/indExtensaoBepsFlag}" select="onAtualizarFlagBeps" />
+										</f:fields>
+									</f:FormElement>
 								</f:formElements>
 							</f:FormContainer>
 						</f:formContainers>

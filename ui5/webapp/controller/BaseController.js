@@ -23,6 +23,21 @@ sap.ui.define(
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			},
 			
+			setComponentBusy: function (oComponent, bBusy) {
+				if (bBusy) {
+					oComponent.setBusyIndicatorDelay(100);
+				}
+				oComponent.setBusy(bBusy);
+			},
+			
+			toURIComponent: function (oParam) {
+				return encodeURIComponent(JSON.stringify(oParam));
+			},
+			
+			fromURIComponent: function (sParam) {
+				return JSON.parse(decodeURIComponent(sParam));
+			},
+			
 			onAcessoRapido: function (oEvent) {
 				var oItem = oEvent.getParameter("item");
 				
