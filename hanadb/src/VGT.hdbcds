@@ -527,4 +527,14 @@ context VGT {
         key id_dominio_rel_tax_package_periodo_status_envio : Integer64 not null;
             status_envio                                    : String(100);
     };
+
+    /*@@layout{"layoutInfo":{"x":-2841,"y":1151.5}}*/
+    entity ARQUIVO {
+        key id_arquivo   : Integer64 not null;
+            arquivo      : LargeBinary;
+            mimetype     : String(30);
+            tamanho      : Integer;
+            data_upload  : LocalDate;
+            nome_arquivo : String(255);
+    };
 };

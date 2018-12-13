@@ -4,6 +4,7 @@
 var config = require("../../config");*/
 
 module.exports = function (app) {
+	var routeArquivo = require("./routeArquivo");
 	var routeTTC = require("./routeTTC");
 	var routePais = require("./routePais");
 	var routeEmpresa = require("./routeEmpresa");
@@ -58,6 +59,7 @@ module.exports = function (app) {
 	
 	var aRoutes = [];	
 	
+	routeArquivo(aRoutes);
 	routeTTC(aRoutes);
 	routePais(aRoutes);
 	routeEmpresa(aRoutes);

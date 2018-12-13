@@ -5,6 +5,7 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.f"
 	xmlns:control="ui5ns.ui5.control"
+	xmlns:u="sap.ui.unified"
 	xmlns="sap.m"
 	class="viewSelecaoModulo">
 	<f:DynamicPage class="semContentPadding">
@@ -20,6 +21,60 @@
 		</f:title>
 		<f:content>
 			<VBox>
+				<VBox>
+					<Table 
+						inset="false"
+						items="{
+							path: '/Arquivos'
+						}">
+						<headerToolbar>
+							<Toolbar>
+								<Title text="CRUD Arquivos" />
+								<ToolbarSpacer />
+								<u:FileUploader 
+									id="fileUploader" 
+									name="myFileUpload" 
+									uploadUrl="" 
+									width="400px" 
+									tooltip="Enviar o arquivo para o Nodejs" />
+								<Button 
+									text="Enviar Arquivo" 
+									press="onEnviarArquivo" />
+							</Toolbar>
+						</headerToolbar>
+						<columns>
+							<Column width="6.5rem" />
+							<Column>
+								<Title text="Nome" />
+							</Column>
+							<Column>
+								<Title text="Data Upload" />
+							</Column>
+							<Column>
+								<Title text="Tipo" />
+							</Column>
+							<Column>
+								<Title text="Tamanho" />
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem
+								type="Navigation"
+								press="onBaixarArquivo">
+								<cells>
+									<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir arquivo" press="onExcluirArquivo" />
+									<Text text="{nome_arquivo}" />
+									<ObjectNumber
+										number="{data_upload}"/>
+									<ObjectNumber
+										number="{mimetype}"/>
+									<ObjectNumber
+										number="{tamanho}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</VBox>
 				<!--<Table 
 					inset="false"
 					items="{
