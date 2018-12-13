@@ -16,7 +16,7 @@ sap.ui.define(
 			},
 			onEnviarMensagem: function (oEvent) {
 				//sap.m.MessageToast.show(this.getResourceBundle().getText("viewEnviarMensagem"));
-				var assunto = "Comunicacao - " + this.getModel().getProperty("/assunto");
+				var assunto = "Comunication - " + this.getModel().getProperty("/assunto");
 				var corpo = this.getModel().getProperty("/corpo");
 				var htmlBody = "<p>Dear Administrator,</p><p>" + corpo + "</p><p>Thank you in advance.</p><p>User</p>";
 				var emailCC = "";//Pegar aqui o email na sessão do usuário

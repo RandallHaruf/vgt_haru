@@ -12,7 +12,7 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			} else {
 				
-				if (req.body._assunto != "" && req.body._corpo != "" && req.body._emailCC != ""){
+				if (req.body._assunto != "" && req.body._corpo != ""){
 				
 					var aEmail = [];
 	

@@ -126,6 +126,8 @@ context VGT {
             fk_dominio_pais_status     : association[*, 0..1] to VGT.DOMINIO_PAIS_STATUS { id_dominio_pais_status };
             fk_aliquota                : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
             fk_dominio_pais_regiao     : association[*, 0..1] to VGT.DOMINIO_PAIS_REGIAO { id_dominio_pais_regiao };
+            ind_extensao_compliance    : Boolean;
+            ind_extensao_beps          : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":-440,"y":720.5}}*/
@@ -536,5 +538,48 @@ context VGT {
             tamanho      : Integer;
             data_upload  : LocalDate;
             nome_arquivo : String(255);
+    };
+
+	/*@@layout{"layoutInfo":{"x":889,"y":202.5}}*/
+    entity DOMINIO_OBRIGACAO_STATUS {
+        key id_dominio_obrigacao_status : Integer;
+            descricao_obrigacao_status  : String(50);
+    };
+
+    /*@@layout{"layoutInfo":{"x":643,"y":401.5}}*/
+    entity MODELO_OBRIGACAO {
+        key id_modelo                   : Integer;
+            nome_obrigacao              : String(200);
+            data_inicial                : LocalDate;
+            data_final                  : LocalDate;
+            prazo_entrega               : LocalDate;
+            fk_id_pais                  : association[*, 0..1] to VGT.PAIS { id_pais };
+            fk_dominio_periodicidade    : association[*, 0..1] to VGT.DOMINIO_PERIODICIDADE_OBRIGACAO { id_periodicidade_obrigacao };
+            fk_dominio_obrigacao_status : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
+    };
+
+	/*@@layout{"layoutInfo":{"x":897,"y":622.5}}*/
+    entity REL_MODELO_EMPRESA {
+            fk_id_modelo_obrigacao         : association[*, 0..1] to VGT.MODELO_OBRIGACAO { id_modelo };
+            fk_id_empresa                  : association[*, 0..1] to VGT.EMPRESA { id_empresa };
+        key id_rel_modelo_empresa          : Integer;
+            fk_id_dominio_obrigacao_status : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
+    };
+
+    /*@@layout{"layoutInfo":{"x":1012,"y":363.5}}*/
+    entity RESPOSTA_OBRIGACAO {
+        id_resposta_obrigacao    : Integer;
+        suporte_contratado       : Boolean;
+        suporte_especificacao    : String(200);
+        suporte_valor            : Decimal(19, 4);
+        fk_id_dominio_moeda      : association[*, 0..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+        fk_id_rel_modelo_empresa : association[*, 0..1] to VGT.REL_MODELO_EMPRESA { id_rel_modelo_empresa };
+        fk_id_dominio_ano_fiscal : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
+    };
+
+    /*@@layout{"layoutInfo":{"x":1019,"y":817.5}}*/
+    entity DOCUMENTO_OBRIGACAO {
+        id_documento             : String(10);
+        fk_id_resposta_obrigacao : association[*, 0..1] to VGT.RESPOSTA_OBRIGACAO { id_resposta_obrigacao };
     };
 };
