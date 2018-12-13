@@ -21,7 +21,7 @@
 		</f:title>
 		<f:content>
 			<VBox>
-				<VBox>
+				<!--<VBox>
 					<Table 
 						inset="false"
 						items="{
@@ -74,7 +74,7 @@
 							</ColumnListItem>
 						</items>
 					</Table>
-				</VBox>
+				</VBox>-->
 				<!--<Table 
 					inset="false"
 					items="{
