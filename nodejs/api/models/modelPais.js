@@ -16,6 +16,12 @@ var oSketch = {
 		prescricaoCredito: {
 			nome: "prescricao_credito"
 		},
+		indExtensaoCompliance: {
+			nome: "ind_extensao_compliance"
+		},
+		indExtensaoBeps: {
+			nome: "ind_extensao_beps"
+		},
 		fkDomPais: {
 			nome: "fk_dominio_pais.id_dominio_pais",
 			number: true
