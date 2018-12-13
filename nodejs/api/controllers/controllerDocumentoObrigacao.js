@@ -1,6 +1,6 @@
 "use strict";
 
-var model = require("../models/modelRelModeloEmpresa");
+var model = require("../models/modelDocumentoObrigacao");
 
 module.exports = {
 
@@ -19,17 +19,23 @@ module.exports = {
 		var aParams = [{
 			coluna: model.colunas.id
 		}, {
-			coluna: model.colunas.fkIdModeloObrigacao,
-			valor: req.body.fkIdModeloObrigacao ? Number(req.body.fkIdModeloObrigacao) : null
+			coluna: model.colunas.fkIdRespostaObrigacao,
+			valor: req.body.fkIdRespostaObrigacao ? Number(req.body.fkIdRespostaObrigacao) : null
 		}, {
-			coluna: model.colunas.fkIdEmpresa,
-			valor: req.body.fkIdEmpresa ? Number(req.body.fkIdEmpresa) : null
+			coluna: model.colunas.dadosArquivo,
+			valor: req.body.dadosArquivo ? req.body.dadosArquivo : null
 		}, {
-			coluna: model.colunas.fkIdDominioObrigacaoStatus,
-			valor: req.body.fkIdDominioObrigacaoStatus ? Number(req.body.fkIdDominioObrigacaoStatus) : null
+			coluna: model.colunas.mimetype,
+			valor: req.body.mimetype ? req.body.mimetype : null
 		}, {
-			coluna: model.colunas.prazoEntregaCustomizado,
-			valor: req.body.prazoEntregaCustomizado ? req.body.prazoEntregaCustomizado : null
+			coluna: model.colunas.tamanho,
+			valor: req.body.tamanho ? req.body.tamanho : null
+		}, {
+			coluna: model.colunas.dataUpload,
+			valor: req.body.dataUpload ? req.body.dataUpload : null
+		}, {
+			coluna: model.colunas.fkIdUsuario,
+			valor: req.body.fkIdUsuario ? Number(req.body.fkIdUsuario) : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -62,17 +68,23 @@ module.exports = {
 		};
 
 		var aParams = [{
-			coluna: model.colunas.fkIdModeloObrigacao,
-			valor: req.body.fkIdModeloObrigacao ? Number(req.body.fkIdModeloObrigacao) : null
+			coluna: model.colunas.fkIdRespostaObrigacao,
+			valor: req.body.fkIdRespostaObrigacao ? Number(req.body.fkIdRespostaObrigacao) : null
 		}, {
-			coluna: model.colunas.fkIdEmpresa,
-			valor: req.body.fkIdEmpresa ? Number(req.body.fkIdEmpresa) : null
+			coluna: model.colunas.dadosArquivo,
+			valor: req.body.dadosArquivo ? req.body.dadosArquivo : null
 		}, {
-			coluna: model.colunas.fkIdDominioObrigacaoStatus,
-			valor: req.body.fkIdDominioObrigacaoStatus ? Number(req.body.fkIdDominioObrigacaoStatus) : null
+			coluna: model.colunas.mimetype,
+			valor: req.body.mimetype ? req.body.mimetype : null
 		}, {
-			coluna: model.colunas.prazoEntregaCustomizado,
-			valor: req.body.prazoEntregaCustomizado ? req.body.prazoEntregaCustomizado : null
+			coluna: model.colunas.tamanho,
+			valor: req.body.tamanho ? req.body.tamanho : null
+		}, {
+			coluna: model.colunas.dataUpload,
+			valor: req.body.dataUpload ? req.body.dataUpload : null
+		}, {
+			coluna: model.colunas.fkIdUsuario,
+			valor: req.body.fkIdUsuario ? Number(req.body.fkIdUsuario) : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -98,7 +110,7 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade RelModeloEmpresa");
+		res.send("TODO: DeepQuery da Entidade DocumentoObrigacao");
 
 		/*var sStatement = 'select * from "DUMMY"';
 

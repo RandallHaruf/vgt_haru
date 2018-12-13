@@ -59,6 +59,8 @@ module.exports = function (app) {
 	var routeModeloObrigacao = require("./routeModeloObrigacao");
 	var routeObrigacaoStatus = require("./routeObrigacaoStatus");
 	var routeRelModeloEmpresa = require("./routeRelModeloEmpresa");
+	var routeRespostaObrigacao = require("./routeRespostaObrigacao");
+	var routeDocumentoObrigacao = require("./routeDocumentoObrigacao");
 	
 	var aRoutes = [];	
 	
@@ -117,6 +119,8 @@ module.exports = function (app) {
 	routeModeloObrigacao(aRoutes);
 	routeObrigacaoStatus(aRoutes);
 	routeRelModeloEmpresa(aRoutes);
+	routeRespostaObrigacao(aRoutes);
+	routeDocumentoObrigacao(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

@@ -128,6 +128,8 @@ context VGT {
             fk_dominio_pais_regiao     : association[*, 0..1] to VGT.DOMINIO_PAIS_REGIAO { id_dominio_pais_regiao };
             ind_extensao_compliance    : Boolean;
             ind_extensao_beps          : Boolean;
+            ano_obrigacao_compliance   : Integer;
+            ano_obrigacao_beps         : Integer;
     };
 
     /*@@layout{"layoutInfo":{"x":-440,"y":720.5}}*/
@@ -564,6 +566,7 @@ context VGT {
             fk_id_empresa                  : association[*, 0..1] to VGT.EMPRESA { id_empresa };
         key id_rel_modelo_empresa          : Integer;
             fk_id_dominio_obrigacao_status : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
+            prazo_entrega_customizado      : LocalDate;
     };
 
     /*@@layout{"layoutInfo":{"x":1012,"y":363.5}}*/
@@ -581,5 +584,11 @@ context VGT {
     entity DOCUMENTO_OBRIGACAO {
         id_documento             : String(10);
         fk_id_resposta_obrigacao : association[*, 0..1] to VGT.RESPOSTA_OBRIGACAO { id_resposta_obrigacao };
+        dados_arquivo            : LargeBinary;
+        mimetype                 : String(50);
+        tamanho                  : Integer;
+        data_upload              : LocalDate;
+        nome_arquivo             : String(255);
+        fk_id_usuario            : association[*, 0..1] to VGT.USUARIO { id_usuario };
     };
 };

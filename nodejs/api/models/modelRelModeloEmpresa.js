@@ -18,6 +18,9 @@ var oSketch = {
 		fkIdDominioObrigacaoStatus: {
 			nome: "fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status",
 			number: true
+		},
+		prazoEntregaCustomizado:{
+			nome: "prazo_entrega_customizado"
 		}
 	} 	
 };
