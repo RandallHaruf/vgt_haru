@@ -204,15 +204,10 @@ sap.ui.define(
 								fkPeriodo: oPeriodo.id_periodo,
 								nomeEmpresa:oParams.oEmpresa.nome
 							}, function (response) {
-								that.byId("dynamicPage").setBusy(false);
-								if (callback) {
-									callback(response);
-								}
+								dialog.close();
+								that._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
+								sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
 							});
-							this._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
-							sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreToast"));
-							//sap.m.MessageToast.show("Salvar requisição para o período: "  );
-							dialog.close();
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({
