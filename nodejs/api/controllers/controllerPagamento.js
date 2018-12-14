@@ -466,7 +466,7 @@ module.exports = {
 				sStatement += oWhere[i];
 			}
 		}			
-
+		sStatement += ' order by pagamento."data_pagamento" desc ';
 		model.execute({
 			statement: sStatement,
 			parameters: aParams

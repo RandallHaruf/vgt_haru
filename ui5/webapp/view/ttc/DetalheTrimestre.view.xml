@@ -64,11 +64,7 @@
 							<Table
 								class="celulasSeparadas"
 								items="{
-									path: '/Borne/Pagamentos',
-									sorter: [{
-										path: 'data_pagamento',
-										descending: true
-									}]
+									path: '/Borne/Pagamentos'
 								}">
 								<headerToolbar>
 									<Toolbar>
