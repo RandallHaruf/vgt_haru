@@ -269,6 +269,9 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"],that);           
+					}
 					that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 				}
 			});	
@@ -586,6 +589,7 @@ sap.ui.define([
 						aRegistro[i]["tblObrigacao.extensao"] = aRegistro[i]["tblObrigacao.extensao"].substring(8,10)+"/"+aRegistro[i]["tblObrigacao.extensao"].substring(5,7)+"/"+aRegistro[i]["tblObrigacao.extensao"].substring(4,0);
 						aRegistro[i]["tblObrigacao.obrigacao_inicial"] = aRegistro[i]["tblObrigacao.obrigacao_inicial"] === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
 						aRegistro[i]["tblObrigacao.suporte_contratado"] = aRegistro[i]["tblObrigacao.suporte_contratado"] === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
+						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"],that);						
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 				}
