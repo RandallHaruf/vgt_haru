@@ -18,8 +18,8 @@ sap.ui.define(
 				//sap.m.MessageToast.show(this.getResourceBundle().getText("viewEnviarMensagem"));
 				var assunto = "Comunication - " + this.getModel().getProperty("/assunto");
 				var corpo = this.getModel().getProperty("/corpo");
-				var htmlBody = "<p>Dear Administrator,</p><p>" + corpo + "</p><p>Thank you in advance.</p><p>User</p>";
-				var emailCC = "";//Pegar aqui o email na sessão do usuário
+				var htmlBody = "<p>Dear Administrator,</p><br><p>&nbsp;&nbsp;" + corpo + "</p><p>Thank you in advance.</p><p>User</p>";
+				var emailCC = "fernando.catarino@tenti.com.br";//Pegar aqui o email na sessão do usuário
 				this.getModel().setProperty("/bEmailButton", false);
 				var that = this;
 				jQuery.ajax({//Desativar botao

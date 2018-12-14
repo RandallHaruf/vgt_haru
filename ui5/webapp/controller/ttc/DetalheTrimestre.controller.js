@@ -504,6 +504,34 @@ sap.ui.define(
 					that._navToResumoTrimestre();
 				});
 			},
+			
+			_pegarLabelPeriodoDetalheTrimestre: function (iNumeroOrdem) {
+				var sLabelTraduzido;
+				
+				//sLabelBanco = sLabelBanco.toLowerCase().trim();
+				switch (true) {
+					case iNumeroOrdem === 1://sLabelBanco.includes("1"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo1");
+						break;
+					case iNumeroOrdem === 2://sLabelBanco.includes("2"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo2");
+						break;
+					case iNumeroOrdem === 3://sLabelBanco.includes("3"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo3");
+						break;
+					case iNumeroOrdem === 4://sLabelBanco.includes("4"):
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo4");
+						break;
+					case iNumeroOrdem === 5://sLabelBanco === "anual":
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo5");
+						break;
+					case iNumeroOrdem >= 6://sLabelBanco === "retificadora":
+						sLabelTraduzido = this.getResourceBundle().getText("viewGeralPeriodo6");
+						break;
+				}
+				
+				return sLabelTraduzido;
+			},
 
 			_onRouteMatched: function (oEvent) {
 				var oParameters = JSON.parse(oEvent.getParameter("arguments").oParameters);
@@ -511,6 +539,7 @@ sap.ui.define(
 				this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
+				this.getModel().setProperty("/LabelPeriodo", this._pegarLabelPeriodoDetalheTrimestre(oParameters.oPeriodo.numero_ordem));
 
 				this._resolverMinMaxDate(oParameters.oPeriodo);
 			

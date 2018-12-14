@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/jQueryMask"
+		"ui5ns/ui5/lib/jQueryMask",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, JSONModel, NodeAPI,JQueryMask) {
+	function (BaseController, JSONModel, NodeAPI,JQueryMask,Constants) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ResumoTrimestre", {
@@ -114,6 +115,27 @@ sap.ui.define(
 			
 			    return [year, month, day].join('-');
 			},
+			
+			_onEnviarMensagem: function (vEmpresa, vPeriodo ) {
+				var that = this;
+				
+				var assunto = "TTC - Period reopening - " + vEmpresa + " - " + vPeriodo;
+				//var corpo = that.getModel().getProperty("/corpo");
+				var htmlBody = "<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TTC module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
+				//this.getModel().setProperty("/bEmailButton", false);
+				
+				jQuery.ajax({//Desativar botao
+					url: Constants.urlBackend + "EmailSend",
+					type: "POST",
+					data: {
+						_assunto: assunto,
+						_corpo: htmlBody
+					},
+					success: function (response) {
+						//sap.m.MessageToast.show("Email enviado com sucesso");
+					}
+				});
+			},
 
 			onReabrirPeriodo: function (oPeriodo) {
 				var that = this;
@@ -173,8 +195,8 @@ sap.ui.define(
 						press: function () {
 							NodeAPI.criarRegistro("RequisicaoReabertura", {
 								dataRequisicao: this._formatDate(new Date()),
-								idUsuario: "2",
-								nomeUsuario: "Juliana",
+								idUsuario: "2", //TROCAR PELA SESSION ID USUARIO
+								nomeUsuario: "Juliana Mauricio",
 								justificativa: oTextArea.getValue(),
 								resposta: "",
 								fkDominioRequisicaoReaberturaStatus: "1",
@@ -187,6 +209,7 @@ sap.ui.define(
 									callback(response);
 								}
 							});
+							this._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
 							sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreToast"));
 							//sap.m.MessageToast.show("Salvar requisição para o período: "  );
 							dialog.close();

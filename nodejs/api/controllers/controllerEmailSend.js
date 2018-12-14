@@ -19,7 +19,7 @@ module.exports = {
 					for (var i = 0, length = result.length; i < length; i++) {
 						aEmail.push(result[i].email);
 					}
-					var emailCC = (req.body._emailCC == "" ? "gabriel.botelho@tenti.com.br" : req.body._emailCC);
+					var emailCC = (req.body._emailCC == "" ? "fernando.catarino@tenti.com.br" : req.body._emailCC);
 					sendEmails.sendEmail({
 						to: aEmail,
 						cc: emailCC,

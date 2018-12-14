@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/jQueryMask"
+		"ui5ns/ui5/lib/jQueryMask",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, NodeAPI, jQueryMask) {
+	function (BaseController, NodeAPI, jQueryMask, Constants) {
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.ResumoTrimestre", {
 			pressDialog: null,
 			
@@ -232,6 +233,27 @@ sap.ui.define(
 				dialog.open();
 			},
 			
+			_onEnviarMensagem: function (vEmpresa, vPeriodo ) {
+				var that = this;
+				
+				var assunto = "TAX PACKAGE – Period reopening - " + vEmpresa + " - " + vPeriodo;
+				//var corpo = that.getModel().getProperty("/corpo");
+				var htmlBody = "<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TAX PACKAGE module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
+				//this.getModel().setProperty("/bEmailButton", false);
+				
+				jQuery.ajax({//Desativar botao
+					url: Constants.urlBackend + "EmailSend",
+					type: "POST",
+					data: {
+						_assunto: assunto,
+						_corpo: htmlBody
+					},
+					success: function (response) {
+						//sap.m.MessageToast.show("Email enviado com sucesso");
+					}
+				});
+			},
+			
 			onReabrirPeriodo: function (oPeriodo) {
 				var that = this;
 				
@@ -286,6 +308,7 @@ sap.ui.define(
 								fkIdRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
 							}).then(function (response) {
 								dialog.close();
+								this._onEnviarMensagem(oPeriodo.oEmpresa.nome, oPeriodo.periodo);
 								sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));	
 							}).catch(function (err) {
 								dialog.close();

@@ -437,8 +437,8 @@ insert into "VGT.DOMINIO_EMPRESA_STATUS"("id_dominio_empresa_status", "status") 
 -- select * from "VGT.DOMINIO_JURISDICAO"
 
 insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(1, 'Federal');
-insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(2, 'Estadual');
-insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(3, 'Municipal');
+insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(2, 'State');
+insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(3, 'City');
 
 -- select * from "VGT.DOMINIO_TIPO_TRANSACAO"
 
