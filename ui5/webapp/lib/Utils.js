@@ -38,29 +38,29 @@ sap.ui.define(
 				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
 				return DataFinal;
 			},
-			traduzPeriodo: function (stringPeriodo){
+			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
 				*/
 				var periodoTraduzido = "";
 				switch (stringPeriodo){
 					case "Semanal":
-						this.getResourceBundle().getText("viewGeralSemanal");
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemanal");
 						break;
 					case "Quinzenal":
-						this.getResourceBundle().getText("viewGeralQuinzenal");
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralQuinzenal");
 						break;
 					case "Trimestral":
-						this.getResourceBundle().getText("viewGeralTrimestral");
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralTrimestral");
 						break;
 					case "Mensal":
-						this.getResourceBundle().getText("viewGeralMensal");
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralMensal");
 						break;
 					case "Semestral":
-						this.getResourceBundle().getText("viewGeralSemestral");
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemestral");
 						break;
 					case "Anual":
-						this.getResourceBundle().getText("viewGeralAnual");
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralAnual");
 						break;
 				}
 				return periodoTraduzido;

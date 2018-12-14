@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, Constants, Validador,NodeAPI) {
+	function (BaseController, Constants, Validador,NodeAPI,Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroObrigacoesComplianceBeps", {
 			
 			/* Métodos a implementar */
@@ -53,7 +54,7 @@ sap.ui.define(
 			//-------------------
 			//trocar o nome desse registro
 			//_nomeColunaIdentificadorNaListagemObjetos: "id_obrigacao_acessoria",
-			_nomeColunaIdentificadorNaListagemObjetos: "id_modelo",
+			_nomeColunaIdentificadorNaListagemObjetos: "tblModeloObrigacao.id_modelo",
 			//-------------------
 			//-------------------
 			//-------------------
@@ -122,13 +123,17 @@ sap.ui.define(
 				//os dois node api foram adicionados recentemente para puxar os valores novos do formulario
 				NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (response) {
 					if (response) {
-						response.unshift({});
-						that.getModel().setProperty("/DomPeriodicidadeObrigacao", response);
+						//response.unshift({});
+						var aRegistro = response;
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["descricao"] = Utils.traduzPeriodo(aRegistro[i]["descricao"],that);
+						}		
+						that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 					}
 				});				
 				NodeAPI.listarRegistros("DominioPais", function (response) {
 					if (response) {
-						response.unshift({});
+						//response.unshift({});
 						that.getModel().setProperty("/DominioPais", response);
 
 					}
@@ -159,10 +164,10 @@ sap.ui.define(
 						var oObjeto = response[0];
 						var obj = {
 							nome: oObjeto["nome_obrigacao"],
-							dataInicio: oObjeto["data_inicio"],
-							dataFim: oObjeto["data_fim"],
-							fkDominioObrigacaoAcessoriaTipo: oObjeto["fk_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
-							selectPeriodicidade: oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],
+							fkDominioObrigacaoAcessoriaTipo: oObjeto["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
+							dataInicio: oObjeto["data_inicial"],
+							dataFim: oObjeto["data_final"],
+							selectPeriodicidade: oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],/*Utils.traduzPeriodo(oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"]),    */                            
 							selectPais: oObjeto["fk_id_pais.id_pais"],
 							selectPrazoEntrega: oObjeto["prazo_entrega"]
 						};
@@ -188,13 +193,14 @@ sap.ui.define(
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {					
 					type: "PUT",
 					data: {
-						nome: obj.nome,
-						dataInicio: obj.dataInicio,
-						dataFim: obj.dataFim,
-						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
-						selectPais: obj.selectPais,
-						selectPeriodicidade: obj.selectPeriodicidade,
-						selectPrazoEntrega: obj.selectPrazoEntrega						
+						nomeObrigacao: obj.nome,
+						dataInicial: obj.dataInicio,
+						dataFinal: obj.dataFim,						
+						prazoEntrega: obj.selectPrazoEntrega,
+						fkIdPais: obj.selectPais,
+						fkIdDominioPeriodicidade:obj.selectPeriodicidade,
+						fkIdDominioObrigacaoStatus: 2,
+						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo					
 					},
 					success: function (response) {
 						that._navToPaginaListagem();		
