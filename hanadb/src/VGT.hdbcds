@@ -536,7 +536,7 @@ context VGT {
     entity ARQUIVO {
         key id_arquivo   : Integer64 not null;
             arquivo      : LargeBinary;
-            mimetype     : String(30);
+            mimetype     : String(255);
             tamanho      : Integer;
             data_upload  : LocalDate;
             nome_arquivo : String(255);
@@ -584,10 +584,10 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":1019,"y":817.5}}*/
     entity DOCUMENTO_OBRIGACAO {
-        id_documento             : String(10);
+        id_documento             : Integer64;
         fk_id_resposta_obrigacao : association[*, 0..1] to VGT.RESPOSTA_OBRIGACAO { id_resposta_obrigacao };
         dados_arquivo            : LargeBinary;
-        mimetype                 : String(50);
+        mimetype                 : String(255);
         tamanho                  : Integer;
         data_upload              : LocalDate;
         nome_arquivo             : String(255);

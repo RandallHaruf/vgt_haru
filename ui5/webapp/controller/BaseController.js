@@ -23,7 +23,7 @@ sap.ui.define(
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			},
 			
-			setComponentBusy: function (oComponent, bBusy) {
+			setBusy: function (oComponent, bBusy) {
 				if (bBusy) {
 					oComponent.setBusyIndicatorDelay(100);
 				}
