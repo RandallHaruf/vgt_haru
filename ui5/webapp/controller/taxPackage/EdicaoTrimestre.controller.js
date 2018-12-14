@@ -144,7 +144,7 @@ sap.ui.define(
 				this.getModel().refresh();
 			},
 			
-			_dialogTaxaMultipla: function (sTitulo, sProperty, sFkTipo) {
+			_dialogTaxaMultipla: function (sTitulo, sProperty, sFkTipo, isNegativo) {
 				/* Criação do scroll container */
 				var oScrollContainer = new sap.m.ScrollContainer({
 					horizontal: true,
@@ -202,6 +202,10 @@ sap.ui.define(
 				var oInputValor = new sap.m.Input({
 					type: "Number",
 					value: "{valor}"
+				}).attachChange(function (oEvent) {
+					if (isNegativo) {
+						oEvent.getSource().setValue(Math.abs(oEvent.getSource().getValue()) * -1);
+					}
 				});
 				
 				var oTemplate = new sap.m.ColumnListItem({
@@ -251,11 +255,11 @@ sap.ui.define(
 			},
 			
 			onEditarIncentivosFiscais: function (oEvent) {
-				this._dialogTaxaMultipla("Incentivos Fiscais", "/IncentivosFiscais", 2); 
+				this._dialogTaxaMultipla("Incentivos Fiscais", "/IncentivosFiscais", 2, true); 
 			},
 			
 			onEditarWHT: function (oEvent) {
-				this._dialogTaxaMultipla("WHT", "/WHT", 3); 
+				this._dialogTaxaMultipla("WHT", "/WHT", 3, true); 
 			},
 
 			onEditarAntecipacoes: function (oEvent) {
@@ -432,6 +436,8 @@ sap.ui.define(
 				var oInputValor = new sap.m.Input({
 					type: "Number",
 					value: "{valor}"
+				}).attachChange(function (oEvent2) {
+					oEvent2.getSource().setValue(Math.abs(oEvent2.getSource().getValue()) * -1);
 				});
 				
 				oTemplate = new sap.m.ColumnListItem({
@@ -828,8 +834,8 @@ sap.ui.define(
 						var iTotalWHT = this._onCalcularTotalTaxaMultipla("/WHT");
 						
 						oTaxReconciliation.rf_other_taxes = iTotalOtherTax;
-						oTaxReconciliation.rf_incentivos_fiscais = Math.abs(iTotalIncentivosFiscais) * -1;
-						oTaxReconciliation.rf_wht = Math.abs(iTotalWHT) * -1;
+						oTaxReconciliation.rf_incentivos_fiscais = iTotalIncentivosFiscais;
+						oTaxReconciliation.rf_wht = iTotalWHT;
 					}
 				}
 			},
@@ -860,7 +866,8 @@ sap.ui.define(
 						
 						if (aAntecipacao) {
 							for (var i = 0, length = aAntecipacao.length; i < length; i++) {
-								fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i].principal) ? Number(aAntecipacao[i].principal) : 0);
+								//fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i].principal) ? Number(aAntecipacao[i].principal) : 0);
+								fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i].principal) ? Math.abs(Number(aAntecipacao[i].principal)) * -1 : 0);
 							} 
 						}
 						
