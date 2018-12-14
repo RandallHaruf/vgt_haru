@@ -124,14 +124,13 @@ sap.ui.define(
 					if (response) {
 						response.unshift({});
 						that.getModel().setProperty("/DomPeriodicidadeObrigacao", response);
-						that._atualizarDados();
 					}
 				});				
 				NodeAPI.listarRegistros("DominioPais", function (response) {
 					if (response) {
 						response.unshift({});
 						that.getModel().setProperty("/DominioPais", response);
-						that._atualizarDados();
+
 					}
 				});	
 				/*
@@ -215,13 +214,14 @@ sap.ui.define(
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao", {
 					type: "POST",
 					data: {
-						nome: obj.nome,
-						dataInicio: obj.dataInicio,
-						dataFim: obj.dataFim,
-						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
-						selectPais: obj.selectPais,						
-						selectPeriodicidade: obj.selectPeriodicidade,
-						selectPrazoEntrega: obj.selectPrazoEntrega	
+						nomeObrigacao: obj.nome,
+						dataInicial: obj.dataInicio,
+						dataFinal: obj.dataFim,						
+						prazoEntrega: obj.selectPrazoEntrega,
+						fkIdPais: obj.selectPais,
+						fkIdDominioPeriodicidade:obj.selectPeriodicidade,
+						fkIdDominioObrigacaoStatus: 2,
+						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
 					},
 					success: function (response) {
 						that._navToPaginaListagem();		

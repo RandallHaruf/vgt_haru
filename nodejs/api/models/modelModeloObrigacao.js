@@ -24,11 +24,15 @@ var oSketch = {
 			number: true
 		},
 		fkIdDominioPeriodicidade: {
-			nome: "fk_id_dominio_periodicidade.id_dominio_periodicidade",
+			nome: "fk_id_dominio_periodicidade.id_periodicidade_obrigacao",
 			number: true
 		},
 		fkIdDominioObrigacaoStatus: {
 			nome: "fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status",
+			number: true
+		},
+		fkIdDominioObrigacaoAcessoriaTipo: {
+			nome: "fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo",
 			number: true
 		}
 	} 	
