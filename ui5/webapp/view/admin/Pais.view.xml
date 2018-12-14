@@ -175,10 +175,26 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
+											<Label text="{i18n>viewGeralAnoObrigacaoCompliance}" labelFor="inputAnoObrigacaoCompliance" />
+										</f:label>
+										<f:fields>
+											<Input type="Number" id="inputAnoObrigacaoCompliance" value="{/objeto/anoObrigacaoCompliance}" required="true" change="onTrocarAnoCompliance" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewGeralAnoObrigacaoBeps}" labelFor="inputAnoObrigacaoBeps" />
+										</f:label>
+										<f:fields>
+											<Input type="Number" id="inputAnoObrigacaoBeps" value="{/objeto/anoObrigacaoBeps}" required="true" change="onTrocarAnoBeps" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
 											<Label text="{i18n>viewGeralExtensaoCompliance}" labelFor="checkExtensaoCompliance" />
 										</f:label>
 										<f:fields>
-											<CheckBox id="checkExtensaoCompliance" selected="{/objeto/indExtensaoComplianceFlag}" select="onAtualizarFlagCompliance" />
+											<CheckBox id="checkExtensaoCompliance" selected="{/objeto/indExtensaoComplianceFlag}" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -186,7 +202,7 @@
 											<Label text="{i18n>viewGeralExtensaoBeps}" labelFor="checkExtensaoBeps" />
 										</f:label>
 										<f:fields>
-											<CheckBox id="checkExtensaoBeps" selected="{/objeto/indExtensaoBepsFlag}" select="onAtualizarFlagBeps" />
+											<CheckBox id="checkExtensaoBeps" selected="{/objeto/indExtensaoBepsFlag}" />
 										</f:fields>
 									</f:FormElement>
 								</f:formElements>

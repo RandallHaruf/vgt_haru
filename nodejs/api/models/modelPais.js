@@ -22,6 +22,12 @@ var oSketch = {
 		indExtensaoBeps: {
 			nome: "ind_extensao_beps"
 		},
+		anoObrigacaoCompliance: {
+			nome: "ano_obrigacao_compliance"
+		},
+		anoObrigacaoBeps: {
+			nome: "ano_obrigacao_beps"
+		},
 		fkDomPais: {
 			nome: "fk_dominio_pais.id_dominio_pais",
 			number: true

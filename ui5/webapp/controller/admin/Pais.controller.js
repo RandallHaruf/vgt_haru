@@ -7,18 +7,14 @@ sap.ui.define(
 	function (BaseController, NodeAPI, Validador) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.Pais", {
 			
-			onAtualizarFlagCompliance: function (oEvent) {
-				/*oEvent.getSource().getBindingContext().getObject().extensaoComplianceFlag =
-					oEvent.getSource().getBindingContext().getObject().extensaoCompliance ? true : false;*/
-					
-				//this.getModel().setProperty("/objeto/indExtensaoComplianceFlag", this.getModel().getProperty("/objeto/indExtensaoCompliance") ? true : false);
+			onTrocarAnoCompliance: function (oEvent) {
+				var iAnoObrigacaoCompliance = this.getModel().getProperty("/objeto/anoObrigacaoCompliance") ? Math.abs(this.getModel().getProperty("/objeto/anoObrigacaoCompliance")) : 0;	
+				this.getModel().setProperty("/objeto/anoObrigacaoCompliance", iAnoObrigacaoCompliance);	
 			},
 			
-			onAtualizarFlagBeps: function (oEvent) {
-				/*oEvent.getSource().getBindingContext().getObject().extensaoBepsFlag =
-					oEvent.getSource().getBindingContext().getObject().extensaoBeps ? true : false;*/
-					
-				//this.getModel().setProperty("/objeto/indExtensaoBepsFlag", this.getModel().getProperty("/objeto/indExtensaoBeps") ? true : false);
+			onTrocarAnoBeps: function (oEvent) {
+				var iAnoObrigacaoBeps = this.getModel().getProperty("/objeto/anoObrigacaoBeps") ? Math.abs(this.getModel().getProperty("/objeto/anoObrigacaoBeps")) : 0;	
+				this.getModel().setProperty("/objeto/anoObrigacaoBeps", iAnoObrigacaoBeps);	
 			},
 			
 			/* Métodos a implementar */
@@ -148,7 +144,9 @@ sap.ui.define(
 						indExtensaoCompliance: oPais["ind_extensao_compliance"],
 						indExtensaoComplianceFlag: oPais["ind_extensao_compliance"] ? true : false,
 						indExtensaoBeps: oPais["ind_extensao_beps"],
-						indExtensaoBepsFlag: oPais["ind_extensao_beps"] ? true : false
+						indExtensaoBepsFlag: oPais["ind_extensao_beps"] ? true : false,
+						anoObrigacaoCompliance: oPais.ano_obrigacao_compliance,
+						anoObrigacaoBeps: oPais.ano_obrigacao_beps
 					};
 					
 					that.getModel().setProperty("/objeto", obj);
@@ -192,7 +190,9 @@ sap.ui.define(
 					fkAliquota: obj.fkAliquota,
 					fkDomPaisRegiao: obj.idRegiao,
 					indExtensaoCompliance: obj.indExtensaoComplianceFlag ? true : false,
-					indExtensaoBeps: obj.indExtensaoBepsFlag ? true : false
+					indExtensaoBeps: obj.indExtensaoBepsFlag ? true : false,
+					anoObrigacaoCompliance: obj.anoObrigacaoCompliance,
+					anoObrigacaoBeps: obj.anoObrigacaoBeps
 				}, function (response) {
 					that._resolverHistoricoAliquota(function () {
 						that._navToPaginaListagem();			
@@ -214,7 +214,9 @@ sap.ui.define(
 					fkAliquota: obj.fkAliquota,
 					fkDomPaisRegiao: obj.idRegiao,
 					indExtensaoCompliance: obj.indExtensaoComplianceFlag ? true : false,
-					indExtensaoBeps: obj.indExtensaoBepsFlag ? true : false
+					indExtensaoBeps: obj.indExtensaoBepsFlag ? true : false,
+					anoObrigacaoCompliance: obj.anoObrigacaoCompliance,
+					anoObrigacaoBeps: obj.anoObrigacaoBeps
 				}, function (response) {
 					// Se foi selecionada uma alíquota válida na criação do país
 					if (obj.fkAliquota && obj.fkAliquota > 0) {

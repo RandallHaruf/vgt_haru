@@ -19,6 +19,8 @@ module.exports = {
 		var iPrescricaoPrejuizo = req.body.prescricaoPrejuizo ? Number(req.body.prescricaoPrejuizo) : null;
 		var sLimitacaoUtilizacaoPrejuizo = req.body.limitacaoUtilizacaoPrejuizo ? req.body.limitacaoUtilizacaoPrejuizo : null; 
 		var iPescricaoCredito = req.body.prescricaoCredito ? Number(req.body.prescricaoCredito) : null;
+		var iAnoObrigacaoCompliance = req.body.anoObrigacaoCompliance ? Number(req.body.anoObrigacaoCompliance) : null;
+		var iAnoObrigacaoBeps = req.body.anoObrigacaoBeps ? Number(req.body.anoObrigacaoBeps) : null;
 		var iFkDomPais = req.body.fkDomPais ? Number(req.body.fkDomPais) : null;
 		var iFkDomPaisStatus = req.body.fkDomPaisStatus ? Number(req.body.fkDomPaisStatus) : null;
 		var iFkAliquota = req.body.fkAliquota ? Number(req.body.fkAliquota) : null;
@@ -37,6 +39,12 @@ module.exports = {
 		}, {
 			coluna: pais.colunas.prescricaoCredito,
 			valor: iPescricaoCredito
+		}, {
+			coluna: pais.colunas.anoObrigacaoCompliance,
+			valor: iAnoObrigacaoCompliance
+		},  {
+			coluna: pais.colunas.anoObrigacaoBeps,
+			valor: iAnoObrigacaoBeps
 		}, {
 			coluna: pais.colunas.indExtensaoCompliance,
 			valor: bExtensaoCompliance
@@ -140,12 +148,12 @@ module.exports = {
 	},
 	
 	atualizarRegistro: function (req, res) {
-		console.log("REQUEST: " + JSON.stringify(req.params) + JSON.stringify(req.body));
-		
 		var idPais = req.params.idPais;
 		
 		var iPrescricaoPrejuizo = req.body.prescricaoPrejuizo ? Number(req.body.prescricaoPrejuizo) : null;
 		var sLimitacaoUtilizacaoPrejuizo = req.body.limitacaoUtilizacaoPrejuizo ? req.body.limitacaoUtilizacaoPrejuizo : null; 
+		var iAnoObrigacaoCompliance = req.body.anoObrigacaoCompliance ? Number(req.body.anoObrigacaoCompliance) : null;
+		var iAnoObrigacaoBeps = req.body.anoObrigacaoBeps ? Number(req.body.anoObrigacaoBeps) : null;
 		var iPescricaoCredito = req.body.prescricaoCredito ? Number(req.body.prescricaoCredito) : null;
 		var iFkDomPais = req.body.fkDomPais ? Number(req.body.fkDomPais) : null;
 		var iFkDomPaisStatus = req.body.fkDomPaisStatus ? Number(req.body.fkDomPaisStatus) : null;
@@ -168,6 +176,12 @@ module.exports = {
 		}, {
 			coluna: pais.colunas.prescricaoCredito,
 			valor: iPescricaoCredito
+		},  {
+			coluna: pais.colunas.anoObrigacaoCompliance,
+			valor: iAnoObrigacaoCompliance
+		},  {
+			coluna: pais.colunas.anoObrigacaoBeps,
+			valor: iAnoObrigacaoBeps
 		}, {
 			coluna: pais.colunas.indExtensaoCompliance,
 			valor: bExtensaoCompliance
