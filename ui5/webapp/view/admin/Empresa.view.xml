@@ -139,7 +139,7 @@
 											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais" />
 										</f:label>
 										<f:fields>
-											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
+											<ComboBox id="comboboxPais" items="{/Pais}" selectionChange="onSelectChange" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
 												<core:Item text="{nomePais}" key="{id}" />
 											</ComboBox>
 										</f:fields>
@@ -238,7 +238,8 @@
 						<f:formContainers>
 							<f:FormContainer>
 								<f:FormElement>
-									<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">
+									<!--<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">-->
+									<table:Table rows="{/ModeloObrigacao}" id="tableObrigacoes" selectionMode="None">
 										<table:extension>
 											<Toolbar>
 												<ToolbarSpacer/>
@@ -258,15 +259,27 @@
 											<table:Column>
 												<Label text="{i18n>viewEmpresasTipo}" />
 												<table:template>
-													<Text text="{tipo}" />
+													<Text text="{tblTipoObrigacao.tipo}" />
 												</table:template>
 											</table:Column>
 											<table:Column>
 												<Label text="{i18n>viewEmpresasNome}" />
 												<table:template>
-													<Text text="{nome}" />
+													<Text text="{tblModeloObrigacao.nome_obrigacao}" />
 												</table:template>
 											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewEmpresaDataPrazo}" />
+												<table:template>
+													<Text text="{tblModeloObrigacao.prazo_entrega}" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewEmpresaDataCustomizada}" />
+												<table:template>
+													<DatePicker valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="false" />
+												</table:template>
+											</table:Column>											
 										</table:columns>
 									</table:Table>
 								</f:FormElement>

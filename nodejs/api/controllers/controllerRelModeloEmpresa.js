@@ -5,13 +5,22 @@ var model = require("../models/modelRelModeloEmpresa");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		var aParams = [];
+
+		if (req.query.fkEmpresa) {
+			aParams.push({
+				coluna: model.colunas.fkEmpresa,
+				valor: req.query.fkEmpresa ? req.query.fkEmpresa : null
+			});
+		}
+
+		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
 				res.send(JSON.stringify(result));
 			}
-		});
+		});	
 	},
 
 	criarRegistro: function (req, res) {
