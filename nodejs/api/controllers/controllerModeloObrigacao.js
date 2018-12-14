@@ -39,6 +39,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdDominioObrigacaoStatus,
 			valor: req.body.fkIdDominioObrigacaoStatus ? Number(req.body.fkIdDominioObrigacaoStatus) : null
+		}, {
+			coluna: model.colunas.fkIdDominioObrigacaoAcessoriaTipo,
+			valor: req.body.fkIdDominioObrigacaoAcessoriaTipo ? Number(req.body.fkIdDominioObrigacaoAcessoriaTipo) : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -91,6 +94,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdDominioObrigacaoStatus,
 			valor: req.body.fkIdDominioObrigacaoStatus ? Number(req.body.fkIdDominioObrigacaoStatus) : null
+		}, {
+			coluna: model.colunas.fkIdDominioObrigacaoAcessoriaTipo,
+			valor: req.body.fkIdDominioObrigacaoAcessoriaTipo ? Number(req.body.fkIdDominioObrigacaoAcessoriaTipo) : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -158,6 +164,8 @@ module.exports = {
 			+'on tblDominioPaisRegiao."id_dominio_pais_regiao" = tblPais."fk_dominio_pais_regiao.id_dominio_pais_regiao" '
 			+'left outer join "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" tblPeriodicidade '
 			+'on tblModeloObrigacao."fk_id_dominio_periodicidade.id_periodicidade_obrigacao" = tblPeriodicidade."id_periodicidade_obrigacao" '
+			+'left outer join "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" tblTipoObrigacao '
+			+'on tblModeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" = tblTipoObrigacao."id_dominio_obrigacao_acessoria_tipo" '
 			+'left outer join "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus on tblModeloObrigacao."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = tblDominioObrigacaoStatus."id_dominio_obrigacao_status" ';
 
 		var oWhere = [];

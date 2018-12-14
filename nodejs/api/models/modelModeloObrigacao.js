@@ -30,6 +30,10 @@ var oSketch = {
 		fkIdDominioObrigacaoStatus: {
 			nome: "fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status",
 			number: true
+		},
+		fkIdDominioObrigacaoAcessoriaTipo: {
+			nome: "fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo",
+			number: true
 		}
 	} 	
 };
