@@ -154,7 +154,7 @@ module.exports = {
 			+'tblDominioObrigacaoStatus."id_dominio_obrigacao_status" "tblDominioObrigacaoStatus.id_dominio_obrigacao_status", '
 			+'tblDominioObrigacaoStatus."descricao_obrigacao_status" "tblDominioObrigacaoStatus.descricao_obrigacao_status", '
 			+'tblTipoObrigacao."id_dominio_obrigacao_acessoria_tipo" "tblTipoObrigacao.id_dominio_obrigacao_acessoria_tipo", '
-			+'tblTipoObrigacao."tipo" "tblTipoObrigacao.tipo", '			
+			+'tblTipoObrigacao."tipo" "tblTipoObrigacao.tipo" '			
 			+'from "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
 			+'left outer JOIN "VGT.PAIS" tblPais '
 			+'on tblModeloObrigacao."fk_id_pais.id_pais" = tblPais."id_pais" '
