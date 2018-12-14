@@ -75,10 +75,12 @@
 							</fb:FilterItem>
 						</fb:filterItems>
 					</fb:FilterBar>
+					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
 					<Button
 					text="Gerar {i18n>viewGeralRelatorio}"
 					type="Emphasized"
-					press="onGerarRelatorio"/>						
+					press="onGerarRelatorio"/>	
+					</HBox>	
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>

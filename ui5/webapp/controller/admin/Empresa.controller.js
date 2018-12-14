@@ -184,12 +184,24 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/Empresa", function (response) {
 					that.getModel().setProperty("/objetos", response);
 				});
-				
+				/*
 				NodeAPI.listarRegistros("DeepQuery/ObrigacaoAcessoria", function (response) {
 					that.getModel().setProperty("/ObrigacaoAcessoria", response);	
-				});
+				});*/
+				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
+					that.getModel().setProperty("/ModeloObrigacao", response);	
+				});				
 			},
 			
+			onSelectChange: function () {
+				var that = this;	
+				var obj = this.getModel().getProperty("/objeto/fk_pais.id_pais");
+				
+				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + obj, function (response) {
+					that.getModel().setProperty("/ModeloObrigacao", response);	
+				});	
+				
+			},
 			_carregarCamposFormulario: function () {
 				var that = this;
 				
@@ -260,11 +272,16 @@ sap.ui.define(
 					});
 				});
 				
-				NodeAPI.listarRegistros("RelacionamentoEmpresaObrigacaoAcessoria?fkEmpresa=" + iIdObjeto + "&indicadorHistorico=false", function (response) {
+				//NodeAPI.listarRegistros("RelacionamentoEmpresaObrigacaoAcessoria?fkEmpresa=" + iIdObjeto + "&indicadorHistorico=false", function (response) {
+				NodeAPI.listarRegistros("RelModeloEmpresa?fkEmpresa=" + iIdObjeto, function (response) {					
 					that._resolverVinculoObrigacoes(response);		
 				});
-				
-				NodeAPI.listarRegistros("DeepQuery/RelacionamentoEmpresaObrigacaoAcessoria/" + iIdObjeto + "&-1?indicadorHistorico=true", function (response) {
+				//-----------------OLHAR UTILIDADE DEPOIS
+				//-----------------OLHAR UTILIDADE DEPOIS
+				//-----------------OLHAR UTILIDADE DEPOIS
+				//-----------------OLHAR UTILIDADE DEPOIS
+				//-----------------OLHAR UTILIDADE DEPOIS
+				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa/" + iIdObjeto , function (response) {
 					that.getModel().setProperty("/objeto/historicoObrigacoes", response);	
 				});
 			},
@@ -283,6 +300,7 @@ sap.ui.define(
 				this.getModel().setProperty("/showHistorico", false); 
 				this.getModel().setProperty("/HistoricoAtual", {});
 				this.getModel().setProperty("/idAliquotaVigente", 0);
+				//this.getModel().setProperty("/ModeloObrigacao", {});				
 			},
 			
 			_atualizarObjeto: function (sIdObjeto) {
@@ -370,17 +388,18 @@ sap.ui.define(
 					remover: []
 				};
 				
-				var aObrigacoes = this.getModel().getProperty("/ObrigacaoAcessoria");
+				//var aObrigacoes = this.getModel().getProperty("/ObrigacaoAcessoria");
+				var aObrigacoes = this.getModel().getProperty("/ModeloObrigacao");				
 					
 				for (var i = 0; i < aObrigacoes.length; i++) {
 					
 					var oObrigacao = aObrigacoes[i];
 					
 					if (!oObrigacao.selecionadaInicialmente && oObrigacao.selecionada) {
-						oObrigacoes.inserir.push(oObrigacao.id_obrigacao_acessoria);
+						oObrigacoes.inserir.push(oObrigacao["tblModeloObrigacao.id_modelo"]);
 					}
 					else if (oObrigacao.selecionadaInicialmente && !oObrigacao.selecionada) {
-						oObrigacoes.remover.push(oObrigacao.id_obrigacao_acessoria);
+						oObrigacoes.remover.push(oObrigacao["tblModeloObrigacao.id_modelo"]);
 					}
 				}
 				
@@ -388,7 +407,8 @@ sap.ui.define(
 			},
 			
 			_resolverVinculoObrigacoes: function (response) {
-				var aObrigacoes = this.getModel().getProperty("/ObrigacaoAcessoria");
+				//var aObrigacoes = this.getModel().getProperty("/ObrigacaoAcessoria");
+				var aObrigacoes = this.getModel().getProperty("/ModeloObrigacao");				
 					
 				for (var i = 0; i < aObrigacoes.length; i++) {
 					
@@ -396,7 +416,9 @@ sap.ui.define(
 					
 					//var aux = response.find(x => x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"]);
 					var aux = response.find(function (x) {
-						return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
+						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
+						return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
+						
 					});
 					
 					if (aux) {
