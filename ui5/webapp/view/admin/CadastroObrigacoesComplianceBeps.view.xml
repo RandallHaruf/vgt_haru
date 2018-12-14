@@ -106,8 +106,8 @@
 											<Label text="{i18n>viewGeralPais}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
-											<Select id="selectPais" selectedKey="{/objeto/selectPais}" items="{/DominioPais}">
-												<core:Item text="{pais}" key="{id_dominio_pais}" />
+											<Select id="selectPais" selectedKey="{/objeto/selectPais}" items="{/Pais}">
+												<core:Item text="{nomePais}" key="{id}" />
 											</Select>
 										</f:fields>
 									</f:FormElement>									

@@ -131,10 +131,10 @@ sap.ui.define(
 						that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 					}
 				});				
-				NodeAPI.listarRegistros("DominioPais", function (response) {
+				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					if (response) {
 						//response.unshift({});
-						that.getModel().setProperty("/DominioPais", response);
+						that.getModel().setProperty("/Pais", response);
 
 					}
 				});	
