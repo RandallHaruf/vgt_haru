@@ -4,9 +4,10 @@ sap.ui.define(
 		"ui5ns/ui5/model/models",
 		"sap/ui/model/Filter",
 		"sap/m/MessageToast",
+		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, models, Filter, MessageToast, NodeAPI) {
+	function (BaseController, models, Filter, MessageToast,Constants,NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.ListaNotificacoes", {
 			onInit: function () {
 
@@ -307,6 +308,30 @@ sap.ui.define(
 				dialog.open();
 			},
 			
+			_onEnviarMensagem: function (vEmpresa, vPeriodo, vTipo ) {
+				var that = this;
+				
+				if (vTipo == "TTC"){
+					var assunto = "TTC - Period reopening request - " + vEmpresa + " - " + vPeriodo;
+					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TTC closed period and the decision is available at Vale Global Tax (VGT) – inserir hyperlink.<br>The period reopened will remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+				}else{
+					var assunto = "TAX PACKAGE - Period reopening request - " + vEmpresa + " - " + vPeriodo;
+					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed periodand the decision is available at Vale Global Tax (VGT) – inserir hyperlink.<br>The period reopenedwill remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+				}
+				
+				jQuery.ajax({//Desativar botao
+					url: Constants.urlBackend + "EmailSend",
+					type: "POST",
+					data: {
+						_assunto: assunto,
+						_corpo: htmlBody
+					},
+					success: function (response) {
+						//sap.m.MessageToast.show("Email enviado com sucesso");
+					}
+				});
+			},
+			
 			onDetalharTTC: function (oEvent) {
 
 				var oItemSelecionadoTTC = oEvent.getSource().getBindingContext().getObject();
@@ -432,6 +457,7 @@ sap.ui.define(
 								fkPeriodo: oItemSelecionadoTTC["fk_periodo.id_periodo"],
 								reabrirPeriodo: true
 							}, function (response) {
+								that._onEnviarMensagem(oItemSelecionadoTTC.nome, oItemSelecionadoTTC.periodo, "TTC");
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
 								that.onAtualizaInfo();
@@ -581,6 +607,7 @@ sap.ui.define(
 								fkIdRelTaxPackagePeriodo: oItemSelecionadoTAX["fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo"],
 								reabrirPeriodo: true
 								}, function (response) {
+								that._onEnviarMensagem(oItemSelecionadoTAX.nome, oItemSelecionadoTAX.periodo, "TAX");
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
 								that.onAtualizaInfo();
