@@ -1829,6 +1829,9 @@ sap.ui.define(
 				this.getModel().setProperty("/Empresa", oParametros.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParametros.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParametros.oAnoCalendario);
+				
+				this.getModel().setProperty("/TaxReconciliation/0/periodo", this._pegarLabelPeriodoTaxReconciliation(this.getModel().getProperty("/Periodo") ? this.getModel().getProperty("/Periodo").numero_ordem : ""));
+				this.getModel().setProperty("/TaxReconciliation/0/labelPeriodo", this._pegarLabelPeriodoTaxReconciliation(this.getModel().getProperty("/Periodo") ? this.getModel().getProperty("/Periodo").numero_ordem : ""));
 
 				//alert("Empresa: " + oParametros.oEmpresa.nome + "\nPeriodo: " + oParametros.oPeriodo.periodo + "\nAnoCalendario: " + oParametros.oAnoCalendario.anoCalendario);
 
@@ -1881,20 +1884,21 @@ sap.ui.define(
 					
 					if (response) {
 						//var oTaxReconAtivo = response.taxReconciliation.find(obj => obj.ind_ativo);
-						var oTaxReconAtivo = response.taxReconciliation.find(function (obj) {
-							return obj.ind_ativo;
-						});
-						oTaxReconAtivo.labelPeriodo = that._pegarLabelPeriodoTaxReconciliation(oTaxReconAtivo.numero_ordem);
-						that.getModel().setProperty("/TaxReconciliation", response.taxReconciliation);
-						that.getModel().setProperty("/IncomeTaxDetails", oTaxReconAtivo.it_details_if_tax_returns_income_differs_from_fs);
+						if (response.taxReconciliation) {
+							var oTaxReconAtivo = response.taxReconciliation.find(function (obj) {
+								return obj.ind_ativo;
+							});
+							oTaxReconAtivo.labelPeriodo = that._pegarLabelPeriodoTaxReconciliation(oTaxReconAtivo.numero_ordem);
+							that.getModel().setProperty("/TaxReconciliation", response.taxReconciliation);
+							that.getModel().setProperty("/IncomeTaxDetails", oTaxReconAtivo.it_details_if_tax_returns_income_differs_from_fs);
+							that._carregarTaxasMultiplas(oTaxReconAtivo.id_tax_reconciliation);
+							sIdTaxReconciliation = oTaxReconAtivo.id_tax_reconciliation;
+						}
 						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
 						that.getModel().setProperty("/DiferencasTemporarias", response.diferencaTemporaria);
 						that.getModel().setProperty("/Moeda", response.moeda);
 
 						that.onAplicarRegras();
-						
-						that._carregarTaxasMultiplas(oTaxReconAtivo.id_tax_reconciliation);
-						sIdTaxReconciliation = oTaxReconAtivo.id_tax_reconciliation;
 					}
 					
 					that._carregarPagamentosTTC(sIdTaxReconciliation);
