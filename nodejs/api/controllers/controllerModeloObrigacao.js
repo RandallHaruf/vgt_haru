@@ -118,7 +118,7 @@ module.exports = {
 	deepQuery: function (req, res) {
 
 		var sStatement = 
-			+'select  '
+			'select  '
 			+'tblModeloObrigacao."id_modelo" "tblModeloObrigacao.id_modelo", '
 			+'tblModeloObrigacao."nome_obrigacao" "tblModeloObrigacao.nome_obrigacao", '
 			+'tblModeloObrigacao."data_inicial" "tblModeloObrigacao.data_inicial", '
