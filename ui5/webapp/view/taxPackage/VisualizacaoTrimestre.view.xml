@@ -1,36 +1,21 @@
-<mvc:View
-	controllerName="ui5ns.ui5.controller.taxPackage.VisualizacaoTrimestre"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core"
-	xmlns:f="sap.ui.layout.form"
-	xmlns:f2="sap.f"
-	xmlns:l="sap.ui.layout"
-	xmlns:t="sap.ui.table"
-	xmlns="sap.m">
-	<f2:DynamicPage 
-		class="semContentPadding"
-		showNavButton="true" 
-		navButtonPress="onNavBack" 
-		title="Visualização Trimestre">
+<mvc:View controllerName="ui5ns.ui5.controller.taxPackage.VisualizacaoTrimestre" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns:l="sap.ui.layout" xmlns="sap.m" xmlns:t="sap.ui.table">
+	<f2:DynamicPage showFooter="true" class="semContentPadding">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome" />
-						<Link text="{i18n>viewTaxPackageListagemEmpresaListagem}" press="navToPage2" />
-						<Link text="{i18n>viewTaxPackageResumoTrimestre}" press="navToPage3" />
-						<Link text="{i18n>viewTaxPackageVisualizacaoTrimestreDetalhes}" enabled="false" />
+						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTAXMenu2}" press="navToPage2" />
+						<Link text="{i18n>viewTAXMenu3}" press="navToPage3" />
+						<Link text="{i18n>viewTAXMenu4}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="{i18n>viewTaxPackageVisualizacaoTrimestreDetalhes}"/>
+					<Title text="Tax Package - {i18n>viewTAXMenu4}"/>
 				</f2:heading>
-				<f2:navigationActions>
-					<Button icon="sap-icon://permission" text="Reabertura" press="onReabrir"/>
-					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
-				</f2:navigationActions>
 				<f2:snappedContent>
-					<ObjectIdentifier title="Vale" />
+					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f2:snappedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -43,20 +28,20 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<ObjectIdentifier title="Vale" />
+											<ObjectIdentifier title="{/Empresa/empresa}" />
 										</l:HorizontalLayout>
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout class="sapUiMediumMarginEnd">
-												<ObjectAttribute title="TIN" text="1231123123"/>
-												<ObjectAttribute title="{i18n>viewGeralMoeda}" text="USD"/>
-												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="2018"/>
-												<ObjectAttribute title="{i18n>viewRelatorioPeriodoDeReferencia}" text="1º Trimestre "/>
+												<ObjectAttribute title="TIN" text="{/Empresa/tin}"/>
+												<ObjectAttribute title="{i18n>viewGeralMoeda}" text="{/LabelMoeda}"/>
+												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="{/AnoCalendario/anoCalendario}"/>
+												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/LabelPeriodo}"/>
 											</l:VerticalLayout>
 											<l:VerticalLayout>
-												<ObjectAttribute title="FY {i18n>ViewGeralDataInício}" text="10/02/2017"/>
-												<ObjectAttribute title="FY {i18n>ViewGeralDataFim}" text="10/03/2018"/>
-												<ObjectAttribute title="{i18n>viewGeralTipo}CIT " text="Estimativa"/>
-												<ObjectAttribute title="Prepared by" text="João Silva - joao.silva@email.com" />
+												<ObjectAttribute title="{i18n>ViewGeralDataInício}" text="{/LabelDataInicio}"/>
+												<ObjectAttribute title="{i18n>ViewGeralDataFim}" text="{/LabelDataFim}"/>
+												<ObjectAttribute title="{i18n>viewEdiçãoTrimestreCITType}" text="{/LabelCITType}"/>
+												<ObjectAttribute title="{i18n>viewEdiçãoTrimestrePreparadoPor}" text="João Silva - joao.silva@email.com" />
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
 									</l:VerticalLayout>
@@ -68,20 +53,11 @@
 			</f2:DynamicPageHeader>
 		</f2:header>
 		<f2:content>
-			<IconTabBar
-				id="idIconTabBarInlineMode"
-				upperCase="true"
-				expandable="false" 
-				class="sapUiNoContentPadding"
-				stretchContentHeight="true">
+			<IconTabBar id="idIconTabBarInlineMode" upperCase="true" expandable="false" stretchContentHeight="true"
+				class="sapUiNoContentPadding">
 				<items>
-					<IconTabFilter text="{i18n>viewTaxPackageVisualizacaoTrimestreItensParaReportar}">
-						<ScrollContainer
-							id="containerItemsToReport"
-							horizontal="true"
-							vertical="true"
-							height="100%"
-							class="sapUiResponsiveContentPadding">
+					<IconTabFilter text="{i18n>viewEdiçãoTrimestreItensParaReportar}">
+						<ScrollContainer id="containerItemsToReport2" horizontal="true" vertical="true" height="100%" class="sapUiResponsiveContentPadding">
 							<!--<VBox id="containerItemsToReport">
 								<HBox alignItems="Center">
 									<Text text="What is the first fiscal year still open to scrutiny by the tax authorities? If YES, please indicate which year(s)." />
@@ -102,16 +78,76 @@
 					</IconTabFilter>
 					<IconTabSeparator icon="" />
 					<IconTabFilter text="Tax Reconciliation">
-						<ScrollContainer
-							horizontal="true"
-							vertical="true"
-							height="100%"
+						<ScrollContainer 
+							horizontal="true" 
+							vertical="true" 
+							height="100%" 
 							class="sapUiNoContentPadding">
-							<Panel 
-								headerText="Resultado Contábil"
-								expandable="true"
-								expanded="true"
-								id="containerResultadoContabil">
+							<Panel headerText="{i18n>viewEdiçãoTrimestreResultadoContabil}" expandable="true" expanded="true" id="containerResultadoContabil2">
+								<HBox alignItems="Center" class="sapUiSmallMarginBottom">
+									<Text text="{i18n>viewGeralMoeda}" class="sapUiSmallMarginEnd"/>
+									<!--<Select>
+										<core:Item text="USD"/>
+									</Select>-->
+									<ComboBox
+										items="{
+											path: '/DominioMoeda', 
+											templateShareable: false
+										}"
+										selectedKey="{/Moeda}"
+										enabled="false">
+										<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
+									</ComboBox>
+								</HBox>
+								<Table
+									items="{
+										path: '/TaxReconciliation',
+										sorter: [{
+											path: 'periodo'
+										}]
+									}"
+									class="bordered celulasSeparadas">
+									<columns>
+										<Column vAlign="Middle" width="10rem">
+											<Text text=""/>
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAtual}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAnterior}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<ObjectIdentifier title="{labelPeriodo}" />
+												<Input type="Number" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_current_income_tax_current_year}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_current_income_tax_previous_year}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_deferred_income_tax}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_non_recoverable_wht}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{rc_statutory_provision_for_income_tax}" editable="false" />
+												<Input type="Number" value="{rc_statutory_gaap_profit_loss_after_tax}" editable="false" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
 								<!--<Table 
 									items="{/taxReconciliation/resultadoContabil}"
 									class="bordered celulasSeparadas">
@@ -145,11 +181,141 @@
 									</items>
 								</Table>-->
 							</Panel>
-							<Panel 
-								id="containerAdicoesExclusoes"
-								headerText="Adições e Exclusões"
-								expandable="true"
-								expanded="true">
+							<Panel id="containerAdicoesExclusoes2" headerText="{i18n>viewGeralAdicoesEExclusoes}" expandable="true" expanded="true">
+								<VBox class="sapUiSmallMarginBottom">
+									<HBox alignItems="Center">
+										<Text width="13rem" text="Total {i18n>viewGeralDiferençaPermanente}: " />
+										<Input type="Number" editable="false" value="{/TotalDiferencaPermanente}" />
+									</HBox>
+									<HBox alignItems="Center">
+										<Text width="13rem" text="Total {i18n>viewGeralDiferencaTemporaria}: " />
+										<Input type="Number" editable="false" value="{/TotalDiferencaTemporaria}" />
+									</HBox>
+								</VBox>
+								<Table
+									class="celulasSeparadas sapUiMediumMarginBottom"
+									items="{/DiferencasPermanentes}">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<!--<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovaDiferencaPermanente" />-->
+												<ObjectIdentifier text="{i18n>viewGeralDiferençaPermanente}" />
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<!--<Column width="3rem" />-->
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTipo}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralOutro}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="1º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="2º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="3º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="4º {i18n>viewGeralTrimestre}"  />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralAnual}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralRetificadora}" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem> 
+											<cells>
+												<!--<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirPermanente" enabled="{= ${nova} ? true : false}" />-->
+												<Select
+													items="{
+														path: '/DiferencaOpcao/Permanente',
+														templateShareable: false
+													}" 
+													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}" 
+													enabled="false">
+													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
+												</Select>
+												<Input value="{outro}" editable="false" />
+												<Input value="{valor1}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor2}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor3}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor4}" editable="false" change="onAplicarRegras" />
+												<Input value="{valorAnual}" editable="false" change="onAplicarRegras" />
+												<Input value="{valorRetificadora}" editable="false" change="onAplicarRegras" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+								<Table
+									class="celulasSeparadas sapUiSmallMarginBottom"
+									items="{/DiferencasTemporarias}">
+									<headerToolbar>
+										<Toolbar>
+											<content>
+												<!--<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovaDiferencaTemporaria" />-->
+												<ObjectIdentifier text="{i18n>viewGeralDiferencaTemporaria}" />
+											</content>
+										</Toolbar>
+									</headerToolbar>
+									<columns>
+										<!--<Column width="3rem" />-->
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTipo}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralOutro}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="1º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="2º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="3º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="4º {i18n>viewGeralTrimestre}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralAnual}" />
+										</Column>
+										<Column width="10rem" hAlign="Center">
+											<Text text="{i18n>viewGeralRetificadora}"/>
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<!--<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirTemporaria" enabled="{= ${nova} ? true : false}" />-->
+												<Select
+													items="{
+														path: '/DiferencaOpcao/Temporaria',
+														templateShareable: false
+													}"
+													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
+													enabled="false">
+													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
+												</Select>
+												<Input value="{outro}" editable="false" />
+												<Input value="{valor1}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor2}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor3}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor4}" editable="false" change="onAplicarRegras" />
+												<Input value="{valorAnual}" editable="false" change="onAplicarRegras" />
+												<Input value="{valorRetificadora}" editable="false" change="onAplicarRegras" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
 								<!--<Table 
 									items="{/taxReconciliation/adicoesExclusoes/permanentDifferences/itens}"
 									class="bordered celulasSeparadas">
@@ -189,144 +355,272 @@
 									</items>
 								</Table>-->
 							</Panel>
-							<Panel 
-								headerText="Resultado Fiscal"
-								expandable="true"
-								expanded="true"
-								id="containerResultadoFiscal">
+							<Panel headerText="{i18n>viewEdiçãoTrimestreResultadoFiscal}" expandable="true" expanded="true" id="containerResultadoFiscal2">
+								<Table
+									items="{
+										path: '/TaxReconciliation',
+										sorter: [{
+											path: 'periodo'
+										}]
+									}"
+									class="bordered celulasSeparadas">
+									<columns>
+										<Column vAlign="Middle" width="10rem">
+											<Text text=""/>
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralTotalLossesUtilized}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralTaxableIncome}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralOthertaxes}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralIncentivosFiscais}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralTotalOtherTaxesAndTaxCredits}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralNetLocalTax}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="WHT" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralTotalInterim}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewGeralTaxDue/(overpaid)}" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<ObjectIdentifier title="{labelPeriodo}" />
+												<Input type="Number" value="{rf_taxable_income_loss_before_losses_and_tax_credits}" editable="false" />
+												<Input type="Number" value="{rf_total_losses_utilized}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{rf_taxable_income_loss_after_losses}" editable="false" />
+												<Input type="Number" value="{rf_income_tax_before_other_taxes_and_credits}" editable="false" />
+												<HBox>
+													<Input type="Number" value="{rf_other_taxes}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarOtherTaxes" />
+												</HBox>
+												<HBox>
+													<Input type="Number" value="{rf_incentivos_fiscais}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarIncentivosFiscais" />
+												</HBox>
+												<Input type="Number" value="{rf_total_other_taxes_and_tax_credits}" editable="false"/>
+												<Input type="Number" value="{rf_net_local_tax}" editable="false" />
+												<HBox>
+													<Input type="Number" value="{rf_wht}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarWHT" />
+												</HBox>
+												<Input type="Number" value="{rf_overpayment_from_prior_year_applied_to_current_year}" editable="false" change="onAplicarRegras" />
+												<HBox>
+													<Input type="Number" value="{rf_total_interim_taxes_payments_antecipacoes}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarAntecipacoes" />
+												</HBox>
+												<Input type="Number" value="{rf_tax_due_overpaid}" editable="false" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
 							</Panel>
-							<Panel 
-								headerText="Income Tax"
-								expandable="true"
-								expanded="true"
-								id="containerIncomeTax">
+							<Panel headerText="{i18n>viewEdiçãoTrimestreImpostoRenda}" expandable="true" expanded="true" id="containerIncomeTax2">
+								<Table
+									items="{
+										path: '/TaxReconciliation',
+										sorter: [{
+											path: 'periodo'
+										}]
+									}"
+									class="bordered celulasSeparadas">
+									<columns>
+										<Column vAlign="Middle" width="10rem">
+											<Text text=""/>
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage(%)}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage(%)}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials(%)}" />
+										</Column>
+										<Column width="10rem">
+											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn(%)}" />
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<ObjectIdentifier title="{labelPeriodo}" />
+												<Input type="Number" value="{it_income_tax_as_per_the_statutory_financials}" editable="false" />
+												<Input type="Number" value="{it_income_tax_as_per_the_tax_return}" editable="false" />
+												<Input type="Number" value="{it_jurisdiction_tax_rate_average}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{it_statutory_tax_rate_average}" editable="false" change="onAplicarRegras" />
+												<Input type="Number" value="{it_effective_tax_rate_as_per_the_statutory_financials}" editable="false" />
+												<Input type="Number" value="{it_effective_tax_rate_as_per_the_tax_return}" editable="false" />
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+								<VBox>
+									<ObjectIdentifier 
+										class="sapUiMediumMarginTop"
+										title="Please provide details if Tax Return's Income differs from FS" />
+									<TextArea
+										id="textAreaIncomeTaxDetails"
+										rows="5"
+										width="100%"
+										editable="false"
+										value="{/IncomeTaxDetails}" />
+								</VBox>
 							</Panel>
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon="" />
 					<IconTabFilter text="Loss Schedule">
-						<ScrollContainer
-							horizontal="true"
-							vertical="true"
-							height="100%"
-							class="sapUiNoContentPadding">
-							<!--<Table 
-								items="{/lossSchedule}"
-								class="celulasSeparadas">
+						<ScrollContainer horizontal="true" vertical="true" height="100%" class="sapUiNoContentPadding">
+							<!--<Table items="{/lossSchedule}" class="celulasSeparadas">
 								<columns>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="FY" />
+										<Text text="FY"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Year of Expiration" />
+										<Text text="Year of Expiration"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Opening Balance" />
+										<Text text="Opening Balance"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Current Year Loss" />
+										<Text text="Current Year Loss"/>
 									</Column>
 									<Column vAlign="Middle" width="11rem">
-										<Text text="Current Year Loss utilized" />
+										<Text text="Current Year Loss utilized"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Adjustments" />
+										<Text text="Adjustments"/>
 									</Column>
 									<Column vAlign="Middle" width="15rem">
-										<Text text="Justificativa" />
+										<Text text="Justificativa"/>
 									</Column>
 									<Column vAlign="Middle" width="11rem">
-										<Text text="Current Year Loss expired" />
+										<Text text="Current Year Loss expired"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Closing balance" />
+										<Text text="Closing balance"/>
 									</Column>
 									<Column vAlign="Middle" width="15rem">
-										<Text text="OBS" />
+										<Text text="OBS"/>
 									</Column>
 								</columns>
 								<items>
 									<ColumnListItem>
 										<cells>
-											<Text text="{fiscalYear}" />
-											<Text text="{yearOfExpiration}" />
-											<Text text="{openingBalance}" />
-											<Text text="{currentYearLoss}" />
-											<Text text="{currentYearLossUtilized}" />
-											<Text text="{adjustments}" />
-											<Text text="{justificativa}" />
-											<Text text="{currentYearLossExpired}" />
-											<Text text="{closingBalance}" />
-											<Text text="{obs}" />
+											<Text text="{fiscalYear}"/>
+											<Text text="{yearOfExpiration}"/>
+											<Text text="{openingBalance}"/>
+											<Text text="{currentYearLoss}"/>
+											<Text text="{currentYearLossUtilized}"/>
+											<Input value="{adjustments}"/>
+											<Input value="{justificativa}"/>
+											<Text text="{currentYearLossExpired}"/>
+											<Text text="{closingBalance}"/>
+											<Input value="{obs}"/>
 										</cells>
 									</ColumnListItem>
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/lossSchedule}" 
-								visibleRowCount="4" 
+								rows="{
+									path: '/LossSchedule',
+									sorter: [{
+										path: 'fy'
+									}]
+								}" 
+								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
 								enableColumnReordering="false">
 								<t:columns>
-									<t:Column width="7.5rem">
-										<Label text="FY" />
+									<t:Column width="8.5rem">
+										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
 										<t:template>
-											<Text text="{fiscalYear}" />
+											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="8.5rem">
-										<Label text="Year of Expiration" />
+										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" />
 										<t:template>
-											<Text text="{yearOfExpiration}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="8.5rem">
-										<Label text="Opening Balance" />
-										<t:template>
-											<Text text="{openingBalance}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="9rem">
-										<Label text="Current Year Loss" />
-										<t:template>
-											<Text text="{currentYearLoss}" />
+											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
-										<Label text="Current Year Loss Utilized" />
+										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
 										<t:template>
-											<Text text="{currentYearLossUtilized}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="7.5rem">
-										<Label text="Adjustments" />
-										<t:template>
-											<Text text="{adjustments}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="15rem">
-										<Label text="Justificativa" />
-										<t:template>
-											<Text text="{justificativa}" />
+											<Text text="{opening_balance}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
-										<Label text="Current Year Loss Expired" />
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}" />
 										<t:template>
-											<Text text="{currentYearLossExpired}" />
+											<Text text="{current_year_value}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="7.5rem">
-										<Label text="Closing Balance" />
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}" />
 										<t:template>
-											<Text text="{closingBalance}" />
+											<Text text="{current_year_value_utilized}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
+										<t:template>
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="false" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="OBS" />
+										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Text text="{obs}" />
+											<Input type="Text" value="{justificativa}" enabled="false" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}" />
+										<t:template>
+											<Text text="{current_year_value_expired}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" />
+										<t:template>
+											<Text text="{closing_balance}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="15rem">
+										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
+										<t:template>
+											<Input value="{obs}" enabled="false" />
 										</t:template>
 									</t:Column>
 								</t:columns>
@@ -335,27 +629,28 @@
 										<Text text="Total" />
 										<HBox>
 											<Text text="Opening Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<!--<Text text="999.999.999,99" textAlign="End" width="7rem" />-->
+											<Text text="{/TotalLossSchedule/opening_balance}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Loss" width="12rem" />
-											<Text text="99.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/current_year_value}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Loss Utilized" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/current_year_value_utilized}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Adjustments" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/adjustments}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Loss Expired" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/current_year_value_expired}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Closing Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalLossSchedule/closing_balance}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
 								</t:footer>
@@ -364,128 +659,127 @@
 					</IconTabFilter>
 					<IconTabSeparator icon="" />
 					<IconTabFilter text="Credit Schedule">
-						<ScrollContainer
-							horizontal="true"
-							vertical="true"
-							height="100%"
-							class="sapUiNoContentPadding">
-							<!--<Table 
-								items="{/creditSchedule}"
-								class="celulasSeparadas">
+						<ScrollContainer horizontal="true" vertical="true" height="100%" class="sapUiNoContentPadding">
+							<!--<Table items="{/creditSchedule}" class="celulasSeparadas">
 								<columns>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="FY" />
+										<Text text="FY"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Year of Expiration" />
+										<Text text="Year of Expiration"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Opening Balance" />
+										<Text text="Opening Balance"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Current Year Credit" />
+										<Text text="Current Year Credit"/>
 									</Column>
 									<Column vAlign="Middle" width="11rem">
-										<Text text="Current Year Credit utilized" />
+										<Text text="Current Year Credit utilized"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Adjustments" />
+										<Text text="Adjustments"/>
 									</Column>
 									<Column vAlign="Middle" width="15rem">
-										<Text text="Justificativa" />
+										<Text text="Justificativa"/>
 									</Column>
 									<Column vAlign="Middle" width="11rem">
-										<Text text="Current Year Credit expired" />
+										<Text text="Current Year Credit expired"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
-										<Text text="Closing balance" />
+										<Text text="Closing balance"/>
 									</Column>
 									<Column vAlign="Middle" width="15rem">
-										<Text text="OBS" />
+										<Text text="OBS"/>
 									</Column>
 								</columns>
 								<items>
 									<ColumnListItem>
 										<cells>
-											<Text text="{fiscalYear}" />
-											<Text text="{yearOfExpiration}" />
-											<Text text="{openingBalance}" />
-											<Text text="{currentYearCredit}" />
-											<Text text="{currentYearCreditUtilized}" />
-											<Text text="{adjustments}" />
-											<Text text="{justificativa}" />
-											<Text text="{currentYearCreditExpired}" />
-											<Text text="{closingBalance}" />
-											<Text text="{obs}" />
+											<Text text="{fiscalYear}"/>
+											<Text text="{yearOfExpiration}"/>
+											<Text text="{openingBalance}"/>
+											<Text text="{currentYearCredit}"/>
+											<Text text="{currentYearCreditUtilized}"/>
+											<Input value="{adjustments}"/>
+											<Input value="{justificativa}"/>
+											<Text text="{currentYearCreditExpired}"/>
+											<Text text="{closingBalance}"/>
+											<Input value="{obs}"/>
 										</cells>
 									</ColumnListItem>
 								</items>
 							</Table>-->
 							<t:Table 
-								rows="{/creditSchedule}" 
-								visibleRowCount="4" 
+								rows="{
+									path: '/CreditSchedule',
+									sorter: [{
+										path: 'fy'
+									}]
+								}" 
+								visibleRowCount="5" 
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
 								enableColumnReordering="false">
 								<t:columns>
-									<t:Column width="7.5rem">
-										<Label text="FY" />
+									<t:Column width="8.5rem">
+										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
 										<t:template>
-											<Text text="{fiscalYear}" />
+											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="8.5rem">
-										<Label text="Year of Expiration" />
+										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" />
 										<t:template>
-											<Text text="{yearOfExpiration}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="8.5rem">
-										<Label text="Opening Balance" />
-										<t:template>
-											<Text text="{openingBalance}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="9rem">
-										<Label text="Current Year Credit" />
-										<t:template>
-											<Text text="{currentYearCredit}" />
+											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
-										<Label text="Current Year Credit Utilized" />
+										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
 										<t:template>
-											<Text text="{currentYearCreditUtilized}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="7.5rem">
-										<Label text="Adjustments" />
-										<t:template>
-											<Text text="{adjustments}" />
-										</t:template>
-									</t:Column>
-									<t:Column width="15rem">
-										<Label text="Justificativa" />
-										<t:template>
-											<Text text="{justificativa}" />
+											<Text text="{opening_balance}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem">
-										<Label text="Current Year Credit Expired" />
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}" />
 										<t:template>
-											<Text text="{currentYearCreditExpired}" />
+											<Text text="{current_year_value}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="7.5rem">
-										<Label text="Closing Balance" />
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}" />
 										<t:template>
-											<Text text="{closingBalance}" />
+											<Text text="{current_year_value_utilized}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
+										<t:template>
+											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="false" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="OBS" />
+										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Text text="{obs}" />
+											<Input value="{justificativa}" enabled="false" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" />
+										<t:template>
+											<Text text="{current_year_value_expired}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" />
+										<t:template>
+											<Text text="{closing_balance}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="15rem">
+										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
+										<t:template>
+											<Input value="{obs}" enabled="false" />
 										</t:template>
 									</t:Column>
 								</t:columns>
@@ -494,27 +788,28 @@
 										<Text text="Total" />
 										<HBox>
 											<Text text="Opening Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<!--<Text text="999.999.999,99" textAlign="End" width="7rem" />-->
+											<Text text="{/TotalCreditSchedule/opening_balance}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Credit" width="12rem" />
-											<Text text="99.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/current_year_value}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Credit Utilized" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/current_year_value_utilized}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Adjustments" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/adjustments}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Current Year Credit Expired" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/current_year_value_expired}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Closing Balance" width="12rem" />
-											<Text text="999.999.999,99" textAlign="End" width="7rem" />
+											<Text text="{/TotalCreditSchedule/closing_balance}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
 								</t:footer>
@@ -524,5 +819,13 @@
 				</items>
 			</IconTabBar>
 		</f2:content>
+		<!--<f2:footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>viewGeralSalvarFechar}" type="Accept" press="onSalvarFechar" />
+				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" />
+				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" />
+			</Toolbar>
+		</f2:footer>-->
 	</f2:DynamicPage>
 </mvc:View>

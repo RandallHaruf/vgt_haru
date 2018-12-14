@@ -81,7 +81,18 @@ sap.ui.define(
 			
 			onVisualizarPeriodo: function (oPeriodo) {
 				//this.getRouter().navTo("taxPackageVisualizacaoTrimestre");
-				alert("Visualizar: " + oPeriodo.periodo);
+				//alert("Visualizar: " + oPeriodo.periodo);
+				var oParams = {};
+				oParams.oPeriodo = oPeriodo;
+				oParams.oEmpresa = this.getModel().getProperty("/Empresa");
+				oParams.oAnoCalendario = {
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
+				};
+				
+				this.getRouter().navTo("taxPackageVisualizacaoTrimestre", {
+					parametros: this.toURIComponent(oParams)
+				});
 			},
 			
 			onSubmeterPeriodo: function (oPeriodo) {

@@ -19,13 +19,17 @@ module.exports = {
 			
 			var resultTaxRecon = db.executeStatementSync(sQuery, aParams);
 			
-			for (var i = 0, length = resultTaxRecon.length; i < length; i++) {
+			/*for (var i = 0, length = resultTaxRecon.length; i < length; i++) {
 				resultTaxRecon[i].ind_ativo = (resultTaxRecon[i].ind_ativo === 1);
-			}
+			}*/
 			
 			var oTaxReconciliation = resultTaxRecon[0];
 			
 			if (oTaxReconciliation && oTaxReconciliation.id_tax_reconciliation) {
+			
+				oTaxReconciliation.ind_ativo = true;
+			}
+				
 				// Carrega a moeda
 				sQuery = 
 					'select taxPackage."fk_dominio_moeda.id_dominio_moeda" '
@@ -178,15 +182,15 @@ module.exports = {
 				}*/
 				
 				var response = JSON.stringify({
-					taxReconciliation: resultTaxRecon,
+					taxReconciliation: resultTaxRecon && resultTaxRecon.length > 0 ? resultTaxRecon : null,
 					diferencaPermanente: aDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 1),
 					diferencaTemporaria: aDiferenca.filter(obj => obj.id_dominio_diferenca_tipo === 2),
 					moeda: resultMoeda && resultMoeda.length > 0 ? resultMoeda[0]["fk_dominio_moeda.id_dominio_moeda"] : null
 				});
-			}
-			else {
+			//}
+			/*else {
 				response = JSON.stringify(null);
-			}
+			}*/
 			
 			res.send(response);
 		}
