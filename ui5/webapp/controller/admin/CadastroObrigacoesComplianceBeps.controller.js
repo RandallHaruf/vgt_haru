@@ -216,11 +216,12 @@ sap.ui.define(
 					data: {
 						nomeObrigacao: obj.nome,
 						dataInicial: obj.dataInicio,
-						dataFinal: obj.dataFim,
-						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo,
-						selectPais: obj.selectPais,						
-						selectPeriodicidade: obj.selectPeriodicidade,
-						selectPrazoEntrega: obj.selectPrazoEntrega	
+						dataFinal: obj.dataFim,						
+						prazoEntrega: obj.selectPrazoEntrega,
+						fkIdPais: obj.selectPais,
+						fkIdDominioPeriodicidade:obj.selectPeriodicidade,
+						fkIdDominioObrigacaoStatus: 2,
+						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
 					},
 					success: function (response) {
 						that._navToPaginaListagem();		
