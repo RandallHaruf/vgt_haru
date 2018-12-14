@@ -255,6 +255,8 @@ sap.ui.define(
 			},
 			
 			onReabrirPeriodo: function (oPeriodo) {
+				var oEmpresa = this.getModel().getProperty("/Empresa");
+				
 				var that = this;
 				
 				var oForm = new sap.ui.layout.form.Form({
@@ -308,7 +310,7 @@ sap.ui.define(
 								fkIdRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
 							}).then(function (response) {
 								dialog.close();
-								this._onEnviarMensagem(oPeriodo.oEmpresa.nome, oPeriodo.periodo);
+								that._onEnviarMensagem(oEmpresa.empresa, oPeriodo.periodo);
 								sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));	
 							}).catch(function (err) {
 								dialog.close();
