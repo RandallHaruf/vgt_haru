@@ -14,9 +14,9 @@ sap.ui.define(
 		return BaseController.extend("ui5ns.ui5.controller.admin.Inicio", {
 
 			onInit: function () {
-				
+
 				this.setModel(new sap.ui.model.json.JSONModel({}));
-				
+
 				var oModel = new sap.ui.model.json.JSONModel({
 					menu: {}
 				});
@@ -90,13 +90,13 @@ sap.ui.define(
 			},
 
 			handleNotificationsPress: function (oEvent) {
-			
+
 				var that = this;
-		
+
 				var countObrig = 0;
 				var countTTC = 0;
 				var countTAX = 0;
-				
+
 				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idAprovacao=1", function (response) { // 1 Obrigacao
 					if (response) {
 
@@ -107,7 +107,7 @@ sap.ui.define(
 							modelcountObrig: countObrig
 
 						});
-						that.getModel().setProperty("/Obrigacao", response)
+						that.getModel().setProperty("/Obrigacao", response);
 					}
 
 				});
@@ -123,7 +123,7 @@ sap.ui.define(
 						modelcountTTC: countTTC
 
 					});
-						that.getModel().setProperty("/RequisicaoReabertura", response);
+					that.getModel().setProperty("/RequisicaoReabertura", response);
 
 				});
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoReaberturaTaxPackage?status=1", function (response) { // 1 TAX Packege
@@ -137,12 +137,12 @@ sap.ui.define(
 						modelcountTAX: countTAX
 
 					});
-						that.getModel().setProperty("/RequisicaoReaberturaTaxPackage", response);
+					that.getModel().setProperty("/RequisicaoReaberturaTaxPackage", response);
 				});
 
 				//var oList = new sap.m.List();
 				var viewId = this.getView().getId();
-					
+
 				var vbox = new sap.m.VBox();
 				var Texto01 = new sap.m.Text({
 					text: "{i18n>viewNotificacaolinhaRequisicaoObrigacao}  ({/ContadorObrig/modelcountObrig})",
@@ -187,15 +187,28 @@ sap.ui.define(
 						vbox
 					]
 				});
-				
+
 				this.getView().addDependent(popover);
-				
+
 				var oToolbar = new sap.m.Toolbar();
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 				oToolbar.addContent(new sap.m.Button({
 					text: that.getResourceBundle().getText("viewAdminInicioBotaoTodasNotificacoes")
 				}).attachPress(function () {
 					sap.ui.getCore().byId(viewId + "--pageContainer").to(viewId + "--listaNotificacoes");
+					
+					var oXMLView = that.byId("listaNotificacoesXMLView");
+					if (oXMLView && oXMLView.byId("paginaListagem") && oXMLView.byId("paginaListagem").aDelegates) {
+						var aDelegates = oXMLView.byId("paginaListagem").aDelegates;
+						for (var i = 0; i < aDelegates.length; i++) {
+							var oItem = aDelegates[i];
+
+							if (oItem.oDelegate && oItem.oDelegate.onAfterShow) {
+								oItem.oDelegate.onAfterShow();
+								break;
+							}
+						}
+					}
 				}));
 
 				popover.setFooter(oToolbar);
