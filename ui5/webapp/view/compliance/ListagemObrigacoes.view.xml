@@ -173,15 +173,15 @@
 								type="Navigation"
 								press="onDetalharObrigacao">
 								<cells>
-									<ObjectIdentifier title="{TBLOBRIGACAOACESSORIANOME}"/>
+									<ObjectIdentifier title="{nome_obrigacao}"/>
 									<Text text="{prazo_entrega}"/>
-									<Text text="{extensao}"/>
+									<Text text="{prazo_entrega_customizado}"/>
 									<Text text="{ano_fiscal}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>
 									<!--core:Icon src="{viewModel>suporteContratado}"/-->
 									<Text text="{suporte_contratado}"/>
-									<Text text="{TBLSTATUSOBRIGACAODESCRICAO}"/>
+									<Text text="{descricao_obrigacao_status}"/>
 								</cells>
 							</ColumnListItem>
 						</items>

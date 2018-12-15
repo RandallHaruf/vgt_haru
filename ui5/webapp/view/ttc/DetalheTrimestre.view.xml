@@ -303,11 +303,7 @@
 							<Table
 								class="celulasSeparadas"
 								items="{
-									path: '/Collected/Pagamentos',
-									sorter: [{
-										path: 'data_pagamento',
-										descending: true
-									}]
+									path: '/Collected/Pagamentos'
 								}">
 								<headerToolbar>
 									<Toolbar>
