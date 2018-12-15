@@ -188,9 +188,13 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/ObrigacaoAcessoria", function (response) {
 					that.getModel().setProperty("/ObrigacaoAcessoria", response);	
 				});*/
-				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
+				/*NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
 					that.getModel().setProperty("/ModeloObrigacao", response);	
-				});				
+				});		*/
+
+				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa", function (response) {
+					that.getModel().setProperty("/RelModeloEmpresa", response);	
+				});					
 			},
 			
 			onSelectChange: function () {
@@ -256,6 +260,11 @@ sap.ui.define(
 				NodeAPI.lerRegistro("Empresa", iIdObjeto, function (response) {
 					that.getModel().setProperty("/objeto", response);	
 					that.getModel().setProperty("/idAliquotaVigente", response["fk_aliquota.id_aliquota"]);
+
+				var pais = this.getModel().getProperty("/objeto/fk_pais.id_pais");
+				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais, function (res) {
+					that.getModel().setProperty("/ModeloObrigacao", res);	
+				});	
 					
 					// Carrega o histórico de alíquotas dessa empresa
 					NodeAPI.listarRegistros("DeepQuery/HistoricoEmpresaAliquota/" + iIdObjeto + "&-1", function (resp) {
@@ -273,7 +282,7 @@ sap.ui.define(
 				});
 				
 				//NodeAPI.listarRegistros("RelacionamentoEmpresaObrigacaoAcessoria?fkEmpresa=" + iIdObjeto + "&indicadorHistorico=false", function (response) {
-				NodeAPI.listarRegistros("RelModeloEmpresa?fkEmpresa=" + iIdObjeto, function (response) {					
+				NodeAPI.listarRegistros("RelModeloEmpresa?idEmpresa=" + iIdObjeto, function (response) {					
 					that._resolverVinculoObrigacoes(response);		
 				});
 				//-----------------OLHAR UTILIDADE DEPOIS
@@ -281,9 +290,10 @@ sap.ui.define(
 				//-----------------OLHAR UTILIDADE DEPOIS
 				//-----------------OLHAR UTILIDADE DEPOIS
 				//-----------------OLHAR UTILIDADE DEPOIS
+				/*
 				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa/" + iIdObjeto , function (response) {
 					that.getModel().setProperty("/objeto/historicoObrigacoes", response);	
-				});
+				});*/
 			},
 			
 			_limparFormulario: function () {
@@ -327,8 +337,8 @@ sap.ui.define(
 					fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
 					fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
 					fkAliquota: obj["fk_aliquota.id_aliquota"],
-					fkPais: obj["fk_pais.id_pais"],
-					obrigacoes: JSON.stringify(this._getSelecaoObrigacoes())
+					fkPais: obj["fk_pais.id_pais"]/*,
+					obrigacoes: JSON.stringify(this._getSelecaoObrigacoes())*/
 				}, function (response) {
 					that._resolverHistoricoAliquota(function () {
 						that._navToPaginaListagem();			
@@ -340,6 +350,7 @@ sap.ui.define(
 				var that = this;
 				
 				var obj = this.getModel().getProperty("/objeto");
+
 				
 				this.byId("btnSalvar").setEnabled(false);
 				
@@ -359,10 +370,34 @@ sap.ui.define(
 					fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
 					fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
 					fkAliquota: obj["fk_aliquota.id_aliquota"],
-					fkPais: obj["fk_pais.id_pais"],
-					obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())
+					fkPais: obj["fk_pais.id_pais"]/*,
+					obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())9*/
 				}, function (response) {
 					that.byId("btnSalvar").setEnabled(true);
+					var then = that;
+					var modelosObrigacao = this.getModel().getProperty("/ModeloObrigacao");	
+					//Cria o Registro de Rel_Modelo_Empresa
+					NodeAPI.criarRegistro("RelModeloEmpresa",{
+						fkIdModeloObrigacao: modelosObrigacao["tblModeloObrigacao.id_modelo"],
+						fkIdEmpresa: JSON.parse(response)[0].generated_id,
+						fkIdDominioObrigacaoStatus: modelosObrigacao["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+						prazoEntregaCustomizado: modelosObrigacao["data_selecionada"]
+					},function (res){
+						var DmenosX = then.getModel().getProperty("/Pais");
+						NodeAPI.criarRegistro("RespostaObrigacao",{
+							suporteContratado: null,
+							suporteEspecificacao: null,
+							suporteValor: null,
+							fkIdDominioMoeda: null,
+							fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
+							fkIdDominioAnoFiscal: 2018 - DmenosX["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+							fkIdDominioAnoCalendario: 2018 
+							
+						},function(re){
+							
+						});
+						
+					});
 					
 					// Se foi selecionada uma alíquota válida na criação da empresa
 					if (obj["fk_aliquota.id_aliquota"] && obj["fk_aliquota.id_aliquota"] > 0) {
@@ -407,18 +442,20 @@ sap.ui.define(
 			},
 			
 			_resolverVinculoObrigacoes: function (response) {
+				/*ESTA FUNCAO VERIFICARA QUAIS MODELOS_OBRIGACAO DESTE PAIS ESTAO SELECIONADOS PARA ESTA EMPRESA
+				ISTO SE DA ATRAVES DA VERIFICAÇÃO NA TABELA REL_MODELO_EMPRESA, QUE ESTA VINDO NO ARGUMENTO DESTA FUNCAO
+				*/
 				//var aObrigacoes = this.getModel().getProperty("/ObrigacaoAcessoria");
-				var aObrigacoes = this.getModel().getProperty("/ModeloObrigacao");				
-					
+				var aObrigacoes = this.getModel().getProperty("/ModeloObrigacao");		
+
 				for (var i = 0; i < aObrigacoes.length; i++) {
 					
 					var oObrigacao = aObrigacoes[i];
-					
+					//NESTA ETAPA VOCE DEVE VERIFICAR QUAIS ID DE MODELO OBRIGACAO TAMBEM ESTAO NA REL_MODELO_EMPRESA
 					//var aux = response.find(x => x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"]);
 					var aux = response.find(function (x) {
 						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
 						return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
-						
 					});
 					
 					if (aux) {
@@ -461,13 +498,13 @@ sap.ui.define(
 				
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarObjetos();
+						that._carregarObjetos();//CARREGA OS OBJETOS DE EMPRESA E MODELOOBRIGACAO
 					}	
 				});
 				
 				this.byId("paginaObjeto").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarCamposFormulario();
+						that._carregarCamposFormulario();//PREENCHIMENTO DAS INFORMACOES NA PRIMEIRA TELA
 						
 						if (oEvent.data.path) {
 							var id = that.getModel().getObject(oEvent.data.path)[that._nomeColunaIdentificadorNaListagemObjetos];
@@ -475,7 +512,7 @@ sap.ui.define(
 							that.getModel().setProperty("/isUpdate", true);
 							that.getModel().setProperty("/idObjeto", id);
 							
-							that._carregarObjetoSelecionado(id);
+							that._carregarObjetoSelecionado(id);//CARREGA AS INFORMACOES DO ID SELECIONADO NO carregarCamposFormulario
 						}
 						else {
 							that.getModel().setProperty("/isUpdate", false);

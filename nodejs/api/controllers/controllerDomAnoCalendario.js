@@ -87,19 +87,42 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade DominioAnoCalendario");
+		var sStatement = 
+			'SELECT '
+			+' tblDominioAnoCalendario."id_dominio_ano_calendario", '
+			+' tblDominioAnoCalendario."ano_calendario" '
+			+' FROM "VGT.DOMINIO_ANO_CALENDARIO" tblDominioAnoCalendario ';
+			
+		var oWhere = [];
+		var aParams = [];
 
-		/*var sStatement = 'select * from "DUMMY"';
+		if (req.params.idRegistro) {
+			oWhere.push(' tblDominioAnoCalendario."id_dominio_ano_calendario" = ? ');
+			aParams.push(req.params.idRegistro);
+		}
 
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+
+		sStatement += ' Order By tblDominioAnoCalendario."ano_calendario"';
+		
 		model.execute({
-		statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };

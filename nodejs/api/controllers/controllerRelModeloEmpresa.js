@@ -5,7 +5,7 @@ var model = require("../models/modelRelModeloEmpresa");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		var aParams = [];
+/*		var aParams = [];
 
 		if (req.query.fkEmpresa) {
 			aParams.push({
@@ -15,6 +15,14 @@ module.exports = {
 		}
 
 		model.listar(aParams, function (err, result) {
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});	
+		*/
+		model.listar([], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
@@ -107,46 +115,46 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade RelModeloEmpresa");
+//		res.send("TODO: DeepQuery da Entidade RelModeloEmpresa");
 
 		var sStatement =
 			' SELECT ' 
-			+ ' ME."fk_id_modelo_obrigacao.id_modelo", '
-			+ ' ME."fk_id_empresa.id_empresa", '
-	        + ' EM."nome", '
-			+ ' OB."nome_obrigacao", '
-			+ ' OB."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"'
-			+ ' ME."id_rel_modelo_empresa", '
-			+ ' ME."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status", '
-			+ ' SO."descricao",'
-	    	+ ' ME."prazo_entrega_customizado" '
-			+ ' FROM "VGT.REL_MODELO_EMPRESA" ME ' 
-			+ ' inner join "VGT.EMPRESA" EM on ME."fk_id_empresa.id_empresa" = EM."id_empresa" '
-			+ ' inner join "VGT.MODELO_OBRIGACAO" OB on ME."fk_id_modelo_obrigacao.id_modelo" = OB."id_modelo"'
-			+ ' inner join "VGT.DOMINIO_STATUS_OBRIGACAO" SO on ME."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = SO."id_status_obrigacao"';
+			+ ' tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" "tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo", '
+			+ ' tblRelModeloEmpresa."fk_id_empresa.id_empresa" "tblRelModeloEmpresa.fk_id_empresa.id_empresa", '
+	        + ' tblEmpresa."nome" "tblEmpresa.nome", '
+			+ ' tblModeloObrigacao."nome_obrigacao" "tblModeloObrigacao.nome_obrigacao", '
+			+ ' tblModeloObrigacao."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" "tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status", '
+			+ ' tblRelModeloEmpresa."id_rel_modelo_empresa" "tblRelModeloEmpresa.id_rel_modelo_empresa", '
+			+ ' tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" "tblRelModeloEmpresa.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status", '
+			+ ' tblDominioStatusObrigacao."descricao" "tblDominioStatusObrigacao.descricao",'
+	    	+ ' tblRelModeloEmpresa."prazo_entrega_customizado" "tblRelModeloEmpresa.prazo_entrega_customizado" '
+			+ ' FROM "VGT.REL_MODELO_EMPRESA" tblRelModeloEmpresa ' 
+			+ ' inner join "VGT.EMPRESA" tblEmpresa on tblRelModeloEmpresa."fk_id_empresa.id_empresa" = tblEmpresa."id_empresa" '
+			+ ' inner join "VGT.MODELO_OBRIGACAO" tblModeloObrigacao on tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = tblModeloObrigacao."id_modelo"'
+			+ ' inner join "VGT.DOMINIO_STATUS_OBRIGACAO" tblDominioStatusObrigacao on tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = tblDominioStatusObrigacao."id_status_obrigacao"';
 			
 			var oWhere = [];
 			var aParams = [];
 			
-		if (req.query.status) {
-			oWhere.push(' ME."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = ? ');
-			aParams.push(req.query.status);
+		if (req.query.idStatus) {
+			oWhere.push(' tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = ? ');
+			aParams.push(req.query.idStatus);
 		}
 		
-		if (req.query.idempresa) {
-			oWhere.push(' ME."fk_id_empresa.id_empresa" = ? ');
-			aParams.push(req.query.idempresa);
+		if (req.query.idEmpresa) {
+			oWhere.push(' tblRelModeloEmpresa."fk_id_empresa.id_empresa" = ? ');
+			aParams.push(req.query.idEmpresa);
 		}
 		
-		if (req.query.idmodelo) {
-			oWhere.push(' ME."fk_id_modelo_obrigacao.id_modelo" = ? ');
-			aParams.push(req.query.idmodelo);
+		if (req.query.idModelo) {
+			oWhere.push(' tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = ? ');
+			aParams.push(req.query.idModelo);
 		}
 		
 		
-		if (req.query.statusModulo) {
-			oWhere.push(' OB."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = ? ');
-			aParams.push(req.query.statusModulo);
+		if (req.query.idObrigacaoStatus) {
+			oWhere.push(' tblDominioStatusObrigacao."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = ? ');
+			aParams.push(req.query.idObrigacaoStatus);
 		}
 		
 		

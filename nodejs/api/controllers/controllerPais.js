@@ -239,6 +239,8 @@ module.exports = {
 			+ 'pais."fk_dominio_pais_regiao.id_dominio_pais_regiao" "fkDominioPaisRegiao", '
 			+ 'dom_pais_regiao."regiao" "nomeRegiao", '
 			+ 'pais."fk_aliquota.id_aliquota" "fkAliquota", '
+			+ 'pais."ano_obrigacao_compliance" "anoObrigacaoCompliance", '		
+			+ 'pais."ano_obrigacao_beps" "anoObrigacaoBeps", '					
 			+ 'aliquota."nome" "nomeAliquota", '
 			+ 'aliquota."valor" "valorAliquota", '
 			+ 'aliquota."data_inicio" "dataInicioAliquota", '
