@@ -124,6 +124,7 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (response) {
 					if (response) {
 						//response.unshift({});
+						response.unshift({ id: 0, nome: "" });						
 						var aRegistro = response;
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
 							aRegistro[i]["descricao"] = Utils.traduzPeriodo(aRegistro[i]["descricao"],that);
@@ -134,6 +135,7 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					if (response) {
 						//response.unshift({});
+						response.unshift({ id: 0, nome: "" });						
 						that.getModel().setProperty("/Pais", response);
 
 					}
