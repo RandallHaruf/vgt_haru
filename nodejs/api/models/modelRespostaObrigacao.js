@@ -29,7 +29,7 @@ var oSketch = {
 			number: true
 		},
 		fkIdDominioAnoCalendario:{
-			nome: "fk_id_dominio_ano_calendario.id_ano_calendario",
+			nome: "fk_id_dominio_ano_calendario.id_dominio_ano_calendario",
 			number: true
 		}
 	} 	

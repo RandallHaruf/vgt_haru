@@ -351,7 +351,11 @@ sap.ui.define(
 				var that = this;
 				
 				var obj = this.getModel().getProperty("/objeto");
-
+				
+				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
+					//response.unshift({ });
+					that.getModel().setProperty("/DmenosXAnos", resposta);	
+				});
 				
 				this.byId("btnSalvar").setEnabled(false);
 				
@@ -379,29 +383,31 @@ sap.ui.define(
 					var modelosObrigacao = that.getModel().getProperty("/ModeloObrigacao");	
 					//Cria o Registro de Rel_Modelo_Empresa
 					for (var k = 0; k < modelosObrigacao.length; k++) {
-						NodeAPI.criarRegistro("RelModeloEmpresa",{
-							fkIdModeloObrigacao: modelosObrigacao[k]["tblModeloObrigacao.id_modelo"],
-							fkIdEmpresa: JSON.parse(response)[0].generated_id,
-							fkIdDominioObrigacaoStatus: modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-							prazoEntregaCustomizado: modelosObrigacao[k]["data_selecionada"]
-						},function (res){
-							var DmenosX = then.getModel().getProperty("/Pais");
-							var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
-								for (var i = 0; i < AnoCalendario.length; i++) {
-									var oAnoCalendario = AnoCalendario[i];
-									NodeAPI.criarRegistro("RespostaObrigacao",{
-										suporteContratado: null,
-										suporteEspecificacao: null,
-										suporteValor: null,
-										fkIdDominioMoeda: null,
-										fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
-										fkIdDominioAnoFiscal: oAnoCalendario[i]["id_dominio_ano_calendario"]- DmenosX[i]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-										fkIdDominioAnoCalendario: oAnoCalendario[i]["id_dominio_ano_calendario"] 
-									},function(re){
-										
-									});
-								}
-						});
+						if(modelosObrigacao[k]["selecionada"] !== undefined){
+							NodeAPI.criarRegistro("RelModeloEmpresa",{
+								fkIdModeloObrigacao: modelosObrigacao[k]["tblModeloObrigacao.id_modelo"],
+								fkIdEmpresa: JSON.parse(response)[0].generated_id,
+								fkIdDominioObrigacaoStatus: modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+								prazoEntregaCustomizado: modelosObrigacao[k]["data_selecionada"]
+							},function (res){
+								var DmenosX = then.getModel().getProperty("/DmenosXAnos");
+								var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
+									for (var i = 0; i < AnoCalendario.length; i++) {
+										var oAnoCalendario = AnoCalendario[i];
+										NodeAPI.criarRegistro("RespostaObrigacao",{
+											suporteContratado: null,
+											suporteEspecificacao: null,
+											suporteValor: null,
+											fkIdDominioMoeda: null,
+											fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
+											fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"]- DmenosX[0]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+											fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] 
+										},function(re){
+											
+										});
+									}
+							});
+						}	
 					}
 					
 					// Se foi selecionada uma alíquota válida na criação da empresa
