@@ -8,7 +8,7 @@ var oSketch = {
 			identity: true
 		},
 		fkIdModeloObrigacao: {
-			nome: "fk_id_modelo_obrigacao.id_modelo_obrigacao",
+			nome: "fk_id_modelo_obrigacao.id_modelo",
 			number: true
 		},
 		fkIdEmpresa: {

@@ -111,6 +111,9 @@ module.exports = {
 				sStatement += oWhere[i];
 			}
 		}
+		else{
+			sStatement += 'where tblDominioAnoCalendario."ano_calendario" >= year(CURRENT_DATE)';
+		}
 
 		sStatement += ' Order By tblDominioAnoCalendario."ano_calendario"';
 		

@@ -188,10 +188,12 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/ObrigacaoAcessoria", function (response) {
 					that.getModel().setProperty("/ObrigacaoAcessoria", response);	
 				});*/
-				/*NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
+				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
 					that.getModel().setProperty("/ModeloObrigacao", response);	
-				});		*/
-
+				});		
+				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendario", function (response) {
+					that.getModel().setProperty("/DominioAnoCalendario", response);	
+				});	
 				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa", function (response) {
 					that.getModel().setProperty("/RelModeloEmpresa", response);	
 				});					
@@ -204,7 +206,6 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + obj, function (response) {
 					that.getModel().setProperty("/ModeloObrigacao", response);	
 				});	
-				
 			},
 			_carregarCamposFormulario: function () {
 				var that = this;
@@ -261,7 +262,7 @@ sap.ui.define(
 					that.getModel().setProperty("/objeto", response);	
 					that.getModel().setProperty("/idAliquotaVigente", response["fk_aliquota.id_aliquota"]);
 
-				var pais = this.getModel().getProperty("/objeto/fk_pais.id_pais");
+				var pais = that.getModel().getProperty("/objeto/fk_pais.id_pais");
 				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais, function (res) {
 					that.getModel().setProperty("/ModeloObrigacao", res);	
 				});	
@@ -375,29 +376,33 @@ sap.ui.define(
 				}, function (response) {
 					that.byId("btnSalvar").setEnabled(true);
 					var then = that;
-					var modelosObrigacao = this.getModel().getProperty("/ModeloObrigacao");	
+					var modelosObrigacao = that.getModel().getProperty("/ModeloObrigacao");	
 					//Cria o Registro de Rel_Modelo_Empresa
-					NodeAPI.criarRegistro("RelModeloEmpresa",{
-						fkIdModeloObrigacao: modelosObrigacao["tblModeloObrigacao.id_modelo"],
-						fkIdEmpresa: JSON.parse(response)[0].generated_id,
-						fkIdDominioObrigacaoStatus: modelosObrigacao["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-						prazoEntregaCustomizado: modelosObrigacao["data_selecionada"]
-					},function (res){
-						var DmenosX = then.getModel().getProperty("/Pais");
-						NodeAPI.criarRegistro("RespostaObrigacao",{
-							suporteContratado: null,
-							suporteEspecificacao: null,
-							suporteValor: null,
-							fkIdDominioMoeda: null,
-							fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
-							fkIdDominioAnoFiscal: 2018 - DmenosX["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-							fkIdDominioAnoCalendario: 2018 
-							
-						},function(re){
-							
+					for (var k = 0; k < modelosObrigacao.length; k++) {
+						NodeAPI.criarRegistro("RelModeloEmpresa",{
+							fkIdModeloObrigacao: modelosObrigacao[k]["tblModeloObrigacao.id_modelo"],
+							fkIdEmpresa: JSON.parse(response)[0].generated_id,
+							fkIdDominioObrigacaoStatus: modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+							prazoEntregaCustomizado: modelosObrigacao[k]["data_selecionada"]
+						},function (res){
+							var DmenosX = then.getModel().getProperty("/Pais");
+							var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
+								for (var i = 0; i < AnoCalendario.length; i++) {
+									var oAnoCalendario = AnoCalendario[i];
+									NodeAPI.criarRegistro("RespostaObrigacao",{
+										suporteContratado: null,
+										suporteEspecificacao: null,
+										suporteValor: null,
+										fkIdDominioMoeda: null,
+										fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
+										fkIdDominioAnoFiscal: oAnoCalendario[i]["id_dominio_ano_calendario"]- DmenosX[i]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+										fkIdDominioAnoCalendario: oAnoCalendario[i]["id_dominio_ano_calendario"] 
+									},function(re){
+										
+									});
+								}
 						});
-						
-					});
+					}
 					
 					// Se foi selecionada uma alíquota válida na criação da empresa
 					if (obj["fk_aliquota.id_aliquota"] && obj["fk_aliquota.id_aliquota"] > 0) {
