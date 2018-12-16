@@ -1020,6 +1020,7 @@ sap.ui.define(
 				var that = this;
 
 				this.byId("containerItemsToReport2").removeAllContent();
+				this.setBusy(this.byId("containerItemsToReport2"), true);
 
 				var oModel = [];
 
@@ -1106,6 +1107,8 @@ sap.ui.define(
 
 						that._carregarDadosItemToReport(sIdRelTaxPackagePeriodo);
 					}
+					
+					that.setBusy(that.byId("containerItemsToReport2"), false);
 				});
 
 				/*var aItemsToReport = [
@@ -1879,6 +1882,10 @@ sap.ui.define(
 				var that = this,
 					sIdRelTaxPackagePeriodo = this.getModel().getProperty("/Periodo").id_rel_tax_package_periodo;
 
+				var oContainerTaxReconciliation = this.byId("containerTaxReconciliation");
+
+				this.setBusy(oContainerTaxReconciliation, true);
+
 				NodeAPI.listarRegistros("TaxPackage?idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo, function (response) {
 					var sIdTaxReconciliation;
 					
@@ -1904,6 +1911,8 @@ sap.ui.define(
 					that._carregarPagamentosTTC(sIdTaxReconciliation);
 					that._carregarHistorico();
 					that._carregarTaxRate();
+					
+					that.setBusy(oContainerTaxReconciliation, false);
 				});
 
 				this._carregarSchedule(1, "/LossSchedule", sIdRelTaxPackagePeriodo);
@@ -2047,13 +2056,28 @@ sap.ui.define(
 			},           
 
 			_salvar: function (oEvent, callback) {
-				var oButton = oEvent.getSource();
+				/*var oButton = oEvent.getSource();
 
-				oButton.setEnabled(false);
+				oButton.setEnabled(false);*/
+				var that = this,
+					oBtnPressionado = oEvent.getSource(),
+					oBtnSalvarFechar = this.byId("btnSalvarFechar"),
+					oBtnSalvar = this.byId("btnSalvar"),
+					oBtnCancelar = this.byId("btnCancelar");
+					
+				oBtnSalvarFechar.setEnabled(false);
+				oBtnSalvar.setEnabled(false);
+				oBtnCancelar.setEnabled(false);
+				
+				this.setBusy(oBtnPressionado, true);
 
 				this._inserir(function (response) {
-					oButton.setEnabled(true);
-
+					oBtnSalvarFechar.setEnabled(true);
+					oBtnSalvar.setEnabled(true);
+					oBtnCancelar.setEnabled(true);
+					
+					that.setBusy(oBtnPressionado, false);
+					
 					if (callback) {
 						callback(JSON.parse(response));
 					}

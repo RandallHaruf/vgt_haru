@@ -79,6 +79,7 @@
 					<IconTabSeparator icon="" />
 					<IconTabFilter text="Tax Reconciliation">
 						<ScrollContainer 
+							id="containerTaxReconciliation"
 							horizontal="true" 
 							vertical="true" 
 							height="100%" 
@@ -818,9 +819,9 @@
 		<f2:footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button text="{i18n>viewGeralSalvarFechar}" type="Accept" press="onSalvarFechar" />
-				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" />
-				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" />
+				<Button id="btnSalvarFechar" text="{i18n>viewGeralSalvarFechar}" type="Accept" press="onSalvarFechar" />
+				<Button id="btnSalvar" text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" />
+				<Button id="btnCancelar" text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" />
 			</Toolbar>
 		</f2:footer>
 	</f2:DynamicPage>
