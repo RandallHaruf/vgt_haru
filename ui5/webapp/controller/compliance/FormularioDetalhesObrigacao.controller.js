@@ -8,26 +8,18 @@ sap.ui.define(
 
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
-					obrigacao: {
+					RespostaObrigacao: {
 						/*
 						 {
-        				"id_obrigacao": 1,
-        				"prazo_entrega": "2019-02-18",
-        				"extensao": "2019-02-18",
-        				"obrigacao_inicial": 1,
-        				"suporte_contratado": 1,
-        				"suporte": "teste",
-        				"observacoes": "teste",
-        				"fk_dominio_status_obrigacao.id_status_obrigacao": 1,
-        				"fk_dominio_pais.id_dominio_pais": 1,
-        				"fk_dominio_periodicidade_obrigacao.id_periodicidade_obrigacao": 1,
-        				"fk_empresa.id_empresa": 1,
-        				"fk_obrigacao_acessoria.id_obrigacao_acessoria": 1,
-        				"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": 1,
-        				"fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao": 2,
-        				"motivo_reprovacao": null
-        				
-    				},
+        				"id_resposta_obrigacao": 1,
+        				"suporte_contratado": "True",
+        				"suporte_especificacao": "BlaBla",
+        				"suporte_valor": 1000.00,
+        				"fk_id_dominio_moeda.id_dominio_moeda": 1,
+        				"fk_id_rel_modelo_empresa.id_rel_modelo_empresa": "1",
+        				"fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal": "1",
+        				"fk_id_dominio_ano_calendario.id_dominio_ano_calendario": 1,
+        			},
 						*/
 					}
 				}));
@@ -41,22 +33,15 @@ sap.ui.define(
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//that.getRouter().navTo("complianceListagemObrigacoes");
-							var obj = that.getModel().getProperty("/Obrigacao");
-							NodeAPI.atualizarRegistro("Obrigacao", obj.id_obrigacao, {
-								prazo_entrega: obj.prazo_entrega,
-								extensao: obj.extensao,
-								obrigacao_inicial: obj.obrigacao_inicial,
-								suporte_contratado: (obj.suporte_contratado === "SIM"),
-								suporte: obj.suporte,
-								observacoes: obj.observacoes,
-								fkDominioStatusObrigacao: obj["fk_dominio_status_obrigacao.id_status_obrigacao"],
-								fkDominioPais: obj["fk_dominio_pais.id_dominio_pais"],
-								fkDominioPeriocidadeObrigacao: obj["fk_dominio_periodicidade_obrigacao.id_periodicidade_obrigacao"],
-								fkEmpresa: obj["fk_empresa.id_empresa"],
-								fkObrigacaoAcessoria: obj["fk_obrigacao_acessoria.id_obrigacao_acessoria"],
-								fkAnoFiscal: obj["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-								fkDominioAprovacaoObrigacao: obj["fk_dominio_aprovacao_obrigacao.id_aprovacao_obrigacao"],
-								motivoReprovacao: obj.motivo_reprovacao
+							var obj = that.getModel().getProperty("/RespostaObrigacao");
+							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_obrigacao, {
+								suporteContratado: (obj.suporte_contratado === "SIM"),
+								suporteEspecificacao: obj.suporte_especificacao,
+								suporteValor: obj.suporte_valor,
+								fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
+								fkIdRelModeloEmpresa : obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
+								fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
+								fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"]
 							}, function (response) {
 								that.getRouter().navTo("complianceListagemObrigacoes");
 							});
@@ -91,7 +76,7 @@ sap.ui.define(
 
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 
-				this.getModel().setProperty("/Obrigacao", oParametros.Obrigacao);
+				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 			}
 		});
 	}
