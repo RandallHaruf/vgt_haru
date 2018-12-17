@@ -34,9 +34,6 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//that.getRouter().navTo("complianceListagemObrigacoes");
 							var obj = that.getModel().getProperty("/RespostaObrigacao");
-							if (obj["suporte_contratado"] == false) {
-								obj["suporte_especificacao"] = "";
-							}
 							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
 								suporteContratado: obj["suporte_contratado"],
 								suporteEspecificacao: obj["suporte_especificacao"],
@@ -73,6 +70,15 @@ sap.ui.define(
 
 			navToPage2: function () {
 				this.getRouter().navTo("complianceListagemObrigacoes");
+			},
+			
+			onTrocarSuporte: function() {
+				var obj = this.getModel().getProperty("/RespostaObrigacao");
+				if (obj["suporte_contratado"] == false) {
+					obj["suporte_especificacao"] = "";
+					obj["fk_id_dominio_moeda.id_dominio_moeda"] = "";
+					obj["suporte_valor"] = "";
+				}	
 			},
 
 			_onRouteMatched: function (oEvent) {

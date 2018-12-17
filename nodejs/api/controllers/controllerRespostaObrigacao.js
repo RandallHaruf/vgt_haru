@@ -189,7 +189,7 @@ module.exports = {
 			}
 		}
 		
-		//sStatement += ' order by periodo."numero_ordem" ';
+		sStatement += ' order by tblDominioAnoFiscal."ano_fiscal" desc ';
 
 		model.execute({
 		statement: sStatement,
