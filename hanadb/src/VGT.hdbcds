@@ -568,6 +568,7 @@ context VGT {
         key id_rel_modelo_empresa          : Integer;
             fk_id_dominio_obrigacao_status : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
             prazo_entrega_customizado      : LocalDate;
+            ind_ativo                      : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":1012,"y":363.5}}*/
