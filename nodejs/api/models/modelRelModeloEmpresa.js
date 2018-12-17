@@ -21,6 +21,9 @@ var oSketch = {
 		},
 		prazoEntregaCustomizado:{
 			nome: "prazo_entrega_customizado"
+		},
+		indAtivo:{
+			nome: "ind_ativo"
 		}
 	} 	
 };

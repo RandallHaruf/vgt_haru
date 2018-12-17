@@ -47,6 +47,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.prazoEntregaCustomizado,
 			valor: req.body.prazoEntregaCustomizado ? req.body.prazoEntregaCustomizado : null
+		}, {
+			coluna: model.colunas.indAtivo,
+			valor: req.body.indAtivo ? req.body.indAtivo : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -90,6 +93,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.prazoEntregaCustomizado,
 			valor: req.body.prazoEntregaCustomizado ? req.body.prazoEntregaCustomizado : null
+		}, {
+			coluna: model.colunas.indAtivo,
+			valor: req.body.indAtivo ? req.body.indAtivo : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
