@@ -99,6 +99,21 @@
 											<Input value="{/RespostaObrigacao/pais}" enabled="false" />
 									</f:fields>
 								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
+									<f:fields>
+											<DatePicker 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/prazo_entrega_customizado}" 
+												enabled="false"
+												/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
+									<f:fields>
+											<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement label="Suporte Contratado">
 									<f:fields>
 										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" />
