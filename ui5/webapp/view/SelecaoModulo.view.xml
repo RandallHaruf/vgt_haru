@@ -21,16 +21,49 @@
 		</f:title>
 		<f:content>
 			<VBox>
-				<!--<VBox>
+				<VBox>
+					<VBox>
+						<HBox>
+							<CheckBox 
+								text="Declaração" 
+								selected="{/IsDeclaracao}" 
+								class="sapUiSmallMarginEnd" /> 
+							<DatePicker 
+								value="{/DataEnvioDeclaracao}" 
+								valueFormat="yyyy-MM-dd"
+								visible="{= ${/IsDeclaracao} === true ? true : false}" />
+						</HBox>
+						<HBox>
+							<u:FileUploader 
+								id="fileUploader" 
+								name="myFileUpload" 
+								uploadUrl="" 
+								width="400px" 
+								tooltip="Enviar o arquivo para o Nodejs"
+								placeholder="Escolha um arquivo" />
+							<Button 
+								text="Enviar Arquivo" 
+								press="onEnviarArquivo" />
+						</HBox>
+					</VBox>
+					<!--<Panel
+						headerText="Documentos"
+						expandable="true"
+						expanded="true">-->
 					<Table 
 						inset="false"
 						items="{
-							path: '/Arquivos'
+							path: '/Arquivos',
+							sorter: [{
+								path: 'nome_arquivo'
+							}, {
+								path: 'data_upload'
+							}]
 						}">
 						<headerToolbar>
 							<Toolbar>
-								<Title text="CRUD Arquivos" />
-								<ToolbarSpacer />
+								<Title text="Documentos" />
+								<!--<ToolbarSpacer />
 								<u:FileUploader 
 									id="fileUploader" 
 									name="myFileUpload" 
@@ -39,42 +72,59 @@
 									tooltip="Enviar o arquivo para o Nodejs" />
 								<Button 
 									text="Enviar Arquivo" 
-									press="onEnviarArquivo" />
+									press="onEnviarArquivo" />-->
 							</Toolbar>
 						</headerToolbar>
 						<columns>
-							<Column width="6.5rem" />
 							<Column>
 								<Title text="Nome" />
 							</Column>
 							<Column>
 								<Title text="Data Upload" />
 							</Column>
+							<!--<Column 
+								minScreenWidth="2000px"
+								demandPopin="true">
+								<Title text="Declaração" />
+							</Column>
 							<Column>
+								<Title text="Data Envio Declaração" />
+							</Column>-->
+							<!--<Column>
 								<Title text="Tipo" />
 							</Column>
 							<Column>
 								<Title text="Tamanho" />
-							</Column>
+							</Column>-->
+							<Column width="6.5rem" />
 						</columns>
 						<items>
-							<ColumnListItem
-								type="Navigation"
-								press="onBaixarArquivo">
+							<ColumnListItem>
 								<cells>
-									<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir arquivo" press="onExcluirArquivo" />
-									<Text text="{nome_arquivo}" />
+									<ObjectIdentifier title="{nome_arquivo}" text="{label_declaracao}" class="sapMTableContentMargin" />
+									<!--<Text text="{nome_arquivo}" />-->
 									<ObjectNumber
 										number="{data_upload}"/>
+									<!---<ObjectNumber
+										number="{ind_declaracao_label}" />
 									<ObjectNumber
+										number="{data_envio_declaracao}" visible="false" />-->
+									<!--<ObjectNumber
 										number="{mimetype}"/>
 									<ObjectNumber
-										number="{tamanho}"/>
+										number="{tamanho}"/>-->
+									<HBox>
+										<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="Baixar arquivo" press="onBaixarArquivo" enabled="{btnDownloadEnabled}" class="sapUiSmallMarginEnd" />
+										<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir arquivo" press="onExcluirArquivo" enabled="{btnExcluirEnabled}" />
+									</HBox>
 								</cells>
 							</ColumnListItem>
 						</items>
 					</Table>
-				</VBox>-->
+					<!--</Panel>-->
+					<!--<UploadCollection id="UploadCollection" instantUpload="false" />
+					<Button id="Button" text="Upload Now" press="onStartUpload" />-->
+				</VBox>
 				<!--<Table 
 					inset="false"
 					items="{
