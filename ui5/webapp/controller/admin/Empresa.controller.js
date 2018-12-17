@@ -188,9 +188,11 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/ObrigacaoAcessoria", function (response) {
 					that.getModel().setProperty("/ObrigacaoAcessoria", response);	
 				});*/
+				
 				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
 					that.getModel().setProperty("/ModeloObrigacao", response);	
-				});		
+				});	
+				
 				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendario", function (response) {
 					that.getModel().setProperty("/DominioAnoCalendario", response);	
 				});	
@@ -261,10 +263,13 @@ sap.ui.define(
 				NodeAPI.lerRegistro("Empresa", iIdObjeto, function (response) {
 					that.getModel().setProperty("/objeto", response);	
 					that.getModel().setProperty("/idAliquotaVigente", response["fk_aliquota.id_aliquota"]);
-
+	
 				var pais = that.getModel().getProperty("/objeto/fk_pais.id_pais");
 				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais, function (res) {
 					that.getModel().setProperty("/ModeloObrigacao", res);	
+						NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa?idEmpresaNaQualMeRelaciono=" + iIdObjeto, function (r) {					
+							that._resolverVinculoObrigacoes(r);		
+						});					
 				});	
 					
 					// Carrega o histórico de alíquotas dessa empresa
@@ -283,9 +288,7 @@ sap.ui.define(
 				});
 				
 				//NodeAPI.listarRegistros("RelacionamentoEmpresaObrigacaoAcessoria?fkEmpresa=" + iIdObjeto + "&indicadorHistorico=false", function (response) {
-				NodeAPI.listarRegistros("RelModeloEmpresa?idEmpresa=" + iIdObjeto, function (response) {					
-					that._resolverVinculoObrigacoes(response);		
-				});
+
 				//-----------------OLHAR UTILIDADE DEPOIS
 				//-----------------OLHAR UTILIDADE DEPOIS
 				//-----------------OLHAR UTILIDADE DEPOIS
@@ -294,14 +297,15 @@ sap.ui.define(
 				/*
 				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa/" + iIdObjeto , function (response) {
 					that.getModel().setProperty("/objeto/historicoObrigacoes", response);	
-				});*/
+				});
+				*/
 			},
 			
 			_limparFormulario: function () {
 				// Limpar o filtro da tabela de obrigações
-				this.byId("searchObrigacoes").fireSearch({
+				/*this.byId("searchObrigacoes").fireSearch({
 					query: ""
-				});
+				});*/
 				// Limpar outras propriedades do modelo
 				this.getModel().setProperty("/DominioEmpresaTipoSocietario", {});
 				this.getModel().setProperty("/DominioEmpresaStatus", {});
@@ -311,7 +315,7 @@ sap.ui.define(
 				this.getModel().setProperty("/showHistorico", false); 
 				this.getModel().setProperty("/HistoricoAtual", {});
 				this.getModel().setProperty("/idAliquotaVigente", 0);
-				//this.getModel().setProperty("/ModeloObrigacao", {});				
+				this.getModel().setProperty("/ModeloObrigacao", {});				
 			},
 			
 			_atualizarObjeto: function (sIdObjeto) {
@@ -466,12 +470,15 @@ sap.ui.define(
 					//var aux = response.find(x => x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"]);
 					var aux = response.find(function (x) {
 						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
-						return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
+						//return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
+						return x["tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
+						
 					});
 					
 					if (aux) {
 						oObrigacao.selecionadaInicialmente = true;	
-						oObrigacao.selecionada = true;		
+						oObrigacao.selecionada = true;
+						oObrigacao.data_selecionada = aux["tblRelModeloEmpresa.prazo_entrega_customizado"];						
 					}
 				}
 				
@@ -523,6 +530,7 @@ sap.ui.define(
 							that.getModel().setProperty("/isUpdate", true);
 							that.getModel().setProperty("/idObjeto", id);
 							
+
 							that._carregarObjetoSelecionado(id);//CARREGA AS INFORMACOES DO ID SELECIONADO NO carregarCamposFormulario
 						}
 						else {
@@ -537,6 +545,7 @@ sap.ui.define(
 			},
 			
 			onNovoObjeto: function (oEvent) {
+				this.getModel().setProperty("/showHistorico", true);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},
 			

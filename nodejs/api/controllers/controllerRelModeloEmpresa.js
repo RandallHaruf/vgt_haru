@@ -122,6 +122,7 @@ module.exports = {
 			+ ' tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" "tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo", '
 			+ ' tblRelModeloEmpresa."fk_id_empresa.id_empresa" "tblRelModeloEmpresa.fk_id_empresa.id_empresa", '
 	        + ' tblEmpresa."nome" "tblEmpresa.nome", '
+	        + ' tblEmpresa."id_empresa" "tblEmpresa.id_empresa", '	        
 			+ ' tblModeloObrigacao."nome_obrigacao" "tblModeloObrigacao.nome_obrigacao", '
 			+ ' tblModeloObrigacao."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" "tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status", '
 			+ ' tblRelModeloEmpresa."id_rel_modelo_empresa" "tblRelModeloEmpresa.id_rel_modelo_empresa", '
@@ -145,7 +146,10 @@ module.exports = {
 			oWhere.push(' tblRelModeloEmpresa."fk_id_empresa.id_empresa" = ? ');
 			aParams.push(req.query.idEmpresa);
 		}
-		
+		if (req.query.idEmpresaNaQualMeRelaciono) {
+			oWhere.push(' tblEmpresa."id_empresa" = ? ');
+			aParams.push(req.query.idEmpresaNaQualMeRelaciono);
+		}		
 		if (req.query.idModelo) {
 			oWhere.push(' tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = ? ');
 			aParams.push(req.query.idModelo);

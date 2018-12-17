@@ -288,7 +288,8 @@
 					</f:Form>
 					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding">
 						<content>
-							<f:Form editable="true" visible="{/showHistorico}">
+							<!--<f:Form editable="true" visible="{/showHistorico}">-->
+							<f:Form editable="true" visible="false">
 								<!--<f:title>
 									<core:Title text="Histórico de Obrigações" />
 								</f:title>-->
