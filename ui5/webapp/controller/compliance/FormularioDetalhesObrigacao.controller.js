@@ -34,10 +34,13 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//that.getRouter().navTo("complianceListagemObrigacoes");
 							var obj = that.getModel().getProperty("/RespostaObrigacao");
-							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_obrigacao, {
-								suporteContratado: (obj.suporte_contratado === "SIM"),
-								suporteEspecificacao: obj.suporte_especificacao,
-								suporteValor: obj.suporte_valor,
+							if (obj["suporte_contratado"] == false) {
+								obj["suporte_especificacao"] = "";
+							}
+							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
+								suporteContratado: obj["suporte_contratado"],
+								suporteEspecificacao: obj["suporte_especificacao"],
+								suporteValor: obj["suporte_valor"],
 								fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
 								fkIdRelModeloEmpresa : obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
 								fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
@@ -56,14 +59,14 @@ sap.ui.define(
 				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
 					title: "Confirm",
 					onClose: function (oAction) {
-						if (sap.m.MessageBox.Action.OK !== oAction) {
+						if (sap.m.MessageBox.Action.OK === oAction) {
 							that.getRouter().navTo("complianceListagemObrigacoes");
 						}
 					}
 				});
 				//sap.m.MessageToast.show("Cancelar inserção");
 			},
-
+			
 			navToHome: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},
@@ -73,9 +76,16 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
-
+				var that = this; 
+				NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
+				if(response){
+					that.getModel().setProperty("/DominioMoeda", response);
+				}
+					
+				});
+			
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-
+				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] === "SIM" ? true : false);
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 			}
 		});

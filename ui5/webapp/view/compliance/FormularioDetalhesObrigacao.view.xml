@@ -31,7 +31,7 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<ObjectIdentifier title="{/RespostaObrigacao/id_obrigacao}" />
+											<!--<ObjectIdentifier title="{/RespostaObrigacao/id_resposta_obrigacao}" />-->
 										</l:HorizontalLayout>
 										<!--<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout>
@@ -51,7 +51,8 @@
 				<f:Form id="formularioObrigacao" 
 					editable="true">
 					<f:title>
-						<core:Title text="{i18n>formularioObrigacaoTituloObrigacao}"/>
+						<!--<core:Title text="{i18n>formularioObrigacaoTituloObrigacao}"/>-->
+						<core:Title text="{/RespostaObrigacao/nome_obrigacao}"/>
 					</f:title>
 					<f:layout>
 						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -60,26 +61,64 @@
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
+								<f:FormElement label="{i18n>ViewGeralDataInício}">
+									<f:fields>
+										<DatePicker 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/data_inicial}" 
+												enabled="false"
+												/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>ViewGeralDataFim}">
+									<f:fields>
+										<DatePicker 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/data_final}" 
+												enabled="false"
+												/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
+									<f:fields>
+										<DatePicker 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/prazo_entrega}" 
+												enabled="false"
+												/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
+									<f:fields>
+											<Input value="{/RespostaObrigacao/pais}" enabled="false" />
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement label="Suporte Contratado">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado" selected="{/RespostaObrigacao/suporteContratado}" />
+										<CheckBox id="checkSuporteContratado" selected="{/RespostaObrigacao/suporte_contratado}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
 											<TextArea 
-											value="{/RespostaObrigacao/suporteEspecificacao}"
+											value="{/RespostaObrigacao/suporte_especificacao}"
 											id="textAreaSuporte"
 											rows="5" 
-											enabled="{= ${/Obrigacao/suporte_contratado} ? true : false}"/>
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? true : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporteValor}" />
+										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}" />
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
+								<f:FormElement label="{i18n>viewGeralMoeda}">
 									<f:fields>
 										<Select 
 												id="selectTipoMoeda" 
@@ -91,17 +130,19 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralEmpresa}">
 									<f:fields>
-												<Select 
+												<!--<Select 
 												id="selectTipoEmpresa" 
 												items="{/Empresa}" 
-												selectedKey="{/RespostaObrigacao/fk_id_rel_modelo_empresa.id_rel_modelo_empresa}">
+												selectedKey="{/RespostaObrigacao/fk_id_empresa.id_empresa}">
 												<core:Item text="{nome}" key="{id_empresa}" />
-											</Select>
+												</Select>-->
+												<Input id="Empresa" value="{/RespostaObrigacao/nome}" enabled="false" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-											<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal}"	required="true" />
+											<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_calendario}" enabled="false" />
+											<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}">
@@ -110,9 +151,10 @@
 												id="datepickerAnoCalendario" 
 												placeholder="Insira uma data..." 
 												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/fk_id_dominio_ano_calendario.id_dominio_ano_calendario}" 
-												required="true"
+												value="{/RespostaObrigacao/ano_calendario}" 
+												enabled="false"
 												/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
 							</f:formElements>
