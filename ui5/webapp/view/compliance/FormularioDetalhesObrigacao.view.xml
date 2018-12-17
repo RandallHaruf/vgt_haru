@@ -101,7 +101,7 @@
 								</f:FormElement>
 								<f:FormElement label="Suporte Contratado">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado" selected="{/RespostaObrigacao/suporte_contratado}" />
+										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
@@ -115,17 +115,25 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}" />
+										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}"  type="Number" enabled="{= ${/RespostaObrigacao/suporte_contratado} ? true : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralMoeda}">
 									<f:fields>
-										<Select 
+										
+										<!--<Select 
 												id="selectTipoMoeda" 
 												items="{/DominioMoeda}" 
 												selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}">
 												<core:Item text="{nome}" key="{id_dominio_moeda}" />
-											</Select>
+											</Select>-->
+											<ComboBox
+											items="{/DominioMoeda}"
+											selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? true : false}"
+											>
+											<core:Item text="{nome}" key="{id_dominio_moeda}" />
+											</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralEmpresa}">

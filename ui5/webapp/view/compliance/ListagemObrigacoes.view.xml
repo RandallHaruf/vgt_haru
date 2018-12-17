@@ -41,35 +41,35 @@
 						count="{/Contadores/modelNaoIniciada}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
-						key="1" />
+						key="4" />
 					<IconTabFilter
 						icon="sap-icon://lateness"
 						iconColor="Neutral"
 						count="{/Contadores/modelAguardando}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
-						key="2" />
+						key="1" />
 					<IconTabFilter
 						icon="sap-icon://alert"
 						iconColor="Negative"
 						count="{/Contadores/modelEmAtraso}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
-						key="3" />
+						key="5" />
 					<IconTabFilter
 						icon="sap-icon://accept"
 						iconColor="Positive"
 						count="{/Contadores/modelEntregueNoPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
-						key="4" />
+						key="6" />
 					<IconTabFilter
 						icon="sap-icon://customer-history"
 						iconColor="Critical"
 						count="{/Contadores/modelEntregueForaPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
-						key="5" />
+						key="7" />
 				</items>
 				<content>
 					<Table
@@ -92,6 +92,10 @@
 									id="cabecalhoTabelaObrigacoes" 
 									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
 								<ToolbarSpacer />
+								<Label
+								text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
+								>
+								</Label>
 								<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
 									id="selectEmpresa" items="{/Empresa}" selectedKey="{/IdEmpresaSelecionado}"
@@ -103,6 +107,10 @@
 										<core:Item text="Empresa C"/>-->
 									</items>
 								</Select>
+								<Label
+								text="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
+								>
+								</Label>
 								<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
 									id="selectAnoCalendario" items="{/DominioAnoCalendario}" selectedKey="{/AnoCalendarioSelecionado}"
