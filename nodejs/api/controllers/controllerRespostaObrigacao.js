@@ -39,6 +39,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdDominioAnoCalendario,
 			valor: req.body.fkIdDominioAnoCalendario ? Number(req.body.fkIdDominioAnoCalendario) : null
+		}, {
+			coluna: model.colunas.fkIdDominioObrigacaoStatusResposta,
+			valor: req.body.fkIdDominioObrigacaoStatusResposta ? Number(req.body.fkIdDominioObrigacaoStatusResposta) : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -91,6 +94,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdDominioAnoCalendario,
 			valor: req.body.fkIdDominioAnoCalendario ? Number(req.body.fkIdDominioAnoCalendario) : null
+		}, {
+			coluna: model.colunas.fkIdDominioObrigacaoStatusResposta,
+			valor: req.body.fkIdDominioObrigacaoStatusResposta ? Number(req.body.fkIdDominioObrigacaoStatusResposta) : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -115,7 +121,7 @@ module.exports = {
 		});
 	},
 
-	deepQuery: function (req, res) {
+deepQuery: function (req, res) {
 
 		var sStatement = 
 		'select tblRespostaObrigacao.*,tblDominioAnoFiscal.*,tblDominioAnoCalendario.*,tblModeloObrigacao.*,tblDominioObrigacaoStatus .*,tblPais.*,tblDominioPais.*,tblPeriodicidade.*, tblEmpresa.*, '
@@ -124,6 +130,7 @@ module.exports = {
 		+ 'tblRelModeloEmpresa."id_rel_modelo_empresa", '
 		+ 'tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" statusRel, '
 		+ 'tblRelModeloEmpresa."prazo_entrega_customizado", '
+		+ 'tblRelModeloEmpresa."ind_ativo", '
 		+ 'tblDominioMoeda."id_dominio_moeda", '
 		+ 'tblDominioMoeda."acronimo", '
 		+ 'tblDominioMoeda."nome" nome_moeda '
@@ -139,7 +146,7 @@ module.exports = {
 		+ 'left outer join "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
 		+ 'on tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = tblModeloObrigacao."id_modelo" '
 		+ 'left outer join "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus '
-		+ 'on tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = tblDominioObrigacaoStatus."id_dominio_obrigacao_status" '
+		+ 'on tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" = tblDominioObrigacaoStatus."id_dominio_obrigacao_status" '
 		+ 'left outer join "VGT.PAIS" tblPais '
 		+ 'on tblModeloObrigacao."fk_id_pais.id_pais" = tblPais."id_pais" '
 		+ 'left outer join "VGT.DOMINIO_PAIS" tblDominioPais '
@@ -163,9 +170,9 @@ module.exports = {
 			aParams.push(req.query.empresa);
 		}
 		
-		if (req.query.statusRel) {
-			oWhere.push(' tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = ? ');
-			aParams.push(req.query.statusRel);
+		if (req.query.statusResp) {
+			oWhere.push(' tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" = ? ');
+			aParams.push(req.query.statusResp);
 		}
 		
 		if (req.query.tipo) {
@@ -176,6 +183,11 @@ module.exports = {
 		if (req.query.statusModelo) {
 			oWhere.push(' tblModeloObrigacao."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = ? ');
 			aParams.push(req.query.statusModelo);
+		}
+		
+		if (req.query.IndAtivoRel) {
+			oWhere.push(' tblRelModeloEmpresa."ind_ativo" = ? ');
+			aParams.push(req.query.IndAtivoRel);
 		}
 		
 		if (oWhere.length > 0) {

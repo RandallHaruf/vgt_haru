@@ -123,12 +123,12 @@ sap.ui.define(
 				};
 				
 				
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa="+oEmpresa+"&anoCalendario="+oAnoCalendario+"&statusRel="+oStatus+"&statusModelo=2", function (response) { // 1 COMPLIANCE
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa="+oEmpresa+"&anoCalendario="+oAnoCalendario+"&statusResp="+oStatus+"&statusModelo=2&IndAtivoRel="+true, function (response) { // 1 COMPLIANCE
 					if (response) {
 						var Todos=0,NaoIniciada = 0,Aguardando = 0,EmAtraso = 0,EntregueNoPrazo = 0,EntregueForaPrazo = 0;
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
-							switch(response[i]["STATUSREL"]){
+							switch(response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"]){
 								case 4:
 									NaoIniciada++;	
 									break;
