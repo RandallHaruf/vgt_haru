@@ -1,0 +1,50 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.Login"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns="sap.m"
+	class="loginView">
+	<FlexBox
+		alignItems="Center"
+		justifyContent="End"
+		class="sapUiSmallMarginTop">
+		<items>
+			<!--<VBox
+				class="sapUiLargeMarginEnd">
+				<Label 
+					text="Língua"/>
+				<Select
+					change="onLanguageChange">
+					<items>
+						<core:Item text="Inglês" key="en-US"/>
+						<core:Item text="Português" key="pt-BR"/>
+					</items>
+				</Select>
+			</VBox>-->
+		</items>
+	</FlexBox>
+	<List
+		headerText="Login" 
+		class="myLoginForm">
+		<InputListItem>
+			<Input
+				id="inputUsuario"
+				placeholder="{i18n>placeholderUsuario}"
+				type="Text" />
+		</InputListItem>
+		<InputListItem>
+			<Input
+				id="inputSenha"
+				placeholder="{i18n>placeholderSenha}"
+				type="Password" />
+		</InputListItem>
+		<InputListItem>
+			<Button
+				type="Accept"
+				text="Login"
+				icon="sap-icon://visits"
+				press="onLogin"/>
+		</InputListItem>
+	</List>
+</mvc:View>

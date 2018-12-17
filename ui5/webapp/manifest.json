@@ -83,6 +83,13 @@
 			"routes": [
 				{
 					"pattern": "",
+					"name": "login",
+					"target": [
+						"login"
+					]
+				},
+				{
+					"pattern": "selecaoModulo",
 					"name": "selecaoModulo",
 					"target": [
 						"selecaoModulo"
@@ -291,6 +298,11 @@
 				}
 			],
 			"targets": {
+				"login": {
+					"viewName": "Login",
+					"viewId": "login",
+					"viewLevel": 1
+				},
 				"selecaoModulo": {
 					"viewName": "SelecaoModulo",
 					"viewId": "selecaoModulo",
