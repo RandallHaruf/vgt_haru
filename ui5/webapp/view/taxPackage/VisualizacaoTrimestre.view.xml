@@ -248,8 +248,8 @@
 												<Input value="{valor2}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor3}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor4}" editable="false" change="onAplicarRegras" />
-												<Input value="{valorAnual}" editable="false" change="onAplicarRegras" />
-												<Input value="{valorRetificadora}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor5}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor6}" editable="false" change="onAplicarRegras" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -310,8 +310,8 @@
 												<Input value="{valor2}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor3}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor4}" editable="false" change="onAplicarRegras" />
-												<Input value="{valorAnual}" editable="false" change="onAplicarRegras" />
-												<Input value="{valorRetificadora}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor5}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor6}" editable="false" change="onAplicarRegras" />
 											</cells>
 										</ColumnListItem>
 									</items>

@@ -2337,7 +2337,7 @@ sap.ui.define(
 				this.getModel().setProperty("/IncentivosFiscais", []);
 				this.getModel().setProperty("/WHT", []);
 				this.getModel().setProperty("/Moeda", null);
-				this.getModel().setProperty("/TaxReconciliation", {});
+				this.getModel().setProperty("/TaxReconciliation", []);
 				this.getModel().setProperty("/DiferencasPermanentes", []);
 				this.getModel().setProperty("/DiferencasTemporarias", []);
 				this.getModel().setProperty("/LossSchedule", []);

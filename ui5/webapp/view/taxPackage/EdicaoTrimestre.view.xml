@@ -247,8 +247,8 @@
 												<Input value="{valor2}" editable="{= ${/Periodo/numero_ordem} === 2 ? true : false}" change="onAplicarRegras" />
 												<Input value="{valor3}" editable="{= ${/Periodo/numero_ordem} === 3 ? true : false}" change="onAplicarRegras" />
 												<Input value="{valor4}" editable="{= ${/Periodo/numero_ordem} === 4 ? true : false}" change="onAplicarRegras" />
-												<Input value="{valorAnual}" editable="{= ${/Periodo/numero_ordem} === 5 ? true : false}" change="onAplicarRegras" />
-												<Input value="{valorRetificadora}" editable="{= ${/Periodo/numero_ordem} >= 6 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor5}" editable="{= ${/Periodo/numero_ordem} === 5 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor6}" editable="{= ${/Periodo/numero_ordem} >= 6 ? true : false}" change="onAplicarRegras" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -308,8 +308,8 @@
 												<Input value="{valor2}" editable="{= ${/Periodo/numero_ordem} === 2 ? true : false}" change="onAplicarRegras" />
 												<Input value="{valor3}" editable="{= ${/Periodo/numero_ordem} === 3 ? true : false}" change="onAplicarRegras" />
 												<Input value="{valor4}" editable="{= ${/Periodo/numero_ordem} === 4 ? true : false}" change="onAplicarRegras" />
-												<Input value="{valorAnual}" editable="{= ${/Periodo/numero_ordem} === 5 ? true : false}" change="onAplicarRegras" />
-												<Input value="{valorRetificadora}" editable="{= ${/Periodo/numero_ordem} >= 6 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor5}" editable="{= ${/Periodo/numero_ordem} === 5 ? true : false}" change="onAplicarRegras" />
+												<Input value="{valor6}" editable="{= ${/Periodo/numero_ordem} >= 6 ? true : false}" change="onAplicarRegras" />
 											</cells>
 										</ColumnListItem>
 									</items>
