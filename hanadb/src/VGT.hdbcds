@@ -372,11 +372,16 @@ context VGT {
     };
 
     /*@@layout{"layoutInfo":{"x":-1304,"y":1178.5}}*/
-    entity DECLARACAO_IR {
-        key id_declaracao_ir           : Integer64;
+    entity DECLARACAO {
+        key id_declaracao              : Integer64;
             fk_rel_tax_package_periodo : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
-            fk_tax_package             : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
-            fk_periodo                 : association[0..1] to VGT.REL_TAX_PACKAGE_PERIODO;
+            nome_arquivo               : String(255);
+            dados_arquivo              : LargeBinary;
+            mimetype                   : String(255);
+            tamanho                    : Integer;
+            data_upload                : LocalDate;
+            data_envio_declaracao      : LocalDate;
+            ind_declaracao             : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":-706,"y":611.5}}*/
