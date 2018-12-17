@@ -134,11 +134,12 @@ module.exports = {
 			+ ' tblRelModeloEmpresa."id_rel_modelo_empresa" "tblRelModeloEmpresa.id_rel_modelo_empresa", '
 			+ ' tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" "tblRelModeloEmpresa.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status", '
 			+ ' tblDominioStatusObrigacao."descricao" "tblDominioStatusObrigacao.descricao",'
+	    	+ ' tblRelModeloEmpresa."ind_ativo" "tblRelModeloEmpresa.ind_ativo", '			
 	    	+ ' tblRelModeloEmpresa."prazo_entrega_customizado" "tblRelModeloEmpresa.prazo_entrega_customizado" '
 			+ ' FROM "VGT.REL_MODELO_EMPRESA" tblRelModeloEmpresa ' 
 			+ ' inner join "VGT.EMPRESA" tblEmpresa on tblRelModeloEmpresa."fk_id_empresa.id_empresa" = tblEmpresa."id_empresa" '
 			+ ' inner join "VGT.MODELO_OBRIGACAO" tblModeloObrigacao on tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = tblModeloObrigacao."id_modelo"'
-			+ ' inner join "VGT.DOMINIO_STATUS_OBRIGACAO" tblDominioStatusObrigacao on tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = tblDominioStatusObrigacao."id_status_obrigacao"';
+			+ ' left outer join "VGT.DOMINIO_STATUS_OBRIGACAO" tblDominioStatusObrigacao on tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" = tblDominioStatusObrigacao."id_status_obrigacao"';
 			
 			var oWhere = [];
 			var aParams = [];
