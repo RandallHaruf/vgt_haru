@@ -4,211 +4,210 @@
 
 -- select * from "VGT.DOMINIO_PAIS"
 
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	1,'Afghanistan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	2,'Albania');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	3,'Algeria');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	4,'Andorra');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	5,'Angola');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	6,'Antigua e Barbuda');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	7,'Argentina');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	8,'Armenia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	9,'Australia ');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	10,'Austria');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	11,'Azerbaijan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	12,'Bahamas');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	13,'Bahrain');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	14,'Bangladesh');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	15,'Barbados');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	16,'Belarus');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	17,'Belgium');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	18,'Belize');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	19,'Benin');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	20,'Bermuda');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	21,'Bhutan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	22,'Bolivia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	23,'Bosnia and Herzegovina');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	24,'Botswana');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	25,'Brazil');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	26,'Brunei');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	27,'Bulgaria');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	28,'Burquina Faso');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	29,'Burundi');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	30,'Cambodia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	31,'Cameroon');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	32,'Canada');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	33,'Cape Verde');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	34,'Cayman Islands');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	35,'Central African Republic');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	36,'Chad');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	37,'Chile');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	38,'China');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	39,'Colombia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	40,'Comoros');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	41,'Congo');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	42,'Congo');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	43,'Costa Rica');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	44,'Croatia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	45,'Cuba');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	46,'Cyprus');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	47,'Czech Republic');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	48,'Denmark');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	49,'Djibouti');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	50,'Dominica');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	51,'Dominican Republic');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	52,'East Timor');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	53,'Ecuador');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	54,'Egypt');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	55,'El Salvador');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	56,'Equatorial Guinea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	57,'Equatorial Guinea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	58,'Eritrea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	59,'Estonia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	60,'Ethiopia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	61,'Fiji');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	62,'Finland');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	63,'France');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	64,'Gabon');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	65,'Gambia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	66,'Georgia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	67,'Germany');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	68,'Ghana');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	69,'Greece');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	70,'Grenada');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	71,'Guatemala');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	72,'Guinea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	73,'Guyana');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	74,'Haiti');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	75,'Honduras');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	76,'Hungary');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	77,'Iceland');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	78,'India');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	79,'Indonesia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	80,'Iran');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	81,'Iraq');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	82,'Ireland');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	83,'Israel');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	84,'Italy');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	85,'Ivory Coast');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	86,'Jamaica');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	87,'Japan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	88,'Jersey');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	89,'Jordan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	90,'Kazakhstan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	91,'Kenya');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	92,'Kingdom of Saudi Arabia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	93,'Kiribati');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	94,'Kosovo');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	95,'Kuwait');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	96,'Kyrgyzstan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	97,'Laos');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	98,'Latvia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	99,'Lebanon');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	100,'Lesotho');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	101,'Liberia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	102,'Libya');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	103,'Liechtenstein');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	104,'Lithuania');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	105,'Luxembourg');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	106,'Macedonia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	107,'Madagascar');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	108,'Malawi');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	109,'Malaysia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	110,'Maldives');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	111,'Mali');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	112,'Malta');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	113,'Marshall Islands');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	114,'Mauritania');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	115,'Mauritius');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	116,'Mexico');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	117,'Micronesia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	118,'Moldova');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	119,'Monaco');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	120,'Mongolia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	121,'Montenegro');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	122,'Morocco');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	123,'Mozambique');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	124,'Myanmar');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	125,'Namibia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	126,'Nauru');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	127,'Nepal');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	128,'Netherlands');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	129,'New Caledonia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	130,'New Zealand');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	131,'Nicaragua');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	132,'Niger');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	133,'Nigeria');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	134,'North Korea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	135,'Norway');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	136,'Oman');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	137,'Pakistan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	138,'Palau');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	139,'Palestine');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	140,'Panama');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	141,'Papua New Guinea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	142,'Paraguay');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	143,'Peru');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	144,'Philippines');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	145,'Poland');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	146,'Portugal');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	147,'Qatar');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	148,'Romania');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	149,'Russia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	150,'Rwanda');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	151,'Saint Kitts and Nevis');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	152,'Saint Lucia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	153,'Saint Vincent and the Grenadines');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	154,'Samoa');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	155,'San Marino');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	156,'São Tomé and Príncipe');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	157,'Senegal');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	158,'Serbia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	159,'Seychelles');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	160,'Sierra Leone');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	161,'Singapore');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	162,'Slovakia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	163,'Slovenia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	164,'Solomon Islands');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	165,'Somalia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	166,'South Africa');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	167,'South Korea');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	168,'South Sudan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	169,'Spain');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	170,'Sri Lanka');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	171,'Sudan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	172,'Suriname');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	173,'Swaziland');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	174,'Sweden');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	175,'Switzerland');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	176,'Syria');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	177,'Taiwan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	178,'Taiwan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	179,'Tajikistan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	180,'Tanzania');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	181,'Thailand');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	182,'Togo');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	183,'Tonga');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	184,'Trinidad and Tobago');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	185,'Tunisia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	186,'Turkey');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	187,'Turkmenistan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	188,'Tuvalu');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	189,'Uganda');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	190,'Ukraine');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	191,'United Arab Emirates');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	192,'United Kingdom');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	193,'United States');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	194,'Uruguay');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	195,'Uzbekistan');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	196,'Vanuatu');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	197,'Vatican City');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	198,'Venezuela');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	199,'Vietnam');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	200,'Yemen');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	201,'Zambia');
-insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(	202,'Zimbabwe');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(1,'Afghanistan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(2,'South Africa');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(3,'Albania');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(4,'Germany');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(5,'Andorra');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(6,'Angola');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(7,'Antigua e Barbuda');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(8,'Kingdom of Saudi Arabia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(9,'Algeria');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(10,'Argentina');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(11,'Armenia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(12,'Australia ');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(13,'Austria');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(14,'Azerbaijan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(15,'Bahamas');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(16,'Bangladesh');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(17,'Barbados');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(18,'Bahrain');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(19,'Belgium');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(20,'Belize');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(21,'Benin');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(22,'Belarus');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(23,'Bolivia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(24,'Bosnia and Herzegovina');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(25,'Botswana');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(26,'Brazil');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(27,'Brunei');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(28,'Bulgaria');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(29,'Burquina Faso');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(30,'Burundi');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(31,'Bhutan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(32,'Cape Verde');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(33,'Cameroon');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(34,'Cambodia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(35,'Canada');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(36,'Qatar');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(37,'Kazakhstan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(38,'Chad');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(39,'Chile');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(40,'China');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(41,'Cyprus');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(42,'Colombia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(43,'Comoros');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(44,'Republic of Congo');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(45,'North Korea');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(46,'South Korea');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(47,'Kosovo');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(48,'Ivory Coast');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(49,'Costa Rica');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(50,'Croatia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(51,'Kuwait');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(52,'Cuba');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(53,'Denmark');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(54,'Dominica');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(55,'Egypt');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(56,'United Arab Emirates');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(57,'Ecuador');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(58,'Eritrea');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(59,'Slovakia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(60,'Slovenia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(61,'Spain');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(62,'Palestine');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(63,'United States');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(64,'Estonia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(65,'Ethiopia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(66,'Fiji');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(67,'Philippines');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(68,'Finland');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(69,'France');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(70,'Gabon');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(71,'Gambia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(72,'Ghana');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(73,'Georgia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(74,'Grenada');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(75,'Greece');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(76,'Guatemala');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(77,'Guyana');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(78,'Guinea');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(79,'Equatorial Guinea');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(80,'Guinea-Bissau');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(81,'Haiti');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(82,'Honduras');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(83,'Hungary');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(84,'Yemen');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(85,'Marshall Islands');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(86,'India');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(87,'Indonesia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(88,'Iran');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(89,'Iraq');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(90,'Ireland');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(91,'Iceland');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(92,'Israel');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(93,'Italy');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(94,'Jamaica');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(95,'Japan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(96,'Djibouti');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(97,'Jordan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(98,'Laos');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(99,'Lesotho');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(100,'Latvia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(101,'Lebanon');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(102,'Liberia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(103,'Libya');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(104,'Liechtenstein');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(105,'Lithuania');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(106,'Luxembourg');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(107,'Macedonia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(108,'Madagascar');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(109,'Malaysia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(110,'Malawi');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(111,'Maldives');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(112,'Mali');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(113,'Malta');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(114,'Morocco');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(115,'Mauritius');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(116,'Mauritania');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(117,'Mexico');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(118,'Myanmar');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(119,'Micronesia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(120,'Mozambique');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(121,'Moldova');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(122,'Monaco');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(123,'Mongolia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(124,'Montenegro');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(125,'Namibia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(126,'Nauru');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(127,'Nepal');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(128,'Nicaragua');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(129,'Niger');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(130,'Nigeria');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(131,'Norway');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(132,'New Zealand');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(133,'Oman');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(134,'Netherlands');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(135,'Palau');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(136,'Panama');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(137,'Papua New Guinea');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(138,'Pakistan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(139,'Paraguay');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(140,'Peru');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(141,'Poland');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(142,'Portugal');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(143,'Kenya');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(144,'Kyrgyzstan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(145,'Kiribati');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(146,'United Kingdom');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(147,'Central African Republic');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(148,'Czech Republic');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(149,'Democratic Republic of Congo');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(150,'Dominican Republic');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(151,'Romania');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(152,'Rwanda');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(153,'Russia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(154,'Solomon Islands');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(155,'El Salvador');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(156,'Samoa');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(157,'Saint Lucia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(158,'Saint Kitts and Nevis');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(159,'San Marino');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(160,'São Tomé and Príncipe');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(161,'Saint Vincent and the Grenadines');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(162,'Seychelles');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(163,'Senegal');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(164,'Sierra Leone');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(165,'Serbia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(166,'Singapore');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(167,'Syria');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(168,'Somalia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(169,'Sri Lanka');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(170,'Swaziland');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(171,'Sudan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(172,'South Sudan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(173,'Sweden');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(174,'Switzerland');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(175,'Suriname');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(176,'Thailand');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(177,'Taiwan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(178,'Tajikistan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(179,'Tanzania');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(180,'East Timor');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(181,'Togo');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(182,'Tonga');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(183,'Trinidad and Tobago');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(184,'Tunisia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(185,'Turkmenistan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(186,'Turkey');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(187,'Tuvalu');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(188,'Ukraine');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(189,'Uganda');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(190,'Uruguay');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(191,'Uzbekistan');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(192,'Vanuatu');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(193,'Vatican City');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(194,'Venezuela');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(195,'Vietnam');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(196,'Zambia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(197,'Zimbabwe');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(198,'Bermuda');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(199,'New Caledonia');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(200,'Cayman Islands');
+insert into "VGT.DOMINIO_PAIS"("id_dominio_pais", "pais") values(201,'Jersey');
 
 -- select * from "VGT.DOMINIO_MOEDA"
---Delete From "VGT.DOMINIO_MOEDA 
+
 insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values( 1 ,' AFEGANE AFEGANIST','AFN');
 insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values( 2 ,' RANDE/AFRICA SUL ','ZAR');
 insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values( 3 ,' LEK ALBANIA REP','ALL');
@@ -376,24 +375,33 @@ insert into "VGT.DOMINIO_MOEDA" ("id_dominio_moeda",  "nome", "acronimo") values
 
 -- select * from "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO"
 
-insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(1, 'Fechado Não Enviado');
-insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(2, 'Não Iniciado');
-insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(3, 'Em andamento');
-insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(4, 'Enviado');
+ 
+
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(1, 'Closed Not Sent');
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(2, 'Not Started');
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(3, 'In Progress');
+insert into "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(4, 'Sent');
+
+ 
 
 -- select * from "VGT.DOMINIO_MODULO"
+
 insert into "VGT.DOMINIO_MODULO"("id_dominio_modulo", "modulo") values(1, 'TTC');
 insert into "VGT.DOMINIO_MODULO"("id_dominio_modulo", "modulo") values(2, 'Tax Package');
 insert into "VGT.DOMINIO_MODULO"("id_dominio_modulo", "modulo") values(3, 'Compliance');
 insert into "VGT.DOMINIO_MODULO"("id_dominio_modulo", "modulo") values(4, 'Beps');
 insert into "VGT.DOMINIO_MODULO"("id_dominio_modulo", "modulo") values(5, 'Admin');
 
+ 
+
 -- select * from "VGT.DOMINIO_PAIS_STATUS"
 
-insert into "VGT.DOMINIO_PAIS_STATUS"("id_dominio_pais_status", "status") values(1, 'Tax haven');
-insert into "VGT.DOMINIO_PAIS_STATUS"("id_dominio_pais_status", "status") values(2, 'Privileged tax regime');
+insert into "VGT.DOMINIO_PAIS_STATUS"("id_dominio_pais_status", "status") values(1, 'Tax Haven');
+insert into "VGT.DOMINIO_PAIS_STATUS"("id_dominio_pais_status", "status") values(2, 'Privileged Tax Regime');
 insert into "VGT.DOMINIO_PAIS_STATUS"("id_dominio_pais_status", "status") values(3, 'Normal');
 insert into "VGT.DOMINIO_PAIS_STATUS"("id_dominio_pais_status", "status") values(4, 'Others');
+
+ 
 
 -- select * from "VGT.DOMINIO_PAIS_REGIAO"
 
@@ -404,29 +412,36 @@ insert into "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values
 insert into "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(5, 'Africa');
 insert into "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(6, 'Oceania');
 
+ 
 -- select * from "VGT.DOMINIO_ALIQUOTA_TIPO"
 
 insert into "VGT.DOMINIO_ALIQUOTA_TIPO"("id_dominio_aliquota_tipo", "tipo") values(1, 'Country');
 insert into "VGT.DOMINIO_ALIQUOTA_TIPO"("id_dominio_aliquota_tipo", "tipo") values(2, 'Entity');
 
+ 
+
 -- select * from "VGT.DOMINIO_DIFERENCA_TIPO"
 
-insert into "VGT.DOMINIO_DIFERENCA_TIPO"("id_dominio_diferenca_tipo", "tipo") values(1, 'Permanente');
-insert into "VGT.DOMINIO_DIFERENCA_TIPO"("id_dominio_diferenca_tipo", "tipo") values(2, 'Temporária');
+insert into "VGT.DOMINIO_DIFERENCA_TIPO"("id_dominio_diferenca_tipo", "tipo") values(1, 'Permanent');
+insert into "VGT.DOMINIO_DIFERENCA_TIPO"("id_dominio_diferenca_tipo", "tipo") values(2, 'Temporary');
+
+ 
 
 -- select * from "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO"
 
 insert into "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO"("id_dominio_obrigacao_acessoria_tipo", "tipo") values(1, 'Beps');
 insert into "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO"("id_dominio_obrigacao_acessoria_tipo", "tipo") values(2, 'Compliance');
 
+ 
 -- select * from "VGT.DOMINIO_TAX_CLASSIFICATION"
 
 insert into "VGT.DOMINIO_TAX_CLASSIFICATION"("id_dominio_tax_classification", "classification") values(1, 'Tax Borne');
 insert into "VGT.DOMINIO_TAX_CLASSIFICATION"("id_dominio_tax_classification", "classification") values(2, 'Tax Collected');
 
+ 
 -- select * from "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO"
 
-insert into "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO"("id_dominio_empresa_tipo_societario", "tipo_societario") values(1, 'Direct control');
+insert into "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO"("id_dominio_empresa_tipo_societario", "tipo_societario") values(1, 'Direct Control');
 insert into "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO"("id_dominio_empresa_tipo_societario", "tipo_societario") values(2, 'Indirect Control');
 insert into "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO"("id_dominio_empresa_tipo_societario", "tipo_societario") values(3, 'Representative Office');
 insert into "VGT.DOMINIO_EMPRESA_TIPO_SOCIETARIO"("id_dominio_empresa_tipo_societario", "tipo_societario") values(4, 'Branch');
@@ -442,7 +457,7 @@ insert into "VGT.DOMINIO_EMPRESA_STATUS"("id_dominio_empresa_status", "status") 
 insert into "VGT.DOMINIO_EMPRESA_STATUS"("id_dominio_empresa_status", "status") values(7, 'To be liquidated');
 insert into "VGT.DOMINIO_EMPRESA_STATUS"("id_dominio_empresa_status", "status") values(8, 'Branch');
 
--- select * from "VGT.DOMINIO_JURISDICAO"
+ -- select * from "VGT.DOMINIO_JURISDICAO"
 
 insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(1, 'Federal');
 insert into "VGT.DOMINIO_JURISDICAO"("id_dominio_jurisdicao", "jurisdicao") values(2, 'State');
@@ -461,54 +476,61 @@ insert into "VGT.DOMINIO_TIPO_TRANSACAO"("id_dominio_tipo_transacao", "tipo_tran
 insert into "VGT.DOMINIO_ACESSO_USUARIO" values (0,'User');
 insert into "VGT.DOMINIO_ACESSO_USUARIO" values (1,'Administrator');
 insert into "VGT.DOMINIO_ACESSO_USUARIO" values (2,'UserAdmin');
-
+ 
 -- VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS
 
-INSERT INTO "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" VALUES( 1, 'Waiting' );
+INSERT INTO "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" VALUES( 1, 'Pending' );
 INSERT INTO "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" VALUES( 2, 'Approved' );
-INSERT INTO "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" VALUES( 3, 'Disapproved' );
+INSERT INTO "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" VALUES( 3, 'Not Approved' );
 
 -- VGT.DOMINIO_STATUS_OBRIGACAO
-INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(1, 'Not started');
-INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(2, 'Waiting');
-INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(3, 'In arrears');
-INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(4, 'Delivered on time');
-INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(5, 'Delivered after the deadline');
+
+INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(1, 'Not Started');
+INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(2, 'Pending');
+INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(3, 'Delayed');
+INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(4, 'Delivered on Time');
+INSERT INTO "VGT.DOMINIO_STATUS_OBRIGACAO" VALUES(5, 'Delivered After Deadline');
 
 -- VGT.DOMINIO_PERIODICIDADE_OBRIGACAO
 INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(1,'Weekly');
-INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(2,'Fortnightly');
-INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(3,'Quarterly');
-INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(4,'Monthly');
-INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(5,'Semester');
-INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(6,'Yearly');
+INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(2,'Biweekly');
+INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(3,'Monthly');
+INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(4,'Bimonthly');
+INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(5,'Quarterly');
+INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(6,'Biannual');
+INSERT INTO "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" VALUES(7,'Annual');
 
+ 
 -- VGT.DOMINIO_SCHEDULE_TIPO
+
 INSERT INTO "VGT.DOMINIO_SCHEDULE_TIPO" VALUES(1, 'Loss');
 INSERT INTO "VGT.DOMINIO_SCHEDULE_TIPO" VALUES(2, 'Credit');
 
+ 
+
 -- VGT.DOMINIO_APROVACAO_OBRIGACAO
-insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (1,'Waiting');
+
+insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (1,'Pending');
 insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (2,'Approved');
-insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (3,'Disapproved');
+insert into "VGT.DOMINIO_APROVACAO_OBRIGACAO" VALUES (3,'Not Approved');
 
-
+ 
 -- VGT.DOMINIO_OBRIGACAO_STATUS
-insert into "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES (1,'Waiting');
+
+insert into "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES (1,'Pending');
 insert into "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES (2,'Active');
 insert into "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES (3,'Excluded');
-INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(4, 'Not started');
-INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(5, 'In arrears');
-INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(6, 'Delivered on time');
-INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(7, 'Delivered after the deadline');
-
+INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(4, 'Not Started');
+INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(5, 'Delayed');
+INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(6, 'Delivered on Time');
+INSERT INTO "VGT.DOMINIO_OBRIGACAO_STATUS" VALUES(7, 'Delivered After Deadline');
 
 -- VGT.DOMINIO_TIPO_TAXA_MULTIPLA
-insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (1, 'Other Taxes');
-insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (2, 'Incentivos Fiscais');
-insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (3, 'WHT');
-insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (4, 'Outras Antecipações');
 
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (1, 'Other Taxes');
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (2, 'Tax Incentives');
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (3, 'WHT');
+insert into "VGT.DOMINIO_TIPO_TAXA_MULTIPLA"("id_dominio_tipo_taxa_multipla", "tipo_taxa_multipla") values (4, 'Interim Taxes Payments');
 -- VGT.DOMINIO_ANO_CALENDARIO
 insert into "VGT.DOMINIO_ANO_CALENDARIO"("id_dominio_ano_calendario", "ano_calendario") values(1, 2010);
 insert into "VGT.DOMINIO_ANO_CALENDARIO"("id_dominio_ano_calendario", "ano_calendario") values(2, 2011);
