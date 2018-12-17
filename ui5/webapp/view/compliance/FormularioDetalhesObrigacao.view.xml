@@ -109,7 +109,7 @@
 												/>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
+								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 									<f:fields>
 											<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
 									</f:fields>
