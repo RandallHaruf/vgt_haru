@@ -118,12 +118,15 @@ module.exports = {
 	deepQuery: function (req, res) {
 
 		var sStatement = 
-		'select tblRespostaObrigacao.*,tblDominioMoeda.*,tblDominioAnoFiscal.*,tblDominioAnoCalendario.*,tblModeloObrigacao.*,tblDominioObrigacaoStatus .*,tblPais.*,tblDominioPais.*,tblPeriodicidade.*, '
+		'select tblRespostaObrigacao.*,tblDominioAnoFiscal.*,tblDominioAnoCalendario.*,tblModeloObrigacao.*,tblDominioObrigacaoStatus .*,tblPais.*,tblDominioPais.*,tblPeriodicidade.*, tblEmpresa.*, '
 		+ 'tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo", '
 		+ 'tblRelModeloEmpresa."fk_id_empresa.id_empresa", '
 		+ 'tblRelModeloEmpresa."id_rel_modelo_empresa", '
 		+ 'tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" statusRel, '
-		+ 'tblRelModeloEmpresa."prazo_entrega_customizado" '
+		+ 'tblRelModeloEmpresa."prazo_entrega_customizado", '
+		+ 'tblDominioMoeda."id_dominio_moeda", '
+		+ 'tblDominioMoeda."acronimo", '
+		+ 'tblDominioMoeda."nome" nome_moeda '
 		+ 'from "VGT.RESPOSTA_OBRIGACAO" tblRespostaObrigacao ' 
 		+ 'left outer join "VGT.DOMINIO_MOEDA" tblDominioMoeda '
 		+ 'on tblRespostaObrigacao."fk_id_dominio_moeda.id_dominio_moeda" = tblDominioMoeda."id_dominio_moeda" '
@@ -142,7 +145,9 @@ module.exports = {
 		+ 'left outer join "VGT.DOMINIO_PAIS" tblDominioPais '
 		+ 'on tblPais."fk_dominio_pais.id_dominio_pais" = tblDominioPais."id_dominio_pais" '
 		+ 'left outer join "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" tblPeriodicidade '
-		+ 'on tblModeloObrigacao."fk_id_dominio_periodicidade.id_periodicidade_obrigacao" = tblPeriodicidade."id_periodicidade_obrigacao" ';
+		+ 'on tblModeloObrigacao."fk_id_dominio_periodicidade.id_periodicidade_obrigacao" = tblPeriodicidade."id_periodicidade_obrigacao" '
+		+ 'left outer join "VGT.EMPRESA" tblEmpresa '
+		+ 'on tblRelModeloEmpresa."fk_id_empresa.id_empresa" = tblEmpresa."id_empresa" ';
 		
 		
 		var oWhere = [];
