@@ -44,10 +44,50 @@ sap.ui.define(
 					});
 				}
 			},
+			onChangeTin: function(oEvent){
+				var obj = this.getModel().getProperty("/objeto");	
+				if (obj["tin"]) {
+					obj["valueStateJurisdicaoTin"] = sap.ui.core.ValueState.Error;
+				}
+				else {
+					obj["valueStateJurisdicaoTin"] = sap.ui.core.ValueState.None;
+					obj["jurisdicao_tin"] = "";
+				}
+			},
 			
+			onChangeNi: function(oEvent){
+				var obj = this.getModel().getProperty("/objeto");	
+				if (obj["ni"]) {
+					obj["valueStateJurisdicaoNi"] = sap.ui.core.ValueState.Error;
+				}
+				else {
+					obj["valueStateJurisdicaoNi"] = sap.ui.core.ValueState.None;
+					obj["jurisdicao_ni"] = "";
+				}
+			},
+			
+			onPreencherJurisdicaoTin: function(oEvent){
+				var obj = this.getModel().getProperty("/objeto");
+				if(!obj["jurisdicao_tin"]){
+					obj["valueStateJurisdicaoTin"] = sap.ui.core.ValueState.Error;
+				}
+				else{
+					obj["valueStateJurisdicaoTin"] = sap.ui.core.ValueState.None;
+				}
+			},
+			
+			onPreencherJurisdicaoNi: function(oEvent){
+				var obj = this.getModel().getProperty("/objeto");	
+				if(!obj["jurisdicao_ni"]){
+					obj["valueStateJurisdicaoNi"] = sap.ui.core.ValueState.Error;
+				} else{
+					obj["valueStateJurisdicaoNi"] = sap.ui.core.ValueState.None;
+				}
+			},
 			_nomeColunaIdentificadorNaListagemObjetos: "id_empresa",
 			
 			_validarFormulario: function () {
+                var obj = this.getModel().getProperty("/objeto");
 				
 				var sIdFormulario = "#" + this.byId("formularioObjeto").getDomRef().id;
 				
@@ -64,6 +104,17 @@ sap.ui.define(
 					sEmail: this.byId("inputLBCEmail").getValue()
 				});
 				
+                var continua = true;
+				if(obj["ni"] && !obj["jurisdicao_ni"]){
+					continua = false;
+					oValidacao.mensagem = "- Os campos destacados são de preenchimento obrigatório";
+				}
+				if(obj["tin"] && !obj["jurisdicao_tin"]){
+					continua = false;
+					oValidacao.mensagem = "- Os campos destacados são de preenchimento obrigatório";
+				}
+				
+				oValidacao.formularioValido = (oValidacao.formularioValido && continua);
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
 						title: "Aviso"
