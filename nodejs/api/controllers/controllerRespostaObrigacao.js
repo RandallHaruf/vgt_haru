@@ -207,7 +207,15 @@ deepQuery: function (req, res) {
 			}
 		}
 		
-		sStatement += ' order by tblDominioAnoFiscal."ano_fiscal" desc ';
+		if(req.query.ListarAteAnoAtual){
+			if (oWhere.length > 0) {
+				sStatement += ' and tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ';		
+			}		
+			else{
+				sStatement += ' where tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ';
+			}
+		}	
+		
 
 		model.execute({
 		statement: sStatement,
