@@ -565,7 +565,7 @@ sap.ui.define(
 
 					Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDeclaracao", oData)
 						.then(function (response) {
-							sap.m.MessageToast.show(response);
+							//sap.m.MessageToast.show(response);
 							that._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
 							oFileUploader.setValue("");
 							oBtnEnviar.setEnabled(true);
@@ -625,7 +625,7 @@ sap.ui.define(
 	
 					Arquivo.excluir("ExcluirDeclaracao/" + oArquivo.id_declaracao)
 						.then(function (response) {
-							sap.m.MessageToast.show(response);
+							//sap.m.MessageToast.show(response);
 							that._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
 							
 							oArquivo.btnExcluirEnabled = true;
