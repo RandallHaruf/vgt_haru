@@ -1186,7 +1186,7 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 	for (var i = 0, length = aAntecipacao.length; i < length; i++) {
 		var oAntecipacao = aAntecipacao[i];
 		
-		if (!oAntecipacao.id_antecipacao) {
+		if (!oAntecipacao.id_antecipacao && oAntecipacao.selecionado) {
 			sQuery = 
 				'insert into "VGT.ANTECIPACAO"( '
 				+ '"id_antecipacao", '
