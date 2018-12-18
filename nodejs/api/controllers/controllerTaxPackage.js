@@ -1032,86 +1032,88 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 function inserirSchedule(oSchedule) {
 	var sQuery, aParams;
 	
-	if (oSchedule.id_schedule) {
-		sQuery = 
-			'update "VGT.SCHEDULE" '
-			+ 'set "fy" = ?, '
-			+ '"year_of_expiration" = ?, '
-			+ '"opening_balance" = ?, '
-			+ '"adjustments" = ?, '
-			+ '"justificativa" = ?, '
-			+ '"closing_balance" = ?, '
-			+ '"obs" = ?, '
-			+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?, '
-			+ '"current_year_value" = ?, '
-			+ '"current_year_value_utilized" = ?, '
-			+ '"current_year_value_expired" = ?, '
-			+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? '
-			+ 'where "id_schedule" = ? ';
-		aParams = [
-			oSchedule.fy,
-			oSchedule.year_of_expiration,
-			oSchedule.opening_balance,
-			oSchedule.adjustments,
-			oSchedule.justificativa,
-			oSchedule.closing_balance,
-			oSchedule.obs,
-			oSchedule["fk_rel_tax_package_periodo.id_rel_tax_package_periodo"],
-			oSchedule.current_year_value,
-			oSchedule.current_year_value_utilized,
-			oSchedule.current_year_value_expired,
-			oSchedule["fk_dominio_schedule_tipo.id_dominio_schedule_tipo"],
-			oSchedule.id_schedule
-		];
+	if (oSchedule) {
+		if (oSchedule.id_schedule) {
+			sQuery = 
+				'update "VGT.SCHEDULE" '
+				+ 'set "fy" = ?, '
+				+ '"year_of_expiration" = ?, '
+				+ '"opening_balance" = ?, '
+				+ '"adjustments" = ?, '
+				+ '"justificativa" = ?, '
+				+ '"closing_balance" = ?, '
+				+ '"obs" = ?, '
+				+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?, '
+				+ '"current_year_value" = ?, '
+				+ '"current_year_value_utilized" = ?, '
+				+ '"current_year_value_expired" = ?, '
+				+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? '
+				+ 'where "id_schedule" = ? ';
+			aParams = [
+				oSchedule.fy,
+				oSchedule.year_of_expiration,
+				oSchedule.opening_balance,
+				oSchedule.adjustments,
+				oSchedule.justificativa,
+				oSchedule.closing_balance,
+				oSchedule.obs,
+				oSchedule["fk_rel_tax_package_periodo.id_rel_tax_package_periodo"],
+				oSchedule.current_year_value,
+				oSchedule.current_year_value_utilized,
+				oSchedule.current_year_value_expired,
+				oSchedule["fk_dominio_schedule_tipo.id_dominio_schedule_tipo"],
+				oSchedule.id_schedule
+			];
+		}
+		else {
+			sQuery  = 
+				'INSERT INTO "VGT.SCHEDULE"("id_schedule", '
+				+ '"fy", '
+				+ '"year_of_expiration", '
+				+ '"opening_balance", '
+				+ '"adjustments", '
+				+ '"justificativa", '
+				+ '"closing_balance", '
+				+ '"obs", '
+				+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo", '
+				+ '"current_year_value", '
+				+ '"current_year_value_utilized", '
+				+ '"current_year_value_expired", '
+				+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo") '
+				+ ' VALUES( '
+				+ '"identity_VGT.SCHEDULE_id_schedule".nextval, '
+				+ '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) '; 
+				/*id_schedule <BIGINT>*/
+				/*fy <INTEGER>*/
+				/*year_of_expiration <INTEGER>*/
+				/*opening_balance <DECIMAL>*/
+				/*adjustments <DECIMAL>*/
+				/*justificativa <NVARCHAR(500)>*/
+				/*closing_balance <DECIMAL>*/
+				/*obs <NVARCHAR(500)>*/
+				/*fk_rel_tax_package_periodo.id_rel_tax_package_periodo <BIGINT>*/
+				/*current_year_value <DECIMAL>*/
+				/*current_year_value_utilized <DECIMAL>*/
+				/*current_year_value_expired <DECIMAL>*/
+				/*fk_dominio_schedule_tipo.id_dominio_schedule_tipo <BIGINT>*/
+			aParams = [
+				oSchedule.fy,
+				oSchedule.year_of_expiration,
+				oSchedule.opening_balance,
+				oSchedule.adjustments,
+				oSchedule.justificativa,
+				oSchedule.closing_balance,
+				oSchedule.obs,
+				oSchedule["fk_rel_tax_package_periodo.id_rel_tax_package_periodo"],
+				oSchedule.current_year_value,
+				oSchedule.current_year_value_utilized,
+				oSchedule.current_year_value_expired,
+				oSchedule["fk_dominio_schedule_tipo.id_dominio_schedule_tipo"]
+			];
+		}
+		
+		db.executeStatementSync(sQuery, aParams);
 	}
-	else {
-		sQuery  = 
-			'INSERT INTO "VGT.SCHEDULE"("id_schedule", '
-			+ '"fy", '
-			+ '"year_of_expiration", '
-			+ '"opening_balance", '
-			+ '"adjustments", '
-			+ '"justificativa", '
-			+ '"closing_balance", '
-			+ '"obs", '
-			+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo", '
-			+ '"current_year_value", '
-			+ '"current_year_value_utilized", '
-			+ '"current_year_value_expired", '
-			+ '"fk_dominio_schedule_tipo.id_dominio_schedule_tipo") '
-			+ ' VALUES( '
-			+ '"identity_VGT.SCHEDULE_id_schedule".nextval, '
-			+ '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) '; 
-			/*id_schedule <BIGINT>*/
-			/*fy <INTEGER>*/
-			/*year_of_expiration <INTEGER>*/
-			/*opening_balance <DECIMAL>*/
-			/*adjustments <DECIMAL>*/
-			/*justificativa <NVARCHAR(500)>*/
-			/*closing_balance <DECIMAL>*/
-			/*obs <NVARCHAR(500)>*/
-			/*fk_rel_tax_package_periodo.id_rel_tax_package_periodo <BIGINT>*/
-			/*current_year_value <DECIMAL>*/
-			/*current_year_value_utilized <DECIMAL>*/
-			/*current_year_value_expired <DECIMAL>*/
-			/*fk_dominio_schedule_tipo.id_dominio_schedule_tipo <BIGINT>*/
-		aParams = [
-			oSchedule.fy,
-			oSchedule.year_of_expiration,
-			oSchedule.opening_balance,
-			oSchedule.adjustments,
-			oSchedule.justificativa,
-			oSchedule.closing_balance,
-			oSchedule.obs,
-			oSchedule["fk_rel_tax_package_periodo.id_rel_tax_package_periodo"],
-			oSchedule.current_year_value,
-			oSchedule.current_year_value_utilized,
-			oSchedule.current_year_value_expired,
-			oSchedule["fk_dominio_schedule_tipo.id_dominio_schedule_tipo"]
-		];
-	}
-	
-	db.executeStatementSync(sQuery, aParams);
 }
 
 function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes) {

@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI) {
+	function (BaseController, NodeAPI,Utils) {
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
@@ -34,6 +35,25 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//that.getRouter().navTo("complianceListagemObrigacoes");
 							var obj = that.getModel().getProperty("/RespostaObrigacao");
+							
+							//Verificar se a data atual já passou para colocar status como em atraso
+							if(obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 || obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1){
+								if(obj["prazo_entrega_customizado"]){
+									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega_customizado"]);	
+								}
+								else{
+									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);	
+								}
+								var dataAtual = new Date();
+								if (dataAtual > dataPrazo) {
+									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
+								}
+								else {
+									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
+								}
+							}
+							
+							
 							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
 								suporteContratado: obj["suporte_contratado"],
 								suporteEspecificacao: obj["suporte_especificacao"],
@@ -41,7 +61,8 @@ sap.ui.define(
 								fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
 								fkIdRelModeloEmpresa : obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
 								fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-								fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"]
+								fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
+								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"]
 							}, function (response) {
 								that.getRouter().navTo("complianceListagemObrigacoes");
 							});

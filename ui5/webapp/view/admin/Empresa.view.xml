@@ -139,7 +139,7 @@
 											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais" />
 										</f:label>
 										<f:fields>
-											<ComboBox id="comboboxPais" items="{/Pais}" selectionChange="onSelectChange" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
+											<ComboBox id="comboboxPais" items="{/Pais}" selectionChange="onSelectChange" selectedKey="{/objeto/fk_pais.id_pais}" required="true" enabled="{=${/isUpdate}===true?false:true}">
 												<core:Item text="{nomePais}" key="{id}" />
 											</ComboBox>
 										</f:fields>
@@ -277,7 +277,7 @@
 											<table:Column>
 												<Label text="{i18n>viewEmpresaDataCustomizada}" />
 												<table:template>
-													<DatePicker valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="true" />
+													<DatePicker valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= ${selecionada} === true ? true : false }" />
 												</table:template>
 											</table:Column>											
 										</table:columns>
@@ -286,7 +286,7 @@
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>
-					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding">
+					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding" visible="false">
 						<content>
 							<!--<f:Form editable="true" visible="{/showHistorico}">-->
 							<f:Form editable="true" visible="false">
@@ -351,9 +351,9 @@
 							</f:Form>
 						</content>
 					</Panel>
-					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding">
+					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= !${/showHistorico}}">
 						<content>
-							<f:Form editable="true" visible="{/showHistorico}">
+							<f:Form editable="true" >
 								<!--<f:title>
 									<core:Title text="Histórico de Alíquotas" />
 								</f:title>-->
