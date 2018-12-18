@@ -255,10 +255,15 @@ sap.ui.define(
 			onSelectChange: function () {
 				var that = this;	
 				var obj = this.getModel().getProperty("/objeto/fk_pais.id_pais");
-				
-				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + obj, function (response) {
-					that.getModel().setProperty("/ModeloObrigacao", response);	
-				});	
+				if(obj){
+					NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + obj, function (response) {
+						that.getModel().setProperty("/ModeloObrigacao", response);	
+					});						
+				}
+				else{
+					that.getModel().setProperty("/ModeloObrigacao", {});
+				}
+
 			},
 			
 			_carregarCamposFormulario: function () {

@@ -139,8 +139,8 @@
 											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais" />
 										</f:label>
 										<f:fields>
-											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
-												<core:Item text="{nomePais}" key="{id}" />
+											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" required="true" selectionChange="onSelectChange">
+												<core:Item text="{nomePais}" key="{id}"/>
 											</ComboBox>
 										</f:fields>
 									</f:FormElement>
