@@ -113,7 +113,7 @@ sap.ui.define(
 				});
 			
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] === "SIM" ? true : false);
+				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] == 1 ? true : false);
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 			}
 		});
