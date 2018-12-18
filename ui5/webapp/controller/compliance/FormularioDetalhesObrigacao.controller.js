@@ -38,14 +38,17 @@ sap.ui.define(
 							
 							//Verificar se a data atual já passou para colocar status como em atraso
 							if(obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 || obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1){
-								if(obj["prazo_entrega_customizado"]){
+								if(obj["data_extensao"]){
+									var dataPrazo = Utils.bancoParaJsDate(obj["data_extensao"]);	
+								}else if(obj["prazo_entrega_customizado"]){
 									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega_customizado"]);	
 								}
 								else{
 									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);	
 								}
 								var dataAtual = new Date();
-								if (dataAtual > dataPrazo) {
+								dataAtual = new Date(dataAtual.getFullYear(),dataAtual.getMonth(),dataAtual.getDate()+1,0,0,0,0);
+								if (dataAtual <= dataPrazo) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
 								}
 								else {
@@ -115,6 +118,7 @@ sap.ui.define(
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] == 1 ? true : false);
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
+				that.getModel().setProperty("/JaEstavaPreenchido",(oParametros.Obrigacao["data_extensao"] ? true : false));
 			}
 		});
 	}
