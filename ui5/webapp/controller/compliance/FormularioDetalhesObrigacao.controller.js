@@ -62,7 +62,8 @@ sap.ui.define(
 								fkIdRelModeloEmpresa : obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
 								fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
 								fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"]
+								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
+								dataExtensao: obj["data_extensao"]
 							}, function (response) {
 								that.getRouter().navTo("complianceListagemObrigacoes");
 							});

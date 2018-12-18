@@ -185,7 +185,9 @@
 									<Text text="{= ${prazo_entrega_customizado} !== null 
 									? ${prazo_entrega_customizado}.substring(8,10)+'/'+${prazo_entrega_customizado}.substring(5,7)+'/'+${ano_fiscal} 
 									: ${prazo_entrega}.substring(8,10)+'/'+${prazo_entrega}.substring(5,7)+'/'+${ano_fiscal}}"/>
-									<Text text="{data_extensao}"/>
+									<Text text="{= ${data_extensao} !== null 
+									? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${ano_fiscal} 
+									: null}"/>
 									<Text text="{ano_fiscal}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>
