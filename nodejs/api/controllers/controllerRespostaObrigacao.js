@@ -136,7 +136,6 @@ deepQuery: function (req, res) {
 		+ 'tblRelModeloEmpresa."id_rel_modelo_empresa", '
 		+ 'tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" statusRel, '
 		+ 'tblRelModeloEmpresa."prazo_entrega_customizado", '
-		+ 'tblRelModeloEmpresa."data_extensao", '
 		+ 'tblRelModeloEmpresa."ind_ativo", '
 		+ 'tblDominioMoeda."id_dominio_moeda", '
 		+ 'tblDominioMoeda."acronimo", '
