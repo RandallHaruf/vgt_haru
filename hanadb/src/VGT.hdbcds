@@ -587,6 +587,7 @@ context VGT {
         fk_id_dominio_ano_fiscal                : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
         fk_id_dominio_ano_calendario            : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
         fk_id_dominio_obrigacao_status_resposta : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
+        data_extensao                           : LocalDate;
     };
 
     /*@@layout{"layoutInfo":{"x":1019,"y":817.5}}*/

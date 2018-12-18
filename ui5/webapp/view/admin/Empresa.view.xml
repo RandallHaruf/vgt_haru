@@ -286,7 +286,7 @@
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>
-					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding">
+					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding" visible="false">
 						<content>
 							<!--<f:Form editable="true" visible="{/showHistorico}">-->
 							<f:Form editable="true" visible="false">
@@ -351,9 +351,9 @@
 							</f:Form>
 						</content>
 					</Panel>
-					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding">
+					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= !${/showHistorico}}">
 						<content>
-							<f:Form editable="true" visible="{/showHistorico}">
+							<f:Form editable="true" >
 								<!--<f:title>
 									<core:Title text="Histórico de Alíquotas" />
 								</f:title>-->

@@ -35,7 +35,10 @@ var oSketch = {
 		fkIdDominioObrigacaoStatusResposta:{
 			nome: "fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status",
 			number: true
-		}
+		},
+		dataExtensao:{
+			nome: "data_extensao"
+		}		
 	} 	
 };
 
