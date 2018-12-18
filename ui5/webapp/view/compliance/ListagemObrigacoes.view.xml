@@ -182,8 +182,10 @@
 								press="onDetalharObrigacao">
 								<cells>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
-									<Text text="{prazo_entrega}"/>
-									<Text text="{prazo_entrega_customizado}"/>
+									<Text text="{= ${prazo_entrega_customizado} !== null 
+									? ${prazo_entrega_customizado}.substring(8,10)+'/'+${prazo_entrega_customizado}.substring(5,7)+'/'+${ano_fiscal} 
+									: ${prazo_entrega}.substring(8,10)+'/'+${prazo_entrega}.substring(5,7)+'/'+${ano_fiscal}}"/>
+									<Text text="{data_extensao}"/>
 									<Text text="{ano_fiscal}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>

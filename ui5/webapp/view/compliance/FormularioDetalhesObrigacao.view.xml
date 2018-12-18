@@ -104,8 +104,8 @@
 											<DatePicker 
 												placeholder="Insira uma data..." 
 												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/prazo_entrega_customizado}" 
-												enabled="false"
+												value="{/RespostaObrigacao/data_extensao}" 
+												enabled="true"
 												/>
 									</f:fields>
 								</f:FormElement>
@@ -164,7 +164,7 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-											<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_calendario}" enabled="false" />
+											<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal}" enabled="false" />
 											<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
