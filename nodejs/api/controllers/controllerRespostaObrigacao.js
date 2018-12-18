@@ -167,7 +167,7 @@ deepQuery: function (req, res) {
 		var aParams = [];
 		
 		if (req.query.anoCalendario) {
-			oWhere.push(' tblRespostaObrigacao."fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal" = ? ');
+			oWhere.push(' tblRespostaObrigacao."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ? ');
 			aParams.push(req.query.anoCalendario);
 		}
 		

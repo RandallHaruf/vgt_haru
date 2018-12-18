@@ -78,7 +78,7 @@
 						id="formularioObjeto" 
 						editable="true">
 						<f:title>
-							<core:Title text="Empresa"/>
+			                <core:Title text="{i18n>viewGeralEmpresa}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -103,27 +103,27 @@
 											<Input id="inputHFMSAP" value="{/objeto/num_hfm_sap}" required="true" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="TIN (Tax Identification Number)">
+									<f:FormElement label="{i18n>viewEmpresasTINTaxIdentificationNumber}" >
 										<f:fields>
-											<Input id="inputTIN" value="{/objeto/tin}" />
+											<Input id="inputTIN" value="{/objeto/tin}" change="onChangeTin"  />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasJurisdicaoT}">
 										<f:fields>
-											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" />
+											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" enabled="{= ${/objeto/tin} ?  true : false }" valueState="{/objeto/valueStateJurisdicaoTin}" change="onPreencherJurisdicaoTin" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="NI (Tax Identification Number)">
+									<f:FormElement label="{i18n>viewEmpresasNITaxIdentificationNumber}">
 										<f:fields>
-											<Input id="inputNI" value="{/objeto/ni}" />
+											<Input id="inputNI" value="{/objeto/ni}"  change="onChangeNi"  />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasJurisdicaoN}" labelFor="inputJurisdicaoNI" />
+											<Label text="{i18n>viewEmpresasJurisdicaoN}" labelFor="inputJurisdicaoNI"  />
 										</f:label>
 										<f:fields>
-											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}" required="true" />
+											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}"  enabled="{= ${/objeto/ni} ?  true : false }" valueState="{/objeto/valueStateJurisdicaoNi}" change="onPreencherJurisdicaoNi" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -139,14 +139,14 @@
 											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais" />
 										</f:label>
 										<f:fields>
-											<ComboBox id="comboboxPais" items="{/Pais}" selectionChange="onSelectChange" selectedKey="{/objeto/fk_pais.id_pais}" required="true" enabled="{=${/isUpdate}===true?false:true}">
+											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" required="true">
 												<core:Item text="{nomePais}" key="{id}" />
 											</ComboBox>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Tipo Societário" class="sapMLabelRequired" />
+											<Label text="{i18n>viewDetalhesDaEmpresaVinculadaTipoSocietario}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select 
@@ -159,19 +159,19 @@
 									</f:FormElement>
 								<f:FormElement>
 										<f:label>
-											<Label text="FY Start/End Date" />
+											<Label text="{i18n>viewRelatorioAnoFiscal}" />
 										</f:label>
 										<f:fields>
 											<DatePicker 
 												id="datepickerStartDate" 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/objeto/fy_start_date}" 
 												required="true"
 												change="onTrocarData" />
 											<DatePicker 
 												id="datepickerEndDate" 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/objeto/fy_end_date}"
 												required="true"
@@ -286,7 +286,7 @@
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>
-					<Panel headerText="{i18n>viewEmpresasHistóricoObrigacoes}" expandable="true" class="sapUiNoContentPadding" visible="false">
+					<Panel headerText="{i18n>viewEmpresasHistoricoObrigacoes}" expandable="true" class="sapUiNoContentPadding" visible="false">
 						<content>
 							<!--<f:Form editable="true" visible="{/showHistorico}">-->
 							<f:Form editable="true" visible="false">
@@ -351,7 +351,7 @@
 							</f:Form>
 						</content>
 					</Panel>
-					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= ${/showHistorico}}">
+					<Panel headerText="{i18n>viewEmpresasHistoricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= ${/showHistorico}}">
 						<content>
 							<f:Form editable="true" >
 								<!--<f:title>
