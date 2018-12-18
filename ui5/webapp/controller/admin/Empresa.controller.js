@@ -385,8 +385,6 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
 					//response.unshift({ });
 					that.getModel().setProperty("/DmenosXAnos", resposta);	
-				});				
-				
 				NodeAPI.atualizarRegistro("Empresa", sIdObjeto, {
 					nome: obj["nome"],
 					numHFMSAP: obj["num_hfm_sap"],
@@ -469,7 +467,10 @@ sap.ui.define(
 						that._resolverHistoricoAliquota(function () {
 							that._navToPaginaListagem();			
 						});
-					});
+					});					
+				});				
+				
+
 			},
 			
 			_inserirObjeto: function () {
@@ -480,79 +481,80 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
 					//response.unshift({ });
 					that.getModel().setProperty("/DmenosXAnos", resposta);	
-				});
-				
-				this.byId("btnSalvar").setEnabled(false);
-				
-				NodeAPI.criarRegistro("Empresa", {
-					nome: obj["nome"],
-					numHFMSAP: obj["num_hfm_sap"],
-					tin: obj["tin"],
-					jurisdicaoTIN: obj["jurisdicao_tin"],
-					ni: obj["ni"],
-					jurisdicaoNi: obj["jurisdicao_ni"],
-					endereco: obj["endereco"],
-					fyStartDate: obj["fy_start_date"],
-					fyEndDate: obj["fy_end_date"],
-					lbcNome: obj["lbc_nome"],
-					lbcEmail: obj["lbc_email"],
-					comentarios: obj["comentarios"],
-					fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
-					fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
-					fkAliquota: obj["fk_aliquota.id_aliquota"],
-					fkPais: obj["fk_pais.id_pais"]/*,
-					obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())9*/
-				}, function (response) {
-					that.byId("btnSalvar").setEnabled(true);
-					var then = that;
-					var modelosObrigacao = that.getModel().getProperty("/ModeloObrigacao");	
-					//Cria o Registro de Rel_Modelo_Empresa
-					for (var k = 0; k < modelosObrigacao.length; k++) {
-						if(modelosObrigacao[k]["selecionada"] !== undefined){
-							NodeAPI.criarRegistro("RelModeloEmpresa",{
-								fkIdModeloObrigacao: modelosObrigacao[k]["tblModeloObrigacao.id_modelo"],
-								fkIdEmpresa: JSON.parse(response)[0].generated_id,//modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-								prazoEntregaCustomizado: modelosObrigacao[k]["data_selecionada"],
-								indAtivo: true
-							},function (res){
-								var DmenosX = then.getModel().getProperty("/DmenosXAnos");
-								var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
-									for (var i = 0; i < AnoCalendario.length; i++) {
-										var oAnoCalendario = AnoCalendario[i];
-										NodeAPI.criarRegistro("RespostaObrigacao",{
-											suporteContratado: null,
-											suporteEspecificacao: null,
-											suporteValor: null,
-											dataExtensao: null,											
-											fkIdDominioMoeda: null,
-											fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
-											fkIdDominioObrigacaoStatusResposta: 4,											
-											fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-											fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] 
-										},function(re){
-											
-										});
-									}
-							});
-						}	
-					}
+					that.byId("btnSalvar").setEnabled(false);
 					
-					// Se foi selecionada uma alíquota válida na criação da empresa
-					if (obj["fk_aliquota.id_aliquota"] && obj["fk_aliquota.id_aliquota"] > 0) {
-						// Cria seu registro inicial de histórico
-						NodeAPI.criarRegistro("HistoricoEmpresaAliquota", {
-							fkEmpresa: JSON.parse(response)[0].generated_id,
-							fkAliquota: obj["fk_aliquota.id_aliquota"],
-							dataInicio: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate()
-						}, function (resp) {
+					NodeAPI.criarRegistro("Empresa", {
+						nome: obj["nome"],
+						numHFMSAP: obj["num_hfm_sap"],
+						tin: obj["tin"],
+						jurisdicaoTIN: obj["jurisdicao_tin"],
+						ni: obj["ni"],
+						jurisdicaoNi: obj["jurisdicao_ni"],
+						endereco: obj["endereco"],
+						fyStartDate: obj["fy_start_date"],
+						fyEndDate: obj["fy_end_date"],
+						lbcNome: obj["lbc_nome"],
+						lbcEmail: obj["lbc_email"],
+						comentarios: obj["comentarios"],
+						fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
+						fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
+						fkAliquota: obj["fk_aliquota.id_aliquota"],
+						fkPais: obj["fk_pais.id_pais"]/*,
+						obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())9*/
+					}, function (response) {
+						that.byId("btnSalvar").setEnabled(true);
+						var then = that;
+						var modelosObrigacao = that.getModel().getProperty("/ModeloObrigacao");	
+						//Cria o Registro de Rel_Modelo_Empresa
+						for (var k = 0; k < modelosObrigacao.length; k++) {
+							if(modelosObrigacao[k]["selecionada"] !== undefined){
+								NodeAPI.criarRegistro("RelModeloEmpresa",{
+									fkIdModeloObrigacao: modelosObrigacao[k]["tblModeloObrigacao.id_modelo"],
+									fkIdEmpresa: JSON.parse(response)[0].generated_id,//modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+									prazoEntregaCustomizado: modelosObrigacao[k]["data_selecionada"],
+									indAtivo: true
+								},function (res){
+									var DmenosX = then.getModel().getProperty("/DmenosXAnos");
+									var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
+										for (var i = 0; i < AnoCalendario.length; i++) {
+											var oAnoCalendario = AnoCalendario[i];
+											NodeAPI.criarRegistro("RespostaObrigacao",{
+												suporteContratado: null,
+												suporteEspecificacao: null,
+												suporteValor: null,
+												dataExtensao: null,											
+												fkIdDominioMoeda: null,
+												fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
+												fkIdDominioObrigacaoStatusResposta: 4,											
+												fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] 
+											},function(re){
+												
+											});
+										}
+								});
+							}	
+						}
+						
+						// Se foi selecionada uma alíquota válida na criação da empresa
+						if (obj["fk_aliquota.id_aliquota"] && obj["fk_aliquota.id_aliquota"] > 0) {
+							// Cria seu registro inicial de histórico
+							NodeAPI.criarRegistro("HistoricoEmpresaAliquota", {
+								fkEmpresa: JSON.parse(response)[0].generated_id,
+								fkAliquota: obj["fk_aliquota.id_aliquota"],
+								dataInicio: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate()
+							}, function (resp) {
+								that._navToPaginaListagem();			
+							});
+						}
+						else {
+							// Se não, apenas retorna
 							that._navToPaginaListagem();			
-						});
-					}
-					else {
-						// Se não, apenas retorna
-						that._navToPaginaListagem();			
-					}		
+						}		
+					});					
 				});
+				
+
 			},
 			
 			_getSelecaoObrigacoes: function (RelModeloEmpresaJaCriadas) {
