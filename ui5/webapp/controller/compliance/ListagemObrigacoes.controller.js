@@ -123,7 +123,7 @@ sap.ui.define(
 				};
 				
 				
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa="+oEmpresa+"&anoCalendario="+oAnoCalendario+"&statusResp="+oStatus+"&statusModelo=2&IndAtivoRel="+true, function (response) { // 1 COMPLIANCE
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa="+oEmpresa+"&anoCalendario="+oAnoCalendario+"&statusResp="+oStatus+"&statusModelo=2&IndAtivoRel="+true+"&ListarAteAnoAtual=true", function (response) { // 1 COMPLIANCE
 					if (response) {
 						var Todos=0,NaoIniciada = 0,Aguardando = 0,EmAtraso = 0,EntregueNoPrazo = 0,EntregueForaPrazo = 0;
 						for (var i = 0, length = response.length; i < length; i++) {

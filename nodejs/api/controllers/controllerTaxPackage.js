@@ -472,7 +472,7 @@ module.exports = {
 				+ 'terceiro_periodo."status_envio" "status_terceiro_periodo", '
 				+ 'quarto_periodo."status_envio" "status_quarto_periodo", '
 				+ 'anual."status_envio" "status_anual", '
-				+ 'count(retificadoras."id_rel_tax_package_periodo") "qte_retificadoras" '
+				+ 'count(retificadoras."id_tax_reconciliation") "qte_retificadoras" '
 				+ 'from "VGT.EMPRESA" empresa '
 				+ 'inner join "VGT.PAIS" pais '
 				+ 'on empresa."fk_pais.id_pais" = pais."id_pais" '
@@ -538,6 +538,8 @@ module.exports = {
 				+ 'on taxPackage."id_tax_package" = rel."fk_tax_package.id_tax_package" '
 				+ 'inner join "VGT.PERIODO" periodo '
 				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+				+ 'left outer join "VGT.TAX_RECONCILIATION" taxReconciliation '
+				+ 'on taxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" '
 				+ 'where '
 				+ 'periodo."numero_ordem" >= 6 '
 				+ ') retificadoras '
@@ -1186,7 +1188,7 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 	for (var i = 0, length = aAntecipacao.length; i < length; i++) {
 		var oAntecipacao = aAntecipacao[i];
 		
-		if (!oAntecipacao.id_antecipacao) {
+		if (!oAntecipacao.id_antecipacao && oAntecipacao.selecionado) {
 			sQuery = 
 				'insert into "VGT.ANTECIPACAO"( '
 				+ '"id_antecipacao", '

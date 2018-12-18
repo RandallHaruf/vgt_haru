@@ -136,7 +136,6 @@ deepQuery: function (req, res) {
 		+ 'tblRelModeloEmpresa."id_rel_modelo_empresa", '
 		+ 'tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" statusRel, '
 		+ 'tblRelModeloEmpresa."prazo_entrega_customizado", '
-		+ 'tblRelModeloEmpresa."data_extensao", '
 		+ 'tblRelModeloEmpresa."ind_ativo", '
 		+ 'tblDominioMoeda."id_dominio_moeda", '
 		+ 'tblDominioMoeda."acronimo", '
@@ -208,7 +207,15 @@ deepQuery: function (req, res) {
 			}
 		}
 		
-		sStatement += ' order by tblDominioAnoFiscal."ano_fiscal" desc ';
+		if(req.query.ListarAteAnoAtual){
+			if (oWhere.length > 0) {
+				sStatement += ' and tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ';		
+			}		
+			else{
+				sStatement += ' where tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ';
+			}
+		}	
+		
 
 		model.execute({
 		statement: sStatement,

@@ -351,7 +351,7 @@
 							</f:Form>
 						</content>
 					</Panel>
-					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= !${/showHistorico}}">
+					<Panel headerText="{i18n>viewEmpresasHistóricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= ${/showHistorico}}">
 						<content>
 							<f:Form editable="true" >
 								<!--<f:title>

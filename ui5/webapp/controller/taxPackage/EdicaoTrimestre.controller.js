@@ -725,10 +725,10 @@ sap.ui.define(
 					sChaveProcurar = "valor4";
 					break;
 				case iNumeroOrdemPeriodo === 5:
-					sChaveProcurar = "valorAnual";
+					sChaveProcurar = "valor5";
 					break;
 				case iNumeroOrdemPeriodo >= 6:
-					sChaveProcurar = "valorRetificadora";
+					sChaveProcurar = "valor6";
 					break;
 				}
 

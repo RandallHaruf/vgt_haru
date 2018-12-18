@@ -21,7 +21,7 @@
 		</f:title>
 		<f:content>
 			<VBox>
-				<VBox>
+				<!--<VBox>
 					<VBox>
 						<HBox>
 							<CheckBox 
@@ -46,10 +46,6 @@
 								press="onEnviarArquivo" />
 						</HBox>
 					</VBox>
-					<!--<Panel
-						headerText="Documentos"
-						expandable="true"
-						expanded="true">-->
 					<Table 
 						inset="false"
 						items="{
@@ -63,16 +59,6 @@
 						<headerToolbar>
 							<Toolbar>
 								<Title text="Documentos" />
-								<!--<ToolbarSpacer />
-								<u:FileUploader 
-									id="fileUploader" 
-									name="myFileUpload" 
-									uploadUrl="" 
-									width="400px" 
-									tooltip="Enviar o arquivo para o Nodejs" />
-								<Button 
-									text="Enviar Arquivo" 
-									press="onEnviarArquivo" />-->
 							</Toolbar>
 						</headerToolbar>
 						<columns>
@@ -82,37 +68,14 @@
 							<Column>
 								<Title text="Data Upload" />
 							</Column>
-							<!--<Column 
-								minScreenWidth="2000px"
-								demandPopin="true">
-								<Title text="Declaração" />
-							</Column>
-							<Column>
-								<Title text="Data Envio Declaração" />
-							</Column>-->
-							<!--<Column>
-								<Title text="Tipo" />
-							</Column>
-							<Column>
-								<Title text="Tamanho" />
-							</Column>-->
 							<Column width="6.5rem" />
 						</columns>
 						<items>
 							<ColumnListItem>
 								<cells>
 									<ObjectIdentifier title="{nome_arquivo}" text="{label_declaracao}" class="sapMTableContentMargin" />
-									<!--<Text text="{nome_arquivo}" />-->
 									<ObjectNumber
 										number="{data_upload}"/>
-									<!---<ObjectNumber
-										number="{ind_declaracao_label}" />
-									<ObjectNumber
-										number="{data_envio_declaracao}" visible="false" />-->
-									<!--<ObjectNumber
-										number="{mimetype}"/>
-									<ObjectNumber
-										number="{tamanho}"/>-->
 									<HBox>
 										<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="Baixar arquivo" press="onBaixarArquivo" enabled="{btnDownloadEnabled}" class="sapUiSmallMarginEnd" />
 										<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir arquivo" press="onExcluirArquivo" enabled="{btnExcluirEnabled}" />
@@ -121,11 +84,10 @@
 							</ColumnListItem>
 						</items>
 					</Table>
-					<!--</Panel>-->
-					<!--<UploadCollection id="UploadCollection" instantUpload="false" />
-					<Button id="Button" text="Upload Now" press="onStartUpload" />-->
+					<UploadCollection id="UploadCollection" instantUpload="false" />
+					<Button id="Button" text="Upload Now" press="onStartUpload" />
 				</VBox>
-				<!--<Table 
+				<Table 
 					inset="false"
 					items="{
 						path: '/Periodos'
