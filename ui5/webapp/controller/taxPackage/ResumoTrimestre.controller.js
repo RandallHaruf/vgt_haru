@@ -529,13 +529,6 @@ sap.ui.define(
 				var dialog = new sap.m.Dialog({
 					title: "Anexar Declaração",
 					content: oVBox,
-					/*beginButton: new sap.m.Button({
-					    text: "enviar",
-					    press: function () {
-					        sap.m.MessageToast.show("Enviar declaração: " + oPeriodo.periodo);
-					        dialog.close();
-					    }.bind(this)
-					}),*/
 					endButton: new sap.m.Button({
 						text: "fechar",
 						press: function () {
@@ -554,38 +547,6 @@ sap.ui.define(
 				dialog.open();
 				
 				this._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
-
-				//alert("Anexar Declaração: " + oPeriodo.periodo);
-
-				/*var oHBox = new sap.m.HBox();
-				
-				oHBox.addItem(new sap.m.UploadCollection({
-					multiple: true,
-					instantUpload: false
-				}));
-				
-				var dialog = new sap.m.Dialog({
-					title: "Anexar Declaração",
-					content: oHBox,
-					beginButton: new sap.m.Button({
-						text: "enviar",
-						press: function () {
-							sap.m.MessageToast.show("Enviar declaração: " + oPeriodo.periodo);
-							dialog.close();
-						}.bind(this)
-					}),
-					endButton: new sap.m.Button({
-						text: "sair",
-						press: function () {
-							dialog.close();
-						}.bind(this)
-					})
-				});
-
-				// to get access to the global model
-				this.getView().addDependent(dialog);
-
-				dialog.open();*/
 			},
 			
 			onEnviarArquivo: function (oEvent, oPeriodo, oFileUploader, sProperty, oTable) {
@@ -714,7 +675,156 @@ sap.ui.define(
 			},
 
 			onBaixarDeclaracao: function (oPeriodo) {
-				alert("Baixar Declaração: " + oPeriodo.periodo);
+				var that = this,
+					sProperty = oPeriodo.numero_ordem === 5 ? "/DeclaracoesAnual" : "/DeclaracoesRetificadora";
+				
+				var oVBox = new sap.m.VBox();
+
+				/*var oVBox2 = new sap.m.VBox();
+
+				var oHBox = new sap.m.HBox();
+
+				var oCheckBox = new sap.m.CheckBox({
+					text: "Declaração",
+					selected: "{/IsDeclaracao}"
+				}).addStyleClass("sapUiSmallMarginEnd");
+
+				var oDatePicker = new sap.m.DatePicker({
+					value: "{/DataEnvioDeclaracao}",
+					valueFormat: "yyyy-MM-dd",
+					enabled: "{= ${/IsDeclaracao} === true ? true : false}"
+				});
+
+				oHBox.addItem(oCheckBox);
+				oHBox.addItem(oDatePicker);
+
+				var oHBox2 = new sap.m.HBox();
+
+				var oFileUploader = new sap.ui.unified.FileUploader({
+					id: "fileUploader",
+					name: "myFileUpload",
+					uploadUrl: "",
+					width: "400px",
+					tooltip: "Enviar o arquivo para o Nodejs",
+					placeholder: "Escolha um arquivo"
+				});
+
+				var oTable = new sap.m.Table({
+					inset: false
+				});
+
+				var oButton = new sap.m.Button({
+					text: "Enviar Arquivo"
+				}).attachPress(function (oEvent) {
+					this.onEnviarArquivo(oEvent, oPeriodo, oFileUploader, sProperty, oTable);
+				}, this);
+
+				oHBox2.addItem(oFileUploader);
+				oHBox2.addItem(oButton);
+
+				oVBox2.addItem(oHBox);
+				oVBox2.addItem(oHBox2);*/
+
+				var oScrollContainer = new sap.m.ScrollContainer({
+					vertical: true,
+					height: "350px",
+					width: "100%"
+				});
+				
+				var oTable = new sap.m.Table({
+					inset: false
+				});
+
+				var oToolbar = new sap.m.Toolbar();
+
+				oToolbar.addContent(new sap.m.Text({
+					text: "Documentos"
+				}));
+
+				oTable.setHeaderToolbar(oToolbar);
+
+				// colunas
+				oTable.addColumn(new sap.m.Column().setHeader(new sap.m.Text({
+					text: "Nome do Arquivo"
+				})));
+
+				oTable.addColumn(new sap.m.Column().setHeader(new sap.m.Text({
+					text: "Data Upload"
+				})));
+
+				 oTable.addColumn(new sap.m.Column({
+					width: "6.5rem"
+				}));
+
+				// células
+				var oObjectIdentifier = new sap.m.ObjectIdentifier({
+					title: "{nome_arquivo}",
+					text: "{label_declaracao}"
+				}).addStyleClass("sapMTableContentMargin");
+
+				var oObjectNumber = new sap.m.ObjectNumber({
+					number: "{data_upload}"
+				});
+
+				var oHBox3 = new sap.m.HBox();
+
+				var oButton2 = new sap.m.Button({
+					icon: "sap-icon://download-from-cloud",
+					type: "Accept",
+					tooltip: "Baixar Arquivo",
+					enabled: "{btnDownloadEnabled}"
+				}).addStyleClass("sapUiSmallMarginEnd").attachPress(oTable, function (oEvent2) {
+					this.onBaixarArquivo(oEvent2, oPeriodo);
+				}, this);
+
+				/* oButton3 = new sap.m.Button({
+					icon: "sap-icon://delete",
+					type: "Reject",
+					tooltip: "Excluir Arquivo",
+					enabled: "{btnExcluirEnabled}"
+				}).attachPress(oTable, function (oEvent3) {
+					this.onExcluirArquivo(oEvent3, oPeriodo, sProperty, oTable);
+				}, this);*/
+
+				oHBox3.addItem(oButton2);
+				//oHBox3.addItem(oButton3);
+
+				// template
+				var oTemplate = new sap.m.ColumnListItem({
+					cells: [oObjectIdentifier, oObjectNumber, oHBox3]
+				});
+
+				oTable.bindItems({
+					path: sProperty, 
+					template: oTemplate
+				});
+
+				oScrollContainer.addContent(oTable);
+
+				//oVBox.addItem(oVBox2);
+				oVBox.addItem(oScrollContainer);
+
+				var dialog = new sap.m.Dialog({
+					title: "Visualizar Declaração",
+					content: oVBox,
+					endButton: new sap.m.Button({
+						text: "fechar",
+						press: function () {
+							dialog.close();
+						}.bind(this)
+					}),
+					afterClose: function () {
+						that.getModel().setProperty(sProperty, []);
+						dialog.destroy();
+					}
+				});
+
+				// to get access to the global model
+				this.getView().addDependent(dialog);
+
+				dialog.open();
+				
+				this._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
 			},
 
 			navToHome: function () {
