@@ -552,7 +552,8 @@
 								rows="{
 									path: '/LossSchedule',
 									sorter: [{
-										path: 'fy'
+										path: 'fy',
+										descending: true
 									}]
 								}" 
 								visibleRowCount="5" 
@@ -711,7 +712,8 @@
 								rows="{
 									path: '/CreditSchedule',
 									sorter: [{
-										path: 'fy'
+										path: 'fy',
+										descending: true
 									}]
 								}" 
 								visibleRowCount="5" 
