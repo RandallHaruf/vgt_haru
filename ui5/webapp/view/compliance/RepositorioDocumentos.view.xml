@@ -14,12 +14,12 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Obrigações" press="navToPage2" />
-						<Link text="Repositório Documentos" enabled="false" />
+						<Link text="{i18n>viewComplianceRepositorioDocumentosListagemObrigacoes}" press="navToPage2" />
+						<Link text="{i18n>viewComplianceRepositorioDocumentosTituloPagina}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Compliance - Repositório de Documentos"/>
+					<Title text="{i18n>viewComplianceRepositorioDocumentosComplianceRepositórioDeDocumentos}"/>
 				</f:heading>
 			</f:DynamicPageTitle>
 		</f:title>
