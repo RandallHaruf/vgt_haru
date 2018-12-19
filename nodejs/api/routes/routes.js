@@ -62,6 +62,7 @@ module.exports = function (app) {
 	var routeRelModeloEmpresa = require("./routeRelModeloEmpresa");
 	var routeRespostaObrigacao = require("./routeRespostaObrigacao");
 	var routeDocumentoObrigacao = require("./routeDocumentoObrigacao");
+	var routeDocumento = require("./routeDocumento");
 	
 	var aRoutes = [];	
 	
@@ -123,6 +124,7 @@ module.exports = function (app) {
 	routeRelModeloEmpresa(aRoutes);
 	routeRespostaObrigacao(aRoutes);
 	routeDocumentoObrigacao(aRoutes);
+	routeDocumento(aRoutes);
 	
 	app.use("/node", aRoutes);
 	
