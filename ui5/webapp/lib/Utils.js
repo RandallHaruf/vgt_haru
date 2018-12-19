@@ -44,24 +44,27 @@ sap.ui.define(
 				*/
 				var periodoTraduzido = "";
 				switch (stringPeriodo){
-					case "Semanal":
+					case "Weekly":
 						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemanal");
 						break;
-					case "Quinzenal":
+					case "Biweekly":
 						periodoTraduzido = that.getResourceBundle().getText("viewGeralQuinzenal");
 						break;
-					case "Trimestral":
+					case "Quarterly":
 						periodoTraduzido = that.getResourceBundle().getText("viewGeralTrimestral");
 						break;
-					case "Mensal":
+					case "Monthly":
 						periodoTraduzido = that.getResourceBundle().getText("viewGeralMensal");
 						break;
-					case "Semestral":
+					case "Biannual":
 						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemestral");
 						break;
-					case "Anual":
+					case "Annual":
 						periodoTraduzido = that.getResourceBundle().getText("viewGeralAnual");
 						break;
+					case "Bimonthly":
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralBimestral");
+						break;						
 				}
 				return periodoTraduzido;
 			},			
