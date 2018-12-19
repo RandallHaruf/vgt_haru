@@ -127,5 +127,28 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});
+	},
+	deepQuery2: function (req, res) {
+		var sStatement = 
+			'SELECT '
+			+' tblDominioAnoCalendario."id_dominio_ano_calendario", '
+			+' tblDominioAnoCalendario."ano_calendario" '
+			+' FROM "VGT.DOMINIO_ANO_CALENDARIO" tblDominioAnoCalendario '
+			+' where tblDominioAnoCalendario."ano_calendario" >= 2018 and tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ' ;
+
+
+		
+
+		sStatement += ' Order By tblDominioAnoCalendario."ano_calendario"';
+		
+		model.execute({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };
