@@ -99,7 +99,7 @@ sap.ui.define(
 			
 			onTrocarSuporte: function() {
 				var obj = this.getModel().getProperty("/RespostaObrigacao");
-				if (obj["suporte_contratado"] == false) {
+				if (!!obj["suporte_contratado"] == false) {
 					obj["suporte_especificacao"] = "";
 					obj["fk_id_dominio_moeda.id_dominio_moeda"] = "";
 					obj["suporte_valor"] = "";
@@ -116,7 +116,7 @@ sap.ui.define(
 				});
 			
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
+				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido",(oParametros.Obrigacao["data_extensao"] ? true : false));
 			}
