@@ -622,7 +622,7 @@ sap.ui.define(
 					var aux = response.find(function (x) {
 						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
 						//return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
-						return (x["tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"] && x["tblRelModeloEmpresa.ind_ativo"] === true);
+						return (x["tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"] && !!x["tblRelModeloEmpresa.ind_ativo"] === true);
 						
 					});
 					
