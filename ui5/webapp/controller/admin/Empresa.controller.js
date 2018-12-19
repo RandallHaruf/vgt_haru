@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI, Validador) {
+	function (BaseController, NodeAPI, Validador,Utils) {
 		jQuery.sap.require("sap.m.MessageBox");
 		
 		return BaseController.extend("ui5ns.ui5.controller.admin.Empresa", {

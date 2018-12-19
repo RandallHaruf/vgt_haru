@@ -271,13 +271,15 @@
 											<table:Column>
 												<Label text="{i18n>viewEmpresaDataPrazo}" />
 												<table:template>
-													<Text text="{tblModeloObrigacao.prazo_entrega}" />
+													<!--<Text text="{= ${tblModeloObrigacao.prazo_entrega}}" />-->
+													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="dd/MM"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
 												<Label text="{i18n>viewEmpresaDataCustomizada}" />
 												<table:template>
-													<DatePicker valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" />
+													<DatePicker displayFormat="dd/MM" valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" />
+													<!--<DateTimeInput id="DTI1" type="Date" value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" displayFormat="dd/MM"/>													-->
 												</table:template>
 											</table:Column>											
 										</table:columns>

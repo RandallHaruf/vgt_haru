@@ -130,6 +130,8 @@
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
+					<Label text="Number" labelFor="inputNumber"/>
+				
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
 					<Button

@@ -97,8 +97,9 @@ sap.ui.define(
 					tipo: "Beps",
 					nome: "Obrigação 2"
 				}]);*/
-				
+
 				var that = this;
+			
 				//jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/ModeloObrigacao", {
 					type: "GET",
@@ -111,7 +112,7 @@ sap.ui.define(
 			
 			_carregarCamposFormulario: function () {
 				var that = this;
-				
+			
 				jQuery.ajax(Constants.urlBackend + "DominioObrigacaoAcessoriaTipo", {
 					type: "GET",
 					dataType: "json",
@@ -158,6 +159,7 @@ sap.ui.define(
 				});*/
 				//CARREGAR O NOVO OBJETO DE OBRIGACAO ACESSORIA
 				var that = this;
+
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {				
 				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 					type: "GET",
@@ -181,6 +183,7 @@ sap.ui.define(
 			
 			_limparFormulario: function () {
 				this.getModel().setProperty("/objeto", {});
+
 			},
 			
 			_atualizarObjeto: function (iIdObjeto) {
@@ -246,7 +249,7 @@ sap.ui.define(
 			/* Métodos fixos */
 			onInit: function () {
 				var that = this;
-				
+
 				that.setModel(new sap.ui.model.json.JSONModel({
 					//DominioPais: [],
 					//DominioPaisStatus: [],

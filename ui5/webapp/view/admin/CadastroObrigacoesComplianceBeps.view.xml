@@ -120,7 +120,7 @@
 											<Label text="{i18n>ViewGeralDataInício}" labelFor="dataInicio" />
 										</f:label>
 										<f:fields>
-											<DatePicker id="dataInicio" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
+											<DatePicker id="dataInicio" displayFormat="short" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -128,7 +128,7 @@
 											<Label text="{i18n>ViewGeralDataFim}" labelFor="dataFim" />
 										</f:label>
 										<f:fields>
-											<DatePicker id="dataFim" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
+											<DatePicker id="dataFim" displayFormat="short" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
@@ -143,10 +143,11 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>formularioObrigacaoLabelPrazoEntrega}" labelFor="dataFim" />
+											<Label text="{i18n>formularioObrigacaoLabelPrazoEntrega}" labelFor="dataFim"/>
 										</f:label>
 										<f:fields>
-											<DatePicker id="selectPrazoEntrega" valueFormat="yyyy-MM-dd" value="{/objeto/selectPrazoEntrega}" required="true" />
+											<DatePicker id="selectPrazoEntrega" displayFormat="dd/MM" valueFormat="yyyy-MM-dd" value="{/objeto/selectPrazoEntrega}" required="true" />
+											<!--<DateTimeInput id="selectPrazoEntrega" type="Date" value="{/objeto/selectPrazoEntrega}" displayFormat="dd/MM" />													-->
 										</f:fields>
 									</f:FormElement>									
 								</f:formElements>

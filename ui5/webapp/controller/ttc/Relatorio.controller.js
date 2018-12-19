@@ -39,6 +39,10 @@ sap.ui.define([
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");                                  	
 		},
 
+			myFormatter: function (value){
+			   return  value + "%";
+			},
+
 		_onClearSelecoes: function (oEvent){
 			this.getModel().setProperty("/IdEmpresasSelecionadas" , undefined);
 			this.getModel().setProperty("/IdDominioTaxClassificationSelecionadas", undefined);

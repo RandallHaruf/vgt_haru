@@ -241,6 +241,7 @@
 											<DatePicker 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{data_pagamento}" 
+												displayFormat="short"
 												valueFormat="yyyy-MM-dd" 
 												minDate="{/MinDate}" 
 												maxDate="{/MaxDate}" />
@@ -499,6 +500,7 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{data_pagamento}" 
 												valueFormat="yyyy-MM-dd" 
+												displayFormat="short"
 												minDate="{/MinDate}" 
 												maxDate="{/MaxDate}" />
 								 	<!--		<ComboBox

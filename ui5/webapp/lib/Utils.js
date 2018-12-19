@@ -33,6 +33,13 @@ sap.ui.define(
 				var DataFinal = dataString.substring(8,10)+"/"+dataString.substring(5,7)+"/"+dataString.substring(4,0);
 				return DataFinal;
 			},
+			stringDatacomBarraParaBanco: function (dataString){
+				var DataFinal = "";
+				if(dataString){
+					DataFinal = dataString.substring(6,10)+"-"+dataString.substring(3,5)+"-"+dataString.substring(0,2);
+				}
+				return DataFinal;
+			},
 			bancoParaJsDate: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
 				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
