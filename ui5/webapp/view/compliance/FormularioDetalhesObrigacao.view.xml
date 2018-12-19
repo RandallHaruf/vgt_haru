@@ -113,6 +113,12 @@
 											<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
 									</f:fields>
 								</f:FormElement>
+									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+									<f:fields>
+										<CheckBox id="checkObrigacaoIniciada" enabled="false" selected="{= ${/RespostaObrigacao/obrigacao_inicial} == 4 ? false : true}"
+										/>
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
 									<f:fields>
 										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" />
