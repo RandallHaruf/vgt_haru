@@ -396,7 +396,7 @@ sap.ui.define(
 			onTrocarIndNaoAplicavel: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 
-				if (oPagamento.ind_nao_aplicavel) {
+				if (!!oPagamento.ind_nao_aplicavel) {
 					oPagamento.administracao_governamental = "";
 					oPagamento.estado = "";
 					oPagamento.cidade = "";
@@ -411,6 +411,7 @@ sap.ui.define(
 					oPagamento.numero_documento = "";
 					oPagamento.entidade_beneficiaria = "";
 					oPagamento["fk_dominio_moeda.id_dominio_moeda"] = null;
+					oPagamento["AcroNome"] = "";
 					oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] = null;
 					oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] = null;
 					oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] = null;
@@ -943,6 +944,9 @@ sap.ui.define(
 					else{
 						continua = false;
 					}
+					if ((!!aPagamentos[i]["ind_nao_aplicavel"]) == true) {
+						continua = true;
+					}
 					/*aPagamentos[i].principal = Utils.stringMoedaParaFloat(aPagamentos[i].principal);
 					aPagamentos[i].juros = Utils.stringMoedaParaFloat(aPagamentos[i].juros);
 					aPagamentos[i].multa = Utils.stringMoedaParaFloat(aPagamentos[i].multa);*/
@@ -969,11 +973,9 @@ sap.ui.define(
 						content: new sap.m.Text({
 							text: this.getView().getModel("i18n").getResourceBundle().getText(
 								"viewTTCDetalheTrimestreMoedaNaoValidaJs")
-					
 						}),
 						endButton: new sap.m.Button({
 							text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralFechar"),
-							
 							press: function () {
 								dialog.close();
 							}
@@ -1136,12 +1138,12 @@ sap.ui.define(
 					}
 
 					//var achouValor = aAllTaxas.find()
-					if ((!oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] ||
+					if ((!!!oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] ||
 							/*!oPagamento["fk_dominio_moeda.id_dominio_moeda"] ||*/ !oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] || ((
 								boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria)) || !oPagamento[
 								"fk_dominio_pais.id_dominio_pais"] || !oPagamento.principal || !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
 							//|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
-							|| JurisdicaoTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento.principal))) || (!
+							|| JurisdicaoTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento.principal))) || (!!!
 							oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento.name_of_tax))) {
 						bValido = false;
 					}
