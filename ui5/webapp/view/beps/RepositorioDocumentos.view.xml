@@ -5,7 +5,7 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m">
 	<f:DynamicPage 
-		title="Beps - Repositório de Documentos"
+		title="Beps - {i18n>viewComplianceRepositorioDocumentosTituloPagina}"
 		showNavButton="true"
 		navButtonPress="onNavBack"
 		class="semContentPadding">
@@ -14,12 +14,12 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Obrigações" press="navToPage2" />
-						<Link text="Repositório Documentos" enabled="false" />
+						<Link text="{i18n>viewComplianceRepositorioDocumentosListagemObrigacoes}" press="navToPage2" />
+						<Link text="{i18n>viewComplianceRepositorioDocumentosTituloPagina}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Beps - Repositório de Documentos"/>
+					<Title text="Beps - {i18n>viewComplianceRepositorioDocumentosTituloPagina}"/>
 				</f:heading>
 			</f:DynamicPageTitle>
 		</f:title>

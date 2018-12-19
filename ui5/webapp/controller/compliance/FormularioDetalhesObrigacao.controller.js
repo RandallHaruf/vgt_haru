@@ -47,8 +47,8 @@ sap.ui.define(
 									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);	
 								}
 								var dataAtual = new Date();
-								dataAtual = new Date(dataAtual.getFullYear(),dataAtual.getMonth(),dataAtual.getDate()+1,0,0,0,0);
-								if (dataAtual <= dataPrazo) {
+								dataPrazo = new Date(dataPrazo.getFullYear(),dataPrazo.getMonth(),dataPrazo.getDate(),23,59,59,0);
+								if ( dataPrazo < dataAtual ) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
 								}
 								else {
@@ -99,7 +99,7 @@ sap.ui.define(
 			
 			onTrocarSuporte: function() {
 				var obj = this.getModel().getProperty("/RespostaObrigacao");
-				if (obj["suporte_contratado"] == false) {
+				if (!!obj["suporte_contratado"] == false) {
 					obj["suporte_especificacao"] = "";
 					obj["fk_id_dominio_moeda.id_dominio_moeda"] = "";
 					obj["suporte_valor"] = "";
@@ -116,7 +116,7 @@ sap.ui.define(
 				});
 			
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
+				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido",(oParametros.Obrigacao["data_extensao"] ? true : false));
 			}

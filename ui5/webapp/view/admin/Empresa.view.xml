@@ -277,7 +277,7 @@
 											<table:Column>
 												<Label text="{i18n>viewEmpresaDataCustomizada}" />
 												<table:template>
-													<DatePicker valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= ${selecionada} === true ? true : false }" />
+													<DatePicker valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" />
 												</table:template>
 											</table:Column>											
 										</table:columns>

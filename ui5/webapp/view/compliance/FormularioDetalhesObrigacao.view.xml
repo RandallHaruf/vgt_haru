@@ -13,12 +13,12 @@
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" enabled="false" />
-						<Link text="Listagem Obrigações" enabled="false" />
-						<Link text="Formulário Detalhe Obrigação" enabled="false" />
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
+						<Link text="{i18n>viewFormularioComplianceFormularioDetalheObrigacao}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="Compliance - Formulário de Detalhe de Obrigação"/>
+					<Title text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}"/>
 				</f2:heading>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -64,7 +64,7 @@
 								<f:FormElement label="{i18n>ViewGeralDataInício}">
 									<f:fields>
 										<DatePicker 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_inicial}" 
 												enabled="false"
@@ -75,7 +75,7 @@
 								<f:FormElement label="{i18n>ViewGeralDataFim}">
 									<f:fields>
 										<DatePicker 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_final}" 
 												enabled="false"
@@ -86,7 +86,7 @@
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/prazo_entrega}" 
 												enabled="false"
@@ -102,10 +102,10 @@
 								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
 									<f:fields>
 											<DatePicker 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= ${/RespostaObrigacao/ind_extensao_compliance} === true ? (!${/JaEstavaPreenchido} ? true : false ) : false}"/>
+												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? (!${/JaEstavaPreenchido} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
@@ -113,7 +113,7 @@
 											<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="Suporte Contratado">
+								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
 									<f:fields>
 										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" />
 									</f:fields>
@@ -224,7 +224,8 @@
 											<OverflowToolbar id="myId">
 												<Title id="attachmentTitle" />
 												<ToolbarSpacer />
-												<SearchField width="10rem" search="onSearch" />
+												<SearchField width="10rem" search="onSearch"
+											placeholder="{i18n>ViewGeralProcurar}" tooltip= "{i18n>ViewGeralProcurar}" />
 												<Button
 													id="deleteSelectedButton"
 													text="Delete"
