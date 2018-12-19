@@ -967,13 +967,13 @@ sap.ui.define(
 						title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsAtencao"),
 						type: "Message",
 						content: new sap.m.Text({
-							/*text: this.getView().getModel("i18n").getResourceBundle().getText(
-								"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório")*/
-							text: "Essa não é uma moeda válida"
+							text: this.getView().getModel("i18n").getResourceBundle().getText(
+								"viewTTCDetalheTrimestreMoedaNaoValidaJs")
+					
 						}),
 						endButton: new sap.m.Button({
-							/*text: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsFechar"),*/
-							text: "Close",
+							text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralFechar"),
+							
 							press: function () {
 								dialog.close();
 							}
