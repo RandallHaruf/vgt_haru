@@ -47,8 +47,8 @@ sap.ui.define(
 									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);	
 								}
 								var dataAtual = new Date();
-								dataAtual = new Date(dataAtual.getFullYear(),dataAtual.getMonth(),dataAtual.getDate()+1,0,0,0,0);
-								if (dataAtual <= dataPrazo) {
+								dataPrazo = new Date(dataPrazo.getFullYear(),dataPrazo.getMonth(),dataPrazo.getDate(),23,59,59,0);
+								if ( dataPrazo < dataAtual ) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
 								}
 								else {
