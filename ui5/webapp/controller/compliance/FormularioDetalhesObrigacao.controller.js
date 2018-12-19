@@ -117,6 +117,7 @@ sap.ui.define(
 			
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
+				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? false : true;
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido",(oParametros.Obrigacao["data_extensao"] ? true : false));
 			}

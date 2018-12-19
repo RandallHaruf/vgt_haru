@@ -190,7 +190,7 @@
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>
 									<!--core:Icon src="{viewModel>suporteContratado}"/-->
-									<Text text="{= !!${suporte_contratado} === 1 
+									<Text text="{= !!${suporte_contratado} 
 									? ${i18n>viewGeralSim}
 									: ${i18n>viewGeralNao}
 									}"/>

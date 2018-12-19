@@ -602,4 +602,4 @@ context VGT {
         nome_arquivo             : String(255);
         fk_id_usuario            : association[*, 0..1] to VGT.USUARIO { id_usuario };
     };
-};
+};  

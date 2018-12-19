@@ -115,7 +115,7 @@
 								</f:FormElement>
 									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada" enabled="false" selected="{= ${/RespostaObrigacao/obrigacao_inicial} == 4 ? false : true}"
+										<CheckBox id="checkObrigacaoIniciada" enabled="false" selected="{/RespostaObrigacao/ObrigacaoIniciada}"
 										/>
 									</f:fields>
 								</f:FormElement>
