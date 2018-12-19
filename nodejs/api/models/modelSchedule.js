@@ -44,6 +44,10 @@ var oSketch = {
 		fkDominioScheduleTipo: {
 			nome: "fk_dominio_schedule_tipo.id_dominio_schedule_tipo",
 			number: true
+		},
+		fkDominioAnoFiscal: {
+			nome: "fk_dominio_ano_fiscal.id_dominio_ano_fiscal",
+			number: true
 		}
 	} 	
 };
