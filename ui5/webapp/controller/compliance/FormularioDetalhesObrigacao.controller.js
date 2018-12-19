@@ -116,7 +116,7 @@ sap.ui.define(
 				});
 			
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] == 1 ? true : false);
+				oParametros.Obrigacao["suporte_contratado"] = (oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido",(oParametros.Obrigacao["data_extensao"] ? true : false));
 			}

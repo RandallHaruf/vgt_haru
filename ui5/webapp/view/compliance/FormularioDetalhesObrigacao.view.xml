@@ -105,7 +105,7 @@
 												placeholder="Insira uma data..." 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= ${/RespostaObrigacao/ind_extensao_compliance} === 1 ? (!${/JaEstavaPreenchido} ? true : false ) : false}"/>
+												enabled="{= ${/RespostaObrigacao/ind_extensao_compliance} === true ? (!${/JaEstavaPreenchido} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
