@@ -105,7 +105,7 @@ sap.ui.define(
 			
 			carregarFiltroAnoCalendario : function(){
 				var that = this;
-					NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
+					NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendarioAteCorrente", function (response) {
 					response.unshift({ id: null, descricao: "" });
 					that.getModel().setProperty("/DominioAnoCalendario", response);
 				});

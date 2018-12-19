@@ -12,4 +12,6 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().delete("/DominioAnoCalendario/:idRegistro", controller.excluirRegistro));
 
 	aRoutes.push(express.Router().get("/DeepQuery/DominioAnoCalendario", controller.deepQuery));
+	
+	aRoutes.push(express.Router().get("/DeepQuery/DominioAnoCalendarioAteCorrente", controller.deepQuery2));
 };
