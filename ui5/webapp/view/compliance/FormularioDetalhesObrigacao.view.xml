@@ -209,7 +209,7 @@
 													select="onSelecionaCheck" class="sapUiSmallMarginEnd"/>
 											</HBox>
 											<HBox>
-												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" enabled="false" visible="{= ${/IsDeclaracao} === true ? true : false}"/>
+												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}"/>
 											</HBox>
 											<HBox>
 												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="Enviar o arquivo para o Nodejs"

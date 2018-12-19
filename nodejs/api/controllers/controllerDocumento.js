@@ -81,14 +81,12 @@ module.exports = {
 			//console.log(req.file.buffer.constructor.name);
 
 			var idRespostaObrigacao = req.body.id ? req.body.id : null;
-
-			//var dataEnvioDeclaracao = req.body.dataEnvioDeclaracao ? req.body.dataEnvioDeclaracao : null;
-			//var resposta_obrigacao = ;
+			var Data = req.body.dataEnvio ? req.body.dataEnvio : null;
 
 			var sQuery =
 				'INSERT INTO "VGT.DOCUMENTO_OBRIGACAO"(' + '"id_documento", ' + '"fk_id_resposta_obrigacao.id_resposta_obrigacao", ' +
 				'"dados_arquivo", ' + '"mimetype", ' + '"tamanho", ' + '"data_upload", ' + '"nome_arquivo", ' + '"fk_id_usuario.id_usuario") ' +
-				' values(' + '"identity_VGT.DOCUMENTO_OBRIGACAO_id_documento".nextval, ' + '?, ' + '?, ' + '?, ' + '?, ' + 'CURRENT_DATE, ' + '?, ' +
+				' values(' + '"identity_VGT.DOCUMENTO_OBRIGACAO_id_documento".nextval, ' + '?, ' + '?, ' + '?, ' + '?, ' + '?, ' + '?, ' +
 				'?) ';
 
 			var aParam = [
@@ -96,6 +94,7 @@ module.exports = {
 				req.file.buffer,
 				req.file.mimetype,
 				req.file.size,
+				Data,
 				req.file.originalname,
 				1
 			];

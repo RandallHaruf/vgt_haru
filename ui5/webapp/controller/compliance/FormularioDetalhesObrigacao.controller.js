@@ -12,12 +12,7 @@ sap.ui.define(
 
 					onInit: function () {
 
-						this.setModel(new sap.ui.model.json.JSONModel({}));
-
-						var idObrigacao = 1; //'PEGAR ID DA OBRIGACAO'
-
-						this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
-
+						//this.setModel(new sap.ui.model.json.JSONModel({}));
 						this.setModel(new sap.ui.model.json.JSONModel({
 							RespostaObrigacao: {
 								/*
@@ -35,11 +30,12 @@ sap.ui.define(
 							}
 						}));
 						this.getRouter().getRoute("complianceFormularioDetalhesObrigacao").attachPatternMatched(this._onRouteMatched, this);
+					
 					},
 
 					_atualizarDocumentos: function (sProperty, sIdObrigacao, oTable) {
 						var that = this;
-
+						
 						this.setBusy(oTable, true);
 
 						Arquivo.listar("ListarDocumento?id=" + sIdObrigacao)
@@ -150,16 +146,19 @@ sap.ui.define(
 							onEnviarArquivo: function (oEvent, sProperty) {
 								var that = this;
 								var oFileUploader = this.getView().byId("fileUploader");
+								var obj2 = that.getModel().getProperty("/RespostaObrigacao");
+								var DataConclusao =	that.byId("DataAtual").getDateValue();
 								var oBtnEnviar = oEvent.getSource();
-								var now = new Date();
 								var oTable = this.byId("tabelaDocumentos");
 
 								//var CkeckSelect = oEvent.getParameter("selected");	
-
+								var DataFormatada = DataConclusao.getFullYear() + "-"+ (DataConclusao.getMonth()+1) +"-"+ DataConclusao.getDate();
+							
+								
 								var oData = {
 
-									dataEnvio: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-									id: 1 //this.getModel().getProperty("/id_resposta_obrigacao")
+									dataEnvio: DataFormatada,
+									id: obj2["id_resposta_obrigacao"]
 								};
 
 								/*if(CkeckSelect === true)
@@ -249,6 +248,7 @@ sap.ui.define(
 											that.getModel().refresh();
 										});
 								});
+							that._atualizarDocumentos();
 							},
 
 							_confirmarExclusao: function (onConfirm) {
@@ -291,11 +291,14 @@ sap.ui.define(
 								});
 
 								var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+								var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 								oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 								oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
 									"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? false : true;
 								this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 								that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
+								
+								this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
 							}
 					});
 			}
