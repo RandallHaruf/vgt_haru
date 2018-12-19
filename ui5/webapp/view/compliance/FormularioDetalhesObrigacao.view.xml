@@ -225,7 +225,7 @@
 												<Title id="attachmentTitle" />
 												<ToolbarSpacer />
 												<SearchField width="10rem" search="onSearch"
-											placeholder="{i18n>ViewGeralProcurar}" />
+											placeholder="{i18n>ViewGeralProcurar}" tooltip= "{i18n>ViewGeralProcurar}" />
 												<Button
 													id="deleteSelectedButton"
 													text="Delete"

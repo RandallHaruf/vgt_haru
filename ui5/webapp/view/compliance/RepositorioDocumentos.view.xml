@@ -5,7 +5,7 @@
 	xmlns:f="sap.f"
 	xmlns="sap.m">
 	<f:DynamicPage 
-		title="{i18n>viewComplianceRepositorioDocumentosTituloPagina}"
+		title="{i18n>viewComplianceRepositorioDocumentosComplianceRepositórioDeDocumentos}"
 		showNavButton="true"
 		navButtonPress="onNavBack"
 		class="semContentPadding">
