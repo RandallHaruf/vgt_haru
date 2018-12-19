@@ -405,6 +405,7 @@ context VGT {
             obs                         : String(500);
             fk_rel_tax_package_periodo  : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
             fk_dominio_schedule_tipo    : association[0..1]    to VGT.DOMINIO_SCHEDULE_TIPO { id_dominio_schedule_tipo };
+            fk_dominio_ano_fiscal       : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
     };
 
     /*@@layout{"layoutInfo":{"x":-1823,"y":776.5}}*/

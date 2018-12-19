@@ -71,6 +71,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkDominioScheduleTipo,
 			valor: req.body.fkDominioScheduleTipo ? Number(req.body.fkDominioScheduleTipo) : null
+		}, {
+			coluna: model.colunas.fkDominioAnoFiscal,
+			valor: req.body.fkDominioAnoFiscal ? Number(req.body.fkDominioAnoFiscal) : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -138,6 +141,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkDominioScheduleTipo,
 			valor: req.body.fkDominioScheduleTipo ? Number(req.body.fkDominioScheduleTipo) : null
+		}, {
+			coluna: model.colunas.fkDominioAnoFiscal,
+			valor: req.body.fkDominioAnoFiscal ? Number(req.body.fkDominioAnoFiscal) : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
