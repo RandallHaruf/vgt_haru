@@ -137,13 +137,20 @@
 										<ColumnListItem>
 											<cells>
 												<ObjectIdentifier title="{labelPeriodo}" />
-												<Input type="Number" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="false" change="onAplicarRegras" />
+												<!--<Input type="Number" value="{rc_statutory_gaap_profit_loss_before_tax}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_current_income_tax_current_year}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_current_income_tax_previous_year}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_deferred_income_tax}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_non_recoverable_wht}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{rc_statutory_provision_for_income_tax}" editable="false" />
-												<Input type="Number" value="{rc_statutory_gaap_profit_loss_after_tax}" editable="false" />
+												<Input type="Number" value="{rc_statutory_gaap_profit_loss_after_tax}" editable="false" />-->
+												<Input textAlign="End" value="{path: 'rc_statutory_gaap_profit_loss_before_tax', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'rc_current_income_tax_current_year', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'rc_current_income_tax_previous_year', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'rc_deferred_income_tax', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'rc_non_recoverable_wht', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'rc_statutory_provision_for_income_tax', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'rc_statutory_gaap_profit_loss_after_tax', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -185,11 +192,13 @@
 								<VBox class="sapUiSmallMarginBottom">
 									<HBox alignItems="Center">
 										<Text width="13rem" text="Total {i18n>viewGeralDiferençaPermanente}: " />
-										<Input type="Number" editable="false" value="{/TotalDiferencaPermanente}" />
+										<!--<Input type="Number" editable="false" value="{/TotalDiferencaPermanente}" />-->
+										<Input textAlign="End" editable="false" value="{path: '/TotalDiferencaPermanente', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 									</HBox>
 									<HBox alignItems="Center">
 										<Text width="13rem" text="Total {i18n>viewGeralDiferencaTemporaria}: " />
-										<Input type="Number" editable="false" value="{/TotalDiferencaTemporaria}" />
+										<!--<Input type="Number" editable="false" value="{/TotalDiferencaTemporaria}" />-->
+										<Input textAlign="End" editable="false" value="{path: '/TotalDiferencaTemporaria', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 									</HBox>
 								</VBox>
 								<Table
@@ -244,12 +253,18 @@
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
 												<Input value="{outro}" editable="false" />
-												<Input value="{valor1}" editable="false" change="onAplicarRegras" />
+												<!--<Input value="{valor1}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor2}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor3}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor4}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor5}" editable="false" change="onAplicarRegras" />
-												<Input value="{valor6}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor6}" editable="false" change="onAplicarRegras" />-->
+												<Input textAlign="End" value="{path: 'valor1', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor2', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor3', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor4', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor5', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor6', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -306,12 +321,18 @@
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
 												<Input value="{outro}" editable="false" />
-												<Input value="{valor1}" editable="false" change="onAplicarRegras" />
+												<!--<Input value="{valor1}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor2}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor3}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor4}" editable="false" change="onAplicarRegras" />
 												<Input value="{valor5}" editable="false" change="onAplicarRegras" />
-												<Input value="{valor6}" editable="false" change="onAplicarRegras" />
+												<Input value="{valor6}" editable="false" change="onAplicarRegras" />-->
+												<Input textAlign="End" value="{path: 'valor1', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor2', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor3', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor4', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor5', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'valor6', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -380,10 +401,10 @@
 										<Column width="10rem">
 											<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" />
 										</Column>
-										<Column width="10rem">
+										<Column width="14rem">
 											<Text text="{i18n>viewGeralOthertaxes}" />
 										</Column>
-										<Column width="10rem">
+										<Column width="14rem">
 											<Text text="{i18n>viewGeralIncentivosFiscais}" />
 										</Column>
 										<Column width="10rem">
@@ -392,13 +413,13 @@
 										<Column width="10rem">
 											<Text text="{i18n>viewGeralNetLocalTax}" />
 										</Column>
-										<Column width="10rem">
+										<Column width="14rem">
 											<Text text="WHT" />
 										</Column>
 										<Column width="10rem">
 											<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" />
 										</Column>
-										<Column width="10rem">
+										<Column width="14rem">
 											<Text text="{i18n>viewGeralTotalInterim}" />
 										</Column>
 										<Column width="10rem">
@@ -409,7 +430,7 @@
 										<ColumnListItem>
 											<cells>
 												<ObjectIdentifier title="{labelPeriodo}" />
-												<Input type="Number" value="{rf_taxable_income_loss_before_losses_and_tax_credits}" editable="false" />
+												<!--<Input type="Number" value="{rf_taxable_income_loss_before_losses_and_tax_credits}" editable="false" />
 												<Input type="Number" value="{rf_total_losses_utilized}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{rf_taxable_income_loss_after_losses}" editable="false" />
 												<Input type="Number" value="{rf_income_tax_before_other_taxes_and_credits}" editable="false" />
@@ -432,7 +453,31 @@
 													<Input type="Number" value="{rf_total_interim_taxes_payments_antecipacoes}" editable="false" />
 													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarAntecipacoes" />
 												</HBox>
-												<Input type="Number" value="{rf_tax_due_overpaid}" editable="false" />
+												<Input type="Number" value="{rf_tax_due_overpaid}" editable="false" />-->
+												<Input textAlign="End" value="{path: 'rf_taxable_income_loss_before_losses_and_tax_credits', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'rf_total_losses_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'rf_taxable_income_loss_after_losses', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'rf_income_tax_before_other_taxes_and_credits', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<HBox>
+													<Input textAlign="End" value="{path: 'rf_other_taxes', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarOtherTaxes" />
+												</HBox>
+												<HBox>
+													<Input textAlign="End" value="{path: 'rf_incentivos_fiscais', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarIncentivosFiscais" />
+												</HBox>
+												<Input textAlign="End" value="{path: 'rf_total_other_taxes_and_tax_credits', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false"/>
+												<Input textAlign="End" value="{path: 'rf_net_local_tax', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<HBox>
+													<Input textAlign="End" value="{path: 'rf_wht', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarWHT" />
+												</HBox>
+												<Input textAlign="End" value="{path: 'rf_overpayment_from_prior_year_applied_to_current_year', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<HBox>
+													<Input textAlign="End" value="{path: 'rf_total_interim_taxes_payments_antecipacoes', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarAntecipacoes" />
+												</HBox>
+												<Input textAlign="End" value="{path: 'rf_tax_due_overpaid', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -474,12 +519,18 @@
 										<ColumnListItem>
 											<cells>
 												<ObjectIdentifier title="{labelPeriodo}" />
-												<Input type="Number" value="{it_income_tax_as_per_the_statutory_financials}" editable="false" />
+												<!--<Input type="Number" value="{it_income_tax_as_per_the_statutory_financials}" editable="false" />
 												<Input type="Number" value="{it_income_tax_as_per_the_tax_return}" editable="false" />
 												<Input type="Number" value="{it_jurisdiction_tax_rate_average}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{it_statutory_tax_rate_average}" editable="false" change="onAplicarRegras" />
 												<Input type="Number" value="{it_effective_tax_rate_as_per_the_statutory_financials}" editable="false" />
-												<Input type="Number" value="{it_effective_tax_rate_as_per_the_tax_return}" editable="false" />
+												<Input type="Number" value="{it_effective_tax_rate_as_per_the_tax_return}" editable="false" />-->
+												<Input textAlign="End" value="{path: 'it_income_tax_as_per_the_statutory_financials', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'it_income_tax_as_per_the_tax_return', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'it_jurisdiction_tax_rate_average', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'it_statutory_tax_rate_average', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
+												<Input textAlign="End" value="{path: 'it_effective_tax_rate_as_per_the_statutory_financials', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'it_effective_tax_rate_as_per_the_tax_return', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -563,7 +614,7 @@
 								visibleRowCountMode="Interactive"
 								selectionMode="None" 
 								enableColumnReordering="false">
-								<t:columns>
+								<!--<t:columns>
 									<t:Column width="8.5rem">
 										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
 										<t:template>
@@ -630,7 +681,6 @@
 										<Text text="Total" />
 										<HBox>
 											<Text text="Opening Balance" width="12rem" />
-											<!--<Text text="999.999.999,99" textAlign="End" width="7rem" />-->
 											<Text text="{/TotalLossSchedule/opening_balance}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
@@ -652,6 +702,97 @@
 										<HBox>
 											<Text text="Closing Balance" width="12rem" />
 											<Text text="{/TotalLossSchedule/closing_balance}" textAlign="End" width="7rem" />
+										</HBox>
+									</VBox>
+								</t:footer>-->
+								<t:columns>
+									<t:Column width="8.5rem" hAlign="Center">
+										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
+										<t:template>
+											<Text text="{fy}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="8.5rem" hAlign="Center">
+										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" />
+										<t:template>
+											<Text text="{year_of_expiration}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
+										<t:template>
+											<Text text="{path: 'opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}" />
+										<t:template>
+											<Text text="{path: 'current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}" />
+										<t:template>
+											<Text text="{path: 'current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
+										<t:template>
+											<Input textAlign="End" value="{path: 'adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" change="onAplicarRegras" enabled="false" />
+										</t:template>
+									</t:Column>
+									<t:Column width="15rem">
+										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
+										<t:template>
+											<Input type="Text" value="{justificativa}" enabled="false" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}" />
+										<t:template>
+											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" />
+										<t:template>
+											<Text text="{path: 'closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</t:template>
+									</t:Column>
+									<t:Column width="15rem">
+										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
+										<t:template>
+											<Input value="{obs}" enabled="false" />
+										</t:template>
+									</t:Column>
+								</t:columns>
+								<t:footer>
+									<VBox>
+										<Text text="Total" />
+										<HBox>
+											<Text text="Opening Balance" width="12rem" />
+											<Text text="{path: '/TotalLossSchedule/opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
+										</HBox>
+										<HBox>
+											<Text text="Current Year Loss" width="12rem" />
+											<Text text="{path: '/TotalLossSchedule/current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
+										</HBox>
+										<HBox>
+											<Text text="Current Year Loss Utilized" width="12rem" />
+											<Text text="{path: '/TotalLossSchedule/current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
+										</HBox>
+										<HBox>
+											<Text text="Adjustments" width="12rem" />
+											<Text text="{path: '/TotalLossSchedule/adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
+										</HBox>
+										<HBox>
+											<Text text="Current Year Loss Expired" width="12rem" />
+											<Text text="{path: '/TotalLossSchedule/current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
+										</HBox>
+										<HBox>
+											<Text text="Closing Balance" width="12rem" />
+											<Text text="{path: '/TotalLossSchedule/closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
 								</t:footer>
@@ -724,58 +865,58 @@
 								selectionMode="None" 
 								enableColumnReordering="false">
 								<t:columns>
-									<t:Column width="8.5rem">
+									<t:Column width="8.5rem" hAlign="Center">
 										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
 										<t:template>
 											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="8.5rem">
+									<t:Column width="8.5rem" hAlign="Center">
 										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" />
 										<t:template>
 											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
+									<t:Column width="12rem" hAlign="End">
 										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
 										<t:template>
-											<Text text="{opening_balance}" />
+											<Text text="{path: 'opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}" />
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}" />
 										<t:template>
-											<Text text="{current_year_value}" />
+											<Text text="{path: 'current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}" />
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}" />
 										<t:template>
-											<Text text="{current_year_value_utilized}" />
+											<Text text="{path: 'current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
+									<t:Column width="12rem" hAlign="End">
 										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
 										<t:template>
-											<Input type="Number" value="{adjustments}" change="onAplicarRegras" enabled="false" />
+											<Input textAlign="End" value="{path: 'adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" change="onAplicarRegras" enabled="false" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input value="{justificativa}" enabled="false" />
+											<Input type="Text" value="{justificativa}" enabled="false" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" />
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}" />
 										<t:template>
-											<Text text="{current_year_value_expired}" />
+											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
+									<t:Column width="12rem" hAlign="End">
 										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" />
 										<t:template>
-											<Text text="{closing_balance}" />
+											<Text text="{path: 'closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
@@ -790,28 +931,27 @@
 										<Text text="Total" />
 										<HBox>
 											<Text text="Opening Balance" width="12rem" />
-											<!--<Text text="999.999.999,99" textAlign="End" width="7rem" />-->
-											<Text text="{/TotalCreditSchedule/opening_balance}" textAlign="End" width="7rem" />
+											<Text text="{path: '/TotalCreditSchedule/opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Current Year Credit" width="12rem" />
-											<Text text="{/TotalCreditSchedule/current_year_value}" textAlign="End" width="7rem" />
+											<Text text="Current Year Loss" width="12rem" />
+											<Text text="{path: '/TotalCreditSchedule/current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Current Year Credit Utilized" width="12rem" />
-											<Text text="{/TotalCreditSchedule/current_year_value_utilized}" textAlign="End" width="7rem" />
+											<Text text="Current Year Loss Utilized" width="12rem" />
+											<Text text="{path: '/TotalCreditSchedule/current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Adjustments" width="12rem" />
-											<Text text="{/TotalCreditSchedule/adjustments}" textAlign="End" width="7rem" />
+											<Text text="{path: '/TotalCreditSchedule/adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Current Year Credit Expired" width="12rem" />
-											<Text text="{/TotalCreditSchedule/current_year_value_expired}" textAlign="End" width="7rem" />
+											<Text text="Current Year Loss Expired" width="12rem" />
+											<Text text="{path: '/TotalCreditSchedule/current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
 											<Text text="Closing Balance" width="12rem" />
-											<Text text="{/TotalCreditSchedule/closing_balance}" textAlign="End" width="7rem" />
+											<Text text="{path: '/TotalCreditSchedule/closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
 								</t:footer>

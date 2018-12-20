@@ -2,13 +2,17 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/Validador",
+		"sap/ui/core/format/NumberFormat"
 	],
-	function (BaseController, NodeAPI, Utils) {
+	function (BaseController, NodeAPI, Utils, Validador, NumberFormat) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.VisualizacaoTrimestre", {
 			onInit: function () {
+				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				
 				/*this.setModel(new sap.ui.model.json.JSONModel({
 					TotalLossSchedule: {
 						opening_balance: 0,
@@ -200,13 +204,15 @@ sap.ui.define(
 				}).setEnabled(false);
 				
 				var oInputValor = new sap.m.Input({
-					type: "Number",
-					value: "{valor}"
+					textAlign: "End",
+					value: "{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
 				}).attachChange(function (oEvent) {
-					if (isNegativo) {
-						oEvent.getSource().setValue(Math.abs(oEvent.getSource().getValue()) * -1);
+					if (this._validarNumeroInserido(oEvent) && isNegativo) {
+						var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+						var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+						oEvent.getSource().setValue(sValorFormatado);
 					}
-				}).setEnabled(false);
+				}, this).setEnabled(false);
 				
 				var oTemplate = new sap.m.ColumnListItem({
 					cells: [/*oBtnExcluir,*/ oInputDescricao, oInputValor]
@@ -314,7 +320,8 @@ sap.ui.define(
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
-					width: "150px"
+					width: "110px",
+					hAlign: "End"
 				}).setHeader(new sap.m.Text({
 					text: "Principal"
 				})));
@@ -358,7 +365,8 @@ sap.ui.define(
 				});
 				
 				var oTextPrincipal = new sap.m.Text({
-					text: "{principal}"
+					textAlign: "End",
+					text: "{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
 				});
 				
 				/*var oTextJuros = new sap.m.Text({
@@ -433,12 +441,23 @@ sap.ui.define(
 					value: "{descricao}"
 				}).setEnabled(false);
 				
-				var oInputValor = new sap.m.Input({
+				/*var oInputValor = new sap.m.Input({
 					type: "Number",
 					value: "{valor}"
 				}).attachChange(function (oEvent2) {
 					oEvent2.getSource().setValue(Math.abs(oEvent2.getSource().getValue()) * -1);
-				}).setEnabled(false);
+				}).setEnabled(false);*/
+				
+				var oInputValor = new sap.m.Input({
+					textAlign: "End",
+					value: "{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}).attachChange(function (oEvent2) {
+					if (this._validarNumeroInserido(oEvent2)) {
+						var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+						var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+						oEvent.getSource().setValue(sValorFormatado);
+					}
+				}, this).setEnabled(false);
 				
 				oTemplate = new sap.m.ColumnListItem({
 					cells: [/*oBtnExcluir,*/ oInputDescricao, oInputValor]
@@ -460,7 +479,7 @@ sap.ui.define(
 
 				/* Criação do diálogo com base na tabela */
 				var dialog = new sap.m.Dialog({
-					contentWidth: "700px",
+					contentWidth: "800px",
 					showHeader: false,
 					type: "Message",
 					content: oScrollContainer,
@@ -486,8 +505,48 @@ sap.ui.define(
 	
 				dialog.open();
 			},
+			
+			_limparMascara: function (sValor) {
+				return sValor.replace(/\./g,"").replace(",", ".");
+			},
+
+			_validarNumeroInserido: function (oEvent) {
+				if (oEvent && oEvent.getSource()) {
+					if (!Validador.isNumber(this._limparMascara(oEvent.getSource().getValue()))) {
+						oEvent.getSource().setValue(0);
+						
+						var dialog = new sap.m.Dialog({
+							title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+							type: "Message",
+							content: new sap.m.Text({
+								text: this.getResourceBundle().getText("viewGeralValorInseridoNaoValido")
+							}),
+							endButton: new sap.m.Button({
+								text: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsFechar"),
+								press: function () {
+									dialog.close();
+								}
+							}),
+							afterClose: function () {
+								dialog.destroy();
+							}
+						});
+		
+						dialog.open();
+						
+						return false;
+					}
+					else {
+						return true;
+					}
+				}
+				
+				return false;
+			},
 
 			onAplicarRegras: function (oEvent) {
+				this._validarNumeroInserido(oEvent);
+				
 				this._onAplicarFormulasRC();
 				this._onCalcularTotalDiferenca();
 				this._onCalcularTotalTaxasMultiplas();
@@ -2454,49 +2513,23 @@ sap.ui.define(
 					}
 				});
 			},*/
-
-			_carregarScheduleInicial: function (sTipo, sProperty) {
+			
+			_carregarHistoricoSchedule: function (sProperty, sTipo) {
 				var that = this,
 					oEmpresa = this.getModel().getProperty("/Empresa"),
-					oPeriodo = this.getModel().getProperty("/Periodo"),
 					oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
 
-				var oParams = {
+				var oParam = {
 					empresa: oEmpresa,
-					periodo: oPeriodo,
 					anoCalendario: oAnoCalendario,
 					tipo: sTipo // Loss Schedule
 				};
 
-				var sEntidade = "ScheduleParaNovoPeriodo?parametros=" + JSON.stringify(oParams);
-
-				NodeAPI.listarRegistros(sEntidade, function (response) {
-					if (response) {
-						/*for (var i = 0; i < response.length; i++) {
-							response[i].ind_corrente = true;
-						}*/
-						//console.table(response);
-						that.getModel().setProperty(sProperty, response);
-						//that._carregarHistoricoSchedule(sProperty, sTipo);
+				NodeAPI.pListarRegistros("HistoricoSchedule?parametros=" + JSON.stringify(oParam))
+					.then(function (response) {
+						that.getModel().setProperty(sProperty, that.getModel().getProperty(sProperty).concat(response));
 						that.onAplicarRegras();
-					}
-				});
-
-				/*var that = this, 
-					oEmpresa = this.getModel().getProperty("/Empresa"),
-					oPeriodo = this.getModel().getProperty("/Periodo"),
-					oAnoCalendario = this.getModel().getProperty("/AnoCalendario"),
-					sIdRelTaxPackagePeriodo = oPeriodo.id_rel_tax_package_periodo,
-					sIdEmpresa = oEmpresa.id_empresa,
-					sIdAnoCalendario = oAnoCalendario.idAnoCalendario;
-				
-				var sEntidade = "ScheduleParaNovoPeriodo?idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo + "&empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario;
-				
-				NodeAPI.listarRegistros(sEntidade, function (response) {
-					if (response) {
-						that.getModel().setProperty("/LossSchedule", response);		
-					}
-				});*/
+					});
 			},
 			
 			_carregarTaxasMultiplas: function (sIdTaxReconciliation) {

@@ -6,7 +6,7 @@ sap.ui.define(
 	],
 	function (BaseController, NumericIcon, Constants) {
 		return BaseController.extend("ui5ns.ui5.controller.SelecaoModulo", {
-
+			
 			onStartUpload: function (oEvent) {
 				var that = this,
 					oButton = oEvent.getSource(),
@@ -24,28 +24,26 @@ sap.ui.define(
 					var oFileUploader = this.byId(oUploadCollectionItem.getFileUploader());
 
 					//aPromise.push(this._uploadArquivo(oFileUploader.getValue(), oFileUploader.oFileUpload.files[0]));
-					
+
 					(function (oItem) {
 						that._uploadArquivo(oFileUploader.getValue(), oFileUploader.oFileUpload.files[0])
 							.then(function (response) {
 								oUploadCollection.removeItem(oItem);
 								that._atualizarDados();
-								
+
 								if (oUploadCollection.getItems().length === 0) {
-									that.setBusy(oButton, false); 
+									that.setBusy(oButton, false);
 									oButton.setEnabled(true);
 								}
 							})
 							.catch(function (err) {
 								sap.m.MessageToast.show("Erro ao carregar arquivo: " + oFileUploader.getValue());
 								//if (oUploadCollection.getItems().length === 0) {
-								that.setBusy(oButton, false); 
+								that.setBusy(oButton, false);
 								oButton.setEnabled(true);
 								//}
 							});
-					}) (oUploadCollectionItem);
-						
-					
+					})(oUploadCollectionItem);
 
 					//alert(this.byId(oFile.getFileUploader()).oFileUpload.files[0]);
 
@@ -79,7 +77,7 @@ sap.ui.define(
 						that.setBusy(oButton, false); 
 						oButton.setEnabled(true);
 					});*/
-					
+
 				/*var oTextArea = this.byId("TextArea");
 				var cFiles = oUploadCollection.getItems().length;
 				var uploadInfo = cFiles + " file(s)";
@@ -108,7 +106,7 @@ sap.ui.define(
 							response[0].label_declaracao = "Declaração: SIM.\nEnvio Declaração: 11/12/2018";
 						}
 						for (var i = 1; i < response.length; i++) {
-							response[i].label_declaracao = "Declaração: NÃO"; 
+							response[i].label_declaracao = "Declaração: NÃO";
 						}
 						that.getModel().setProperty("/Arquivos", response);
 					})
@@ -209,7 +207,7 @@ sap.ui.define(
 					});
 				});
 			},
-			
+
 			_confirmarExclusao: function (onConfirm) {
 				var dialog = new sap.m.Dialog({
 					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
@@ -227,7 +225,7 @@ sap.ui.define(
 						}
 					}),
 					endButton: new sap.m.Button({
-						text:  this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
 						press: function () {
 							dialog.close();
 						}
@@ -244,16 +242,16 @@ sap.ui.define(
 				var that = this,
 					oButton = oEvent.getSource(),
 					oArquivo = oEvent.getSource().getBindingContext().getObject();
-					
+
 				oArquivo.btnExcluirEnabled = false;
 				oArquivo.btnDownloadEnabled = false;
 				this.getModel().refresh();
 				this.setBusy(oButton, true);
-				
+
 				this._downloadArquivo(oArquivo.id_arquivo)
 					.then(function (response) {
 						that._salvarArquivo(response[0].nome_arquivo, response[0].mimetype, response[0].arquivo.data);
-						
+
 						oArquivo.btnExcluirEnabled = true;
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
@@ -261,7 +259,7 @@ sap.ui.define(
 					})
 					.catch(function (err) {
 						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
-						
+
 						oArquivo.btnExcluirEnabled = true;
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
@@ -313,18 +311,18 @@ sap.ui.define(
 				var that = this,
 					oButton = oEvent.getSource(),
 					oArquivo = oEvent.getSource().getBindingContext().getObject();
-				
+
 				this._confirmarExclusao(function () {
 					oArquivo.btnExcluirEnabled = false;
 					oArquivo.btnDownloadEnabled = false;
 					that.getModel().refresh();
 					that.setBusy(oButton, true);
-	
+
 					that._excluirArquivo(oArquivo.id_arquivo)
 						.then(function (response) {
 							sap.m.MessageToast.show(response);
 							that._atualizarDados();
-							
+
 							oArquivo.btnExcluirEnabled = true;
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
@@ -332,7 +330,7 @@ sap.ui.define(
 						})
 						.catch(function (err) {
 							sap.m.MessageToast.show("Erro ao excluir arquivo: " + oArquivo.nome_arquivo);
-							
+
 							oArquivo.btnExcluirEnabled = true;
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
@@ -341,16 +339,30 @@ sap.ui.define(
 				});
 			},
 
+			calcular: function (oEvent) {
+				var fValor1 = this.getModel().getProperty("/Valor1");
+				
+				var fTotalValores = 0,
+					aValor = this.getModel().getProperty("/Valores");
+				
+				for (var i = 0, length = aValor.length; i < length; i++) {
+					fTotalValores += aValor[i].valor;
+				}
+				
+				var fTotal = fValor1 + fTotalValores;
+				
+				this.getModel().setProperty("/Total", fTotal);
+			},
+	
 			onInit: function () {
-				this.setModel(new sap.ui.model.json.JSONModel({
-					Periodos: [{
-						periodo: "1º trimestre",
-						n1: 1,
-						n2: 2
+				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+
+				this.getView().setModel(new sap.ui.model.json.JSONModel({
+					Valor1: null,
+					Valores: [{
+						valor: 15
 					}, {
-						periodo: "2º trimestre",
-						n1: 5,
-						n2: 2
+						valor: 23.56
 					}]
 				}));
 

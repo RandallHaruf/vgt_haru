@@ -50,6 +50,10 @@
 	color: green;
 }*/
 
+.myApp .rightAlignedInput input {
+	text-align: right;
+}
+
 .myApp .bordered {
 	border: 2px;
 	border-style: groove;

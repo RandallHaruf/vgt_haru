@@ -2,14 +2,16 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/Validador",
+		"sap/ui/core/format/NumberFormat"
 	],
-	function (BaseController, NodeAPI, Utils) {
+	function (BaseController, NodeAPI, Utils, Validador, NumberFormat) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
 			onInit: function () {
-				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 				
 				var oModel = new sap.ui.model.json.JSONModel({});
 				oModel.setSizeLimit(300);
@@ -101,15 +103,17 @@ sap.ui.define(
 				var oInputDescricao = new sap.m.Input({
 					value: "{descricao}"
 				});
-
+				
 				var oInputValor = new sap.m.Input({
-					type: "Number",
-					value: "{valor}"
+					textAlign: "End",
+					value: "{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
 				}).attachChange(function (oEvent) {
-					if (isNegativo) {
-						oEvent.getSource().setValue(Math.abs(oEvent.getSource().getValue()) * -1);
+					if (this._validarNumeroInserido(oEvent) && isNegativo) {
+						var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+						var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+						oEvent.getSource().setValue(sValorFormatado);
 					}
-				});
+				}, this);
 
 				var oTemplate = new sap.m.ColumnListItem({
 					cells: [oBtnExcluir, oInputDescricao, oInputValor]
@@ -211,7 +215,8 @@ sap.ui.define(
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
-					width: "150px"
+					width: "110px",
+					hAlign: "End"
 				}).setHeader(new sap.m.Text({
 					text: "Principal"
 				})));
@@ -234,7 +239,8 @@ sap.ui.define(
 				});
 
 				var oTextPrincipal = new sap.m.Text({
-					text: "{principal}"
+					textAlign: "End",
+					text: "{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
 				});
 
 				var oTemplate = new sap.m.ColumnListItem({
@@ -301,12 +307,23 @@ sap.ui.define(
 					value: "{descricao}"
 				});
 
-				var oInputValor = new sap.m.Input({
+				/*var oInputValor = new sap.m.Input({
 					type: "Number",
 					value: "{valor}"
 				}).attachChange(function (oEvent2) {
 					oEvent2.getSource().setValue(Math.abs(oEvent2.getSource().getValue()) * -1);
-				});
+				});*/
+				
+				var oInputValor = new sap.m.Input({
+					textAlign: "End",
+					value: "{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}).attachChange(function (oEvent2) {
+					if (this._validarNumeroInserido(oEvent2)) {
+						var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+						var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+						oEvent.getSource().setValue(sValorFormatado);
+					}
+				}, this);
 
 				oTemplate = new sap.m.ColumnListItem({
 					cells: [oBtnExcluir, oInputDescricao, oInputValor]
@@ -328,7 +345,7 @@ sap.ui.define(
 
 				/* Criação do diálogo com base na tabela */
 				var dialog = new sap.m.Dialog({
-					contentWidth: "700px",
+					contentWidth: "800px",
 					showHeader: false,
 					type: "Message",
 					content: oScrollContainer,
@@ -349,7 +366,47 @@ sap.ui.define(
 				dialog.open();
 			},
 
+			_limparMascara: function (sValor) {
+				return sValor.replace(/\./g,"").replace(",", ".");
+			},
+
+			_validarNumeroInserido: function (oEvent) {
+				if (oEvent && oEvent.getSource()) {
+					if (!Validador.isNumber(this._limparMascara(oEvent.getSource().getValue()))) {
+						oEvent.getSource().setValue(0);
+						
+						var dialog = new sap.m.Dialog({
+							title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+							type: "Message",
+							content: new sap.m.Text({
+								text: this.getResourceBundle().getText("viewGeralValorInseridoNaoValido")
+							}),
+							endButton: new sap.m.Button({
+								text: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsFechar"),
+								press: function () {
+									dialog.close();
+								}
+							}),
+							afterClose: function () {
+								dialog.destroy();
+							}
+						});
+		
+						dialog.open();
+						
+						return false;
+					}
+					else {
+						return true;
+					}
+				}
+				
+				return false;
+			},
+
 			onAplicarRegras: function (oEvent) {
+				this._validarNumeroInserido(oEvent);
+				
 				this._onAplicarFormulasRC();
 				this._onCalcularTotalDiferenca();
 				this._onCalcularTotalTaxasMultiplas();
@@ -836,8 +893,8 @@ sap.ui.define(
 
 				jQuery.sap.require("sap.m.MessageBox");
 
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir esta linha?", {
-					title: "Confirmação",
+				sap.m.MessageBox.confirm(this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsVocetemcertezaquedesejaexcluiralinha"), {
+					title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 					onClose: function (oAction) {
 						if (oAction === sap.m.MessageBox.Action.OK) {
 							var aData = that.getModel().getProperty(sProperty);
@@ -1622,7 +1679,7 @@ sap.ui.define(
 					title: "Confirmação",
 					type: "Message",
 					content: new sap.m.Text({
-						text: "Você tem certeza que deseja cancelar a edição?"
+						text: this.getResourceBundle().getText("viewDetalhesTrimestreJStextsVocêtemcertezaquedesejacancelaraedição")
 					}),
 					beginButton: new sap.m.Button({
 						text: "Sim",

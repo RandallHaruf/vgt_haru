@@ -21,6 +21,26 @@
 		</f:title>
 		<f:content>
 			<VBox>
+				<!--<Input change="calcular" value="{path: '/Valor1', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" /> 
+				<Table 
+					inset="false"
+					items="{
+						path: '/Valores'
+					}">
+					<columns>
+						<Column>
+							<Title text="Valor" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Input change="calcular" value="{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+				<Input value="{path: '/Total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" /> -->
 				<!--<VBox>
 					<VBox>
 						<HBox>
