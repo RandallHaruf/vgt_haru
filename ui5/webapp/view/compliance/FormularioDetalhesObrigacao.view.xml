@@ -32,13 +32,13 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<!--<ObjectIdentifier title="{/RespostaObrigacao/id_resposta_obrigacao}" />-->
+											<ObjectAttribute title="{i18n>viewGeralEmpresa}" text="{/RespostaObrigacao/nome}"/>
 										</l:HorizontalLayout>
-										<!--<l:HorizontalLayout allowWrapping="true">
+										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout>
-												<ObjectAttribute title="Ano Calendário" text="2018"/>
+												<ObjectAttribute title="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}" text="{/RespostaObrigacao/ano_calendario}"/>
 											</l:VerticalLayout>
-										</l:HorizontalLayout>-->
+										</l:HorizontalLayout>
 									</l:VerticalLayout>
 								</content>
 							</Panel>
@@ -214,7 +214,7 @@
 											<HBox>
 												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="Enviar o arquivo para o Nodejs"
 													placeholder="Escolha um arquivo"/>
-												<Button id="btnEnviar" text="Enviar Arquivo" press="onEnviarArquivo"/>
+												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
 											</HBox>
 										</VBox>
 										<Table id="tabelaDocumentos" inset="false" items="{ path: '/Documentos', sorter: [{ path: 'nome_arquivo' }, { path: 'data_upload' }] }">

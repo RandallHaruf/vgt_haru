@@ -181,6 +181,10 @@ module.exports = {
 			oWhere.push(' tblDominioObrigacaoStatus."id_dominio_obrigacao_status" = ? ');
 			aParams.push(req.query.idRegistro);
 		}
+		if (req.query.idModeloObrigacao) {
+			oWhere.push('tblModeloObrigacao."id_modelo" = ? ');
+			aParams.push(req.query.idModeloObrigacao);
+		}
 
 		if (oWhere.length > 0) {
 			sStatement += "where ";

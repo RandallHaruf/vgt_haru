@@ -11,7 +11,7 @@ sap.ui.define(
 			BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 					onInit: function () {
-
+						
 						//this.setModel(new sap.ui.model.json.JSONModel({}));
 						this.setModel(new sap.ui.model.json.JSONModel({
 							RespostaObrigacao: {
@@ -151,7 +151,7 @@ sap.ui.define(
 								var oBtnEnviar = oEvent.getSource();
 								var oTable = this.byId("tabelaDocumentos");
 								var DataFormatada;
-	
+							
 								//var CkeckSelect = oEvent.getParameter("selected");
 								if (DataConclusao === null ){
 								var now = new Date();
@@ -161,6 +161,8 @@ sap.ui.define(
 								else
 								{
 								DataFormatada = DataConclusao.getFullYear() + "-"+ (DataConclusao.getMonth()+1) +"-"+ DataConclusao.getDate();
+								this._AtualizaStatusObrigacao(DataFormatada);
+								
 								}
 								var oData = {
 
@@ -193,7 +195,48 @@ sap.ui.define(
 									sap.m.MessageToast.show("Selecione um arquivo");
 								}
 							},
-
+							
+							_AtualizaStatusObrigacao: function(Data){
+								var that = this;
+								var obj2 = that.getModel().getProperty("/RespostaObrigacao");
+								var Status;
+								
+								if (obj2["prazo_entrega_customizado"] === null){
+									if(obj2["prazo_entrega"] <= Data){
+										Status = 6;
+									}
+									else
+									{
+										Status = 7;
+									}
+								}
+								else
+								{
+									if(obj2["prazo_entrega_customizado"] <= Data){
+										Status = 6;
+									}
+									else
+									{
+										Status = 7;
+									}
+								}
+								
+								NodeAPI.atualizarRegistro("RespostaObrigacao", obj2.id_resposta_obrigacao, {
+												suporteContratado: obj2["suporte_contratado"],
+												suporteEspecificacao: obj2["suporte_especificacao"],
+												suporteValor: obj2["suporte_valor"],
+												fkIdDominioMoeda: obj2["fk_id_dominio_moeda.id_dominio_moeda"],
+												fkIdRelModeloEmpresa: obj2["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
+												fkIdDominioAnoFiscal: obj2["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
+												fkIdDominioAnoCalendario: obj2["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
+												fkIdDominioObrigacaoStatusResposta: Status ,
+												dataExtensao: obj2["data_extensao"]
+											}, function (response) {
+												//that.getRouter().navTo("complianceListagemObrigacoes");
+											});
+								
+							},
+							
 							onBaixarArquivo: function (oEvent) {
 								var that = this,
 									oButton = oEvent.getSource(),
@@ -255,7 +298,7 @@ sap.ui.define(
 											that.getModel().refresh();
 										});
 								});
-							that._atualizarDocumentos();
+							that._atualizarDocumentos('/Documentos', idObrigacao, oTable);
 							},
 
 							_confirmarExclusao: function (onConfirm) {
@@ -296,7 +339,6 @@ sap.ui.define(
 									}
 
 								});
-
 								var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 								var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 								oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
@@ -304,6 +346,7 @@ sap.ui.define(
 									"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? false : true;
 								this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 								that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
+								
 								
 								this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
 							}
