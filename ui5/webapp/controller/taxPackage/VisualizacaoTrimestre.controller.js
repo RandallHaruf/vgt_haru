@@ -2078,12 +2078,18 @@ sap.ui.define(
 					aAntecipacao = this.getModel().getProperty("/PagamentosTTC"),
 					aOutrasAntecipacoes = this.getModel().getProperty("/OutrasAntecipacoes");
 
+				// @NOVO_SCHEDULE - comentar
 				var oLossSchedule = this.getModel().getProperty("/LossSchedule").find(function (obj) {
 						return obj.ind_corrente === true;
 					}),
 					oCreditSchedule = this.getModel().getProperty("/CreditSchedule").find(function (obj) {
 						return obj.ind_corrente === true;
 					});
+
+				/*
+				@NOVO_SCHEDULE - descomentar
+				var aLossSchedule = this.getModel().getProperty("/LossSchedule"),
+					aCreditSchedule = this.getModel().getProperty("/CreditSchedule");*/
 
 				console.log("######## INSERIR ########");
 				console.log("- Items To Report: ");
@@ -2354,7 +2360,8 @@ sap.ui.define(
 					ind_ativo: true
 				}]);*/
 			},
-
+			
+			// @NOVO_SCHEDULE - comentar
 			_carregarSchedule: function (sTipo, sProperty, sIdRelTaxPackagePeriodo) {
 				var that = this;
 
@@ -2363,6 +2370,7 @@ sap.ui.define(
 						for (var i = 0; i < response.length; i++) {
 							response[i].ind_corrente = true;
 						}
+						
 						that.getModel().setProperty(sProperty, response);
 						that._carregarHistoricoSchedule(sProperty, sTipo);
 						that.onAplicarRegras();
@@ -2371,25 +2379,30 @@ sap.ui.define(
 					}
 				});
 			},
-			
-			_carregarHistoricoSchedule: function (sProperty, sTipo) {
+
+			/*
+			@NOVO_SCHEDULE - descomentar
+			_carregarSchedule: function (sTipo, sProperty, sIdRelTaxPackagePeriodo) {
 				var that = this,
-					oEmpresa = this.getModel().getProperty("/Empresa"),
 					oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
 
-				var oParam = {
-					empresa: oEmpresa,
-					anoCalendario: oAnoCalendario,
-					tipo: sTipo // Loss Schedule
-				};
-				
-				NodeAPI.pListarRegistros("HistoricoSchedule?parametros=" + JSON.stringify(oParam))
-					.then(function (response) {
-						that.getModel().setProperty(sProperty, that.getModel().getProperty(sProperty).concat(response));
+				NodeAPI.listarRegistros("DeepQuery/Schedule?tipo=" + sTipo + "&idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo, function (response) {
+					if (response && response.length > 0) {
+						var oScheduleCorrente = response.find(function (obj) { 
+							return obj.ano_fiscal === Number(oAnoCalendario.anoCalendario);
+						});
+						
+						if (oScheduleCorrente) oScheduleCorrente.ind_corrente = true;
+						
+						that.getModel().setProperty(sProperty, response);
 						that.onAplicarRegras();
-					});
-			},
-
+					} else {
+						that._carregarScheduleInicial(sTipo, sProperty);
+					}
+				});
+			},*/
+			
+			// @NOVO_SCHEDULE - COMENTAR
 			_carregarScheduleInicial: function (sTipo, sProperty) {
 				var that = this,
 					oEmpresa = this.getModel().getProperty("/Empresa"),
@@ -2410,9 +2423,61 @@ sap.ui.define(
 						for (var i = 0; i < response.length; i++) {
 							response[i].ind_corrente = true;
 						}
-						//console.table(response);
 						that.getModel().setProperty(sProperty, [response]);
 						that._carregarHistoricoSchedule(sProperty, sTipo);
+						that.onAplicarRegras();
+					}
+				});
+			},
+
+			/*
+			@NOVO_SCHEDULE - descomentar
+			_carregarScheduleInicial: function (sTipo, sProperty) {
+				var that = this,
+					oEmpresa = this.getModel().getProperty("/Empresa"),
+					oPeriodo = this.getModel().getProperty("/Periodo"),
+					oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
+
+				var oParams = {
+					empresa: oEmpresa,
+					periodo: oPeriodo,
+					anoCalendario: oAnoCalendario,
+					tipo: sTipo // Loss Schedule
+				};
+
+				var sEntidade = "ScheduleParaNovoPeriodo?parametros=" + JSON.stringify(oParams);
+
+				NodeAPI.listarRegistros(sEntidade, function (response) {
+					if (response) {
+						that.getModel().setProperty(sProperty, response);
+						that.onAplicarRegras();
+					}
+				});
+			},*/
+
+			_carregarScheduleInicial: function (sTipo, sProperty) {
+				var that = this,
+					oEmpresa = this.getModel().getProperty("/Empresa"),
+					oPeriodo = this.getModel().getProperty("/Periodo"),
+					oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
+
+				var oParams = {
+					empresa: oEmpresa,
+					periodo: oPeriodo,
+					anoCalendario: oAnoCalendario,
+					tipo: sTipo // Loss Schedule
+				};
+
+				var sEntidade = "ScheduleParaNovoPeriodo?parametros=" + JSON.stringify(oParams);
+
+				NodeAPI.listarRegistros(sEntidade, function (response) {
+					if (response) {
+						/*for (var i = 0; i < response.length; i++) {
+							response[i].ind_corrente = true;
+						}*/
+						//console.table(response);
+						that.getModel().setProperty(sProperty, response);
+						//that._carregarHistoricoSchedule(sProperty, sTipo);
 						that.onAplicarRegras();
 					}
 				});

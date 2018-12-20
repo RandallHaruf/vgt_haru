@@ -5,23 +5,23 @@ var model = require("../models/modelSchedule");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		
+
 		var aParams = [];
-		
+
 		if (req.query.tipo) {
 			aParams.push({
 				coluna: model.colunas.fkDominioScheduleTipo,
 				valor: req.query.tipo
 			});
 		}
-		
+
 		if (req.query.idRelTaxPackagePeriodo) {
 			aParams.push({
 				coluna: model.colunas.fkRelTaxPackagePeriodo,
 				valor: req.query.idRelTaxPackagePeriodo
 			});
 		}
-		
+
 		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -169,19 +169,45 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade Schedule");
+		var sStatement = 
+			'select * '
+			+ 'from "VGT.SCHEDULE" schedule '
+			+ 'inner join "VGT.DOMINIO_ANO_FISCAL" anoFiscal '
+			+ 'on schedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = anoFiscal."id_dominio_ano_fiscal" ';
 
-		/*var sStatement = 'select * from "DUMMY"';
+		var aWhere = [];
+		var aParams = [];
+		
+		if (req.query.tipo) {
+			aWhere.push(' schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = ? ');
+			aParams.push(req.query.tipo);
+		}
 
+		if (req.query.idRelTaxPackagePeriodo) {
+			aWhere.push(' schedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? ');
+			aParams.push(req.query.idRelTaxPackagePeriodo);
+		}
+		
+		if (aWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < aWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += aWhere[i];
+			}
+		}
+		
 		model.execute({
-		statement: sStatement
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };
