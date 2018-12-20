@@ -110,7 +110,12 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("DominioPaisStatus", function (response) {
 					response.unshift({ id: null, descricao: "" });
-					that.getModel().setProperty("/DominioPaisStatus", response);
+						var aResponse = response;
+						for (var i = 1, length = aResponse.length; i < length; i++) {
+							aResponse[i]["status"] = Utils.traduzStatusTiposPais(aResponse[i]["status"],that);
+						}
+						that.getModel().setProperty("/DominioPaisStatus", aResponse);					
+					//that.getModel().setProperty("/DominioPaisStatus", response);
 				});
 				
 				NodeAPI.listarRegistros("DominioPaisRegiao", function (response) {

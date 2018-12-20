@@ -64,6 +64,25 @@ sap.ui.define(
 				that.getModel().setProperty("/displayFormatSemAno", formatSemAno);
 			},
 			
+			traduzStatusTiposPais: function (stringPaisTipoStatus,that){
+				var tiposPaisTraduzido = "";
+				switch (stringPaisTipoStatus){
+					case "Tax Haven":
+						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo1");
+						break;
+					case "Privileged Tax Regime":
+						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo2");
+						break;
+					case "Normal":
+						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo3");
+						break;
+					case "Others":
+						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo4");
+						break;
+				}
+				return tiposPaisTraduzido;
+			},
+			
 			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
