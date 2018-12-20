@@ -4,7 +4,8 @@ sap.ui.define(
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/jQueryMask",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Arquivo"
+		"ui5ns/ui5/lib/Arquivo",
+		"ui5ns/ui5/lib/Utils"
 	],
 	function (BaseController, NodeAPI, jQueryMask, Constants, Arquivo) {
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.ResumoTrimestre", {
@@ -79,6 +80,53 @@ sap.ui.define(
 				this.getRouter().navTo("taxPackageEdicaoTrimestre", {
 					parametros: JSON.stringify(oParams)
 				});
+			},
+			ContadorDeTempo: function (idModulo, trimestre) {
+				var Hoje = new Date();
+				var Periodo;
+				if (idModulo == 2) { //Taxpackage
+					switch (trimestre) {
+					case 1:
+						Periodo = new Date((new Date().getFullYear()) + "/04/31");
+						break;
+					case 2:
+						Periodo = new Date((new Date().getFullYear()) + "/07/31");
+						break;
+					case 3:
+						Periodo = new Date((new Date().getFullYear()) + "/10/31");
+						break;
+					case 4:
+						Periodo = new Date((new Date().getFullYear()) + "/01/31");
+						if (Hoje > new Date((new Date().getFullYear()) + "/10/31") && Hoje < new Date((new Date().getFullYear() + 1) + "01/01")) {
+							Periodo.setFullYear(Periodo.getFullYear() + 1);
+						}
+					}
+				} else if (idModulo == 1) { //TTC
+					switch (trimestre) {
+					case 1:
+						Periodo = new Date((new Date().getFullYear()) + "/04/20");
+						break;
+					case 2:
+						Periodo = new Date((new Date().getFullYear()) + "/07/20");
+						break;
+					case 3:
+						Periodo = new Date((new Date().getFullYear()) + "/10/20");
+						break;
+					case 4:
+						Periodo = new Date((new Date().getFullYear()) + "/01/20");
+						if (Hoje > new Date((new Date().getFullYear()) + "/10/20") && Hoje < new Date((new Date().getFullYear() + 1) + "01/01")) {
+							Periodo.setFullYear(Periodo.getFullYear() + 1);
+						}
+					}
+				}
+
+				var TTCTempoFalta = Periodo.getTime() - Hoje.getTime();
+				var seconds = Math.floor(TTCTempoFalta / 1000);
+				var minutes = Math.floor(seconds / 60);
+				var hours = Math.floor(minutes / 60);
+				var days = Math.floor(hours / 24);
+
+				return parseInt(days) + 1;
 			},
 
 			onVisualizarPeriodo: function (oPeriodo) {
@@ -255,8 +303,6 @@ sap.ui.define(
 				});
 			},
 
-			
-
 			onReabrirPeriodo: function (oPeriodo) {
 				var that = this;
 
@@ -370,12 +416,12 @@ sap.ui.define(
 
 				return [year, month, day].join('-');
 			},
-			
+
 			_atualizarDeclaracoes: function (sProperty, sIdRelTaxPackagePeriodo, oTable) {
 				var that = this;
-				
+
 				this.setBusy(oTable, true);
-				
+
 				Arquivo.listar("ListarDeclaracoes?idRelTaxPackagePeriodo=" + sIdRelTaxPackagePeriodo)
 					.then(function (response) {
 						for (var i = 0; i < response.length; i++) {
@@ -384,18 +430,17 @@ sap.ui.define(
 								if (response[i].data_envio_declaracao) {
 									response[i].label_declaracao += "Envio Declaração: " + response[i].data_envio_declaracao;
 								}
-							}
-							else {
-								response[i].label_declaracao = "Declaração: NÃO"; 
+							} else {
+								response[i].label_declaracao = "Declaração: NÃO";
 							}
 						}
 						that.getModel().setProperty(sProperty, response);
-						
+
 						that.setBusy(oTable, false);
 					})
 					.catch(function (err) {
 						sap.m.MessageToast.show(err);
-						
+
 						that.setBusy(oTable, false);
 					});
 			},
@@ -403,7 +448,7 @@ sap.ui.define(
 			onAnexarDeclaracao: function (oPeriodo) {
 				var that = this,
 					sProperty = oPeriodo.numero_ordem === 5 ? "/DeclaracoesAnual" : "/DeclaracoesRetificadora";
-				
+
 				var oVBox = new sap.m.VBox();
 
 				var oVBox2 = new sap.m.VBox();
@@ -517,7 +562,7 @@ sap.ui.define(
 				});
 
 				oTable.bindItems({
-					path: sProperty, 
+					path: sProperty,
 					template: oTemplate
 				});
 
@@ -545,16 +590,17 @@ sap.ui.define(
 				this.getView().addDependent(dialog);
 
 				dialog.open();
-				
+
 				this._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
 			},
-			
+
 			onEnviarArquivo: function (oEvent, oPeriodo, oFileUploader, sProperty, oTable) {
 				var that = this,
 					oBtnEnviar = oEvent.getSource();
-					
+
 				var oData = {
-					dataEnvioDeclaracao: (this.getModel().getProperty("/DataEnvioDeclaracao") ? this.getModel().getProperty("/DataEnvioDeclaracao") : ""),
+					dataEnvioDeclaracao: (this.getModel().getProperty("/DataEnvioDeclaracao") ? this.getModel().getProperty("/DataEnvioDeclaracao") :
+						""),
 					indDeclaracao: (this.getModel().getProperty("/IsDeclaracao") ? true : false),
 					fkRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
 				};
@@ -580,23 +626,23 @@ sap.ui.define(
 						});
 				} else {
 					sap.m.MessageToast.show("Selecione um arquivo");
-				}	
+				}
 			},
-			
+
 			onBaixarArquivo: function (oEvent, oPeriodo) {
 				var that = this,
 					oButton = oEvent.getSource(),
 					oArquivo = oEvent.getSource().getBindingContext().getObject();
-					
+
 				oArquivo.btnExcluirEnabled = false;
 				oArquivo.btnDownloadEnabled = false;
 				this.getModel().refresh();
 				this.setBusy(oButton, true);
-				
+
 				Arquivo.download("DownloadDeclaracao?arquivo=" + oArquivo.id_declaracao)
 					.then(function (response) {
 						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
-						
+
 						oArquivo.btnExcluirEnabled = true;
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
@@ -604,30 +650,30 @@ sap.ui.define(
 					})
 					.catch(function (err) {
 						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
-						
+
 						oArquivo.btnExcluirEnabled = true;
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
 						that.getModel().refresh();
 					});
 			},
-			
+
 			onExcluirArquivo: function (oEvent, oPeriodo, sProperty, oTable) {
 				var that = this,
 					oButton = oEvent.getSource(),
 					oArquivo = oEvent.getSource().getBindingContext().getObject();
-				
+
 				this._confirmarExclusao(function () {
 					oArquivo.btnExcluirEnabled = false;
 					oArquivo.btnDownloadEnabled = false;
 					that.getModel().refresh();
 					that.setBusy(oButton, true);
-	
+
 					Arquivo.excluir("ExcluirDeclaracao/" + oArquivo.id_declaracao)
 						.then(function (response) {
 							//sap.m.MessageToast.show(response);
 							that._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
-							
+
 							oArquivo.btnExcluirEnabled = true;
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
@@ -635,7 +681,7 @@ sap.ui.define(
 						})
 						.catch(function (err) {
 							sap.m.MessageToast.show("Erro ao excluir arquivo: " + oArquivo.nome_arquivo);
-							
+
 							oArquivo.btnExcluirEnabled = true;
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
@@ -643,7 +689,7 @@ sap.ui.define(
 						});
 				});
 			},
-			
+
 			_confirmarExclusao: function (onConfirm) {
 				var dialog = new sap.m.Dialog({
 					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
@@ -661,7 +707,7 @@ sap.ui.define(
 						}
 					}),
 					endButton: new sap.m.Button({
-						text:  this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
 						press: function () {
 							dialog.close();
 						}
@@ -677,7 +723,7 @@ sap.ui.define(
 			onBaixarDeclaracao: function (oPeriodo) {
 				var that = this,
 					sProperty = oPeriodo.numero_ordem === 5 ? "/DeclaracoesAnual" : "/DeclaracoesRetificadora";
-				
+
 				var oVBox = new sap.m.VBox();
 
 				/*var oVBox2 = new sap.m.VBox();
@@ -730,7 +776,7 @@ sap.ui.define(
 					height: "350px",
 					width: "100%"
 				});
-				
+
 				var oTable = new sap.m.Table({
 					inset: false
 				});
@@ -752,7 +798,7 @@ sap.ui.define(
 					text: "Data Upload"
 				})));
 
-				 oTable.addColumn(new sap.m.Column({
+				oTable.addColumn(new sap.m.Column({
 					width: "6.5rem"
 				}));
 
@@ -795,7 +841,7 @@ sap.ui.define(
 				});
 
 				oTable.bindItems({
-					path: sProperty, 
+					path: sProperty,
 					template: oTemplate
 				});
 
@@ -823,7 +869,7 @@ sap.ui.define(
 				this.getView().addDependent(dialog);
 
 				dialog.open();
-				
+
 				this._atualizarDeclaracoes(sProperty, oPeriodo.id_rel_tax_package_periodo, oTable);
 			},
 
@@ -1077,7 +1123,7 @@ sap.ui.define(
 				var oToolbar = this.byId(sIdToolbar);
 
 				oToolbar.addContent(new sap.m.Title({
-					text: that.getResourceBundle().getText("viewGeralFaltamXDias", [1]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
+					text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(2, oPeriodo.numero_ordem)]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
 				}));
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
