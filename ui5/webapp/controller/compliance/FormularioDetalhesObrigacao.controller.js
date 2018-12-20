@@ -64,7 +64,12 @@ sap.ui.define(
 							this.byId("DataAtual").setDateValue();
 						}
 					},
-
+                    onTrocarObrigacaoIniciada: function (oEvent) {
+						var objObrigacao = this.getModel().getProperty("/RespostaObrigacao");
+						if (objObrigacao["ObrigacaoIniciada"]) {
+							objObrigacao["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
+						}
+					},
 						onSalvar: function () {
 								var that = this;
 								jQuery.sap.require("sap.m.MessageBox");
@@ -76,8 +81,8 @@ sap.ui.define(
 											var obj = that.getModel().getProperty("/RespostaObrigacao");
 
 											//Verificar se a data atual já passou para colocar status como em atraso
-											if (obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 || obj[
-													"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1) {
+											if (obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1 /*|| obj[
+												"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4*/) {
 												if (obj["data_extensao"]) {
 													var dataPrazo = Utils.bancoParaJsDate(obj["data_extensao"]);
 												} else if (obj["prazo_entrega_customizado"]) {
@@ -89,9 +94,9 @@ sap.ui.define(
 												dataPrazo = new Date(dataPrazo.getFullYear(), dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
 												if (dataPrazo < dataAtual) {
 													obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
-												} else {
-													obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
-												}
+												} /*else {
+												    obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
+											    }*/
 											}
 
 											NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {

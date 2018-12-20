@@ -62,7 +62,7 @@
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
-								<f:FormElement label="{i18n>ViewGeralDataInício}">
+								<!--<f:FormElement label="{i18n>ViewGeralDataInício}">
 									<f:fields>
 										<DatePicker 
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
@@ -70,7 +70,6 @@
 												value="{/RespostaObrigacao/data_inicial}" 
 												enabled="false"
 												/>
-										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>ViewGeralDataFim}">
@@ -81,9 +80,8 @@
 												value="{/RespostaObrigacao/data_final}" 
 												enabled="false"
 												/>
-										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
-								</f:FormElement>
+								</f:FormElement>-->
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
