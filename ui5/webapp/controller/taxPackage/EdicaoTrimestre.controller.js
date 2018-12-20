@@ -1709,8 +1709,11 @@ sap.ui.define(
 
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 
-				this.getModel().setProperty("/LabelDataInicio", Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_start_date));
-				this.getModel().setProperty("/LabelDataFim", Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_end_date));
+				var sLabelDataInicio = Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_start_date);
+				var sLabelDataFim = Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_end_date);
+
+				this.getModel().setProperty("/LabelDataInicio", sLabelDataInicio.substring(0, sLabelDataInicio.lastIndexOf('/')));
+				this.getModel().setProperty("/LabelDataFim", sLabelDataFim.substring(0, sLabelDataFim.lastIndexOf('/')));
 				this.getModel().setProperty("/LabelCITType", this._pegarLabelCITType(oParametros.oPeriodo.numero_ordem));
 				this.getModel().setProperty("/LabelPeriodo", this._pegarLabelPeriodoTaxReconciliation(oParametros.oPeriodo.numero_ordem));
 				this.getModel().setProperty("/Empresa", oParametros.oEmpresa);

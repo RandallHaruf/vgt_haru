@@ -41,7 +41,7 @@
 												<ObjectAttribute title="{i18n>ViewGeralDataInício}" text="{/LabelDataInicio}"/>
 												<ObjectAttribute title="{i18n>ViewGeralDataFim}" text="{/LabelDataFim}"/>
 												<ObjectAttribute title="{i18n>viewEdiçãoTrimestreCITType}" text="{/LabelCITType}"/>
-												<ObjectAttribute title="{i18n>viewEdiçãoTrimestrePreparadoPor}" text="João Silva - joao.silva@email.com" />
+												<!--<ObjectAttribute title="{i18n>viewEdiçãoTrimestrePreparadoPor}" text="João Silva - joao.silva@email.com" />-->
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
 									</l:VerticalLayout>
