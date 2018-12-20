@@ -205,34 +205,43 @@ sap.ui.define(
 								var that = this;
 								var obj2 = that.getModel().getProperty("/RespostaObrigacao");
 								var Status;
-								if(obj2["data_extensao"] === null ){
-									if (obj2["prazo_entrega_customizado"] === null){
-										if(obj2["prazo_entrega"] <= Data){
-											Status = 6;
+								var arryData = obj2["data_extensao"].split('-');
+								var DataExtensao =new Date(arryData[0] + '-' + arryData[1] + '-' + arryData[2]);
+								arryData = obj2["prazo_entrega_customizado"].split('-');
+								var prazo_entrega_customizado = new Date(arryData[0] + '-' + arryData[1] + '-' + arryData[2]);
+								arryData = obj2["prazo_entrega"].split('-');
+								var prazo_entrega = new Date(arryData[0] + '-' + arryData[1] + '-' + arryData[2]);
+								arryData = Data.split('-');
+								var DataEscolhida = new Date(arryData[0] + '-' + arryData[1] + '-' + arryData[2]);
+								
+								if(DataExtensao === null ){
+									if (prazo_entrega_customizado === null){
+										if(prazo_entrega < DataEscolhida){
+											Status = 7;
 										}
 										else
 										{
-											Status = 7;
+											Status = 6;
 										}
 									}
 									else
 									{
-										if(obj2["prazo_entrega_customizado"] <= Data){
-											Status = 6;
+										if(prazo_entrega_customizado < DataEscolhida){
+											Status = 7;
 										}
 										else
 										{
-											Status = 7;
+											Status = 6;
 										}
 									}
 								} 
 						        else{
-									if(obj2["data_extensao"] <= Data){
-										Status = 6;
+									if( DataExtensao < DataEscolhida){
+										Status = 7;
 									}
 									else
 									{
-										Status = 7;	
+										Status = 6;	
 									}
 								}
 								NodeAPI.atualizarRegistro("RespostaObrigacao", obj2.id_resposta_obrigacao, {
