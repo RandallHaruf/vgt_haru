@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/Utils"		
 	],
-	function (BaseController, Constants, Validador) {
+	function (BaseController, Constants, Validador,Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroAliquotasTaxPackage", {
 			
 			/* Métodos a implementar */
@@ -59,7 +60,7 @@ sap.ui.define(
 			
 			_carregarObjetoSelecionado: function (iIdObjeto) {
 				var that = this;
-				
+
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + iIdObjeto, {
 					type: "GET",
 					dataType: "json",
@@ -105,7 +106,7 @@ sap.ui.define(
 			
 			_inserirObjeto: function () {
 				var that = this;
-				
+
 				var obj = this.getModel().getProperty("/objeto");
 				
 				jQuery.ajax(Constants.urlBackend + "Aliquota", {
@@ -167,10 +168,12 @@ sap.ui.define(
 			},
 			
 			onNovoObjeto: function (oEvent) {
+				Utils.displayFormat(this);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},
 			
 			onAbrirObjeto: function (oEvent) {
+				Utils.displayFormat(this);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip", {
 					path: oEvent.getSource().getBindingContext().getPath()
 				});

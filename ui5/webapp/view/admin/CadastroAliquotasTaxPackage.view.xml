@@ -100,18 +100,18 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Data Início" labelFor="dataInicio" />
+											<Label text="Data Início {/displayFormatFull}" labelFor="dataInicio" />
 										</f:label>
 										<f:fields>
-											<DatePicker id="dataInicio" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
+											<DatePicker id="dataInicio" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Data Fim" labelFor="dataFim" />
+											<Label text="Data Fim {/displayFormatFull}" labelFor="dataFim" />
 										</f:label>
 										<f:fields>
-											<DatePicker id="dataFim" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
+											<DatePicker id="dataFim" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>

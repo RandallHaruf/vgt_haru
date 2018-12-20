@@ -114,8 +114,6 @@ sap.ui.define(
 				var that = this;
 				//this.onTrocaLingua();
 				
-				Utils.displayFormat(this);
-				
 				jQuery.ajax(Constants.urlBackend + "DominioObrigacaoAcessoriaTipo", {
 					type: "GET",
 					dataType: "json",
@@ -291,10 +289,12 @@ sap.ui.define(
 			},
 			
 			onNovoObjeto: function (oEvent) {
+				Utils.displayFormat(this);				
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},
 			
 			onAbrirObjeto: function (oEvent) {
+				Utils.displayFormat(this);				
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip", {
 					path: oEvent.getSource().getBindingContext().getPath()
 				});

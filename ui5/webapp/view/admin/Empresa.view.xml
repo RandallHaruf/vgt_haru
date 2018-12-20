@@ -383,18 +383,18 @@
 																	<Text text="{i18n>viewEmpresasNome}" />
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasDataI}" />
+																	<Text text="{i18n>viewEmpresasDataI} {/displayFormatFull}" />
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasDataF}" />
+																	<Text text="{i18n>viewEmpresasDataF} {/displayFormatFull}" />
 																</Column>
 															</columns>
 															<items>
 																<ColumnListItem>
 																	<cells>
 																		<ObjectIdentifier title="{nome}" />
-																		<DatePicker valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
-																		<DatePicker valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
+																		<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
+																		<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
 																	</cells>
 																</ColumnListItem>
 															</items>

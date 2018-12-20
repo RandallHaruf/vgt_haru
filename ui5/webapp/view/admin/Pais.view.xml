@@ -238,10 +238,10 @@
 															<Text text="Valor" />
 														</Column>
 														<Column>
-															<Text text="{i18n>ViewGeralDataInício}" />
+															<Text text="{i18n>ViewGeralDataInício} {/displayFormatFull}" />
 														</Column>
 														<Column>
-															<Text text="{i18n>ViewGeralDataFim}" />
+															<Text text="{i18n>ViewGeralDataFim} {/displayFormatFull}" />
 														</Column>
 													</columns>
 													<items>
@@ -249,8 +249,8 @@
 															<cells>
 																<Text text="{nome}" />
 																<Text text="{valor}%" />
-																<DatePicker valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
-																<DatePicker valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
+																<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
+																<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
 															</cells>
 														</ColumnListItem>
 													</items>
