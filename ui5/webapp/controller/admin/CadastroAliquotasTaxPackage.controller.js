@@ -57,8 +57,14 @@ sap.ui.define(
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
-						response.unshift({ id: null, nome: "" });
-						that.getModel().setProperty("/DominioAliquotaTipo", response);
+						response.unshift({ id: null, nome: "" });						
+						var aResponse = response;
+						for (var i = 1, length = aResponse.length; i < length; i++) {
+							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["tipo"],that);
+						}
+						that.getModel().setProperty("/DominioAliquotaTipo", aResponse);
+						
+						//that.getModel().setProperty("/DominioAliquotaTipo", response);
 					}
 				});
 			},
