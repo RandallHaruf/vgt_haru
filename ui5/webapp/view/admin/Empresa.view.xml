@@ -159,12 +159,13 @@
 									</f:FormElement>
 								<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewRelatorioAnoFiscal}" />
+											<Label text="{i18n>viewRelatorioAnoFiscal} {/displayFormatFull}" />
 										</f:label>
 										<f:fields>
 											<DatePicker 
 												id="datepickerStartDate" 
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												displayFormat="{/displayFormatFull}"
 												valueFormat="yyyy-MM-dd" 
 												value="{/objeto/fy_start_date}" 
 												required="true"
@@ -172,6 +173,7 @@
 											<DatePicker 
 												id="datepickerEndDate" 
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												displayFormat="{/displayFormatFull}"
 												valueFormat="yyyy-MM-dd" 
 												value="{/objeto/fy_end_date}"
 												required="true"
@@ -269,16 +271,16 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresaDataPrazo}" />
+												<Label text="{i18n>viewEmpresaDataPrazo} {/displayFormatSemAno}" />
 												<table:template>
 													<!--<Text text="{= ${tblModeloObrigacao.prazo_entrega}}" />-->
-													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="dd/MM"/>
+													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="{/displayFormatSemAno}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresaDataCustomizada}" />
+												<Label text="{i18n>viewEmpresaDataCustomizada} {/displayFormatSemAno}" />
 												<table:template>
-													<DatePicker displayFormat="dd/MM" valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" />
+													<DatePicker displayFormat="{/displayFormatSemAno}" valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" />
 													<!--<DateTimeInput id="DTI1" type="Date" value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" displayFormat="dd/MM"/>													-->
 												</table:template>
 											</table:Column>											

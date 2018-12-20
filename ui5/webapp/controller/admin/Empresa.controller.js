@@ -315,7 +315,7 @@ sap.ui.define(
 				this.getModel().setProperty("/showHistorico", true);*/
 				
 				var that = this;
-				
+				Utils.displayFormat(this);
 				this.getModel().setProperty("/showHistorico", true);
 				
 				NodeAPI.lerRegistro("Empresa", iIdObjeto, function (response) {

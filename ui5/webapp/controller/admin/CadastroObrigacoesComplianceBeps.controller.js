@@ -112,7 +112,10 @@ sap.ui.define(
 			
 			_carregarCamposFormulario: function () {
 				var that = this;
-			
+				//this.onTrocaLingua();
+				
+				Utils.displayFormat(this);
+				
 				jQuery.ajax(Constants.urlBackend + "DominioObrigacaoAcessoriaTipo", {
 					type: "GET",
 					dataType: "json",

@@ -45,6 +45,25 @@ sap.ui.define(
 				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
 				return DataFinal;
 			},
+			
+			displayFormat: function (that){
+				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
+				var formatFull = "";
+				var formatSemAno = "";
+				switch (lingua){
+					case "pt-BR":
+						formatFull = "dd/MM/yyyy";
+						formatSemAno = "dd/MM";
+						break;
+					case "en-US":
+						formatFull = "MM/dd/yyyy";
+						formatSemAno = "MM/dd";
+						break;
+				}
+				that.getModel().setProperty("/displayFormatFull", formatFull);
+				that.getModel().setProperty("/displayFormatSemAno", formatSemAno);
+			},
+			
 			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
