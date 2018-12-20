@@ -150,11 +150,18 @@ sap.ui.define(
 								var DataConclusao =	that.byId("DataAtual").getDateValue();
 								var oBtnEnviar = oEvent.getSource();
 								var oTable = this.byId("tabelaDocumentos");
-
-								//var CkeckSelect = oEvent.getParameter("selected");	
-								var DataFormatada = DataConclusao.getFullYear() + "-"+ (DataConclusao.getMonth()+1) +"-"+ DataConclusao.getDate();
-							
-								
+								var DataFormatada;
+	
+								//var CkeckSelect = oEvent.getParameter("selected");
+								if (DataConclusao === null ){
+								var now = new Date();
+								 DataFormatada = now.getFullYear() + "-"+ (now.getMonth()+1) +"-"+ now.getDate();
+								 
+								}
+								else
+								{
+								DataFormatada = DataConclusao.getFullYear() + "-"+ (DataConclusao.getMonth()+1) +"-"+ DataConclusao.getDate();
+								}
 								var oData = {
 
 									dataEnvio: DataFormatada,
