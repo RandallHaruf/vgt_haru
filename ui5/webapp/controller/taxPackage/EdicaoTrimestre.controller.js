@@ -1709,11 +1709,22 @@ sap.ui.define(
 
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 
-				var sLabelDataInicio = Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_start_date);
-				var sLabelDataFim = Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_end_date);
+				var sLabelDataInicio = oParametros.oEmpresa.fy_start_date,
+					sLabelDataFim = oParametros.oEmpresa.fy_end_date;
+					
+				try {
+					sLabelDataInicio = Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_start_date);
+					sLabelDataFim = Utils.stringDataDoBancoParaStringDDMMYYYY(oParametros.oEmpresa.fy_end_date);
+				
+					sLabelDataInicio = sLabelDataInicio.substring(0, sLabelDataInicio.lastIndexOf('/'));
+					sLabelDataFim = sLabelDataFim.substring(0, sLabelDataFim.lastIndexOf('/'));
+				} 
+				catch (e) {
+					console.log(e);
+				}
 
-				this.getModel().setProperty("/LabelDataInicio", sLabelDataInicio.substring(0, sLabelDataInicio.lastIndexOf('/')));
-				this.getModel().setProperty("/LabelDataFim", sLabelDataFim.substring(0, sLabelDataFim.lastIndexOf('/')));
+				this.getModel().setProperty("/LabelDataInicio", sLabelDataInicio);
+				this.getModel().setProperty("/LabelDataFim", sLabelDataFim);
 				this.getModel().setProperty("/LabelCITType", this._pegarLabelCITType(oParametros.oPeriodo.numero_ordem));
 				this.getModel().setProperty("/LabelPeriodo", this._pegarLabelPeriodoTaxReconciliation(oParametros.oPeriodo.numero_ordem));
 				this.getModel().setProperty("/Empresa", oParametros.oEmpresa);
