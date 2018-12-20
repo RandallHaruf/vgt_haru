@@ -6,12 +6,12 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome"/>
-						<Link text="Listagem Obrigações" press="navToPage1"/>
-						<Link text="Listagem de Requisição de Obrigações" enabled="false"/>
+						<Link text="{i18n>viewListagemRequisicoesListagemObrigações}" press="navToPage1"/>
+						<Link text="{i18n>viewListagemRequisicoesListagemdeRequisiçãodeObrigações}" enabled="false"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Compliance - Listagem de Requisição de Obrigações"/>
+					<Title text="{i18n>viewListagemRequisicoesTitulo}"/>
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
