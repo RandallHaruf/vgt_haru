@@ -205,27 +205,36 @@ sap.ui.define(
 								var that = this;
 								var obj2 = that.getModel().getProperty("/RespostaObrigacao");
 								var Status;
-								
-								if (obj2["prazo_entrega_customizado"] === null){
-									if(obj2["prazo_entrega"] <= Data){
+								if(obj2["data_extensao"] === null ){
+									if (obj2["prazo_entrega_customizado"] === null){
+										if(obj2["prazo_entrega"] <= Data){
+											Status = 6;
+										}
+										else
+										{
+											Status = 7;
+										}
+									}
+									else
+									{
+										if(obj2["prazo_entrega_customizado"] <= Data){
+											Status = 6;
+										}
+										else
+										{
+											Status = 7;
+										}
+									}
+								} 
+						        else{
+									if(obj2["data_extensao"] <= Data){
 										Status = 6;
 									}
 									else
 									{
-										Status = 7;
+										Status = 7;	
 									}
 								}
-								else
-								{
-									if(obj2["prazo_entrega_customizado"] <= Data){
-										Status = 6;
-									}
-									else
-									{
-										Status = 7;
-									}
-								}
-								
 								NodeAPI.atualizarRegistro("RespostaObrigacao", obj2.id_resposta_obrigacao, {
 												suporteContratado: obj2["suporte_contratado"],
 												suporteEspecificacao: obj2["suporte_especificacao"],
