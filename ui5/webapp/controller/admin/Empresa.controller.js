@@ -27,10 +27,11 @@ sap.ui.define(
 					this.byId("tableObrigacoes").getBinding("rows").filter(this._oTxtFilter, "Application");
 				}
 			},
-			
+
 			onTrocarData: function (oEvent) {
+							var that = this;
 				if (Validador.periodoInvalido(this.byId("datepickerStartDate").getDateValue(), this.byId("datepickerEndDate").getDateValue())) {
-					sap.m.MessageBox.warning("A Data Início não pode ser posterior a Data Fim", {
+					sap.m.MessageBox.warning(that.getResourceBundle().getText("viewAdminEmpresaControllerjsADataInícioNãoPodeSerPosteriorADataFim"), {
 						title: "Aviso"
 					});
 				}

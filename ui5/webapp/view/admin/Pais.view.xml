@@ -29,7 +29,7 @@
 					<Toolbar>
 						<Title 
 							id="cabecalhoTabelaObjetos" 
-							text="Países"/>
+							text="{i18n>viewGeralPaises}"/>
 						<ToolbarSpacer />
 						<Button 
 							id="botaoNovoObjeto" 
@@ -235,7 +235,7 @@
 															<Text text="{i18n>viewGeralNome}" />
 														</Column>
 														<Column vAlign="Middle">
-															<Text text="Valor" />
+															<Text text="{i18n>viewGeralValue}" />
 														</Column>
 														<Column>
 															<Text text="{i18n>ViewGeralDataInício} {/displayFormatFull}" />
