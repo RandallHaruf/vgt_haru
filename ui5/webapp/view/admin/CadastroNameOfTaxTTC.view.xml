@@ -168,6 +168,7 @@
 														id="searchPais"
 														width="15rem" 
 														search="onTextSearch" 
+														placeholder="{i18n>ViewGeralProcurar} {i18n>viewGeralPais}"														
 														value="{/filterValue}" />
 												</Toolbar>
 											</table:extension>

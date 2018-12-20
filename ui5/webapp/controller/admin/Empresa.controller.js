@@ -17,7 +17,7 @@ sap.ui.define(
 	
 				if (sQuery !== null) {
 					this._oTxtFilter = new sap.ui.model.Filter([
-						new sap.ui.model.Filter("nome", sap.ui.model.FilterOperator.Contains, sQuery)
+						new sap.ui.model.Filter("tblModeloObrigacao.nome_obrigacao", sap.ui.model.FilterOperator.Contains, sQuery)
 					], false);
 				}
 	

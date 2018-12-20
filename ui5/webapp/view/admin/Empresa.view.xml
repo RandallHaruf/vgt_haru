@@ -248,7 +248,8 @@
 												<SearchField 
 													id="searchObrigacoes"
 													width="15rem" 
-													search="onTextSearch" 
+													search="onTextSearch"
+													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
 													value="{/filterValue}" />
 											</Toolbar>
 										</table:extension>
