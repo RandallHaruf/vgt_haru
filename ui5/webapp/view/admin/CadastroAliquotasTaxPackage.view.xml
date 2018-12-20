@@ -32,23 +32,23 @@
 					<Toolbar>
 						<Title 
 							id="cabecalhoTabelaObjetos" 
-							text="Alíquotas"/>
+							text="{i18n>viewAdminInicioMenuTaxPackageCadastroAliquotas}"/>
 						<ToolbarSpacer />
 						<Button 
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
 							press="onNovoObjeto" 
-							text="novo"
+							text="{i18n>viewGeralNovo}"
 							type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>
 		
 				<columns>
 					<Column>
-						<Text text="Nome" />
+						<Text text="{i18n>viewRelatorioNome}" />
 					</Column>
 					<Column>
-						<Text text="Valor" />
+						<Text text="{i18n>viewRelatorioValue}" />
 					</Column>
 				</columns>
 		
@@ -73,18 +73,18 @@
 						id="formularioObjeto" 
 						editable="true">
 						<f:title>
-							<core:Title text="Alíquota"/>
+							<core:Title text="{i18n>viewAdminInicioMenuTaxPackageCadastroAliquotas}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
 						<f:formContainers>
-							<f:FormContainer title="Cadastro">
+							<f:FormContainer title="{i18n>viewGeralCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="Nome" labelFor="inputNomeAliquota" />
+											<Label text="{i18n>viewRelatorioNome}" labelFor="inputNomeAliquota" />
 										</f:label>
 										<f:fields>
 											<Input type="Text" id="inputNomeAliquota" value="{/objeto/nome}" required="true" />
@@ -92,7 +92,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Valor (%)" labelFor="inputValorAliquota" />
+											<Label text="{i18n>viewRelatorioValue} (%)" labelFor="inputValorAliquota" />
 										</f:label>
 										<f:fields>
 											<Input type="Number" id="inputValorAliquota" value="{/objeto/valor}" required="true" />
@@ -100,7 +100,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Data Início {/displayFormatFull}" labelFor="dataInicio" />
+											<Label text="{i18n>viewEmpresasDataI} {/displayFormatFull}" labelFor="dataInicio" />
 										</f:label>
 										<f:fields>
 											<DatePicker id="dataInicio" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
@@ -108,7 +108,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Data Fim {/displayFormatFull}" labelFor="dataFim" />
+											<Label text="{i18n>viewEmpresasDataF} {/displayFormatFull}" labelFor="dataFim" />
 										</f:label>
 										<f:fields>
 											<DatePicker id="dataFim" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
@@ -116,7 +116,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="Tipo" class="sapMLabelRequired" />
+											<Label text="{i18n>viewGeralTipo}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
 											<Select id="selectTipo" items="{/DominioAliquotaTipo}" selectedKey="{/objeto/idTipo}">
@@ -139,11 +139,11 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
-						text="Salvar" 
+						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
-						text="Cancelar" 
+						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>
 				</Toolbar>

@@ -93,7 +93,22 @@ sap.ui.define(
 						break;						
 				}
 				return periodoTraduzido;
-			},			
+			},	
+			traduzTiposAliquota: function (stringTipoAliquota, that){
+				/*Recebe valores
+				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
+				*/
+				var traduzTipoAliquota = "";
+				switch (stringTipoAliquota){
+					case "Country":
+						traduzTipoAliquota = that.getResourceBundle().getText("viewGeralPais");
+						break;
+					case "Entity":
+						traduzTipoAliquota = that.getResourceBundle().getText("viewGeralEmpresa");
+						break;
+				}
+				return traduzTipoAliquota;
+			},				
 			dateNowParaArquivo: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "_" +(Data.getMonth() +1).toString().padStart(2,"0") + "_" + Data.getFullYear().toString();
