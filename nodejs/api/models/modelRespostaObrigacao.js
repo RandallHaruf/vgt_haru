@@ -38,7 +38,10 @@ var oSketch = {
 		},
 		dataExtensao:{
 			nome: "data_extensao"
-		}		
+		},
+		dataConclusao:{
+			nome: "data_conclusao"
+		}
 	} 	
 };
 

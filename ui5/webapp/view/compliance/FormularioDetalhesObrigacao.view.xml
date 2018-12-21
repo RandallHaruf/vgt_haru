@@ -82,12 +82,23 @@
 												/>
 									</f:fields>
 								</f:FormElement>-->
+								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao}" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
+									<f:fields>
+										<DatePicker 
+											placeholder="{i18n>viewGeralInsiraUmaData}" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/RespostaObrigacao/data_conclusao}" 
+											enabled="false"
+											/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/prazo_entrega}" 
+												value="{/RespostaObrigacao/label_prazo_entrega}" 
 												enabled="false"
 												/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
@@ -104,7 +115,8 @@
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? (!${/JaEstavaPreenchido} ? true : false ) : false}"/>
+												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? (!${/JaEstavaPreenchido} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false ) : false}"/>
+												
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
@@ -114,13 +126,12 @@
 								</f:FormElement>
 									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada" enabled="false" selected="{/RespostaObrigacao/ObrigacaoIniciada}"
-										/>
+										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? false : !!${JaEstavaIniciada}}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" />
+										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" enabled="{=  ${/JaDataObrigacaoConcluida} ? true : false }" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
@@ -129,12 +140,12 @@
 											value="{/RespostaObrigacao/suporte_especificacao}"
 											id="textAreaSuporte"
 											rows="5" 
-											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? true : false}"/>
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ?  ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}"  type="Number" enabled="{= ${/RespostaObrigacao/suporte_contratado} ? true : false}"/>
+										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}"  type="Number" enabled="{= ${/RespostaObrigacao/suporte_contratado} ?  ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralMoeda}">
@@ -149,7 +160,7 @@
 											<ComboBox
 											items="{/DominioMoeda}"
 											selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}"
-											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? true : false}"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"
 											>
 											<core:Item text="{nome}" key="{id_dominio_moeda}" />
 											</ComboBox>
@@ -203,8 +214,7 @@
 									<VBox>
 										<VBox>
 											<HBox>
-												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}"
-													select="onSelecionaCheck" class="sapUiSmallMarginEnd"/>
+												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}" select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }" />
 											</HBox>
 											<HBox>
 												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}"/>

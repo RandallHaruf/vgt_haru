@@ -26,6 +26,9 @@ var oSketch = {
 		fkIdUsuario: {
 			nome: "fk_id_usuario.id_usuario",
 			number: true
+		},
+		indConclusao:{
+			nome: "ind_conclusao"
 		}
 	}
 };

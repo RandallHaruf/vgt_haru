@@ -20,7 +20,7 @@ module.exports = {
 
 		var aParam = [],
 			sQuery =
-			' SELECT "id_documento", "fk_id_resposta_obrigacao.id_resposta_obrigacao", "mimetype", "tamanho", "data_upload", "nome_arquivo", "fk_id_usuario.id_usuario" FROM "VGT.DOCUMENTO_OBRIGACAO" ';
+			' SELECT "id_documento", "fk_id_resposta_obrigacao.id_resposta_obrigacao", "mimetype", "tamanho", "data_upload", "nome_arquivo", "fk_id_usuario.id_usuario", "ind_conclusao" FROM "VGT.DOCUMENTO_OBRIGACAO" ';
 
 		if (req.query.id) {
 			aParam.push(req.query.id);
@@ -81,22 +81,38 @@ module.exports = {
 			//console.log(req.file.buffer.constructor.name);
 
 			var idRespostaObrigacao = req.body.id ? req.body.id : null;
-			var Data = req.body.dataEnvio ? req.body.dataEnvio : null;
+			var Confirmado = req.body.indConclusao ? req.body.indConclusao : null;
 
 			var sQuery =
-				'INSERT INTO "VGT.DOCUMENTO_OBRIGACAO"(' + '"id_documento", ' + '"fk_id_resposta_obrigacao.id_resposta_obrigacao", ' +
-				'"dados_arquivo", ' + '"mimetype", ' + '"tamanho", ' + '"data_upload", ' + '"nome_arquivo", ' + '"fk_id_usuario.id_usuario") ' +
-				' values(' + '"identity_VGT.DOCUMENTO_OBRIGACAO_id_documento".nextval, ' + '?, ' + '?, ' + '?, ' + '?, ' + '?, ' + '?, ' +
-				'?) ';
+				'INSERT INTO "VGT.DOCUMENTO_OBRIGACAO"(' 
+				+ '"id_documento", ' 
+				+ '"fk_id_resposta_obrigacao.id_resposta_obrigacao", ' 
+				+ '"dados_arquivo", ' 
+				+ '"mimetype", ' 
+				+ '"tamanho", ' 
+				+ '"data_upload", ' 
+				+ '"nome_arquivo", ' 
+				+ '"fk_id_usuario.id_usuario", ' 
+				+ '"ind_conclusao") ' 
+				+ ' values(' 
+				+ '"identity_VGT.DOCUMENTO_OBRIGACAO_id_documento".nextval, ' 
+				+ '?, ' 
+				+ '?, ' 
+				+ '?,' 
+				+ '?, '
+				+ 'CURRENT_DATE, ' 
+				+ '?, ' 
+				+ '?, ' 
+				+ '?) ';
 
 			var aParam = [
 				idRespostaObrigacao,
 				req.file.buffer,
 				req.file.mimetype,
 				req.file.size,
-				Data,
 				req.file.originalname,
-				1
+				1,
+				Confirmado
 			];
 
 			var conn = db.getConnection();

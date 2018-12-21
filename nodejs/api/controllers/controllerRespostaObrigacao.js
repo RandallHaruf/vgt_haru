@@ -45,6 +45,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataExtensao,
 			valor: req.body.dataExtensao ? req.body.dataExtensao : null
+		}, {
+			coluna: model.colunas.dataConclusao,
+			valor: req.body.dataConclusao ? req.body.dataConclusao : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -103,6 +106,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataExtensao,
 			valor: req.body.dataExtensao ? req.body.dataExtensao : null
+		},  {
+			coluna: model.colunas.dataConclusao,
+			valor: req.body.dataConclusao ? req.body.dataConclusao : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
