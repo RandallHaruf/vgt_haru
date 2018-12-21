@@ -217,7 +217,7 @@
 												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}" select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }" />
 											</HBox>
 											<HBox>
-												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}"/>
+												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" />
 											</HBox>
 											<HBox>
 												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="Enviar o arquivo para o Nodejs"
@@ -268,7 +268,8 @@
 				<Button 
 					text="{i18n>formularioObrigacaoBotaoSalvar}" 
 					type="Accept" 
-					press="onSalvar"/>
+					press="onSalvar"
+					enabled="{/JaDataObrigacaoConcluida}"/>
 				<Button 
 					text="{i18n>formularioObrigacaoBotaoCancelar}" 
 					type="Reject" 

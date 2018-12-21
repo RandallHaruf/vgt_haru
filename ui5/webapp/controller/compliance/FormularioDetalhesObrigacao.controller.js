@@ -178,8 +178,9 @@ sap.ui.define(
 					id: obj2["id_resposta_obrigacao"]
 				};
 
-				if (DataConclusao === null) {
-
+				//if (DataConclusao === null) {
+				//if (!this.getModel().getProperty("/JaDataObrigacaoConcluida")) {
+				if (!this.getModel().getProperty("/IsDeclaracao")) {
 					if (oFileUploader.getValue()) {
 						oBtnEnviar.setEnabled(false);
 						this.setBusy(oBtnEnviar, true);
