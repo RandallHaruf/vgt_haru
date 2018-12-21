@@ -115,7 +115,7 @@
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? (!${/JaEstavaPreenchido} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false ) : false}"/>
+												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? true : (!${/JaEstavaPreenchido} ? true : false ) : false)}"/>
 												
 									</f:fields>
 								</f:FormElement>
