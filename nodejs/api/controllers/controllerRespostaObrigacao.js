@@ -220,7 +220,15 @@ deepQuery: function (req, res) {
 			else{
 				sStatement += ' where tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ';
 			}
-		}	
+		}
+		if (req.query.ListarAteAnoAtualMaisUm){
+			if (oWhere.length > 0) {
+				sStatement += ' and (tblDominioAnoCalendario."ano_calendario" between 2018 and (year(CURRENT_DATE) + 1)) ';		
+			}		
+			else{
+				sStatement += ' where (tblDominioAnoCalendario."ano_calendario" between 2018 and (year(CURRENT_DATE) + 1)) ';
+			}
+		}
 		
 
 		model.execute({

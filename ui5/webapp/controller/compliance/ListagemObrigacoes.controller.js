@@ -18,7 +18,8 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
-				this._atualizarDados();
+				//this._atualizarDados();
+				this._atualizarDadosFiltrado();
 			},
 
 			onFiltrar: function (oEvent) {
@@ -38,6 +39,18 @@ sap.ui.define(
 				var oBinding = this.byId("tabelaObrigacoes").getBinding("items");
 
 				oBinding.filter(oFilter);
+				
+
+				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
+					"/AnoCalendarioSelecionado") : "";
+				var CampoAnoEstaPreenchido = (oAnoCalendario ? "&ListarAteAnoAtualMaisUm=1" : "");
+				this._atualizarDadosFiltrado();
+				/*if (!!CampoAnoEstaPreenchido) {
+					this._atualizarDadosFiltrado();
+				}
+				else{
+					this._atualizarDados();
+				}*/
 			},
 
 			navToHome: function () {
@@ -61,17 +74,23 @@ sap.ui.define(
 
 			onTerminouAtualizar: function (oEvent) {
 				//MessageToast.show("Atualizar contadores");	
-				this._atualizarDados();
+				//this._atualizarDados();
+				/*var existeEmpresa = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
+					"/AnoCalendarioSelecionado") : "";
+				if () {
+					
+				}*/
+				
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
 				//MessageToast.show("Filtrar tabela por ano calendário: " + oEvent.getSource().getSelectedItem().getText());	
-				this._atualizarDados();
+				this._atualizarDadosFiltrado();
 			},
 
 			onTrocarEmpresa: function (oEvent) {
 				//MessageToast.show("Filtrar tabela por empresas: " + oEvent.getSource().getSelectedItem().getText());
-				this._atualizarDados();
+				this._atualizarDadosFiltrado();
 			},
 
 			onBuscarDocumentos: function (oEvent) {
@@ -124,13 +143,12 @@ sap.ui.define(
 				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
 					"/AnoCalendarioSelecionado") : "";
 				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
-
 				if (oStatus == '0') {
 					oStatus = '';
 				};
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&statusResp=&statusModelo=2&IndAtivoRel=" + true + "&ListarAteAnoAtual=true",
+					"&statusResp=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
 					function (response) { // 1 COMPLIANCE
 						if (response) {
 							var Todos = 0,
@@ -173,7 +191,82 @@ sap.ui.define(
 					});
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=" + true + "&ListarAteAnoAtual=true",
+					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+					function (response) { // 1 COMPLIANCE
+						if (response) {
+							for (var i = 0, length = response.length; i < length; i++) {
+								response[i]["label_prazo_entrega"] = 
+									(response[i]["prazo_entrega_customizado"] !== null) 
+									? response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
+									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);
+									
+								response[i]["prazo_entrega_customizado"] = 
+									(response[i]["prazo_entrega_customizado"] !== null) 
+									? response[i]["ano_calendario"] +"-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
+									: null;
+							}
+							that.getModel().setProperty("/Obrigacao", response);
+
+						}
+					});
+			},
+			_atualizarDadosFiltrado: function () {
+				var that = this;
+
+				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado") ? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
+				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
+					"/AnoCalendarioSelecionado") : "";
+				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
+				var campoAnoEstaVazio = (!oAnoCalendario ? "&ListarAteAnoAtualMaisUm=1" : "");
+				if (oStatus == '0') {
+					oStatus = '';
+				};
+
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+					"&statusResp=&statusModelo=2&IndAtivoRel=true" + campoAnoEstaVazio,
+					function (response) { // 1 COMPLIANCE
+						if (response) {
+							var Todos = 0,
+								NaoIniciada = 0,
+								Aguardando = 0,
+								EmAtraso = 0,
+								EntregueNoPrazo = 0,
+								EntregueForaPrazo = 0;
+							for (var i = 0, length = response.length; i < length; i++) {
+								switch (response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"]) {
+								case 4:
+									NaoIniciada++;
+									break;
+								case 1:
+									Aguardando++;
+									break;
+								case 5:
+									EmAtraso++;
+									break;
+								case 6:
+									EntregueNoPrazo++;
+									break;
+								case 7:
+									EntregueForaPrazo++;
+									break;
+								}
+								Todos++;
+							}
+							that.getModel().setProperty("/Contadores", {
+								modelTodos: Todos,
+								modelNaoIniciada: NaoIniciada,
+								modelAguardando: Aguardando,
+								modelEmAtraso: EmAtraso,
+								modelEntregueNoPrazo: EntregueNoPrazo,
+								modelEntregueForaPrazo: EntregueForaPrazo
+							});
+							//that.getModel().setProperty("/Obrigacao", response);
+
+						}
+					});
+
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
