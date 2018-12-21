@@ -420,6 +420,7 @@
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
+						id="btnCancelar"
 						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>

@@ -143,6 +143,7 @@
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
+						id="botaoCancelar"
 						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>
