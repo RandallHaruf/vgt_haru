@@ -1117,14 +1117,59 @@ sap.ui.define(
 				});
 			},
 
+			_isPeriodoCorrente: function (iNumeroOrdem) {
+				var now = new Date(),
+					dataInicio, 
+					dataFim,
+					iCurrentYear = now.getFullYear();
+					
+				now.setYear(this.byId("selectAnoCalendario").getSelectedItem().getText());
+				
+				switch (iNumeroOrdem) {
+					case 1:
+						dataInicio = new Date(iCurrentYear + "/02/1");
+						dataFim = new Date(iCurrentYear + "/04/31");
+						return now >= dataInicio && now <= dataFim;
+					case 2:
+						dataInicio = new Date(iCurrentYear + "/05/1");
+						dataFim = new Date(iCurrentYear + "/07/31");
+						return now >= dataInicio && now <= dataFim;
+					case 3:
+						dataInicio = new Date(iCurrentYear + "/08/1");
+						dataFim = new Date(iCurrentYear + "/10/31");
+						return now >= dataInicio && now <= dataFim;
+					case 4:
+						var iAux;
+						if (now >= new Date(iCurrentYear + "/01/1") && now <= new Date(iCurrentYear + "/01/31")) {
+							iAux = iCurrentYear - 1;
+							dataInicio = new Date(iAux + "/11/1");
+							dataFim = new Date(iCurrentYear + "/01/31");
+						}
+						else {
+							iAux =  iCurrentYear + 1;
+							dataInicio = new Date(iCurrentYear + "/11/1");
+							dataFim = new Date(iAux+  "/01/31");
+						}
+						
+						return now >= dataInicio && now <= dataFim;
+				}
+				
+				return false;
+			},
+
 			_popularToolbarEstimativaCorrente: function (sIdToolbar, oPeriodo) {
 				var that = this;
 
 				var oToolbar = this.byId(sIdToolbar);
-
-				oToolbar.addContent(new sap.m.Title({
-					text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(2, oPeriodo.numero_ordem)]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
-				}));
+				
+				if (this._isPeriodoCorrente(oPeriodo.numero_ordem)) {
+					oToolbar.addContent(new sap.m.Title({
+						text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(2, oPeriodo.numero_ordem)]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
+					}));
+				}
+				else {
+					// PEGAR A DATA LIMITE QUE A REABERTURA É VALIDA E CALCULAR QUANTO TEMPO FALTA    
+				}
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
@@ -1184,9 +1229,9 @@ sap.ui.define(
 
 				var oToolbar = this.byId(sIdToolbar);
 
-				oToolbar.addContent(new sap.m.Title({
+				/*oToolbar.addContent(new sap.m.Title({
 					text: that.getResourceBundle().getText("viewGeralFaltamXDias", [1]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
-				}));
+				}));*/
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 

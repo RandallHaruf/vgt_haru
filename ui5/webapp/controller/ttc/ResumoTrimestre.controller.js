@@ -12,14 +12,16 @@ sap.ui.define(
 		BaseController.extend("ui5ns.ui5.controller.ttc.ResumoTrimestre", {
 
 			onInit: function () {
+				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				
 				this.setModel(new JSONModel());
 
 				this.getRouter().getRoute("ttcResumoTrimestre").attachPatternMatched(this._onRouteMatched, this);
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
-				sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreAnoSelecionado ") + oEvent.getSource().getSelectedItem()
-					.getText());
+				/*sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreAnoSelecionado ") + oEvent.getSource().getSelectedItem()
+					.getText());*/
 
 				this._atualizarDados();
 			},
@@ -584,14 +586,59 @@ sap.ui.define(
 				oToolbar.addContent(oButton);
 			},
 
+			_isPeriodoCorrente: function (iNumeroOrdem) {
+				var now = new Date(),
+					dataInicio, 
+					dataFim,
+					iCurrentYear = now.getFullYear();
+					
+				now.setYear(this.byId("selectAnoCalendario").getSelectedItem().getText());
+				
+				switch (iNumeroOrdem) {
+					case 1:
+						dataInicio = new Date(iCurrentYear + "/21/1");
+						dataFim = new Date(iCurrentYear + "/04/20");
+						return now >= dataInicio && now <= dataFim;
+					case 2:
+						dataInicio = new Date(iCurrentYear + "/04/21");
+						dataFim = new Date(iCurrentYear + "/07/20");
+						return now >= dataInicio && now <= dataFim;
+					case 3:
+						dataInicio = new Date(iCurrentYear + "/07/21");
+						dataFim = new Date(iCurrentYear + "/10/20");
+						return now >= dataInicio && now <= dataFim;
+					case 4:
+						var iAux;
+						if (now >= new Date(iCurrentYear + "/01/1") && now <= new Date(iCurrentYear + "/01/20")) {
+							iAux = iCurrentYear - 1;
+							dataInicio = new Date(iAux + "/10/21");
+							dataFim = new Date(iCurrentYear + "/01/20");
+						}
+						else {
+							iAux =  iCurrentYear + 1;
+							dataInicio = new Date(iCurrentYear + "/10/21");
+							dataFim = new Date(iAux+  "/01/20");
+						}
+						
+						return now >= dataInicio && now <= dataFim;
+				}
+				
+				return false;
+			},
+
 			_popularToolbarPeriodoCorrente: function (sIdToolbar, oPeriodo) {
 				var that = this;
 
 				var oToolbar = this.byId(sIdToolbar);
 
-				oToolbar.addContent(new sap.m.Title({
-					text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(1,oPeriodo.numero_ordem)])
-				}));
+				if (this._isPeriodoCorrente(oPeriodo.numero_ordem)) {
+					oToolbar.addContent(new sap.m.Title({
+						text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(1,oPeriodo.numero_ordem)])
+					}));
+				}
+				else {
+					// PEGAR A DATA LIMITE QUE A REABERTURA É VALIDA E CALCULAR QUANTO TEMPO FALTA
+				}
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
