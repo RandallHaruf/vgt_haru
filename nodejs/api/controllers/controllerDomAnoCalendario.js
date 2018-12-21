@@ -134,7 +134,7 @@ module.exports = {
 			+' tblDominioAnoCalendario."id_dominio_ano_calendario", '
 			+' tblDominioAnoCalendario."ano_calendario" '
 			+' FROM "VGT.DOMINIO_ANO_CALENDARIO" tblDominioAnoCalendario '
-			+' where tblDominioAnoCalendario."ano_calendario" >= 2018 and tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) ' ;
+			+' where tblDominioAnoCalendario."ano_calendario" >= 2018 and tblDominioAnoCalendario."ano_calendario" <= (year(CURRENT_DATE) + 1) ';
 
 
 		

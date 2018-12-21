@@ -92,8 +92,10 @@ sap.ui.define(
 
 							//Verificar se a data atual já passou para colocar status como em atraso
 							if (obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1
-								/*|| obj[
-										"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4*/
+								|| obj[
+										"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 5
+								|| obj[
+										"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4
 							) {
 								if (obj["data_extensao"]) {
 									var dataPrazo = Utils.bancoParaJsDate(obj["data_extensao"]);
@@ -107,9 +109,9 @@ sap.ui.define(
 								if (dataPrazo < dataAtual) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
 								}
-								/*else {
-										    obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
-									    }*/
+								else{
+									    obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
+								    }
 							}
 
 							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
@@ -448,9 +450,9 @@ sap.ui.define(
 				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
-					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? false : true;
+					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] != 4 ? true : false;
 				this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
-					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? false : true));
+					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? true : false));
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));

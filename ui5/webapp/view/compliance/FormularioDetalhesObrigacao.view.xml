@@ -115,7 +115,7 @@
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? true : (!${/JaEstavaPreenchido} ? true : false ) : false)}"/>
+												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"/>
 												
 									</f:fields>
 								</f:FormElement>
@@ -126,7 +126,7 @@
 								</f:FormElement>
 									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? !!${JaEstavaIniciada} : false}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
+										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? !!${/JaEstavaIniciada} : false}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
