@@ -142,6 +142,10 @@
 								</columns>
 								<items>
 									<ColumnListItem>
+										<!--
+											textAlign="End" 
+												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
+										-->
 										<cells>
 											<core:Icon src="{icone_aplicavel}" />
 											<Text text="{category}" />
@@ -159,10 +163,18 @@
 											<Text text="{acronimo}" />
 											<Text text="{tipo_transacao}" />
 											<Text text="{tipo_transacao_outros}" />
-											<Text text="{principal}" />
-											<Text text="{juros}" />
-											<Text text="{multa}" />
-											<Text text="{total}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 											<Text text="{numero_documento}" />
 											<Text text="{entidade_beneficiaria}" />
 										</cells>
@@ -274,10 +286,18 @@
 											<Text text="{acronimo}" />
 											<Text text="{tipo_transacao}" />
 											<Text text="{tipo_transacao_outros}" />
-											<Text text="{principal}" />
-											<Text text="{juros}" />
-											<Text text="{multa}" />
-											<Text text="{total}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+											<Text 
+												textAlign="End"
+												text="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 											<Text text="{numero_documento}" />
 											<Text text="{entidade_beneficiaria}" />
 										</cells>

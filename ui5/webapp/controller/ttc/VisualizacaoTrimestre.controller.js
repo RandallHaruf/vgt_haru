@@ -8,6 +8,8 @@ sap.ui.define(
 		
 		return BaseController.extend("ui5ns.ui5.controller.ttc.VisualizacaoTrimestre", {
 			onInit: function () {
+				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				
 				this.setModel(new sap.ui.model.json.JSONModel({
 					"pagamentos": {
 						borne: [
