@@ -98,7 +98,7 @@ sap.ui.define(
 			
 			_atualizarObjeto: function () {
 				var that = this;
-				
+				that.byId("botaoCancelar").setEnabled(false);
 				var obj = this.getModel().getProperty("/objeto");
 				var idObjeto = this.getModel().getProperty("/idObjeto");
 				
@@ -112,6 +112,7 @@ sap.ui.define(
 						fkTipo: obj.idTipo
 					},
 					success: function (response) {
+						that.byId("botaoCancelar").setEnabled(true);
 						that._navToPaginaListagem();		
 					}
 				});
@@ -119,7 +120,7 @@ sap.ui.define(
 			
 			_inserirObjeto: function () {
 				var that = this;
-
+				that.byId("botaoCancelar").setEnabled(false);
 				var obj = this.getModel().getProperty("/objeto");
 				
 				jQuery.ajax(Constants.urlBackend + "Aliquota", {
@@ -132,6 +133,7 @@ sap.ui.define(
 						fkTipo: obj.idTipo
 					},
 					success: function (response) {
+						that.byId("botaoCancelar").setEnabled(true);						
 						that._navToPaginaListagem();		
 					}
 				});
