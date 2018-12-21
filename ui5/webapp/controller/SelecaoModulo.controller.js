@@ -366,7 +366,7 @@ sap.ui.define(
 					}]
 				}));
 
-				this._atualizarDados();
+				//this._atualizarDados();
 
 				/*this.byId("vemNimim").addItem(new NumericIcon({
 					icon: new sap.ui.core.Icon({
