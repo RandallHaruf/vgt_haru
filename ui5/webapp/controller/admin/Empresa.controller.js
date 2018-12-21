@@ -377,7 +377,10 @@ sap.ui.define(
 				this._navToPaginaListagem();*/
 				
 				var that = this;
-				that.byId("btnCancelar").setEnabled(false);					
+				that.byId("btnCancelar").setEnabled(false);	
+				that.byId("btnSalvar").setEnabled(false);	
+				that.setBusy(that.byId("btnSalvar"),true);
+				
 				var obj = this.getModel().getProperty("/objeto");
 				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
 					//response.unshift({ });
@@ -463,7 +466,9 @@ sap.ui.define(
 							});						
 						
 							that._resolverHistoricoAliquota(function () {
-								that.byId("btnCancelar").setEnabled(true);									
+								that.byId("btnCancelar").setEnabled(true);		
+								that.byId("btnSalvar").setEnabled(true);		
+								that.setBusy(that.byId("btnSalvar"),false);								
 								that._navToPaginaListagem();			
 							});
 					});	
@@ -476,6 +481,8 @@ sap.ui.define(
 			_inserirObjeto: function () {
 				var that = this;
 				that.byId("btnCancelar").setEnabled(false);
+				that.byId("btnSalvar").setEnabled(false);	
+				that.setBusy(that.byId("btnSalvar"),true);				
 				var obj = this.getModel().getProperty("/objeto");
 				
 				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
@@ -503,6 +510,8 @@ sap.ui.define(
 						obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())9*/
 					}, function (response) {
 						that.byId("btnSalvar").setEnabled(true);
+						that.byId("btnCancelar").setEnabled(true);
+						that.setBusy(that.byId("btnSalvar"),false);						
 						var then = that;
 						var modelosObrigacao = that.getModel().getProperty("/ModeloObrigacao");	
 						
@@ -546,13 +555,17 @@ sap.ui.define(
 								fkAliquota: obj["fk_aliquota.id_aliquota"],
 								dataInicio: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate()
 							}, function (resp) {
-								that.byId("btnCancelar").setEnabled(true);								
+								that.byId("btnCancelar").setEnabled(true);		
+								that.byId("btnSalvar").setEnabled(true);
+								that.setBusy(that.byId("btnSalvar"),false);								
 								that._navToPaginaListagem();			
 							});
 						}
 						else {
 							// Se não, apenas retorna
 							that.byId("btnCancelar").setEnabled(true);	
+							that.byId("btnSalvar").setEnabled(true);
+							that.setBusy(that.byId("btnSalvar"),false);							
 							that._navToPaginaListagem();			
 						}		
 					});					
