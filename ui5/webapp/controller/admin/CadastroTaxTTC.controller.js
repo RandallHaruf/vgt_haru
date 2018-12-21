@@ -10,10 +10,10 @@ sap.ui.define(
 			/* Métodos a implementar */
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-				
+				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja desabilitar esta Tax?" , {
-					title: "Confirm",
+				 sap.m.MessageBox.confirm(that.getResourceBundle().getText("viewGeralDesabilitarTaxa") , {
+					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							sap.m.MessageToast.show("Desabilitar Tax: " + nome);	
@@ -28,8 +28,8 @@ sap.ui.define(
 				var idExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
 				
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir esta Tax?" , {
-					title: "Confirm",
+			 sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralExcluirTaxa") , {
+					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Tax: " + nome);	

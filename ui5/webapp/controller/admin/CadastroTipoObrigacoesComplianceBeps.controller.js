@@ -10,10 +10,10 @@ sap.ui.define(
 			/* Métodos a implementar */
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-				
+				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja desabilitar esta Obrigação?" , {
-					title: "Confirm",
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralDesabilitarOBR") , {
+					title: "info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							sap.m.MessageToast.show("Desabilitar Obrigação: " + nome);	
@@ -28,8 +28,8 @@ sap.ui.define(
 				var idExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
 				
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir este item?" , {
-					title: "Confirm",
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralCerteza") , {
+					title: "info",
 					onClose: function (oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Obrigação: " + nome);	
@@ -65,7 +65,7 @@ sap.ui.define(
 				
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
-						title: "Aviso"
+						title: "Info"
 					});
 				}
 				

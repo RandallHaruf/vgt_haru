@@ -27,13 +27,13 @@ sap.ui.define(
 			
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-				
+				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja desabilitar esta Name of Tax?" , {
-					title: "Confirm",
+			  sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralDesabilitarNomeTaxa") , {
+					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							sap.m.MessageToast.show("Desabilitar Name of Tax: " + nome);	
+							 sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralToastDesabilitarNameOfTax") + nome);	
 						}
 					}
 				});
@@ -44,8 +44,8 @@ sap.ui.define(
 				var idExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
 				
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir esta Name of Tax?" , {
-					title: "Confirm",
+				 sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralExcluirNomeTaxa") , {
+					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							NodeAPI.excluirRegistro("NameOfTax", idExcluir, function (response) {
