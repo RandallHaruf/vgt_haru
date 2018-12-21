@@ -126,7 +126,7 @@
 								</f:FormElement>
 									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? false : !!${JaEstavaIniciada}}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
+										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? true : !!${JaEstavaIniciada}}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
