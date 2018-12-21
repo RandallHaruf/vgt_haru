@@ -10,10 +10,10 @@ sap.ui.define(
 			/* Métodos a implementar */
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-				
+				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja desabilitar esta Category?" , {
-					title: "Confirm",
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("viewGeralCertezaDesabilitarCategoria") , {
+					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							sap.m.MessageToast.show(this.getResourceBundle().getText("viewAdminCadastroCategoriaTTCDesabilitarCategory")  + nome);	
@@ -28,8 +28,8 @@ sap.ui.define(
 				var idExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
 				
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir esta Category?" , {
-					title: "Confirm",
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralExcluirCategoriaC") , {
+					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Category: " + nome);	
@@ -62,7 +62,7 @@ sap.ui.define(
 				
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
-						title: "Aviso"
+						title: "Info"
 					});
 				}
 				
