@@ -69,29 +69,29 @@
 						id="formularioObjeto" 
 						editable="true">
 						<f:title>
-							<core:Title text="Item to Report"/>
+							<core:Title text="{i18n>viewTaxPackageVisualizacaoTrimestreItensParaReportar}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
 						<f:formContainers>
-							<f:FormContainer title="Cadastro">
+							<f:FormContainer title="{i18n>viewGeralCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="Pergunta" labelFor="inputPergunta" />
+											<Label text="[i18n>viewGeralQUestion}" labelFor="inputPergunta" />
 										</f:label>
 										<f:fields>
 											<TextArea rows="5" id="inputPergunta" value="{/objeto/pergunta}" required="true" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="Flag Sim/Não">
+									<f:FormElement label="{i18n>viewGeralFlagSN}">
 										<f:fields>
 											<CheckBox  selected="{/objeto/flagSimNao}" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="Flag Ano">
+									<f:FormElement label="{i18n>viewGeralFlagAno}">
 										<f:fields>
 											<CheckBox selected="{/objeto/flagAno}" />
 										</f:fields>
@@ -106,11 +106,13 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
-						text="Salvar" 
+						id="btnSalvar"
+						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
-						text="Cancelar" 
+						id="btnCancelar"
+						text="{i18n>viewGeralCancelar}"
 						type="Reject" 
 						press="onCancelar"/>
 				</Toolbar>

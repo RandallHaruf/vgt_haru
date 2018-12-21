@@ -215,6 +215,9 @@ sap.ui.define(
 				this._navToPaginaListagem();*/
 				
 				var that = this;
+					that.byId("btnCancelar").setEnabled(false);
+				that.byId("btnSalvar").setEnabled(false);
+				that.setBusy(that.byId("btnSalvar"), true);
 				
 				var obj = this.getModel().getProperty("/objeto");
 				
@@ -223,6 +226,9 @@ sap.ui.define(
 					fkTax: obj.tax,
 					idPaises: JSON.stringify(that._getIdsPaisesSelecionados())
 				}, function (response) {
+						that.byId("btnCancelar").setEnabled(true);
+				that.byId("btnSalvar").setEnabled(true);
+				that.setBusy(that.byId("btnSalvar"), false);
 					that._navToPaginaListagem();		
 				});
 			},
@@ -232,6 +238,9 @@ sap.ui.define(
 				this._navToPaginaListagem();	*/
 				
 				var that = this;
+				that.byId("btnCancelar").setEnabled(false);
+				that.byId("btnSalvar").setEnabled(false);
+				that.setBusy(that.byId("btnSalvar"), true);
 				
 				var obj = this.getModel().getProperty("/objeto");
 				
@@ -241,6 +250,9 @@ sap.ui.define(
 					fkTax: obj.tax,
 					idPaises: JSON.stringify(that._getIdsPaisesSelecionados())
 				}, function (response) {
+				that.byId("btnCancelar").setEnabled(true);
+				that.byId("btnSalvar").setEnabled(true);
+				that.setBusy(that.byId("btnSalvar"), false);
 					that._navToPaginaListagem();		
 				});
 			},
