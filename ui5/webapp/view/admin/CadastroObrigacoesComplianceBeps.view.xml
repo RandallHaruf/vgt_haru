@@ -164,6 +164,7 @@
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
+				    	id="btnOCCancelar"
 						text="{i18n>formularioObrigacaoBotaoCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>

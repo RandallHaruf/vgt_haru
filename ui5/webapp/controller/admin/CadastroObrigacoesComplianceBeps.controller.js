@@ -219,7 +219,7 @@ sap.ui.define(
 				this._navToPaginaListagem();		*/
 				
 				var that = this;
-				
+					that.byId("btnOCCancelar").setEnabled(false);
 				var obj = this.getModel().getProperty("/objeto");
 				
 				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria", {				
@@ -236,6 +236,7 @@ sap.ui.define(
 						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
 					},
 					success: function (response) {
+							that.byId("btnOCCancelar").setEnabled(true);
 						that._navToPaginaListagem();		
 					}
 				});
