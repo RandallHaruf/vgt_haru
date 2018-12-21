@@ -39,9 +39,9 @@ sap.ui.define(
 			
 			onTrocarEmail: function (oEvent) {
 				var sEmail = oEvent.getSource().getValue();
-				
+				var that=this;
 				if (sEmail !== "" && !Validador.emailValido(sEmail)) {
-					sap.m.MessageBox.warning("O email inserido não é válido", {
+				sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralEmailNaoValido"), {
 						title: "Aviso"
 					});
 				}
@@ -109,17 +109,17 @@ sap.ui.define(
                 var continua = true;
 				if(obj["ni"] && !obj["jurisdicao_ni"]){
 					continua = false;
-					oValidacao.mensagem = "- Os campos destacados são de preenchimento obrigatório";
+					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
 				if(obj["tin"] && !obj["jurisdicao_tin"]){
 					continua = false;
-					oValidacao.mensagem = "- Os campos destacados são de preenchimento obrigatório";
+					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
 				
 				oValidacao.formularioValido = (oValidacao.formularioValido && continua);
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
-						title: "Aviso"
+						title: ""
 					});
 				}
 				
@@ -233,19 +233,18 @@ sap.ui.define(
 				]);*/
 				
 				var that = this;
-				
+				that.setBusy(that.byId("tabelaObjetos"),true);
 				NodeAPI.listarRegistros("DeepQuery/Empresa", function (response) {
-					that.getModel().setProperty("/objetos", response);
+					
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["status"] = Utils.traduzEmpresaStatusTipo(aResponse[i]["id_dominio_empresa_status"],that);
+						}
+					that.getModel().setProperty("/objetos", aResponse);
+					
+					that.setBusy(that.byId("tabelaObjetos"),false);					
 				});
-				/*
-				NodeAPI.listarRegistros("DeepQuery/ObrigacaoAcessoria", function (response) {
-					that.getModel().setProperty("/ObrigacaoAcessoria", response);	
-				});*/
-				/*
-				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao", function (response) {
-					that.getModel().setProperty("/ModeloObrigacao", response);	
-				});	*/
-				
+
 				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendario", function (response) {
 					that.getModel().setProperty("/DominioAnoCalendario", response);	
 				});	
@@ -256,21 +255,24 @@ sap.ui.define(
 			
 			onSelectChange: function () {
 				var that = this;	
+				that.setBusy(that.byId("tableObrigacoes"),true);
 				var obj = this.getModel().getProperty("/objeto/fk_pais.id_pais");
 				if(obj){
 					NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + obj, function (response) {
 						that.getModel().setProperty("/ModeloObrigacao", response);	
+						that.setBusy(that.byId("tableObrigacoes"),false);
 					});						
 				}
 				else{
 					that.getModel().setProperty("/ModeloObrigacao", {});
+					that.setBusy(that.byId("tableObrigacoes"),false);
 				}
 
 			},
 			
 			_carregarCamposFormulario: function () {
 				var that = this;
-				
+								
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					response.unshift({ });
 					that.getModel().setProperty("/Pais", response);	
@@ -304,42 +306,24 @@ sap.ui.define(
 			},
 			
 			_carregarObjetoSelecionado: function (iIdObjeto) {
-				/*this.getModel().setProperty("/objeto", {
-					id: iIdObjeto,
-					historicoAliquotas: [{
-						nome: "Alíquota 1",
-						dataInicio: "10/05/2017",
-						dataFim: "10/05/2018" 
-					}, {
-						nome: "Alíquota 2",
-						dataInicio: "10/06/2017",
-						dataFim: "10/06/2018" 
-					}],
-					historicoObrigacoes: [{
-						tipo: "Compliance",
-						nome: "Obrigação 1"
-					}, {
-						tipo: "Beps",
-						nome: "Obrigação 2"
-					}]
-				});
-				
-				this.getModel().setProperty("/showHistorico", true);*/
-				
+
 				var that = this;
 
 				this.getModel().setProperty("/showHistorico", true);
 				
+				that.setBusy(that.byId("formularioObjeto"),true);				
 				NodeAPI.lerRegistro("Empresa", iIdObjeto, function (response) {
 					that.getModel().setProperty("/objeto", response);	
 					that.getModel().setProperty("/idAliquotaVigente", response["fk_aliquota.id_aliquota"]);
-	
-				var pais = that.getModel().getProperty("/objeto/fk_pais.id_pais");
-				NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais, function (res) {
-					that.getModel().setProperty("/ModeloObrigacao", res);	
-						NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa?idEmpresaNaQualMeRelaciono=" + iIdObjeto, function (r) {					
-							that._resolverVinculoObrigacoes(r);		
-						});					
+					
+					that.setBusy(that.byId("formularioObjeto"),false);
+					
+					var pais = that.getModel().getProperty("/objeto/fk_pais.id_pais");
+					NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais, function (res) {
+						that.getModel().setProperty("/ModeloObrigacao", res);
+							NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa?idEmpresaNaQualMeRelaciono=" + iIdObjeto, function (r) {					
+								that._resolverVinculoObrigacoes(r);	
+							});					
 				});	
 					
 					// Carrega o histórico de alíquotas dessa empresa

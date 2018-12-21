@@ -35,7 +35,7 @@ sap.ui.define(
 			
 			_carregarObjetos: function () {
 				var that = this;
-				
+				that.setBusy(that.byId("paginaListagem"),true);
 				jQuery.ajax(Constants.urlBackend + "/DeepQuery/Aliquota", {
 					type: "GET",
 					dataType: "json",
@@ -45,6 +45,7 @@ sap.ui.define(
 							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"],that);
 						}
 						that.getModel().setProperty("/objetos", aResponse);
+						that.setBusy(that.byId("paginaListagem"),false);						
 						//that.getModel().setProperty("/objetos", response);						
 					}
 				});
@@ -59,7 +60,7 @@ sap.ui.define(
 					success: function (response) {
 						response.unshift({ id: null, nome: "" });						
 						var aResponse = response;
-						for (var i = 1, length = aResponse.length; i < length; i++) {
+						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"],that);
 						}
 						that.getModel().setProperty("/DominioAliquotaTipo", aResponse);
@@ -71,7 +72,7 @@ sap.ui.define(
 			
 			_carregarObjetoSelecionado: function (iIdObjeto) {
 				var that = this;
-
+				that.setBusy(that.byId("paginaObjeto"),true);
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + iIdObjeto, {
 					type: "GET",
 					dataType: "json",
@@ -86,6 +87,7 @@ sap.ui.define(
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
+						that.setBusy(that.byId("paginaObjeto"),false);
 					}
 				});
 			},

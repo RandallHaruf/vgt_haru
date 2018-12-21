@@ -10,13 +10,13 @@ sap.ui.define(
 			/* Métodos a implementar */
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).pergunta;
-				
+					var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja desabilitar esta Pergunta?" , {
+			sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralDesabilitarPergunta") , {
 					title: "Confirm",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							sap.m.MessageToast.show("Desabilitar Pergunta: " + nome);	
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralToastDesabilitarPergunta")  + nome);	
 						}
 					}
 				});
@@ -28,7 +28,7 @@ sap.ui.define(
 				var iIdExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
 				
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir este item?" , {
+				   sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralCerteza") , {
 					title: "Confirm",
 					onClose: function (oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {

@@ -94,28 +94,30 @@ sap.ui.define(
 			
 			_carregarObjetos: function () {
 				var that = this;
-				
+				this.setBusy(this.byId("tabelaObjetos"),true);
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					var aResponse = response;
-					for (var i = 1, length = aResponse.length; i < length; i++) {
+					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["descricaoStatus"] = Utils.traduzStatusTiposPais(aResponse[i]["fkDominioPaisStatus"],that);
 					}
 					that.getModel().setProperty("/objetos", aResponse);
+					that.setBusy(that.byId("tabelaObjetos"),false);
 				});
 			},
 			
 			_carregarCamposFormulario: function () {
 				var that = this;
-				
+
 				NodeAPI.listarRegistros("DominioPais", function (response) {
 					response.unshift({ id: null, nome: "" });
 					that.getModel().setProperty("/DominioPais", response);
 				});
 				
 				NodeAPI.listarRegistros("DominioPaisStatus", function (response) {
-					response.unshift({ id: null, descricao: "" });
+					response.unshift({ });
+					//response.unshift({ id: null, descricao: "" });					
 						var aResponse = response;
-						for (var i = 1, length = aResponse.length; i < length; i++) {
+						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["status"] = Utils.traduzStatusTiposPais(aResponse[i]["id_dominio_pais_status"],that);
 						}
 						that.getModel().setProperty("/DominioPaisStatus", aResponse);					
@@ -125,7 +127,7 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DominioPaisRegiao", function (response) {
 					response.unshift({ id: null, descricao: "" });
 						var aResponse = response;
-						for (var i = 1, length = aResponse.length; i < length; i++) {
+						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["regiao"] = Utils.traduzPaisRegiao(aResponse[i]["id_dominio_pais_regiao"],that);
 						}
 					that.getModel().setProperty("/DominioPaisRegiao", aResponse);
@@ -141,6 +143,7 @@ sap.ui.define(
 				var that = this;
 				that.getModel().setProperty("/showHistoricoAliquotas", true);
 				
+				that.setBusy(that.byId("paginaObjeto"),true);
 				// Carrega o objeto com o id selecionado
 				NodeAPI.lerRegistro("Pais", iIdObjeto, function (response) {
 					var oPais = response;
@@ -164,6 +167,8 @@ sap.ui.define(
 					
 					that.getModel().setProperty("/objeto", obj);
 					that.getModel().setProperty("/idAliquotaVigente", obj.fkAliquota);
+					
+					that.setBusy(that.byId("paginaObjeto"),false);
 					
 					// Carrega o histórico de alíquotas desse país
 					NodeAPI.listarRegistros("DeepQuery/HistoricoPaisAliquota/" + iIdObjeto + "&-1", function (resp) {

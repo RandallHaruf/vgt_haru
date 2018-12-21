@@ -11,6 +11,8 @@ sap.ui.define(
 		BaseController.extend("ui5ns.ui5.controller.ttc.ListagemEmpresas", {
 
 			onInit: function () {
+				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				
 				this.setModel(new JSONModel());
 				
 				this.getRouter().getRoute("ttcListagemEmpresas").attachPatternMatched(this._onRouteMatched, this);                         
