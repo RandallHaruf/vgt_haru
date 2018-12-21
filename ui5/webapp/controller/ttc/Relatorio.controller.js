@@ -26,14 +26,13 @@ sap.ui.define([
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);
 		},
+		_handleRouteMatched: function () {
+			this.onExit();
+		},	
 		
 		navToHome: function () {
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("selecaoModulo");                                  	
 		},
-		
-		_handleRouteMatched: function () {
-			this.onExit();
-		},	
 		
 		navToPage2: function () {
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");                                  	
