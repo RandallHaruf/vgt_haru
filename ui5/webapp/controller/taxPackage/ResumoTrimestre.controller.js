@@ -97,7 +97,7 @@ sap.ui.define(
 						break;
 					case 4:
 						Periodo = new Date((new Date().getFullYear()) + "/01/31");
-						if (Hoje > new Date((new Date().getFullYear()) + "/10/31") && Hoje < new Date((new Date().getFullYear() + 1) + "01/01")) {
+						if (Hoje > new Date((new Date().getFullYear()) + "/10/31") && Hoje < new Date((new Date().getFullYear() + 1) + "/01/01")) {
 							Periodo.setFullYear(Periodo.getFullYear() + 1);
 						}
 					}
@@ -114,7 +114,7 @@ sap.ui.define(
 						break;
 					case 4:
 						Periodo = new Date((new Date().getFullYear()) + "/01/20");
-						if (Hoje > new Date((new Date().getFullYear()) + "/10/20") && Hoje < new Date((new Date().getFullYear() + 1) + "01/01")) {
+						if (Hoje > new Date((new Date().getFullYear()) + "/10/20") && Hoje < new Date((new Date().getFullYear() + 1) + "/01/01")) {
 							Periodo.setFullYear(Periodo.getFullYear() + 1);
 						}
 					}
