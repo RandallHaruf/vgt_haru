@@ -183,6 +183,8 @@ sap.ui.define(
 				if (!this.getModel().getProperty("/IsDeclaracao")) {
 					if (oFileUploader.getValue()) {
 						oBtnEnviar.setEnabled(false);
+						this.getModel().setProperty("/CancelaBotaoConfirmar", false);
+						this.getModel().setProperty("/CancelaBotaoCancelar", false);
 						this.setBusy(oBtnEnviar, true);
 						Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDocumento", oData)
 							.then(function (response) {
@@ -191,11 +193,15 @@ sap.ui.define(
 								oFileUploader.setValue("");
 								oBtnEnviar.setEnabled(true);
 								that.setBusy(oBtnEnviar, false);
+								that.getModel().setProperty("/CancelaBotaoConfirmar", true);
+								that.getModel().setProperty("/CancelaBotaoCancelar", true);
 							})
 							.catch(function (err) {
 								sap.m.MessageToast.show(err);
 								oBtnEnviar.setEnabled(true);
 								that.setBusy(oBtnEnviar, false);
+								that.getModel().setProperty("/CancelaBotaoConfirmar", true);
+								that.getModel().setProperty("/CancelaBotaoCancelar", true);
 							});
 					} else {
 						sap.m.MessageToast.show("Selecione um arquivo");
@@ -203,7 +209,8 @@ sap.ui.define(
 
 				} else {
 					DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
-					
+					this.getModel().setProperty("/CancelaBotaoConfirmar", false);
+					this.getModel().setProperty("/CancelaBotaoCancelar", false);
 					var dialog = new sap.m.Dialog({
 						title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
 						type: "Message",
@@ -223,45 +230,51 @@ sap.ui.define(
 										.then(function (response) {
 											//sap.m.MessageToast.show(response);
 											that._atualizarDocumentos('/Documentos', oData.id, oTable);
-											oFileUploader.setValue("");
-											oBtnEnviar.setEnabled(true);
-											that.setBusy(oBtnEnviar, false);
+											
+											var IntMes = DataConclusao.getMonth();//Number(DataConclusao.toString());
+											IntMes = IntMes + 1;
+											var strMes = IntMes.toString();
+			
+											that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" + DataConclusao.getDate();
+											that._AtualizaStatusObrigacao(DataFormatada);
+			
+											var obj = that.getModel().getProperty("/RespostaObrigacao");
+											
+											NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
+												suporteContratado: obj["suporte_contratado"],
+												suporteEspecificacao: obj["suporte_especificacao"],
+												suporteValor: obj["suporte_valor"],
+												fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
+												fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
+												fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
+												fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
+												fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
+												dataExtensao: obj["data_extensao"],
+												dataConclusao: obj["data_conclusao"]
+											}, function (response2) {
+												that.getRouter().navTo("complianceListagemObrigacoes");
+												that.getModel().setProperty("/CancelaBotaoConfirmar", true);
+												that.getModel().setProperty("/CancelaBotaoCancelar", true);
+												oFileUploader.setValue("");
+												oBtnEnviar.setEnabled(true);
+												that.setBusy(oBtnEnviar, false);
+												dialog.close();
+											});
+											
 										})
 										.catch(function (err) {
 											sap.m.MessageToast.show(err);
 											oBtnEnviar.setEnabled(true);
 											that.setBusy(oBtnEnviar, false);
+											that.getModel().setProperty("/CancelaBotaoConfirmar", true);
+											that.getModel().setProperty("/CancelaBotaoCancelar", true);
+											dialog.close();
 										});
 								} else {
 									sap.m.MessageToast.show("Selecione um arquivo");
 								}
 
-								var IntMes = DataConclusao.getMonth();//Number(DataConclusao.toString());
-								IntMes = IntMes + 1;
-								var strMes = IntMes.toString();
 
-								that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" +
-									DataConclusao.getDate();
-								that._AtualizaStatusObrigacao(DataFormatada);
-
-								var obj = that.getModel().getProperty("/RespostaObrigacao");
-
-								NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
-									suporteContratado: obj["suporte_contratado"],
-									suporteEspecificacao: obj["suporte_especificacao"],
-									suporteValor: obj["suporte_valor"],
-									fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-									fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
-									fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-									fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-									fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
-									dataExtensao: obj["data_extensao"],
-									dataConclusao: obj["data_conclusao"]
-								}, function (response) {
-									that.getRouter().navTo("complianceListagemObrigacoes");
-								});
-
-								dialog.close();
 							}
 						}),
 						endButton: new sap.m.Button({
@@ -457,6 +470,7 @@ sap.ui.define(
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
+				this.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
 				this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
 			}
 		});
