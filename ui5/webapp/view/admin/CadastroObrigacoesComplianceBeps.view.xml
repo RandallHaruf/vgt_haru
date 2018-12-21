@@ -160,6 +160,7 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
+					id="btnSalvarOC"
 						text="{i18n>formularioObrigacaoBotaoSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>

@@ -171,8 +171,9 @@ sap.ui.define(
 			_inserirObjeto: function () {
 				/*sap.m.MessageToast.show("Inserir Objeto");
 				this._navToPaginaListagem();		*/
-				
 				var that = this;
+				that.byId("btnCTOCancelar").setEnabled(false);
+			
 				
 				var obj = this.getModel().getProperty("/objeto");
 				
@@ -185,6 +186,7 @@ sap.ui.define(
 						fkDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
 					},
 					success: function (response) {
+					  that.byId("btnCTOCancelar").setEnabled(true);
 						that._navToPaginaListagem();		
 					}
 				});

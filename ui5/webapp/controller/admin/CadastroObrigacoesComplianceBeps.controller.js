@@ -6,36 +6,36 @@ sap.ui.define(
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, Constants, Validador,NodeAPI,Utils) {
+	function (BaseController, Constants, Validador, NodeAPI, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroObrigacoesComplianceBeps", {
-			
+
 			/* Métodos a implementar */
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-					var that = this;
+				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralDesabilitarOBR") , {
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralDesabilitarOBR"), {
 					title: "Info",
-					onClose: function(oAction) { 
+					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							sap.m.MessageToast.show("Desabilitar Obrigação: " + nome);	
+							sap.m.MessageToast.show("Desabilitar Obrigação: " + nome);
 						}
 					}
 				});
 			},
-			
+
 			onExcluir: function (oEvent) {
 				var that = this;
 				//var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
 				var idExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
-				
+
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralCerteza") , {
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralCerteza"), {
 					title: "Info",
-					onClose: function (oAction) { 
+					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Obrigação: " + nome);
-							
+
 							//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + idExcluir, {
 							jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + idExcluir, {
 								type: "DELETE",
@@ -43,7 +43,7 @@ sap.ui.define(
 									that._carregarObjetos();
 								}
 							});
-							
+
 						}
 					}
 				});
@@ -61,9 +61,9 @@ sap.ui.define(
 			//-------------------
 			//DESCOMENTAR A VALIDACAO DOS OUTROS CAMPOS
 			_validarFormulario: function () {
-				
+
 				var sIdFormulario = "#" + this.byId("formularioObjeto").getDomRef().id;
-				
+
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: jQuery(sIdFormulario + " input[aria-required=true]"),
 					aDropdownObrigatorio: [
@@ -77,16 +77,16 @@ sap.ui.define(
 						selectPrazoEntrega: this.byId("selectPrazoEntrega")
 					}
 				});
-				
+
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
 						title: "Aviso"
 					});
 				}
-				
+
 				return oValidacao.formularioValido;
 			},
-			
+
 			_carregarObjetos: function () {
 				/*this.getModel().setProperty("/objetos", [{
 					id: "1",
@@ -99,7 +99,7 @@ sap.ui.define(
 				}]);*/
 
 				var that = this;
-			
+
 				//jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/ModeloObrigacao", {
 					type: "GET",
@@ -109,16 +109,19 @@ sap.ui.define(
 					}
 				});
 			},
-			
+
 			_carregarCamposFormulario: function () {
 				var that = this;
 				//this.onTrocaLingua();
-				
+
 				jQuery.ajax(Constants.urlBackend + "DominioObrigacaoAcessoriaTipo", {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
-						response.unshift({ id: 0, nome: "" });
+						response.unshift({
+							id: 0,
+							nome: ""
+						});
 						that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", response);
 					}
 				});
@@ -126,22 +129,28 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DomPeriodicidadeObrigacao", function (response) {
 					if (response) {
 						//response.unshift({});
-						response.unshift({ id: 0, nome: "" });						
+						response.unshift({
+							id: 0,
+							nome: ""
+						});
 						var aRegistro = response;
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
-							aRegistro[i]["descricao"] = Utils.traduzObrigacaoPeriodo(aRegistro[i]["id_periodicidade_obrigacao"],that);
-						}		
+							aRegistro[i]["descricao"] = Utils.traduzObrigacaoPeriodo(aRegistro[i]["id_periodicidade_obrigacao"], that);
+						}
 						that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 					}
-				});				
+				});
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					if (response) {
 						//response.unshift({});
-						response.unshift({ id: 0, nome: "" });						
+						response.unshift({
+							id: 0,
+							nome: ""
+						});
 						that.getModel().setProperty("/Pais", response);
 
 					}
-				});	
+				});
 				/*
 				jQuery.ajax("https://3cmwthhrqctaqsr8-app-nodejs.cfapps.us10.hana.ondemand.com/node/DominioPaisStatus", {
 					type: "GET",
@@ -152,17 +161,17 @@ sap.ui.define(
 					}
 				});*/
 			},
-			
-			_carregarObjetoSelecionado: function (iIdObjeto) {//CARREGAR O NOVO OBJETO DE OBRIGACAO ACESSORIA
+
+			_carregarObjetoSelecionado: function (iIdObjeto) { //CARREGAR O NOVO OBJETO DE OBRIGACAO ACESSORIA
 				/*this.getModel().setProperty("/objeto", {
 					id: iIdObjeto,
 					nome: "Nome da Obrigação"
 				});*/
 				//CARREGAR O NOVO OBJETO DE OBRIGACAO ACESSORIA
 				var that = this;
-
-				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {				
-				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
+				that.byId("btnOCCancelar").setEnabled(false);
+				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {
+					//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
@@ -172,82 +181,91 @@ sap.ui.define(
 							fkDominioObrigacaoAcessoriaTipo: oObjeto["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
 							dataInicio: oObjeto["data_inicial"],
 							dataFim: oObjeto["data_final"],
-							selectPeriodicidade: oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],/*Utils.traduzPeriodo(oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"]),    */                            
+							selectPeriodicidade: oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],
+							/*Utils.traduzPeriodo(oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"]),    */
 							selectPais: oObjeto["fk_id_pais.id_pais"],
 							selectPrazoEntrega: oObjeto["prazo_entrega"]
+
 						};
-						
+						that.byId("btnOCCancelar").setEnabled(true);
 						that.getModel().setProperty("/objeto", obj);
 					}
 				});
 			},
-			
+
 			_limparFormulario: function () {
 				this.getModel().setProperty("/objeto", {});
 
 			},
-			
+
 			_atualizarObjeto: function (iIdObjeto) {
 				/*sap.m.MessageToast.show("Atualizar Objeto");
 				this._navToPaginaListagem();*/
-				
+
 				var that = this;
-				
+				that.byId("btnOCCancelar").setEnabled(false);
+				that.byId("btnSalvarOCr").setEnabled(false);
+				that.setBusy(that.byId("btnSalvarOC"), true);
 				var obj = this.getModel().getProperty("/objeto");
-				
+
 				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
-				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {					
+				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {
 					type: "PUT",
 					data: {
 						nomeObrigacao: obj.nome,
 						dataInicial: obj.dataInicio,
-						dataFinal: obj.dataFim,						
+						dataFinal: obj.dataFim,
 						prazoEntrega: obj.selectPrazoEntrega,
 						fkIdPais: obj.selectPais,
-						fkIdDominioPeriodicidade:obj.selectPeriodicidade,
+						fkIdDominioPeriodicidade: obj.selectPeriodicidade,
 						fkIdDominioObrigacaoStatus: 2,
-						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo					
+						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
 					},
 					success: function (response) {
-						that._navToPaginaListagem();		
+						that.byId("btnOCCancelar").setEnabled(true);
+						that.byId("btnSalvarOC").setEnabled(true);
+						that.setBusy(that.byId("btnSalvarOC"), false);
+						that._navToPaginaListagem();
 					}
 				});
 			},
-			
+
 			_inserirObjeto: function () {
 				/*sap.m.MessageToast.show("Inserir Objeto");
 				this._navToPaginaListagem();		*/
-				
+
 				var that = this;
-					that.byId("btnOCCancelar").setEnabled(false);
+				that.byId("btnOCCancelar").setEnabled(false);
+				that.byId("btnSalvarOCr").setEnabled(false);
+				that.setBusy(that.byId("btnSalvarOC"), true);
 				var obj = this.getModel().getProperty("/objeto");
-				
+
 				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria", {				
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao", {
 					type: "POST",
 					data: {
 						nomeObrigacao: obj.nome,
 						dataInicial: obj.dataInicio,
-						dataFinal: obj.dataFim,						
+						dataFinal: obj.dataFim,
 						prazoEntrega: obj.selectPrazoEntrega,
 						fkIdPais: obj.selectPais,
-						fkIdDominioPeriodicidade:obj.selectPeriodicidade,
+						fkIdDominioPeriodicidade: obj.selectPeriodicidade,
 						fkIdDominioObrigacaoStatus: 2,
 						fkIdDominioObrigacaoAcessoriaTipo: obj.fkDominioObrigacaoAcessoriaTipo
 					},
 					success: function (response) {
-							that.byId("btnOCCancelar").setEnabled(true);
-						that._navToPaginaListagem();		
+						that.byId("btnOCCancelar").setEnabled(true);
+						that.byId("btnSalvarOC").setEnabled(true);
+						that.setBusy(that.byId("btnSalvarOC"), false);
+						that._navToPaginaListagem();
 					}
 				});
 			},
-			
-			
-			
+
 			_navToPaginaListagem: function () {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
 			},
-			
+
 			/* Métodos fixos */
 			onInit: function () {
 				var that = this;
@@ -256,62 +274,60 @@ sap.ui.define(
 					//DominioPais: [],
 					//DominioPaisStatus: [],
 					objetos: [],
-					objeto: { },
+					objeto: {},
 					isUpdate: false
 				}));
-				
+
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
 						that._carregarObjetos();
-					}	
+					}
 				});
-				
+
 				this.byId("paginaObjeto").addEventDelegate({
 					onAfterShow: function (oEvent) {
 						that._carregarCamposFormulario();
-						
+
 						if (oEvent.data.path) {
 							var id = that.getModel().getObject(oEvent.data.path)[that._nomeColunaIdentificadorNaListagemObjetos];
-							
+
 							that.getModel().setProperty("/isUpdate", true);
 							that.getModel().setProperty("/idObjeto", id);
-							
+
 							that._carregarObjetoSelecionado(id);
-						}
-						else {
+						} else {
 							that.getModel().setProperty("/isUpdate", false);
 						}
 					},
-					
+
 					onAfterHide: function (oEvent) {
 						that._limparFormulario();
 					}
 				});
 			},
-			
+
 			onNovoObjeto: function (oEvent) {
-				Utils.displayFormat(this);				
+				Utils.displayFormat(this);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},
-			
+
 			onAbrirObjeto: function (oEvent) {
-				Utils.displayFormat(this);				
+				Utils.displayFormat(this);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip", {
 					path: oEvent.getSource().getBindingContext().getPath()
 				});
 			},
-			
+
 			onSalvar: function (oEvent) {
 				if (this._validarFormulario()) {
 					if (this.getModel().getProperty("/isUpdate")) {
 						this._atualizarObjeto(this.getModel().getProperty("/idObjeto"));
-					}
-					else {
+					} else {
 						this._inserirObjeto();
 					}
 				}
 			},
-			
+
 			onCancelar: function (oEvent) {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
 			}

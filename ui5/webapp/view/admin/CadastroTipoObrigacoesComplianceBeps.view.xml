@@ -136,6 +136,7 @@
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
+					id="btnCTOCancelar"
 						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>

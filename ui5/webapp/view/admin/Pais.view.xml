@@ -268,11 +268,12 @@
 				<Toolbar>
 					<ToolbarSpacer/>
 					<Button 
+					id="btnSalvarP"
 						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
 						press="onSalvar"/>
 					<Button 
-						id="btnCancelar"
+						id="btnCancelarP"
 						text="{i18n>viewGeralCancelar}" 
 						type="Reject" 
 						press="onCancelar"/>

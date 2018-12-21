@@ -5,14 +5,14 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Validador",
 		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, Constants, Validador,Utils) {
+	function (BaseController, Constants, Validador, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroAliquotasTaxPackage", {
-			
+
 			/* Métodos a implementar */
 			_validarFormulario: function () {
-				
+
 				var sIdFormulario = "#" + this.byId("formularioObjeto").getDomRef().id;
-				
+
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: jQuery(sIdFormulario + " input[aria-required=true]"),
 					aDropdownObrigatorio: [
@@ -23,56 +23,60 @@ sap.ui.define(
 						dataFim: this.byId("dataFim")
 					}
 				});
-				
+
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
 						title: "Aviso"
 					});
 				}
-				
+
 				return oValidacao.formularioValido;
 			},
-			
+
 			_carregarObjetos: function () {
 				var that = this;
-				that.setBusy(that.byId("paginaListagem"),true);
+				that.setBusy(that.byId("paginaListagem"), true);
 				jQuery.ajax(Constants.urlBackend + "/DeepQuery/Aliquota", {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
 						var aResponse = response;
 						for (var i = 0, length = aResponse.length; i < length; i++) {
-							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"],that);
+							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"], that);
 						}
 						that.getModel().setProperty("/objetos", aResponse);
-						that.setBusy(that.byId("paginaListagem"),false);						
+						that.setBusy(that.byId("paginaListagem"), false);
 						//that.getModel().setProperty("/objetos", response);						
 					}
 				});
 			},
-			
+
 			_carregarCamposFormulario: function () {
 				var that = this;
-				
+
 				jQuery.ajax(Constants.urlBackend + "/DominioAliquotaTipo", {
 					type: "GET",
 					dataType: "json",
 					success: function (response) {
-						response.unshift({ id: null, nome: "" });						
+						response.unshift({
+							id: null,
+							nome: ""
+						});
 						var aResponse = response;
 						for (var i = 0, length = aResponse.length; i < length; i++) {
-							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"],that);
+							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"], that);
 						}
 						that.getModel().setProperty("/DominioAliquotaTipo", aResponse);
-						
+
 						//that.getModel().setProperty("/DominioAliquotaTipo", response);
 					}
 				});
 			},
-			
+
 			_carregarObjetoSelecionado: function (iIdObjeto) {
 				var that = this;
-				that.setBusy(that.byId("paginaObjeto"),true);
+
+				that.setBusy(that.byId("paginaObjeto"), true);
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + iIdObjeto, {
 					type: "GET",
 					dataType: "json",
@@ -85,23 +89,25 @@ sap.ui.define(
 							dataFim: oRegistro["data_fim"],
 							idTipo: oRegistro["fk_dominio_aliquota_tipo.id_dominio_aliquota_tipo"]
 						};
-						
+
 						that.getModel().setProperty("/objeto", obj);
-						that.setBusy(that.byId("paginaObjeto"),false);
+						that.setBusy(that.byId("paginaObjeto"), false);
 					}
 				});
 			},
-			
+
 			_limparFormulario: function () {
 				this.getModel().setProperty("/objeto", {});
 			},
-			
+
 			_atualizarObjeto: function () {
 				var that = this;
 				that.byId("botaoCancelar").setEnabled(false);
+				that.byId("botaoSalvar").setEnabled(false);
+				that.setBusy(that.byId("botaoSalvar"), true);
 				var obj = this.getModel().getProperty("/objeto");
 				var idObjeto = this.getModel().getProperty("/idObjeto");
-				
+
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + idObjeto, {
 					type: "PUT",
 					data: {
@@ -113,16 +119,21 @@ sap.ui.define(
 					},
 					success: function (response) {
 						that.byId("botaoCancelar").setEnabled(true);
-						that._navToPaginaListagem();		
+						that.byId("botaoSalvar").setEnabled(true);
+						that.setBusy(that.byId("botaoSalvar"), false);
+
+						that._navToPaginaListagem();
 					}
 				});
 			},
-			
+
 			_inserirObjeto: function () {
 				var that = this;
 				that.byId("botaoCancelar").setEnabled(false);
+				that.byId("botaoSalvar").setEnabled(false);
+				that.setBusy(that.byId("botaoSalvar"), true);
 				var obj = this.getModel().getProperty("/objeto");
-				
+
 				jQuery.ajax(Constants.urlBackend + "Aliquota", {
 					type: "POST",
 					data: {
@@ -133,78 +144,78 @@ sap.ui.define(
 						fkTipo: obj.idTipo
 					},
 					success: function (response) {
-						that.byId("botaoCancelar").setEnabled(true);						
-						that._navToPaginaListagem();		
+						that.byId("botaoCancelar").setEnabled(true);
+						that.byId("botaoSalvar").setEnabled(true);
+						that.setBusy(that.byId("botaoSalvar"), false);
+						that._navToPaginaListagem();
 					}
 				});
 			},
-			
+
 			_navToPaginaListagem: function () {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
 			},
-			
+
 			/* Métodos fixos */
 			onInit: function () {
 				var that = this;
-				
+
 				that.setModel(new sap.ui.model.json.JSONModel({
 					objetos: [],
 					DominioAliquotaTipo: [],
-					objeto: { },
+					objeto: {},
 					idObjeto: 0,
 					isUpdate: false
 				}));
-				
+
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
 						that._carregarObjetos();
-					}	
+					}
 				});
-				
+
 				this.byId("paginaObjeto").addEventDelegate({
 					onAfterShow: function (oEvent) {
 						that._carregarCamposFormulario();
-						
+
 						if (oEvent.data.path) {
 							that.getModel().setProperty("/isUpdate", true);
 							that.getModel().setProperty("/idObjeto", that.getModel().getObject(oEvent.data.path).id_aliquota);
-							
+
 							that._carregarObjetoSelecionado(that.getModel().getObject(oEvent.data.path).id_aliquota);
-						}
-						else {
+						} else {
 							that.getModel().setProperty("/isUpdate", false);
 						}
 					},
-					
+
 					onAfterHide: function (oEvent) {
 						that._limparFormulario();
 					}
 				});
 			},
-			
+
 			onNovoObjeto: function (oEvent) {
 				Utils.displayFormat(this);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},
-			
+
 			onAbrirObjeto: function (oEvent) {
 				Utils.displayFormat(this);
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip", {
 					path: oEvent.getSource().getBindingContext().getPath()
 				});
 			},
-			
+
 			onSalvar: function (oEvent) {
 				if (this._validarFormulario()) {
 					if (this.getModel().getProperty("/isUpdate")) {
 						this._atualizarObjeto();
-					}
-					else {
+					} else {
 						this._inserirObjeto();
 					}
 				}
 			},
-			
+
 			onCancelar: function (oEvent) {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
 			}
