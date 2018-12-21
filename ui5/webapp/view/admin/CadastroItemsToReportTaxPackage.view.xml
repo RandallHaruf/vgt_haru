@@ -80,7 +80,7 @@
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="[i18n>viewGeralQUestion}" labelFor="inputPergunta" />
+											<Label text="{i18n>viewGeralQUestion}" labelFor="inputPergunta" />
 										</f:label>
 										<f:fields>
 											<TextArea rows="5" id="inputPergunta" value="{/objeto/pergunta}" required="true" />

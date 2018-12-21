@@ -113,13 +113,15 @@ sap.ui.define(
 			
 			onSalvar: function (oEvent) {
 				var sIdObjetoSelecionado = this._idObjetoSelecionado;
+				var that=this;
 				if (sIdObjetoSelecionado) {
 					//alert("Atualizar alterações");
-					sap.m.MessageToast.show("Atualizar alterações");
+				sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralAAlterações"));
+
 				}
 				else {
 					//alert("Inserir novo objeto");
-					sap.m.MessageToast.show("Inserir novo objeto");
+				   sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralInserirNovoObj"));
 					
 					// Novo objeto
 					var id = jQuery.now().toString();
