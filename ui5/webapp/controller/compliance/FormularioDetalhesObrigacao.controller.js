@@ -170,8 +170,6 @@ sap.ui.define(
 				var oTable = this.byId("tabelaDocumentos");
 				var DataFormatada;
 
-				DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
-
 				var oData = {
 
 					indConclusao: false,
@@ -201,6 +199,8 @@ sap.ui.define(
 					}
 
 				} else {
+					DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
+					
 					var dialog = new sap.m.Dialog({
 						title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
 						type: "Message",
