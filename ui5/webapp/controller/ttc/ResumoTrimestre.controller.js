@@ -115,13 +115,13 @@ sap.ui.define(
 									that._atualizarDados();
 								} else {
 									var dialog2 = new sap.m.Dialog({
-										title: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+										title: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
 										type: "Message",
 										content: new sap.m.Text({
 											text: json.message
 										}),
 										endButton: new sap.m.Button({
-											text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+											text: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
 											press: function () {
 												dialog2.close();
 											}

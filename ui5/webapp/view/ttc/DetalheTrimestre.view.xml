@@ -275,29 +275,30 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												type="Text" 
 												value="{tipo_transacao_outros}" />
+											<!--<Input textAlign="End" value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  editable="{ind_ativo}" change="onAplicarRegras" />-->
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{principal}" 
+												textAlign="End" 
+												value="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{juros}" 
+												textAlign="End" 
+												value="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{multa}" 
+												textAlign="End" 
+												value="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
 											<Input 
 												class="money total"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{total}" 
+												textAlign="End" 
+												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												editable="false" />
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
@@ -531,7 +532,7 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												type="Text" 
 												value="{tipo_transacao_outros}" />
-											<Input 
+											<!--<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												type="Number" 
@@ -554,6 +555,30 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												type="Number" 
 												value="{total}" 
+												editable="false" />-->
+											<Input 
+												class="money"
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												textAlign="End" 
+												value="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money"
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												textAlign="End" 
+												value="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money"
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												textAlign="End" 
+												value="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
+												change="onCalcularTotal" />
+											<Input 
+												class="money total"
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												textAlign="End" 
+												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												editable="false" />
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"

@@ -278,12 +278,23 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("DominioEmpresaTipoSocietario", function (response) {
 					response.unshift({ });
-					that.getModel().setProperty("/DominioEmpresaTipoSocietario", response);	
+					var aDominioEmpresaTipoSocietario = response;
+					for(var i = 1 ; i < aDominioEmpresaTipoSocietario.length ; i++){
+						aDominioEmpresaTipoSocietario[i]["tipo_societario"] = 
+						Utils.traduzEmpresaTipoSocietario(aDominioEmpresaTipoSocietario[i]["id_dominio_empresa_tipo_societario"],that);
+					}					
+					that.getModel().setProperty("/DominioEmpresaTipoSocietario", aDominioEmpresaTipoSocietario);	
+					//that.getModel().setProperty("/DominioEmpresaTipoSocietario", response);	
 				});
 				
 				NodeAPI.listarRegistros("DominioEmpresaStatus", function (response) {
 					response.unshift({ });
-					that.getModel().setProperty("/DominioEmpresaStatus", response);	
+					var aDominioEmpresaStatus = response;
+					for(var i = 1 ; i < aDominioEmpresaStatus.length ; i++){
+						aDominioEmpresaStatus[i]["status"] = 
+						Utils.traduzEmpresaStatusTipo(aDominioEmpresaStatus[i]["id_dominio_empresa_status"],that);
+					}						
+					that.getModel().setProperty("/DominioEmpresaStatus", aDominioEmpresaStatus);	
 				});
 				
 				NodeAPI.listarRegistros("Aliquota?tipo=empresa", function (response) {

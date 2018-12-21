@@ -301,7 +301,7 @@ module.exports = {
 		if (req.body.idPeriodo && isNumber(req.body.idPeriodo)
 			&& req.body.idEmpresa && isNumber(req.body.idEmpresa)) {
 				
-			if (pagamentosObrigatoriosDeclarados(Number(req.body.idEmpresa), Number(req.body.idPeriodo))) {
+			//if (pagamentosObrigatoriosDeclarados(Number(req.body.idEmpresa), Number(req.body.idPeriodo))) {
 				var aParams = [false, Number(req.body.idEmpresa), Number(req.body.idPeriodo)],
 					sQuery =
 					'update "VGT.REL_EMPRESA_PERIODO" '
@@ -324,13 +324,13 @@ module.exports = {
 						}));
 					}
 				});
-			}
-			else {
+			//}
+			/*else {
 				res.send(JSON.stringify({
 					success: false,
 					message: "Não foi possível encerrar o período.\nExistem pagamentos obrigatórios para o seu país que não foram declarados ou marcados como N/A."
 				}));	
-			}
+			}*/
 		}
 		else {
 			res.send(JSON.stringify({

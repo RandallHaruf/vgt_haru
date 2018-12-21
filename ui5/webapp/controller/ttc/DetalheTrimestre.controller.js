@@ -11,6 +11,8 @@ sap.ui.define(
 
 		return BaseController.extend("ui5ns.ui5.controller.ttc.DetalheTrimestre", {
 			onInit: function () {
+				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				
 				var that = this;
 				//jQuery(".money input").mask("000.000.000.000.000,00", {reverse: true});
 
