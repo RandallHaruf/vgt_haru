@@ -91,7 +91,6 @@
 								<!--Title 
 									id="cabecalhoTabelaObrigacoes" 
 									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
-								<ToolbarSpacer />
 								<Label
 								text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
 								>
@@ -122,12 +121,9 @@
 										<core:Item text="2016"/>-->
 									</items>
 								</Select>
-								<Button 
-									id="botaoBuscarDocumentos" 
-									icon="sap-icon://inspection" 
-									press="onBuscarDocumentos" 
-									text="{i18n>viewComplianceListagemObrigacoesBotaoBuscarDocumentos}"
-									type="Emphasized"/>
+								
+								<ToolbarSpacer />
+								
 								<Button 
 									id="botaoNovaObrigacao" 
 									icon="sap-icon://add" 

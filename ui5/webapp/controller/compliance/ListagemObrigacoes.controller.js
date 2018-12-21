@@ -76,7 +76,7 @@ sap.ui.define(
 			
 			onBuscarDocumentos: function (oEvent) {
 				this.getRouter().navTo("complianceRepositorioDocumentos");
-			},
+			}, 
 			
 			onNovaObrigacao: function (oEvent) {
 				this.getRouter().navTo("complianceFormularioNovaObrigacao");
