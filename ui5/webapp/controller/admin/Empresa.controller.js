@@ -377,7 +377,7 @@ sap.ui.define(
 				this._navToPaginaListagem();*/
 				
 				var that = this;
-				
+				that.byId("btnCancelar").setEnabled(false);					
 				var obj = this.getModel().getProperty("/objeto");
 				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
 					//response.unshift({ });
@@ -427,7 +427,8 @@ sap.ui.define(
 												fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
 												fkIdDominioObrigacaoStatusResposta: 4,											
 												fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] 
+												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] ,
+												data_conclusao: null
 											},function(re){});
 										}
 									});
@@ -462,6 +463,7 @@ sap.ui.define(
 							});						
 						
 							that._resolverHistoricoAliquota(function () {
+								that.byId("btnCancelar").setEnabled(true);									
 								that._navToPaginaListagem();			
 							});
 					});	
@@ -473,13 +475,13 @@ sap.ui.define(
 			
 			_inserirObjeto: function () {
 				var that = this;
-				
+				that.byId("btnCancelar").setEnabled(false);
 				var obj = this.getModel().getProperty("/objeto");
 				
 				NodeAPI.listarRegistros("DeepQuery/Pais/"+obj["fk_pais.id_pais"], function (resposta) {
 					//response.unshift({ });
 					that.getModel().setProperty("/DmenosXAnos", resposta);	
-					that.byId("btnSalvar").setEnabled(false);
+
 					
 					NodeAPI.criarRegistro("Empresa", {
 						nome: obj["nome"],
@@ -503,6 +505,7 @@ sap.ui.define(
 						that.byId("btnSalvar").setEnabled(true);
 						var then = that;
 						var modelosObrigacao = that.getModel().getProperty("/ModeloObrigacao");	
+						
 						//Cria o Registro de Rel_Modelo_Empresa
 						for (var k = 0; k < modelosObrigacao.length; k++) {
 							if(modelosObrigacao[k]["selecionada"] !== undefined){
@@ -525,7 +528,8 @@ sap.ui.define(
 												fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
 												fkIdDominioObrigacaoStatusResposta: 4,											
 												fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"],//ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] 
+												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"] ,
+												data_conclusao: null
 											},function(re){
 												
 											});
@@ -533,7 +537,7 @@ sap.ui.define(
 								});
 							}	
 						}
-						
+
 						// Se foi selecionada uma alíquota válida na criação da empresa
 						if (obj["fk_aliquota.id_aliquota"] && obj["fk_aliquota.id_aliquota"] > 0) {
 							// Cria seu registro inicial de histórico
@@ -542,11 +546,13 @@ sap.ui.define(
 								fkAliquota: obj["fk_aliquota.id_aliquota"],
 								dataInicio: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate()
 							}, function (resp) {
+								that.byId("btnCancelar").setEnabled(true);								
 								that._navToPaginaListagem();			
 							});
 						}
 						else {
 							// Se não, apenas retorna
+							that.byId("btnCancelar").setEnabled(true);	
 							that._navToPaginaListagem();			
 						}		
 					});					

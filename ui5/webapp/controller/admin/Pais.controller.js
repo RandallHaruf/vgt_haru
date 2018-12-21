@@ -195,7 +195,7 @@ sap.ui.define(
 			
 			_atualizarObjeto: function () {
 				var that = this;
-				
+				that.byId("btnCancelar").setEnabled(false);	
 				var obj = this.getModel().getProperty("/objeto");
 				var idObjeto = this.getModel().getProperty("/idObjeto");
 				
@@ -213,6 +213,7 @@ sap.ui.define(
 					anoObrigacaoBeps: obj.anoObrigacaoBeps
 				}, function (response) {
 					that._resolverHistoricoAliquota(function () {
+						that.byId("btnCancelar").setEnabled(true);	
 						that._navToPaginaListagem();			
 					});
 				});
@@ -220,7 +221,7 @@ sap.ui.define(
 			
 			_inserirObjeto: function () {
 				var that = this;
-
+				that.byId("btnCancelar").setEnabled(false);	
 				var obj = this.getModel().getProperty("/objeto");
 				
 				NodeAPI.criarRegistro("Pais", {
@@ -244,11 +245,13 @@ sap.ui.define(
 							fkAliquota: obj.fkAliquota,
 							dataInicio: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate()
 						}, function (resp) {
+							that.byId("btnCancelar").setEnabled(true);	
 							that._navToPaginaListagem();			
 						});
 					}
 					else {
 						// Se não, apenas retorna
+						that.byId("btnCancelar").setEnabled(true);	
 						that._navToPaginaListagem();			
 					}
 				});
