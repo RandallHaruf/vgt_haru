@@ -96,7 +96,11 @@ sap.ui.define(
 				var that = this;
 				
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
-					that.getModel().setProperty("/objetos", response);
+					var aResponse = response;
+					for (var i = 1, length = aResponse.length; i < length; i++) {
+						aResponse[i]["descricaoStatus"] = Utils.traduzStatusTiposPais(aResponse[i]["fkDominioPaisStatus"],that);
+					}
+					that.getModel().setProperty("/objetos", aResponse);
 				});
 			},
 			
@@ -112,7 +116,7 @@ sap.ui.define(
 					response.unshift({ id: null, descricao: "" });
 						var aResponse = response;
 						for (var i = 1, length = aResponse.length; i < length; i++) {
-							aResponse[i]["status"] = Utils.traduzStatusTiposPais(aResponse[i]["status"],that);
+							aResponse[i]["status"] = Utils.traduzStatusTiposPais(aResponse[i]["id_dominio_pais_status"],that);
 						}
 						that.getModel().setProperty("/DominioPaisStatus", aResponse);					
 					//that.getModel().setProperty("/DominioPaisStatus", response);
@@ -120,7 +124,11 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("DominioPaisRegiao", function (response) {
 					response.unshift({ id: null, descricao: "" });
-					that.getModel().setProperty("/DominioPaisRegiao", response);
+						var aResponse = response;
+						for (var i = 1, length = aResponse.length; i < length; i++) {
+							aResponse[i]["regiao"] = Utils.traduzPaisRegiao(aResponse[i]["id_dominio_pais_regiao"],that);
+						}
+					that.getModel().setProperty("/DominioPaisRegiao", aResponse);
 				});
 				
 				NodeAPI.listarRegistros("Aliquota?tipo=pais", function (response) {

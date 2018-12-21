@@ -42,7 +42,7 @@ sap.ui.define(
 					success: function (response) {
 						var aResponse = response;
 						for (var i = 0, length = aResponse.length; i < length; i++) {
-							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["tipo"],that);
+							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"],that);
 						}
 						that.getModel().setProperty("/objetos", aResponse);
 						//that.getModel().setProperty("/objetos", response);						
@@ -60,7 +60,7 @@ sap.ui.define(
 						response.unshift({ id: null, nome: "" });						
 						var aResponse = response;
 						for (var i = 1, length = aResponse.length; i < length; i++) {
-							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["tipo"],that);
+							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"],that);
 						}
 						that.getModel().setProperty("/DominioAliquotaTipo", aResponse);
 						

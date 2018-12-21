@@ -411,6 +411,7 @@ upsert "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(3, '
 upsert "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(4, 'Asia') where "id_dominio_pais_regiao" = 4;
 upsert "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(5, 'Africa') where "id_dominio_pais_regiao" = 5;
 upsert "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(6, 'Oceania') where "id_dominio_pais_regiao" = 6;
+upsert "VGT.DOMINIO_PAIS_REGIAO"("id_dominio_pais_regiao", "regiao") values(7, 'Central America') where "id_dominio_pais_regiao" = 7;
 --
 -- 
 ---- select * from "VGT.DOMINIO_ALIQUOTA_TIPO"
@@ -486,7 +487,7 @@ upsert "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ("id_dominio_requisicao_reaber
 ---- VGT.DOMINIO_STATUS_OBRIGACAO
 --
 upsert "VGT.DOMINIO_STATUS_OBRIGACAO" ("id_status_obrigacao", "descricao") values(1, 'Not Started') where "id_status_obrigacao" = 1;
-upsert "VGT.DOMINIO_STATUS_OBRIGACAO" ("id_status_obrigacao", "descricao") values(2, 'Pending') where "id_status_obrigacao" = 2;
+upsert "VGT.DOMINIO_STATUS_OBRIGACAO" ("id_status_obrigacao", "descricao") values(2, 'Started') where "id_status_obrigacao" = 2;
 upsert "VGT.DOMINIO_STATUS_OBRIGACAO" ("id_status_obrigacao", "descricao") values(3, 'Delayed') where "id_status_obrigacao" = 3;
 upsert "VGT.DOMINIO_STATUS_OBRIGACAO" ("id_status_obrigacao", "descricao") values(4, 'Delivered on Time') where "id_status_obrigacao" = 4;
 upsert "VGT.DOMINIO_STATUS_OBRIGACAO" ("id_status_obrigacao", "descricao") values(5, 'Delivered After Deadline') where "id_status_obrigacao" = 5;

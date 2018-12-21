@@ -64,29 +64,110 @@ sap.ui.define(
 				that.getModel().setProperty("/displayFormatSemAno", formatSemAno);
 			},
 			
-			traduzStatusTiposPais: function (stringPaisTipoStatus,that){
+			traduzStatusTiposPais: function (intPaisTipoStatus,that){
 				var tiposPaisTraduzido = "";
-				switch (stringPaisTipoStatus){
-					case "Tax Haven":
+				switch (intPaisTipoStatus){
+					case 1:
 						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo1");
 						break;
-					case "Privileged Tax Regime":
+					case 2:
 						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo2");
 						break;
-					case "Normal":
+					case 3:
 						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo3");
 						break;
-					case "Others":
+					case 4:
 						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo4");
 						break;
 				}
 				return tiposPaisTraduzido;
 			},
-			
+			traduzEmpresaStatusTipo: function (intEmpresaStatusTipo,that){
+				var tipoEmpresaStatus = "";
+				switch (intEmpresaStatusTipo){
+				
+					case 1:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo1");
+						break;
+					case 2:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo2");
+						break;
+					case 3:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo3");
+						break;
+					case 4:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo4");
+						break;
+					case 5:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo5");
+						break;
+					case 6:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo6");
+						break;
+					case 7:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo7");
+						break;
+					case 8:
+						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo8");
+						break;						
+				}
+				return tipoEmpresaStatus;
+			},	
+			traduzEmpresaTipoSocietario: function (intTipoSocietario,that){
+				var tipoSocietario = "";
+				switch (intTipoSocietario){
+					case 1:
+						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo1");
+						break;
+					case 2:
+						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo2");
+						break;
+					case 3:
+						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo3");
+						break;
+					case 4:
+						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo4");
+						break;
+				}
+				return tipoSocietario;
+			},		
+
+			traduzObrigacaoPeriodo: function (intObrigacaoPeriodo, that){
+				/*Recebe valores
+				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
+				*/
+				
+				var periodoTraduzido = "";
+				switch (intObrigacaoPeriodo){
+					case 1:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemanal");
+						break;
+					case 2:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralQuinzenal");
+						break;
+					case 3:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralMensal");
+						break;
+					case 4:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralBimestral");
+						break;						
+					case 5:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralTrimestral");
+						break;
+					case 6:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemestral");
+						break;
+					case 7:
+						periodoTraduzido = that.getResourceBundle().getText("viewGeralAnual");
+						break;
+				}
+				return periodoTraduzido;
+			},
 			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
 				*/
+				
 				var periodoTraduzido = "";
 				switch (stringPeriodo){
 					case "Weekly":
@@ -113,20 +194,50 @@ sap.ui.define(
 				}
 				return periodoTraduzido;
 			},	
-			traduzTiposAliquota: function (stringTipoAliquota, that){
+			traduzTiposAliquota: function (intTipoAliquota, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
 				*/
 				var traduzTipoAliquota = "";
-				switch (stringTipoAliquota){
-					case "Country":
+				switch (intTipoAliquota){
+					case 1:
 						traduzTipoAliquota = that.getResourceBundle().getText("viewGeralPais");
 						break;
-					case "Entity":
+					case 2:
 						traduzTipoAliquota = that.getResourceBundle().getText("viewGeralEmpresa");
 						break;
 				}
 				return traduzTipoAliquota;
+			},		
+			traduzPaisRegiao: function (intRegiao, that){
+				/*Recebe valores
+				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
+				*/
+				var periodoRegiaoTraduzido = "";
+				switch (intRegiao){
+					case 1:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo1");
+						break;
+					case 2:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo2");
+						break;
+					case 3:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo3");
+						break;
+					case 4:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo4");
+						break;
+					case 5:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo5");
+						break;
+					case 6:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo6");
+						break;
+					case 7:
+						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo7");
+						break;						
+				}
+				return periodoRegiaoTraduzido;
 			},				
 			dateNowParaArquivo: function (){
 				var Data = new Date();

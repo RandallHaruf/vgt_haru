@@ -129,7 +129,7 @@ sap.ui.define(
 						response.unshift({ id: 0, nome: "" });						
 						var aRegistro = response;
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
-							aRegistro[i]["descricao"] = Utils.traduzPeriodo(aRegistro[i]["descricao"],that);
+							aRegistro[i]["descricao"] = Utils.traduzObrigacaoPeriodo(aRegistro[i]["id_periodicidade_obrigacao"],that);
 						}		
 						that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 					}
