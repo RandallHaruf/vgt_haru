@@ -20,7 +20,7 @@
 						path: 'tipo',
 						group: true
 					}, {
-						path: 'nome','valor'
+						path: 'nome'
 					}]
 				}"
 				growing="true"

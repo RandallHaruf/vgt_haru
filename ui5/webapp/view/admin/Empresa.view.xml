@@ -17,9 +17,9 @@
 				items="{
 					path: '/objetos',
 					sorter: [{
-						path: 'nome'
+						path: 'pais', group: true
 					}, {
-						path: 'pais'
+						path: 'nome'
 					}, {
 						path: 'status'
 					}]

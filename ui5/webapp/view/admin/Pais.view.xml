@@ -16,15 +16,18 @@
 				id="tabelaObjetos"
 				items="{
 					path: '/objetos',
-					sorter: {
-						path: 'id'
-					}
-				}"
+					sorter: [{
+						path: 'descricaoStatus',
+						group: true
+					}, {
+						path: 'nomePais'
+					}]
+				}"	
 				growing="true"
 				enableBusyIndicator="true"
 				growingScrollToLoad="true"
 				updateFinished="onTerminouAtualizar">
-		
+
 				<headerToolbar>
 					<Toolbar>
 						<Title 
