@@ -39,9 +39,9 @@ sap.ui.define(
 			
 			onTrocarEmail: function (oEvent) {
 				var sEmail = oEvent.getSource().getValue();
-				
+				var that=this;
 				if (sEmail !== "" && !Validador.emailValido(sEmail)) {
-					sap.m.MessageBox.warning("O email inserido não é válido", {
+				sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralEmailNaoValido"), {
 						title: "Aviso"
 					});
 				}
@@ -109,17 +109,17 @@ sap.ui.define(
                 var continua = true;
 				if(obj["ni"] && !obj["jurisdicao_ni"]){
 					continua = false;
-					oValidacao.mensagem = "- Os campos destacados são de preenchimento obrigatório";
+					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
 				if(obj["tin"] && !obj["jurisdicao_tin"]){
 					continua = false;
-					oValidacao.mensagem = "- Os campos destacados são de preenchimento obrigatório";
+					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
 				
 				oValidacao.formularioValido = (oValidacao.formularioValido && continua);
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
-						title: "Aviso"
+						title: ""
 					});
 				}
 				

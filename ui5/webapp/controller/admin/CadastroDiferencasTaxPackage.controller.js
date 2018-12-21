@@ -92,7 +92,7 @@ sap.ui.define(
 							//sap.m.MessageToast.show("Inserir diferença: " + oInputNome.getValue());
 							
 							if (!oInputNome.getValue() || !oSelectTipo.getSelectedKey()) {
-								sap.m.MessageBox.warning("Os campos destacados são de preenchimento obrigatório", {
+								sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralOrbigatorio"), {
 									title: "Aviso"
 								});
 							}
@@ -192,7 +192,7 @@ sap.ui.define(
 							//sap.m.MessageToast.show("Atualizar diferença: " + nome);
 							
 							if (!oInputNome.getValue() || !oSelectTipo.getSelectedKey()) {
-								sap.m.MessageBox.warning("Os campos destacados são de preenchimento obrigatório", {
+								sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralOrbigatorio"), {
 									title: "Aviso"
 								});
 							}
@@ -230,12 +230,12 @@ sap.ui.define(
 				
 				dialog.open();
 			},
-			
+		
 			onDesabilitar: function (oEvent) {
 				var nome = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
-				
+					var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja desabilitar esta Diferença?" , {
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("viewGeralCertezaDesabilitar") , {
 					title: "Confirm",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
@@ -251,7 +251,7 @@ sap.ui.define(
 				var iIdDiferenca = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_diferenca_opcao"];
 				
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm("Você tem certeza que deseja excluir este item?" , {
+				sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralCerteza") , {
 					title: "Confirm",
 					onClose: function (oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
