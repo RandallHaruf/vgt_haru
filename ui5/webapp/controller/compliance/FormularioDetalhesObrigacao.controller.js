@@ -43,9 +43,9 @@ sap.ui.define(
 						for (var i = 0; i < response.length; i++) {
 							response[i].btnExcluirEnabled = !response[i].ind_conclusao;
 						}
-						
+
 						that.getModel().setProperty(sProperty, response);
-						
+
 						that.setBusy(oTable, false);
 					})
 					.catch(function (err) {
@@ -91,12 +91,9 @@ sap.ui.define(
 							}
 
 							//Verificar se a data atual já passou para colocar status como em atraso
-							if (obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1
-								|| obj[
-										"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 5
-								|| obj[
-										"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4
-							) {
+							if (obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1 || obj[
+									"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 5 || obj[
+									"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4) {
 								if (obj["data_extensao"]) {
 									var dataPrazo = Utils.bancoParaJsDate(obj["data_extensao"]);
 								} else if (obj["prazo_entrega_customizado"]) {
@@ -108,10 +105,9 @@ sap.ui.define(
 								dataPrazo = new Date(dataPrazo.getFullYear(), dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
 								if (dataPrazo < dataAtual) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
+								} else {
+									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
 								}
-								else{
-									    obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
-								    }
 							}
 
 							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
@@ -211,6 +207,11 @@ sap.ui.define(
 					DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
 					this.getModel().setProperty("/CancelaBotaoConfirmar", false);
 					this.getModel().setProperty("/CancelaBotaoCancelar", false);
+
+					var oBtnCancelar = new sap.m.Button({
+						text: "{i18n>formularioObrigacaoBotaoCancelar}"
+					});
+
 					var dialog = new sap.m.Dialog({
 						title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
 						type: "Message",
@@ -220,7 +221,10 @@ sap.ui.define(
 						}),
 						beginButton: new sap.m.Button({
 							text: "{i18n>viewGeralSim}",
-							press: function () {
+							press: function (oEvent2) {
+								oEvent2.getSource().setEnabled(false);
+								oBtnCancelar.setEnabled(false);
+								that.setBusy(dialog, true);
 
 								oData.indConclusao = true;
 								if (oFileUploader.getValue()) {
@@ -230,16 +234,17 @@ sap.ui.define(
 										.then(function (response) {
 											//sap.m.MessageToast.show(response);
 											that._atualizarDocumentos('/Documentos', oData.id, oTable);
-											
-											var IntMes = DataConclusao.getMonth();//Number(DataConclusao.toString());
+
+											var IntMes = DataConclusao.getMonth(); //Number(DataConclusao.toString());
 											IntMes = IntMes + 1;
 											var strMes = IntMes.toString();
-			
-											that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" + DataConclusao.getDate();
+
+											that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" +
+												DataConclusao.getDate();
 											that._AtualizaStatusObrigacao(DataFormatada);
-			
+
 											var obj = that.getModel().getProperty("/RespostaObrigacao");
-											
+
 											NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
 												suporteContratado: obj["suporte_contratado"],
 												suporteEspecificacao: obj["suporte_especificacao"],
@@ -260,7 +265,7 @@ sap.ui.define(
 												that.setBusy(oBtnEnviar, false);
 												dialog.close();
 											});
-											
+
 										})
 										.catch(function (err) {
 											sap.m.MessageToast.show(err);
@@ -274,26 +279,22 @@ sap.ui.define(
 									sap.m.MessageToast.show("Selecione um arquivo");
 								}
 
-
 							}
 						}),
-						endButton: new sap.m.Button({
-							text: "{i18n>formularioObrigacaoBotaoCancelar}",
-							press: function () {
-								dialog.close();
-							}
-						}),
+						endButton: oBtnCancelar,
 						afterClose: function () {
 							dialog.destroy();
 						}
 					});
 
+					oBtnCancelar.attachPress(function (oEvent2) {
+						dialog.close();
+					});
+
 					this.getView().addDependent(dialog);
 
 					dialog.open();
-
 				}
-
 			},
 
 			_AtualizaStatusObrigacao: function (Data) {
@@ -452,7 +453,7 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				this.getModel().setProperty("/IsDeclaracao", false);
-				
+
 				var that = this;
 				NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
 					if (response) {
