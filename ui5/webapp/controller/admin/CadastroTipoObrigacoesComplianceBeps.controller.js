@@ -36,6 +36,10 @@ sap.ui.define(
 							
 							jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + idExcluir, {
 								type: "DELETE",
+								xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 								success: function (response) {
 									that._carregarObjetos();
 								}
@@ -87,6 +91,10 @@ sap.ui.define(
 				
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
 					type: "GET",
+					xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						that.getModel().setProperty("/objetos", response);
@@ -99,6 +107,10 @@ sap.ui.define(
 				
 				jQuery.ajax(Constants.urlBackend + "DominioObrigacaoAcessoriaTipo", {
 					type: "GET",
+					xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						response.unshift({ id: 0, nome: "" });
@@ -127,6 +139,10 @@ sap.ui.define(
 				
 				jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 					type: "GET",
+					xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						var oObjeto = response[0];
@@ -156,6 +172,10 @@ sap.ui.define(
 				
 				jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 					type: "PUT",
+					xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 					data: {
 						nome: obj.nome,
 						dataInicio: obj.dataInicio,
@@ -179,6 +199,10 @@ sap.ui.define(
 				
 				jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria", {
 					type: "POST",
+					xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 					data: {
 						nome: obj.nome,
 						dataInicio: obj.dataInicio,

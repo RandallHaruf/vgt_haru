@@ -220,6 +220,10 @@ sap.ui.define([
 			oWhere[13] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -231,6 +235,10 @@ sap.ui.define([
 			oWhere[13] = ["tblEmpresa.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -242,6 +250,10 @@ sap.ui.define([
 			oWhere[13] = ["tblDominioPais.pais"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -253,6 +265,10 @@ sap.ui.define([
 			oWhere[13] = ["tblObrigacaoAcessoria.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -264,6 +280,10 @@ sap.ui.define([
 			oWhere[13] = ["tblDominioPeriodicidadeObrigacao.descricao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -278,6 +298,10 @@ sap.ui.define([
 			oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -289,6 +313,10 @@ sap.ui.define([
 			oWhere[13] = ["tblDominioStatusObrigacao.descricao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -300,6 +328,10 @@ sap.ui.define([
 			oWhere[13] = ["tblObrigacao.prazo_entrega"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -312,6 +344,10 @@ sap.ui.define([
 			oWhere[13] = ["tblObrigacao.extensao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -579,6 +615,10 @@ sap.ui.define([
 			var that = this;
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},

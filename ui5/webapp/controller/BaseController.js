@@ -1,8 +1,9 @@
 sap.ui.define(
 	[
-		"sap/ui/core/mvc/Controller"
+		"sap/ui/core/mvc/Controller",
+		"ui5ns/ui5/model/Constants"
 	], 
-	function (Controller) {
+	function (Controller, Constants) {
 		"use strict";
 
 		return Controller.extend("vale.Compliance.controller.BaseController", {
@@ -64,6 +65,14 @@ sap.ui.define(
 				}
 				else if (oItem === this.byId("acessoRapidoEmpresas")) {
 					this.getRouter().navTo("empresasVinculadas");
+				}
+				else if (oItem ===  this.byId("acessoRapidoLogout")) {
+					fetch(Constants.urlBackend + "deslogar", {
+						credentials: 'include'
+					})
+					.then(() => {
+						this.getRouter().navTo("login");
+					});
 				}
 			}
 		});

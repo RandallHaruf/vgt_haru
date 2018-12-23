@@ -2,6 +2,7 @@
 
 var model = require("../models/modelEmpresa");
 var modelRelEmpresaObrigacao = require("../models/modelRelEmpresaObrigacaoAcessoria");
+var auth = require("../auth")();
 
 module.exports = {
 
@@ -10,7 +11,7 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
-				res.send(JSON.stringify(result));
+				res.send(JSON.stringify(auth.filtrarEmpresas(req, result, "id_empresa")));
 			}
 		});
 	},
@@ -237,7 +238,7 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
-				res.send(JSON.stringify(result));
+				res.send(JSON.stringify(auth.filtrarEmpresas(req,result, "id_empresa")));
 			}
 		});
 	}

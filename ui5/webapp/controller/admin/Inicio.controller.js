@@ -305,10 +305,10 @@ sap.ui.define(
 							}, {
 								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
 								key: "cadastroObrigacoes"
-							}, {
+							}/*, {
 								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
 								key: "cadastroObrigacoes"
-							}]
+							}*/]
 						}
 					]
 				});

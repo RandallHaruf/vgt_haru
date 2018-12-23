@@ -6,7 +6,7 @@ sap.ui.define(
 	],
 	function (BaseController, NumericIcon, Constants) {
 		return BaseController.extend("ui5ns.ui5.controller.SelecaoModulo", {
-			
+
 			onStartUpload: function (oEvent) {
 				var that = this,
 					oButton = oEvent.getSource(),
@@ -341,47 +341,65 @@ sap.ui.define(
 
 			calcular: function (oEvent) {
 				var fValor1 = this.getModel().getProperty("/Valor1");
-				
+
 				var fTotalValores = 0,
 					aValor = this.getModel().getProperty("/Valores");
-				
+
 				for (var i = 0, length = aValor.length; i < length; i++) {
 					fTotalValores += aValor[i].valor;
 				}
-				
+
 				var fTotal = fValor1 + fTotalValores;
-				
+
 				this.getModel().setProperty("/Total", fTotal);
 			},
-	
+
 			onInit: function () {
-				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
-
-				this.getView().setModel(new sap.ui.model.json.JSONModel({
-					Valor1: null,
-					Valores: [{
-						valor: 15
-					}, {
-						valor: 23.56
-					}]
-				}));
-
-				//this._atualizarDados();
-
-				/*this.byId("vemNimim").addItem(new NumericIcon({
-					icon: new sap.ui.core.Icon({
-						src: "sap-icon://message-warning"
-					}),
-					number: 2,
-					color: "#900"
-				}));*/
-
-				/*var that = this;
-				jQuery("#" + this.byId("painelTTC").getDomRef().id).click(function () {
-					that.getRouter().navTo("ttcListagemEmpresas");
-				});*/
-
 				this.byId("selectIdioma").setSelectedKey(sap.ui.getCore().getConfiguration().getLanguage());
+
+				this.getRouter().getRoute("selecaoModulo").attachPatternMatched(this._onRouteMatched, this);
+			},
+
+			_onRouteMatched: function (oEvent) {
+				this.setBusy(this.byId("painelSelecaoModulo"), true);
+
+				this.setModel(new sap.ui.model.json.JSONModel());
+				this.getModel().setProperty("/ShowTTC", false);
+				this.getModel().setProperty("/ShowTaxPackage", false);
+				this.getModel().setProperty("/ShowCompliance", false);
+				this.getModel().setProperty("/ShowBeps", false);
+				this.getModel().setProperty("/ShowAdmin", false);
+				
+				fetch(Constants.urlBackend + "verifica-auth", {
+						credentials: "include"
+					})
+					.then((res) => {
+						res.json()
+							.then((response) => {
+								this.setBusy(this.byId("painelSelecaoModulo"), false);
+
+								if (response.success) {
+									this.getModel().setProperty("/ShowTTC", response.modulos && response.modulos.includes(1) ? true : false);
+									this.getModel().setProperty("/ShowTaxPackage", response.modulos && response.modulos.includes(2) ? true : false);
+									this.getModel().setProperty("/ShowCompliance", response.modulos && response.modulos.includes(3) ? true : false);
+									this.getModel().setProperty("/ShowBeps", response.modulos && response.modulos.includes(4) ? true : false);
+									this.getModel().setProperty("/ShowAdmin", response.modulos && response.modulos.includes(5) ? true : false);
+								} else {
+									MessageToast.show(response.error.msg);
+									this.getRouter().navTo("Login");
+								}
+							})
+							.catch((err) => {
+								this.setBusy(this.byId("painelSelecaoModulo"), false)
+								MessageToast.show(err);
+								this.getRouter().navTo("Login");
+							});
+					})
+					.catch((err) => {
+						this.setBusy(this.byId("painelSelecaoModulo"), false)
+						MessageToast.show(err);
+						this.getRouter().navTo("Login");
+					});
 			},
 
 			navToTTC: function (oEvent) {

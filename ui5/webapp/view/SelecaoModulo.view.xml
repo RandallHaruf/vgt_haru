@@ -20,7 +20,7 @@
 			</f:DynamicPageTitle>
 		</f:title>
 		<f:content>
-			<VBox>
+			<VBox id="painelSelecaoModulo">
 				<!--<Input change="calcular" value="{path: '/Valor1', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" /> 
 				<Table 
 					inset="false"
@@ -165,41 +165,51 @@
 					expandable="False"
 					class="painelModulos">
 					<GenericTile 
+						id="caixaTTC"
 						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
 						header="{i18n>viewSelecaoModuloBotaoTTC}"
-						press="navToTTC">
+						press="navToTTC"
+						visible="{/ShowTTC}">
 						<TileContent>
 							<ImageContent src="sap-icon://home-share" />
 						</TileContent>
 					</GenericTile>
 					<GenericTile 
+						id="caixaTaxPackage"
 						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
 						header="{i18n>viewSelecaoModuloBotaoTaxPackage}"
-						press="navToTaxPackage">
+						press="navToTaxPackage"
+						visible="{/ShowTaxPackage}">
 						<TileContent>
 							<ImageContent src="sap-icon://home-share" />
 						</TileContent>
 					</GenericTile>
 					<GenericTile 
+						id="caixaCompliance"
 						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
 						header="{i18n>viewSelecaoModuloBotaoCompliance}"
-						press="navToCompliance">
+						press="navToCompliance"
+						visible="{/ShowCompliance}">
 						<TileContent>
 							<ImageContent src="sap-icon://home-share" />
 						</TileContent>
 					</GenericTile>
 					<GenericTile 
+						id="caixaBeps"
 						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
 						header="{i18n>viewSelecaoModuloBotaoBeps}"
-						press="navToBeps">
+						press="navToBeps"
+						visible="{/ShowBeps}">
 						<TileContent>
 							<ImageContent src="sap-icon://home-share" />
 						</TileContent>
 					</GenericTile>
 					<GenericTile 
+						id="caixaAdmin"
 						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
 						header="Admin"
-						press="navToAdmin">
+						press="navToAdmin"
+						visible="{/ShowAdmin}">
 						<TileContent>
 							<ImageContent src="sap-icon://home-share" />
 						</TileContent>

@@ -877,9 +877,11 @@ module.exports = {
 					}));
 				}
 				else {
+					var auth = require("../auth")();
+					
 					res.send(JSON.stringify({
 						success: true,
-						result: result
+						result: auth.filtrarEmpresas(req, result, "id_empresa")
 					}));
 				}
 			});

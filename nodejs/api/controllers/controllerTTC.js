@@ -457,7 +457,9 @@ module.exports = {
 							}
 						}
 						
-						res.send(JSON.stringify(aResumoEmpresa));
+						var auth = require("../auth")();
+						
+						res.send(JSON.stringify(auth.filtrarEmpresas(req, aResumoEmpresa, "id_empresa")));
 					}
 				});
 			}

@@ -2,38 +2,67 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"sap/m/MessageToast",
-		"sap/ui/model/json/JSONModel"
-	], 
-	function (BaseController, MessageToast, JSONModel) {
+		"sap/ui/model/json/JSONModel",
+		"ui5ns/ui5/model/Constants"
+	],
+	function (BaseController, MessageToast, JSONModel, Constants) {
 		"use strict";
-		
+
 		return BaseController.extend("ui5ns.ui5.controller.Login", {
-			
-			onLogin: function () {
-				this.getRouter().navTo("selecaoModulo");
-				/*
-				jQuery.ajax("/VALECS/p2000426116trial/hana01/valecs/xsjs/login_auth.xsjs", {
-					type: "GET",
-					data: {
-						user: that.byId("inputUsuario").getValue(),
-						password: that.byId("inputSenha").getValue()
-					},
-					success: function (response) {
-						var oResponse = $.parseJSON(response);
-						
-						MessageToast.show(oResponse.message);
-						if (oResponse.success) {
-							that.getRouter().navTo("moduleOverview");
-						}
-					},
-					error: function (error) {
-						MessageToast.show("Request Error");
-					}
-				});*/
+
+			onInit: function () {
+				fetch(Constants.urlBackend + "verifica-auth", {
+						credentials: 'include'
+					})
+					.then((res) => {
+						res.json()
+							.then((response) => {
+								if (response.success) {
+									MessageToast.show(response.msg);
+									this.getRouter().navTo("selecaoModulo");
+								}
+							})
+					});
 			},
-			
-			onLanguageChange: function (oEvent) {
-			}
+
+			onLogin: function () {
+				//this.getRouter().navTo("selecaoModulo");
+
+				fetch(Constants.urlBackend + "login", {
+						method: "POST",
+						headers: {
+							Accept: "application/json",
+							"Content-type": "application/json"
+						},
+						credentials: 'include',
+						body: JSON.stringify({
+							usuario: this.byId("inputUsuario").getValue(),
+							senha: this.byId("inputSenha").getValue()
+						})
+					})
+					.then((r) => {
+						r.json()
+							.then((response) => {
+								if (response.success) {
+									this.byId("inputUsuario").setValue("");
+									this.byId("inputSenha").setValue("");
+									
+									MessageToast.show(response.msg);
+									this.getRouter().navTo("selecaoModulo");
+								} else {
+									MessageToast.show(response.error.msg);
+								}
+							})
+							.catch((err) => {
+								MessageToast.show(err);
+							})
+					})
+					.catch((err) => {
+						MessageToast.show(err);
+					});
+			},
+
+			onLanguageChange: function (oEvent) {}
 		});
 	}
 );

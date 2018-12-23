@@ -322,6 +322,10 @@ sap.ui.define(
 				jQuery.ajax({//Desativar botao
 					url: Constants.urlBackend + "EmailSend",
 					type: "POST",
+					xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 					data: {
 						_assunto: assunto,
 						_corpo: htmlBody

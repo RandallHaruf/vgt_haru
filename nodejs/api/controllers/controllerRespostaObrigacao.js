@@ -239,7 +239,8 @@ deepQuery: function (req, res) {
 		res.send(JSON.stringify(err));
 		}
 		else {
-		res.send(JSON.stringify(result));
+			var auth = require("../auth")();
+		res.send(JSON.stringify(auth.filtrarEmpresas(req, result, "id_empresa")));
 		}
 		});
 	}

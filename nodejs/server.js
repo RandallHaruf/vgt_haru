@@ -1,108 +1,126 @@
-/*eslint no-console: 0*/
-/*"use strict";
+var port = process.env.PORT || 3000;
 
-var http = require("http");
+var cors = require("cors");
 var express = require("express");
+var cookieSession = require("cookie-session");
 var bodyParser = require("body-parser");
-var cors = require("cors");
-var db = require("./api/db.js");
 var routes = require("./api/routes/routes.js");
 var jobs = require("./jobs/jobs.js");
-
-var port = process.env.PORT || 3000;
-var server = http.createServer();
+var auth = require("./api/auth.js");
 var app = express();
 
-app.use(require("express-fileupload")());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cors({origin: "*"}));
-
-//db.connect();
-
-routes(app);
-jobs();
-
-server.on("request", app);
-
-server.listen(port, function() {
-	console.info("HTTP Server: " + server.address().port);
-});*/
-
-var port = process.env.PORT || 3000;
-
-var cors = require("cors");
-var express = require('express');
-var session = require('express-session');
-var crypto = require('crypto');
-var cookieParser = require('cookie-parser');
-var bodyParser = require("body-parser");
-var MemoryStore = require('memorystore')(session);
-var routes = require("./api/routes/routes.js");
-var jobs = require("./jobs/jobs.js");
-var app = express();
-
-app.use(cookieParser());
-
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
-
-/*app.use(bodyParser.urlencoded({
-	extended: true
+app.use(bodyParser.json({
+	limit: "50mb"
+}));
+app.use(bodyParser.urlencoded({
+	limit: "50mb",
+	extended: true,
+	parameterLimit: 50000
 }));
 
-app.use(bodyParser.json());*/
+var whitelist = [
+	"https://webidetesting7283801-p2000969321trial.dispatcher.hanatrial.ondemand.com",
+	"https://webidetesting7283801-p2000895628trial.dispatcher.hanatrial.ondemand.com"
+];
 
-/*var whitelist = ["https://webidetesting7283801-p2000895628trial.dispatcher.hanatrial.ondemand.com"];
 var corsOptions = {
 	origin: function (origin, callback) {
 		if (whitelist.indexOf(origin) !== -1) {
 			callback(null, true);
 		} else {
-			callback(new Error('Not allowed by CORS'));
+			callback(new Error("Not allowed by CORS"));
 		}
 	},
+	optionsSuccessStatus: 204,
 	credentials: true
 };
 
-app.use(cors(corsOptions));*/
+app.use(cors(corsOptions));
+app.set("trust proxy", 1);
 
-app.use(cors());
-/*app.use(cors({
-	origin: "*"
-	//origin: "https://webidetesting7283801-p2000895628trial.dispatcher.hanatrial.ondemand.com"
-}));*/
-
-app.use(session({
-	secret: crypto.randomBytes(20).toString('hex'),
-	resave: false,
-	saveUninitialized: false,
-	store: new MemoryStore({
-		checkPeriod: 86400000 // prune expired entries every 24h
-	})
+app.use(cookieSession({
+	name: "hnck",
+	secret: "tempSecret123",
+	secure: true,
+	httpOnly: false,
+	path: "/",
+	domain: ".ondemand.com",
+	maxAge: 60000 * 60 * 24 * 3 // 3 dias
 }));
 
-app.use(function (req, res, next) {
-	if (req.session.qteRequest) {
-		req.session.qteRequest++;
-	} else {
-		req.session.qteRequest = 1;
-	}
-
-	console.log("Foram realizadas " + req.session.qteRequest + " requests nesta sessão.");
-	next();
-});
-
+auth(app);
 routes(app);
 jobs();
 
 app.listen(port, function () {
-	console.log("Nodejs API: " + port);
-	/*console.log("CREATE API " + process.env.CREATE_API);*/
+	console.log("Nodejs server: " + port);
 });
 
-/*if (process.env.CREATE_API) {
-	const fs = require('fs');
-	
-	fs.appendFileSync('./message.txt', 'data to append');
-}*/
+/*
+// SCRIPT PARA ENCRIPTAR SENHA DE USUARIOS INSERIDOS NA MÃO
+
+const db = require("./api/db.js");
+const bcrypt = require("bcryptjs");
+
+const getUsuarios = function () {
+	return new Promise(function (resolve, reject) {
+		db.executeStatement({
+			statement: 'select * from "VGT.USUARIO"'
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}	
+			else {
+				resolve(result);
+			}
+		});
+	});
+};
+
+const hashPassword = function (sPassword) {
+	return new Promise(function (resolve, reject) {
+		bcrypt.hash(sPassword, 5, function (err, hash) {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(hash);	
+			}
+		});	
+	});
+};
+
+const updateUsuario = function (sIdUsuario, sHash) {
+	return new Promise(function (resolve, reject) {
+		db.executeStatement({
+			statement: 'update "VGT.USUARIO" set "pass" = ? where "id_usuario" = ?',
+			parameters: [sHash, sIdUsuario]
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(result);
+			}
+		});
+	});
+};
+
+getUsuarios()
+	.then(function (result) {
+		for (let i = 0, length = result.length; i < length; i++) {
+			hashPassword(result[i].pass)
+				.then(function (hash) {
+					return updateUsuario(result[i].id_usuario, hash);
+				})
+				.then(function (res) {
+					console.log(res);
+				})
+				.catch(function (reject) {
+					console.log(reject);	
+				});
+		}
+	})
+	.catch(function (err) {
+		console.log(err);	
+	});*/

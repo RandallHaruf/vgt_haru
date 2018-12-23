@@ -39,6 +39,10 @@ sap.ui.define(
 							//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + idExcluir, {
 							jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + idExcluir, {
 								type: "DELETE",
+								xhrFields: {
+									withCredentials: true
+								},
+								crossDomain: true,
 								success: function (response) {
 									that._carregarObjetos();
 								}
@@ -103,6 +107,10 @@ sap.ui.define(
 				//jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/ModeloObrigacao", {
 					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						that.getModel().setProperty("/objetos", response);
@@ -116,6 +124,10 @@ sap.ui.define(
 
 				jQuery.ajax(Constants.urlBackend + "DominioObrigacaoAcessoriaTipo", {
 					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						response.unshift({
@@ -173,6 +185,10 @@ sap.ui.define(
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {
 					//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						var oObjeto = response[0];
@@ -204,13 +220,17 @@ sap.ui.define(
 
 				var that = this;
 				that.byId("btnOCCancelar").setEnabled(false);
-				that.byId("btnSalvarOCr").setEnabled(false);
+				that.byId("btnSalvarOC").setEnabled(false);
 				that.setBusy(that.byId("btnSalvarOC"), true);
 				var obj = this.getModel().getProperty("/objeto");
 
 				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + iIdObjeto, {
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + iIdObjeto, {
 					type: "PUT",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					data: {
 						nomeObrigacao: obj.nome,
 						dataInicial: obj.dataInicio,
@@ -243,6 +263,10 @@ sap.ui.define(
 				//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria", {				
 				jQuery.ajax(Constants.urlBackend + "ModeloObrigacao", {
 					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					data: {
 						nomeObrigacao: obj.nome,
 						dataInicial: obj.dataInicio,

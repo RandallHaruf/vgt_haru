@@ -38,6 +38,10 @@ sap.ui.define(
 				that.setBusy(that.byId("paginaListagem"), true);
 				jQuery.ajax(Constants.urlBackend + "/DeepQuery/Aliquota", {
 					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						var aResponse = response;
@@ -56,6 +60,10 @@ sap.ui.define(
 
 				jQuery.ajax(Constants.urlBackend + "/DominioAliquotaTipo", {
 					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						response.unshift({
@@ -79,6 +87,10 @@ sap.ui.define(
 				that.setBusy(that.byId("paginaObjeto"), true);
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + iIdObjeto, {
 					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
 						var oRegistro = response[0];
@@ -110,6 +122,10 @@ sap.ui.define(
 
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + idObjeto, {
 					type: "PUT",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					data: {
 						nome: obj.nome,
 						valor: obj.valor,
@@ -136,6 +152,10 @@ sap.ui.define(
 
 				jQuery.ajax(Constants.urlBackend + "Aliquota", {
 					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
 					data: {
 						nome: obj.nome,
 						valor: obj.valor,

@@ -10,6 +10,10 @@ sap.ui.define(
 					jQuery.ajax({
 						url: Constants.urlBackend + sRota,
 						type: "GET",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
 						dataType: "json"
 					}).then(function (response) {
 						if (response.success) {
@@ -39,6 +43,10 @@ sap.ui.define(
 						url: Constants.urlBackend + sRota,
 						data: formData,
 						type: "POST",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
 						contentType: false,
 						processData: false,
 						dataType: "json"
@@ -60,6 +68,10 @@ sap.ui.define(
 						//url: "https://kwbklufmudxr7o61-vgt-haru-nodejs.cfapps.eu10.hana.ondemand.com/node/DownloadArquivo?arquivo=" + sIdArquivo,
 						url: Constants.urlBackend + sRota,
 						type: "GET",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
 						dataType: "json"
 					}).then(function (response) {
 						if (response.success) {
@@ -93,6 +105,10 @@ sap.ui.define(
 						//url: "https://kwbklufmudxr7o61-vgt-haru-nodejs.cfapps.eu10.hana.ondemand.com/node/ExcluirArquivo/" + sIdArquivo,
 						url: Constants.urlBackend + sRota,
 						type: "DELETE",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
 						dataType: "json"
 					}).then(function (response) {
 						if (response.success) {

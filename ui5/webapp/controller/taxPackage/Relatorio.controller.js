@@ -88,6 +88,10 @@ sap.ui.define([
 			oWhere[4] = ["tblEmpresa.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -99,6 +103,10 @@ sap.ui.define([
 			oWhere[4] = ["tblDominioAnoCalendario.ano_calendario"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -110,6 +118,10 @@ sap.ui.define([
 			oWhere[4] = ["tblPeriodo.id_periodo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -121,6 +133,10 @@ sap.ui.define([
 			oWhere[4] = ["tblDominioMoeda.acronimo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
@@ -226,6 +242,10 @@ sap.ui.define([
 			var that = this;
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTaxPackage", {
 				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
 				data: {
 					parametros: JSON.stringify(oWhere)
 				},
