@@ -1,0 +1,11 @@
+INSERT INTO "VGT.USUARIO" VALUES("identity_VGT.USUARIO_id_usuario".nextval,'Pedro Ferraz', 'pedro.ferraz@tenti.com.br', '', 'pernil', '123456', true, 2);
+
+-- Acesso a todos os módulos
+INSERT INTO "VGT.REL_USUARIO_MODULO" VALUES(1,1);
+INSERT INTO "VGT.REL_USUARIO_MODULO" VALUES(1,2);
+INSERT INTO "VGT.REL_USUARIO_MODULO" VALUES(1,3);
+INSERT INTO "VGT.REL_USUARIO_MODULO" VALUES(1,4);
+INSERT INTO "VGT.REL_USUARIO_MODULO" VALUES(1,5);
+
+-- Incrementar para o número de empresas na base
+INSERT INTO "VGT.REL_USUARIO_EMPRESA" VALUES(1,1);
