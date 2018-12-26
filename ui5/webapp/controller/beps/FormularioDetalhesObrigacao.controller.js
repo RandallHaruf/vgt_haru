@@ -119,7 +119,7 @@ sap.ui.define(
 								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
 								dataExtensao: obj["data_extensao"]
 							}, function (response) {
-								that.getRouter().navTo("complianceListagemObrigacoes");
+								that.getRouter().navTo("bepsListagemObrigacoes");
 							});
 						}
 					}
@@ -145,7 +145,7 @@ sap.ui.define(
 			},
 
 			navToPage2: function () {
-				this.getRouter().navTo("complianceListagemObrigacoes");
+				this.getRouter().navTo("bepsListagemObrigacoes");
 			},
 
 			onTrocarSuporte: function () {
@@ -255,7 +255,7 @@ sap.ui.define(
 												dataExtensao: obj["data_extensao"],
 												dataConclusao: obj["data_conclusao"]
 											}, function (response2) {
-												that.getRouter().navTo("complianceListagemObrigacoes");
+												that.getRouter().navTo("bepsListagemObrigacoes");
 												that.getModel().setProperty("/CancelaBotaoConfirmar", true);
 												that.getModel().setProperty("/CancelaBotaoCancelar", true);
 												oFileUploader.setValue("");
