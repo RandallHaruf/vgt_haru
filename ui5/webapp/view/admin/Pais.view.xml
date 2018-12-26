@@ -47,7 +47,7 @@
 					<Column>
 						<Text text="{i18n>viewGeralNome}" />
 					</Column>
-					<Column>
+					<Column >
 						<Text text="Status" />
 					</Column>
 					<Column>

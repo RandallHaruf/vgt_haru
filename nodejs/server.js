@@ -20,7 +20,11 @@ app.use(bodyParser.urlencoded({
 
 var whitelist = [
 	"https://webidetesting7283801-p2000969321trial.dispatcher.hanatrial.ondemand.com",
-	"https://webidetesting7283801-p2000895628trial.dispatcher.hanatrial.ondemand.com"
+	"https://webidetesting7283801-p2000895628trial.dispatcher.hanatrial.ondemand.com",
+	"https://webidetesting7283801-p2000968011trial.dispatcher.hanatrial.ondemand.com",
+	"https://webidetesting7283801-p2000968010trial.dispatcher.hanatrial.ondemand.com",
+	"https://webidetesting7283801-p2000965014trial.dispatcher.hanatrial.ondemand.com",
+	"https://webidetesting7283801-p2000965144trial.dispatcher.hanatrial.ondemand.com"
 ];
 
 var corsOptions = {
@@ -55,8 +59,8 @@ jobs();
 app.listen(port, function () {
 	console.log("Nodejs server: " + port);
 });
-
 /*
+
 // SCRIPT PARA ENCRIPTAR SENHA DE USUARIOS INSERIDOS NA MÃO
 
 const db = require("./api/db.js");

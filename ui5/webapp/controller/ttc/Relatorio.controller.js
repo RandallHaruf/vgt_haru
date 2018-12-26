@@ -22,9 +22,10 @@ sap.ui.define([
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
-			
+			/*
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);
+			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);*/
+			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
 		},
 		_handleRouteMatched: function () {
 			this.onExit();
