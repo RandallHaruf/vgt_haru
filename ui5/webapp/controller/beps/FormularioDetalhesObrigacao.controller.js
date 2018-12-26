@@ -198,7 +198,7 @@ sap.ui.define(
 								that.getModel().setProperty("/CancelaBotaoCancelar", true);
 							});
 					} else {
-						sap.m.MessageToast.show("Selecione um arquivo");
+					sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
 					}
 
 				} else {
@@ -274,7 +274,7 @@ sap.ui.define(
 											dialog.close();
 										});
 								} else {
-									sap.m.MessageToast.show("Selecione um arquivo");
+								sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
 								}
 
 							}
@@ -376,7 +376,7 @@ sap.ui.define(
 						that.getModel().refresh();
 					})
 					.catch(function (err) {
-						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
+					 sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
 
 						oArquivo.btnExcluirEnabled = true;
 						oArquivo.btnDownloadEnabled = true;
@@ -409,7 +409,7 @@ sap.ui.define(
 							that.getModel().refresh();
 						})
 						.catch(function (err) {
-							sap.m.MessageToast.show("Erro ao excluir arquivo: " + oArquivo.nome_arquivo);
+						sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
 
 							oArquivo.btnExcluirEnabled = true;
 							oArquivo.btnDownloadEnabled = true;
