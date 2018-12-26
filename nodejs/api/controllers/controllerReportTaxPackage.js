@@ -95,6 +95,14 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
+		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+		}
+
 		for (var i = 0; i < aEntrada.length; i++) {
 			filtro = "";			
 			if (aEntrada[i] !== null){
@@ -112,7 +120,10 @@ module.exports = {
 							break;
 						case 3:
 							filtro = ' tblDominioMoeda."id_dominio_moeda" = ? ';
-							break;						
+							break;
+						case 4:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
+							break;							
 					}
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);
@@ -163,7 +174,7 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		
-		switch(aEntrada[aEntrada.length-1][0]){
+		switch(aEntrada[5][0]){
 			case "tblEmpresa.nome":
 				stringDistinct = 'Select distinct "tblEmpresa.id_empresa" , "tblEmpresa.nome"  from (';
 				break;
@@ -263,6 +274,14 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.TAX_RECONCILIATION" AS tblTaxReconciliation '
 			+'ON tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" = tblTaxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo"';		
 
+		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+		}
+
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
 			if (aEntrada[i] !== null){
@@ -280,6 +299,9 @@ module.exports = {
 							break;
 						case 3:
 							filtro = ' tblDominioMoeda."id_dominio_moeda" = ? ';
+							break;			
+						case 4:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
 							break;							
 					}
 					if(aEntrada[i].length == 1){
