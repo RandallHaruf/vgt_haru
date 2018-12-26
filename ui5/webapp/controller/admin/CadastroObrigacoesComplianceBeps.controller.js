@@ -256,7 +256,7 @@ sap.ui.define(
 
 				var that = this;
 				that.byId("btnOCCancelar").setEnabled(false);
-				that.byId("btnSalvarOCr").setEnabled(false);
+				that.byId("btnSalvarOC").setEnabled(false);
 				that.setBusy(that.byId("btnSalvarOC"), true);
 				var obj = this.getModel().getProperty("/objeto");
 

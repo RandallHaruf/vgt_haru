@@ -1,12 +1,13 @@
 <mvc:View controllerName="ui5ns.ui5.controller.beps.FormularioDetalhesObrigacao" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns="sap.m" class="viewBepsFormularioDetalhesObrigacao" xmlns:u="sap.ui.unified">
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns="sap.m" class="viewBepsFormularioDetalhesObrigacao"
+	xmlns:u="sap.ui.unified">
 	<f2:DynamicPage title="Beps - Formulário Detalhamento Obrigação" showFooter="true">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" enabled="false"/>
-						<Link text="Listagem Obrigações" enabled="false"/>
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
 						<Link text="Formulário Detalhe Obrigação" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
@@ -27,11 +28,11 @@
 								<content>
 									<l:VerticalLayout>
 										<l:HorizontalLayout allowWrapping="true" class="sapUiSmallMarginBottom">
-											<ObjectIdentifier title="Vale"/>
+											<ObjectAttribute title="{i18n>viewGeralEmpresa}" text="{/RespostaObrigacao/nome}"/>
 										</l:HorizontalLayout>
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout>
-												<ObjectAttribute title="Ano Calendário" text="2018"/>
+												<ObjectAttribute title="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}" text="{/RespostaObrigacao/ano_calendario}"/>
 											</l:VerticalLayout>
 										</l:HorizontalLayout>
 									</l:VerticalLayout>
@@ -46,7 +47,7 @@
 			<VBox class="sapUiSmallMargin">
 				<f:Form id="formularioObrigacao" editable="true">
 					<f:title>
-						<core:Title text="{i18n>formularioObrigacaoTituloObrigacao}"/>
+						<core:Title text="{/RespostaObrigacao/nome_obrigacao}"/>
 					</f:title>
 					<f:layout>
 						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -55,82 +56,117 @@
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao}" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
 									<f:fields>
-										<Select id="selectEmpresas">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Empresa A" key="1"/>
-												<core:Item text="Empresa B" key="2"/>
-												<core:Item text="Empresa C" key="2"/>
-											</items>
-										</Select>
-									</f:fields>
-								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
-									<f:fields>
-										<Select id="selectTipo">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Tipo 1" key="1"/>
-												<core:Item text="Tipo 2" key="2"/>
-												<core:Item text="Tipo 3" key="2"/>
-											</items>
-										</Select>
-									</f:fields>
-								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
-									<f:fields>
-										<Select id="selectPeriodicidade">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Periodicidade 1" key="1"/>
-												<core:Item text="Periodicidade 2" key="2"/>
-												<core:Item text="Periodicidade 3" key="2"/>
-											</items>
-										</Select>
-									</f:fields>
-								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
-									<f:fields>
-										<Select id="selectAnoFiscal">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="2018"/>
-												<core:Item text="2017"/>
-												<core:Item text="2016"/>
-											</items>
-										</Select>
+										<DatePicker 
+											placeholder="{i18n>viewGeralInsiraUmaData}" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/RespostaObrigacao/data_conclusao}" 
+											enabled="false"
+											/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
-										<DatePicker id="datepickerPrazoEntrega" placeholder="{i18n>placeholderDatepicker}"/>
+										<DatePicker 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/label_prazo_entrega}" 
+												enabled="false"
+												/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
+									<f:fields>
+											<Input value="{/RespostaObrigacao/pais}" enabled="false" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
 									<f:fields>
-										<DatePicker id="datepickerExtensao" placeholder="{i18n>placeholderDatepicker}"/>
+											<DatePicker 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/data_extensao}" 
+												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"/>
+												
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada"/>
+											<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="Suporte Contratado">
+									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado"/>
+										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? !!${/JaEstavaIniciada} : false}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
+									<f:fields>
+										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" enabled="{=  ${/JaDataObrigacaoConcluida} ? true : false }" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
-										<TextArea id="textAreaSuporte" rows="5" enabled="false"/>
+											<TextArea 
+											value="{/RespostaObrigacao/suporte_especificacao}"
+											id="textAreaSuporte"
+											rows="5" 
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ?  ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelObservacoes}">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<TextArea id="textAreaObservacoes" rows="5"/>
+										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}"  type="Number" enabled="{= ${/RespostaObrigacao/suporte_contratado} ?  ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>viewGeralMoeda}">
+									<f:fields>
+										
+										<!--<Select 
+												id="selectTipoMoeda" 
+												items="{/DominioMoeda}" 
+												selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}">
+												<core:Item text="{nome}" key="{id_dominio_moeda}" />
+											</Select>-->
+											<ComboBox
+											items="{/DominioMoeda}"
+											selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"
+											>
+											<core:Item text="{nome}" key="{id_dominio_moeda}" />
+											</ComboBox>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>viewGeralEmpresa}">
+									<f:fields>
+												<!--<Select 
+												id="selectTipoEmpresa" 
+												items="{/Empresa}" 
+												selectedKey="{/RespostaObrigacao/fk_id_empresa.id_empresa}">
+												<core:Item text="{nome}" key="{id_empresa}" />
+												</Select>-->
+												<Input id="Empresa" value="{/RespostaObrigacao/nome}" enabled="false" />
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
+									<f:fields>
+											<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal}" enabled="false" />
+											<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}">
+									<f:fields>
+										<DatePicker 
+												id="datepickerAnoCalendario" 
+												placeholder="Insira uma data..." 
+												valueFormat="yyyy-MM-dd" 
+												value="{/RespostaObrigacao/ano_calendario}" 
+												enabled="false"
+												/>
+										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
 							</f:formElements>
@@ -152,16 +188,15 @@
 									<VBox>
 										<VBox>
 											<HBox>
-												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}"
-													select="onSelecionaCheck" class="sapUiSmallMarginEnd"/>
+												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}" select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }" />
 											</HBox>
 											<HBox>
-												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" enabled="false" visible="{= ${/IsDeclaracao} === true ? true : false}"/>
+												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" />
 											</HBox>
 											<HBox>
 												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="Enviar o arquivo para o Nodejs"
 													placeholder="Escolha um arquivo"/>
-												<Button id="btnEnviar" text="Enviar Arquivo" press="onEnviarArquivo"/>
+												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
 											</HBox>
 										</VBox>
 										<Table id="tabelaDocumentos" inset="false" items="{ path: '/Documentos', sorter: [{ path: 'nome_arquivo' }, { path: 'data_upload' }] }">
@@ -204,8 +239,17 @@
 		<f2:footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar"/>
-				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar"/>
+				<Button 
+					text="{i18n>formularioObrigacaoBotaoSalvar}" 
+					type="Accept" 
+					press="onSalvar"
+					enabled="{/CancelaBotaoConfirmar}"/>
+				<Button 
+					text="{i18n>formularioObrigacaoBotaoCancelar}" 
+					type="Reject" 
+					press="onCancelar"
+					enabled="{/CancelaBotaoCancelar}"
+					/>
 			</Toolbar>
 		</f2:footer>
 	</f2:DynamicPage>

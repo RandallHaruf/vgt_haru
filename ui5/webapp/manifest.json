@@ -255,7 +255,7 @@
 					]
 				},
 				{
-					"pattern": "bepsFormularioDetalhesObrigacao",
+					"pattern": "bepsFormularioDetalhesObrigacao/{parametros}",
 					"name": "bepsFormularioDetalhesObrigacao",
 					"target": [
 						"bepsFormularioDetalhesObrigacao"

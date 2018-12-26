@@ -6,9 +6,6 @@
 	xmlns="sap.m"
 	class="viewBepsListagemObrigacoes">
 	<f:DynamicPage
-		title="Beps - Listagem Obrigações"
-		showNavButton="true"
-		navButtonPress="onNavBack"
 		class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -22,8 +19,8 @@
 					<Title text="Beps - Listagem Obrigações"/>
 				</f:heading>
 				<f:navigationActions>
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
-					<!--Button icon="sap-icon://manager-insight" tooltip="Relatório" text="Relatório" press="onNavToReport" /-->
 				</f:navigationActions>
 			</f:DynamicPageTitle>
 		</f:title>
@@ -35,53 +32,53 @@
 				<items>
 					<IconTabFilter
 						showAll="true"
-						count="{viewModel>/tabFilters/todas}"
+						count="{/Contadores/modelTodos}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"
-						key="todas" />
+						key="0" />
 					<IconTabSeparator />
 					<IconTabFilter
 						icon="sap-icon://sys-help"
 						iconColor="Default"
-						count="{viewModel>/tabFilters/naoIniciada}"
+						count="{/Contadores/modelNaoIniciada}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
-						key="naoIniciada" />
+						key="4" />
 					<IconTabFilter
 						icon="sap-icon://lateness"
 						iconColor="Neutral"
-						count="{viewModel>/tabFilters/emAndamento}"
+						count="{/Contadores/modelAguardando}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
-						key="emAndamento" />
+						key="1" />
 					<IconTabFilter
 						icon="sap-icon://alert"
 						iconColor="Negative"
-						count="{viewModel>/tabFilters/emAtraso}"
+						count="{/Contadores/modelEmAtraso}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
-						key="emAtraso" />
+						key="5" />
 					<IconTabFilter
 						icon="sap-icon://accept"
 						iconColor="Positive"
-						count="{viewModel>/tabFilters/entregueNoPrazo}"
+						count="{/Contadores/modelEntregueNoPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
-						key="entregueNoPrazo" />
+						key="6" />
 					<IconTabFilter
 						icon="sap-icon://customer-history"
 						iconColor="Critical"
-						count="{viewModel>/tabFilters/entregueForaPrazo}"
+						count="{/Contadores/modelEntregueForaPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
 						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
-						key="entregueForaPrazo" />
+						key="7" />
 				</items>
 				<content>
 					<Table
 						id="tabelaObrigacoes"
 						items="{
-							path: 'viewModel>/obrigacoes',
+							path: '/Obrigacao',
 							sorter: {
-								path: 'empresa',
+								path: 'nome',
 								group: true
 							}
 						}"
@@ -96,9 +93,13 @@
 									id="cabecalhoTabelaObrigacoes" 
 									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
 								<ToolbarSpacer />
-							<Select
+							<Label
+								text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
+								>
+								</Label>
+								<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
-									id="selectEmpresa" items="{/Empresa}" selectedKey="{/objeto/idempresa}"
+									id="selectEmpresa" items="{/Empresa}" selectedKey="{/IdEmpresaSelecionado}"
 									change="onTrocarEmpresa">
 									<items>
 										<core:Item text="{nome}" key="{id_empresa}" />
@@ -107,6 +108,10 @@
 										<core:Item text="Empresa C"/>-->
 									</items>
 								</Select>
+								<Label
+								text="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
+								>
+								</Label>
 								<Select
 									tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
 									id="selectAnoCalendario" items="{/DominioAnoCalendario}" selectedKey="{/AnoCalendarioSelecionado}"
@@ -118,12 +123,9 @@
 										<core:Item text="2016"/>-->
 									</items>
 								</Select>
-								<Button 
-									id="botaoBuscarDocumentos" 
-									icon="sap-icon://inspection" 
-									press="onBuscarDocumentos" 
-									text="{i18n>viewComplianceListagemObrigacoesBotaoBuscarDocumentos}"
-									type="Emphasized"/>
+								
+								<ToolbarSpacer />
+								
 								<Button 
 									id="botaoNovaObrigacao" 
 									icon="sap-icon://add" 
@@ -177,15 +179,20 @@
 								type="Navigation"
 								press="onDetalharObrigacao">
 								<cells>
-									<ObjectIdentifier title="{viewModel>tipo}"/>
-									<Text text="{viewModel>prazoEntrega}"/>
-									<Text text="{viewModel>extensao}"/>
-									<Text text="{viewModel>anoFiscal}"/>
-									<Text text="{viewModel>pais}"/>
-									<Text text="{viewModel>periodicidade}"/>
+									<ObjectIdentifier title="{nome_obrigacao}"/>
+									<Text text="{= ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4)}"/>
+									<Text text="{= ${data_extensao} !== null 
+									? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) 
+									: null}"/>
+									<Text text="{ano_fiscal}"/>
+									<Text text="{pais}"/>
+									<Text text="{descricao}"/>
 									<!--core:Icon src="{viewModel>suporteContratado}"/-->
-									<Text text="{viewModel>suporteContratado}"/>
-									<Text text="{viewModel>status}"/>
+									<Text text="{= !!${suporte_contratado} 
+									? ${i18n>viewGeralSim}
+									: ${i18n>viewGeralNao}
+									}"/>
+									<Text text="{descricao_obrigacao_status}"/>
 								</cells>
 							</ColumnListItem>
 						</items>
