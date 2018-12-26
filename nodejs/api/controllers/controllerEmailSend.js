@@ -4,37 +4,61 @@ var modelUsuario = require("../models/modelUsuario.js");
 
 module.exports = {
 	comunicarAdmin: function (req, res) {
-		modelUsuario.listar([{
-			coluna: modelUsuario.colunas.fkDominioTipoAcesso,
-			valor: 1
-		}], function (err, result) {
-			if (err) {
-				res.send(JSON.stringify(err));
-			} else {
-				
-				if (req.body._assunto != "" && req.body._corpo != ""){
-				
-					var aEmail = [];
-	
-					for (var i = 0, length = result.length; i < length; i++) {
-						aEmail.push(result[i].email);
-					}
-					var emailCC = (req.session.usuario.email == "" ? "fernando.catarino@tenti.com.br" : req.session.usuario.email);
-					sendEmails.sendEmail({
-						to: aEmail,
+		if (req.body._assunto != "" && req.body._corpo != "") {
+			var emailCC = "";
+            //var EmailDestino = "vale.global.tax@vale.com";
+			var EmailDestino = "gabrielcarreirasbotelho@gmail.com";
+			var nomeUser = req.session.usuario.nome;
+			var corpoAux = req.body._corpo;
+			if (req.body._boolEmailCC == true || req.body._boolEmailCC == "true") {
+				emailCC = (req.session.usuario.email);
+			}
+			if (req.body.IdUsuario) {
+				modelUsuario.listar([{
+					coluna: modelUsuario.colunas.id,
+					valor: req.body.IdUsuario
+				}], function (err, result) {
+					if (err) {
+						res.send(JSON.stringify(err));
+					} else {
+						EmailDestino = result[0]["email"];
+						nomeUser = result[0]["nome"];
+						corpoAux = corpoAux.replace("User",nomeUser);
+						
+						sendEmails.sendEmail({
+						to: EmailDestino,
 						cc: emailCC,
 						subject: req.body._assunto,
-						body:{ 
-								isHtml: true,
-								content: req.body._corpo
-						     }
-					}, function (sucesso) {
-						res.send(JSON.stringify(sucesso));
-					}, function (err2) {
-						res.send(JSON.stringify(err2));
-					});
-				}
+						body: {
+							isHtml: true,
+							content: corpoAux
+						}
+						}, function (sucesso) {
+							res.send(JSON.stringify(sucesso));
+						}, function (err2) {
+							res.send(JSON.stringify(err2));
+						});	
+						
+					}
+				});
 			}
-			});
+			else{
+				corpoAux = corpoAux.replace("User",nomeUser);
+				
+				sendEmails.sendEmail({
+					to: EmailDestino,
+					cc: emailCC,
+					subject: req.body._assunto,
+					body: {
+						isHtml: true,
+						content: corpoAux
+					}
+				}, function (sucesso) {
+					res.send(JSON.stringify(sucesso));
+				}, function (err2) {
+					res.send(JSON.stringify(err2));
+				});	
+			}
+		}
 	}
 };
