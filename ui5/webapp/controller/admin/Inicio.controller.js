@@ -237,6 +237,7 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
+			
 
 				this.getModel("viewModel").setProperty("/menu", {
 					navigation: [
@@ -266,16 +267,16 @@ sap.ui.define(
 								key: "ttcModulo",
 								route: "ttcListagemEmpresas"
 							}, {
-								title: "Câmbio",
+								title: that.getResourceBundle().getText("viewGeralCambio"),
 								key: "ttcCambio"
 							}, {
-								title: "Category",
+								title:  that.getResourceBundle().getText("viewGeralCategoria"),
 								key: "ttcCadastroCategory"
 							}, {
-								title: "Tax",
+								title: that.getResourceBundle().getText("viewGeralTaxa"),
 								key: "ttcCadastroTax"
 							}, {
-								title: "Name of Tax",
+								title: that.getResourceBundle().getText("viewGeralNomeT"),
 								key: "ttcCadastroTributos"
 							}]
 						}, {
@@ -283,13 +284,13 @@ sap.ui.define(
 							icon: "sap-icon://product",
 							expanded: false,
 							items: [{
-								title: "Visualizar Módulo",
+								title: that.getResourceBundle().getText("viewGeralVisualizarM"),
 								key: "taxPackageModulo"
 							}, {
-								title: "Items to Report",
+								title: that.getResourceBundle().getText("viewGeralItemsTR"),
 								key: "taxPackageCadastroItemsToReport"
 							}, {
-								title: "Adições/Exclusões",
+								title: that.getResourceBundle().getText("viewGeralAdicoesEExclusoes"),
 								key: "taxPackageCadastroAdicoesExclusoes"
 							}]
 						}, {
@@ -297,10 +298,10 @@ sap.ui.define(
 							icon: "sap-icon://activities",
 							expanded: false,
 							items: [{
-								title: "Visualizar Compliance",
+								title: that.getResourceBundle().getText( "viewAdminInicioMenuComplianceBepsVisualizarCompliance"),
 								key: "complianceModulo"
 							}, {
-								title: "Visualizar Beps",
+								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarBeps"),
 								key: "bepsModulo"
 							}, {
 								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
