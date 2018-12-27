@@ -503,16 +503,16 @@
 											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage(%)}" />
+											<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage(%)}" />
+											<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials(%)}" />
+											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn(%)}" />
+											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}" />
 										</Column>
 									</columns>
 									<items>
@@ -930,27 +930,27 @@
 									<VBox>
 										<Text text="Total" />
 										<HBox>
-											<Text text="Opening Balance" width="12rem" />
+											<Text text="{i18n>viewTaxPackageOpeningBalance}" width="12rem" />
 											<Text text="{path: '/TotalCreditSchedule/opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Current Year Loss" width="12rem" />
+											<Text text="{i18n>viewTaxPackageCurrentYearLoss}" width="12rem" />
 											<Text text="{path: '/TotalCreditSchedule/current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Current Year Loss Utilized" width="12rem" />
+											<Text text="{i18n>viewTaxPackageCurrentYearLossUtilized}" width="12rem" />
 											<Text text="{path: '/TotalCreditSchedule/current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Adjustments" width="12rem" />
+											<Text text="{i18n>viewTaxPackageAdjustments}" width="12rem" />
 											<Text text="{path: '/TotalCreditSchedule/adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Current Year Loss Expired" width="12rem" />
+											<Text text="{i18n>viewTaxPackageCurrentYearLossExpired}" width="12rem" />
 											<Text text="{path: '/TotalCreditSchedule/current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 										<HBox>
-											<Text text="Closing Balance" width="12rem" />
+											<Text text="{i18n>viewTaxPackageClosingBalance}" width="12rem" />
 											<Text text="{path: '/TotalCreditSchedule/closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" textAlign="End" width="7rem" />
 										</HBox>
 									</VBox>
