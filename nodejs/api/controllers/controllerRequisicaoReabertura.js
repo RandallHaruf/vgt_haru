@@ -108,10 +108,10 @@ module.exports = {
 				valor: req.body.dataRequisicao ? req.body.dataRequisicao : null
 			}, {
 				coluna: model.colunas.idUsuario,
-				valor: req.body.idUsuario ? Number(req.body.idUsuario) : null
+				valor: req.body.idUsuario ? Number(req.session.usuario.id) : null
 			}, {
 				coluna: model.colunas.nomeUsuario,
-				valor: req.body.nomeUsuario ? req.body.nomeUsuario : null
+				valor: req.body.nomeUsuario ? req.session.usuario.nome : null
 			}, {
 				coluna: model.colunas.justificativa,
 				valor: req.body.justificativa ? req.body.justificativa : null

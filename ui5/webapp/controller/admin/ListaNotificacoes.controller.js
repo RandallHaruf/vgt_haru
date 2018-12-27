@@ -308,15 +308,15 @@ sap.ui.define(
 				dialog.open();
 			},
 			
-			_onEnviarMensagem: function (vEmpresa, vPeriodo, vTipo ) {
+			_onEnviarMensagem: function (vEmpresa, vPeriodo, vTipo,idUsuario ) {
 				var that = this;
 				
 				if (vTipo == "TTC"){
 					var assunto = "TTC - Period reopening request - " + vEmpresa + " - " + vPeriodo;
-					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TTC closed period and the decision is available at Vale Global Tax (VGT) – inserir hyperlink.<br>The period reopened will remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TTC closed period and the decision is available at <a href='" + document.domain +"'>Vale Global Tax (VGT)</a> .<br>The period reopened will remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
 				}else{
 					var assunto = "TAX PACKAGE - Period reopening request - " + vEmpresa + " - " + vPeriodo;
-					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed periodand the decision is available at Vale Global Tax (VGT) – inserir hyperlink.<br>The period reopenedwill remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed periodand the decision is available at <a href='" + document.domain +"'>Vale Global Tax (VGT)</a> .<br>The period reopenedwill remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
 				}
 				
 				jQuery.ajax({//Desativar botao
@@ -328,7 +328,8 @@ sap.ui.define(
 				crossDomain: true,
 					data: {
 						_assunto: assunto,
-						_corpo: htmlBody
+						_corpo: htmlBody,
+						IdUsuario:idUsuario
 					},
 					success: function (response) {
 						//sap.m.MessageToast.show("Email enviado com sucesso");
@@ -461,7 +462,7 @@ sap.ui.define(
 								fkPeriodo: oItemSelecionadoTTC["fk_periodo.id_periodo"],
 								reabrirPeriodo: true
 							}, function (response) {
-								that._onEnviarMensagem(oItemSelecionadoTTC.nome, oItemSelecionadoTTC.periodo, "TTC");
+								that._onEnviarMensagem(oItemSelecionadoTTC.nome, oItemSelecionadoTTC.periodo, "TTC",oItemSelecionadoTTC.id_usuario);
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
 								that.onAtualizaInfo();
@@ -611,7 +612,7 @@ sap.ui.define(
 								fkIdRelTaxPackagePeriodo: oItemSelecionadoTAX["fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo"],
 								reabrirPeriodo: true
 								}, function (response) {
-								that._onEnviarMensagem(oItemSelecionadoTAX.nome, oItemSelecionadoTAX.periodo, "TAX");
+								that._onEnviarMensagem(oItemSelecionadoTAX.nome, oItemSelecionadoTAX.periodo, "TAX",oItemSelecionadoTAX.id_usuario);
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
 								that.onAtualizaInfo();
