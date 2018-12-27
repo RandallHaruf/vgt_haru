@@ -218,7 +218,7 @@
 												<ColumnListItem>
 													<cells>
 														<ObjectIdentifier title="{nome_arquivo}" text="{label_declaracao}" class="sapMTableContentMargin"/>
-														<ObjectNumber number="{data_upload}"/>
+														<ObjectNumber number="{= ${data_upload} !== null ? ${data_upload}.substring(8,10)+'/'+${data_upload}.substring(5,7)+'/'+${data_upload}.substring(0,4) : null}/>
 														<HBox>
 															<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixar} {i18n>viewCambioArquivo}" press="onBaixarArquivo" enabled="{btnDownloadEnabled}"
 																class="sapUiSmallMarginEnd"/>
