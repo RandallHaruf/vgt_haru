@@ -626,10 +626,17 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblObrigacao.prazo_entrega"] = aRegistro[i]["tblObrigacao.prazo_entrega"].substring(8,10)+"/"+aRegistro[i]["tblObrigacao.prazo_entrega"].substring(5,7)+"/"+aRegistro[i]["tblObrigacao.prazo_entrega"].substring(4,0);
-						aRegistro[i]["tblObrigacao.extensao"] = aRegistro[i]["tblObrigacao.extensao"].substring(8,10)+"/"+aRegistro[i]["tblObrigacao.extensao"].substring(5,7)+"/"+aRegistro[i]["tblObrigacao.extensao"].substring(4,0);
-						aRegistro[i]["tblObrigacao.obrigacao_inicial"] = aRegistro[i]["tblObrigacao.obrigacao_inicial"] === 1 ? that.getResourceBundle().getText("viewGeralSim") : that.getResourceBundle().getText("viewGeralNao") ;         
-						aRegistro[i]["tblObrigacao.suporte_contratado"] = aRegistro[i]["tblObrigacao.suporte_contratado"] === 1 ? that.getResourceBundle().getText("viewGeralSim") :that.getResourceBundle().getText("viewGeralNao") ;
+						aRegistro[i]["prazo_de_entrega_calculado"] = aRegistro[i]["prazo_de_entrega_calculado"] 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["prazo_de_entrega_calculado"]) 
+						: null;
+						aRegistro[i]["tblRespostaObrigacao.data_extensao"] = aRegistro[i]["tblRespostaObrigacao.data_extensao"] 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblRespostaObrigacao.data_extensao"]) 
+						: null;
+						//TRADUZIR DESCRICAO DA OBRIGACAO STATUS
+						aRegistro[i]["tblRespostaObrigacao.suporte_contratado"] = !!aRegistro[i]["tblRespostaObrigacao.suporte_contratado"] === true 
+						? that.getResourceBundle().getText("viewGeralSim") 
+						: that.getResourceBundle().getText("viewGeralNao") ;
+						
 						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"],that);						
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);

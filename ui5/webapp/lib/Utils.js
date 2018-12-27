@@ -15,6 +15,7 @@ sap.ui.define(
 				}
 				return fConversao;
 			},
+			
 			formataData: function (sData){
 				var fDataNoPadrao = "";
 				if (sData){
@@ -22,6 +23,7 @@ sap.ui.define(
 				}
 				return fDataNoPadrao;
 			},
+			
 			dateNowParaBanco: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "/" +(Data.getMonth() +1).toString().padStart(2,"0") + "/" + Data.getFullYear().toString();
@@ -33,12 +35,30 @@ sap.ui.define(
 				var DataFinal = dataString.substring(8,10)+"/"+dataString.substring(5,7)+"/"+dataString.substring(4,0);
 				return DataFinal;
 			},
+			
+			
 			stringDatacomBarraParaBanco: function (dataString){
 				var DataFinal = "";
 				if(dataString){
 					DataFinal = dataString.substring(6,10)+"-"+dataString.substring(3,5)+"-"+dataString.substring(0,2);
 				}
 				return DataFinal;
+			},
+			
+			formatData: function (data,that){
+				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
+				var formatFull = "";
+				var formatSemAno = "";
+				switch (lingua){
+					case "pt-BR":
+						formatFull = "dd/MM/yyyy";
+						formatSemAno = "dd/MM";
+						break;
+					case "en-US":
+						formatFull = "MM/dd/yyyy";
+						formatSemAno = "MM/dd";
+						break;
+				}
 			},
 			bancoParaJsDate: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
@@ -82,6 +102,7 @@ sap.ui.define(
 				}
 				return tiposPaisTraduzido;
 			},
+			
 			traduzEmpresaStatusTipo: function (intEmpresaStatusTipo,that){
 				var tipoEmpresaStatus = "";
 				switch (intEmpresaStatusTipo){
@@ -113,6 +134,7 @@ sap.ui.define(
 				}
 				return tipoEmpresaStatus;
 			},	
+			
 			traduzEmpresaTipoSocietario: function (intTipoSocietario,that){
 				var tipoSocietario = "";
 				switch (intTipoSocietario){
@@ -163,6 +185,7 @@ sap.ui.define(
 				}
 				return periodoTraduzido;
 			},
+			
 			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
@@ -194,6 +217,7 @@ sap.ui.define(
 				}
 				return periodoTraduzido;
 			},	
+			
 			traduzTiposAliquota: function (intTipoAliquota, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
@@ -209,6 +233,7 @@ sap.ui.define(
 				}
 				return traduzTipoAliquota;
 			},		
+			
 			traduzPaisRegiao: function (intRegiao, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
@@ -238,7 +263,8 @@ sap.ui.define(
 						break;						
 				}
 				return periodoRegiaoTraduzido;
-			},				
+			},
+			
 			dateNowParaArquivo: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "_" +(Data.getMonth() +1).toString().padStart(2,"0") + "_" + Data.getFullYear().toString();
