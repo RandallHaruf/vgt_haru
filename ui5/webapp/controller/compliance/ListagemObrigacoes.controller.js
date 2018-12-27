@@ -21,6 +21,7 @@ sap.ui.define(
 				this.carregarFiltroAnoCalendario();
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
+				this.setBusy(this.byId("tabelaObrigacoes"), false);
 				
 			},
 
@@ -104,12 +105,14 @@ sap.ui.define(
 			},
 
 			onDetalharObrigacao: function (oEvent) {
+				this.setBusy(this.byId("tabelaObrigacoes"), true);
 				var oParametros = {
 					Obrigacao: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())
 				};
 
 				this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {
 					parametros: JSON.stringify(oParametros)
+					
 				});
 			},
 

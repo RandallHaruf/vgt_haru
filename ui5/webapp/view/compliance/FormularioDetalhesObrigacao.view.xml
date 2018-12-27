@@ -15,7 +15,7 @@
 					<Breadcrumbs>
 						<Link text="Home" enabled="false" />
 						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
-						<Link text="{i18n>viewFormularioComplianceFormularioDetalheObrigacao}" enabled="false" />
+						<Link text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>

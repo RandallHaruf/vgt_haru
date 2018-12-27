@@ -134,8 +134,8 @@ sap.ui.define(
 						var oObjeto = response[0];
 						var obj = {
 							pergunta: oObjeto["pergunta"],
-							flagSimNao: oObjeto["flag_sim_nao"],
-							flagAno: oObjeto["flag_ano"]
+							flagSimNao: !!oObjeto["flag_sim_nao"],
+							flagAno: !!oObjeto["flag_ano"]
 						};
 
 						that.getModel().setProperty("/objeto", obj);
