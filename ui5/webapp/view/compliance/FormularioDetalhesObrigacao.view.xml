@@ -220,8 +220,8 @@
 												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" />
 											</HBox>
 											<HBox>
-												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="Enviar o arquivo para o Nodejs"
-													placeholder="Escolha um arquivo"/>
+												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
+													placeholder="{i18n>viewGeralEscolhaUmArquivo}"/>
 												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
 											</HBox>
 										</VBox>
