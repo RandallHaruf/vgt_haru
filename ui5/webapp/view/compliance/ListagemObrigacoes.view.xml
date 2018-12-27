@@ -178,10 +178,8 @@
 								press="onDetalharObrigacao">
 								<cells>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
-									<Text text="{= ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4)}"/>
-									<Text text="{= ${data_extensao} !== null 
-									? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) 
-									: null}"/>
+									<Text text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}" />
+									<Text text="{= ${/Linguagem} === 'EN-US' ? ( ${data_extensao} !== null ? ${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(0,4) : null) : ( ${data_extensao} !== null ? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) : null)}" />
 									<Text text="{ano_fiscal}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>

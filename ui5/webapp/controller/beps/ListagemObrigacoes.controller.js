@@ -16,6 +16,7 @@ sap.ui.define(
 			},
 			
 			_onRouteMatched: function (oEvent) {
+				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
 				//this._atualizarDados();
