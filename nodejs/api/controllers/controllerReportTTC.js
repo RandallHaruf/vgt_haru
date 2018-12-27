@@ -170,7 +170,7 @@ module.exports = {
 	},
 	
 	deepQuery: function (req, res) { 
-
+		
 		var sStatement = 
 			'SELECT '
 			+'tblEmpresa."id_empresa" "tblEmpresa.id_empresa", '
@@ -254,6 +254,16 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
+		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			if (aEntrada[12] === null){
+				aEntrada[12] = [];
+			}
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
+			}
+		}
+
 		for (var i = 0; i < aEntrada.length; i++) {
 			filtro = "";			
 			if (aEntrada[i] !== null){
@@ -295,6 +305,9 @@ module.exports = {
 							break;	
 						case 11:
 							filtro = ' tblPagamento."data_pagamento" <= ? ';
+							break;	
+						case 12:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
 							break;							
 					}
 					if(aEntrada[i].length == 1){
@@ -454,6 +467,15 @@ module.exports = {
 			+'INNER JOIN "VGT.DOMINIO_MOEDA" AS tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda" '
 			+'INNER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"';
 			
+		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			if (aEntrada[12] === null){
+				aEntrada[12] = [];
+			}
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
+			}
+		}			
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";			
@@ -496,7 +518,10 @@ module.exports = {
 							break;	
 						case 11:
 							filtro = ' tblPagamento."data_pagamento" <= ? ';
-							break;								
+							break;	
+						case 12:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
+							break;							
 					}
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);

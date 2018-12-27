@@ -77,6 +77,7 @@
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
 					<Button
+					id="GerarRelatorio"
 					text="Gerar {i18n>viewGeralRelatorio}"
 					type="Emphasized"
 					press="onGerarRelatorio"/>	
@@ -87,7 +88,7 @@
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/ReportTaxPackage'}">
+				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
 						<Column width="6rem">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>

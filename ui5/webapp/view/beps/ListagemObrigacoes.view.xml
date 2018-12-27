@@ -92,7 +92,7 @@
 								<!--Title 
 									id="cabecalhoTabelaObrigacoes" 
 									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
-								<ToolbarSpacer />
+							
 							<Label
 								text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
 								>

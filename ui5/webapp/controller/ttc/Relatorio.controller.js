@@ -390,12 +390,15 @@ sap.ui.define([
 			oWhere.push(oDominioTipoTransacao);
 			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
 			oWhere.push(oDataFim === null? oDataFim : vetorFim);			
-
+			oWhere.push(null);
+			
 			this._preencheReportTTC(oWhere);
 		},
 
 		_preencheReportTTC: function (oWhere){
 			var that = this;
+			that.setBusy(that.byId("relatorioDoTTC"),true);	
+			that.byId("GerarRelatorio").setEnabled(false);				
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
 				type: "POST",
 				xhrFields: {
@@ -415,6 +418,8 @@ sap.ui.define([
 						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
 					}		
 					that.getModel().setProperty("/ReportTTC", aRegistro);
+					that.setBusy(that.byId("relatorioDoTTC"),false);	
+					that.byId("GerarRelatorio").setEnabled(true);						
 				}
 			});					
 		},		

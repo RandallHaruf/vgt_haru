@@ -8,11 +8,11 @@
 					<Breadcrumbs>
 						<Link text="Home" enabled="false"/>
 						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
-						<Link text="Formulário Detalhe Obrigação" enabled="false"/>
+						<Link text="{i18n>viewFormularioComplianceBepsFormularioDetalheObrigacao}" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="Beps - Formulário de Detalhe de Obrigação"/>
+					<Title text="Beps - {i18n>viewFormularioComplianceBepsFormularioDetalheObrigacao}"/>
 				</f2:heading>
 				<f2:snappedContent>
 					<ObjectIdentifier title="Vale"/>
@@ -161,7 +161,7 @@
 									<f:fields>
 										<DatePicker 
 												id="datepickerAnoCalendario" 
-												placeholder="Insira uma data..." 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/ano_calendario}" 
 												enabled="false"
@@ -194,20 +194,20 @@
 												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" />
 											</HBox>
 											<HBox>
-												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="Enviar o arquivo para o Nodejs"
-													placeholder="Escolha um arquivo"/>
+												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
+													placeholder="{i18n>viewGeralEscolhaUmArquivo}"/>
 												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
 											</HBox>
 										</VBox>
 										<Table id="tabelaDocumentos" inset="false" items="{ path: '/Documentos', sorter: [{ path: 'nome_arquivo' }, { path: 'data_upload' }] }">
 											<headerToolbar>
 												<Toolbar>
-													<Title text="Arquivos da Obrigação"/>
+													<Title text="{i18n>viewFormularioComplianceBepsArquivosObrigacao}"/>
 												</Toolbar>
 											</headerToolbar>
 											<columns>
 												<Column>
-													<Title text="Nome"/>
+													<Title text="{i18n>viewEmpresasNome}"/>
 												</Column>
 												<Column>
 													<Title text="Data Upload"/>
@@ -218,11 +218,11 @@
 												<ColumnListItem>
 													<cells>
 														<ObjectIdentifier title="{nome_arquivo}" text="{label_declaracao}" class="sapMTableContentMargin"/>
-														<ObjectNumber number="{data_upload}"/>
+														<ObjectNumber number="{= ${data_upload} !== null ? ${data_upload}.substring(8,10)+'/'+${data_upload}.substring(5,7)+'/'+${data_upload}.substring(0,4) : null}/>
 														<HBox>
-															<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="Baixar arquivo" press="onBaixarArquivo" enabled="{btnDownloadEnabled}"
+															<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixar} {i18n>viewCambioArquivo}" press="onBaixarArquivo" enabled="{btnDownloadEnabled}"
 																class="sapUiSmallMarginEnd"/>
-															<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir arquivo" press="onExcluirArquivo" enabled="{btnExcluirEnabled}"/>
+															<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluir} {i18n>viewCambioArquivo}" press="onExcluirArquivo" enabled="{btnExcluirEnabled}"/>
 														</HBox>
 													</cells>
 												</ColumnListItem>

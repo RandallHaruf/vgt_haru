@@ -23,9 +23,10 @@ sap.ui.define([
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
-			
+			/*
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);			
+			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);	*/		
+			this.getRouter().getRoute("taxPackageRelatorio").attachPatternMatched(this._handleRouteMatched, this);				
 		},
 
 		_handleRouteMatched: function () {
@@ -84,8 +85,9 @@ sap.ui.define([
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(null);
 			
-			oWhere[4] = ["tblEmpresa.nome"];
+			oWhere[5] = ["tblEmpresa.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
 				xhrFields: {
@@ -100,7 +102,7 @@ sap.ui.define([
 					that.getModel().setProperty("/Empresa", aRegistro);
 				}
 			});	
-			oWhere[4] = ["tblDominioAnoCalendario.ano_calendario"];
+			oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
 				xhrFields: {
@@ -115,7 +117,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
 				}
 			});	
-			oWhere[4] = ["tblPeriodo.id_periodo"];
+			oWhere[5] = ["tblPeriodo.id_periodo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
 				xhrFields: {
@@ -130,7 +132,7 @@ sap.ui.define([
 					that.getModel().setProperty("/Periodo", aRegistro);
 				}
 			});	
-			oWhere[4] = ["tblDominioMoeda.acronimo"];
+			oWhere[5] = ["tblDominioMoeda.acronimo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
 				type: "POST",
 				xhrFields: {
@@ -234,12 +236,16 @@ sap.ui.define([
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
-
+			oWhere.push(null);
+			oWhere.push(null);
+			
 			this._preencheReportTax(oWhere);			
 		},
 		
 		_preencheReportTax: function (oWhere){
 			var that = this;
+			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
+			that.byId("GerarRelatorio").setEnabled(false);				
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTaxPackage", {
 				type: "POST",
 				xhrFields: {
@@ -270,6 +276,8 @@ sap.ui.define([
 								: "0" ;
 					}						
 					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
+					that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+					that.byId("GerarRelatorio").setEnabled(true);						
 				}
 			});				
 		},		

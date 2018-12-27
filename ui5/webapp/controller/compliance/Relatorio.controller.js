@@ -40,8 +40,9 @@ sap.ui.define([
 				}]				
 			}));
 			this._atualizarDados();
-			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);			
+			/*this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);*/		
+			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._handleRouteMatched, this);			
 		},
 
 		_handleRouteMatched: function () {

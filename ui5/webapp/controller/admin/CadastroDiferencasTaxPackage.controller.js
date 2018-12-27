@@ -59,7 +59,7 @@ sap.ui.define(
 				);
 
 				oFormElement.setLabel(new sap.m.Label({
-					text: "Tipo"
+					text: that.getResourceBundle().getText("viewGeralTipo")
 				}).addStyleClass("sapMLabelRequired"));
 
 				var oSelectTipo = new sap.m.Select().bindItems({
@@ -83,7 +83,7 @@ sap.ui.define(
 										}*/
 					)
 					.setLabel(new sap.m.Label({
-						text: "Nome"
+						text: that.getResourceBundle().getText("viewRelatorioNome")
 					}).addStyleClass("sapMLabelRequired"))
 					.addField(oInputNome);
 
@@ -92,16 +92,16 @@ sap.ui.define(
 				oForm.addFormContainer(oFormContainer);
 
 				var dialog = new sap.m.Dialog({
-					title: "Nova Diferença",
+					title: that.getResourceBundle().getText("viewGeralNovaDiferenca"),
 					content: oForm,
 					beginButton: new sap.m.Button({
-						text: "salvar",
+						text: that.getResourceBundle().getText("viewGeralSalvar"),
 						press: function () {
 							//sap.m.MessageToast.show("Inserir diferença: " + oInputNome.getValue());
 
 							if (!oInputNome.getValue() || !oSelectTipo.getSelectedKey()) {
 								sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralOrbigatorio"), {
-									title: "Aviso"
+									title: "Info"
 								});
 							} else {
 								jQuery.ajax(Constants.urlBackend + "DiferencaOpcao", {
@@ -124,7 +124,7 @@ sap.ui.define(
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({
-						text: "sair",
+						text:  that.getResourceBundle().getText("viewGeralSair"),
 						press: function () {
 							dialog.close();
 						}.bind(this)
@@ -162,7 +162,7 @@ sap.ui.define(
 				);
 
 				oFormElement.setLabel(new sap.m.Label({
-					text: "Tipo"
+					text:  that.getResourceBundle().getText("viewGeralTipo")
 				}).addStyleClass("sapMLabelRequired"));
 
 				var oSelectTipo = new sap.m.Select({
@@ -187,7 +187,7 @@ sap.ui.define(
 				);
 
 				oFormElement.setLabel(new sap.m.Label({
-					text: "Nome"
+					text: that.getResourceBundle().getText("viewRelatorioNome")
 				}).addStyleClass("sapMLabelRequired"));
 
 				var oInputNome = new sap.m.Input({
@@ -201,7 +201,7 @@ sap.ui.define(
 				oForm.addFormContainer(oFormContainer);
 
 				var dialog = new sap.m.Dialog({
-					title: "Editar Diferença",
+					title: that.getResourceBundle().getText("viewGeralEditarDiferenca"),
 					content: oForm,
 					beginButton: new sap.m.Button({
 						text: "salvar",
