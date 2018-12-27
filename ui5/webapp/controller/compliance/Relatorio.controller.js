@@ -405,12 +405,12 @@ sap.ui.define([
 				// column definitions with column name and binding info for the content
 
 				columns : [{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaTipo"),
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro1"),
 					template : {
 						content : "{tblDominioObrigacaoAcessoriaTipo.tipo}"
 					}
 				}, {
-					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesSelectEmpresas"),
 					template : {
 						content : "{tblEmpresa.nome}"
 					}
@@ -420,9 +420,9 @@ sap.ui.define([
 						content : "{tblDominioPais.pais}"
 					}
 				}, {
-					name : this.getResourceBundle().getText("viewComplianceFormularioDetalhesObrigacaoListagemObrigações"),
+					name : this.getResourceBundle().getText("viewEmpresasObrigacoesAcessorias"),
 					template : {
-						content : "{tblObrigacaoAcessoria.nome}"
+						content : "{tblModeloObrigacao.nome_obrigacao}"
 					}
 				}, {
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPeriodicidade"),
@@ -435,39 +435,39 @@ sap.ui.define([
 						content : "{tblDominioAnoFiscal.ano_fiscal}"
 					}
 				},{
+					name : this.getResourceBundle().getText("viewGeralAnoCalendario"),
+					template : {
+						content : "{tblDominioAnoCalendario.ano_calendario}"
+					}
+				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPrazoEntrega"),
 					template : {
-						content : "{tblObrigacao.prazo_entrega}"
+						content : "{prazo_de_entrega_calculado}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaExtensao"),
 					template : {
-						content : "{tblObrigacao.extensao}"
+						content : "{tblRespostaObrigacao.data_extensao}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaStatus"),
 					template : {
-						content : "{tblDominioStatusObrigacao.descricao}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesBotaoRequisicao"),
-					template : {
-						content : "{tblObrigacao.obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+						content : "{tblDominioObrigacaoStatus.descricao_obrigacao_status}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaSuporteContratado"),
 					template : {
-						content : "{tblObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+						content : "{tblRespostaObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
 					}
 				},{
-					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					name : this.getResourceBundle().getText("formularioObrigacaoLabelValorSuporte"),
 					template : {
-						content : "{tblObrigacao.suporte}"
+						content : "{tblRespostaObrigacao.suporte_valor}"
 					}
 				},{
-					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
+					name : this.getResourceBundle().getText("formularioObrigacaoLabelObservacoes"),
 					template : {
-						content : "{tblObrigacao.observacoes}"
+						content : "{tblRespostaObrigacao.suporte_especificacao}"
 					}
 				}]
 			});
