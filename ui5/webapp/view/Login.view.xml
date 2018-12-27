@@ -41,6 +41,7 @@
 		</InputListItem>
 		<InputListItem>
 			<Button
+				id="buttonLogin"
 				type="Accept"
 				text="Login"
 				icon="sap-icon://visits"
