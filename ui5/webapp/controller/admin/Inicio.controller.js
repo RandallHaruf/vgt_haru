@@ -7,9 +7,10 @@ sap.ui.define(
 		"ui5ns/ui5/model/models",
 		"sap/ui/model/Filter",
 		"sap/m/MessageToast",
+		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, jQuery, Popover, Button, models, Filter, MessageToast, NodeAPI) {
+	function (BaseController, jQuery, Popover, Button, models, Filter, MessageToast, Constants, NodeAPI) {
 
 		return BaseController.extend("ui5ns.ui5.controller.admin.Inicio", {
 
@@ -196,7 +197,7 @@ sap.ui.define(
 					text: that.getResourceBundle().getText("viewAdminInicioBotaoTodasNotificacoes")
 				}).attachPress(function () {
 					sap.ui.getCore().byId(viewId + "--pageContainer").to(viewId + "--listaNotificacoes");
-					
+
 					var oXMLView = that.byId("listaNotificacoesXMLView");
 					if (oXMLView && oXMLView.byId("paginaListagem") && oXMLView.byId("paginaListagem").aDelegates) {
 						var aDelegates = oXMLView.byId("paginaListagem").aDelegates;
@@ -236,8 +237,32 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+
+				fetch(Constants.urlBackend + "verifica-auth", {
+						credentials: "include"
+					})
+					.then((res) => {
+						res.json()
+							.then((response) => {
+								if (response.success) {
+									//alert(response.nome + "  " + response.id);
+										that.getModel().setProperty("/NomeUsuario", response.nome);
+								} else {
+									MessageToast.show(response.error.msg);
+									this.getRouter().navTo("Login");
+								}
+							})
+							.catch((err) => {
+								MessageToast.show(err);
+								this.getRouter().navTo("Login");
+							});
+					})
+					.catch((err) => {
+						MessageToast.show(err);
+						this.getRouter().navTo("Login");
+					});
+					
 				var that = this;
-			
 
 				this.getModel("viewModel").setProperty("/menu", {
 					navigation: [
@@ -270,7 +295,7 @@ sap.ui.define(
 								title: that.getResourceBundle().getText("viewGeralCambio"),
 								key: "ttcCambio"
 							}, {
-								title:  that.getResourceBundle().getText("viewGeralCategoria"),
+								title: that.getResourceBundle().getText("viewGeralCategoria"),
 								key: "ttcCadastroCategory"
 							}, {
 								title: that.getResourceBundle().getText("viewGeralTaxa"),
@@ -298,18 +323,20 @@ sap.ui.define(
 							icon: "sap-icon://activities",
 							expanded: false,
 							items: [{
-								title: that.getResourceBundle().getText( "viewAdminInicioMenuComplianceBepsVisualizarCompliance"),
-								key: "complianceModulo"
-							}, {
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarBeps"),
-								key: "bepsModulo"
-							}, {
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
-								key: "cadastroObrigacoes"
-							}/*, {
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
-								key: "cadastroObrigacoes"
-							}*/]
+									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarCompliance"),
+									key: "complianceModulo"
+								}, {
+									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarBeps"),
+									key: "bepsModulo"
+								}, {
+									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
+									key: "cadastroObrigacoes"
+								}
+								/*, {
+																title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
+																key: "cadastroObrigacoes"
+															}*/
+							]
 						}
 					]
 				});

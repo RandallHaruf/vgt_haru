@@ -169,7 +169,9 @@ const verificaAuth = function (req, res) {
 		res.send({
 			success: true,
 			msg: "Usuário já autenticado.",
-			modulos: req.session.usuario.modulos
+			modulos: req.session.usuario.modulos,
+			nome: req.session.usuario.nome,
+			id: req.session.usuario.id
 		});
 	} else {
 		req.session = {
