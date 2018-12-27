@@ -228,7 +228,7 @@
 										<Table id="tabelaDocumentos" inset="false" items="{ path: '/Documentos', sorter: [{ path: 'nome_arquivo' }, { path: 'data_upload' }] }">
 											<headerToolbar>
 												<Toolbar>
-													<Title text="Arquivos da Obrigação"/>
+													<Title text="{i18n>viewFormularioComplianceBepsArquivosObrigacao}"/>
 												</Toolbar>
 											</headerToolbar>
 											<columns>
