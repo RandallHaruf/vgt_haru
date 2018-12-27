@@ -26,6 +26,8 @@ sap.ui.define(
 			},
 			
 			onSelecionarEmpresa: function (oEvent) {
+				this.setBusy(this.byId("tabelaEmpresas"), true);
+				
 				var oEmpresaSelecionada = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				var sIdAnoCalendarioSelecionado = this.getModel().getProperty("/AnoCalendarioSelecionado");
 				
@@ -40,6 +42,8 @@ sap.ui.define(
 			},
 			
 			_onRouteMatched: function (oEvent) {
+				this.setBusy(this.byId("tabelaEmpresas"), false);
+				
 				var that = this;
 				
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {

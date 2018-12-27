@@ -381,6 +381,7 @@ upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_p
 upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(2, 'Not Started') where "id_dominio_rel_tax_package_periodo_status_envio" = 2;
 upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(3, 'In Progress') where "id_dominio_rel_tax_package_periodo_status_envio" = 3;
 upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(4, 'Sent') where "id_dominio_rel_tax_package_periodo_status_envio" = 4;
+upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(5, 'Waiting for Approval') where "id_dominio_rel_tax_package_periodo_status_envio" = 5;
 --
 -- 
 --
