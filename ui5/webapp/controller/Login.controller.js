@@ -23,6 +23,7 @@ sap.ui.define(
 								}
 							})
 					});
+				this.getRouter().getRoute("login").attachPatternMatched(this._onRouteMatched, this);	
 			},
 
 			onLogin: function () {
@@ -62,7 +63,12 @@ sap.ui.define(
 					});
 			},
 
-			onLanguageChange: function (oEvent) {}
+			onLanguageChange: function (oEvent) {},
+			_onRouteMatched: function(){
+			    var that = this;
+				this.byId("inputSenha").onsapenter = function(e) {that.byId("buttonLogin").firePress()};
+				this.byId("inputUsuario").onsapenter = function(e) {that.byId("buttonLogin").firePress()};
+			}
 		});
 	}
 );
