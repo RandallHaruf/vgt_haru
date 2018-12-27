@@ -67,7 +67,11 @@ sap.ui.define(
 			
 			bancoParaJsDate: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
-				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
+				var DataFinal = null;
+				if(dataString){
+					DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));					
+				}
+
 				return DataFinal;
 			},
 			

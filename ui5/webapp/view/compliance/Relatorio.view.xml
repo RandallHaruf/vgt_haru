@@ -77,8 +77,8 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewComplianceFormularioDetalhesObrigacaoListagemObrigações}">
 								<fb:control>
-									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/ObrigacaoAcessoria' }" selectedKeys="{/IdObrigacaoAcessoriaSelecionadas}">
-										<core:Item key="{tblObrigacaoAcessoria.id_obrigacao_acessoria}" text="{tblObrigacaoAcessoria.nome}"/>
+									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/ModeloObrigacao' }" selectedKeys="{/IdObrigacaoAcessoriaSelecionadas}">
+										<core:Item key="{tblModeloObrigacao.id_modelo}" text="{tblModeloObrigacao.nome_obrigacao}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -96,32 +96,39 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="L" label="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}">
+								<fb:control>
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
 							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
 									<DateRangeSelection	id="PrazoEntrega" dateValue="{/DataPrazoEntregaInicio}"	secondDateValue="{/DataPrazoEntregaFim}" 
-									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoPrazoMin}" maxDate="{/ObrigacaoPrazoMax}"/>
+									displayFormat="{/displayFormatSemAno}" placeholder="{/displayFormatSemAno} {i18n>viewGeralAte} {/displayFormatSemAno}" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoPrazoMin}" maxDate="{/ObrigacaoPrazoMax}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
 								<fb:control>
 									<DateRangeSelection	id="Extensao" dateValue="{/DataExtensaoInicio}"	secondDateValue="{/DataExtensaoFim}" 
-									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoExtensaoMin}" maxDate="{/ObrigacaoExtensaoMax}"/>
+									displayFormat="{/displayFormatFull}" placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoExtensaoMin}" maxDate="{/ObrigacaoExtensaoMax}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">
 								<fb:control>
 									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/DominioStatusObrigacao' }" selectedKeys="{/IdDominioStatusObrigacaoSelecionadas}">
-										<core:Item key="{tblDominioStatusObrigacao.id_status_obrigacao}" text="{tblDominioStatusObrigacao.descricao}"/>
+										<core:Item key="{tblDominioObrigacaoStatus.id_dominio_obrigacao_status}" text="{tblDominioObrigacaoStatus.descricao_obrigacao_status}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="H" label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+						<!--	<fb:FilterItem name="H" label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 								<fb:control>
 									<ComboBox items="{path: '/ObrigacaoIniciada'}" selectionChange="onSelectChange" selectedKey="{/CheckObrigacaoInicial}">
 										<core:Item key="{key}" text="{value}" />
 									</ComboBox>
 								</fb:control>
-							</fb:FilterItem>
+							</fb:FilterItem>-->
 							<fb:FilterItem name="I" label="{i18n>viewFormularioNovaObrigacaoSC}">
 								<fb:control>
 									<ComboBox items="{path: '/SuporteContratado'}" selectionChange="onSelectChange" selectedKey="{/CheckSuporteContratado}">
@@ -164,6 +171,9 @@
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 						</Column>
 						<Column width="6rem">
+							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						</Column>						
+						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
 						</Column>
 						<Column width="6rem">
@@ -178,12 +188,9 @@
 						<Column width="6rem">
 							<Text text="{i18n>formularioObrigacaoLabelValorSuporte}"/>
 						</Column>
-						<Column width="15rem">
+						<Column width="6rem">
 							<Text text="{i18n>formularioObrigacaoLabelObservacoes}"/>
 						</Column>
-						<Column width="15rem">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
-						</Column>						
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -194,6 +201,7 @@
 								<Text text="{tblModeloObrigacao.nome_obrigacao}"/>
 								<Text text="{tblDominioPeriodicidadeObrigacao.descricao}"/>
 								<Text text="{tblDominioAnoFiscal.ano_fiscal}"/>
+								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>									
 								<Text text="{prazo_de_entrega_calculado}"/>
 								<Text text="{tblRespostaObrigacao.data_extensao}"/>
 								<!--<Text text="{tblDominioStatusObrigacao.descricao}"/>
@@ -202,8 +210,7 @@
 								<Text text="{tblDominioObrigacaoStatus.descricao_obrigacao_status}" />
 								<Text text="{tblRespostaObrigacao.suporte_contratado}"/>								
 								<Text text="{tblRespostaObrigacao.suporte_valor}"/>
-								<Text text="{tblRespostaObrigacao.suporte_especificacao}"/>		
-								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>	
+								<Text text="{tblRespostaObrigacao.suporte_especificacao}"/>	
 							</cells>
 						</ColumnListItem>
 					</items>

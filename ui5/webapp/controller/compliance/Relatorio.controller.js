@@ -83,6 +83,7 @@ sap.ui.define([
 
 		onExit: function () {
 			this._onClearSelecoes();
+			Utils.displayFormat(this);	
 			this._atualizarDados();			
 			this.aKeys = [];
 			this.aFilters = [];
@@ -195,7 +196,7 @@ sap.ui.define([
 			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataExtensaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoInicio").getDate().toString().padStart(2,'0')) : null : null;
 			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataExtensaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoFim").getDate().toString().padStart(2,'0')) : null : null;			
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
-			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial") ? this.getModel().getProperty("/CheckObrigacaoInicial") === undefined ? null : this.getModel().getProperty("/CheckObrigacaoInicial") == "1" ? ["true"] : ["false"] : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
 
 			var oWhere = []; 
@@ -210,7 +211,8 @@ sap.ui.define([
 			oWhere.push(oDataExtensaoInicio === null? null : vetorInicioExtensao);
 			oWhere.push(oDataExtensaoFim === null? null : vetorFimExtensao);			
 			oWhere.push(oDominioStatusObrigacao);
-			oWhere.push(oCheckObrigacao);
+
+			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
 			oWhere.push(null);	
 			
@@ -263,7 +265,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioPais", aRegistro);
 				}
 			});		
-			oWhere[13] = ["tblObrigacaoAcessoria.nome"];
+			oWhere[13] = ["tblModeloObrigacao.nome_obrigacao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -275,7 +277,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ObrigacaoAcessoria", aRegistro);
+					that.getModel().setProperty("/ModeloObrigacao", aRegistro);
 				}
 			});	
 			oWhere[13] = ["tblDominioPeriodicidadeObrigacao.descricao"];
@@ -311,7 +313,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
 				}
 			});		
-			oWhere[13] = ["tblDominioStatusObrigacao.descricao"];
+			oWhere[13] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -326,7 +328,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioStatusObrigacao", aRegistro);
 				}
 			});	
-			oWhere[13] = ["tblObrigacao.prazo_entrega"];
+			oWhere[13] = ["prazo_de_entrega_calculado"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -338,11 +340,15 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ObrigacaoPrazoMin", Utils.bancoParaJsDate(aRegistro[0]["min(tblObrigacao.prazo_entrega)"]));
-					that.getModel().setProperty("/ObrigacaoPrazoMax", Utils.bancoParaJsDate(aRegistro[0]["max(tblObrigacao.prazo_entrega)"]));	
+					that.getModel().setProperty("/ObrigacaoPrazoMin", Utils.bancoParaJsDate(
+						aRegistro[0] ? aRegistro[0]["min(prazo_de_entrega_calculado)"] : null
+					));
+					that.getModel().setProperty("/ObrigacaoPrazoMax", Utils.bancoParaJsDate(
+						aRegistro[0] ? aRegistro[0]["max(prazo_de_entrega_calculado)"] : null
+					));	
 				}
 			});	
-			oWhere[13] = ["tblObrigacao.extensao"];
+			oWhere[13] = ["tblRespostaObrigacao.data_extensao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -354,8 +360,27 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ObrigacaoExtensaoMin", Utils.bancoParaJsDate(aRegistro[0]["min(tblObrigacao.extensao)"]));
-					that.getModel().setProperty("/ObrigacaoExtensaoMax", Utils.bancoParaJsDate(aRegistro[0]["max(tblObrigacao.extensao)"]));	
+					that.getModel().setProperty("/ObrigacaoExtensaoMin", Utils.bancoParaJsDate(
+						aRegistro[0] ? aRegistro[0]["min(tblRespostaObrigacao.data_extensao)"] : null
+					));
+					that.getModel().setProperty("/ObrigacaoExtensaoMax", Utils.bancoParaJsDate(
+						aRegistro[0] ? aRegistro[0]["max(tblRespostaObrigacao.data_extensao)"] : null
+					));	
+				}
+			});		
+			oWhere[13] = ["tblDominioAnoCalendario.ano_calendario"];
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);	
 				}
 			});				
 		},
@@ -485,12 +510,12 @@ sap.ui.define([
 				// column definitions with column name and binding info for the content
 
 				columns : [{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaTipo"),
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro1"),
 					template : {
 						content : "{tblDominioObrigacaoAcessoriaTipo.tipo}"
 					}
 				}, {
-					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
+					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesSelectEmpresas"),
 					template : {
 						content : "{tblEmpresa.nome}"
 					}
@@ -500,9 +525,9 @@ sap.ui.define([
 						content : "{tblDominioPais.pais}"
 					}
 				}, {
-					name : this.getResourceBundle().getText("viewComplianceFormularioDetalhesObrigacaoListagemObrigações"),
+					name : this.getResourceBundle().getText("viewEmpresasObrigacoesAcessorias"),
 					template : {
-						content : "{tblObrigacaoAcessoria.nome}"
+						content : "{tblModeloObrigacao.nome_obrigacao}"
 					}
 				}, {
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPeriodicidade"),
@@ -515,39 +540,39 @@ sap.ui.define([
 						content : "{tblDominioAnoFiscal.ano_fiscal}"
 					}
 				},{
+					name : this.getResourceBundle().getText("viewGeralAnoCalendario"),
+					template : {
+						content : "{tblDominioAnoCalendario.ano_calendario}"
+					}
+				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaPrazoEntrega"),
 					template : {
-						content : "{tblObrigacao.prazo_entrega}"
+						content : "{prazo_de_entrega_calculado}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaExtensao"),
 					template : {
-						content : "{tblObrigacao.extensao}"
+						content : "{tblRespostaObrigacao.data_extensao}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaStatus"),
 					template : {
-						content : "{tblDominioStatusObrigacao.descricao}"
-					}
-				},{
-					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesBotaoRequisicao"),
-					template : {
-						content : "{tblObrigacao.obrigacao_inicial}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+						content : "{tblDominioObrigacaoStatus.descricao_obrigacao_status}"//"{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
 					}
 				},{
 					name : this.getResourceBundle().getText("viewComplianceListagemObrigacoesColunaSuporteContratado"),
 					template : {
-						content : "{tblObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
+						content : "{tblRespostaObrigacao.suporte_contratado}"//"{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"
 					}
 				},{
-					name : this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					name : this.getResourceBundle().getText("formularioObrigacaoLabelValorSuporte"),
 					template : {
-						content : "{tblObrigacao.suporte}"
+						content : "{tblRespostaObrigacao.suporte_valor}"
 					}
 				},{
-					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
+					name : this.getResourceBundle().getText("formularioObrigacaoLabelObservacoes"),
 					template : {
-						content : "{tblObrigacao.observacoes}"
+						content : "{tblRespostaObrigacao.suporte_especificacao}"
 					}
 				}]
 			});
@@ -591,7 +616,7 @@ sap.ui.define([
 			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataExtensaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoInicio").getDate().toString().padStart(2,'0')) : null : null;
 			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataExtensaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoFim").getDate().toString().padStart(2,'0')) : null : null;			
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
-			var oCheckObrigacao = this.getModel().getProperty("/CheckObrigacaoInicial") ? this.getModel().getProperty("/CheckObrigacaoInicial") === undefined ? null : this.getModel().getProperty("/CheckObrigacaoInicial") == "1" ? ["true"] : ["false"] : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
 
 			var oWhere = []; 
@@ -606,7 +631,7 @@ sap.ui.define([
 			oWhere.push(oDataExtensaoInicio === null? null : vetorInicioExtensao);
 			oWhere.push(oDataExtensaoFim === null? null : vetorFimExtensao);			
 			oWhere.push(oDominioStatusObrigacao);
-			oWhere.push(oCheckObrigacao);
+			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
 			
 			this._preencheReportObrigacao(oWhere);
@@ -627,7 +652,9 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["prazo_de_entrega_calculado"] = aRegistro[i]["prazo_de_entrega_calculado"] 
-						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["prazo_de_entrega_calculado"]) 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(
+							aRegistro[i]["tblDominioAnoCalendario.ano_calendario"]+aRegistro[i]["prazo_de_entrega_calculado"].substring(4,10)
+							) 
 						: null;
 						aRegistro[i]["tblRespostaObrigacao.data_extensao"] = aRegistro[i]["tblRespostaObrigacao.data_extensao"] 
 						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblRespostaObrigacao.data_extensao"]) 

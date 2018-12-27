@@ -85,7 +85,7 @@
 									<Text text="{/empresa/pais}" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaTipoSocietário}">
+							<form:FormElement label="{i18n>viewDetalhesDaEmpresaVinculadaTipoSocietario}">
 								<form:fields>
 									<!--<Select id="selectTipoSocietario">
 										<items>
