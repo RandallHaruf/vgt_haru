@@ -11,7 +11,7 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
-						<Link text="{i18n>viewTAXMenu2} Empresas" enabled="false" />
+						<Link text="{i18n>viewTAXMenu2}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
