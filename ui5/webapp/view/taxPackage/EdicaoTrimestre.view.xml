@@ -408,7 +408,7 @@
 											<Text text="{i18n>viewGeralTotalInterim}" />
 										</Column>
 										<Column width="10rem">
-											<Text text="{i18n>viewGeralTaxDue/(overpaid}" />
+											<Text text="{i18n>viewGeralTaxDueoverpaid}" />
 										</Column>
 									</columns>
 									<items>
