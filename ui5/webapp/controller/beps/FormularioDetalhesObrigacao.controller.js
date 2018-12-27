@@ -450,6 +450,7 @@ sap.ui.define(
 			},
 			_onRouteMatched: function (oEvent) {
 				this.getModel().setProperty("/IsDeclaracao", false);
+				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 
 				var that = this;
 				NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
