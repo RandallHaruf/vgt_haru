@@ -18,9 +18,20 @@ sap.ui.define(
 			
 			formataData: function (sData){
 				var fDataNoPadrao = "";
-				if (sData){
-					fDataNoPadrao = sData.getDate().toString().padStart(2,"0") + "/" +(sData.getMonth() +1).toString().padStart(2,"0") + "/" + sData.getFullYear().toString() ;
+				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
+				switch(lingua){
+					case "pt-BR":
+						if (sData){
+							fDataNoPadrao = sData.getDate().toString().padStart(2,"0") + "/" +(sData.getMonth() +1).toString().padStart(2,"0") + "/" + sData.getFullYear().toString() ;
+						}						
+						break;
+					case "en-US":
+						if (sData){
+							fDataNoPadrao = (sData.getMonth() +1).toString().padStart(2,"0") + "/" + sData.getDate().toString().padStart(2,"0") + "/" + sData.getFullYear().toString() ;
+						}										
+						break;
 				}
+
 				return fDataNoPadrao;
 			},
 			
@@ -32,7 +43,16 @@ sap.ui.define(
 
 			stringDataDoBancoParaStringDDMMYYYY: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
-				var DataFinal = dataString.substring(8,10)+"/"+dataString.substring(5,7)+"/"+dataString.substring(4,0);
+				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
+				var DataFinal = "";
+				switch(lingua){
+					case "pt-BR":
+						DataFinal = dataString.substring(8,10)+"/"+dataString.substring(5,7)+"/"+dataString.substring(4,0);
+						break;
+					case "en-US":	
+						DataFinal = dataString.substring(5,7)+"/"+dataString.substring(8,10)+"/"+dataString.substring(4,0);
+						break;
+				}
 				return DataFinal;
 			},
 			
@@ -45,21 +65,6 @@ sap.ui.define(
 				return DataFinal;
 			},
 			
-			formatData: function (data,that){
-				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
-				var formatFull = "";
-				var formatSemAno = "";
-				switch (lingua){
-					case "pt-BR":
-						formatFull = "dd/MM/yyyy";
-						formatSemAno = "dd/MM";
-						break;
-					case "en-US":
-						formatFull = "MM/dd/yyyy";
-						formatSemAno = "MM/dd";
-						break;
-				}
-			},
 			bancoParaJsDate: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
 				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
