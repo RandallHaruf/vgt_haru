@@ -53,6 +53,8 @@ sap.ui.define(
 			},
 			
 			onSelecionarEmpresa: function (oEvent) {
+				this.setBusy(this.byId("tabelaEmpresas"), true);
+				
 				var oEmpresa = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				delete oEmpresa.iconeStatusPrimeiroPeriodo;
 				delete oEmpresa.iconeStatusSegundoPeriodo;
@@ -71,6 +73,8 @@ sap.ui.define(
 			},
 			
 			_onRouteMatched: function (oEvent) {
+				this.setBusy(this.byId("tabelaEmpresas"), false);
+				
 				var that = this;
 				
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {

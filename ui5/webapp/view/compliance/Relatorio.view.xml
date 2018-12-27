@@ -173,16 +173,16 @@
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 						</Column>
 						<Column width="6rem">
-							<Text text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}"/>
-						</Column>
-						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
 						</Column>
-						<Column width="15rem">
-							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"/>
+						<Column width="6rem">
+							<Text text="{i18n>formularioObrigacaoLabelValorSuporte}"/>
 						</Column>
 						<Column width="15rem">
-							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+							<Text text="{i18n>formularioObrigacaoLabelObservacoes}"/>
+						</Column>
+						<Column width="15rem">
+							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>						
 					</columns>
 					<items>
@@ -191,18 +191,19 @@
 								<Text text="{tblDominioObrigacaoAcessoriaTipo.tipo}"/>
 								<Text text="{tblEmpresa.nome}"/>
 								<Text text="{tblDominioPais.pais}"/>
-								<Text text="{tblObrigacaoAcessoria.nome}"/>
+								<Text text="{tblModeloObrigacao.nome_obrigacao}"/>
 								<Text text="{tblDominioPeriodicidadeObrigacao.descricao}"/>
 								<Text text="{tblDominioAnoFiscal.ano_fiscal}"/>
-								<Text text="{tblObrigacao.prazo_entrega}"/>
-								<Text text="{tblObrigacao.extensao}"/>
-								<Text text="{tblDominioStatusObrigacao.descricao}"/><!--
+								<Text text="{prazo_de_entrega_calculado}"/>
+								<Text text="{tblRespostaObrigacao.data_extensao}"/>
+								<!--<Text text="{tblDominioStatusObrigacao.descricao}"/>
 								<Text text="{= ${obrigacao_inicial} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}" />
 								<Text text="{= ${suporte_contratado} === 1 ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao}}"/>-->
-								<Text text="{tblObrigacao.obrigacao_inicial}" />
-								<Text text="{tblObrigacao.suporte_contratado}"/>								
-								<Text text="{tblObrigacao.suporte}"/>
-								<Text text="{tblObrigacao.observacoes}"/>								
+								<Text text="{tblDominioObrigacaoStatus.descricao_obrigacao_status}" />
+								<Text text="{tblRespostaObrigacao.suporte_contratado}"/>								
+								<Text text="{tblRespostaObrigacao.suporte_valor}"/>
+								<Text text="{tblRespostaObrigacao.suporte_especificacao}"/>		
+								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>	
 							</cells>
 						</ColumnListItem>
 					</items>

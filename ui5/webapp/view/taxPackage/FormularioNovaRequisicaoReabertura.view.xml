@@ -6,7 +6,7 @@
 	xmlns:f2="sap.f"
 	xmlns="sap.m">
 	<f2:DynamicPage
-		title="Tax Package - Formulário de Requisição de Reabertura"
+		title="{i18n>viewFormularioNovaReaquisiçãoReaberturaTaxPackageFormuláriodeRequisiçãodeReabertura}"
 		showFooter="true">
 		<f2:title>
 			<f2:DynamicPageTitle>

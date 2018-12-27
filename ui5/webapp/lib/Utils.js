@@ -15,13 +15,26 @@ sap.ui.define(
 				}
 				return fConversao;
 			},
+			
 			formataData: function (sData){
 				var fDataNoPadrao = "";
-				if (sData){
-					fDataNoPadrao = sData.getDate().toString().padStart(2,"0") + "/" +(sData.getMonth() +1).toString().padStart(2,"0") + "/" + sData.getFullYear().toString() ;
+				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
+				switch(lingua){
+					case "pt-BR":
+						if (sData){
+							fDataNoPadrao = sData.getDate().toString().padStart(2,"0") + "/" +(sData.getMonth() +1).toString().padStart(2,"0") + "/" + sData.getFullYear().toString() ;
+						}						
+						break;
+					case "en-US":
+						if (sData){
+							fDataNoPadrao = (sData.getMonth() +1).toString().padStart(2,"0") + "/" + sData.getDate().toString().padStart(2,"0") + "/" + sData.getFullYear().toString() ;
+						}										
+						break;
 				}
+
 				return fDataNoPadrao;
 			},
+			
 			dateNowParaBanco: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "/" +(Data.getMonth() +1).toString().padStart(2,"0") + "/" + Data.getFullYear().toString();
@@ -30,9 +43,20 @@ sap.ui.define(
 
 			stringDataDoBancoParaStringDDMMYYYY: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
-				var DataFinal = dataString.substring(8,10)+"/"+dataString.substring(5,7)+"/"+dataString.substring(4,0);
+				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
+				var DataFinal = "";
+				switch(lingua){
+					case "pt-BR":
+						DataFinal = dataString.substring(8,10)+"/"+dataString.substring(5,7)+"/"+dataString.substring(4,0);
+						break;
+					case "en-US":	
+						DataFinal = dataString.substring(5,7)+"/"+dataString.substring(8,10)+"/"+dataString.substring(4,0);
+						break;
+				}
 				return DataFinal;
 			},
+			
+			
 			stringDatacomBarraParaBanco: function (dataString){
 				var DataFinal = "";
 				if(dataString){
@@ -40,6 +64,7 @@ sap.ui.define(
 				}
 				return DataFinal;
 			},
+			
 			bancoParaJsDate: function (dataString){
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"
 				var DataFinal = new Date(dataString.substring(0,4),dataString.substring(5,7)-1,dataString.substring(8,10));
@@ -82,6 +107,7 @@ sap.ui.define(
 				}
 				return tiposPaisTraduzido;
 			},
+			
 			traduzEmpresaStatusTipo: function (intEmpresaStatusTipo,that){
 				var tipoEmpresaStatus = "";
 				switch (intEmpresaStatusTipo){
@@ -113,6 +139,7 @@ sap.ui.define(
 				}
 				return tipoEmpresaStatus;
 			},	
+			
 			traduzEmpresaTipoSocietario: function (intTipoSocietario,that){
 				var tipoSocietario = "";
 				switch (intTipoSocietario){
@@ -163,6 +190,7 @@ sap.ui.define(
 				}
 				return periodoTraduzido;
 			},
+			
 			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
@@ -194,6 +222,7 @@ sap.ui.define(
 				}
 				return periodoTraduzido;
 			},	
+			
 			traduzTiposAliquota: function (intTipoAliquota, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
@@ -209,6 +238,7 @@ sap.ui.define(
 				}
 				return traduzTipoAliquota;
 			},		
+			
 			traduzPaisRegiao: function (intRegiao, that){
 				/*Recebe valores
 				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
@@ -238,7 +268,8 @@ sap.ui.define(
 						break;						
 				}
 				return periodoRegiaoTraduzido;
-			},				
+			},
+			
 			dateNowParaArquivo: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "_" +(Data.getMonth() +1).toString().padStart(2,"0") + "_" + Data.getFullYear().toString();
