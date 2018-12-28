@@ -127,7 +127,30 @@ sap.ui.define(
 						break;
 				}
 				return traducao;
-			},			
+			},		
+			traduzTipoTransacao: function (id,that){
+				
+				var traducao = "";
+				switch (id){
+				
+					case 1:
+						traducao = that.getResourceBundle().getText("viewGeralCashInstallmentSettlement");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewGeralCashRefundReimbursementNegativeValue");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("viewGeralPaymentWithIncomeTaxCredits");
+						break;
+					case 4:
+						traducao = that.getResourceBundle().getText("viewGeralPaymentWithOtherTaxCredits");
+						break;
+					case 5:
+						traducao = that.getResourceBundle().getText("viewGeralOtherSpecify");
+						break;
+				}
+				return traducao;
+			},	
 			traduzEmpresaStatusTipo: function (id,that){
 				
 				var traducao = "";

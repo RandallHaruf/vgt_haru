@@ -358,6 +358,9 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i]["tblDominioTipoTransacao.id_dominio_tipo_transacao"],that);           
+					}				
 					that.getModel().setProperty("/DominioTipoTransacao", aRegistro);
 				}
 			});					
