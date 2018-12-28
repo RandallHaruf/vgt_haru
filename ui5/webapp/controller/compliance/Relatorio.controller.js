@@ -18,16 +18,6 @@ sap.ui.define([
 	return BaseController.extend("ui5ns.ui5.controller.compliance.Relatorio", {
 		onInit: function () {
 			this.getView().setModel(new sap.ui.model.json.JSONModel({
-				"ObrigacaoIniciada": [{
-					"key": null,
-					"value": null
-				}, {
-					"key": 1,
-					"value": this.getResourceBundle().getText("viewGeralSim")
-				}, {
-					"key": 0,
-					"value": this.getResourceBundle().getText("viewGeralNao")
-				}],
 				"SuporteContratado": [{
 					"key": null,
 					"value": null
@@ -84,7 +74,17 @@ sap.ui.define([
 		onExit: function () {
 			this._onClearSelecoes();
 			Utils.displayFormat(this);	
-			this._atualizarDados();			
+			this._atualizarDados();		
+			this.getModel().setProperty("/SuporteContratado",[{
+					"key": null,
+					"value": null
+				}, {
+					"key": 1,
+					"value": this.getResourceBundle().getText("viewGeralSim")
+				}, {
+					"key": 0,
+					"value": this.getResourceBundle().getText("viewGeralNao")
+				}]);
 			this.aKeys = [];
 			this.aFilters = [];
 			this.oModel = null;
@@ -211,16 +211,16 @@ sap.ui.define([
 			oWhere.push(oDataExtensaoInicio === null? null : vetorInicioExtensao);
 			oWhere.push(oDataExtensaoFim === null? null : vetorFimExtensao);			
 			oWhere.push(oDominioStatusObrigacao);
-
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
+			oWhere.push(null);	
 			oWhere.push(null);	
 			
 			/* ----- ESTE TRECHO DE CODIGO FOI PARA A FUNCAO geraRelatorio
 			this._preencheReportObrigacao(oWhere);
 			*/
 
-			oWhere[13] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
+			oWhere[14] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -235,7 +235,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", aRegistro);
 				}
 			});		
-			oWhere[13] = ["tblEmpresa.nome"];
+			oWhere[14] = ["tblEmpresa.nome"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -250,7 +250,7 @@ sap.ui.define([
 					that.getModel().setProperty("/Empresa", aRegistro);
 				}
 			});				
-			oWhere[13] = ["tblDominioPais.pais"];
+			oWhere[14] = ["tblDominioPais.pais"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -265,7 +265,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioPais", aRegistro);
 				}
 			});		
-			oWhere[13] = ["tblModeloObrigacao.nome_obrigacao"];
+			oWhere[14] = ["tblModeloObrigacao.nome_obrigacao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -280,7 +280,7 @@ sap.ui.define([
 					that.getModel().setProperty("/ModeloObrigacao", aRegistro);
 				}
 			});	
-			oWhere[13] = ["tblDominioPeriodicidadeObrigacao.descricao"];
+			oWhere[14] = ["tblDominioPeriodicidadeObrigacao.descricao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -298,7 +298,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 				}
 			});	
-			oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
+			oWhere[14] = ["tblDominioAnoFiscal.ano_fiscal"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -313,7 +313,7 @@ sap.ui.define([
 					that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
 				}
 			});		
-			oWhere[13] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
+			oWhere[14] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -325,10 +325,13 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioObrigacaoStatus.descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(aRegistro[i]["tblDominioObrigacaoStatus.id_dominio_obrigacao_status"],that);           
+					}					
 					that.getModel().setProperty("/DominioStatusObrigacao", aRegistro);
 				}
 			});	
-			oWhere[13] = ["prazo_de_entrega_calculado"];
+			oWhere[14] = ["prazo_de_entrega_calculado"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -348,7 +351,7 @@ sap.ui.define([
 					));	
 				}
 			});	
-			oWhere[13] = ["tblRespostaObrigacao.data_extensao"];
+			oWhere[14] = ["tblRespostaObrigacao.data_extensao"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -368,7 +371,7 @@ sap.ui.define([
 					));	
 				}
 			});		
-			oWhere[13] = ["tblDominioAnoCalendario.ano_calendario"];
+			oWhere[14] = ["tblDominioAnoCalendario.ano_calendario"];
 			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -594,12 +597,7 @@ sap.ui.define([
 		},		
 		
 		_geraRelatorio: function () {
-			/*
-			Esta função gera um array de arrays para serem passados como argumento posteriormente para a função de preencher o relatorio.
-			Para nao passar um argumento aquela posicao de array deve ficar nula.
-			Ex.:
-			[null,null,null,["1","2"],["35"],null,null,["5","8","12","7"]]
-			*/
+
 			var vetorInicioEntrega = [];
 			var vetorInicioExtensao = [];
 			var vetorFimEntrega = [];
@@ -633,12 +631,16 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
-			
+			oWhere.push(null);	
+		
 			this._preencheReportObrigacao(oWhere);
 		},
 		
 		_preencheReportObrigacao: function (oWhere){
 			var that = this;
+			that.setBusy(that.byId("relatorioCompliance"),true);	
+			that.byId("GerarRelatorio").setEnabled(false);	
+			
 			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
 				type: "POST",
 				xhrFields: {
@@ -667,6 +669,9 @@ sap.ui.define([
 						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"],that);						
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
+					
+					that.setBusy(that.byId("relatorioCompliance"),false);	
+					that.byId("GerarRelatorio").setEnabled(true);						
 				}
 			});				
 		}

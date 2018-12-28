@@ -194,6 +194,38 @@ sap.ui.define(
 				}
 				return periodoTraduzido;
 			},
+
+			traduzStatusObrigacao: function (intStatusObrigacao, that){
+				/*Recebe valores
+				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
+				*/
+
+				var statusTraduzido = "";
+				switch (intStatusObrigacao){
+					case 1:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralPending");
+						break;
+					case 2:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralActive");
+						break;
+					case 3:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralExcluded");
+						break;
+					case 4:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralNotStarted");
+						break;						
+					case 5:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralDelayed");
+						break;
+					case 6:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralDeliveredOnTime");
+						break;
+					case 7:
+						statusTraduzido = that.getResourceBundle().getText("viewGeralDeliveredAfterDeadline");
+						break;
+				}
+				return statusTraduzido;
+			},
 			
 			traduzPeriodo: function (stringPeriodo, that){
 				/*Recebe valores

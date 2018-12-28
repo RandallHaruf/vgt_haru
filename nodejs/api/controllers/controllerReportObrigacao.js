@@ -118,6 +118,15 @@ module.exports = {
 			PrazoLEque = aEntrada[7][0]; 	
 		}
 		
+		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			if (aEntrada[13] === null){
+				aEntrada[13] = [];
+			}
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[13].push(JSON.stringify(aEmpresas[j]));
+			}
+		}		
 		
 		for (var i = 0; i < aEntrada.length; i++) {
 			filtro = "";			
@@ -168,7 +177,10 @@ module.exports = {
 							else{
 								filtro = ' (tblRespostaObrigacao."suporte_contratado" = ? or tblRespostaObrigacao."suporte_contratado" is NULL) ';
 							}
-							break;								
+							break;	
+						case 13:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
+							break;							
 					}
 					
 					if(i !== 6 && i !== 7){
@@ -214,6 +226,8 @@ module.exports = {
 			}
 		}
 		
+		sStatement+=' order by tblDominioPais."pais" , tblEmpresa."nome" , tblDominioAnoCalendario."ano_calendario"';
+		
 		db.executeStatement({
 			statement: sStatement,
 			parameters: aParams
@@ -243,9 +257,17 @@ module.exports = {
 			PrazoLEque = aEntrada[7][0]; 	
 		}
 		
-
+		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			if (aEntrada[13] === null){
+				aEntrada[13] = [];
+			}
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[13].push(JSON.stringify(aEmpresas[j]));
+			}
+		}
 		
-		switch(aEntrada[13][0]){
+		switch(aEntrada[14][0]){
 			case "tblDominioObrigacaoAcessoriaTipo.tipo":
 				stringDistinct = 'Select distinct "tblDominioObrigacaoAcessoriaTipo.tipo", "tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo" from (';
 				break;
@@ -425,6 +447,9 @@ module.exports = {
 							else{
 								filtro = ' (tblRespostaObrigacao."suporte_contratado" = ? or tblRespostaObrigacao."suporte_contratado" is NULL) ';
 							}
+							break;		
+						case 13:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
 							break;								
 					}
 					if(i !== 6 && i !== 7){	
@@ -471,7 +496,7 @@ module.exports = {
 		
 		sStatement = stringDistinct + sStatement + ")";
 		
-
+		//sStatement+=' order by tblDominioPais."pais" , tblEmpresa."nome"';
 		
 		db.executeStatement({
 			statement: sStatement,

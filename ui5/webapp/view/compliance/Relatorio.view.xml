@@ -8,11 +8,11 @@
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Listagem Obrigações" press="navToPage2" />-->
-						<Link text="Relatório" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="Relatório Compliance/Beps" save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Compliance/Beps" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<!--<Button
@@ -140,7 +140,8 @@
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
 					<Button
-					text="Gerar {i18n>viewGeralRelatorio}"
+					id="GerarRelatorio"
+					text="{i18n>viewGeralGerar} {i18n>viewGeralRelatorio}"
 					type="Emphasized"
 					press="onGerarRelatorio"/>	
 					</HBox>
@@ -149,7 +150,7 @@
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
-			<ScrollContainer horizontal="true" vertical="true" height="100%">
+			<ScrollContainer id="relatorioCompliance" horizontal="true" vertical="true" height="100%">
 				<Table items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
 					<columns>
 						<Column width="6rem">
