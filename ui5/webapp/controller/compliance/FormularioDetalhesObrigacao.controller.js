@@ -222,12 +222,11 @@ sap.ui.define(
 						beginButton: new sap.m.Button({
 							text: "{i18n>viewGeralSim}",
 							press: function (oEvent2) {
-								oEvent2.getSource().setEnabled(false);
-								oBtnCancelar.setEnabled(false);
-								that.setBusy(dialog, true);
-
-								oData.indConclusao = true;
 								if (oFileUploader.getValue()) {
+									oEvent2.getSource().setEnabled(false);
+									oBtnCancelar.setEnabled(false);
+									that.setBusy(dialog, true);
+									oData.indConclusao = true;
 									oBtnEnviar.setEnabled(false);
 									that.setBusy(oBtnEnviar, true);
 									Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDocumento", oData)
