@@ -327,8 +327,16 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DataPagamentoMin", Utils.bancoParaJsDate(aRegistro[0]["min(tblPagamento.data_pagamento)"]));
-					that.getModel().setProperty("/DataPagamentoMax", Utils.bancoParaJsDate(aRegistro[0]["max(tblPagamento.data_pagamento)"]));					
+					that.getModel().setProperty("/DataPagamentoMin", Utils.bancoParaJsDate(
+						aRegistro[0]
+						? aRegistro[0]["min(tblPagamento.data_pagamento)"]
+						: null
+					));
+					that.getModel().setProperty("/DataPagamentoMax", Utils.bancoParaJsDate(
+						aRegistro[0]
+						? aRegistro[0]["max(tblPagamento.data_pagamento)"]
+						: null
+					));					
 				}
 			});	
 			oWhere[13] = ["tblDominioMoeda.acronimo"];
