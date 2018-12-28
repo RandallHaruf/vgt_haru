@@ -183,7 +183,7 @@ sap.ui.define(
 				}
 				return traducao;
 			},	
-			
+
 			traduzEmpresatraducao: function (id,that){
 				
 				var traducao = "";
@@ -199,6 +199,26 @@ sap.ui.define(
 						break;
 					case 4:
 						traducao = that.getResourceBundle().getText("viewEmpresatraducaoTipo4");
+						break;
+				}
+				return traducao;
+			},	
+			
+			traduzEmpresaTipoSocietario: function (id,that){
+				
+				var traducao = "";
+				switch (id){
+					case 1:
+						traducao = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo1");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo2");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo3");
+						break;
+					case 4:
+						traducao = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo4");
 						break;
 				}
 				return traducao;
