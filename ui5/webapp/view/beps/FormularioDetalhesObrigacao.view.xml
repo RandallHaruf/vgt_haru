@@ -136,7 +136,7 @@
 											selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}"
 											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"
 											>
-											<core:Item text="{nome}" key="{id_dominio_moeda}" />
+											<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
 											</ComboBox>
 									</f:fields>
 								</f:FormElement>
