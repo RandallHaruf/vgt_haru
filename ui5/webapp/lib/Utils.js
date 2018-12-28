@@ -93,217 +93,222 @@ sap.ui.define(
 				that.getModel().setProperty("/displayFormatSemAno", formatSemAno);
 			},
 			
-			traduzStatusTiposPais: function (intPaisTipoStatus,that){
-				var tiposPaisTraduzido = "";
-				switch (intPaisTipoStatus){
+			traduzStatusTiposPais: function (id,that){
+				
+				var traducao = "";
+				switch (id){
 					case 1:
-						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo1");
+						traducao = that.getResourceBundle().getText("viewPaisTipo1");
 						break;
 					case 2:
-						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo2");
+						traducao = that.getResourceBundle().getText("viewPaisTipo2");
 						break;
 					case 3:
-						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo3");
+						traducao = that.getResourceBundle().getText("viewPaisTipo3");
 						break;
 					case 4:
-						tiposPaisTraduzido = that.getResourceBundle().getText("viewPaisTipo4");
+						traducao = that.getResourceBundle().getText("viewPaisTipo4");
 						break;
 				}
-				return tiposPaisTraduzido;
+				return traducao;
 			},
-			
-			traduzEmpresaStatusTipo: function (intEmpresaStatusTipo,that){
-				var tipoEmpresaStatus = "";
-				switch (intEmpresaStatusTipo){
+			traduzJurisdicao: function (id,that){
 				
+				var traducao = "";
+				switch (id){
 					case 1:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo1");
+						traducao = that.getResourceBundle().getText("viewGeralFederal");
 						break;
 					case 2:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo2");
+						traducao = that.getResourceBundle().getText("viewGeralState");
 						break;
 					case 3:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo3");
+						traducao = that.getResourceBundle().getText("viewGeralCity");
+						break;
+				}
+				return traducao;
+			},			
+			traduzEmpresaStatusTipo: function (id,that){
+				
+				var traducao = "";
+				switch (id){
+				
+					case 1:
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo1");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo2");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo3");
 						break;
 					case 4:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo4");
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo4");
 						break;
 					case 5:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo5");
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo5");
 						break;
 					case 6:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo6");
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo6");
 						break;
 					case 7:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo7");
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo7");
 						break;
 					case 8:
-						tipoEmpresaStatus = that.getResourceBundle().getText("viewEmpresaStatusTipo8");
+						traducao = that.getResourceBundle().getText("viewEmpresaStatusTipo8");
 						break;						
 				}
-				return tipoEmpresaStatus;
+				return traducao;
 			},	
 			
-			traduzEmpresaTipoSocietario: function (intTipoSocietario,that){
-				var tipoSocietario = "";
-				switch (intTipoSocietario){
+			traduzEmpresatraducao: function (id,that){
+				
+				var traducao = "";
+				switch (id){
 					case 1:
-						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo1");
+						traducao = that.getResourceBundle().getText("viewEmpresatraducaoTipo1");
 						break;
 					case 2:
-						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo2");
+						traducao = that.getResourceBundle().getText("viewEmpresatraducaoTipo2");
 						break;
 					case 3:
-						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo3");
+						traducao = that.getResourceBundle().getText("viewEmpresatraducaoTipo3");
 						break;
 					case 4:
-						tipoSocietario = that.getResourceBundle().getText("viewEmpresaTipoSocietarioTipo4");
+						traducao = that.getResourceBundle().getText("viewEmpresatraducaoTipo4");
 						break;
 				}
-				return tipoSocietario;
+				return traducao;
 			},		
 
-			traduzObrigacaoPeriodo: function (intObrigacaoPeriodo, that){
-				/*Recebe valores
-				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
-				*/
-				
-				var periodoTraduzido = "";
-				switch (intObrigacaoPeriodo){
+			traduzObrigacaoPeriodo: function (id, that){
+
+				var traducao = "";
+				switch (id){
 					case 1:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemanal");
+						traducao = that.getResourceBundle().getText("viewGeralSemanal");
 						break;
 					case 2:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralQuinzenal");
+						traducao = that.getResourceBundle().getText("viewGeralQuinzenal");
 						break;
 					case 3:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralMensal");
+						traducao = that.getResourceBundle().getText("viewGeralMensal");
 						break;
 					case 4:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralBimestral");
+						traducao = that.getResourceBundle().getText("viewGeralBimestral");
 						break;						
 					case 5:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralTrimestral");
+						traducao = that.getResourceBundle().getText("viewGeralTrimestral");
 						break;
 					case 6:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemestral");
+						traducao = that.getResourceBundle().getText("viewGeralSemestral");
 						break;
 					case 7:
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralAnual");
+						traducao = that.getResourceBundle().getText("viewGeralAnual");
 						break;
 				}
-				return periodoTraduzido;
+				return traducao;
 			},
 
-			traduzStatusObrigacao: function (intStatusObrigacao, that){
-				/*Recebe valores
-				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
-				*/
+			traduzStatusObrigacao: function (id, that){
 
-				var statusTraduzido = "";
-				switch (intStatusObrigacao){
+				var traducao = "";
+				switch (id){
 					case 1:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralPending");
+						traducao = that.getResourceBundle().getText("viewGeralPending");
 						break;
 					case 2:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralActive");
+						traducao = that.getResourceBundle().getText("viewGeralActive");
 						break;
 					case 3:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralExcluded");
+						traducao = that.getResourceBundle().getText("viewGeralExcluded");
 						break;
 					case 4:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralNotStarted");
+						traducao = that.getResourceBundle().getText("viewGeralNotStarted");
 						break;						
 					case 5:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralDelayed");
+						traducao = that.getResourceBundle().getText("viewGeralDelayed");
 						break;
 					case 6:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralDeliveredOnTime");
+						traducao = that.getResourceBundle().getText("viewGeralDeliveredOnTime");
 						break;
 					case 7:
-						statusTraduzido = that.getResourceBundle().getText("viewGeralDeliveredAfterDeadline");
+						traducao = that.getResourceBundle().getText("viewGeralDeliveredAfterDeadline");
 						break;
 				}
-				return statusTraduzido;
+				return traducao;
 			},
 			
-			traduzPeriodo: function (stringPeriodo, that){
-				/*Recebe valores
-				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
-				*/
-				
-				var periodoTraduzido = "";
-				switch (stringPeriodo){
+			traduzPeriodo: function (id, that){
+
+				var traducao = "";
+				switch (id){
 					case "Weekly":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemanal");
+						traducao = that.getResourceBundle().getText("viewGeralSemanal");
 						break;
 					case "Biweekly":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralQuinzenal");
+						traducao = that.getResourceBundle().getText("viewGeralQuinzenal");
 						break;
 					case "Quarterly":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralTrimestral");
+						traducao = that.getResourceBundle().getText("viewGeralTrimestral");
 						break;
 					case "Monthly":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralMensal");
+						traducao = that.getResourceBundle().getText("viewGeralMensal");
 						break;
 					case "Biannual":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralSemestral");
+						traducao = that.getResourceBundle().getText("viewGeralSemestral");
 						break;
 					case "Annual":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralAnual");
+						traducao = that.getResourceBundle().getText("viewGeralAnual");
 						break;
 					case "Bimonthly":
-						periodoTraduzido = that.getResourceBundle().getText("viewGeralBimestral");
+						traducao = that.getResourceBundle().getText("viewGeralBimestral");
 						break;						
 				}
-				return periodoTraduzido;
+				return traducao;
 			},	
 			
-			traduzTiposAliquota: function (intTipoAliquota, that){
-				/*Recebe valores
-				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
-				*/
-				var traduzTipoAliquota = "";
-				switch (intTipoAliquota){
+			traduzTiposAliquota: function (id, that){
+
+				var traducao = "";
+				switch (id){
 					case 1:
-						traduzTipoAliquota = that.getResourceBundle().getText("viewGeralPais");
+						traducao = that.getResourceBundle().getText("viewGeralPais");
 						break;
 					case 2:
-						traduzTipoAliquota = that.getResourceBundle().getText("viewGeralEmpresa");
+						traducao = that.getResourceBundle().getText("viewGeralEmpresa");
 						break;
 				}
-				return traduzTipoAliquota;
+				return traducao;
 			},		
 			
-			traduzPaisRegiao: function (intRegiao, that){
-				/*Recebe valores
-				Semanal, Quinzenal,Trimestral,Mensal,Semestral,Anual
-				*/
-				var periodoRegiaoTraduzido = "";
-				switch (intRegiao){
+			traduzPaisRegiao: function (id, that){
+
+				var traducao = "";
+				switch (id){
 					case 1:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo1");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo1");
 						break;
 					case 2:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo2");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo2");
 						break;
 					case 3:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo3");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo3");
 						break;
 					case 4:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo4");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo4");
 						break;
 					case 5:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo5");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo5");
 						break;
 					case 6:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo6");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo6");
 						break;
 					case 7:
-						periodoRegiaoTraduzido = that.getResourceBundle().getText("viewPaisRegiaoTipo7");
+						traducao = that.getResourceBundle().getText("viewPaisRegiaoTipo7");
 						break;						
 				}
-				return periodoRegiaoTraduzido;
+				return traducao;
 			},
 			
 			dateNowParaArquivo: function (){

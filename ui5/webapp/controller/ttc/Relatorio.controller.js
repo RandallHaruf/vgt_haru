@@ -279,6 +279,9 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i]["tblDominioJurisdicao.id_dominio_jurisdicao"],that);           
+					}					
 					that.getModel().setProperty("/DominioJurisdicao", aRegistro);
 				}
 			});		
