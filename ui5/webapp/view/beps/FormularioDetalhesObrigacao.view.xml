@@ -210,7 +210,7 @@
 													<Title text="{i18n>viewEmpresasNome}"/>
 												</Column>
 												<Column>
-													<Title text="Data Upload"/>
+													<Title text="{i18n>viewFormularioComplianceBepsDataUp}"/>
 												</Column>
 												<Column width="6.5rem"/>
 											</columns>
