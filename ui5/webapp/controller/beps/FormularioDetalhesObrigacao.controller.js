@@ -119,6 +119,7 @@ sap.ui.define(
 								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
 								dataExtensao: obj["data_extensao"]
 							}, function (response) {
+								that.getView().byId("fileUploader").setValue("");
 								that.getRouter().navTo("bepsListagemObrigacoes");
 							});
 						}

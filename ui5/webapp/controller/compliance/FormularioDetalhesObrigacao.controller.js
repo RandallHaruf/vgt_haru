@@ -121,6 +121,7 @@ sap.ui.define(
 								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
 								dataExtensao: obj["data_extensao"]
 							}, function (response) {
+								that.getView().byId("fileUploader").setValue("");
 								that.getRouter().navTo("complianceListagemObrigacoes");
 							});
 						}
@@ -316,7 +317,7 @@ sap.ui.define(
 					IntMes = Number(arryData[1].toString());
 					IntMes = IntMes - 1;
 					strMes = IntMes.toString();
-					prazo_entrega_customizado = new Date(arryData[0] + '-' + strMes + '-' + arryData[2]);
+					prazo_entrega_customizado = new Date(this.getModel().getProperty("RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' + arryData[2]);
 				} else {
 					prazo_entrega_customizado = null;
 				}
@@ -324,7 +325,7 @@ sap.ui.define(
 				IntMes = Number(arryData[1].toString());
 				IntMes = IntMes - 1;
 				strMes = IntMes.toString();
-				var prazo_entrega = new Date(arryData[0] + '-' + strMes + '-' + arryData[2]);
+				var prazo_entrega = new Date(this.getModel().getProperty("RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' + arryData[2]);
 				arryData = Data.split('-');
 				IntMes = Number(arryData[1].toString());
 				IntMes = IntMes - 1;
