@@ -316,7 +316,7 @@ sap.ui.define(
 					IntMes = Number(arryData[1].toString());
 					IntMes = IntMes - 1;
 					strMes = IntMes.toString();
-					prazo_entrega_customizado = new Date(arryData[0] + '-' + strMes + '-' + arryData[2]);
+					prazo_entrega_customizado = new Date(this.getModel().getProperty("/RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' + arryData[2]);
 				} else {
 					prazo_entrega_customizado = null;
 				}
@@ -324,7 +324,7 @@ sap.ui.define(
 				IntMes = Number(arryData[1].toString());
 				IntMes = IntMes - 1;
 				strMes = IntMes.toString();
-				var prazo_entrega = new Date(arryData[0] + '-' + strMes + '-' + arryData[2]);
+				var prazo_entrega = new Date(this.getModel().getProperty("/RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' + arryData[2]);
 				arryData = Data.split('-');
 				IntMes = Number(arryData[1].toString());
 				IntMes = IntMes - 1;
