@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI, Validador) {
+	function (BaseController, NodeAPI, Validador , Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroNameOfTaxTTC", {
 			
 			/* Métodos a implementar */
@@ -139,7 +140,12 @@ sap.ui.define(
 				var that = this;
 				
 				NodeAPI.listarRegistros("DeepQuery/NameOfTax?indDefault=true", function (response) {
-					that.getModel().setProperty("/objetos", response);
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
+						}
+						that.getModel().setProperty("/objetos", aResponse);							
+					//that.getModel().setProperty("/objetos", response);
 				});
 				
 				NodeAPI.listarRegistros("DominioPais", function (response) {
@@ -152,7 +158,12 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("DominioTaxClassification", function (response) {
 					response.unshift({ "id_dominio_tax_classification": null, "classification": ""  });
-					that.getModel().setProperty("/DominioTaxClassification", response);
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
+						}
+						that.getModel().setProperty("/DominioTaxClassification", aResponse);						
+					//that.getModel().setProperty("/DominioTaxClassification", response);
 				});
 			},
 			

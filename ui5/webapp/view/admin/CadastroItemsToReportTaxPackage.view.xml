@@ -29,13 +29,13 @@
 					<Toolbar>
 						<Title 
 							id="cabecalhoTabelaObjetos" 
-							text="Items to Report"/>
+							text="{i18n>viewGeralItemsTR}"/>
 						<ToolbarSpacer />
 						<Button 
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
 							press="onNovoObjeto" 
-							text="novo"
+							text="{i18n>viewGeralNovo}"
 							type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>

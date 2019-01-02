@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/model/Constants"
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, Constants) {
+	function (BaseController, Constants,Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroDiferencasTaxPackage", {
 
 			onInit: function () {
@@ -20,17 +21,7 @@ sap.ui.define(
 					}
 				});
 
-				jQuery.ajax(Constants.urlBackend + "DominioDiferencaTipo", {
-					type: "GET",
-					xhrFields: {
-						withCredentials: true
-					},
-					crossDomain: true,
-					dataType: "json",
-					success: function (response) {
-						that.getModel().setProperty("/DominioDiferencaTipo", response);
-					}
-				});
+
 			},
 
 			onNovoObjeto: function (oEvent) {
@@ -306,6 +297,23 @@ sap.ui.define(
 
 				var that = this;
 
+				jQuery.ajax(Constants.urlBackend + "DominioDiferencaTipo", {
+					type: "GET",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					dataType: "json",
+					success: function (response) {
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["tipo"] = Utils.traduzDominioDiferencaTipo(aResponse[i]["id_dominio_diferenca_tipo"],that);
+						}
+						that.getModel().setProperty("/DominioDiferencaTipo", aResponse);						
+						//that.getModel().setProperty("/DominioDiferencaTipo", response);
+					}
+				});
+
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/DiferencaOpcao", {
 					type: "GET",
 					xhrFields: {
@@ -314,7 +322,14 @@ sap.ui.define(
 					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
-						that.getModel().setProperty("/objetos", response);
+						
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["tipo"] = Utils.traduzDominioDiferencaTipo(aResponse[i]["fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo"],that);
+						}
+						that.getModel().setProperty("/objetos", aResponse);
+					
+						//that.getModel().setProperty("/objetos", response);
 					}
 				});
 			}

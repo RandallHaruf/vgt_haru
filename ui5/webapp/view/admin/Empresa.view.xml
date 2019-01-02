@@ -48,9 +48,9 @@
 					<Column>
 						<Text text="{i18n>viewEmpresasNome}" />
 					</Column>
-					<Column>
+					<!--<Column>
 						<Text text="{i18n>viewEmpresasPais}" />
-					</Column>
+					</Column>-->
 					<Column>
 						<Text text="Status" />
 					</Column>
@@ -62,7 +62,7 @@
 						press="onAbrirObjeto">
 						<cells>
 							<ObjectIdentifier title="{nome}"/>
-							<Text text="{pais}" />
+						<!--	<Text text="{pais}" />-->
 							<Text text="{status}" />
 						</cells>
 					</ColumnListItem>

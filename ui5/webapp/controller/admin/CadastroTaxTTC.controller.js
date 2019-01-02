@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/Utils"	
 	],
-	function (BaseController, Constants, Validador) {
+	function (BaseController, Constants, Validador ,Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroTaxTTC", {
 			
 			/* Métodos a implementar */
@@ -127,7 +128,12 @@ sap.ui.define(
 				crossDomain: true,
 					dataType: "json",
 					success: function (response) {
-						that.getModel().setProperty("/objetos", response);
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
+						}
+						that.getModel().setProperty("/objetos", aResponse);							
+						//that.getModel().setProperty("/objetos", response);
 					}
 				});
 			},
@@ -144,7 +150,12 @@ sap.ui.define(
 					dataType: "json",
 					success: function (response) {
 						response.unshift({ id: null, nome: "" });
-						that.getModel().setProperty("/DominioTaxClassification", response);
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
+						}
+						that.getModel().setProperty("/DominioTaxClassification", aResponse);							
+						//that.getModel().setProperty("/DominioTaxClassification", response);
 					}
 				});
 				

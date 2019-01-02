@@ -112,6 +112,19 @@ sap.ui.define(
 				}
 				return traducao;
 			},
+			traduzDominioTaxClassification: function (id,that){
+				
+				var traducao = "";
+				switch (id){
+					case 1:
+						traducao = that.getResourceBundle().getText("viewGeralDominioTaxClassificationTipo1");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewGeralDominioTaxClassificationTipo2");
+						break;
+				}
+				return traducao;
+			},			
 			traduzJurisdicao: function (id,that){
 				
 				var traducao = "";
