@@ -81,7 +81,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("bepsFormularioDetalhesObrigacao", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 			

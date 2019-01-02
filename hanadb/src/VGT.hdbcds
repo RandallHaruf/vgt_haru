@@ -604,4 +604,21 @@ context VGT {
         fk_id_usuario            : association[*, 0..1] to VGT.USUARIO { id_usuario };
         ind_conclusao            : Boolean;
     };
+
+    /*@@layout{"layoutInfo":{"x":-2701,"y":750.5}}*/
+    entity DOMINIO_REQUISICAO_ENCERRAMENTO_PERIODO_STATUS {
+        key id_dominio_requisicao_encerramento_periodo_status : Integer64 not null;
+            status                                            : String(200);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2261,"y":590.5}}*/
+    entity REQUISICAO_ENCERRAMENTO_PERIODO_TAX_PACKAGE {
+        key id_requisicao_encerramento_periodo_tax_package    : Integer64 not null;
+            data_requisicao                                   : LocalDate;
+            resposta                                          : String(2000);
+            fk_dominio_requisicao_encerramento_periodo_status : association[*, 0..1] to VGT.DOMINIO_REQUISICAO_ENCERRAMENTO_PERIODO_STATUS { id_dominio_requisicao_encerramento_periodo_status };
+            fk_rel_tax_package_periodo                        : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+            fk_usuario                                        : association[*, 0..1] to VGT.USUARIO { id_usuario };
+            observacao                                        : String(2000);
+    };
 };

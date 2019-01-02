@@ -100,7 +100,7 @@ sap.ui.define(
 									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);
 								}
 								var dataAtual = new Date();
-								dataPrazo = new Date(dataPrazo.getFullYear(), dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
+								dataPrazo = new Date(obj["ano_calendario"], dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
 								if (dataPrazo < dataAtual) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
 								} else {
@@ -460,7 +460,7 @@ sap.ui.define(
 					}
 
 				});
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[

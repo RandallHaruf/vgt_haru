@@ -145,33 +145,50 @@ sap.ui.define(
 				});
 			},
 
-			onSubmeterPeriodo: function (oPeriodo) {
-				/*var dialog = new sap.m.Dialog({
-					title: "Confirmação de Fechamento",
-					type: "Message",
-					content: new sap.m.Text({ text: "Você tem certeza que deseja fechar o período?" }),
-					beginButton: new sap.m.Button({
-						text: "Submeter",
-						press: function () {
-							//sap.m.MessageToast.show("Submit pressed!");
-							alert("Submeter: " + oPeriodo.periodo);
-							dialog.close();
-						}
-					}),
-					endButton: new sap.m.Button({
-						text: "Cancelar",
-						press: function () {
-							dialog.close();
-						}
-					}),
-					afterClose: function() {
-						dialog.destroy();
-					}
-				});
-	
-				dialog.open();	*/
+			onSubmeterPeriodo: function (oEvent, oPeriodo) {
 				var that = this,
-					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
+					oBtnSubmeterPeriodo = oEvent.getSource();
+					
+				if (oPeriodo.numero_ordem >= 5) {
+					oBtnSubmeterPeriodo.setEnabled(false);
+					this.setBusy(oBtnSubmeterPeriodo, true);
+					
+					NodeAPI.get("ChecarDeclaracaoEnviada", {
+						queryString: {
+							idRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
+						}
+					}).then(function(result) {
+						oBtnSubmeterPeriodo.setEnabled(true);
+						that.setBusy(oBtnSubmeterPeriodo, false);
+					
+						var json = JSON.parse(result);
+						
+						if (json.success && json.result) {
+							that._dialogSubmeterPeriodo(oPeriodo);
+						}
+						else {
+							jQuery.sap.require("sap.m.MessageBox");
+							
+							// Não é possível encerrar período sem enviar a declaração
+							sap.m.MessageBox.show(that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAvisoFaltaDeclaracao"), {
+								title: that.getResourceBundle().getText("viewGeralAviso")
+							});
+						}
+					})
+					.catch(function(err) {
+						oBtnSubmeterPeriodo.setEnabled(true);
+						that.setBusy(oBtnSubmeterPeriodo, false);
+						
+						alert(err.statusText);
+					});
+				}
+				else {
+					this._dialogSubmeterPeriodo(oPeriodo);
+				}
+			},
+			
+			_dialogSubmeterPeriodo: function (oPeriodo) {
+				var that = this;
 
 				var dialog = new sap.m.Dialog({
 					title: this.getResourceBundle().getText("viewResumoTrimestreJSTEXTSConfirmaçãodeFechamento"),
@@ -183,7 +200,8 @@ sap.ui.define(
 						text: this.getResourceBundle().getText("viewResumoTrimestreJSTEXTSSubmeter"),
 						press: function () {
 							NodeAPI.pAtualizarRegistro("EncerrarTrimestreTaxPackage", "", {
-								relTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
+								relTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo,
+								requerAprovacao: oPeriodo.numero_ordem >= 4
 							}).then(function (response) {
 								dialog.close();
 
@@ -233,38 +251,6 @@ sap.ui.define(
 
 								dialog2.open();
 							});
-							/*NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
-								idEmpresa: sIdEmpresa,
-								idPeriodo: oPeriodo.id_periodo
-							}, function (response) {
-								dialog.close();	
-								
-								var json = JSON.parse(response);
-								
-								if (json.success) {
-									that._atualizarDados();	
-								}
-								else {
-									var dialog2 = new sap.m.Dialog({
-										title: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
-										type: "Message",
-										content: new sap.m.Text({
-											text: json.message
-										}),
-										endButton: new sap.m.Button({
-											text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
-											press: function () {
-												dialog2.close();
-											}
-										}),
-										afterClose: function () {
-											dialog2.destroy();
-										}
-									});
-					
-									dialog2.open();
-								}
-							});*/
 						}
 					}),
 					endButton: new sap.m.Button({
@@ -1144,7 +1130,9 @@ sap.ui.define(
 					return now >= dataInicio && now <= dataFim;
 				case 4:
 					var iAux;
-					if (now >= new Date(iCurrentYear + "/01/1") && now <= new Date(iCurrentYear + "/01/31")) {
+					//if (now >= new Date(iCurrentYear + "/01/1") && now <= new Date(iCurrentYear + "/01/31")) {
+					if (now.getMonth() === 0 && now.getDate() >= 1 && now.getDate() <= 31) {
+						now.setYear(now.getFullYear() + 1);
 						iAux = iCurrentYear - 1;
 						dataInicio = new Date(iAux + "/11/1");
 						dataFim = new Date(iCurrentYear + "/01/31");
@@ -1190,8 +1178,8 @@ sap.ui.define(
 				oButton = new sap.m.Button({
 					icon: "sap-icon://paper-plane",
 					text: that.getResourceBundle().getText("viewGeralFechamento")
-				}).attachPress(function () {
-					that.onSubmeterPeriodo(oPeriodo);
+				}).attachPress(function (oEvent) {
+					that.onSubmeterPeriodo(oEvent, oPeriodo);
 				});
 
 				oToolbar.addContent(oButton);
@@ -1201,6 +1189,10 @@ sap.ui.define(
 				var that = this;
 
 				var oToolbar = this.byId(sIdToolbar);
+
+				if (oPeriodo.status_envio === 5) {
+					oToolbar.addContent(new sap.m.Text({ text: "{i18n>viewGeralAguardandoAprovacao}" }));
+				}
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
@@ -1216,12 +1208,14 @@ sap.ui.define(
 				oToolbar.addContent(oButton);
 
 				// <Button icon="sap-icon://permission" text="{i18n>viewGeralBotaoReabertura}" press="onReabrirPeriodo"/>
-				oButton = new sap.m.Button({
-					icon: "sap-icon://permission",
-					text: that.getResourceBundle().getText("viewGeralReabertura")
-				}).attachPress(function () {
-					that.onReabrirPeriodo(oPeriodo);
-				});
+				if (oPeriodo.status_envio !== 5) { // aguardando aprovação
+					oButton = new sap.m.Button({
+						icon: "sap-icon://permission",
+						text: that.getResourceBundle().getText("viewGeralReabertura")
+					}).attachPress(function () {
+						that.onReabrirPeriodo(oPeriodo);
+					});
+				}
 
 				oToolbar.addContent(oButton);
 			},
@@ -1263,8 +1257,8 @@ sap.ui.define(
 				oButton = new sap.m.Button({
 					icon: "sap-icon://paper-plane",
 					text: that.getResourceBundle().getText("viewGeralFechamento")
-				}).attachPress(function () {
-					that.onSubmeterPeriodo(oPeriodo);
+				}).attachPress(function (oEvent) {
+					that.onSubmeterPeriodo(oEvent, oPeriodo);
 				});
 
 				oToolbar.addContent(oButton);
@@ -1274,6 +1268,10 @@ sap.ui.define(
 				var that = this;
 
 				var oToolbar = this.byId(sIdToolbar);
+
+				if (oPeriodo.status_envio === 5) {
+					oToolbar.addContent(new sap.m.Text({ text: "{i18n>viewGeralAguardandoAprovacao}" }));
+				}
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
@@ -1299,12 +1297,14 @@ sap.ui.define(
 				oToolbar.addContent(oButton);
 
 				// <Button icon="sap-icon://permission" text="{i18n>viewGeralBotaoReabertura}" press="onReabrirPeriodo"/>
-				oButton = new sap.m.Button({
-					icon: "sap-icon://permission",
-					text: that.getResourceBundle().getText("viewGeralReabertura")
-				}).attachPress(function () {
-					that.onReabrirPeriodo(oPeriodo);
-				});
+				if (oPeriodo.status_envio !== 5) { // aguardando aprovação
+					oButton = new sap.m.Button({
+						icon: "sap-icon://permission",
+						text: that.getResourceBundle().getText("viewGeralReabertura")
+					}).attachPress(function () {
+						that.onReabrirPeriodo(oPeriodo);
+					});
+				}
 
 				oToolbar.addContent(oButton);
 			},

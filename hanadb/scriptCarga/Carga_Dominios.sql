@@ -383,6 +383,14 @@ upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_p
 upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(4, 'Sent') where "id_dominio_rel_tax_package_periodo_status_envio" = 4;
 upsert "VGT.DOMINIO_REL_TAX_PACKAGE_PERIODO_STATUS_ENVIO" ("id_dominio_rel_tax_package_periodo_status_envio", "status_envio") values(5, 'Waiting for Approval') where "id_dominio_rel_tax_package_periodo_status_envio" = 5;
 --
+-- select * from "VGT.DOMINIO_REQUISICAO_ENCERRAMENTO_PERIODO_STATUS"
+--
+--
+--
+upsert "VGT.DOMINIO_REQUISICAO_ENCERRAMENTO_PERIODO_STATUS" ("id_dominio_requisicao_encerramento_periodo_status", "status") values(1, 'Pending') where "id_dominio_requisicao_encerramento_periodo_status" = 1;
+upsert "VGT.DOMINIO_REQUISICAO_ENCERRAMENTO_PERIODO_STATUS" ("id_dominio_requisicao_encerramento_periodo_status", "status") values(2, 'Approved') where "id_dominio_requisicao_encerramento_periodo_status" = 2;
+upsert "VGT.DOMINIO_REQUISICAO_ENCERRAMENTO_PERIODO_STATUS" ("id_dominio_requisicao_encerramento_periodo_status", "status") values(3, 'Not Approved') where "id_dominio_requisicao_encerramento_periodo_status" = 3;
+--
 -- 
 --
 ---- select * from "VGT.DOMINIO_MODULO"

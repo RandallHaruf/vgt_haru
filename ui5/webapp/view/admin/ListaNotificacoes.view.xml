@@ -56,8 +56,7 @@
 						items="{
 							path: '/RequisicaoReabertura',
 							sorter: {
-								path: 'nome',
-								group: false
+								path: 'id_requisicao_reabertura'
 							}
 						}"
 						growing="true"
@@ -98,8 +97,7 @@
 						items="{
 							path: '/RequisicaoReaberturaTaxPackage',
 							sorter: {
-								path: 'nome',
-								group: false
+								path: 'id_requisicao_reabertura_tax_tackage'
 							}
 						}"
 						growing="true"
@@ -130,6 +128,40 @@
 									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTaxPackage} ( #{id_requisicao_reabertura_tax_tackage})"/>
 									<Text text="{data_requisicao}"/>
 									<Text text="{justificativa}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTituloTaxPackageRequisicaoEncerramento} ({/ContadorTax2})" width="auto" class="sapUiResponsiveMargin">
+					<Table
+						items="{
+							path: '/RequisicaoEncerramentoPeriodoTaxPackage',
+							sorter: {
+								path: 'id_requisicao_encerramento_periodo_tax_package'
+							}
+						}"
+						growing="true"
+						enableBusyIndicator="true"
+						growingScrollToLoad="true">
+						<columns>
+							<Column>
+								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
+							</Column>
+							<Column
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
+							</Column>
+						</columns>
+			
+						<items>
+							<ColumnListItem
+								type="Navigation"
+								press="onDetalharEncerramentoTaxPackage">
+								<cells>
+									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoEncerramentoPeriodoTaxPackage} (#{id_requisicao_encerramento_periodo_tax_package})"/>
+									<Text text="{data_requisicao}"/>
 								</cells>
 							</ColumnListItem>
 						</items>

@@ -136,6 +136,9 @@ sap.ui.define(
 					case 4: // enviado
 						sIcone = "sap-icon://approvals";
 						break;
+					case 5: // Aguardando aprovação
+						sIcone = "sap-icon://lateness";
+						break;
 				}
 				
 				return sIcone;

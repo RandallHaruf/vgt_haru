@@ -229,6 +229,7 @@ module.exports = {
 				aOutrasAntecipacoes = oTaxPackage.outrasAntecipacoes;
 			
 			atualizarMoeda(sIdTaxPackage, sIdMoeda);
+			atualizarStatus(sIdRelTaxPackagePeriodo);
 			
 			var sIdTaxReconciliation = inserirTaxReconciliation(sIdRelTaxPackagePeriodo, oTaxReconciliation, sIncomeTaxDetails);
 			
@@ -898,8 +899,9 @@ module.exports = {
 	
 	encerrarTrimestre: function (req, res) {
 		if (req.body.relTaxPackagePeriodo && isNumber(req.body.relTaxPackagePeriodo)) {
-				
 			//if (pagamentosObrigatoriosDeclarados(Number(req.body.idEmpresa), Number(req.body.idPeriodo))) {
+			var requerAprovacao = req.body.requerAprovacao == "true";
+			
 			var sQuery =
 				'update "VGT.REL_TAX_PACKAGE_PERIODO" '
 				+ 'set "ind_ativo" = ?, '
@@ -907,7 +909,7 @@ module.exports = {
 				+ '"status_envio" = ? '
 				+ 'where '
 				+ '"id_rel_tax_package_periodo" = ? ',
-				aParams = [false, jsDateObjectToSqlDateString(new Date()), 4 /* enviado */, Number(req.body.relTaxPackagePeriodo)];
+				aParams = [false, jsDateObjectToSqlDateString(new Date()), (requerAprovacao ? 5 : 4) /* aguardando : enviado */, Number(req.body.relTaxPackagePeriodo)];
 				
 			db.executeStatement({
 				statement: sQuery,
@@ -917,10 +919,38 @@ module.exports = {
 					res.send(JSON.stringify(err));
 				}	
 				else {
-					res.send(JSON.stringify({
-						success: true,
-						result: result
-					}));
+					if (requerAprovacao) {
+						sQuery = 
+							'insert into "VGT.REQUISICAO_ENCERRAMENTO_PERIODO_TAX_PACKAGE" ('
+							+ '"id_requisicao_encerramento_periodo_tax_package", '
+							+ '"data_requisicao", '
+							+ '"fk_dominio_requisicao_encerramento_periodo_status.id_dominio_requisicao_encerramento_periodo_status", '
+							+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo", '
+							+ '"fk_usuario.id_usuario") ' 
+							+ 'values ("identity_VGT.REQUISICAO_ENCERRAMENTO_PERIODO_TAX_PACKAGE_id_requisicao_encerramento_periodo_tax_package".nextval, CURRENT_DATE, 1, ?, ?)'; // abre como pending (id = 1)
+						aParams = [req.body.relTaxPackagePeriodo, req.session.usuario.id];
+						
+						db.executeStatement({
+							statement: sQuery,
+							parameters: aParams
+						}, function (err2, result2) {
+							if (err2) {
+								res.send(JSON.stringify(err2));
+							}	
+							else {
+								res.send(JSON.stringify({
+									success: true,
+									result: result2
+								}));
+							}
+						});
+					}
+					else {
+						res.send(JSON.stringify({
+							success: true,
+							result: result
+						}));
+					}
 				}
 			});
 			/*} 
@@ -935,6 +965,41 @@ module.exports = {
 			res.send(JSON.stringify({
 				success: false,
 				message: "ID do relacionamento do Tax Package com o Período é obrigatório"
+			}));
+		}
+	},
+	
+	checarDeclaracaoEnviada: function (req, res) {
+		if (req.query.idRelTaxPackagePeriodo && isNumber(req.query.idRelTaxPackagePeriodo)) {
+			
+			var sQuery = 'select * from "VGT.DECLARACAO" where "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?',
+				aParam = [req.query.idRelTaxPackagePeriodo];
+				
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParam
+			}, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				}	
+				else {
+					var declaracao = result.filter(function (obj) {
+						return obj.ind_declaracao;	
+					});
+					
+					res.send(JSON.stringify({
+						success: true,
+						result: declaracao && declaracao.length
+					}));
+				}
+			});
+		}	
+		else {
+			res.send(JSON.stringify({
+				success: false,
+				error: {
+					message: "Não foi enviado o ID do período a ser verificado."
+				}
 			}));
 		}
 	}
@@ -953,6 +1018,15 @@ function atualizarMoeda (sIdTaxPackage, sFkMoeda) {
 		aParams = [sFkMoeda, sIdTaxPackage];
 	
 	var result = db.executeStatementSync(sQuery, aParams);
+	
+	return result === 1;
+}
+
+function atualizarStatus (sIdRelTaxPackagePeriodo) {
+	var sQuery = 'update "VGT.REL_TAX_PACKAGE_PERIODO" set "status_envio" = ? where "id_rel_tax_package_periodo" = ?',
+		aParam = [3, sIdRelTaxPackagePeriodo]; // em andamento
+	
+	var result = db.executeStatementSync(sQuery, aParam);
 	
 	return result === 1;
 }
