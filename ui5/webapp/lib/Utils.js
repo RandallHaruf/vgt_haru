@@ -354,6 +354,59 @@ sap.ui.define(
 				return traducao;
 			},
 			
+				traduzTrimestre: function (id, that){
+
+				var traducao = "";
+				switch (id){
+				
+					case 1:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo1");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo2");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo3");
+						break;
+					case 4:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo4");
+						break;
+					case 5:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo5");
+						break;
+					case 6:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo6");
+						break;
+				}
+				return traducao;
+			},
+           traduzDominioDiferencaTipo: function (id,that){
+               
+              var traducao = "";
+              switch (id){
+              case 1:
+                   traducao = that.getResourceBundle().getText("viewGeralDominioDiferencaTipo1");
+                     break;
+              case 2:
+                    traducao = that.getResourceBundle().getText("viewGeralDominioDiferencaTipo2");
+                     break;
+                }
+                 return traducao;
+           },
+
+			traduzCategoriaPagamento:function (nome,that){
+               var traducao = "";
+               switch (nome){
+                   case "Borne":
+                      traducao = that.getResourceBundle().getText("viewGeralBorne");
+                      break;
+                   case "Collected":
+                      traducao = that.getResourceBundle().getText("viewGeralCollected");
+                      break;
+               }
+               return traducao;
+			},
+
 			dateNowParaArquivo: function (){
 				var Data = new Date();
 				var fDataNoPadrao =  Data.getDate().toString().padStart(2,"0") + "_" +(Data.getMonth() +1).toString().padStart(2,"0") + "_" + Data.getFullYear().toString();

@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/formatter",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"	
 	],
-	function (BaseController, formatter, NodeAPI) {
+	function (BaseController, formatter, NodeAPI, Utils) {
 		BaseController.extend("ui5ns.ui5.controller.taxPackage.RequisicaoReabertura", {
 			
 			onInit: function () {
@@ -135,6 +136,8 @@ sap.ui.define(
 							      tooltip: "Reprovado"
 							    };
 							}
+								response[i]["periodo"] = Utils.traduzTrimestre(response[i]["numero_ordem"],that);
+							
 						}
 						that.getModel().setProperty("/requisicoes", response);
 					}
