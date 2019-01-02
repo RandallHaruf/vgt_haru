@@ -214,19 +214,23 @@ module.exports = {
 		if(PrazoGEque!==null || PrazoLEque!==null){
 			sStatement = 'select * from (' + sStatement + ') where ';
 			if(PrazoGEque!==null){
-				sStatement+=' "prazo_de_entrega_calculado" >=  ? ';
+				sStatement+=' (EXTRACT(month from "prazo_de_entrega_calculado") > EXTRACT(month from ?) or ((EXTRACT(month from "prazo_de_entrega_calculado") = EXTRACT(month from ?)) and (EXTRACT(day from "prazo_de_entrega_calculado") >= EXTRACT(day from ?)))) ';
+				aParams.push(PrazoGEque);
+				aParams.push(PrazoGEque);
 				aParams.push(PrazoGEque);
 			}
 			if(PrazoGEque!==null && PrazoLEque!==null){
 				sStatement+=' and ';
 			}
 			if(PrazoLEque!==null){
-				sStatement+=' "prazo_de_entrega_calculado" <=  ? ';
+				sStatement+='(EXTRACT(month from "prazo_de_entrega_calculado") < EXTRACT(month from ?) or ((EXTRACT(month from "prazo_de_entrega_calculado") = EXTRACT(month from ?)) and (EXTRACT(day from "prazo_de_entrega_calculado") <= EXTRACT(day from ?))))';
+				aParams.push(PrazoLEque);
+				aParams.push(PrazoLEque);
 				aParams.push(PrazoLEque);
 			}
 		}
 		
-		sStatement+=' order by tblDominioPais."pais" , tblEmpresa."nome" , tblDominioAnoCalendario."ano_calendario"';
+		sStatement+=' order by "tblDominioPais.pais" , "tblEmpresa.nome" , "tblDominioAnoCalendario.ano_calendario"';
 		
 		db.executeStatement({
 			statement: sStatement,
@@ -482,14 +486,20 @@ module.exports = {
 		if(PrazoGEque!==null || PrazoLEque!==null){
 			sStatement = 'select * from (' + sStatement + ') where ';
 			if(PrazoGEque!==null){
-				sStatement+=' "prazo_de_entrega_calculado" >=  ? ';
+				//sStatement+=' "prazo_de_entrega_calculado" >=  ? ';
+				sStatement+=' (EXTRACT(month from "prazo_de_entrega_calculado") > EXTRACT(month from ?) or ((EXTRACT(month from "prazo_de_entrega_calculado") = EXTRACT(month from ?)) and (EXTRACT(day from "prazo_de_entrega_calculado") >= EXTRACT(day from ?)))) ';
+				aParams.push(PrazoGEque);
+				aParams.push(PrazoGEque);
 				aParams.push(PrazoGEque);
 			}
 			if(PrazoGEque!==null && PrazoLEque!==null){
 				sStatement+=' and ';
 			}
 			if(PrazoLEque!==null){
-				sStatement+=' "prazo_de_entrega_calculado" <=  ? ';
+				//sStatement+=' "prazo_de_entrega_calculado" <=  ? ';
+				sStatement+='(EXTRACT(month from "prazo_de_entrega_calculado") < EXTRACT(month from ?) or ((EXTRACT(month from "prazo_de_entrega_calculado") = EXTRACT(month from ?)) and (EXTRACT(day from "prazo_de_entrega_calculado") <= EXTRACT(day from ?))))';
+				aParams.push(PrazoLEque);
+				aParams.push(PrazoLEque);
 				aParams.push(PrazoLEque);
 			}
 		}		

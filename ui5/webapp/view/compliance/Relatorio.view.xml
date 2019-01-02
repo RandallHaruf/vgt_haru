@@ -105,14 +105,31 @@
 							</fb:FilterItem>							
 							<fb:FilterItem name="F" label="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}">
 								<fb:control>
-									<DateRangeSelection	id="PrazoEntrega" dateValue="{/DataPrazoEntregaInicio}"	secondDateValue="{/DataPrazoEntregaFim}" 
-									displayFormat="{/displayFormatSemAno}" placeholder="{/displayFormatSemAno} {i18n>viewGeralAte} {/displayFormatSemAno}" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoPrazoMin}" maxDate="{/ObrigacaoPrazoMax}"/>
+									<DateRangeSelection	
+									id="PrazoEntrega" 
+									dateValue="{/DataPrazoEntregaInicio}"	
+									secondDateValue="{/DataPrazoEntregaFim}" 
+									displayFormat="{/displayFormatSemAno}" 
+									valueFormat="{/displayFormatSemAno}"
+									placeholder="{/displayFormatSemAno} {i18n>viewGeralAte} {/displayFormatSemAno}" 
+									delimiter="{i18n>viewGeralAte}" 
+									change="onSelectChange" 
+									minDate="{/ObrigacaoPrazoMin}" 
+									maxDate="{/ObrigacaoPrazoMax}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewComplianceListagemObrigacoesColunaExtensao}">
 								<fb:control>
-									<DateRangeSelection	id="Extensao" dateValue="{/DataExtensaoInicio}"	secondDateValue="{/DataExtensaoFim}" 
-									displayFormat="{/displayFormatFull}" placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/ObrigacaoExtensaoMin}" maxDate="{/ObrigacaoExtensaoMax}"/>
+									<DateRangeSelection	
+									id="Extensao" 
+									dateValue="{/DataExtensaoInicio}"	
+									secondDateValue="{/DataExtensaoFim}" 
+									displayFormat="{/displayFormatFull}" 
+									placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" 
+									delimiter="{i18n>viewGeralAte}" 
+									change="onSelectChange" 
+									minDate="{/ObrigacaoExtensaoMin}" 
+									maxDate="{/ObrigacaoExtensaoMax}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="K" label="{i18n>viewComplianceListagemObrigacoesColunaStatus}">

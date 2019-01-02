@@ -293,7 +293,7 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"],that);           
+						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);           
 					}
 					that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
 				}

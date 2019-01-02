@@ -286,27 +286,27 @@ sap.ui.define(
 
 				var traducao = "";
 				switch (id){
-					case "Weekly":
+					case 1:
 						traducao = that.getResourceBundle().getText("viewGeralSemanal");
 						break;
-					case "Biweekly":
+					case 2:
 						traducao = that.getResourceBundle().getText("viewGeralQuinzenal");
 						break;
-					case "Quarterly":
-						traducao = that.getResourceBundle().getText("viewGeralTrimestral");
-						break;
-					case "Monthly":
+					case 3:
 						traducao = that.getResourceBundle().getText("viewGeralMensal");
 						break;
-					case "Biannual":
+					case 4:
+						traducao = that.getResourceBundle().getText("viewGeralBimestral");
+						break;	
+					case 5:
+						traducao = that.getResourceBundle().getText("viewGeralTrimestral");
+						break;
+					case 6:
 						traducao = that.getResourceBundle().getText("viewGeralSemestral");
 						break;
-					case "Annual":
+					case 7:
 						traducao = that.getResourceBundle().getText("viewGeralAnual");
-						break;
-					case "Bimonthly":
-						traducao = that.getResourceBundle().getText("viewGeralBimestral");
-						break;						
+						break;					
 				}
 				return traducao;
 			},	

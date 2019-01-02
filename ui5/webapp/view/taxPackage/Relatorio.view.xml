@@ -43,7 +43,7 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
