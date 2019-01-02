@@ -102,14 +102,13 @@ sap.ui.define(
 									var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);
 								}
 								var dataAtual = new Date();
-								dataPrazo = new Date(dataPrazo.getFullYear(), dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
+								dataPrazo = new Date(obj["ano_calendario"], dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
 								if (dataPrazo < dataAtual) {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
 								} else {
 									obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
 								}
 							}
-
 							NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
 								suporteContratado: obj["suporte_contratado"],
 								suporteEspecificacao: obj["suporte_especificacao"],
