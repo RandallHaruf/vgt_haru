@@ -69,6 +69,7 @@ sap.ui.define([
 		onExit: function () {
 			this._onClearSelecoes();
 			this._atualizarDados();
+			Utils.displayFormat(this);			
 			this.aKeys = [];
 			this.aFilters = [];
 			this.oModel = null;
@@ -425,7 +426,10 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"].substring(8,10)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(5,7)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(4,0);
+						//aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"].substring(8,10)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(5,7)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(4,0);
+						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"]
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblPagamento.data_pagamento"])                          
+						: null;
 						aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
 						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
 						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i]["tblPagamento.principal"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
@@ -507,7 +511,7 @@ sap.ui.define([
 						content : "{tblDominioTipoTransacao.tipo_transacao}"
 					}
 				},{
-					name : this.getResourceBundle().getText("ViewRelatorioDataDePagamento"),
+					name : this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaDataPagamento"),
 					template : {
 						content : "{tblPagamento.data_pagamento}"
 					}

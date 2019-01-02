@@ -109,10 +109,18 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamentoInício}">
+							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamento}">
 								<fb:control>
-									<DateRangeSelection	id="DataPagamento" dateValue="{/DataPagamentoInicio}"	secondDateValue="{/DataPagamentoFim}" 
-									displayFormat="dd/MM/yyyy" delimiter="{i18n>viewGeralAte}" change="onSelectChange" minDate="{/DataPagamentoMin}" maxDate="{/DataPagamentoMax}"/>
+									<DateRangeSelection	
+									id="DataPagamento" 
+									dateValue="{/DataPagamentoInicio}"	
+									secondDateValue="{/DataPagamentoFim}" 
+									displayFormat="{/displayFormatFull}" 
+									placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" 
+									delimiter="{i18n>viewGeralAte}" 
+									change="onSelectChange" 
+									minDate="{/DataPagamentoMin}" 
+									maxDate="{/DataPagamentoMax}"/>
 								</fb:control>
 							</fb:FilterItem>								
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
@@ -179,7 +187,7 @@
 							<Text text="{i18n>ViewRelatorioTipoDeTransacao}" />
 						</Column>
 						<Column width="10rem">
-							<Text text="{i18n>ViewRelatorioDataDePagamento}"/>
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}"/>
 						</Column>		
 						<Column width="10rem">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}"/>
