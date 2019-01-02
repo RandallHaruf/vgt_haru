@@ -63,6 +63,7 @@ module.exports = function (app) {
 	var routeRespostaObrigacao = require("./routeRespostaObrigacao");
 	var routeDocumentoObrigacao = require("./routeDocumentoObrigacao");
 	var routeDocumento = require("./routeDocumento");
+	var routeRequisicaoEncerramentoPeriodoTaxPackage = require("./routeRequisicaoEncerramentoPeriodoTaxPackage");
 	
 	var aRoutes = [];	
 	
@@ -125,6 +126,7 @@ module.exports = function (app) {
 	routeRespostaObrigacao(aRoutes);
 	routeDocumentoObrigacao(aRoutes);
 	routeDocumento(aRoutes);
+	routeRequisicaoEncerramentoPeriodoTaxPackage(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

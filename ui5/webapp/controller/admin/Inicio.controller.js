@@ -140,6 +140,21 @@ sap.ui.define(
 					});
 					that.getModel().setProperty("/RequisicaoReaberturaTaxPackage", response);
 				});
+				
+				NodeAPI.get("DeepQuery/RequisicaoEncerramentoPeriodoTaxPackage", {
+						queryString: {
+							status: 1 // em andamento
+						}
+					})
+					.then(function (response) {
+						if (response) {
+							var json = JSON.parse(response);
+							that.getModel().setProperty("/ContadorTaxPackageEncerramentoPeriodo", json.length);
+						}
+					})
+					.catch(function (err) {
+						alert(err.statusText);
+					});
 
 				//var oList = new sap.m.List();
 				var viewId = this.getView().getId();
@@ -162,6 +177,12 @@ sap.ui.define(
 					width: "auto"
 				}).addStyleClass("sapUiResponsiveMargin");
 				vbox.addItem(Texto03);
+				
+				var Texto04 = new sap.m.Text({
+					text: "{i18n>viewNotificacaolinhaRequisicaoEncerramentoPeriodoTaxPackage} ({/ContadorTaxPackageEncerramentoPeriodo})",
+					width: "auto"
+				}).addStyleClass("sapUiResponsiveMargin");
+				vbox.addItem(Texto04);
 
 				/*var panel01 = new sap.m.Panel({
 					headerText: "alguma coisa",

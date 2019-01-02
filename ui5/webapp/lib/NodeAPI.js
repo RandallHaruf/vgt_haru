@@ -4,8 +4,47 @@ sap.ui.define(
 	],
 	function (Constants) {
 		var urlBackend = Constants.urlBackend;
+	
+		var encodeQueryString = function (oQueryString) {
+			var encodedQueryString = "";
+			
+			if (oQueryString) {
+				var aKey = Object.keys(oQueryString);
+				
+				for (var i = 0, length = aKey.length; i < length; i++) {
+					if (i !== 0) {
+						encodedQueryString += "&";
+					}
+					
+					encodedQueryString += aKey[i] + "=" + encodeURIComponent(oQueryString[aKey[i]]);
+				}
+			}
+			
+			return encodedQueryString;
+		};
 
 		return {
+
+			get: function (sRota, oParam) {
+				return new Promise(function (resolve, reject) {
+					var encodedQueryString;
+					if (oParam) {
+						encodedQueryString = encodeQueryString(oParam.queryString);
+					}
+						
+					jQuery.ajax(urlBackend + sRota + (encodedQueryString ? "?" + encodedQueryString : ""), {
+						type: "GET",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true
+					}).then(function (response) {
+						resolve(response);
+					}, function (err) {
+						reject(err);
+					});
+				});
+			},
 
 			pListarRegistros: function (sEntidade) {
 				return new Promise(function (resolve, reject) {

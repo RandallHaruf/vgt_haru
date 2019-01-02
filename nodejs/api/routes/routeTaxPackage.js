@@ -10,4 +10,5 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().get("/HistoricoSchedule", controller.listarHistoricoSchedule));
 	aRoutes.push(express.Router().get("/TaxPackageListagemEmpresas", controller.listagemEmpresas));
 	aRoutes.push(express.Router().put("/EncerrarTrimestreTaxPackage", controller.encerrarTrimestre));
+	aRoutes.push(express.Router().get("/ChecarDeclaracaoEnviada", controller.checarDeclaracaoEnviada));
 };

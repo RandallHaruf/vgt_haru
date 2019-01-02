@@ -7,21 +7,21 @@ sap.ui.define(
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, models, Filter, MessageToast,Constants,NodeAPI) {
+	function (BaseController, models, Filter, MessageToast, Constants, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.ListaNotificacoes", {
 			onInit: function () {
 
 				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
 				this.setModel(new sap.ui.model.json.JSONModel({}));
-				
+
 				var that = this;
-				
+
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
 						that._atualizarDados();
-					}	
+					}
 				});
-				
+
 				//this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 				/*
 				oModel = new sap.ui.model.json.JSONModel({
@@ -44,10 +44,9 @@ sap.ui.define(
 				});
 				*/
 			},
-			
-			onAtualizaInfo: function()
-			{
-				this._atualizarDados();	
+
+			onAtualizaInfo: function () {
+				this._atualizarDados();
 			},
 
 			_onRouteMatched: function (oEvent) {
@@ -96,8 +95,8 @@ sap.ui.define(
 				that.getModel().setProperty("/ContadorTTC", {
 					modelcountTTC: countTTC
 				});
-				
-					NodeAPI.listarRegistros("DeepQuery/RequisicaoReaberturaTaxPackage?&status=1", function (response) { // 1 TAX Packege
+
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoReaberturaTaxPackage?&status=1", function (response) { // 1 TAX Packege
 					if (response) {
 
 						for (var i = 0, length = response.length; i < length; i++) {
@@ -111,9 +110,148 @@ sap.ui.define(
 					}
 
 				});
+
 				that.getModel().setProperty("/ContadorTax", {
 					modelcountTAX: countTAX
 				});
+
+				NodeAPI.get("DeepQuery/RequisicaoEncerramentoPeriodoTaxPackage", {
+						queryString: {
+							status: 1
+						}
+					})
+					.then(function (response) {
+						if (response) {
+							var json = JSON.parse(response);
+							that.getModel().setProperty("/ContadorTax2", json.length);
+							that.getModel().setProperty("/RequisicaoEncerramentoPeriodoTaxPackage", json);
+						}
+					})
+					.catch(function (err) {
+						alert(err.statusText);
+					});
+
+			},
+
+			onDetalharEncerramentoTaxPackage: function (oEvent) {
+				var oItemSelecionado = oEvent.getSource().getBindingContext().getObject();
+
+				var oForm = new sap.ui.layout.form.Form({
+					editable: true
+				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
+					singleContainerFullSize: false
+				}));
+
+				var oFormContainer = new sap.ui.layout.form.FormContainer();
+
+				var oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralEmpresa}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.nome_empresa
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralTrimestre}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.periodo
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralDataRequisicao}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.data_requisicao
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralAno}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.ano_calendario
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralUsuario}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.nome_usuario
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+				
+				var oSelect = new sap.m.Select();
+				oSelect.addItem(new sap.ui.core.Item({
+					text: "Aprovado",
+					key: "2"
+				}));
+				oSelect.addItem(new sap.ui.core.Item({
+					text: "Reprovado",
+					key: "3"
+				}));
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "Status"
+				}).addField(oSelect);
+				
+				oFormContainer.addFormElement(oFormElement);
+
+				var oTextArea = new sap.m.TextArea({
+					rows: 5
+				});
+
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralResposta}"
+				}).addField(oTextArea);
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oForm.addFormContainer(oFormContainer);
+
+				var that = this;
+
+				var dialog = new sap.m.Dialog({
+					title: "{i18n>viewNotificacaoTituloTaxPackageRequisicaoEncerramento} (#" + oItemSelecionado.id_requisicao_encerramento_periodo_tax_package + ")",
+					content: oForm,
+					beginButton: new sap.m.Button({
+						text: "{i18n>viewGeralSalvar}",
+						press: function () {
+							NodeAPI.atualizarRegistro("RequisicaoEncerramentoPeriodoTaxPackage", oItemSelecionado.id_requisicao_encerramento_periodo_tax_package, {
+								dataRequisicao: oItemSelecionado.data_requisicao,
+								observacao: oItemSelecionado.observacao, 
+								resposta: oTextArea.getValue(),
+								fkDominioRequisicaoEncerramentoPeriodoStatus: oSelect.getSelectedKey(),
+								fkUsuario: oItemSelecionado["fk_usuario.id_usuario"],
+								fkRelTaxPackagePeriodo: oItemSelecionado.id_rel_tax_package_periodo,
+								atualizarPeriodo: true
+							}, function (response) {
+								that._onEnviarMensagem(oItemSelecionado.nome_empresa, oItemSelecionado.periodo, "ENCERRAMENTO_TP", oItemSelecionado["fk_usuario.id_usuario"]);
+								sap.m.MessageToast.show("Solicitação salva com sucesso !");
+								dialog.close();
+								that.onAtualizaInfo();
+							});
+						}.bind(this)
+					}),
+					endButton: new sap.m.Button({
+						text: "{i18n>viewGeralSair}",
+						press: function () {
+							dialog.close();
+						}.bind(this)
+					}),
+					afterClose: function () {
+						that.getView().removeDependent(dialog);
+						dialog.destroy();
+					}
+				});
+
+				// to get access to the global model
+				this.getView().addDependent(dialog);
+
+				dialog.open();
 			},
 
 			onDetalharObrigacao: function (oEvent) {
@@ -222,7 +360,7 @@ sap.ui.define(
 				});*/
 
 				var oSelect = new sap.m.Select();
-			
+
 				oSelect.addItem(new sap.ui.core.Item({
 					text: "Aprovado",
 					key: "2"
@@ -256,8 +394,7 @@ sap.ui.define(
 
 				var that = this;
 				this.setModel(new sap.ui.model.json.JSONModel({
-					obrigacao: {
-					} 	
+					obrigacao: {}
 				}));
 				var dialog = new sap.m.Dialog({
 					title: "{i18n>viewNotificacaolinhaRequisicaoObrigacao} (#" + oItemSelecionado.id_obrigacao + ")",
@@ -267,7 +404,7 @@ sap.ui.define(
 						press: function () {
 							//var objObrig = that.getModel().getProperty("/Obrigacao");
 							//objObrig.id_obrigacao = oItemSelecionado.id_obrigacao;
-							NodeAPI.atualizarRegistro("Obrigacao", 	oItemSelecionado.id_obrigacao , {
+							NodeAPI.atualizarRegistro("Obrigacao", oItemSelecionado.id_obrigacao, {
 								prazo_entrega: oItemSelecionado.prazo_entrega,
 								extensao: oItemSelecionado.extensao,
 								obrigacao_inicial: oItemSelecionado.obrigacao_inicial,
@@ -281,7 +418,7 @@ sap.ui.define(
 								fkObrigacaoAcessoria: oItemSelecionado["fk_obrigacao_acessoria.id_obrigacao_acessoria"],
 								fkAnoFiscal: oItemSelecionado["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"],
 								fkDominioAprovacaoObrigacao: oSelect.getSelectedKey(),
-								motivoReprovacao:  oTextArea.getValue()
+								motivoReprovacao: oTextArea.getValue()
 							}, function (response) {
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
@@ -307,40 +444,57 @@ sap.ui.define(
 
 				dialog.open();
 			},
-			
-			_onEnviarMensagem: function (vEmpresa, vPeriodo, vTipo,idUsuario ) {
-				var that = this;
-				
-				if (vTipo == "TTC"){
-					var assunto = "TTC - Period reopening request - " + vEmpresa + " - " + vPeriodo;
-					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TTC closed period and the decision is available at <a href='" + document.domain +"'>Vale Global Tax (VGT)</a> .<br>The period reopened will remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
-				}else{
-					var assunto = "TAX PACKAGE - Period reopening request - " + vEmpresa + " - " + vPeriodo;
-					var htmlBody = "<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed periodand the decision is available at <a href='" + document.domain +"'>Vale Global Tax (VGT)</a> .<br>The period reopenedwill remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+
+			_onEnviarMensagem: function (vEmpresa, vPeriodo, vTipo, idUsuario) {
+				var that = this,
+					assunto = "",
+					htmlBody = "";
+
+				if (vTipo === "ENCERRAMENTO_TP") {
+					assunto = "Tax Package - Period closing request - " + vEmpresa + " - " + vPeriodo;
+					htmlBody =
+						"<p>Dear User,</p><br>"
+						+ "<p>&nbsp;Please be informed that we reviewed your request to submit a Tax Package period and the decision is available at <a href='" + document.domain +"'>Vale Global Tax (VGT)</a>.<br>"
+						+ "Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p>"
+						+ "<p>Thank you in advance for your support.</p>"
+						+ "<p>Global Tax Team</p>";
 				}
-				
-				jQuery.ajax({//Desativar botao
+				else if (vTipo == "TTC") {
+					assunto = "TTC - Period reopening request - " + vEmpresa + " - " + vPeriodo;
+					htmlBody =
+						"<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TTC closed period and the decision is available at <a href='" +
+						document.domain +
+						"'>Vale Global Tax (VGT)</a> .<br>The period reopened will remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+				} else {
+					assunto = "TAX PACKAGE - Period reopening request - " + vEmpresa + " - " + vPeriodo;
+					htmlBody =
+						"<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed periodand the decision is available at <a href='" +
+						document.domain +
+						"'>Vale Global Tax (VGT)</a> .<br>The period reopenedwill remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+				}
+
+				jQuery.ajax({ //Desativar botao
 					url: Constants.urlBackend + "EmailSend",
 					type: "POST",
 					xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
+						withCredentials: true
+					},
+					crossDomain: true,
 					data: {
 						_assunto: assunto,
 						_corpo: htmlBody,
-						IdUsuario:idUsuario
+						IdUsuario: idUsuario
 					},
 					success: function (response) {
 						//sap.m.MessageToast.show("Email enviado com sucesso");
 					}
 				});
 			},
-			
+
 			onDetalharTTC: function (oEvent) {
 
 				var oItemSelecionadoTTC = oEvent.getSource().getBindingContext().getObject();
-				
+
 				var oForm = new sap.ui.layout.form.Form({
 					editable: true
 				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
@@ -439,10 +593,9 @@ sap.ui.define(
 
 				var that = this;
 				this.setModel(new sap.ui.model.json.JSONModel({
-					TTC: {
-					} 	
+					TTC: {}
 				}));
-				
+
 				var dialog = new sap.m.Dialog({
 					title: "{i18n>viewNotificacaolinhaRequisicaoTTC} (#" + oItemSelecionadoTTC.id_requisicao_reabertura + ")",
 					content: oForm,
@@ -456,13 +609,13 @@ sap.ui.define(
 								idUsuario: oItemSelecionadoTTC.id_usuario,
 								nomeUsuario: oItemSelecionadoTTC.nome_usuario,
 								justificativa: oItemSelecionadoTTC.justificativa,
-								resposta:  oTextArea.getValue(),
+								resposta: oTextArea.getValue(),
 								fkDominioRequisicaoReaberturaStatus: oSelect.getSelectedKey(),
 								fkEmpresa: oItemSelecionadoTTC["fk_empresa.id_empresa"],
 								fkPeriodo: oItemSelecionadoTTC["fk_periodo.id_periodo"],
 								reabrirPeriodo: true
 							}, function (response) {
-								that._onEnviarMensagem(oItemSelecionadoTTC.nome, oItemSelecionadoTTC.periodo, "TTC",oItemSelecionadoTTC.id_usuario);
+								that._onEnviarMensagem(oItemSelecionadoTTC.nome, oItemSelecionadoTTC.periodo, "TTC", oItemSelecionadoTTC.id_usuario);
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
 								that.onAtualizaInfo();
@@ -487,11 +640,11 @@ sap.ui.define(
 
 				dialog.open();
 			},
-			
-			onDetalharTaxPackage : function (oEvent) {
+
+			onDetalharTaxPackage: function (oEvent) {
 
 				var oItemSelecionadoTAX = oEvent.getSource().getBindingContext().getObject();
-				
+
 				var oForm = new sap.ui.layout.form.Form({
 					editable: true
 				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
@@ -590,11 +743,10 @@ sap.ui.define(
 
 				var that = this;
 				this.setModel(new sap.ui.model.json.JSONModel({
-					TAX: {
-					} 	
+					TAX: {}
 				}));
-				
-				    var dialog = new sap.m.Dialog({
+
+				var dialog = new sap.m.Dialog({
 					title: "{i18n>viewNotificacaolinhaRequisicaoTaxPackage} (#" + oItemSelecionadoTAX.id_requisicao_reabertura_tax_tackage + ")",
 					content: oForm,
 					beginButton: new sap.m.Button({
@@ -604,15 +756,15 @@ sap.ui.define(
 							//objTAX.id_requisicao_reabertura_tax_tackage = oItemSelecionadoTAX.id_requisicao_reabertura;
 							NodeAPI.atualizarRegistro("RequisicaoReaberturaTaxPackage", oItemSelecionadoTAX.id_requisicao_reabertura_tax_tackage, {
 								dataRequisicao: oItemSelecionadoTAX.data_requisicao,
-								idUsuario: 	oItemSelecionadoTAX.id_usuario,
+								idUsuario: oItemSelecionadoTAX.id_usuario,
 								nomeUsuario: oItemSelecionadoTAX.nome_usuario,
 								justificativa: oItemSelecionadoTAX.justificativa,
-								resposta:  oTextArea.getValue(),
+								resposta: oTextArea.getValue(),
 								fkDominioRequisicaoReaberturaStatus: oSelect.getSelectedKey(),
 								fkIdRelTaxPackagePeriodo: oItemSelecionadoTAX["fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo"],
 								reabrirPeriodo: true
-								}, function (response) {
-								that._onEnviarMensagem(oItemSelecionadoTAX.nome, oItemSelecionadoTAX.periodo, "TAX",oItemSelecionadoTAX.id_usuario);
+							}, function (response) {
+								that._onEnviarMensagem(oItemSelecionadoTAX.nome, oItemSelecionadoTAX.periodo, "TAX", oItemSelecionadoTAX.id_usuario);
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();
 								that.onAtualizaInfo();
