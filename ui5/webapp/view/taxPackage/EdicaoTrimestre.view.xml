@@ -493,7 +493,7 @@
 								<VBox>
 									<ObjectIdentifier 
 										class="sapUiMediumMarginTop"
-										title="Please provide details if Tax Return's Income differs from FS" />
+										title="{i18n>viewGeralTaxVisuPleaseProvide}" />
 									<TextArea
 										id="textAreaIncomeTaxDetails"
 										rows="5"
