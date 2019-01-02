@@ -516,8 +516,13 @@ sap.ui.define(
 				});
 
 				this._setBusy(true);
+					
+				var oAnoCalendario = this.getModel().getProperty("/DominioAnoCalendario").find(function (obj) {
+					return obj.id_dominio_ano_calendario === Number(sIdAnoCalendario);
+				});
 
-				NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario, function (response) {
+				NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + JSON.stringify(oAnoCalendario), function (response) {
+				//NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario, function (response) {
 					if (response) {
 						var aKeys = Object.keys(response);
 						for (var i = 0, length = aKeys.length; i < length; i++) {

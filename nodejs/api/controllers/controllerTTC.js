@@ -10,10 +10,10 @@ function jsDateObjectToSqlDateString (oDate) {
 	return oDate.getFullYear() + "-" + (oDate.getMonth() + 1) + "-" + oDate.getDate();
 }
 
-function pegarDataInicioFimMes (iMes) {
+function pegarDataInicioFimMes (sAnoCalendario, iMes) {
 	var date = new Date();
-	var primeiroDia = new Date(date.getFullYear(), iMes, 1);
-	var ultimoDia = new Date(date.getFullYear(), iMes + 1, 0);
+	var primeiroDia = new Date(sAnoCalendario, iMes, 1);
+	var ultimoDia = new Date(sAnoCalendario, iMes + 1, 0);
 	
 	return {
 		dataInicio: jsDateObjectToSqlDateString(primeiroDia),
@@ -21,9 +21,9 @@ function pegarDataInicioFimMes (iMes) {
 	};
 }
 
-function pegarDataInicioFimTrimestre (iMeses) {
-	var oDataInicioFimMesInicioTrimestre = pegarDataInicioFimMes(iMeses[0]);
-	var oDataInicioFimMesFimTrimestre = pegarDataInicioFimMes(iMeses[2]);
+function pegarDataInicioFimTrimestre (sAnoCalendario, iMeses) {
+	var oDataInicioFimMesInicioTrimestre = pegarDataInicioFimMes(sAnoCalendario, iMeses[0]);
+	var oDataInicioFimMesFimTrimestre = pegarDataInicioFimMes(sAnoCalendario, iMeses[2]);
 	
 	return {
 		dataInicio: oDataInicioFimMesInicioTrimestre.dataInicio,
@@ -31,7 +31,7 @@ function pegarDataInicioFimTrimestre (iMeses) {
 	};
 }
 
-function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario) {
+function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario, sAnoCalendario) {
 	for (var i = 0; i < aTrimestre.length; i++) {
 		
 		var idMoeda = aTrimestre[i].id_moeda;
@@ -50,7 +50,7 @@ function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario) {
 			+ 'on tax."fk_category.id_tax_category" = taxCategory."id_tax_category" '
 			+ 'inner join "VGT.REL_EMPRESA_PERIODO" rel '
 			+ 'on pagamento."fk_periodo.id_periodo" = rel."fk_periodo.id_periodo" '
-			+ 'and rel."fk_empresa.id_empresa" = ?'
+			+ 'and rel."fk_empresa.id_empresa" = ? '
 			+ 'inner join "VGT.PERIODO" periodo '
 			+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
 			+ 'where '
@@ -60,13 +60,13 @@ function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario) {
 			+ 'and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
 			+ 'and pagamento."fk_empresa.id_empresa" = ? ';
 				
-		var oDataInicioFim1 = pegarDataInicioFimMes(aMeses[0]);
+		var oDataInicioFim1 = pegarDataInicioFimMes(sAnoCalendario, aMeses[0]);
 		var aParams1 = [sIdEmpresa, oDataInicioFim1.dataInicio, oDataInicioFim1.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
 		
-		var oDataInicioFim2 = pegarDataInicioFimMes(aMeses[1]);
+		var oDataInicioFim2 = pegarDataInicioFimMes(sAnoCalendario, aMeses[1]);
 		var aParams2 = [sIdEmpresa, oDataInicioFim2.dataInicio, oDataInicioFim2.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
 		
-		var oDataInicioFim3 = pegarDataInicioFimMes(aMeses[2]);
+		var oDataInicioFim3 = pegarDataInicioFimMes(sAnoCalendario, aMeses[2]);
 		var aParams3 = [sIdEmpresa, oDataInicioFim3.dataInicio, oDataInicioFim3.dataFim, idMoeda, idClasse, sIdAnoCalendario, sIdEmpresa];
 		
 		var result1 = db.executeStatementSync(sQuery, aParams1);
@@ -100,7 +100,7 @@ function pegarResumo (aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario) {
 	}
 }
 
-function pegarResumoTrimestre (iTrimestre, sIdAnoCalendario, sIdEmpresa) {
+function pegarResumoTrimestre (iTrimestre, sIdAnoCalendario, sIdEmpresa, sAnoCalendario) {
 	var aMeses;
 	
 	if (iTrimestre === 1) {
@@ -116,7 +116,7 @@ function pegarResumoTrimestre (iTrimestre, sIdAnoCalendario, sIdEmpresa) {
 		aMeses = [9, 10, 11];
 	}
 	
-	var oDataInicioFimTrimestre = pegarDataInicioFimTrimestre(aMeses);
+	var oDataInicioFimTrimestre = pegarDataInicioFimTrimestre(sAnoCalendario, aMeses);
 	
 	var sQuery = 
 		'select distinct moeda."id_dominio_moeda", moeda."acronimo" '
@@ -181,7 +181,7 @@ function pegarResumoTrimestre (iTrimestre, sIdAnoCalendario, sIdEmpresa) {
 		}
 	}
 	
-	pegarResumo(aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario);
+	pegarResumo(aTrimestre, aMeses, sIdEmpresa, sIdAnoCalendario, sAnoCalendario);
 	
 	return aTrimestre;
 }
@@ -342,14 +342,14 @@ module.exports = {
 	
 	listarResumoTrimeste: function (req, res) {
 		var sIdEmpresa = req.query.empresa,
-			sIdAnoCalendario = req.query.anoCalendario;
+			oAnoCalendario = JSON.parse(req.query.anoCalendario);
 		
 		var oResumoTrimestre = {};
 		
-		oResumoTrimestre.PrimeiroPeriodo = pegarResumoTrimestre(1, sIdAnoCalendario, sIdEmpresa);
-		oResumoTrimestre.SegundoPeriodo  = pegarResumoTrimestre(2, sIdAnoCalendario, sIdEmpresa);
-		oResumoTrimestre.TerceiroPeriodo = pegarResumoTrimestre(3, sIdAnoCalendario, sIdEmpresa);
-		oResumoTrimestre.QuartoPeriodo   = pegarResumoTrimestre(4, sIdAnoCalendario, sIdEmpresa);
+		oResumoTrimestre.PrimeiroPeriodo = pegarResumoTrimestre(1, oAnoCalendario.id_dominio_ano_calendario, sIdEmpresa, oAnoCalendario.ano_calendario);
+		oResumoTrimestre.SegundoPeriodo  = pegarResumoTrimestre(2, oAnoCalendario.id_dominio_ano_calendario, sIdEmpresa, oAnoCalendario.ano_calendario);
+		oResumoTrimestre.TerceiroPeriodo = pegarResumoTrimestre(3, oAnoCalendario.id_dominio_ano_calendario, sIdEmpresa, oAnoCalendario.ano_calendario);
+		oResumoTrimestre.QuartoPeriodo   = pegarResumoTrimestre(4, oAnoCalendario.id_dominio_ano_calendario, sIdEmpresa, oAnoCalendario.ano_calendario);
 		
 		res.send(JSON.stringify(oResumoTrimestre));
 	},
