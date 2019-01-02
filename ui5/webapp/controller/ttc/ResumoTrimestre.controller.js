@@ -613,7 +613,8 @@ sap.ui.define(
 					return now >= dataInicio && now <= dataFim;
 				case 4:
 					var iAux;
-					if (now >= new Date(iCurrentYear + "/01/1") && now <= new Date(iCurrentYear + "/01/20")) {
+					//if (now >= new Date(iCurrentYear + "/01/1") && now <= new Date(iCurrentYear + "/01/20")) {
+					if (now.getMonth() === 0 && now.getDate() >= 1 && now.getDate() <= 31) {
 						iAux = iCurrentYear - 1;
 						dataInicio = new Date(iAux + "/10/21");
 						dataFim = new Date(iCurrentYear + "/01/20");
