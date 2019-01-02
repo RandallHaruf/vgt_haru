@@ -18,6 +18,13 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 
 		<script>
+			setInterval(function() {  
+				jQuery.ajax({
+					url: "index.html",
+					type: "GET"
+				});
+			}, 60000); // 60s
+		
 			sap.ui.getCore().attachInit(function() {
 				new sap.m.Shell({
 					app: new sap.ui.core.ComponentContainer({
