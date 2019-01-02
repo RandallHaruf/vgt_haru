@@ -606,6 +606,9 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DominioJurisdicao", function (response) {
 					if (response) {
 						response.unshift({});
+						for(var i = 0, length = response.length; i < length;i++){
+							response[i]["jurisdicao"] = Utils.traduzJurisdicao(response[i]["id_dominio_jurisdicao"],that);
+						} 
 						that.getModel().setProperty("/DominioJurisdicao", response);
 					}
 				});
@@ -639,6 +642,9 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DominioTipoTransacao", function (response) {
 					if (response) {
 						response.unshift({});
+						for(var i = 0, length = response.length; i < length;i++){
+							response[i]["tipo_transacao"] = Utils.traduzTipoTransacao(response[i]["id_dominio_tipo_transacao"],that);
+						} 
 						that.getModel().setProperty("/DominioTipoTransacao", response);
 					}
 				});
@@ -1001,7 +1007,7 @@ sap.ui.define(
 			_resolverMinMaxDate: function (oPeriodo) {
 				var oMinDate,
 					oMaxDate,
-					iCurrentYear = new Date().getFullYear();
+					iCurrentYear = this.getModel().getProperty("/AnoCalendario").anoCalendario;
 
 				switch (oPeriodo.numero_ordem) {
 				case 1:

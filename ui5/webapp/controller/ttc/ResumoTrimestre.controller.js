@@ -4,9 +4,10 @@ sap.ui.define(
 		"sap/ui/model/json/JSONModel",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/jQueryMask",
-		"ui5ns/ui5/model/Constants"
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants) {
+	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants,Utils) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ResumoTrimestre", {
@@ -527,6 +528,8 @@ sap.ui.define(
 							for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
 								var oPagamento = aPagamento[j];
 
+								oPagamento["categoria"] = Utils.traduzCategoriaPagamento(oPagamento["categoria"],that);           
+							
 								oPagamento["primeiroValor"] = (oPagamento["primeiroValor"] ? parseInt(oPagamento["primeiroValor"], 10) : 0);
 								oPagamento["segundoValor"] = (oPagamento["segundoValor"] ? parseInt(oPagamento["segundoValor"], 10) : 0);
 								oPagamento["terceiroValor"] = (oPagamento["terceiroValor"] ? parseInt(oPagamento["terceiroValor"], 10) : 0);
