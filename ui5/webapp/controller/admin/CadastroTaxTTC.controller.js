@@ -119,7 +119,10 @@ sap.ui.define(
 				}]);*/
 				
 				var that = this;
+
+				that.setBusy(that.byId("paginaListagem"), true);
 				
+				that.getModel().setProperty("/objetos", null);	
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/Tax", {
 					type: "GET",
 					xhrFields: {
@@ -132,7 +135,9 @@ sap.ui.define(
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
 						}
-						that.getModel().setProperty("/objetos", aResponse);							
+						that.getModel().setProperty("/objetos", aResponse);	
+
+						that.setBusy(that.byId("paginaListagem"), false);						
 						//that.getModel().setProperty("/objetos", response);
 					}
 				});
@@ -177,7 +182,8 @@ sap.ui.define(
 				});*/
 				
 				var that = this;
-				
+
+				that.setBusy(that.byId("formularioObjeto"), true);				
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/Tax/" + iIdObjeto, {
 					type: "GET",
 					xhrFields: {
@@ -194,7 +200,8 @@ sap.ui.define(
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
-						
+
+						that.setBusy(that.byId("formularioObjeto"), false);						
 						that._carregarCategory(obj.fkClassification);
 					}
 				});
@@ -227,9 +234,9 @@ sap.ui.define(
 						fkCategory: obj.fkCategory     
 					},
 					success: function (response) {
-				that.byId("btnCancelar").setEnabled(true);
-				that.byId("btnSalvar").setEnabled(true);
-				that.setBusy(that.byId("btnSalvar"), false);
+						that.byId("btnCancelar").setEnabled(true);
+						that.byId("btnSalvar").setEnabled(true);
+						that.setBusy(that.byId("btnSalvar"), false);
 						that._navToPaginaListagem();		
 					}
 				});
@@ -257,9 +264,9 @@ sap.ui.define(
 						fkCategory: obj.fkCategory     
 					},
 					success: function (response) {
-				that.byId("btnCancelar").setEnabled(true);
-				that.byId("btnSalvar").setEnabled(true);
-				that.setBusy(that.byId("btnSalvar"), false);
+						that.byId("btnCancelar").setEnabled(true);
+						that.byId("btnSalvar").setEnabled(true);
+						that.setBusy(that.byId("btnSalvar"), false);
 						that._navToPaginaListagem();		
 					}
 				});

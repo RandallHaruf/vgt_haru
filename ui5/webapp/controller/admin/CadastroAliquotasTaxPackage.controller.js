@@ -36,6 +36,7 @@ sap.ui.define(
 			_carregarObjetos: function () {
 				var that = this;
 				that.setBusy(that.byId("paginaListagem"), true);
+				that.getModel().setProperty("/objetos", null);
 				jQuery.ajax(Constants.urlBackend + "/DeepQuery/Aliquota", {
 					type: "GET",
 					xhrFields: {
@@ -50,7 +51,6 @@ sap.ui.define(
 						}
 						that.getModel().setProperty("/objetos", aResponse);
 						that.setBusy(that.byId("paginaListagem"), false);
-						//that.getModel().setProperty("/objetos", response);						
 					}
 				});
 			},

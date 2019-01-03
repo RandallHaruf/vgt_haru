@@ -138,7 +138,9 @@ sap.ui.define(
 				}]);*/
 				
 				var that = this;
-				
+				that.getModel().setProperty("/objetos", null);
+
+				that.setBusy(that.byId("paginaListagem"), true);				
 				NodeAPI.listarRegistros("DeepQuery/NameOfTax?indDefault=true", function (response) {
 						var aResponse = response;
 						for (var i = 0, length = aResponse.length; i < length; i++) {
@@ -149,6 +151,8 @@ sap.ui.define(
 				});
 				
 				NodeAPI.listarRegistros("DominioPais", function (response) {
+
+					that.setBusy(that.byId("paginaListagem"), false);					
 					that.getModel().setProperty("/DominioPais", response); 
 				});
 			},
@@ -192,7 +196,8 @@ sap.ui.define(
 				});*/
 				
 				var that = this;
-				
+
+				that.setBusy(that.byId("formularioObjeto"), true);				
 				NodeAPI.lerRegistro("DeepQuery/NameOfTax", iIdObjeto, function (response) {
 					that.getModel().setProperty("/objeto", {
 						classification: response["id_dominio_tax_classification"],
@@ -203,10 +208,14 @@ sap.ui.define(
 					
 					that._carregarCategory(response["id_dominio_tax_classification"]);
 					that._carregarTax(response["id_tax_category"]);
+
+					that.setBusy(that.byId("formularioObjeto"), false);					
 				});
-				
+
+				that.setBusy(that.byId("tablePais"), true);
 				NodeAPI.listarRegistros("RelacionamentoPaisNameOfTax?fkNameOfTax=" + iIdObjeto, function (response) {
 					that._resolverVinculoPais(response);
+					that.setBusy(that.byId("tablePais"), false);
 				});
 			},
 			
@@ -226,7 +235,7 @@ sap.ui.define(
 				this._navToPaginaListagem();*/
 				
 				var that = this;
-					that.byId("btnCancelar").setEnabled(false);
+				that.byId("btnCancelar").setEnabled(false);
 				that.byId("btnSalvar").setEnabled(false);
 				that.setBusy(that.byId("btnSalvar"), true);
 				
@@ -237,13 +246,13 @@ sap.ui.define(
 					fkTax: obj.tax,
 					idPaises: JSON.stringify(that._getIdsPaisesSelecionados())
 				}, function (response) {
-						that.byId("btnCancelar").setEnabled(true);
-				that.byId("btnSalvar").setEnabled(true);
-				that.setBusy(that.byId("btnSalvar"), false);
+					that.byId("btnCancelar").setEnabled(true);
+					that.byId("btnSalvar").setEnabled(true);
+					that.setBusy(that.byId("btnSalvar"), false);
 					that._navToPaginaListagem();		
 				});
 			},
-			
+
 			_inserirObjeto: function () {
 				/*sap.m.MessageToast.show("Inserir Objeto");
 				this._navToPaginaListagem();	*/
@@ -261,9 +270,9 @@ sap.ui.define(
 					fkTax: obj.tax,
 					idPaises: JSON.stringify(that._getIdsPaisesSelecionados())
 				}, function (response) {
-				that.byId("btnCancelar").setEnabled(true);
-				that.byId("btnSalvar").setEnabled(true);
-				that.setBusy(that.byId("btnSalvar"), false);
+					that.byId("btnCancelar").setEnabled(true);
+					that.byId("btnSalvar").setEnabled(true);
+					that.setBusy(that.byId("btnSalvar"), false);
 					that._navToPaginaListagem();		
 				});
 			},
@@ -300,6 +309,14 @@ sap.ui.define(
 					if (aux) {
 						oPais.selecionado = true;
 					}
+
+				    aDominioPais.sort(function(x, y) {
+				        // true values first
+				        return (x.selecionado === y.selecionado)? 0 : x.selecionado? -1 : 1;
+				        // false values first
+				        // return (x === y)? 0 : x? 1 : -1;
+				    });
+				
 				}
 			},
 			

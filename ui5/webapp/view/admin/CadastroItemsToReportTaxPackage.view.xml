@@ -17,7 +17,7 @@
 				items="{
 					path: '/objetos',
 					sorter: {
-						path: 'item_to_report'
+						path: 'pergunta'
 					}
 				}"
 				growing="true"

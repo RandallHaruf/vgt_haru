@@ -160,7 +160,7 @@
 							<f:FormContainer>
 								<f:formElements>
 									<f:FormElement>
-										<table:Table rows="{/DominioPais}" id="tablePais" selectionMode="None">
+										<table:Table rows="{/DominioPais}" id="tablePais" selectionMode="None" enableColumnReordering="true">
 											<table:extension>
 												<Toolbar>
 													<ToolbarSpacer/>

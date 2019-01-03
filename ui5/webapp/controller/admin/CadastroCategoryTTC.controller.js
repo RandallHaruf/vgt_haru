@@ -75,18 +75,10 @@ sap.ui.define(
 			},
 
 			_carregarObjetos: function () {
-				/*this.getModel().setProperty("/objetos", [{
-					id: "1",
-					classification: "Tax Borne",
-					nome: "Tax on Profits"
-				}, {
-					id: "2",
-					classification: "Tax Collected",
-					nome: "Other taxes"
-				}]);*/
 
 				var that = this;
-
+				that.getModel().setProperty("/objetos",null);
+				that.setBusy(that.byId("tabelaObjetos"), true);
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/TaxCategory", {
 					type: "GET",
 					xhrFields: {
@@ -99,8 +91,8 @@ sap.ui.define(
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
 						}
+						that.setBusy(that.byId("tabelaObjetos"), false);
 						that.getModel().setProperty("/objetos", aResponse);						
-						//that.getModel().setProperty("/objetos", response);
 					}
 				});
 			},
@@ -141,12 +133,9 @@ sap.ui.define(
 			},
 
 			_carregarObjetoSelecionado: function (iIdObjeto) {
-				/*this.getModel().setProperty("/objeto", {
-					id: iIdObjeto,
-					nome: "Nome da Categoria"
-				});*/
-
+				
 				var that = this;
+				that.setBusy(that.byId("paginaObjeto"),true);
 
 				jQuery.ajax(Constants.urlBackend + "TaxCategory/" + iIdObjeto, {
 					type: "GET",
@@ -161,7 +150,8 @@ sap.ui.define(
 							category: oObjeto["category"],
 							fkDominioTaxClassification: oObjeto["fk_dominio_tax_classification.id_dominio_tax_classification"]
 						};
-
+						
+						that.setBusy(that.byId("paginaObjeto"),false);
 						that.getModel().setProperty("/objeto", obj);
 					}
 				});
@@ -177,6 +167,10 @@ sap.ui.define(
 
 				var that = this;
 
+				that.byId("btnCancelar").setEnabled(false);	
+				that.byId("btnSalvar").setEnabled(false);	
+				that.setBusy(that.byId("btnSalvar"),true);
+
 				var obj = this.getModel().getProperty("/objeto");
 
 				jQuery.ajax(Constants.urlBackend + "TaxCategory/" + iIdObjeto, {
@@ -190,6 +184,9 @@ sap.ui.define(
 						fkDominioTaxClassification: obj.fkDominioTaxClassification
 					},
 					success: function (response) {
+						that.byId("btnCancelar").setEnabled(true);	
+						that.byId("btnSalvar").setEnabled(true);	
+						that.setBusy(that.byId("btnSalvar"),false);						
 						that._navToPaginaListagem();
 					}
 				});
@@ -200,6 +197,10 @@ sap.ui.define(
 				this._navToPaginaListagem();*/
 
 				var that = this;
+
+				that.byId("btnCancelar").setEnabled(false);	
+				that.byId("btnSalvar").setEnabled(false);	
+				that.setBusy(that.byId("btnSalvar"),true);
 
 				var obj = this.getModel().getProperty("/objeto");
 
@@ -214,6 +215,11 @@ sap.ui.define(
 						fkDominioTaxClassification: obj.fkDominioTaxClassification
 					},
 					success: function (response) {
+
+						that.byId("btnCancelar").setEnabled(true);	
+						that.byId("btnSalvar").setEnabled(true);	
+						that.setBusy(that.byId("btnSalvar"),false);
+						
 						that._navToPaginaListagem();
 					}
 				});

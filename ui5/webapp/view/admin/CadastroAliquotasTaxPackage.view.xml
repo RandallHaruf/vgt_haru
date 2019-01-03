@@ -19,7 +19,7 @@
 					sorter: [{
 						path: 'tipo',
 						group: true
-					}, {
+					},{
 						path: 'nome'
 					}]
 				}"
