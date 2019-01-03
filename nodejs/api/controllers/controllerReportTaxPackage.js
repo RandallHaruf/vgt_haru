@@ -182,7 +182,7 @@ module.exports = {
 				stringDistinct = 'Select distinct "tblDominioAnoCalendario.id_dominio_ano_calendario" , "tblDominioAnoCalendario.ano_calendario" from (';
 				break;		
 			case "tblPeriodo.id_periodo":
-				stringDistinct = 'select distinct "tblPeriodo.id_periodo", "tblPeriodo.periodo" , "tblDominioAnoCalendario.ano_calendario" from (';
+				stringDistinct = 'select distinct "tblPeriodo.id_periodo", "tblPeriodo.periodo" , "tblDominioAnoCalendario.ano_calendario" , "tblPeriodo.numero_ordem" from (';
 				break;	
 			case "tblDominioMoeda.acronimo":
 				stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
