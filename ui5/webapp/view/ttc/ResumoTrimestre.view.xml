@@ -69,7 +69,7 @@
 									<headerToolbar>
 										<Toolbar>
 											<content>
-												<Title text="{i18n>viewGeralPeriodo1}" level="H2"/>
+												<Title text="{i18n>viewGeralPeriodo7}" level="H2"/>
 											</content>
 										</Toolbar>
 									</headerToolbar>
@@ -165,7 +165,7 @@
 									<headerToolbar>
 										<Toolbar>
 											<content>
-												<Title text="{i18n>viewGeralPeriodo2}" level="H2"/>
+												<Title text="{i18n>viewGeralPeriodo8}" level="H2"/>
 											</content>
 										</Toolbar>
 									</headerToolbar>
@@ -260,7 +260,7 @@
 									<headerToolbar>
 										<Toolbar>
 											<content>
-												<Title text="{i18n>viewGeralPeriodo3}" level="H2"/>
+												<Title text="{i18n>viewGeralPeriodo9}" level="H2"/>
 											</content>
 										</Toolbar>
 									</headerToolbar>
@@ -355,7 +355,7 @@
 									<headerToolbar>
 										<Toolbar>
 											<content>
-												<Title text="{i18n>viewGeralPeriodo4}" level="H2"/>
+												<Title text="{i18n>viewGeralPeriodo10}" level="H2"/>
 											</content>
 										</Toolbar>
 									</headerToolbar>

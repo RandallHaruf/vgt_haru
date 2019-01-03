@@ -39,7 +39,7 @@
 										</l:HorizontalLayout>
 										<l:HorizontalLayout allowWrapping="true">
 											<l:VerticalLayout>
-												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/LabelPeriodo}"/>
+												<ObjectAttribute title="{i18n>viewGeralTrimestre}" text="{/LabelPeriodo}"/>
 												<ObjectAttribute title="{i18n>viewGeralAnoCalendario}" text="{/AnoCalendario/anoCalendario}"/>
 											</l:VerticalLayout>
 										</l:HorizontalLayout>

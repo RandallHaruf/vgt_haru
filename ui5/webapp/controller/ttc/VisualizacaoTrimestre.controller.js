@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI) {
+	function (BaseController, NodeAPI, Utils) {
 		"use strict";
 		
 		return BaseController.extend("ui5ns.ui5.controller.ttc.VisualizacaoTrimestre", {
@@ -291,8 +292,9 @@ sap.ui.define(
 			
 			_onRouteMatched: function (oEvent) {
 				 var oParameters = JSON.parse(oEvent.getParameter("arguments").oParameters); 
-				 
+				 var that =this;
 				 this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
+				 oParameters.oPeriodo["periodo"] = Utils.traduzTrimestreTTC(oParameters.oPeriodo["numero_ordem"],that);
 				 this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				 this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
 				 
@@ -309,10 +311,13 @@ sap.ui.define(
 							response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
 						}
 						
+						
+						
 						that.getModel().setProperty("/Pagamentos/Borne", response);
 					}	
 					
 					that.byId("tabelaPagamentosBorne").setBusy(false);
+					
 				});
 				
 				this.byId("tabelaPagamentosCollected").setBusyIndicatorDelay(100);
@@ -323,6 +328,9 @@ sap.ui.define(
 						for (var i = 0; i < response.length; i++) {
 							response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
 						}
+						
+						
+						
 						
 						that.getModel().setProperty("/Pagamentos/Collected", response);
 					}	

@@ -48,10 +48,10 @@
 									<Select id="selectTrimestre">
 										<items>
 											<core:Item text=""/>
-											<core:Item text="{i18n>viewGeralPeriodo1}" key="1"/>
-											<core:Item text="{i18n>viewGeralPeriodo2}" key="2"/>
-											<core:Item text="{i18n>viewGeralPeriodo3}" key="3"/>
-											<core:Item text="{i18n>viewGeralPeriodo4}" key="4"/>
+											<core:Item text="{i18n>viewGeralPeriodo7}" key="1"/>
+											<core:Item text="{i18n>viewGeralPeriodo8}" key="2"/>
+											<core:Item text="{i18n>viewGeralPeriodo9}" key="3"/>
+											<core:Item text="{i18n>viewGeralPeriodo10}" key="4"/>
 										</items>
 									</Select>
 								</f:fields>

@@ -393,6 +393,27 @@ sap.ui.define(
 				}
 				return traducao;
 			},
+				traduzTrimestreTTC: function (id, that){
+
+				var traducao = "";
+				switch (id){
+				
+					case 1:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo7");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo8");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo9");
+						break;
+					case 4:
+						traducao = that.getResourceBundle().getText("viewGeralPeriodo10");
+						break;
+			
+				}
+				return traducao;
+			},
            traduzDominioDiferencaTipo: function (id,that){
                
               var traducao = "";
