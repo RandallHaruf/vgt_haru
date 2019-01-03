@@ -38,7 +38,7 @@
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
 							press="onNovoObjeto" 
-							text="novo"
+							text="{i18n>viewGeralNovo}"
 							type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>

@@ -92,7 +92,7 @@ sap.ui.define(
 
 							if (!oInputNome.getValue() || !oSelectTipo.getSelectedKey()) {
 								sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralOrbigatorio"), {
-									title: "Info"
+									title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso")
 								});
 							} else {
 								jQuery.ajax(Constants.urlBackend + "DiferencaOpcao", {
@@ -195,13 +195,13 @@ sap.ui.define(
 					title: that.getResourceBundle().getText("viewGeralEditarDiferenca"),
 					content: oForm,
 					beginButton: new sap.m.Button({
-						text: "salvar",
+						text: that.getResourceBundle().getText("viewGeralSalvar"),
 						press: function () {
 							//sap.m.MessageToast.show("Atualizar diferença: " + nome);
 
 							if (!oInputNome.getValue() || !oSelectTipo.getSelectedKey()) {
 								sap.m.MessageBox.warning(that.getResourceBundle().getText("ViewGeralOrbigatorio"), {
-									title: "Aviso"
+									title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso")
 								});
 							} else {
 								jQuery.ajax(Constants.urlBackend + "DiferencaOpcao/" + iIdDiferenca, {
@@ -227,7 +227,7 @@ sap.ui.define(
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({
-						text: "sair",
+						text:  that.getResourceBundle().getText("viewGeralSair"),
 						press: function () {
 							dialog.close();
 						}.bind(this)
@@ -296,7 +296,8 @@ sap.ui.define(
 				}]);*/
 
 				var that = this;
-
+				that.setBusy(that.byId("tabelaObjetos"), true);
+				that.getModel().setProperty("/DominioDiferencaTipo", null);
 				jQuery.ajax(Constants.urlBackend + "DominioDiferencaTipo", {
 					type: "GET",
 					xhrFields: {
@@ -313,7 +314,7 @@ sap.ui.define(
 						//that.getModel().setProperty("/DominioDiferencaTipo", response);
 					}
 				});
-
+				that.getModel().setProperty("/objetos", null);
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/DiferencaOpcao", {
 					type: "GET",
 					xhrFields: {
@@ -327,6 +328,7 @@ sap.ui.define(
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["tipo"] = Utils.traduzDominioDiferencaTipo(aResponse[i]["fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo"],that);
 						}
+						that.setBusy(that.byId("tabelaObjetos"), false);
 						that.getModel().setProperty("/objetos", aResponse);
 					
 						//that.getModel().setProperty("/objetos", response);

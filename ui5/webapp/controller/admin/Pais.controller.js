@@ -95,6 +95,7 @@ sap.ui.define(
 			_carregarObjetos: function () {
 				var that = this;
 				this.setBusy(this.byId("tabelaObjetos"), true);
+				that.getModel().setProperty("/objetos", null);
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {

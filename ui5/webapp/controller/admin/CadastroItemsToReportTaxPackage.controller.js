@@ -79,7 +79,7 @@ sap.ui.define(
 				}]);*/
 
 				var that = this;
-
+				that.getModel().setProperty("/objetos", null);
 				jQuery.ajax(Constants.urlBackend + "ItemToReport", {
 					type: "GET",
 					xhrFields: {
