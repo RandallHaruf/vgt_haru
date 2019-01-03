@@ -129,6 +129,9 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.id_periodo"],that);           
+					}							
 					that.getModel().setProperty("/Periodo", aRegistro);
 				}
 			});	

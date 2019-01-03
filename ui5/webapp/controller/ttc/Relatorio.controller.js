@@ -220,6 +220,9 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i]["tblDominioTaxClassification.id_dominio_tax_classification"],that);           
+					}							
 					that.getModel().setProperty("/DominioTaxClassification", aRegistro);
 				}
 			});	
