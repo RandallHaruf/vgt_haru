@@ -75,6 +75,17 @@ sap.ui.define(
 				return DataFinal;
 			},
 			
+			orderByArrayParaBox: function (array,stringOrderBy){
+				    array.sort(function(x, y) {
+				        return (x[stringOrderBy] === y[stringOrderBy])
+				        ? 0 
+				        : x[stringOrderBy] < y[stringOrderBy]
+				        ? -1 
+				        : 1;
+				    });	
+				return array;
+			},			
+			
 			displayFormat: function (that){
 				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
 				var formatFull = "";

@@ -99,7 +99,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", aRegistro);
+					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
 				}
 			});	
 			oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
@@ -147,7 +147,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", aRegistro);
+					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
 				}
 			});				
 		},
@@ -277,6 +277,7 @@ sap.ui.define([
 							aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] 
 								? Number(aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
 								: "0" ;
+						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 								
 					}						
 					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
 					that.setBusy(that.byId("relatorioDoTaxPackage"),false);		

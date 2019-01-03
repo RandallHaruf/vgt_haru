@@ -205,7 +205,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", aRegistro);
+					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome"));
 				}
 			});	
 			oWhere[13] = ["tblDominioTaxClassification.classification"];
@@ -222,8 +222,9 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i]["tblDominioTaxClassification.id_dominio_tax_classification"],that);           
-					}							
-					that.getModel().setProperty("/DominioTaxClassification", aRegistro);
+					}	
+
+					that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aRegistro,"tblDominioTaxClassification.classification"));
 				}
 			});	
 			oWhere[13] = ["tblTaxCategory.category"];
@@ -238,7 +239,8 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/TaxCategory", aRegistro);
+					
+					that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(aRegistro,"tblTaxCategory.category"));
 				}
 			});	
 			oWhere[13] = ["tblTax.tax"];
@@ -253,7 +255,8 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Tax", aRegistro);
+					
+					that.getModel().setProperty("/Tax", Utils.orderByArrayParaBox(aRegistro,"tblTax.tax"));
 				}
 			});		
 			oWhere[13] = ["tblNameOfTax.name_of_tax"];
@@ -268,7 +271,8 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/NameOfTax", aRegistro);
+
+					that.getModel().setProperty("/NameOfTax", Utils.orderByArrayParaBox(aRegistro,"tblNameOfTax.name_of_tax"));
 				}
 			});	
 			oWhere[13] = ["tblDominioJurisdicao.jurisdicao"];
@@ -285,8 +289,9 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i]["tblDominioJurisdicao.id_dominio_jurisdicao"],that);           
-					}					
-					that.getModel().setProperty("/DominioJurisdicao", aRegistro);
+					}	
+					
+					that.getModel().setProperty("/DominioJurisdicao", Utils.orderByArrayParaBox(aRegistro,"tblDominioJurisdicao.jurisdicao"));
 				}
 			});		
 			oWhere[13] = ["tblDominioPais.pais"];
@@ -301,7 +306,10 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioPais", aRegistro);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);           
+					}			
+					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro,"tblDominioPais.pais"));
 				}
 			});	
 			oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
@@ -355,7 +363,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", aRegistro);
+					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
 				}
 			});		
 			oWhere[13] = ["tblDominioTipoTransacao.tipo_transacao"];
@@ -373,7 +381,7 @@ sap.ui.define([
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i]["tblDominioTipoTransacao.id_dominio_tipo_transacao"],that);           
 					}				
-					that.getModel().setProperty("/DominioTipoTransacao", aRegistro);
+					that.getModel().setProperty("/DominioTipoTransacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioTipoTransacao.tipo_transacao"));
 				}
 			});					
 		},
@@ -429,7 +437,6 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						//aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"].substring(8,10)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(5,7)+"/"+aRegistro[i]["tblPagamento.data_pagamento"].substring(4,0);
 						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"]
 						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblPagamento.data_pagamento"])                          
 						: null;
@@ -437,6 +444,11 @@ sap.ui.define([
 						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
 						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i]["tblPagamento.principal"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
 						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0" ;
+						
+						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i]["tblDominioTaxClassification.id_dominio_tax_classification"],that);
+						aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i]["tblDominioJurisdicao.id_dominio_jurisdicao"],that); 
+						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);  
+						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i]["tblDominioTipoTransacao.id_dominio_tipo_transacao"],that);  					
 					}		
 					that.getModel().setProperty("/ReportTTC", aRegistro);
 					that.setBusy(that.byId("relatorioDoTTC"),false);	
