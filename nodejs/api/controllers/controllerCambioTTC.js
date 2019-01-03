@@ -1,9 +1,9 @@
 "use strict";
 
 var XLSX = require("xlsx");
-var config = require("../../config.js");
+//var config = require("../../config.js");
 
-var diretorio = config.pathToUploads + "cambioTTC/";
+var diretorio = "/diretorio/xlsx"; //config.pathToUploads + "cambioTTC/";
 
 function excelDateToString (date) {
 	var oDate = new Date(Math.round((date - 25569) * 86400 * 1000));

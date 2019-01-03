@@ -1,4 +1,4 @@
-var sendEmails = require("../../jobs/sendEmails.js");
+var sendEmails = require("../../utils/sendEmails.js");
 var db = require("../db.js");
 var modelUsuario = require("../models/modelUsuario.js");
 var config = require("../../config.json");

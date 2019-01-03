@@ -96,10 +96,18 @@ function send_Not_Email(numOrdem, anoCal, qtdDia) {
 	*/
 }
 
+function encerrarPeriodoAnteriorAbrirPeriodoCorrente(numeroOrdem) {
+	
+}
+
 module.exports = function () {
 	var schedule = require('node-schedule');
 	
 	var anoCal = (new Date()).getFullYear();
+	
+	/*schedule.scheduleJob('0 20 20 1 *', function () {
+		console.log((new Date()).getTime());
+	});*/
 	
 	/*
 	schedule.scheduleJob('/3 * * * * *', function () {

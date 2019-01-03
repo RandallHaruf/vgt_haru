@@ -2,7 +2,7 @@
 
 var db = require("../db");
 var model = require("../models/modelRequisicaoReabertura");
-var disparaEmail = require("../../jobs/sendEmails");
+var disparaEmail = require("../../utils/sendEmails");
 
 function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa,
 	sIdPeriodo, sNomeEmpresa) {
