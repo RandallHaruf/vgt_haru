@@ -45,16 +45,16 @@
 		
 				<columns>
 					<Column>
-						<Text text="{i18n>viewGeralNome}" />
+						<Text text="{i18n>viewPaisAdminPais}" />
 					</Column>
 					<Column >
 						<Text text="Status" />
 					</Column>
 					<Column>
-						<Text text="{i18n>viewGeralAliquotaVigente}" />
+						<Text text="{i18n>viewPaisAdminNomeImposto}" />
 					</Column>
 					<Column>
-						<Text text="{i18n>viewGeralValueAliquot}" />
+						<Text text="{i18n>viewPaisAdminAliquotaVigente}" />
 					</Column>
 				</columns>
 		
@@ -238,7 +238,7 @@
 															<Text text="{i18n>viewGeralNome}" />
 														</Column>
 														<Column vAlign="Middle">
-															<Text text="{i18n>viewGeralValue}" />
+															<Text text="{i18n>viewPaisAdminAliquota}" />
 														</Column>
 														<Column>
 															<Text text="{i18n>ViewGeralDataInício} {/displayFormatFull}" />
