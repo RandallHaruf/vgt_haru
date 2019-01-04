@@ -20,4 +20,6 @@ module.exports = function () {
 	
 	require('./ttc/encerrarPeriodoAnteriorAbrirPeriodoCorrente')();
 	require('./ttc/notificarProximidadeEncerramentoPeriodo')();
+	
+	require('./taxPackage/encerrarPeriodoAnteriorAbrirPeriodoCorrente')();
 };
