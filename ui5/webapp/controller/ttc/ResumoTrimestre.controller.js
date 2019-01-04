@@ -233,12 +233,19 @@ sap.ui.define(
 
 				var oTextArea = new sap.m.TextArea({
 					rows: 5
+				}).attachChange(function (oEvent) {
+					if (oEvent.getSource().getValue()) {
+						oEvent.getSource().setValueState(sap.ui.core.ValueState.None);
+						oEvent.getSource().setValueStateText("");
+					}
 				});
 
-				oFormElement = new sap.ui.layout.form.FormElement({
-					label: "{i18n>viewGeralJustificativa}"
-				}).addField(oTextArea);
+				var oLabel = new sap.m.Label({
+					text: "{i18n>viewGeralJustificativa}"
+				}).addStyleClass("sapMLabelRequired");
 
+				oFormElement = new sap.ui.layout.form.FormElement().setLabel(oLabel).addField(oTextArea);
+				
 				oFormContainer.addFormElement(oFormElement);
 
 				oForm.addFormContainer(oFormContainer);
@@ -249,21 +256,27 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
-							NodeAPI.criarRegistro("RequisicaoReabertura", {
-								dataRequisicao: this._formatDate(new Date()),
-								idUsuario: "2", //TROCAR PELA SESSION ID USUARIO
-								nomeUsuario: "Juliana Mauricio",
-								justificativa: oTextArea.getValue(),
-								resposta: "",
-								fkDominioRequisicaoReaberturaStatus: "1",
-								fkEmpresa: oParams.oEmpresa.id_empresa,
-								fkPeriodo: oPeriodo.id_periodo,
-								nomeEmpresa: oParams.oEmpresa.nome
-							}, function (response) {
-								dialog.close();
-								that._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
-								sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
-							});
+							if (oTextArea.getValue()) {
+								NodeAPI.criarRegistro("RequisicaoReabertura", {
+									dataRequisicao: this._formatDate(new Date()),
+									idUsuario: "2", //TROCAR PELA SESSION ID USUARIO
+									nomeUsuario: "Juliana Mauricio",
+									justificativa: oTextArea.getValue(),
+									resposta: "",
+									fkDominioRequisicaoReaberturaStatus: "1",
+									fkEmpresa: oParams.oEmpresa.id_empresa,
+									fkPeriodo: oPeriodo.id_periodo,
+									nomeEmpresa: oParams.oEmpresa.nome
+								}, function (response) {
+									dialog.close();
+									that._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
+									sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
+								});
+							}
+							else {
+								oTextArea.setValueState(sap.ui.core.ValueState.Error);
+								oTextArea.setValueStateText(that.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio"));
+							}
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({

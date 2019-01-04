@@ -326,11 +326,18 @@ sap.ui.define(
 
 				var oTextArea = new sap.m.TextArea({
 					rows: 5
+				}).attachChange(function (oEvent) {
+					if (oEvent.getSource().getValue()) {
+						oEvent.getSource().setValueState(sap.ui.core.ValueState.None);
+						oEvent.getSource().setValueStateText("");
+					}
 				});
+				
+				var oLabel = new sap.m.Label({
+					text: "{i18n>viewGeralJustificativa}"
+				}).addStyleClass("sapMLabelRequired");
 
-				oFormElement = new sap.ui.layout.form.FormElement({
-					label: "{i18n>viewGeralJustificativa}"
-				}).addField(oTextArea);
+				oFormElement = new sap.ui.layout.form.FormElement().setLabel(oLabel).addField(oTextArea);
 
 				oFormContainer.addFormElement(oFormElement);
 
@@ -342,39 +349,45 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
-							NodeAPI.pCriarRegistro("RequisicaoReaberturaTaxPackage", {
-								dataRequisicao: this._formatDate(new Date()),
-								idUsuario: 2,
-								nomeUsuario: "Juliana",
-								justificativa: oTextArea.getValue(),
-								fkDominioRequisicaoReaberturaStatus: 1,
-								fkIdRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
-							}).then(function (response) {
-								dialog.close();
-								that._onEnviarMensagem(oEmpresa.empresa, oPeriodo.periodo);
-								sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
-							}).catch(function (err) {
-								dialog.close();
-
-								var dialog2 = new sap.m.Dialog({
-									title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
-									type: "Message",
-									content: new sap.m.Text({
-										text: err.status + " - " + err.statusText
-									}),
-									endButton: new sap.m.Button({
-										text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
-										press: function () {
-											dialog2.close();
+							if (oTextArea.getValue()) {
+								NodeAPI.pCriarRegistro("RequisicaoReaberturaTaxPackage", {
+									dataRequisicao: this._formatDate(new Date()),
+									idUsuario: 2,
+									nomeUsuario: "Juliana",
+									justificativa: oTextArea.getValue(),
+									fkDominioRequisicaoReaberturaStatus: 1,
+									fkIdRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
+								}).then(function (response) {
+									dialog.close();
+									that._onEnviarMensagem(oEmpresa.empresa, oPeriodo.periodo);
+									sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
+								}).catch(function (err) {
+									dialog.close();
+	
+									var dialog2 = new sap.m.Dialog({
+										title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+										type: "Message",
+										content: new sap.m.Text({
+											text: err.status + " - " + err.statusText
+										}),
+										endButton: new sap.m.Button({
+											text: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+											press: function () {
+												dialog2.close();
+											}
+										}),
+										afterClose: function () {
+											dialog2.destroy();
 										}
-									}),
-									afterClose: function () {
-										dialog2.destroy();
-									}
+									});
+	
+									dialog2.open();
 								});
-
-								dialog2.open();
-							});
+							}
+							else {
+								oTextArea.setValueState(sap.ui.core.ValueState.Error);
+								oTextArea.setValueStateText(that.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio"));
+							}
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({
