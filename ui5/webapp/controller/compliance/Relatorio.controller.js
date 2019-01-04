@@ -232,7 +232,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", aRegistro);
+					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoAcessoriaTipo.tipo"));
 				}
 			});		
 			oWhere[14] = ["tblEmpresa.nome"];
@@ -247,7 +247,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", aRegistro);
+					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome"));
 				}
 			});				
 			oWhere[14] = ["tblDominioPais.pais"];
@@ -262,7 +262,10 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioPais", aRegistro);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);           
+					}					
+					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro,"tblDominioPais.pais"));
 				}
 			});		
 			oWhere[14] = ["tblModeloObrigacao.nome_obrigacao"];
@@ -277,7 +280,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ModeloObrigacao", aRegistro);
+					that.getModel().setProperty("/ModeloObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblModeloObrigacao.nome_obrigacao"));
 				}
 			});	
 			oWhere[14] = ["tblDominioPeriodicidadeObrigacao.descricao"];
@@ -295,7 +298,7 @@ sap.ui.define([
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);           
 					}
-					that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
+					that.getModel().setProperty("/DomPeriodicidadeObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioPeriodicidadeObrigacao.descricao"));
 				}
 			});	
 			oWhere[14] = ["tblDominioAnoFiscal.ano_fiscal"];
@@ -328,7 +331,7 @@ sap.ui.define([
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblDominioObrigacaoStatus.descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(aRegistro[i]["tblDominioObrigacaoStatus.id_dominio_obrigacao_status"],that);           
 					}					
-					that.getModel().setProperty("/DominioStatusObrigacao", aRegistro);
+					that.getModel().setProperty("/DominioStatusObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoStatus.descricao_obrigacao_status"));
 				}
 			});	
 			oWhere[14] = ["prazo_de_entrega_calculado"];
@@ -666,7 +669,8 @@ sap.ui.define([
 						? that.getResourceBundle().getText("viewGeralSim") 
 						: that.getResourceBundle().getText("viewGeralNao") ;
 						
-						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"],that);						
+						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);	
+						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);  
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 					

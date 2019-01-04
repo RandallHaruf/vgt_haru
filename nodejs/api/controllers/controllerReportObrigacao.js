@@ -230,7 +230,7 @@ module.exports = {
 			}
 		}
 		
-		sStatement+=' order by "tblDominioPais.pais" , "tblEmpresa.nome" , "tblDominioAnoCalendario.ano_calendario"';
+		sStatement+=' order by "tblDominioObrigacaoAcessoriaTipo.tipo" , "tblDominioPais.pais" , "tblEmpresa.nome" , "tblModeloObrigacao.nome_obrigacao" , "tblDominioAnoCalendario.ano_calendario"';
 		
 		db.executeStatement({
 			statement: sStatement,
