@@ -74,7 +74,7 @@ sap.ui.define(
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["tipo"] = Utils.traduzTiposAliquota(aResponse[i]["id_dominio_aliquota_tipo"], that);
 						}
-						that.getModel().setProperty("/DominioAliquotaTipo", aResponse);
+						that.getModel().setProperty("/DominioAliquotaTipo", Utils.orderByArrayParaBox(aResponse,"tipo"));
 
 						//that.getModel().setProperty("/DominioAliquotaTipo", response);
 					}

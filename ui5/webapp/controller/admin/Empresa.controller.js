@@ -276,7 +276,12 @@ sap.ui.define(
 								
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					response.unshift({ });
-					that.getModel().setProperty("/Pais", response);	
+					var aPais = response;
+					for(var i = 1 ; i < aPais.length ; i++){
+						aPais[i]["nomePais"] = 
+						Utils.traduzDominioPais(aPais[i]["fkDominioPais"],that);
+					}					
+					that.getModel().setProperty("/Pais", Utils.orderByArrayParaBox(aPais,"nomePais"));	
 				});
 				
 				NodeAPI.listarRegistros("DominioEmpresaTipoSocietario", function (response) {
@@ -286,7 +291,7 @@ sap.ui.define(
 						aDominioEmpresaTipoSocietario[i]["tipo_societario"] = 
 						Utils.traduzEmpresaTipoSocietario(aDominioEmpresaTipoSocietario[i]["id_dominio_empresa_tipo_societario"],that);
 					}					
-					that.getModel().setProperty("/DominioEmpresaTipoSocietario", aDominioEmpresaTipoSocietario);	
+					that.getModel().setProperty("/DominioEmpresaTipoSocietario", Utils.orderByArrayParaBox(aDominioEmpresaTipoSocietario,"tipo_societario"));	
 					//that.getModel().setProperty("/DominioEmpresaTipoSocietario", response);	
 				});
 				
@@ -297,7 +302,7 @@ sap.ui.define(
 						aDominioEmpresaStatus[i]["status"] = 
 						Utils.traduzEmpresaStatusTipo(aDominioEmpresaStatus[i]["id_dominio_empresa_status"],that);
 					}						
-					that.getModel().setProperty("/DominioEmpresaStatus", aDominioEmpresaStatus);	
+					that.getModel().setProperty("/DominioEmpresaStatus", Utils.orderByArrayParaBox(aDominioEmpresaStatus,"status"));	
 				});
 				
 				NodeAPI.listarRegistros("Aliquota?tipo=empresa", function (response) {

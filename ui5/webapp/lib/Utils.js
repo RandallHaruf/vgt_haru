@@ -79,7 +79,7 @@ sap.ui.define(
 				    array.sort(function(x, y) {
 				        return (x[stringOrderBy] === y[stringOrderBy])
 				        ? 0 
-				        : x[stringOrderBy] < y[stringOrderBy]
+				        : (x[stringOrderBy] < y[stringOrderBy]) || (x[stringOrderBy] === null)
 				        ? -1 
 				        : 1;
 				    });	
