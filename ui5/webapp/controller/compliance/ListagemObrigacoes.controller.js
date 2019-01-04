@@ -120,12 +120,13 @@ sap.ui.define(
 			onNavBack: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},
+			
 			carregarFiltroEmpresa: function () {
 				var that = this;
 				NodeAPI.listarRegistros("Empresa", function (response) {
 					response.unshift({
 						id: null,
-						descricao: ""
+						nome: that.getResourceBundle().getText("viewGeralTodos")
 					});
 					that.getModel().setProperty("/Empresa", response);
 				});
@@ -136,7 +137,7 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendarioAteCorrente", function (response) {
 					response.unshift({
 						id: null,
-						descricao: ""
+						ano_calendario: that.getResourceBundle().getText("viewGeralTodos")
 					});
 					that.getModel().setProperty("/DominioAnoCalendario", response);
 				});

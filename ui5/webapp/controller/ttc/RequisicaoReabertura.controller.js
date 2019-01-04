@@ -104,7 +104,9 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
 					if (response) {
-						response.unshift({});
+						response.unshift({
+							status: that.getResourceBundle().getText("viewGeralTodos")
+						});
 						that.getModel().setProperty("/RequisicaoReaberturaStatus", response);
 						
 						that._atualizarDados();
