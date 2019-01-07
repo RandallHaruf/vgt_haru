@@ -83,7 +83,7 @@ sap.ui.define(
 			
 			_carregarCategory: function (iIdClassification) {
 				var that = this;
-				
+				//that.setBusy(that.byId("formularioObjeto"), true);					
 				jQuery.ajax(Constants.urlBackend + "TaxCategory?classification=" + iIdClassification, {
 					type: "GET",
 					xhrFields: {
@@ -93,7 +93,8 @@ sap.ui.define(
 					dataType: "json",
 					success: function (response) {
 						response.unshift({ id: null, nome: "" });
-						that.getModel().setProperty("/TaxCategory", response);
+						that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(response,"category"));
+						that.setBusy(that.byId("formularioObjeto"), false);							
 					}
 				});
 			},
@@ -159,7 +160,7 @@ sap.ui.define(
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
 						}
-						that.getModel().setProperty("/DominioTaxClassification", aResponse);							
+						that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aResponse,"classification"));							
 						//that.getModel().setProperty("/DominioTaxClassification", response);
 					}
 				});
@@ -200,9 +201,9 @@ sap.ui.define(
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
-
-						that.setBusy(that.byId("formularioObjeto"), false);						
 						that._carregarCategory(obj.fkClassification);
+						
+						//that.setBusy(that.byId("formularioObjeto"), false);							
 					}
 				});
 			},

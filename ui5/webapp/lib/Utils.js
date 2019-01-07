@@ -77,12 +77,13 @@ sap.ui.define(
 			
 			orderByArrayParaBox: function (array,stringOrderBy){
 				    array.sort(function(x, y) {
-				        return (x[stringOrderBy] === y[stringOrderBy])
-				        ? 0 
-				        : (x[stringOrderBy] < y[stringOrderBy]) || (x[stringOrderBy] === null)
-				        ? -1 
-				        : 1;
-				    });	
+					if (x[stringOrderBy]){
+						return y[stringOrderBy] ? x[stringOrderBy].localeCompare(y[stringOrderBy]) : 1;
+					}
+					else if (y[stringOrderBy]){
+						return x[stringOrderBy] ? y[stringOrderBy].localeCompare(x[stringOrderBy]) : -1;
+					}
+					});	
 				return array;
 			},			
 			

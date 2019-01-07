@@ -113,7 +113,11 @@ sap.ui.define(
 					crossDomain: true,
 					dataType: "json",
 					success: function (response) {
-						that.getModel().setProperty("/objetos", response);
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aResponse[i]["tblDominioPais.id_dominio_pais"], that);
+						}							
+						that.getModel().setProperty("/objetos", Utils.orderByArrayParaBox(response,"nomePais"));
 					}
 				});
 			},
@@ -134,7 +138,7 @@ sap.ui.define(
 							id: 0,
 							nome: ""
 						});
-						that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", response);
+						that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", Utils.orderByArrayParaBox(response,"tipo"));
 					}
 				});
 				//os dois node api foram adicionados recentemente para puxar os valores novos do formulario
@@ -149,7 +153,7 @@ sap.ui.define(
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
 							aRegistro[i]["descricao"] = Utils.traduzObrigacaoPeriodo(aRegistro[i]["id_periodicidade_obrigacao"], that);
 						}
-						that.getModel().setProperty("/DomPeriodicidadeObrigacao", aRegistro);
+						that.getModel().setProperty("/DomPeriodicidadeObrigacao", Utils.orderByArrayParaBox(aRegistro,"descricao"));
 					}
 				});
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
@@ -159,7 +163,11 @@ sap.ui.define(
 							id: 0,
 							nome: ""
 						});
-						that.getModel().setProperty("/Pais", response);
+						var aPais = response;
+						for (var i = 0, length = aPais.length; i < length; i++) {
+							aPais[i]["nomePais"] = Utils.traduzDominioPais(aPais[i]["fkDominioPais"], that);
+						}						
+						that.getModel().setProperty("/Pais", Utils.orderByArrayParaBox(aPais,"nomePais"));
 
 					}
 				});

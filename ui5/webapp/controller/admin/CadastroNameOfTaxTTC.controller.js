@@ -150,10 +150,13 @@ sap.ui.define(
 					//that.getModel().setProperty("/objetos", response);
 				});
 				
-				NodeAPI.listarRegistros("DominioPais", function (response) {
-
-					that.setBusy(that.byId("paginaListagem"), false);					
-					that.getModel().setProperty("/DominioPais", response); 
+				NodeAPI.listarRegistros("DominioPais", function (responsePais) {
+					that.setBusy(that.byId("paginaListagem"), false);		
+						var aPais = responsePais;
+						for (var i = 0, length = aPais.length; i < length; i++) {
+							aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
+						}					
+					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(responsePais,"pais")); 
 				});
 			},
 			
@@ -166,7 +169,7 @@ sap.ui.define(
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
 						}
-						that.getModel().setProperty("/DominioTaxClassification", aResponse);						
+						that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aResponse,"classification"));						
 					//that.getModel().setProperty("/DominioTaxClassification", response);
 				});
 			},
@@ -176,7 +179,7 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("TaxCategory?classification=" + sIdClassification, function (response) {
 					response.unshift({ "id_tax_category": null, "category": ""  });
-					that.getModel().setProperty("/TaxCategory", response);
+					that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(response,"category"));
 				});
 			},
 			
@@ -185,7 +188,7 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("Tax?category=" + sIdCategory, function (response) {
 					response.unshift({ "id_tax": null, "tax": ""  });
-					that.getModel().setProperty("/Tax", response);
+					that.getModel().setProperty("/Tax", Utils.orderByArrayParaBox(response,"tax"));
 				});
 			},
 			
@@ -362,8 +365,9 @@ sap.ui.define(
 						that._limparFormulario();
 					}
 				});
+
 			},
-			
+
 			onNovoObjeto: function (oEvent) {
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},

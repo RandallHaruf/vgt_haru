@@ -100,6 +100,7 @@ sap.ui.define(
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["descricaoStatus"] = Utils.traduzStatusTiposPais(aResponse[i]["fkDominioPaisStatus"], that);
+						aResponse[i]["nomePais"] = Utils.traduzDominioPais(aResponse[i]["fkDominioPais"],that);
 					}
 					that.getModel().setProperty("/objetos", aResponse);
 					that.setBusy(that.byId("tabelaObjetos"), false);
@@ -114,7 +115,11 @@ sap.ui.define(
 						id: null,
 						nome: ""
 					});
-					that.getModel().setProperty("/DominioPais", response);
+					var aPais = response;
+					for (var i = 0, length = aPais.length; i < length; i++) {
+						aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
+					}					
+					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aPais,"pais"));
 				});
 
 				NodeAPI.listarRegistros("DominioPaisStatus", function (response) {
@@ -124,7 +129,7 @@ sap.ui.define(
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["status"] = Utils.traduzStatusTiposPais(aResponse[i]["id_dominio_pais_status"], that);
 					}
-					that.getModel().setProperty("/DominioPaisStatus", aResponse);
+					that.getModel().setProperty("/DominioPaisStatus", Utils.orderByArrayParaBox(aResponse,"status"));
 					//that.getModel().setProperty("/DominioPaisStatus", response);
 				});
 
@@ -133,11 +138,11 @@ sap.ui.define(
 						id: null,
 						descricao: ""
 					});
-					var aResponse = response;
-					for (var i = 0, length = aResponse.length; i < length; i++) {
-						aResponse[i]["regiao"] = Utils.traduzPaisRegiao(aResponse[i]["id_dominio_pais_regiao"], that);
+					var aResponseRegiao = response;
+					for (var i = 0, length = aResponseRegiao.length; i < length; i++) {
+						aResponseRegiao[i]["regiao"] = Utils.traduzPaisRegiao(aResponseRegiao[i]["id_dominio_pais_regiao"], that);
 					}
-					that.getModel().setProperty("/DominioPaisRegiao", aResponse);
+					that.getModel().setProperty("/DominioPaisRegiao", Utils.orderByArrayParaBox(aResponseRegiao,"regiao"));
 				});
 
 				NodeAPI.listarRegistros("Aliquota?tipo=pais", function (response) {
