@@ -553,7 +553,7 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				var oParameters = JSON.parse(oEvent.getParameter("arguments").oParameters);
-
+				Utils.displayFormat(this);
 				this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
@@ -572,34 +572,34 @@ sap.ui.define(
 				NodeAPI.listarRegistros("TaxCategory?classification=1", function (response) { // Classification=Borne
 					if (response) {
 						response.unshift({});
-						that.getModel().setProperty("/Borne/TaxCategory", response);
+						that.getModel().setProperty("/Borne/TaxCategory", Utils.orderByArrayParaBox(response,"category"));
 					}
 				});
 
 				NodeAPI.listarRegistros("TaxCategory?classification=2", function (response) { // Classification=Collected
 					if (response) {
 						response.unshift({});
-						that.getModel().setProperty("/Collected/TaxCategory", response);
+						that.getModel().setProperty("/Collected/TaxCategory", Utils.orderByArrayParaBox(response,"category"));
 					}
 				});
 
 				NodeAPI.listarRegistros("DeepQuery/Tax?classification=1", function (response) { // Classification=Borne
 					if (response) {
 						response.unshift({});
-						that.getModel().setProperty("/Borne/Tax", response);
+						that.getModel().setProperty("/Borne/Tax", Utils.orderByArrayParaBox(response,"tax"));
 					}
 				});
 
 				NodeAPI.listarRegistros("DeepQuery/Tax?classification=2", function (response) { // Classification=Collected
 					if (response) {
 						response.unshift({});
-						that.getModel().setProperty("/Collected/Tax", response);
+						that.getModel().setProperty("/Collected/Tax", Utils.orderByArrayParaBox(response,"tax"));
 					}
 				});
 
 				NodeAPI.listarRegistros("Pais/" + oParameters.oEmpresa["fk_pais.id_pais"] + "/NameOfTax?default=true", function (response) {
 					if (response) {
-						that.getModel().setProperty("/NameOfTaxPadrao", response);
+						that.getModel().setProperty("/NameOfTaxPadrao", Utils.orderByArrayParaBox(response,"name_of_tax"));
 					}
 				});
 
@@ -609,14 +609,17 @@ sap.ui.define(
 						for(var i = 0, length = response.length; i < length;i++){
 							response[i]["jurisdicao"] = Utils.traduzJurisdicao(response[i]["id_dominio_jurisdicao"],that);
 						} 
-						that.getModel().setProperty("/DominioJurisdicao", response);
+						that.getModel().setProperty("/DominioJurisdicao",Utils.orderByArrayParaBox(response,"jurisdicao"));
 					}
 				});
 
 				NodeAPI.listarRegistros("DominioPais", function (response) {
 					if (response) {
 						response.unshift({});
-						that.getModel().setProperty("/DominioPais", response);
+						for(var i = 0, length = response.length; i < length;i++){
+							response[i]["pais"] = Utils.traduzDominioPais(response[i]["id_dominio_pais"],that);
+						} 						
+						that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(response,"pais"));
 					}
 				});
 
@@ -634,7 +637,7 @@ sap.ui.define(
 							var oResponse = response[i];
 							response[i].AcroNome = response[i]["acronimo"] + " - " + response[i]["nome"];
 						}
-						that.getModel().setProperty("/DominioMoeda", response);
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(response,"AcroNome"));
 						that._carregarPagamentos();
 					}
 				});
@@ -645,7 +648,7 @@ sap.ui.define(
 						for(var i = 0, length = response.length; i < length;i++){
 							response[i]["tipo_transacao"] = Utils.traduzTipoTransacao(response[i]["id_dominio_tipo_transacao"],that);
 						} 
-						that.getModel().setProperty("/DominioTipoTransacao", response);
+						that.getModel().setProperty("/DominioTipoTransacao", Utils.orderByArrayParaBox(response,"tipo_transacao"));
 					}
 				});
 
