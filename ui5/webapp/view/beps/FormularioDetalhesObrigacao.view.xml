@@ -50,30 +50,32 @@
 						<core:Title text="{/RespostaObrigacao/nome_obrigacao}"/>
 					</f:title>
 					<f:layout>
-						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+						<f:ResponsiveGridLayout labelSpanXL="5" labelSpanL="5" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 							emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 					</f:layout>
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao}" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao} ({i18n>displayformatFull})" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
 									<f:fields>
 										<DatePicker 
-											placeholder="{i18n>viewGeralInsiraUmaData}" 
+											placeholder="{i18n>displayformatFull}" 
 											valueFormat="yyyy-MM-dd" 
 											value="{/RespostaObrigacao/data_conclusao}" 
 											enabled="false"
+											displayFormat="{i18n>displayformatFull}"
 											/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega} ({i18n>displayformatFull})">
 									<f:fields>
 										<DatePicker 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												placeholder="{i18n>displayformatFull}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/label_prazo_entrega}" 
 												enabled="false"
+												displayFormat="{i18n>displayformatFull}"
 												/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
@@ -83,12 +85,13 @@
 											<Input value="{/RespostaObrigacao/pais}" enabled="false" />
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao} ({i18n>displayformatFull})">
 									<f:fields>
 											<DatePicker 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												placeholder="{i18n>displayformatFull}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
+												displayFormat="{i18n>displayformatFull}"
 												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"/>
 												
 									</f:fields>

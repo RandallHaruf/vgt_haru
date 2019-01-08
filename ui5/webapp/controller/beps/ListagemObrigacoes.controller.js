@@ -170,7 +170,6 @@ sap.ui.define(
 					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
-							
 							for (var i = 0, length = response.length; i < length; i++) {
 								response[i]["label_prazo_entrega"] = 
 									(response[i]["prazo_entrega_customizado"] !== null) 
@@ -181,8 +180,9 @@ sap.ui.define(
 									(response[i]["prazo_entrega_customizado"] !== null) 
 									? response[i]["ano_calendario"] +"-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
 									: null;
-									
-								response[i]["descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],that);
+								
+								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"],that);	
+								response[i]["descricao_obrigacao_status"] =  Utils.traduzStatusObrigacao(response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],that);
 								response[i]["descricao"] = Utils.traduzObrigacaoPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],that);
 							}
 							that.getModel().setProperty("/Obrigacao", response);
