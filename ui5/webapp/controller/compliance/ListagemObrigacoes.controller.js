@@ -124,10 +124,11 @@ sap.ui.define(
 			carregarFiltroEmpresa: function () {
 				var that = this;
 				NodeAPI.listarRegistros("Empresa", function (response) {
+					response = Utils.orderByArrayParaBox(response,"nome");
 					response.unshift({
 						id: null,
 						nome: that.getResourceBundle().getText("viewGeralTodos")
-					});
+					});					
 					that.getModel().setProperty("/Empresa", response);
 				});
 			},

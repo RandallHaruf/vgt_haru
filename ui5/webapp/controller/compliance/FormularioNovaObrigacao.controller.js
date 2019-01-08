@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI) {
+	function (BaseController, NodeAPI , Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.compliance.FormularioNovaObrigacao", {
 			onInit: function () {
 				var oModel = new sap.ui.model.json.JSONModel({
@@ -77,8 +78,36 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros(sEntidade, function (response) {
 					if (response) {
+						var filtro;
+						switch (sEntidade){
+							case "Empresa":
+								filtro = Utils.orderByArrayParaBox(response,"nome");
+								break;
+							case "DominioPais":
+								var aPais = response;
+								for(var i = 0 ; i < aPais.length ; i++){
+									aPais[i]["pais"] = 
+									Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
+								}								
+								filtro = Utils.orderByArrayParaBox(aPais,"pais");
+								break;
+							case "ObrigacaoAcessoria?tipo=2":
+								filtro = Utils.orderByArrayParaBox(response,"nome");
+								break;
+							case "DomPeriodicidadeObrigacao":
+								var aPeriodicidade = response;
+								for(var i = 0 ; i < aPeriodicidade.length ; i++){
+									aPeriodicidade[i]["descricao"] = 
+									Utils.traduzObrigacaoPeriodo(aPeriodicidade[i]["id_periodicidade_obrigacao"],that);
+								}								
+								filtro = Utils.orderByArrayParaBox(aPeriodicidade,"descricao");
+								break;
+							case "DominioAnoFiscal":
+								filtro = response;
+								break;	
+						}
 						response.unshift({});
-						that.getModel().setProperty("/" + sEntidade, response);
+						that.getModel().setProperty("/" + sEntidade, filtro);
 						that._limparModel();
 					}
 				});
