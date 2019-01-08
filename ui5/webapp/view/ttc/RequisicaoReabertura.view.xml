@@ -59,7 +59,10 @@
 			<Table
 				id="tabelaObjetos"
 				items="{
-					path: '/requisicoes'
+					path: '/requisicoes',
+					sorter: [{
+						path: 'id_requisicao_reabertura'
+					}]					
 				}"
 				growing="true"
 				enableBusyIndicator="true"
@@ -90,7 +93,10 @@
 				</headerToolbar>
 		
 				<columns>
-					<Column>
+					<Column						
+						minScreenWidth="XXLarge"
+						demandPopin="true"
+						hAlign="Center">
 						<Text text="{i18n>viewGeralIdRequisicao}" />
 					</Column>
 					<Column
@@ -106,7 +112,7 @@
 						<Text text="{i18n>viewGeralTrimestre}" />
 					</Column>
 					<Column
-						minScreenWidth="Desktop"
+						minScreenWidth="XXLarge"
 						demandPopin="true"
 						hAlign="Center">
 						<Text text="{i18n>viewGeralDataRequisicao}" />

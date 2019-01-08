@@ -229,6 +229,23 @@ sap.ui.define(
 				return traducao;
 			},	
 			
+			traduzTTCRequisicaoReaberturaPeriodoStatus: function (id,that){
+				
+				var traducao = "";
+				switch (id){
+					case 1:
+						traducao = that.getResourceBundle().getText("viewTTCRequisicaoReaberturaPeriodoStatus1");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("viewTTCRequisicaoReaberturaPeriodoStatus2");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("viewTTCRequisicaoReaberturaPeriodoStatus3");
+						break;
+				}
+				return traducao;
+			},
+			
 			traduzEmpresaTipoSocietario: function (id,that){
 				
 				var traducao = "";

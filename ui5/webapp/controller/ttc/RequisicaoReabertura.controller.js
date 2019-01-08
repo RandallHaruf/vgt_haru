@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/formatter",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, formatter, NodeAPI) {
+	function (BaseController, formatter, NodeAPI,Utils) {
 		BaseController.extend("ui5ns.ui5.controller.ttc.RequisicaoReabertura", {
 			formatter: formatter,
 			
@@ -104,11 +105,16 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
 					if (response) {
+
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["status"] = Utils.traduzTTCRequisicaoReaberturaPeriodoStatus(aResponse[i]["id_dominio_requisicao_reabertura_status"],that);
+						}	
+						response = Utils.orderByArrayParaBox(response,"status");
 						response.unshift({
 							status: that.getResourceBundle().getText("viewGeralTodos")
-						});
+						});						
 						that.getModel().setProperty("/RequisicaoReaberturaStatus", response);
-						
 						that._atualizarDados();
 					}
 				});
