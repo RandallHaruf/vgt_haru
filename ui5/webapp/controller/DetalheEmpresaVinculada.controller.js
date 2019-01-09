@@ -43,9 +43,10 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 						var aResponse = oParametros;
-						for (var i = 0, length = aResponse.length; i < length; i++) {
-							aResponse[i]["status"] = Utils.traduzEmpresaStatusTipo(aResponse[i]["id_dominio_empresa_status"],this);
-						}				
+							aResponse["empresa"]["pais"] = Utils.traduzDominioPais(aResponse["empresa"]["fk_dominio_pais.id_dominio_pais"],this);
+							aResponse["empresa"]["status"] = Utils.traduzEmpresaStatusTipo(aResponse["empresa"]["id_dominio_empresa_status"],this);	
+							aResponse["empresa"]["tipo_societario"] = Utils.traduzEmpresaTipoSocietario(aResponse["empresa"]["id_dominio_empresa_tipo_societario"],this);								
+			
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 			}
 		});
