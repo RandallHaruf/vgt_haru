@@ -1,8 +1,9 @@
 sap.ui.define(
 	[
-		"ui5ns/ui5/controller/BaseController"
+		"ui5ns/ui5/controller/BaseController",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController) {
+	function (BaseController,Utils) {
 		BaseController.extend("ui5ns.ui5.controller.DetalheEmpresaVinculada", {
 			
 			onInit: function () {
@@ -41,7 +42,10 @@ sap.ui.define(
 			
 			_onRouteMatched: function (oEvent) {
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-				
+						var aResponse = oParametros;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["status"] = Utils.traduzEmpresaStatusTipo(aResponse[i]["id_dominio_empresa_status"],this);
+						}				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 			}
 		});

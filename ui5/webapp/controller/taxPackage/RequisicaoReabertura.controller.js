@@ -100,11 +100,15 @@ sap.ui.define(
 				
 				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
 					if (response) {
+						var aResponse = response;
+						for (var i = 0, length = aResponse.length; i < length; i++) {
+							aResponse[i]["status"] = Utils.traduzTTCRequisicaoReaberturaPeriodoStatus(aResponse[i]["id_dominio_requisicao_reabertura_status"],that);
+						}	
+						response = Utils.orderByArrayParaBox(response,"status");						
+						that.getModel().setProperty("/RequisicaoReaberturaStatus", Utils.orderByArrayParaBox(response,"status"));
 						response.unshift({
 							status: that.getResourceBundle().getText("viewGeralTodos")
-						});
-						that.getModel().setProperty("/RequisicaoReaberturaStatus", response);
-						
+						});						
 						that._atualizarDados();
 					}
 				});

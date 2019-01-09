@@ -38,8 +38,8 @@
 												<ObjectAttribute title="{i18n>viewGeralPeriodo}" text="{/LabelPeriodo}"/>
 											</l:VerticalLayout>
 											<l:VerticalLayout>
-												<ObjectAttribute title="{i18n>ViewGeralDataInício}" text="{/LabelDataInicio}"/>
-												<ObjectAttribute title="{i18n>ViewGeralDataFim}" text="{/LabelDataFim}"/>
+												<ObjectAttribute title="{i18n>ViewGeralDataInício} ({i18n>displayformatSemAno})" text="{/LabelDataInicio}"/>
+												<ObjectAttribute title="{i18n>ViewGeralDataFim} ({i18n>displayformatSemAno})" text="{/LabelDataFim}"/>
 												<ObjectAttribute title="{i18n>viewEdiçãoTrimestreCITType}" text="{/LabelCITType}"/>
 												<!--<ObjectAttribute title="{i18n>viewEdiçãoTrimestrePreparadoPor}" text="João Silva - joao.silva@email.com" />-->
 											</l:VerticalLayout>
@@ -550,7 +550,7 @@
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon="" />
-					<IconTabFilter text="Loss Schedule">
+					<IconTabFilter text="{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}">
 						<ScrollContainer horizontal="true" vertical="true" height="100%" class="sapUiNoContentPadding">
 							<!--<Table items="{/lossSchedule}" class="celulasSeparadas">
 								<columns>

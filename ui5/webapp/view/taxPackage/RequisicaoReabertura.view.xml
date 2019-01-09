@@ -55,7 +55,10 @@
 			<Table
 				id="tabelaObjetos"
 				items="{
-					path: '/requisicoes'
+					path: '/requisicoes',
+					sorter: [{
+						path: 'id_requisicao_reabertura'
+					}]					
 				}"
 				growing="true"
 				enableBusyIndicator="true"
