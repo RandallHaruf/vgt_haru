@@ -79,7 +79,7 @@
 											valueFormat="yyyy-MM-dd"
 											id="datepickerPrazoEntrega" 
 											placeholder="{i18n>placeholderDatepicker}"
-											displayFormat="{i18n>displayformatFull}"/>
+											displayFormat="{i18n>displayFormatFull}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
@@ -89,7 +89,7 @@
 											valueFormat="yyyy-MM-dd"
 											id="datepickerExtensao" 
 											placeholder="{i18n>placeholderDatepicker}"
-											displayFormat="{i18n>displayformatFull}"/>
+											displayFormat="{i18n>displayFormatFull}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
