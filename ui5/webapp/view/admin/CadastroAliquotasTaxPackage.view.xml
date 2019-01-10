@@ -103,7 +103,14 @@
 											<Label text="{i18n>viewEmpresasDataI} {/displayFormatFull}" labelFor="dataInicio" />
 										</f:label>
 										<f:fields>
-											<DatePicker id="dataInicio" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/objeto/dataInicio}" required="true" />
+											<DatePicker 
+											id="dataInicio" 
+											displayFormat="{/displayFormatFull}" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/objeto/dataInicio}" 
+											required="true" 
+											change="onValidarData"
+											/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -111,7 +118,14 @@
 											<Label text="{i18n>viewEmpresasDataF} {/displayFormatFull}" labelFor="dataFim" />
 										</f:label>
 										<f:fields>
-											<DatePicker id="dataFim" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/objeto/dataFim}" required="true" />
+											<DatePicker 
+											id="dataFim" 
+											displayFormat="{/displayFormatFull}" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/objeto/dataFim}" 
+											required="true" 
+											change="onValidarData"
+											/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>

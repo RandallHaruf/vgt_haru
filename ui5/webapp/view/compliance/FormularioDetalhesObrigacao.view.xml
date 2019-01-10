@@ -90,6 +90,7 @@
 											value="{/RespostaObrigacao/data_conclusao}" 
 											enabled="false"
 											displayFormat="{i18n>displayFormatFull}"
+											change="onValidarData"
 											/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
@@ -102,6 +103,7 @@
 												value="{/RespostaObrigacao/label_prazo_entrega}" 
 												enabled="false"
 												displayFormat="{i18n>displayFormatFull}"
+												change="onValidarData"
 												/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
@@ -118,8 +120,9 @@
 												valueFormat="yyyy-MM-dd" 
 												displayFormat="{i18n>displayFormatFull}"
 												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"/>
-												
+												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"
+												change="onValidarData"
+												/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
@@ -182,7 +185,14 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-											<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal}" enabled="false" />
+											<DatePicker 
+											id="datepickerAnoFiscal" 
+											placeholder="Insira uma data" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/RespostaObrigacao/ano_fiscal}" 
+											enabled="false" 
+											change="onValidarData"
+											/>
 											<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
@@ -194,6 +204,7 @@
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/ano_calendario}" 
 												enabled="false"
+												change="onValidarData"
 												/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
@@ -220,7 +231,12 @@
 												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}" select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }" />
 											</HBox>
 											<HBox>
-												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" />
+												<DatePicker 
+												id="DataAtual" 
+												valueFormat="yyyy-MM-dd" 
+												visible="{= ${/IsDeclaracao} === true ? true : false}" 
+												change="onValidarData"
+												/>
 											</HBox>
 											<HBox>
 												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"

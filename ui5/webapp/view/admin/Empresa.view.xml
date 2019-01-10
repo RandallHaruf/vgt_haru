@@ -281,7 +281,13 @@
 											<table:Column>
 												<Label text="{i18n>viewEmpresaDataCustomizada} {/displayFormatSemAno}" />
 												<table:template>
-													<DatePicker displayFormat="{/displayFormatSemAno}" valueFormat='yyyy-MM-dd' value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" />
+													<DatePicker 
+													displayFormat="{/displayFormatSemAno}" 
+													valueFormat='yyyy-MM-dd' 
+													value="{data_selecionada}" 
+													editable="{= !!${selecionada} === true ? true : false }" 
+													change="onValidarData"
+													/>
 													<!--<DateTimeInput id="DTI1" type="Date" value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" displayFormat="dd/MM"/>													-->
 												</table:template>
 											</table:Column>											

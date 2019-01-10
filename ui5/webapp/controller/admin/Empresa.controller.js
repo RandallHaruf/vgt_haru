@@ -30,6 +30,7 @@ sap.ui.define(
 
 			onTrocarData: function (oEvent) {
 							var that = this;
+				that.onValidarData(oEvent);							
 				if (Validador.periodoInvalido(this.byId("datepickerStartDate").getDateValue(), this.byId("datepickerEndDate").getDateValue())) {
 					sap.m.MessageBox.warning(that.getResourceBundle().getText("viewAdminEmpresaControllerjsADataInícioNãoPodeSerPosteriorADataFim"), {
 						title: "Aviso"

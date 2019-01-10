@@ -96,6 +96,7 @@ sap.ui.define([
 			this.getPage().setShowFooter(!this.getPage().getShowFooter());
 		},
 		onSelectChange: function (oEvent) {
+			this.onValidarData(oEvent);
 			this._atualizarDados();
 			//this._geraRelatorio();
 		},
