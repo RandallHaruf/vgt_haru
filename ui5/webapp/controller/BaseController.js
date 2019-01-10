@@ -24,6 +24,10 @@ sap.ui.define(
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			},
 			
+			isIFrame: function () {
+				return self !== top;		
+			},
+			
 			setBusy: function (oComponent, bBusy) {
 				if (bBusy) {
 					oComponent.setBusyIndicatorDelay(100);
@@ -73,6 +77,18 @@ sap.ui.define(
 					.then(() => {
 						this.getRouter().navTo("login");
 					});
+				}
+			},
+			
+			onValidarData: function (oEvent) {
+				if (!oEvent.getParameter("valid")) {
+					jQuery.sap.require("sap.m.MessageBox");
+							
+					sap.m.MessageBox.show(this.getResourceBundle().getText("viewGeralValorInseridoNaoValido"), {
+						title: this.getResourceBundle().getText("viewGeralAviso")
+					});
+					
+					oEvent.getSource().setValue("");
 				}
 			}
 		});

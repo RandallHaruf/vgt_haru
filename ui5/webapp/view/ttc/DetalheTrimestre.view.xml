@@ -245,7 +245,8 @@
 												placeholder="{/displayFormatFull}"
 												valueFormat="yyyy-MM-dd" 
 												minDate="{/MinDate}" 
-												maxDate="{/MaxDate}" />
+												maxDate="{/MaxDate}"
+												change="onValidarData" />
 											<!--<ComboBox
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
