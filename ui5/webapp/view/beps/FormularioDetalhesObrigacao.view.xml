@@ -56,26 +56,26 @@
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao} ({i18n>displayformatFull})" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao} ({i18n>displayFormatFull})" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
 									<f:fields>
 										<DatePicker 
-											placeholder="{i18n>displayformatFull}" 
+											placeholder="{i18n>displayFormatFull}" 
 											valueFormat="yyyy-MM-dd" 
 											value="{/RespostaObrigacao/data_conclusao}" 
 											enabled="false"
-											displayFormat="{i18n>displayformatFull}"
+											displayFormat="{i18n>displayFormatFull}"
 											/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega} ({i18n>displayformatFull})">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega} ({i18n>displayFormatFull})">
 									<f:fields>
 										<DatePicker 
-												placeholder="{i18n>displayformatFull}" 
+												placeholder="{i18n>displayFormatFull}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/label_prazo_entrega}" 
 												enabled="false"
-												displayFormat="{i18n>displayformatFull}"
+												displayFormat="{i18n>displayFormatFull}"
 												/>
 										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
 									</f:fields>
@@ -85,13 +85,13 @@
 											<Input value="{/RespostaObrigacao/pais}" enabled="false" />
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao} ({i18n>displayformatFull})">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao} ({i18n>displayFormatFull})">
 									<f:fields>
 											<DatePicker 
-												placeholder="{i18n>displayformatFull}" 
+												placeholder="{i18n>displayFormatFull}" 
 												valueFormat="yyyy-MM-dd" 
 												value="{/RespostaObrigacao/data_extensao}" 
-												displayFormat="{i18n>displayformatFull}"
+												displayFormat="{i18n>displayFormatFull}"
 												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"/>
 												
 									</f:fields>
