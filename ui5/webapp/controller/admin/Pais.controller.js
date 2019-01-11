@@ -156,7 +156,7 @@ sap.ui.define(
 
 			_carregarObjetoSelecionado: function (iIdObjeto) {
 				var that = this;
-				that.getModel().setProperty("/showHistoricoAliquotas", true);
+				that.getModel().setProperty("/showHistoricoAliquotas", false);
 
 				that.setBusy(that.byId("paginaObjeto"), true);
 				// Carrega o objeto com o id selecionado
