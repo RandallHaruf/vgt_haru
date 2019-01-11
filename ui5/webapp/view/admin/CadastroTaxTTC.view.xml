@@ -64,7 +64,7 @@
 							<ObjectIdentifier text="{tax}"/>
 							<HBox>
 								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false" />
 							</HBox>
 						</cells>
 					</ColumnListItem>
