@@ -118,7 +118,9 @@ module.exports = {
 	deepQuery: function (req, res) {
 		//res.send("TODO: DeepQuery da Entidade Usuario");
 		
-		var sStatement = 'select tblUsuario.* from "VGT.USUARIO" tblUsuario ';
+		var sStatement = 'select tblUsuario.*,tblDominioAcesso.* from "VGT.USUARIO" tblUsuario '
+						 +'left outer join "VGT.DOMINIO_ACESSO_USUARIO" tblDominioAcesso '
+						 +'on tblUsuario."fk_dominio_tipo_acesso.id_tipo_acesso" = tblDominioAcesso."id_tipo_acesso"';
 		
 		var oWhere = [];
 		var aParams = [];
@@ -126,6 +128,10 @@ module.exports = {
 		if (req.query.tipoAcesso) {
 			oWhere.push(' tblUsuario."fk_dominio_tipo_acesso.id_tipo_acesso" = ? ');
 			aParams.push(req.query.tipoAcesso);
+		}
+		if (req.query.idObjeto) {
+			oWhere.push(' tblUsuario."id_usuario" = ? ');
+			aParams.push(req.query.idObjeto);
 		}
 		
 		if (oWhere.length > 0) {
