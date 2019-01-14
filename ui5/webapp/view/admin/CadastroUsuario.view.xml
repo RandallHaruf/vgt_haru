@@ -1,0 +1,307 @@
+<mvc:View
+	controllerName="ui5ns.ui5.controller.admin.CadastroUsuario"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:dnd="sap.ui.core.dnd"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<NavContainer id="myNav" class="fixNavContainer">
+		<Page
+			id="paginaListagem"
+			showHeader="false"
+			visible="true">
+			<Table
+				id="tabelaObjetos"
+				items="{
+					path: '/objetos',
+					sorter: [{
+						path: 'classification',
+						group: true
+					}, {
+						path: 'category'
+					}, {
+						path: 'tax'
+					}, {
+						path: 'name_of_tax'
+					}]
+				}"
+				growing="true"
+				enableBusyIndicator="true"
+				growingScrollToLoad="true"
+				updateFinished="onTerminouAtualizar">
+		
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="{i18n>viewUsuarioAdminUsuarios}"/>
+						<ToolbarSpacer />
+						<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="{i18n>viewGeralNovo}"
+							type="Emphasized"/>
+					</Toolbar>
+				</headerToolbar>
+		
+				<!--<columns>
+					<Column mergeDuplicates="true">
+						<Text text="{i18n>viewGeralCategoria}" />
+					</Column>
+					<Column mergeDuplicates="true">
+						<Text text="{i18n>viewGeralTaxa}" />
+					</Column>
+					<Column>
+						<Text text="{i18n>viewGeralNomeT}" />
+					</Column>
+					<Column width="100px"></Column>
+				</columns>-->
+				<columns>
+					<Column>
+						<Text text="{i18n>viewUsuarioAdminNome}" />
+					</Column>
+					<Column>
+						<Text text="{i18n>viewUsuarioAdminEmail}" />
+					</Column>
+					<Column>
+						<Text text="{i18n>viewUsuarioAdminTipoAcesso}" />
+					</Column>
+					<!--<Column width="100px"></Column>-->
+				</columns>
+		
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press="onAbrirObjeto">
+						<cells>
+							<ObjectIdentifier text="{nome}"/>
+							<ObjectIdentifier text="{email}"/>
+							<ObjectIdentifier text="{descricao}"/>
+							<!--<HBox>
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false" />
+							</HBox>-->
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</Page>
+		<Page
+			id="paginaObjeto"
+			showHeader="false">
+			<content>
+				<VBox class="sapUiSmallMargin">
+					<f:Form 
+						id="formularioObjeto" 
+						editable="true">
+						<f:title>
+							<core:Title text="{i18n>viewUsuarioAdminUsuarios}"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer title="{i18n>viewGeralCadastro}">
+								<f:formElements>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewUsuarioAdminNome}" class="required" labelFor="inputNome" />
+										</f:label>
+										<f:fields>
+											<Input type="Text" id="inputNome" value="{/objeto/nome}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewUsuarioAdminLogin}" class="required" labelFor="inputLogin" />
+										</f:label>
+										<f:fields>
+											<Input type="Text" id="inputLogin" value="{/objeto/user}" required="true" enabled="false" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewUsuarioAdminEmail}" class="required" labelFor="inputEmail" />
+										</f:label>
+										<f:fields>
+											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true" enabled="false" />
+											<Button text="{i18n>viewUsuarioAdminTrocarSenha}" width="200px" press="onTrocarSenha"/>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewUsuarioAdminContato}" class="required" labelFor="inputContato" />
+										</f:label>
+										<f:fields>
+											<Input type="Number" id="inputContato" value="{/objeto/contato}" required="true" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewUsuarioAdminAtivo}" class="required" labelFor="chkAtivo" />
+										</f:label>
+										<f:fields>
+											<CheckBox text="Ativo" id="chkAtivo" selected="{= !!${/objeto/user} ? true : false}" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewUsuarioAdminTipoAcesso}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectClassification" items="{/DominioAcessoUsuario}" selectedKey="{/objeto/fk_dominio_tipo_acesso.id_tipo_acesso}">
+												<core:Item text="{descricao}" key="{id_tipo_acesso}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									
+									
+									<!--<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewGeralClassificacao}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectClassification" items="{/DominioTaxClassification}" change="onTrocarClassification" selectedKey="{/objeto/classification}">
+												<core:Item text="{classification}" key="{id_dominio_tax_classification}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewRelatorioCategoria}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectCategory" items="{/TaxCategory}" change="onTrocarCategory" selectedKey="{/objeto/category}">
+												<core:Item text="{category}" key="{id_tax_category}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewGeralTaxa}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectTax" items="{/Tax}" selectedKey="{/objeto/tax}">
+												<core:Item text="{tax}" key="{id_tax}" />
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewGeralNomeT}" labelFor="inputNameOfTax" />
+										</f:label>
+										<f:fields>
+											<Input type="Text" id="inputNameOfTax" value="{/objeto/nameOfTax}" required="true" />
+										</f:fields>
+									</f:FormElement>-->
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form>
+						<f:title>
+							<core:Title text="{i18n>viewUsuarioAdminModulos}" />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:formElements>
+									<f:FormElement>
+										<table:Table rows="{/DominioModulo}" id="tableModulos" selectionMode="None" enableColumnReordering="true">
+											<table:extension>
+												<Toolbar>
+													<ToolbarSpacer/>
+													<SearchField 
+														id="searchModulo"
+														width="15rem" 
+														search="onTextSearch" 
+														placeholder="{i18n>ViewGeralProcurar} {i18n>viewUsuarioAdminModulo}"														
+														value="{/filterValue}" />
+												</Toolbar>
+											</table:extension>
+											<table:columns>
+												<table:Column width="45px">
+													<table:template>
+														<CheckBox selected="false" />
+													</table:template>
+												</table:Column>
+												<table:Column>
+													<Label text="{i18n>viewUsuarioAdminModulos}" />
+													<table:template>
+														<Text text="{modulo}" />
+													</table:template>
+												</table:Column>
+											</table:columns>
+										</table:Table>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+						<f:title>
+							<core:Title text="{i18n>viewUsuarioAdminEmpresas}" />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:formElements>
+									<f:FormElement>
+										<table:Table rows="{/Empresas}" id="tableEmpresas" selectionMode="None" enableColumnReordering="true">
+											<table:extension>
+												<Toolbar>
+													<ToolbarSpacer/>
+													<SearchField 
+														id="searchEmpresa"
+														width="15rem" 
+														search="onTextSearch" 
+														placeholder="{i18n>ViewGeralProcurar} {i18n>viewUsuarioAdminEmpresa}"														
+														value="{/filterValue}" />
+												</Toolbar>
+											</table:extension>
+											<table:columns>
+												<table:Column width="45px">
+													<table:template>
+														<CheckBox selected="false" />
+													</table:template>
+												</table:Column>
+												<table:Column>
+													<Label text="{i18n>viewUsuarioAdminEmpresas}" />
+													<table:template>
+														<Text text="{nome}" />
+													</table:template>
+												</table:Column>
+											</table:columns>
+										</table:Table>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+				</VBox>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button 
+						id="btnSalvar"
+						text="{i18n>viewGeralSalvar}" 
+						type="Accept" 
+						press="onSalvar"/>
+					<Button 
+						id="btnCancelar"
+						text="{i18n>viewGeralCancelar}" 
+						type="Reject" 
+						press="onCancelar"/>
+				</Toolbar>
+			</footer>
+		</Page>
+	</NavContainer>
+</mvc:View>

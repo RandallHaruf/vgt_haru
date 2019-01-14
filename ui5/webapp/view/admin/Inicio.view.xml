@@ -46,6 +46,9 @@
 					<!--<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Usuario" />
 					</ScrollContainer>-->
+					<!--<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroUsuario" id="usuarioXMLView" />
+					</ScrollContainer>-->
 					<ScrollContainer id="taxPackageCadastroAliquotas" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroAliquotasTaxPackage" id="taxPackageCadastroAliquotasXMLView" />
 					</ScrollContainer>
