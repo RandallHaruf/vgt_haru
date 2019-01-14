@@ -468,9 +468,9 @@ sap.ui.define(
 				} else {
 					assunto = "TAX PACKAGE - Period reopening request - " + vEmpresa + " - " + vPeriodo;
 					htmlBody =
-						"<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed periodand the decision is available at <a href='" +
+						"<p>Dear User,</p><br><p>&nbsp;Please be informed that we reviewed your request to reopen a TAX PACKAGE closed period and the decision is available at <a href='" +
 						document.domain +
-						"'>Vale Global Tax (VGT)</a> .<br>The period reopenedwill remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
+						"'>Vale Global Tax (VGT)</a> .<br>The period reopened will remain open for 5 days. Past the delay, it will be closed automatically.<br>Should you have any question or require any support, don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.</p><p>Thank you in advance for your support.</p><p>Global Tax Team</p>";
 				}
 
 				jQuery.ajax({ //Desativar botao

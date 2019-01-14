@@ -173,7 +173,7 @@ sap.ui.define(
 				var assunto = "TTC - Period reopening - " + vEmpresa + " - " + vPeriodo;
 				//var corpo = that.getModel().getProperty("/corpo");
 				var htmlBody =
-					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TTC module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
+					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TTC module at <a href='" + document.domain + "'>Vale Global Tax (VGT)</a> Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
 				//this.getModel().setProperty("/bEmailButton", false);
 
 				jQuery.ajax({ //Desativar botao
