@@ -15,19 +15,21 @@
 					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Tax Package" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
+					<Text 
+						text="{i18n>viewRelatorioExportar}"	/>
 					<!--<Button
 						text="{i18n>viewRelatorioImprimir}"
 						type="Transparent"
 						icon="sap-icon://print" />-->
 					<Button
-						text="{i18n>viewRelatorioExportar} CSV"
+						text="CSV"
 						type="Transparent"
 						press="onDataExportCSV"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
-						text="{i18n>viewRelatorioExportar} XLS"
+						text="XLS"
 						type="Transparent"
 						press="onDataExportCSV"/>
 					<!--<Button
@@ -78,7 +80,7 @@
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
 					<Button
 					id="GerarRelatorio"
-					text="Gerar {i18n>viewGeralRelatorio}"
+					text="{i18n>viewGeralBtnRelatorioTaxP}"
 					type="Emphasized"
 					press="onGerarRelatorio"/>	
 					</HBox>	
