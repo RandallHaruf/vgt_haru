@@ -66,6 +66,7 @@ module.exports = function (app) {
 	var routeRequisicaoEncerramentoPeriodoTaxPackage = require("./routeRequisicaoEncerramentoPeriodoTaxPackage");
 	var routeDominioAcessoUsuario = require("./routeDominioAcessoUsuario");
 	var routeDominioModulo = require("./routeDominioModulo");
+	var routeUsuarioModulo = require("./routeUsuarioModulo");
 	
 	var aRoutes = [];	
 	
@@ -131,6 +132,7 @@ module.exports = function (app) {
 	routeRequisicaoEncerramentoPeriodoTaxPackage(aRoutes);
 	routeDominioAcessoUsuario(aRoutes);
 	routeDominioModulo(aRoutes);
+	routeUsuarioModulo(aRoutes);
 	
 	app.use("/node", aRoutes);
 	

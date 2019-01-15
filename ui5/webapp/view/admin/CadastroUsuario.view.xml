@@ -203,7 +203,7 @@
 					</f:Form>
 					<f:Form>
 						<f:title>
-							<core:Title text="{i18n>viewUsuarioAdminModulos}" />
+							<core:Title text="{i18n>viewUsuarioAdminVinculos}" />
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -228,7 +228,7 @@
 											<table:columns>
 												<table:Column width="45px">
 													<table:template>
-														<CheckBox selected="false" />
+														<CheckBox selected="{= ${marcado} ? true : false}" />
 													</table:template>
 												</table:Column>
 												<table:Column>
@@ -243,9 +243,6 @@
 								</f:formElements>
 							</f:FormContainer>
 						</f:formContainers>
-						<f:title>
-							<core:Title text="{i18n>viewUsuarioAdminEmpresas}" />
-						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>

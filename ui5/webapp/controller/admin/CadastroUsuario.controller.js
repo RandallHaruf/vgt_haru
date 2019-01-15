@@ -137,8 +137,21 @@ sap.ui.define(
 					that.getModel().setProperty("/DominioAcessoUsuario", response);
 				});
 				NodeAPI.listarRegistros("DominioModulo", function (response) {
-					response = Utils.orderByArrayParaBox(response,"modulo");
-					that.getModel().setProperty("/DominioModulo", response);
+					var id_usuario = that.getModel().getProperty("/idObjeto");
+					NodeAPI.listarRegistros("DeepQuery/UsuarioModulo?idUsuario=" + id_usuario, function (resposta) {
+						
+						for(var i = 0; i < response.length; i++){
+							var aux = resposta.find(function (x) {
+								return (x["fk_dominio_modulo.id_dominio_modulo"] === response[i]["id_dominio_modulo"]);
+							});
+							if (aux) {
+								response[i]["marcado"] = true;
+							}
+						}
+						response = Utils.orderByArrayParaBox(response,"modulo");
+						that.getModel().setProperty("/DominioModulo", response);
+						
+					});
 				});
 				NodeAPI.listarRegistros("Empresa", function (response) {
 					response = Utils.orderByArrayParaBox(response,"nome");
@@ -179,7 +192,7 @@ sap.ui.define(
 				var that = this;
 
 				that.setBusy(that.byId("formularioObjeto"), true);
-
+				that.getModel().setProperty("/idObjeto", iIdObjeto);
 				NodeAPI.lerRegistro("Usuario", iIdObjeto, function (response) {
 					that.getModel().setProperty("/objeto", response);
 
