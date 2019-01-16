@@ -15,20 +15,22 @@
 					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} TTC" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
+					<Text 
+						text="{i18n>viewRelatorioExportar}"	/>
 					<!--<Button
 						text="{i18n>viewRelatorioImprimir}"
 						type="Transparent"
 						icon="sap-icon://print" 
 						press="onImprimir" />-->
 					<Button
-						text="{i18n>viewRelatorioExportar} CSV"
+						text="CSV"
 						type="Transparent"
 						press="onDataExport"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
-						text="{i18n>viewRelatorioExportar} XLS"
+						text="XLS"
 						type="Transparent"
 						press="onDataExport"/>
 					<!--<Button

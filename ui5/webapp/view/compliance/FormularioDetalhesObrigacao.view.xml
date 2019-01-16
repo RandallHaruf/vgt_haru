@@ -239,8 +239,9 @@
 												/>
 											</HBox>
 											<HBox>
-												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
-													placeholder="{i18n>viewGeralEscolhaUmArquivo}"/>
+												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}" 
+													buttonText="{i18n>viewGeralEscolhaUmArquivo}"
+													placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}"/>
 												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
 											</HBox>
 										</VBox>

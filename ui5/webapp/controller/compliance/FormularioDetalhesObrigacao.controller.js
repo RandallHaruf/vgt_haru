@@ -80,7 +80,7 @@ sap.ui.define(
 				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
 				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar"), {
-					title: "Confirm",
+					title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//that.getRouter().navTo("complianceListagemObrigacoes");
@@ -132,7 +132,7 @@ sap.ui.define(
 				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
 				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
-					title: "Confirm",
+					title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							that.getRouter().navTo("complianceListagemObrigacoes");
