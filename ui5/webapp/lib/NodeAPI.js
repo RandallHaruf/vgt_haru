@@ -46,9 +46,14 @@ sap.ui.define(
 				});
 			},
 
-			pListarRegistros: function (sEntidade) {
+			pListarRegistros: function (sEntidade, oQueryString) {
+				var encodedQueryString;
+				if (oQueryString) {
+					encodedQueryString = encodeQueryString(oQueryString);
+				}
+					
 				return new Promise(function (resolve, reject) {
-					jQuery.ajax(urlBackend + sEntidade, {
+					jQuery.ajax(urlBackend + sEntidade + (encodedQueryString ? "?" + encodedQueryString : ""), {
 						type: "GET",
 						xhrFields: {
 							withCredentials: true
@@ -112,6 +117,22 @@ sap.ui.define(
 				});
 			},
 
+			pLerRegistro: function (sEntidade, sIdRegistro) {
+				return new Promise(function (resolve, reject) {
+					jQuery.ajax(urlBackend + sEntidade + "/" + sIdRegistro, {
+						type: "GET",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true
+					}).then(function (response) {
+						resolve(response);
+					}, function (err) {
+						reject(err);
+					});
+				});
+			},
+
 			lerRegistro: function (sEntidade, sIdRegistro, callback) {
 				jQuery.ajax(urlBackend + sEntidade + "/" + sIdRegistro, {
 					type: "GET",
@@ -158,6 +179,22 @@ sap.ui.define(
 							callback(response);
 						}
 					}
+				});
+			},
+
+			pExcluirRegistro: function (sEntidade, sIdRegistro) {
+				return new Promise(function (resolve, reject) {
+					jQuery.ajax(urlBackend + sEntidade + "/" + sIdRegistro, {
+						type: "DELETE",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true
+					}).then(function (response) {
+						resolve(response);
+					}, function (err) {
+						reject(err);
+					});
 				});
 			},
 

@@ -1,10 +1,33 @@
 "use strict";
 
-/*var fs = require("fs");
-var config = require("../../config");*/
+const fs = require('fs');
+const pathModule = require('path');
+
+const loadRoutes = (path, aRoutes) => {
+    let stat = fs.lstatSync(path);
+    if (stat.isDirectory()) {
+        let aFile = fs.readdirSync(path);
+        let f, l = aFile.length;
+        for (let i = 0; i < l; i++) {
+            f = pathModule.join(path, aFile[i]);
+            loadRoutes(f, aRoutes);
+        }
+    }
+    else {
+    	if (!path.includes('routes.js')) {
+	        require(pathModule.resolve(path))(aRoutes);
+    	}
+    }
+};
 
 module.exports = function (app) {
-	var routeArquivo = require("./routeArquivo");
+	var aRoutes = [];
+	
+	loadRoutes(__dirname, aRoutes);
+	
+	app.use("/node", aRoutes);
+	
+	/*var routeArquivo = require("./routeArquivo");
 	var routeDeclaracao = require("./routeDeclaracao");
 	var routeTTC = require("./routeTTC");
 	var routePais = require("./routePais");
@@ -132,31 +155,5 @@ module.exports = function (app) {
 	routeRequisicaoEncerramentoPeriodoTaxPackage(aRoutes);
 	routeDominioAcessoUsuario(aRoutes);
 	routeDominioModulo(aRoutes);
-	routeUsuarioModulo(aRoutes);
-	
-	app.use("/node", aRoutes);
-	
-	/*var aRoutes = [];
-	
-	try {
-		var path = config.pathToRoot + "api/routes/";
-		
-		fs.readdirSync(path).forEach(function (file) {
-			if (file !== "routes.js") {
-				require("./" + file)(aRoutes);
-				console.log("./" + file);
-			}
-		});
-		
-		app.use("/node", aRoutes);
-	}
-	catch (e) {
-		console.log(e);
-	}*/
-	
-	app.use(function (req, res) {
-    	res.writeHead(404, {"Content-Type": "text/html"});
-    	res.write("<h1>404 Not Found</h1>");
-		return res.end();
-    });
+	routeUsuarioModulo(aRoutes);*/
 };
