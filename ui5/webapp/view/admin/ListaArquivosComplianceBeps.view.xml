@@ -1,5 +1,5 @@
 <mvc:View
-	controllerName="ui5ns.ui5.controller.admin.CadastroUsuario"
+	controllerName="ui5ns.ui5.controller.admin.ListaArquivosComplianceBeps"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout" 
@@ -36,7 +36,7 @@
 					<Toolbar>
 						<Title 
 							id="cabecalhoTabelaObjetos" 
-							text="{i18n>viewUsuarioAdminUsuarios}"/>
+							text="{i18n>viewArquivosAdminMenu}"/>
 						<ToolbarSpacer />
 					</Toolbar>
 				</headerToolbar>
@@ -55,13 +55,19 @@
 				</columns>-->
 				<columns>
 					<Column>
-						<Text text="{i18n>viewUsuarioAdminNome}" />
+						<Text text="{i18n>viewArquivosAdminTipoObrigacao}" />
 					</Column>
 					<Column>
-						<Text text="{i18n>viewUsuarioAdminEmail}" />
+						<Text text="{i18n>viewArquivosAdminEmpresa}" />
 					</Column>
 					<Column>
-						<Text text="{i18n>viewUsuarioAdminTipoAcesso}" />
+						<Text text="{i18n>viewArquivosAdminNomeObrigacao}" />
+					</Column>
+					<Column>
+						<Text text="{i18n>viewArquivosAdminAnoFiscal}" />
+					</Column>
+					<Column>
+						<Text text="{i18n>viewArquivosAdminDownload}" />
 					</Column>
 					<!--<Column width="100px"></Column>-->
 				</columns>
@@ -71,12 +77,12 @@
 						type="Navigation"
 						press="onAbrirObjeto">
 						<cells>
+							<ObjectIdentifier text="{Tipo}"/>
 							<ObjectIdentifier text="{nome}"/>
-							<ObjectIdentifier text="{email}"/>
-							<ObjectIdentifier text="{descricao}"/>
-							<!--<HBox>
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false" />
-							</HBox>-->
+							<ObjectIdentifier text="{nome_obrigacao}"/>
+							<ObjectIdentifier text="{ano_fiscal}"/>
+							<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onAbrirObjeto" enabled="{btnDownloadEnabled}"
+							class="sapUiSmallMarginEnd"/>
 						</cells>
 					</ColumnListItem>
 				</items>

@@ -198,7 +198,7 @@ deepQuery: function (req, res) {
 		}
 		
 		if (req.query.IndAtivoRel) {
-			oWhere.push(' tblRelModeloEmpresa."ind_ativo" = ? ');
+			oWhere.push(' (tblRelModeloEmpresa."ind_ativo" = ? OR tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4)');
 			aParams.push(req.query.IndAtivoRel);
 		}
 		
@@ -227,6 +227,14 @@ deepQuery: function (req, res) {
 			}		
 			else{
 				sStatement += ' where (tblDominioAnoCalendario."ano_calendario" between 2018 and (year(CURRENT_DATE) + 1)) ';
+			}
+		}
+		if (req.query.ListarSomenteEmVigencia){
+			if (oWhere.length > 0) {
+				sStatement += ' and ((year(tblModeloObrigacao."data_inicial") <= tblDominioAnoCalendario."ano_calendario") and (year(tblModeloObrigacao."data_final") >= tblDominioAnoCalendario."ano_calendario")) ';		
+			}		
+			else{
+				sStatement += ' where ((year(tblModeloObrigacao."data_inicial") <= tblDominioAnoCalendario."ano_calendario") and (year(tblModeloObrigacao."data_final") >= tblDominioAnoCalendario."ano_calendario")) ';
 			}
 		}
 		

@@ -124,7 +124,7 @@
 										<f:fields>
 											<DatePicker 
 											id="dataInicio" 
-											displayFormat="{/displayFormatFull}" 
+											displayFormat="yyyy" 
 											valueFormat="yyyy-MM-dd" 
 											value="{/objeto/dataInicio}" 
 											required="true" 
@@ -139,7 +139,7 @@
 										<f:fields>
 											<DatePicker 
 											id="dataFim" 
-											displayFormat="{/displayFormatFull}" 
+											displayFormat="yyyy" 
 											valueFormat="yyyy-MM-dd" 
 											value="{/objeto/dataFim}" 
 											required="true" 

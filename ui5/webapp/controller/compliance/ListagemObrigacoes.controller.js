@@ -231,7 +231,7 @@ sap.ui.define(
 				};
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&statusResp=&statusModelo=2&IndAtivoRel=true" + campoAnoEstaVazio,
+					"&statusResp=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
 							var Todos = 0,
@@ -269,12 +269,11 @@ sap.ui.define(
 								modelEntregueForaPrazo: EntregueForaPrazo
 							});
 							//that.getModel().setProperty("/Obrigacao", response);
-
 						}
 					});
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true" + campoAnoEstaVazio,
+					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {

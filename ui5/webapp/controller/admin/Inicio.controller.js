@@ -357,6 +357,10 @@ sap.ui.define(
 								}, {
 									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
 									key: "cadastroObrigacoes"
+								},
+								{
+									title: that.getResourceBundle().getText("viewArquivosAdminMenu"),
+									key: "listaArquivos"
 								}
 								/*, {
 																title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),

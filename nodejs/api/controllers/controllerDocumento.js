@@ -173,5 +173,82 @@ module.exports = {
 				}
 			}));
 		}
+	},
+	listarTodosArquivos: function (req, res) {
+
+		var sStatement =   'SELECT '
+						  +'tblRespostaObrigacao.*, '
+						  +'tblDominioAnoFiscal.*, '
+						  +'tblModeloObrigacao.*, '
+                          +'tblDominioObrigacaoStatus .*, '
+                          +'tblPeriodicidade.*, '
+						  +'tblEmpresa.*, '
+						  +'tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo", '
+						  +'tblRelModeloEmpresa."fk_id_empresa.id_empresa", '
+						  +'tblRelModeloEmpresa."id_rel_modelo_empresa", '
+						  +'tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" statusRel, '
+						  +'tblRelModeloEmpresa."prazo_entrega_customizado", '
+						  +'tblRelModeloEmpresa."ind_ativo" '
+						  +'FROM "VGT.RESPOSTA_OBRIGACAO" tblRespostaObrigacao '
+						  +'LEFT OUTER JOIN "VGT.REL_MODELO_EMPRESA" tblRelModeloEmpresa '
+						  +'ON tblRespostaObrigacao."fk_id_rel_modelo_empresa.id_rel_modelo_empresa" = tblRelModeloEmpresa."id_rel_modelo_empresa" '
+						  +'LEFT OUTER JOIN "VGT.DOMINIO_ANO_FISCAL" tblDominioAnoFiscal '
+						  +'ON tblRespostaObrigacao."fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal" = tblDominioAnoFiscal."id_dominio_ano_fiscal" '
+						  +'LEFT OUTER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
+						  +'ON tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = tblModeloObrigacao."id_modelo" '
+						  +'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus '
+						  +'ON tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" = tblDominioObrigacaoStatus."id_dominio_obrigacao_status" '
+						  +'LEFT OUTER JOIN "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" tblPeriodicidade '
+						  +'ON tblModeloObrigacao."fk_id_dominio_periodicidade.id_periodicidade_obrigacao" = tblPeriodicidade."id_periodicidade_obrigacao" '
+						  +'LEFT OUTER JOIN "VGT.EMPRESA" tblEmpresa '
+						  +'ON tblRelModeloEmpresa."fk_id_empresa.id_empresa" = tblEmpresa."id_empresa" '
+						  +'INNER JOIN "VGT.DOCUMENTO_OBRIGACAO" tblDocumentoObrigacao '
+						  +'ON tblRespostaObrigacao."id_resposta_obrigacao" = tblDocumentoObrigacao."fk_id_resposta_obrigacao.id_resposta_obrigacao" ';
+		var oWhere = [];
+		var aParams = [];
+		
+		if (req.query.anoCalendario) {
+			oWhere.push(' tblRespostaObrigacao."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ? ');
+			aParams.push(req.query.anoCalendario);
+		}
+		
+		if (req.query.IndAtivoRel) {
+			oWhere.push(' (tblRelModeloEmpresa."ind_ativo" = ? OR tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4)');
+			aParams.push(req.query.IndAtivoRel);
+		}
+		
+		
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+			
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+		
+		if (req.query.ListarSomenteEmVigencia){
+			if (oWhere.length > 0) {
+				sStatement += ' and ((year(tblModeloObrigacao."data_inicial") <= tblDominioAnoCalendario."ano_calendario") and (year(tblModeloObrigacao."data_final") >= tblDominioAnoCalendario."ano_calendario")) ';		
+			}		
+			else{
+				sStatement += ' where ((year(tblModeloObrigacao."data_inicial") <= tblDominioAnoCalendario."ano_calendario") and (year(tblModeloObrigacao."data_final") >= tblDominioAnoCalendario."ano_calendario")) ';
+			}
+		}
+		
+		var conn = db.getConnection();
+
+		conn.exec(sStatement,aParams, function (err, result) {
+		closeConnection(conn);
+		if (err) {
+		res.send(JSON.stringify(err));
+		}
+		else {
+			var auth = require("../auth")();
+		res.send(JSON.stringify(auth.filtrarEmpresas(req, result, "id_empresa")));
+		}
+		});
 	}
 };

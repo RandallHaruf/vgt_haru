@@ -46,9 +46,9 @@
 					<!--<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Usuario" />
 					</ScrollContainer>-->
-					<!--<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
+					<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroUsuario" id="usuarioXMLView" />
-					</ScrollContainer>-->
+					</ScrollContainer>
 					<ScrollContainer id="taxPackageCadastroAliquotas" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroAliquotasTaxPackage" id="taxPackageCadastroAliquotasXMLView" />
 					</ScrollContainer>
@@ -90,6 +90,9 @@
 					</ScrollContainer>
 					<ScrollContainer id="cadastroObrigacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps" id="cadastroObrigacoesXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="listaArquivos" horizontal="false" vertical="true" height="100%">
+						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaArquivosComplianceBeps" id="listaArquivosXMLView" />
 					</ScrollContainer>
 					<ScrollContainer id="listaNotificacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaNotificacoes" id="listaNotificacoesXMLView" />
