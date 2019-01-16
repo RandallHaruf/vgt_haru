@@ -183,6 +183,7 @@ module.exports = {
                           +'tblDominioObrigacaoStatus .*, '
                           +'tblPeriodicidade.*, '
 						  +'tblEmpresa.*, '
+						  +'tblDocumentoObrigacao.*, '
 						  +'tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo", '
 						  +'tblRelModeloEmpresa."fk_id_empresa.id_empresa", '
 						  +'tblRelModeloEmpresa."id_rel_modelo_empresa", '
