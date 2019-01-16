@@ -77,18 +77,39 @@ module.exports = {
 		var oConnection = null;
 		
 		try {
-			var dbHost = cfenv.getAppEnv().services.hanatrial[0].credentials.host,
-				dbPort = cfenv.getAppEnv().services.hanatrial[0].credentials.port,
-				dbUser = cfenv.getAppEnv().services.hanatrial[0].credentials.user,
-				dbPassword = cfenv.getAppEnv().services.hanatrial[0].credentials.password,
-				dbSchema = cfenv.getAppEnv().services.hanatrial[0].credentials.schema;
-			
-			var client = hana.createConnection(),
-				sConnString = "serverNode=" + dbHost + ":" + dbPort + ";uid=" + dbUser + ";pwd=" + dbPassword + ";currentschema=" +dbSchema;
-			
-			client.connect(sConnString);
-			
-			oConnection = client;
+			if (cfenv.getAppEnv().services.hanatrial) {
+				var dbHost = cfenv.getAppEnv().services.hanatrial[0].credentials.host,
+					dbPort = cfenv.getAppEnv().services.hanatrial[0].credentials.port,
+					dbUser = cfenv.getAppEnv().services.hanatrial[0].credentials.user,
+					dbPassword = cfenv.getAppEnv().services.hanatrial[0].credentials.password,
+					dbSchema = cfenv.getAppEnv().services.hanatrial[0].credentials.schema;
+				
+				var client = hana.createConnection(),
+					sConnString = "serverNode=" + dbHost + ":" + dbPort + ";uid=" + dbUser + ";pwd=" + dbPassword + ";currentschema=" +dbSchema;
+				
+				client.connect(sConnString);
+				
+				oConnection = client;
+			}
+			else if (cfenv.getAppEnv().services.hana) {
+				var dbHost = cfenv.getAppEnv().services.hana[0].credentials.host,
+					dbPort = cfenv.getAppEnv().services.hana[0].credentials.port,
+					dbUser = cfenv.getAppEnv().services.hana[0].credentials.user,
+					dbPassword = cfenv.getAppEnv().services.hana[0].credentials.password,
+					dbSchema = cfenv.getAppEnv().services.hana[0].credentials.schema,
+					dbCertificate = cfenv.getAppEnv().services.hana[0].credentials.certificate;
+				
+				var client = hana.createConnection(),
+					sConnString = "serverNode=" + dbHost + ":" + dbPort + ";encrypt=true;uid=" + dbUser + ";pwd=" + dbPassword + ";sslValidateCertificate=false;currentschema=" +dbSchema;
+					console.log("sConnString = "+ sConnString);
+				
+				client.connect(sConnString);
+				
+				oConnection = client;
+			}
+			else {
+				throw new Error("Não existe variável de ambiente com credenciais do hanadb");
+			}
 		}
 		catch (e) {
 			console.log(e);
