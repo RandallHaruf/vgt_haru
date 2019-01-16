@@ -12,6 +12,7 @@ var app = express();
 app.use(bodyParser.json({
 	limit: "50mb"
 }));
+
 app.use(bodyParser.urlencoded({
 	limit: "50mb",
 	extended: true,
@@ -56,11 +57,26 @@ auth(app);
 routes(app);
 jobs();
 
+app.use((req, res, next) => {
+	const error = new Error('Route Not found');
+	error.status = 404;
+	next(error);
+});
+
+app.use((error, req, res, next) => {
+	res.status(error.status || 500);
+	res.json({
+		error: {
+			message: error.message
+		}
+	});
+});
+
 app.listen(port, function () {
 	console.log("Nodejs server: " + port);
 });
-/*
 
+/*
 // SCRIPT PARA ENCRIPTAR SENHA DE USUARIOS INSERIDOS NA MÃO
 
 const db = require("./api/db.js");

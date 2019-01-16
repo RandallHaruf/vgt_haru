@@ -285,8 +285,22 @@ module.exports = {
 					}
 				}
 				
-				sStatement += ' where "' + oCondition.coluna.nome + '" = ? ';
-				aValues.push(oCondition.valor);
+				if (oCondition.length) {
+					sStatement += ' where ';
+					
+					for (var i = 0, length = oCondition.length; i < length; i++) {
+						if (i !== 0) {
+							sStatement += ' and ';
+						}
+						
+						sStatement += ' "' + oCondition[i].coluna.nome + '" = ? ';
+						aValues.push(oCondition[i].valor);	
+					}
+				}
+				else {
+					sStatement += ' where "' + oCondition.coluna.nome + '" = ? ';
+					aValues.push(oCondition.valor);
+				}
 				
 				that.executeStatement({
 					statement: sStatement,
