@@ -768,10 +768,10 @@ sap.ui.define(
 						fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
 
 					if (fRcStatutoryGaapProfitLossBeforeTax !== 0) {
-						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = Number(parseFloat(fRcStatutoryProvisionForIncomeTax /
-							fRcStatutoryGaapProfitLossBeforeTax).toFixed(2)) * 100;
-						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = Number(parseFloat(fValor4 / fRcStatutoryGaapProfitLossBeforeTax).toFixed(
-							2)) * 100;
+						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = /*Number(parseFloat(*/(fRcStatutoryProvisionForIncomeTax /
+							fRcStatutoryGaapProfitLossBeforeTax)/*).toFixed(2))*/ * 100;
+						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = /*Number(parseFloat(*/(fValor4 / fRcStatutoryGaapProfitLossBeforeTax)/*).toFixed(
+							2))*/ * 100;
 					} else {
 						if (fRcStatutoryProvisionForIncomeTax > 0) {
 							oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 100;
@@ -867,8 +867,21 @@ sap.ui.define(
 
 							oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;
 
-							oLossSchedule.justificativaEnabled = Validador.isNumber(oLossSchedule.adjustments) && Number(oLossSchedule.adjustments) !== 0 ?
-								true : false;
+							oLossSchedule.justificativaEnabled = 
+								Validador.isNumber(oLossSchedule.adjustments) && Number(oLossSchedule.adjustments) !== 0 
+									? true 
+									: false;
+							
+							oLossSchedule.justificativaValueState = 
+								oLossSchedule.justificativaEnabled 
+									? oLossSchedule.justificativa 
+										? sap.ui.core.ValueState.None
+										: sap.ui.core.ValueState.Error
+									: sap.ui.core.ValueState.None;
+									
+							if (!oLossSchedule.justificativaEnabled) {
+								oLossSchedule.justificativa = "";
+							}
 						}
 					}
 				}
@@ -919,8 +932,21 @@ sap.ui.define(
 
 							oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;
 
-							oCreditSchedule.justificativaEnabled = Validador.isNumber(oCreditSchedule.adjustments) && Number(oCreditSchedule.adjustments) !==
-								0 ? true : false;
+							oCreditSchedule.justificativaEnabled = 
+								Validador.isNumber(oCreditSchedule.adjustments) && Number(oCreditSchedule.adjustments) !== 0 
+									? true 
+									: false;
+							
+							oCreditSchedule.justificativaValueState = 
+								oCreditSchedule.justificativaEnabled 
+									? oCreditSchedule.justificativa 
+										? sap.ui.core.ValueState.None
+										: sap.ui.core.ValueState.Error
+									: sap.ui.core.ValueState.None;
+									
+							if (!oCreditSchedule.justificativaEnabled) {
+								oCreditSchedule.justificativa = "";
+							}
 						}
 					}
 				}
@@ -2315,29 +2341,74 @@ sap.ui.define(
 			},
 
 			_salvar: function (oEvent, callback) {
-				var that = this,
-					oBtnPressionado = oEvent.getSource(),
-					oBtnSalvarFechar = this.byId("btnSalvarFechar"),
-					oBtnSalvar = this.byId("btnSalvar"),
-					oBtnCancelar = this.byId("btnCancelar");
-
-				oBtnSalvarFechar.setEnabled(false);
-				oBtnSalvar.setEnabled(false);
-				oBtnCancelar.setEnabled(false);
-
-				this.setBusy(oBtnPressionado, true);
-
-				this._inserir(function (response) {
-					oBtnSalvarFechar.setEnabled(true);
-					oBtnSalvar.setEnabled(true);
-					oBtnCancelar.setEnabled(true);
-
-					that.setBusy(oBtnPressionado, false);
-
-					if (callback) {
-						callback(JSON.parse(response));
-					}
-				});
+				if (this._isFormularioValido()) {
+					var that = this,
+						oBtnPressionado = oEvent.getSource(),
+						oBtnSalvarFechar = this.byId("btnSalvarFechar"),
+						oBtnSalvar = this.byId("btnSalvar"),
+						oBtnCancelar = this.byId("btnCancelar");
+	
+					oBtnSalvarFechar.setEnabled(false);
+					oBtnSalvar.setEnabled(false);
+					oBtnCancelar.setEnabled(false);
+	
+					this.setBusy(oBtnPressionado, true);
+	
+					this._inserir(function (response) {
+						oBtnSalvarFechar.setEnabled(true);
+						oBtnSalvar.setEnabled(true);
+						oBtnCancelar.setEnabled(true);
+	
+						that.setBusy(oBtnPressionado, false);
+	
+						if (callback) {
+							callback(JSON.parse(response));
+						}
+					});
+				}
+			},
+			
+			_isFormularioValido: function () {
+				var msg = "",
+					bValido = true,
+					oValidacao;
+				
+				oValidacao = this._validarJustificativa();
+				
+				if (!oValidacao.valido) {
+					msg += "- " + oValidacao.mensagem + "\n";	
+					bValido = false;
+				}
+				
+				if (!bValido) {
+					jQuery.sap.require("sap.m.MessageBox");
+					
+					sap.m.MessageBox.show(msg, {
+						title: this.getResourceBundle().getText("viewGeralAviso")
+					});
+				}
+					
+				return bValido;
+			},
+			
+			_validarJustificativa: function () {
+				var aLossSchedule = this.getModel().getProperty("/LossSchedule"),
+					aCreditSchedule = this.getModel().getProperty("/CreditSchedule"),
+					aScheduleComJustificativaObrigatoriaVazia;
+					
+				var pegarScheduleComJustificativaObrigatoriaVazia = function (aSchedule) {
+					return aSchedule.filter(function (obj) {
+						return obj.justificativaEnabled && !obj.justificativa	
+					});
+				}
+				
+				aScheduleComJustificativaObrigatoriaVazia = pegarScheduleComJustificativaObrigatoriaVazia(aLossSchedule);
+				aScheduleComJustificativaObrigatoriaVazia = aScheduleComJustificativaObrigatoriaVazia.concat(pegarScheduleComJustificativaObrigatoriaVazia(aCreditSchedule));
+				
+				return {
+					valido: !aScheduleComJustificativaObrigatoriaVazia.length,
+					mensagem: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoJustificativa") //"Existem justificativas obrigatórias sem preenchimento"
+				};	
 			},
 
 			_inserir: function (callback) {
@@ -2802,6 +2873,12 @@ sap.ui.define(
 					.catch((err) => {
 						console.log(err);
 					});
+			},
+			
+			onTrocarJustificativa: function (oEvent) {
+				var obj = oEvent.getSource().getBindingContext().getObject();
+				
+				obj.justificativaValueState = obj.justificativa ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
 			}
 		});
 	}

@@ -614,7 +614,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" />
+											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
@@ -864,7 +864,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
 										<t:template>
-											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" />
+											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
