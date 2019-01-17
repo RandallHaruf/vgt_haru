@@ -111,7 +111,28 @@ module.exports = {
 							res.send(JSON.stringify(err2));
 						}	
 						else {
-							res.send(JSON.stringify(result2));
+							// Se é um período que requer aprovação de envio e sua requisição foi aprovada,
+							// submete ele a procedure de atualização do schedule para
+							// saber se é preciso atualizar as informações de schedule no banco para períodos futuros
+							if (Number(req.body.fkDominioRequisicaoEncerramentoPeriodoStatus) === 2) {
+								model.execute({
+									statement: 'call "atualizar_schedule"(?)',
+									parameters: [req.body.fkRelTaxPackagePeriodo]
+								}, function (err3, result3) {
+									if (err3) {
+										res.send(JSON.stringify(err3));
+									}	
+									else {
+										res.send(JSON.stringify({
+											success: true,
+											result: result3
+										}));
+									}
+								});	
+							}
+							else {
+								res.send(JSON.stringify(result2));	
+							}
 						}
 					});
 				}
