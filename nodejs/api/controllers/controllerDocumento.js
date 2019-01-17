@@ -176,14 +176,21 @@ module.exports = {
 	},
 	listarTodosArquivos: function (req, res) {
 
-		var sStatement =   'SELECT '
+		var sStatement =  'SELECT * FROM ( ' 
+						  +'SELECT '
 						  +'tblRespostaObrigacao.*, '
-						  +'tblDominioAnoFiscal.*, '
 						  +'tblModeloObrigacao.*, '
+						  +'tblDominioAnoCalendario.*, '
                           +'tblDominioObrigacaoStatus .*, '
                           +'tblPeriodicidade.*, '
 						  +'tblEmpresa.*, '
 						  +'tblDocumentoObrigacao.*, '
+						  +'(tblDominioAnoCalendario."ano_calendario" - COALESCE(tblModeloObrigacao."ano_obrigacao", '
+						  +'case tblModeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" '
+						  +'when 1 then tblPais."ano_obrigacao_beps" '
+						  +'when 2 then tblPais."ano_obrigacao_compliance" '
+						  +'end '
+						  +')) "ano_fiscal", '
 						  +'tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo", '
 						  +'tblRelModeloEmpresa."fk_id_empresa.id_empresa", '
 						  +'tblRelModeloEmpresa."id_rel_modelo_empresa", '
@@ -193,8 +200,6 @@ module.exports = {
 						  +'FROM "VGT.RESPOSTA_OBRIGACAO" tblRespostaObrigacao '
 						  +'LEFT OUTER JOIN "VGT.REL_MODELO_EMPRESA" tblRelModeloEmpresa '
 						  +'ON tblRespostaObrigacao."fk_id_rel_modelo_empresa.id_rel_modelo_empresa" = tblRelModeloEmpresa."id_rel_modelo_empresa" '
-						  +'LEFT OUTER JOIN "VGT.DOMINIO_ANO_FISCAL" tblDominioAnoFiscal '
-						  +'ON tblRespostaObrigacao."fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal" = tblDominioAnoFiscal."id_dominio_ano_fiscal" '
 						  +'LEFT OUTER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
 						  +'ON tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo" = tblModeloObrigacao."id_modelo" '
 						  +'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus '
@@ -203,19 +208,47 @@ module.exports = {
 						  +'ON tblModeloObrigacao."fk_id_dominio_periodicidade.id_periodicidade_obrigacao" = tblPeriodicidade."id_periodicidade_obrigacao" '
 						  +'LEFT OUTER JOIN "VGT.EMPRESA" tblEmpresa '
 						  +'ON tblRelModeloEmpresa."fk_id_empresa.id_empresa" = tblEmpresa."id_empresa" '
+						  +'LEFT outer join "VGT.DOMINIO_ANO_CALENDARIO" tblDominioAnoCalendario '
+						  +'ON tblRespostaObrigacao."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
+						  + 'left outer join "VGT.PAIS" tblPais '
+						  + 'on tblModeloObrigacao."fk_id_pais.id_pais" = tblPais."id_pais" '
 						  +'INNER JOIN "VGT.DOCUMENTO_OBRIGACAO" tblDocumentoObrigacao '
 						  +'ON tblRespostaObrigacao."id_resposta_obrigacao" = tblDocumentoObrigacao."fk_id_resposta_obrigacao.id_resposta_obrigacao" ';
 		var oWhere = [];
 		var aParams = [];
 		
-		if (req.query.anoCalendario) {
-			oWhere.push(' tblRespostaObrigacao."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ? ');
-			aParams.push(req.query.anoCalendario);
-		}
+		/*if (req.query.anoFiscal) {
+			var Interrogacoes = "";
+			var aAnoFiscal = JSON.parse(req.query.anoFiscal);
+			for (var i = 0; i< aAnoFiscal.length; i++){
+				Interrogacoes += (Interrogacoes === "" ? "" : ",") + "?";
+				aParams.push(req.query.aAnoFiscal[i]);
+			}
+			oWhere.push(' "ano_fiscal" in (' + Interrogacoes + ') ');
+		}*/
 		
 		if (req.query.IndAtivoRel) {
 			oWhere.push(' (tblRelModeloEmpresa."ind_ativo" = ? OR tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4)');
 			aParams.push(req.query.IndAtivoRel);
+		}
+		
+		if (req.query.idEmpresa) {
+			var Interrogacoes = "";
+			var aIdEmpresa = JSON.parse(req.query.idEmpresa);
+			for (var i = 0; i< aIdEmpresa.length; i++){
+				Interrogacoes += (Interrogacoes === "" ? "" : ",") + "?";
+				aParams.push(Number(aIdEmpresa[i]));
+			}
+			oWhere.push(' tblEmpresa."id_empresa" in (' + Interrogacoes + ') ');
+		}
+		if (req.query.idObrigacoes) {
+			var Interrogacoes2 = "";
+			var aidObrigacoes = JSON.parse(req.query.idObrigacoes);
+			for (var j = 0; j< aidObrigacoes.length; j++){
+				Interrogacoes2 += (Interrogacoes2 === "" ? "" : ",") + "?";
+				aParams.push(Number(aidObrigacoes[j]));
+			}
+			oWhere.push(' tblModeloObrigacao."id_modelo" in (' + Interrogacoes2 + ') ');
 		}
 		
 		
@@ -238,6 +271,16 @@ module.exports = {
 				sStatement += ' where ((year(tblModeloObrigacao."data_inicial") <= tblDominioAnoCalendario."ano_calendario") and (year(tblModeloObrigacao."data_final") >= tblDominioAnoCalendario."ano_calendario")) ';
 			}
 		}
+		sStatement += ')';
+		if (req.query.anoFiscal){
+			var aAnoFiscal = JSON.parse(req.query.anoFiscal);
+			var strAnoFiscal = "";
+			for (var i = 0; i< aAnoFiscal.length; i++){
+				strAnoFiscal += (strAnoFiscal === "" ? "" : ",") + aAnoFiscal[i];
+			}
+			sStatement += ' where "ano_fiscal" in (' + strAnoFiscal + ') ';
+		}
+		console.log(sStatement);
 		
 		var conn = db.getConnection();
 

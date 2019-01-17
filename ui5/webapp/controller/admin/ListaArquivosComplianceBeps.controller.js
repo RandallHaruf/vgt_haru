@@ -102,14 +102,52 @@ sap.ui.define(
 
 				return oValidacao.formularioValido;
 			},
+			
+			RecarregarObjetos: function () {
 
+				var that = this;
+				that.getModel().setProperty("/objetos", null);
+				
+				
+				var AnoFiscal = this.getModel().getProperty("/IdAnosFiscaisSelecionadas")  ? "&anoFiscal=" + JSON.stringify(this.getModel().getProperty("/IdAnosFiscaisSelecionadas")) : "";
+				var Empresa = this.getModel().getProperty("/IdEmpresasSelecionadas")  ? "&idEmpresa=" + JSON.stringify(this.getModel().getProperty("/IdEmpresasSelecionadas")) : "";
+				var NomeObrigacao = this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")  ? "&idObrigacoes=" + JSON.stringify(this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")) : "";
+				
+				that.setBusy(that.byId("paginaListagem"), true);
+				NodeAPI.listarRegistros("DeepQuery/ListarTodosDocumentos?ListarSomenteEmVigencia=1&IndAtivoRel=1" + AnoFiscal + Empresa + NomeObrigacao, function (response) {
+					var aResponse = response;
+					for (var i = 0, length = aResponse.length; i < length; i++) {
+						aResponse[i]["Tipo"] = aResponse[i]["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"] == 1 ? "Beps" : "Compliance";
+					}
+					that.getModel().setProperty("/objetos", aResponse);
+					that.setBusy(that.byId("paginaListagem"), false);
+				});
+			},
+			
 			_carregarObjetos: function () {
 
 				var that = this;
 				that.getModel().setProperty("/objetos", null);
-
+				
+				if(this.getModel().getProperty("PrimeiraVez") == 0 || this.getModel().getProperty("PrimeiraVez") == undefined || this.getModel().getProperty("PrimeiraVez") == ""){
+					this.getModel().setProperty("PrimeiraVez", 1);
+					NodeAPI.listarRegistros("Empresa", function (response) {
+						that.getModel().setProperty("/Empresas", response);
+					});
+					NodeAPI.listarRegistros("ModeloObrigacao", function (response) {
+						that.getModel().setProperty("/Obrigacoes", response);
+					});
+					NodeAPI.listarRegistros("DominioAnoFiscal", function (response) {
+						that.getModel().setProperty("/AnosFiscais", response);
+					});
+				}
+				
+				var AnoFiscal = this.getModel().getProperty("/IdAnosFiscaisSelecionadas")  ? "&anoFiscal=" + JSON.parse(this.getModel().getProperty("/IdAnosFiscaisSelecionadas")) : "";
+				var Empresa = this.getModel().getProperty("/IdEmpresasSelecionadas")  ? "&idEmpresa=" + JSON.parse(this.getModel().getProperty("/IdEmpresasSelecionadas")) : "";
+				var NomeObrigacao = this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")  ? "&idObrigacoes=" + JSON.parse(this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")) : "";
+				
 				that.setBusy(that.byId("paginaListagem"), true);
-				NodeAPI.listarRegistros("DeepQuery/ListarTodosDocumentos", function (response) {
+				NodeAPI.listarRegistros("DeepQuery/ListarTodosDocumentos?ListarSomenteEmVigencia=1&IndAtivoRel=1" + AnoFiscal + Empresa + NomeObrigacao, function (response) {
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["Tipo"] = aResponse[i]["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"] == 1 ? "Beps" : "Compliance";
@@ -215,7 +253,7 @@ sap.ui.define(
 				
 				// Limpar outras propriedades do modelo
 			},
-
+			
 			_atualizarObjeto: function (sIdObjeto) {
 				/*sap.m.MessageToast.show("Atualizar Objeto");
 				this._navToPaginaListagem();*/
@@ -354,34 +392,11 @@ sap.ui.define(
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},*/
 
-			onAbrirObjeto: function (oEvent) {
-				var that = this,
-					oButton = oEvent.getSource(),
-					oArquivo = oEvent.getSource().getBindingContext().getObject();
-
-				oArquivo.btnExcluirEnabled = false;
-				oArquivo.btnDownloadEnabled = false;
-				this.getModel().refresh();
-				this.setBusy(oButton, true);
-
-				Arquivo.download("DownloadDocumento?arquivo=" + oArquivo.id_documento)
-					.then(function (response) {
-						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
-
-						oArquivo.btnExcluirEnabled = true;
-						oArquivo.btnDownloadEnabled = true;
-						that.setBusy(oButton, false);
-						that.getModel().refresh();
-					})
-					.catch(function (err) {
-						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
-
-						oArquivo.btnExcluirEnabled = true;
-						oArquivo.btnDownloadEnabled = true;
-						that.setBusy(oButton, false);
-						that.getModel().refresh();
-					});
-			},
+			/*onAbrirObjeto: function (oEvent) {
+				this.byId("myNav").to(this.byId("paginaObjeto"), "flip", {
+					path: oEvent.getSource().getBindingContext().getPath()
+				});
+			},*/
 
 			onSalvar: function (oEvent) {
 				if (this._validarFormulario()) {

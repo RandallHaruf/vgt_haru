@@ -12,6 +12,80 @@
 			id="paginaListagem"
 			showHeader="false"
 			visible="true">
+			<!--
+			<f:Form 
+						editable="true">
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+						</f:layout>
+						
+						<f:formContainers>
+							<f:FormContainer title="{i18n>viewArquivosAdminFiltros}">
+								<f:formElements>
+									<f:FormElement>
+										<f:fields>
+											<MultiComboBox id="selectEmpresa" items="{ path: '/Empresas' }" selectedKeys="{/IdEmpresasSelecionadas}" >
+												<core:Item key="{id_empresa}" text="{nome}"/>																				
+											</MultiComboBox>
+										</f:fields>
+										<f:fields>
+											<MultiComboBox id="selectNomeObrigacao" items="{ path: '/Obrigacoes' }" selectedKeys="{/IdNomeObrigacoesSelecionadas}" >
+												<core:Item key="{id_modelo}" text="{nome_obrigacao}"/>																				
+											</MultiComboBox>
+										</f:fields>
+										<f:fields>
+											<MultiComboBox id="selectAnoFiscal" items="{ path: '/AnosFiscais' }" selectedKeys="{/IdAnosFiscaisSelecionadas}" >
+												<core:Item key="{ano_fiscal}" text="{ano_fiscal}"/>																				
+											</MultiComboBox>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:fields>
+											<Button text="{i18n>viewArquivosAdminPesquisar}" width="200px" press="RecarregarObjetos"/>
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+						
+					</f:Form>
+			-->
+			<l:BlockLayout>
+				<l:BlockLayoutRow>
+					<l:BlockLayoutCell>
+						<VBox>
+							<Label text="{i18n>viewArquivosAdminEmpresa}" />
+							<MultiComboBox id="selectEmpresa" items="{ path: '/Empresas' }" selectedKeys="{/IdEmpresasSelecionadas}" >
+								<core:Item key="{id_empresa}" text="{nome}"/>																				
+							</MultiComboBox>
+						</VBox>
+					</l:BlockLayoutCell>
+					<l:BlockLayoutCell>
+						<VBox>
+							<Label text="{i18n>viewArquivosAdminNomeObrigacao}" />
+							<MultiComboBox id="selectNomeObrigacao" items="{ path: '/Obrigacoes' }" selectedKeys="{/IdNomeObrigacoesSelecionadas}" >
+								<core:Item key="{id_modelo}" text="{nome_obrigacao}"/>																				
+							</MultiComboBox>
+						</VBox>
+					</l:BlockLayoutCell>
+					<l:BlockLayoutCell>
+						<VBox>
+							<Label text="{i18n>viewArquivosAdminAnoFiscal}" />
+							<MultiComboBox id="selectAnoFiscal" items="{ path: '/AnosFiscais' }" selectedKeys="{/IdAnosFiscaisSelecionadas}" >
+								<core:Item key="{ano_fiscal}" text="{ano_fiscal}"/>																				
+							</MultiComboBox>
+						</VBox>
+					</l:BlockLayoutCell>
+				</l:BlockLayoutRow>
+				<l:BlockLayoutRow>
+					<l:BlockLayoutCell>
+						<VBox alignItems="Center">
+							<Button text="{i18n>viewArquivosAdminPesquisar}" width="200px" press="RecarregarObjetos"/>
+						</VBox>
+					</l:BlockLayoutCell>
+				</l:BlockLayoutRow>
+			</l:BlockLayout>
 			<Table
 				id="tabelaObjetos"
 				items="{
@@ -40,19 +114,6 @@
 						<ToolbarSpacer />
 					</Toolbar>
 				</headerToolbar>
-		
-				<!--<columns>
-					<Column mergeDuplicates="true">
-						<Text text="{i18n>viewGeralCategoria}" />
-					</Column>
-					<Column mergeDuplicates="true">
-						<Text text="{i18n>viewGeralTaxa}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>viewGeralNomeT}" />
-					</Column>
-					<Column width="100px"></Column>
-				</columns>-->
 				<columns>
 					<Column>
 						<Text text="{i18n>viewArquivosAdminTipoObrigacao}" />

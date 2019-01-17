@@ -565,6 +565,7 @@ context VGT {
             fk_id_dominio_periodicidade            : association[*, 0..1] to VGT.DOMINIO_PERIODICIDADE_OBRIGACAO { id_periodicidade_obrigacao };
             fk_id_dominio_obrigacao_status         : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
             fk_id_dominio_obrigacao_acessoria_tipo : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO { id_dominio_obrigacao_acessoria_tipo };
+            ano_obrigacao                          : Integer;
     };
 
     /*@@layout{"layoutInfo":{"x":851,"y":646.5}}*/
@@ -622,7 +623,7 @@ context VGT {
             observacao                                        : String(2000);
     };
 
-	/*@@layout{"layoutInfo":{"x":-1077,"y":102.5}}*/
+    /*@@layout{"layoutInfo":{"x":-1077,"y":102.5}}*/
     entity DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO {
         key id_dominio_schedule_value_utilized_tipo : Integer64 not null;
             tipo                                    : String(100);
