@@ -5,6 +5,35 @@ sap.ui.define(
 	],
 	function (Validador) {
 		return {
+			getPeriodoEdicaoTaxPackage: function (iAno) {
+				// Se não foi passado um ano que se deseja conhecer seu periodo de edição, retorna o período do ano corrente
+				if (!iAno) {
+					var now = new Date(),
+						dataInicio,
+						dataFim;
+					
+					if (now.getMonth() === 0 && now.getDate() >= 1 && now.getDate() <= 31) {
+						dataInicio = new Date(now.getFullYear() - 1, 0, 31);
+						dataFim = new Date(now.getFullYear(), 0, 31);
+					}
+					else {
+						dataInicio = new Date(now.getFullYear(), 0, 31);
+						dataFim = new Date(now.getFullYear() + 1, 0, 31);
+					}
+					
+					return {
+						inicio: dataInicio,
+						fim: dataFim
+					};
+				}
+				else {
+					return {
+						inicio: new Date(iAno, 0, 31),
+						fim: new Date(iAno + 1, 0, 31)
+					};
+				}
+			},
+			
 			stringMoedaParaFloat: function (sMoeda) {
 				var fConversao = 0.00;
 				if (sMoeda) {
