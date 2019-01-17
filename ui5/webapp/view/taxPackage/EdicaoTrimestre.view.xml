@@ -241,7 +241,8 @@
 														path: '/DiferencaOpcao/Permanente',
 														templateShareable: false
 													}" 
-													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}">
+													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
+													enabled="{= ${nova} ? true : false}">
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
 												<Input value="{outro}" />
@@ -302,7 +303,8 @@
 														path: '/DiferencaOpcao/Temporaria',
 														templateShareable: false
 													}"
-													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}">
+													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
+													enabled="{= ${nova} ? true : false}">
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
 												<Input value="{outro}" />
@@ -632,7 +634,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
 										<t:template>
-											<Input value="{obs}" enabled="{= ${ind_corrente} === true ? true : false}" />
+											<Input value="{obs}" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}" -->
 										</t:template>
 									</t:Column>
 								</t:columns>
@@ -882,7 +884,7 @@
 									<t:Column width="15rem">
 										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
 										<t:template>
-											<Input value="{obs}" enabled="{= ${ind_corrente} === true ? true : false}" />
+											<Input value="{obs}" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}" -->
 										</t:template>
 									</t:Column>
 								</t:columns>

@@ -25,6 +25,7 @@ sap.ui.define(
 			_adicionarTaxaMultipla: function (sProperty, sFkTipo) {
 				this.getModel().getProperty(sProperty).unshift({
 					descricao: null,
+					descricaoValueState: sap.ui.core.ValueState.Error,
 					valor: 0,
 					"fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla": sFkTipo
 				});
@@ -101,7 +102,12 @@ sap.ui.define(
 				}, this);
 
 				var oInputDescricao = new sap.m.Input({
-					value: "{descricao}"
+					value: "{descricao}",
+					valueState: "{descricaoValueState}",
+					valueStateText: this.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio")
+				}).attachChange(function (oEvent) {
+					var obj = oEvent.getSource().getBindingContext().getObject();
+					obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
 				});
 
 				var oInputValor = new sap.m.Input({
@@ -140,8 +146,29 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "Fechar",
 						press: function () {
-							dialog.close();
-							that.onAplicarRegras();
+							var aTaxa = that.getModel().getProperty(sProperty),
+								bValido = true;
+							
+							if (aTaxa && aTaxa.length) {
+								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+									return !obj.descricao;
+								});
+								
+								if (aTaxaSemDescricao.length) {
+									bValido = false;
+								}
+							}
+							
+							if (bValido) {
+								dialog.close();
+								that.onAplicarRegras();
+							}
+							else {
+								jQuery.sap.require("sap.m.MessageBox");
+								sap.m.MessageBox.show(that.getResourceBundle().getText("ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+									title: that.getResourceBundle().getText("viewGeralAviso")
+								});
+							}
 						}
 					}),
 					afterClose: function () {
@@ -306,8 +333,17 @@ sap.ui.define(
 					this._excluirTaxaMultipla(oEvent2, "/OutrasAntecipacoes");
 				}, this);
 
-				var oInputDescricao = new sap.m.Input({
+				/*var oInputDescricao = new sap.m.Input({
 					value: "{descricao}"
+				});*/
+				
+				var oInputDescricao = new sap.m.Input({
+					value: "{descricao}",
+					valueState: "{descricaoValueState}",
+					valueStateText: this.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio")
+				}).attachChange(function (oEvent) {
+					var obj = oEvent.getSource().getBindingContext().getObject();
+					obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
 				});
 
 				/*var oInputValor = new sap.m.Input({
@@ -358,8 +394,29 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "Fechar",
 						press: function () {
-							dialog.close();
-							that.onAplicarRegras();
+							var aTaxa = that.getModel().getProperty("/OutrasAntecipacoes"),
+								bValido = true;
+							
+							if (aTaxa && aTaxa.length) {
+								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+									return !obj.descricao;
+								});
+								
+								if (aTaxaSemDescricao.length) {
+									bValido = false;
+								}
+							}
+							
+							if (bValido) {
+								dialog.close();
+								that.onAplicarRegras();
+							}
+							else {
+								jQuery.sap.require("sap.m.MessageBox");
+								sap.m.MessageBox.show(that.getResourceBundle().getText("ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+									title: that.getResourceBundle().getText("viewGeralAviso")
+								});
+							}
 						}
 					}),
 					afterClose: function () {
