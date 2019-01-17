@@ -221,7 +221,9 @@ module.exports = {
 				/*oLossSchedule = oTaxPackage.lossSchedule,
 				oCreditSchedule = oTaxPackage.creditSchedule,*/
 				aLossSchedule = oTaxPackage.lossSchedule,
+				aTotalLossesUtilized = oTaxPackage.totalLossesUtilized,
 				aCreditSchedule = oTaxPackage.creditSchedule,
+				aOverpaymentFromPriorYearAppliedToCurrentYear = oTaxPackage.overpaymentFromPriorYearAppliedToCurrentYear,
 				aOtherTax = oTaxPackage.otherTaxes,
 				aIncentivoFiscal = oTaxPackage.incentivosFiscais,
 				aWHT = oTaxPackage.wht,
@@ -242,6 +244,8 @@ module.exports = {
 			
 			inserirSchedule(aLossSchedule);
 			inserirSchedule(aCreditSchedule);
+			
+			inserirScheduleValueUtilized(sIdTaxReconciliation, aTotalLossesUtilized, aOverpaymentFromPriorYearAppliedToCurrentYear);
 			
 			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes);
 			
@@ -271,8 +275,8 @@ module.exports = {
 				aSchedule = [],
 				oSchedule;
 			
-			/*
-			@NOVO_SCHEDULE - descomentar
+			
+			//@NOVO_SCHEDULE - descomentar
 			var sQuery, aParams;
 			
 			// pegar id de todos os anos fiscais iguais ou anteriores ao ano calendario corrente
@@ -305,7 +309,7 @@ module.exports = {
 				}
 			}
 				
-			if (resultAnoCalendarioAnterior) {
+			if (resultAnoCalendarioAnterior && resultAnoCalendarioAnterior[0]) {
 				var iIdAnoCalendarioAnterior = resultAnoCalendarioAnterior[0].id_dominio_ano_calendario;
 			
 				// carregar o retrato de schedule do ultimo periodo do ano calendario anterior	
@@ -439,8 +443,9 @@ module.exports = {
 				}
 			}
 			
-			res.send(JSON.stringify(aSchedule));*/
+			res.send(JSON.stringify(aSchedule));
 			
+			/*
 			// @NOVO_SCHEDULE - comentar
 			var sQuery, aParams, result;
 			
@@ -529,7 +534,7 @@ module.exports = {
 				};
 			}
 			
-			res.send(JSON.stringify(oSchedule)); 
+			res.send(JSON.stringify(oSchedule)); */
 		}
 		else {
 			res.send(JSON.stringify({
@@ -946,10 +951,23 @@ module.exports = {
 						});
 					}
 					else {
-						res.send(JSON.stringify({
-							success: true,
-							result: result
-						}));
+						// Se é um período que não requer aprovação de envio,
+						// submete ele a procedure de atualização do schedule imediatamente para
+						// saber se é preciso atualizar as informações de schedule no banco
+						db.executeStatement({
+							statement: 'call "atualizar_schedule"(?)',
+							parameters: [req.body.relTaxPackagePeriodo]
+						}, function (err2, result2) {
+							if (err2) {
+								res.send(JSON.stringify(err2));
+							}	
+							else {
+								res.send(JSON.stringify({
+									success: true,
+									result: result2
+								}));
+							}
+						});	
 					}
 				}
 			});
@@ -1389,8 +1407,8 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 	}
 }
 
-/*
-@NOVO_SCHEDULE - descomentar
+
+//@NOVO_SCHEDULE - descomentar
 function inserirSchedule(aSchedule) {
 	var sQuery, aParams;
 	
@@ -1472,8 +1490,73 @@ function inserirSchedule(aSchedule) {
 			db.executeStatementSync(sQuery, aParams);
 		}
 	}
-}*/
+}
 
+function inserirScheduleValueUtilized(sFkTaxReconciliation, aTotalLossesUtilized, aOverpaymentFromPriorYearApplierToCurrentYear) {
+	var aValuesUtilized = aTotalLossesUtilized.concat(aOverpaymentFromPriorYearApplierToCurrentYear);
+	
+	var sQuery, aParams;
+	
+	sQuery = 'select * from "VGT.SCHEDULE_VALUE_UTILIZED" where "fk_tax_reconciliation.id_tax_reconciliation" = ? ';
+	aParams = [sFkTaxReconciliation];
+	
+	var result = db.executeStatementSync(sQuery, aParams),
+		aValuesUtilizedPersistido = [];
+	
+	if (result && result.length > 0) {
+		aValuesUtilizedPersistido = result;
+	}
+	
+	for (var i = 0, length = aValuesUtilizedPersistido.length; i < length; i++) {
+		var oValueUtilizedPersistido = aValuesUtilizedPersistido[i];
+		
+		var oValueUtilizedEnviado = aValuesUtilized.find(function (obj) {
+			return oValueUtilizedPersistido.id_schedule_value_utilized === obj.id_schedule_value_utilized;
+		});
+		
+		if (!oValueUtilizedEnviado) {
+			sQuery = 'delete from "VGT.SCHEDULE_VALUE_UTILIZED" where "id_schedule_value_utilized" = ?';
+			aParams = [oValueUtilizedPersistido.id_schedule_value_utilized];
+			
+			db.executeStatementSync(sQuery, aParams);
+		}
+	}
+	
+	for (var i = 0, length = aValuesUtilized.length; i < length; i++) {
+		var oValueUtilized = aValuesUtilized[i];
+		
+		if (oValueUtilized.id_schedule_value_utilized) {
+			// update
+			sQuery = 
+				'update "VGT.SCHEDULE_VALUE_UTILIZED" set '
+				+ '"schedule_fy" = ?, '
+				+ '"valor" = ?, '
+				+ '"obs" = ?, '
+				+ '"fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo" = ?, '
+				+ '"fk_tax_reconciliation.id_tax_reconciliation" = ? '
+				+ 'where '
+				+ '"id_schedule_value_utilized" = ? ';
+			aParams = [oValueUtilized.schedule_fy, oValueUtilized.valor, oValueUtilized.obs, oValueUtilized["fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo"], sFkTaxReconciliation, oValueUtilized.id_schedule_value_utilized];
+		}
+		else {
+			// insert
+			sQuery = 
+				'insert into "VGT.SCHEDULE_VALUE_UTILIZED"( '
+				+ '"id_schedule_value_utilized", '
+				+ '"schedule_fy", '
+				+ '"valor", '
+				+ '"obs", '
+				+ '"fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo", '
+				+ '"fk_tax_reconciliation.id_tax_reconciliation") values ('
+				+ '"identity_VGT.SCHEDULE_VALUE_UTILIZED_id_schedule_value_utilized".nextval, ?, ?, ?, ?, ?)';
+			aParams = [oValueUtilized.schedule_fy, oValueUtilized.valor, oValueUtilized.obs, oValueUtilized["fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo"], sFkTaxReconciliation];
+		}
+		
+		db.executeStatementSync(sQuery, aParams);
+	}
+}
+
+/*
 // @NOVO_SCHEDULE - comentar
 function inserirSchedule(oSchedule) {
 	var sQuery, aParams;
@@ -1548,7 +1631,7 @@ function inserirSchedule(oSchedule) {
 		
 		db.executeStatementSync(sQuery, aParams);
 	}
-}
+}*/
 
 function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes) {
 	var aTaxaMultipla = aOtherTax.concat(aIncentivoFiscal);
