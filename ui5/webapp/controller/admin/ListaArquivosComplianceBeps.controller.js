@@ -392,11 +392,34 @@ sap.ui.define(
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},*/
 
-			/*onAbrirObjeto: function (oEvent) {
-				this.byId("myNav").to(this.byId("paginaObjeto"), "flip", {
-					path: oEvent.getSource().getBindingContext().getPath()
-				});
-			},*/
+			onAbrirObjeto: function (oEvent) {
+				var that = this,
+					oButton = oEvent.getSource(),
+					oArquivo = oEvent.getSource().getBindingContext().getObject();
+
+				oArquivo.btnExcluirEnabled = false;
+				oArquivo.btnDownloadEnabled = false;
+				this.getModel().refresh();
+				this.setBusy(oButton, true);
+
+				Arquivo.download("DownloadDocumento?arquivo=" + oArquivo.id_documento)
+					.then(function (response) {
+						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
+
+						oArquivo.btnExcluirEnabled = true;
+						oArquivo.btnDownloadEnabled = true;
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					})
+					.catch(function (err) {
+						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
+
+						oArquivo.btnExcluirEnabled = true;
+						oArquivo.btnDownloadEnabled = true;
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					});
+			},
 
 			onSalvar: function (oEvent) {
 				if (this._validarFormulario()) {

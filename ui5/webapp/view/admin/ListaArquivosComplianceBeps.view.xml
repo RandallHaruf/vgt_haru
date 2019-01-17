@@ -136,7 +136,7 @@
 				<items>
 					<ColumnListItem
 						type="Navigation"
-						press="onAbrirObjeto">
+						>
 						<cells>
 							<ObjectIdentifier text="{Tipo}"/>
 							<ObjectIdentifier text="{nome}"/>
