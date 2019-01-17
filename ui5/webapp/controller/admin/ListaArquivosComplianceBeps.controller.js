@@ -109,9 +109,9 @@ sap.ui.define(
 				that.getModel().setProperty("/objetos", null);
 				
 				
-				var AnoFiscal = this.getModel().getProperty("/IdAnosFiscaisSelecionadas")  ? "&anoFiscal=" + JSON.stringify(this.getModel().getProperty("/IdAnosFiscaisSelecionadas")) : "";
-				var Empresa = this.getModel().getProperty("/IdEmpresasSelecionadas")  ? "&idEmpresa=" + JSON.stringify(this.getModel().getProperty("/IdEmpresasSelecionadas")) : "";
-				var NomeObrigacao = this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")  ? "&idObrigacoes=" + JSON.stringify(this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")) : "";
+				var AnoFiscal = this.getModel().getProperty("/IdAnosFiscaisSelecionadas") && this.getModel().getProperty("/IdAnosFiscaisSelecionadas") != ""  ? "&anoFiscal=" + JSON.stringify(this.getModel().getProperty("/IdAnosFiscaisSelecionadas")) : "";
+				var Empresa = this.getModel().getProperty("/IdEmpresasSelecionadas") && this.getModel().getProperty("/IdEmpresasSelecionadas") != "" ? "&idEmpresa=" + JSON.stringify(this.getModel().getProperty("/IdEmpresasSelecionadas")) : "";
+				var NomeObrigacao = this.getModel().getProperty("/IdNomeObrigacoesSelecionadas") && this.getModel().getProperty("/IdNomeObrigacoesSelecionadas") != "" ? "&idObrigacoes=" + JSON.stringify(this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")) : "";
 				
 				that.setBusy(that.byId("paginaListagem"), true);
 				NodeAPI.listarRegistros("DeepQuery/ListarTodosDocumentos?ListarSomenteEmVigencia=1&IndAtivoRel=1" + AnoFiscal + Empresa + NomeObrigacao, function (response) {
