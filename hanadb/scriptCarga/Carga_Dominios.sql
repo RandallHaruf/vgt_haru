@@ -1,3 +1,6 @@
+-- select * from "VGT.DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO
+upsert "VGT.DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO"("id_dominio_schedule_value_utilized_tipo", "tipo") values(1, 'Loss') where "id_dominio_schedule_value_utilized_tipo" = 1;
+upsert "VGT.DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO"("id_dominio_schedule_value_utilized_tipo", "tipo") values(2, 'Credit') where "id_dominio_schedule_value_utilized_tipo" = 2;
 --/*
 --
 --*/

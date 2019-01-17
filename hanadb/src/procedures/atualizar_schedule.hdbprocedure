@@ -1,0 +1,115 @@
+PROCEDURE "atualizar_schedule"(input_id_rel_tax_package_periodo integer)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+AS
+BEGIN
+	declare id_rel_tax_package_periodo Integer := :input_id_rel_tax_package_periodo;
+	declare ano_calendario_corrente Integer := year(CURRENT_DATE);
+	
+	-- informações do relacionamento entre tax package e periodo que está sendo analisado no momento
+	declare id_empresa Integer;
+	declare id_ano_calendario Integer;
+	declare ano_calendario Integer;
+	declare numero_ordem Integer;
+	-- flag para após a análise saber se deve atualizar os schedules posteriores ou não
+	declare flag_atualizar Integer;
+	
+	-- guarda o id da empresa do relacionamento entre tax package e periodo que está sendo analisado no momento
+	select taxPackage."fk_empresa.id_empresa" into id_empresa
+	from "VGT.REL_TAX_PACKAGE_PERIODO" rel	
+		inner join "VGT.TAX_PACKAGE" taxPackage
+			on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package"
+	where
+		rel."id_rel_tax_package_periodo" = id_rel_tax_package_periodo;
+		
+	-- guarda o id do ano calendário do relacionamento entre tax package e periodo que está sendo analisado no momento
+	select periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" into id_ano_calendario
+		from "VGT.REL_TAX_PACKAGE_PERIODO" rel	
+			inner join "VGT.PERIODO" periodo	
+				on rel."fk_periodo.id_periodo" = periodo."id_periodo"
+		where
+			rel."id_rel_tax_package_periodo" = id_rel_tax_package_periodo;
+			
+	-- guarda o número de ordem a quem o relacionamento entre tax package e periodo que está sendo analisado no momento se refere
+	select periodo."numero_ordem" into numero_ordem
+		from "VGT.REL_TAX_PACKAGE_PERIODO" rel	
+			inner join "VGT.PERIODO" periodo	
+				on rel."fk_periodo.id_periodo" = periodo."id_periodo"
+		where
+			rel."id_rel_tax_package_periodo" = id_rel_tax_package_periodo;
+			
+	-- guarda o ano calendário do relacionamento entre tax package e periodo que está sendo analisado no momento
+	select anoCalendario."ano_calendario" into ano_calendario
+		from "VGT.REL_TAX_PACKAGE_PERIODO" rel	
+			inner join "VGT.PERIODO" periodo	
+				on rel."fk_periodo.id_periodo" = periodo."id_periodo"
+			inner join "VGT.DOMINIO_ANO_CALENDARIO" anoCalendario
+				on periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = anoCalendario."id_dominio_ano_calendario"
+		where
+			rel."id_rel_tax_package_periodo" = id_rel_tax_package_periodo;
+	
+	select 
+		case 
+			-- caso este seja o último período de seu ano de calendário
+			when MAX(periodo."numero_ordem") = numero_ordem then
+				case
+					-- e se trata de um registro de reabertura/retroativo, pois não pertence ao ano de edição (corrente)
+					when ano_calendario < ano_calendario_corrente then 1 -- é preciso atualizar o schedule
+					else 0 -- se trata do último período, mas do ano corrente, então ignora
+				end
+			else 0 -- não se trata do último período, então ignora
+		end "resultado" into flag_atualizar
+	from "VGT.REL_TAX_PACKAGE_PERIODO" rel	
+		inner join "VGT.PERIODO" periodo	
+			on rel."fk_periodo.id_periodo" = periodo."id_periodo"
+		inner join "VGT.TAX_PACKAGE" taxPackage
+			on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package"
+		inner join "VGT.TAX_RECONCILIATION" taxReconciliation
+			on taxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo"
+	where
+		taxPackage."fk_empresa.id_empresa" = id_empresa
+		and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = id_ano_calendario;
+		
+		if :flag_atualizar = 1
+			then
+				-- realiza o update de todos os schedules do ano calendário seguinte até o presente momento
+				update "VGT.SCHEDULE" schedule
+				set 
+					-- cada schedule vai receber no opening balance de cada retrato de cada ano fiscal o valor de closing balance
+					-- do período que foi enviado/teve envio aprovado
+					schedule."opening_balance" = (
+						select "closing_balance"
+						from "VGT.SCHEDULE" innerSchedule
+						where
+							innerSchedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = id_rel_tax_package_periodo -- varia
+							and innerSchedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" -- varia
+							and innerSchedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = schedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" -- varia
+					),
+					schedule."closing_balance" = schedule."current_year_value" + schedule."current_year_value_utilized" + schedule."adjustments" + schedule."current_year_value_expired" + (
+						select "closing_balance"
+						from "VGT.SCHEDULE" innerSchedule
+						where
+							innerSchedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = id_rel_tax_package_periodo -- varia
+							and innerSchedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" = schedule."fk_dominio_schedule_tipo.id_dominio_schedule_tipo" -- varia
+							and innerSchedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = schedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" -- varia
+					)
+				from "VGT.SCHEDULE" schedule
+					inner join "VGT.REL_TAX_PACKAGE_PERIODO" rel
+						on schedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo"
+					inner join "VGT.TAX_PACKAGE" taxPackage
+						on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package"
+					inner join "VGT.PERIODO" periodo	
+						on rel."fk_periodo.id_periodo" = periodo."id_periodo"
+					inner join "VGT.DOMINIO_ANO_CALENDARIO" anoCalendario
+						on periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = anoCalendario."id_dominio_ano_calendario"
+				where
+					taxPackage."fk_empresa.id_empresa" = id_empresa -- varia
+					and anoCalendario."ano_calendario" > ano_calendario -- varia
+					and schedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" in (
+						select "fk_dominio_ano_fiscal.id_dominio_ano_fiscal"
+						from "VGT.SCHEDULE"
+						where
+							"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = id_rel_tax_package_periodo -- varia
+					);
+		end if;
+END

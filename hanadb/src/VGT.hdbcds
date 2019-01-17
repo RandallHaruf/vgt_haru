@@ -153,7 +153,7 @@ context VGT {
             fk_pais                            : association[*, 0..1] to VGT.PAIS { id_pais };
     };
 
-    /*@@layout{"layoutInfo":{"x":-858,"y":121.5}}*/
+    /*@@layout{"layoutInfo":{"x":-687,"y":55.5}}*/
     entity OBRIGACAO_ACESSORIA {
         key id_obrigacao_acessoria              : Integer not null;
             nome                                : String(200);
@@ -620,5 +620,21 @@ context VGT {
             fk_rel_tax_package_periodo                        : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
             fk_usuario                                        : association[*, 0..1] to VGT.USUARIO { id_usuario };
             observacao                                        : String(2000);
+    };
+
+	/*@@layout{"layoutInfo":{"x":-1077,"y":102.5}}*/
+    entity DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO {
+        key id_dominio_schedule_value_utilized_tipo : Integer64 not null;
+            tipo                                    : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1019,"y":271.5}}*/
+    entity SCHEDULE_VALUE_UTILIZED {
+        key id_schedule_value_utilized              : Integer64 not null;
+            schedule_fy                             : Integer;
+            valor                                   : Decimal(19, 4);
+            obs                                     : String(2000);
+            fk_dominio_schedule_value_utilized_tipo : association[*, 0..1] to VGT.DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO { id_dominio_schedule_value_utilized_tipo };
+            fk_tax_reconciliation                   : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
     };
 };
