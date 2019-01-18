@@ -67,7 +67,7 @@ sap.ui.define(
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
 				oToolbar.addContent(new sap.m.Button({
-					text: "Nova",
+					text: this.getResourceBundle().getText("viewGeralNova"),
 					icon: "sap-icon://add",
 					type: "Emphasized"
 				}).attachPress(oTable, function () {
@@ -84,19 +84,20 @@ sap.ui.define(
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
-					text: "Descrição"
+					text: this.getResourceBundle().getText("ViewRelatorioDescricao")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
-					text: "Valor"
+					text: this.getResourceBundle().getText("viewRelatorioValue")
 				})));
 
 				/* Template das células */
 				var oBtnExcluir = new sap.m.Button({
 					icon: "sap-icon://delete",
-					type: "Reject"
+					type: "Reject",
+					tooltip: "{i18n>viewGeralExcluirLinha}"
 				}).attachPress(oTable, function (oEvent2) {
 					this._excluirTaxaMultipla(oEvent2, sProperty);
 				}, this);
@@ -144,7 +145,7 @@ sap.ui.define(
 					type: "Message",
 					content: oScrollContainer,
 					beginButton: new sap.m.Button({
-						text: "Fechar",
+						text: that.getResourceBundle().getText("viewGeralFechar"),
 						press: function () {
 							var aTaxa = that.getModel().getProperty(sProperty),
 								bValido = true;
@@ -182,11 +183,11 @@ sap.ui.define(
 			},
 
 			onEditarOtherTaxes: function (oEvent) {
-				this._dialogTaxaMultipla("Other Taxes", "/OtherTaxes", 1);
+				this._dialogTaxaMultipla(this.getResourceBundle().getText("viewGeralOthertaxes"), "/OtherTaxes", 1);
 			},
 
 			onEditarIncentivosFiscais: function (oEvent) {
-				this._dialogTaxaMultipla("Incentivos Fiscais", "/IncentivosFiscais", 2, true);
+				this._dialogTaxaMultipla(this.getResourceBundle().getText("viewGeralIncentivosFiscais"), "/IncentivosFiscais", 2, true);
 			},
 
 			onEditarWHT: function (oEvent) {
@@ -205,7 +206,7 @@ sap.ui.define(
 				var oPanelTTC = new sap.m.Panel({
 					expandable: true,
 					expanded: false,
-					headerText: "Valores declarados no TTC",
+					headerText: this.getResourceBundle().getText("viewTAXEdicaoTrimestreValoresDeclaradosTTC"),
 					width: "auto"
 				}).addStyleClass("sapUiResponsiveMargin sapUiNoContentPadding");
 
@@ -226,21 +227,21 @@ sap.ui.define(
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
-					text: "Name of Tax"
+					text: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaNameTax")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
-					text: "Data do Pagamento"
+					text: this.getResourceBundle().getText("ViewRelatorioDataDePagamento")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
-					text: "Moeda"
+					text: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaCurrency")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
@@ -248,7 +249,7 @@ sap.ui.define(
 					width: "110px",
 					hAlign: "End"
 				}).setHeader(new sap.m.Text({
-					text: "Principal"
+					text: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaPrincipal")
 				})));
 
 				/* Template das células */
@@ -288,7 +289,7 @@ sap.ui.define(
 				var oPanelOutros = new sap.m.Panel({
 					expandable: true,
 					expanded: false,
-					headerText: "Outros pagamentos",
+					headerText: this.getResourceBundle().getText("viewTAXEdicaoTrimestreOutrosPagamentos"),
 					width: "auto"
 				}).addStyleClass("sapUiResponsiveMargin sapUiNoContentPadding");
 
@@ -299,7 +300,7 @@ sap.ui.define(
 				var oToolbar = new sap.m.Toolbar();
 
 				oToolbar.addContent(new sap.m.Button({
-					text: "Nova",
+					text: this.getResourceBundle().getText("viewGeralNova"),
 					icon: "sap-icon://add",
 					type: "Emphasized"
 				}).attachPress(oTable, function () {
@@ -316,19 +317,20 @@ sap.ui.define(
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
-					text: "Descrição"
+					text: this.getResourceBundle().getText("ViewRelatorioDescricao")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
-					text: "Valor"
+					text: this.getResourceBundle().getText("viewRelatorioValue")
 				})));
 
 				/* Template das células */
 				var oBtnExcluir = new sap.m.Button({
 					icon: "sap-icon://delete",
-					type: "Reject"
+					type: "Reject",
+					tooltip: "{i18n>viewGeralExcluirLinha}"
 				}).attachPress(oTable, function (oEvent2) {
 					this._excluirTaxaMultipla(oEvent2, "/OutrasAntecipacoes");
 				}, this);
@@ -392,7 +394,7 @@ sap.ui.define(
 					type: "Message",
 					content: oScrollContainer,
 					beginButton: new sap.m.Button({
-						text: "Fechar",
+						text: that.getResourceBundle().getText("viewGeralFechar"),
 						press: function () {
 							var aTaxa = that.getModel().getProperty("/OutrasAntecipacoes"),
 								bValido = true;
@@ -440,7 +442,7 @@ sap.ui.define(
 				this.getModel().refresh();
 			},
 
-			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo) {
+			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, sTitulo) {
 				var validarClosingBalanceAposUtilizacao = function (oEv) {
 					var obj = oEv.getSource().getBindingContext().getObject(),
 						currentFYValuesUtilized = that.getModel().getProperty(sProperty).filter(o => Number(o.schedule_fy) === Number(obj.schedule_fy)),
@@ -491,13 +493,13 @@ sap.ui.define(
 				var oToolbar = new sap.m.Toolbar();
 
 				oToolbar.addContent(new sap.m.ObjectIdentifier({
-					title: "Total Losses Utilized"
+					title: sTitulo
 				}));
-
+ 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
 				oToolbar.addContent(new sap.m.Button({
-					text: "Nova",
+					text: this.getResourceBundle().getText("viewGeralNova"),
 					icon: "sap-icon://add",
 					type: "Emphasized"
 				}).attachPress(oTable, function () {
@@ -515,27 +517,28 @@ sap.ui.define(
 					width: "100px",
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
-					text: "FY"
+					text: this.getResourceBundle().getText("viewEdiçãoTrimestreFY")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
 					width: "175px"
 				}).setHeader(new sap.m.Text({
-					text: "Valor"
+					text: this.getResourceBundle().getText("viewGeralValue")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
 					width: "175px"
 				}).setHeader(new sap.m.Text({
-					text: "Observação"
+					text: this.getResourceBundle().getText("viewNotificacaoColunaobservacao")
 				})));
 
 				/* Template das células */
 				var oBtnExcluir = new sap.m.Button({
 					icon: "sap-icon://delete",
-					type: "Reject"
+					type: "Reject",
+					tooltip: "{i18n>viewGeralExcluirLinha}"
 				}).attachPress(oTable, function (oEvent2) {
 					this._excluirTaxaMultipla(oEvent2, sProperty);
 				}, this);
@@ -607,7 +610,7 @@ sap.ui.define(
 					type: "Message",
 					content: oScrollContainer,
 					beginButton: new sap.m.Button({
-						text: "Fechar",
+						text: that.getResourceBundle().getText("viewGeralFechar"),
 						press: function () {
 							dialog.close();
 							that.onAplicarRegras();
@@ -633,7 +636,7 @@ sap.ui.define(
 					sSchedule = "/CreditSchedule",
 					sFkTipo = 2;
 
-				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo);
+				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText("viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"));
 			},
 
 			onEditarTotalLossesUtilized: function (oEvent) {
@@ -644,7 +647,7 @@ sap.ui.define(
 					sSchedule = "/LossSchedule",
 					sFkTipo = 1;
 
-				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo);
+				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText("viewGeralTotalLossesUtilized"));
 			},
 
 			_limparMascara: function (sValor) {
@@ -2043,7 +2046,8 @@ sap.ui.define(
 
 					aCells.push(new sap.m.Button({
 						icon: "sap-icon://delete",
-						type: "Reject"
+						type: "Reject",
+						tooltip: "{i18n>viewGeralExcluirLinha}"
 					}).attachPress(oTable, oAdicaoExclusaoConfig.onExcluir, this));
 
 					// Coluna de tipo de diferença
@@ -2149,13 +2153,13 @@ sap.ui.define(
 
 			_confirmarCancelamento: function (onConfirm) {
 				var dialog = new sap.m.Dialog({
-					title: "Confirmação",
+					title: this.getResourceBundle().getText("viewGeralConfirma"),
 					type: "Message",
 					content: new sap.m.Text({
 						text: this.getResourceBundle().getText("viewDetalhesTrimestreJStextsVocêtemcertezaquedesejacancelaraedição")
 					}),
 					beginButton: new sap.m.Button({
-						text: "Sim",
+						text: this.getResourceBundle().getText("viewGeralSim"),
 						press: function () {
 							dialog.close();
 							if (onConfirm) {
@@ -2164,7 +2168,7 @@ sap.ui.define(
 						}
 					}),
 					endButton: new sap.m.Button({
-						text: "Cancelar",
+						text: this.getResourceBundle().getText("viewGeralCancelar"),
 						press: function () {
 							dialog.close();
 						}
