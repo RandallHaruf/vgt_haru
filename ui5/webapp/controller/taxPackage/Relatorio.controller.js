@@ -62,7 +62,7 @@ sap.ui.define([
 		},
 
 		onSelectChange: function (oEvent) {
-			this.onValidarData(oEvent);
+			//this.onValidarData(oEvent);
 			this._atualizarDados();			
 		},
 
