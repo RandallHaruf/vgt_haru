@@ -6,14 +6,14 @@ module.exports = {
 
 	listarRegistros: function (req, res) {
 		var aParams = [];
-		
+
 		if (req.query.respostaItemToReport) {
 			aParams.push({
 				coluna: model.colunas.fkRespostaItemToReport,
 				valor: req.query.respostaItemToReport
 			});
 		}
-		
+
 		model.listar(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -93,19 +93,28 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		res.send("TODO: DeepQuery da Entidade RelacionamentoRespostaItemToReportAnoFiscal");
-
-		/*var sStatement = 'select * from "DUMMY"';
+		var sStatement = 
+			'select * '
+			+ 'from "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" rel '
+			+ 'inner join "VGT.DOMINIO_ANO_FISCAL" anoFiscal '
+			+ 'on rel."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = anoFiscal."id_dominio_ano_fiscal" '
+			+ 'where '
+			+ 'rel."fk_resposta_item_to_report.id_resposta_item_to_report" = ?';
+		var aParam = [];
+		
+		if (req.query.respostaItemToReport) {
+			aParam.push(req.query.respostaItemToReport);
+		}
 
 		model.execute({
-		statement: sStatement
+			statement: sStatement,
+			parameters: aParam
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
-		});*/
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
 	}
 };
