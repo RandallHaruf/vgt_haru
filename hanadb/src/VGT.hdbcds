@@ -638,4 +638,11 @@ context VGT {
             fk_dominio_schedule_value_utilized_tipo : association[*, 0..1] to VGT.DOMINIO_SCHEDULE_VALUE_UTILIZED_TIPO { id_dominio_schedule_value_utilized_tipo };
             fk_tax_reconciliation                   : association[*, 0..1] to VGT.TAX_RECONCILIATION { id_tax_reconciliation };
     };
+
+    /*@@layout{"layoutInfo":{"x":8,"y":314.5}}*/
+    entity VALOR_ALIQUOTA {
+        valor         : Decimal(19, 4);
+        fk_ano_fiscal : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO.;
+        fk_aliquota   : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
+    };
 };
