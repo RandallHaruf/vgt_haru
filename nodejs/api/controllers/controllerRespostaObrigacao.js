@@ -136,13 +136,20 @@ module.exports = {
 deepQuery: function (req, res) {
 
 		var sStatement = 
-		'select tblRespostaObrigacao.*,tblDominioAnoFiscal.*,tblDominioAnoCalendario.*,tblModeloObrigacao.*,tblDominioObrigacaoStatus .*,tblPais.*,tblDominioPais.*,tblPeriodicidade.*, tblEmpresa.*, '
+		 'select * from ( '
+ 		+'select tblRespostaObrigacao.*,tblDominioAnoCalendario.*,tblModeloObrigacao.*,tblDominioObrigacaoStatus .*,tblPais.*,tblDominioPais.*,tblPeriodicidade.*, tblEmpresa.*, '
 		+ 'tblRelModeloEmpresa."fk_id_modelo_obrigacao.id_modelo", '
 		+ 'tblRelModeloEmpresa."fk_id_empresa.id_empresa", '
 		+ 'tblRelModeloEmpresa."id_rel_modelo_empresa", '
 		+ 'tblRelModeloEmpresa."fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status" statusRel, '
 		+ 'tblRelModeloEmpresa."prazo_entrega_customizado", '
 		+ 'tblRelModeloEmpresa."ind_ativo", '
+		+'(tblDominioAnoCalendario."ano_calendario" - COALESCE(tblModeloObrigacao."ano_obrigacao", '
+	    +'case tblModeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" '
+    	+'when 1 then tblPais."ano_obrigacao_beps" '
+		+'when 2 then tblPais."ano_obrigacao_compliance" '
+		+'end '
+		+')) "ano_fiscal", '
 		+ 'tblDominioMoeda."id_dominio_moeda", '
 		+ 'tblDominioMoeda."acronimo", '
 		+ 'tblDominioMoeda."nome" nome_moeda '
@@ -237,7 +244,7 @@ deepQuery: function (req, res) {
 				sStatement += ' where ((year(tblModeloObrigacao."data_inicial") <= tblDominioAnoCalendario."ano_calendario") and (year(tblModeloObrigacao."data_final") >= tblDominioAnoCalendario."ano_calendario")) ';
 			}
 		}
-		
+		sStatement += ' )';
 
 		model.execute({
 		statement: sStatement,

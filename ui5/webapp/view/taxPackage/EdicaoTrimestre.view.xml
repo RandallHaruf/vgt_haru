@@ -506,7 +506,10 @@
 										id="textAreaIncomeTaxDetails"
 										rows="5"
 										width="100%"
-										value="{/IncomeTaxDetails}" />
+										value="{/IncomeTaxDetails}"
+										valueState="{/IncomeTaxDetailsValueState}"
+										valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}"
+										change="onTrocarIncomeTaxDetails" />
 								</VBox>
 							</Panel>
 						</ScrollContainer>

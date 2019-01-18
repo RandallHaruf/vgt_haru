@@ -130,6 +130,9 @@
 					<Column>
 						<Text text="{i18n>viewArquivosAdminDownload}" />
 					</Column>
+					<Column>
+						<Text text="{i18n>viewArquivosAdminDownload}" />
+					</Column>
 					<!--<Column width="100px"></Column>-->
 				</columns>
 		
@@ -142,6 +145,7 @@
 							<ObjectIdentifier text="{nome}"/>
 							<ObjectIdentifier text="{nome_obrigacao}"/>
 							<ObjectIdentifier text="{ano_fiscal}"/>
+							<ObjectIdentifier text="{data_upload}"/>
 							<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onAbrirObjeto" enabled="{btnDownloadEnabled}"
 							class="sapUiSmallMarginEnd"/>
 						</cells>
