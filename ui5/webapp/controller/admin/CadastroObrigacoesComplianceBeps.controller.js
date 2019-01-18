@@ -208,7 +208,8 @@ sap.ui.define(
 							selectPeriodicidade: oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],
 							/*Utils.traduzPeriodo(oObjeto["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"]),    */
 							selectPais: oObjeto["fk_id_pais.id_pais"],
-							selectPrazoEntrega: oObjeto["prazo_entrega"]
+							selectPrazoEntrega: oObjeto["prazo_entrega"],
+							anoObrigacao: oObjeto["ano_obrigacao"]
 
 						};
 						that.byId("btnOCCancelar").setEnabled(true);
