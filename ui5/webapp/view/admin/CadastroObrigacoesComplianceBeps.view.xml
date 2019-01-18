@@ -180,7 +180,7 @@
 											<Input 	
 											id="productInput"
 											type="Text"
-											value="{/objeto/ano_obrigacao}"
+											value="{/objeto/anoObrigacao}"
 											></Input>
 										</f:fields>
 									</f:FormElement>
