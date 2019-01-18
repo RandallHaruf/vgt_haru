@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, Constants, Validador, Utils) {
+	function (BaseController, Constants, Validador,NodeAPI, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroAliquotasTaxPackage", {
 
 			/* Métodos a implementar */
@@ -57,7 +58,8 @@ sap.ui.define(
 
 			_carregarCamposFormulario: function () {
 				var that = this;
-
+				
+				
 				jQuery.ajax(Constants.urlBackend + "/DominioAliquotaTipo", {
 					type: "GET",
 					xhrFields: {
@@ -83,17 +85,21 @@ sap.ui.define(
 
 			_carregarObjetoSelecionado: function (iIdObjeto) {
 				var that = this;
-
+				
 				that.setBusy(that.byId("paginaObjeto"), true);
-				jQuery.ajax(Constants.urlBackend + "Aliquota/" + iIdObjeto, {
-					type: "GET",
-					xhrFields: {
-						withCredentials: true
-					},
-					crossDomain: true,
-					dataType: "json",
-					success: function (response) {
-						var oRegistro = response[0];
+				
+				var promise1 = NodeAPI.pLerRegistro("Aliquota", iIdObjeto),
+					promise2 = NodeAPI.pListarRegistros("ValorAliquota", {
+						fkAliquota: iIdObjeto
+					});
+					
+				Promise.all([
+						promise1,
+						promise2
+					])
+					.then(function (aResponse) {
+						// carga do imposto que vem no response[0]
+						var oRegistro = JSON.parse(aResponse[0])[0]; // parse é um detalhe pela rota ser padrão velho
 						var obj = {
 							nome: oRegistro["nome"],
 							valor: oRegistro["valor"],
@@ -103,9 +109,16 @@ sap.ui.define(
 						};
 
 						that.getModel().setProperty("/objeto", obj);
+						
+						// carga das aliquotas que vem no response[1]
+						var aValorAliquota = aResponse[1].result;
+						that.getModel().setProperty("/valorAliquota", aValorAliquota);
+						
 						that.setBusy(that.byId("paginaObjeto"), false);
-					}
-				});
+					})
+					.catch(function (err) {
+						alert(err.status + ' - ' + err.statusText);	
+					});
 			},
 
 			_limparFormulario: function () {
