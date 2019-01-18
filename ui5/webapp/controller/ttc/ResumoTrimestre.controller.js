@@ -621,7 +621,7 @@ sap.ui.define(
 
 				switch (iNumeroOrdem) {
 				case 1:
-					dataInicio = new Date(iCurrentYear + "/21/1");
+					dataInicio = new Date(iCurrentYear + "/01/21");
 					dataFim = new Date(iCurrentYear + "/04/20");
 					return now >= dataInicio && now <= dataFim;
 				case 2:

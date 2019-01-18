@@ -206,7 +206,7 @@
 										</Toolbar>
 									</headerToolbar>
 									<columns>
-										<Column width="3rem" />
+										<Column width="4rem" />
 										<Column width="11rem" hAlign="Center">
 											<Text text="{i18n>viewGeralTipo}" />
 										</Column>
@@ -268,7 +268,7 @@
 										</Toolbar>
 									</headerToolbar>
 									<columns>
-										<Column width="3rem" />
+										<Column width="4rem" />
 										<Column width="11rem" hAlign="Center">
 											<Text text="{i18n>viewGeralTipo}" />
 										</Column>
