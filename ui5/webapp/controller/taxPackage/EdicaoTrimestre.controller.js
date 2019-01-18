@@ -495,7 +495,7 @@ sap.ui.define(
 				oToolbar.addContent(new sap.m.ObjectIdentifier({
 					title: sTitulo
 				}));
- 
+
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
 				oToolbar.addContent(new sap.m.Button({
@@ -636,7 +636,8 @@ sap.ui.define(
 					sSchedule = "/CreditSchedule",
 					sFkTipo = 2;
 
-				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText("viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"));
+				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
+					"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"));
 			},
 
 			onEditarTotalLossesUtilized: function (oEvent) {
@@ -647,7 +648,8 @@ sap.ui.define(
 					sSchedule = "/LossSchedule",
 					sFkTipo = 1;
 
-				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText("viewGeralTotalLossesUtilized"));
+				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
+					"viewGeralTotalLossesUtilized"));
 			},
 
 			_limparMascara: function (sValor) {
@@ -875,22 +877,20 @@ sap.ui.define(
 							this.byId("textAreaIncomeTaxDetails").setEnabled(false);
 						}
 					}
-					
+
 					// Se o IncomeTaxDetails estiver habilitado significa que ele é obrigatório!
 					if (this.byId("textAreaIncomeTaxDetails").getEnabled()) {
 						// Se estiver vazio, avisa ao usuário que o preenchimento é obrigatório
 						if (!this.byId("textAreaIncomeTaxDetails").getValue()) {
 							this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.Error);
-						}
-						else {
+						} else {
 							// Se estiver preenchido nao exibe/remove o aviso de obrigatoriedade
-							this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.None);	
+							this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.None);
 						}
-					}
-					else {
+					} else {
 						// Se o IncomeTaxDetails não estiver habilitado ele não é editável, então limpa o campo e remove aviso de obrigatoriedade
 						this.byId("textAreaIncomeTaxDetails").setValue("");
-						this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.None);	
+						this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.None);
 					}
 				}
 			},
@@ -1562,7 +1562,7 @@ sap.ui.define(
 							response.sort(function (a, b) {
 								return (a.numero_ordem > b.numero_ordem) ? 1 : ((b.numero_ordem > a.numero_ordem) ? -1 : 0);
 							});
-							
+
 							for (var i = 0, length = response.length; i < length; i++) {
 								var oRespostaItemToReport = response[i];
 
@@ -1570,45 +1570,65 @@ sap.ui.define(
 									return oRespostaItemToReport["fk_item_to_report.id_item_to_report"] === obj.idItemToReport;
 								});
 
+								// Para cada resposta de item to report que ainda possua seu componente visual ativado,
+								// é preciso pesquisar se existe relacionamento dela com anos fiscais (ou seja, é uma resposta com combo box de ano fiscal),
+								// para exibir o histórico de anos e de resposta textual.
 								if (oComponenteItemToReport) {
-									if (oRespostaItemToReport.resposta) {
-										var sIdPainelHistorico = oComponenteItemToReport.idPainelHistorico,
-											sLabel;
+									(function (oResposta, oComponente) {
+										NodeAPI.pListarRegistros("DeepQuery/RelacionamentoRespostaItemToReportAnoFiscal", {
+												respostaItemToReport: oResposta.id_resposta_item_to_report
+											})
+											.then(function (aRel) {
+												if (oResposta.resposta || (aRel.length)) {
+													var sIdPainelHistorico = oComponente.idPainelHistorico,
+														sLabel;
 
-										switch (oRespostaItemToReport.numero_ordem) {
-										case 1:
-											sLabel = that.getResourceBundle().getText("viewGeralPeriodo1");
-											break;
-										case 2:
-											sLabel = that.getResourceBundle().getText("viewGeralPeriodo2");
-											break;
-										case 3:
-											sLabel = that.getResourceBundle().getText("viewGeralPeriodo3");
-											break;
-										case 4:
-											sLabel = that.getResourceBundle().getText("viewGeralPeriodo4");
-											break;
-										case 5:
-											sLabel = that.getResourceBundle().getText("viewGeralPeriodo5");
-											break;
-										}
+													switch (oResposta.numero_ordem) {
+														case 1:
+															sLabel = that.getResourceBundle().getText("viewGeralPeriodo1");
+															break;
+														case 2:
+															sLabel = that.getResourceBundle().getText("viewGeralPeriodo2");
+															break;
+														case 3:
+															sLabel = that.getResourceBundle().getText("viewGeralPeriodo3");
+															break;
+														case 4:
+															sLabel = that.getResourceBundle().getText("viewGeralPeriodo4");
+															break;
+														case 5:
+															sLabel = that.getResourceBundle().getText("viewGeralPeriodo5");
+															break;
+													}
 
-										var oCustomListItem = new sap.m.CustomListItem();
-										var oVBox = new sap.m.VBox().addStyleClass("sapUiSmallMarginBegin sapUiSmallMarginTopBottom");
+													var oCustomListItem = new sap.m.CustomListItem();
+													var oVBox = new sap.m.VBox().addStyleClass("sapUiSmallMarginBegin sapUiSmallMarginTopBottom");
 
-										oVBox.addItem(new sap.m.Title({
-											level: "H3",
-											text: sLabel
-										}));
+													oVBox.addItem(new sap.m.Title({
+														level: "H3",
+														text: sLabel
+													}));
 
-										oVBox.addItem(new sap.m.Text({
-											text: oRespostaItemToReport.resposta
-										}));
+													var msg = "";
+													for (var j = 0, length2 = aRel.length; j < length2; j++) {
+														if (j !== 0) {
+															msg += ",";
+														}
+														msg += aRel[j]["ano_fiscal"];
+													}
+													msg += (msg ? "\n" : "") + oResposta.resposta;
 
-										oCustomListItem.addContent(oVBox);
+													oVBox.addItem(new sap.m.Text({
+														text: msg
+													}));
 
-										sap.ui.getCore().byId(sIdPainelHistorico).addItem(oCustomListItem);
-									}
+													oCustomListItem.addContent(oVBox);
+
+													sap.ui.getCore().byId(sIdPainelHistorico).addItem(oCustomListItem);
+												}
+											});
+									}) (oRespostaItemToReport, oComponenteItemToReport);
+									
 								}
 							}
 						}
@@ -2459,17 +2479,17 @@ sap.ui.define(
 				var msg = "",
 					bValido = true,
 					aValidacao = [];
-				
+
 				aValidacao.push(this._validarJustificativa());
 				aValidacao.push(this._validarIncomeTaxDetails());
 
 				for (var i = 0, length = aValidacao.length; i < length; i++) {
 					var oValidacao = aValidacao[i];
-					
+
 					if (!oValidacao.valido) {
 						msg += "- " + oValidacao.mensagem + "\n";
 						bValido = false;
-					}	
+					}
 				}
 
 				if (!bValido) {
@@ -2503,14 +2523,14 @@ sap.ui.define(
 					mensagem: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoJustificativa") //"Existem justificativas obrigatórias sem preenchimento"
 				};
 			},
-			
+
 			_validarIncomeTaxDetails: function () {
 				var bValido = this.getModel().getProperty("/IncomeTaxDetailsValueState") !== sap.ui.core.ValueState.Error;
-				
+
 				return {
 					valido: bValido,
 					mensagem: this.getResourceBundle().getText("viewGeralTaxVisuPleaseProvide")
-				};	
+				};
 			},
 
 			_inserir: function (callback) {
@@ -2983,9 +3003,10 @@ sap.ui.define(
 
 				obj.justificativaValueState = obj.justificativa ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
 			},
-			
+
 			onTrocarIncomeTaxDetails: function (oEvent) {
-				this.getModel().setProperty("/IncomeTaxDetailsValueState", oEvent.getSource().getValue() ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error);
+				this.getModel().setProperty("/IncomeTaxDetailsValueState", oEvent.getSource().getValue() ? sap.ui.core.ValueState.None : sap.ui.core
+					.ValueState.Error);
 			}
 		});
 	}
