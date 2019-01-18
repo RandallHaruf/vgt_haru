@@ -170,9 +170,20 @@
 											required="true" 
 											change="onValidarData"
 											/>
-											<!--<DateTimeInput id="selectPrazoEntrega" type="Date" value="{/objeto/selectPrazoEntrega}" displayFormat="dd/MM" />													-->
 										</f:fields>
 									</f:FormElement>									
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}" labelFor="dataFim"/>
+										</f:label>
+										<f:fields>
+											<Input 	
+											id="productInput"
+											type="Text"
+											value="{/objeto/ano_obrigacao}"
+											></Input>
+										</f:fields>
+									</f:FormElement>
 								</f:formElements>
 							</f:FormContainer>
 						</f:formContainers>

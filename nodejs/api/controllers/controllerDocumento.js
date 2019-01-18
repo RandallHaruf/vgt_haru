@@ -186,6 +186,7 @@ module.exports = {
 						  +'tblEmpresa.*, '
 						  +'tblDocumentoObrigacao."nome_arquivo", '
 						  +'tblDocumentoObrigacao."id_documento", '
+						  +'tblDocumentoObrigacao."data_upload", '
 						  +'(tblDominioAnoCalendario."ano_calendario" - COALESCE(tblModeloObrigacao."ano_obrigacao", '
 						  +'case tblModeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" '
 						  +'when 1 then tblPais."ano_obrigacao_beps" '
