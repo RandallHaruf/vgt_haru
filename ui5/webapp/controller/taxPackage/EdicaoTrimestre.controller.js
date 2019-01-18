@@ -148,24 +148,24 @@ sap.ui.define(
 						press: function () {
 							var aTaxa = that.getModel().getProperty(sProperty),
 								bValido = true;
-							
+
 							if (aTaxa && aTaxa.length) {
 								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
 									return !obj.descricao;
 								});
-								
+
 								if (aTaxaSemDescricao.length) {
 									bValido = false;
 								}
 							}
-							
+
 							if (bValido) {
 								dialog.close();
 								that.onAplicarRegras();
-							}
-							else {
+							} else {
 								jQuery.sap.require("sap.m.MessageBox");
-								sap.m.MessageBox.show(that.getResourceBundle().getText("ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+								sap.m.MessageBox.show(that.getResourceBundle().getText(
+									"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
 									title: that.getResourceBundle().getText("viewGeralAviso")
 								});
 							}
@@ -336,7 +336,7 @@ sap.ui.define(
 				/*var oInputDescricao = new sap.m.Input({
 					value: "{descricao}"
 				});*/
-				
+
 				var oInputDescricao = new sap.m.Input({
 					value: "{descricao}",
 					valueState: "{descricaoValueState}",
@@ -396,24 +396,24 @@ sap.ui.define(
 						press: function () {
 							var aTaxa = that.getModel().getProperty("/OutrasAntecipacoes"),
 								bValido = true;
-							
+
 							if (aTaxa && aTaxa.length) {
 								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
 									return !obj.descricao;
 								});
-								
+
 								if (aTaxaSemDescricao.length) {
 									bValido = false;
 								}
 							}
-							
+
 							if (bValido) {
 								dialog.close();
 								that.onAplicarRegras();
-							}
-							else {
+							} else {
 								jQuery.sap.require("sap.m.MessageBox");
-								sap.m.MessageBox.show(that.getResourceBundle().getText("ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+								sap.m.MessageBox.show(that.getResourceBundle().getText(
+									"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
 									title: that.getResourceBundle().getText("viewGeralAviso")
 								});
 							}
@@ -439,7 +439,7 @@ sap.ui.define(
 
 				this.getModel().refresh();
 			},
-			
+
 			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo) {
 				var validarClosingBalanceAposUtilizacao = function (oEv) {
 					var obj = oEv.getSource().getBindingContext().getObject(),
@@ -539,7 +539,7 @@ sap.ui.define(
 				}).attachPress(oTable, function (oEvent2) {
 					this._excluirTaxaMultipla(oEvent2, sProperty);
 				}, this);
-				
+
 				var oSelectFY = new sap.m.Select({
 					selectedKey: "{schedule_fy}"
 				}).bindItems({
@@ -622,23 +622,23 @@ sap.ui.define(
 
 				this.getView().addDependent(dialog);
 
-				dialog.open();	
+				dialog.open();
 			},
-			
+
 			onEditarOverpaymentFromPriorYearAppliedToCurrentYear: function (oEvent) {
 				var that = this;
-				
+
 				var sProperty = "/OverpaymentFromPriorYearAppliedToCurrentYear",
 					sScheduleFY = "/CreditScheduleFY",
 					sSchedule = "/CreditSchedule",
 					sFkTipo = 2;
 
-				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo);	
+				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo);
 			},
 
 			onEditarTotalLossesUtilized: function (oEvent) {
 				var that = this;
-				
+
 				var sProperty = "/TotalLossesUtilized",
 					sScheduleFY = "/LossScheduleFY",
 					sSchedule = "/LossSchedule",
@@ -779,7 +779,7 @@ sap.ui.define(
 
 					/*oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year = oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year ?
 						Math.abs(oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year) * -1 : 0;*/
-						
+
 					var aOverpaymentFromPriorYearAppliedToCurrentYear = this.getModel().getProperty("/OverpaymentFromPriorYearAppliedToCurrentYear");
 
 					if (aOverpaymentFromPriorYearAppliedToCurrentYear) {
@@ -788,7 +788,8 @@ sap.ui.define(
 						for (var i = 0, length = aOverpaymentFromPriorYearAppliedToCurrentYear.length; i < length; i++) {
 							var oOverpaymentFromPriorYearAppliedToCurrentYear = aOverpaymentFromPriorYearAppliedToCurrentYear[i];
 
-							fOverpaymentFromPriorYearAppliedToCurrentYear += oOverpaymentFromPriorYearAppliedToCurrentYear.valor ? Number(oOverpaymentFromPriorYearAppliedToCurrentYear.valor) : 0;
+							fOverpaymentFromPriorYearAppliedToCurrentYear += oOverpaymentFromPriorYearAppliedToCurrentYear.valor ? Number(
+								oOverpaymentFromPriorYearAppliedToCurrentYear.valor) : 0;
 						}
 
 						oResultadoFiscal.rf_overpayment_from_prior_year_applied_to_current_year = fOverpaymentFromPriorYearAppliedToCurrentYear;
@@ -825,10 +826,12 @@ sap.ui.define(
 						fValor4 = oIncomeTax.rf_net_local_tax ? Number(oIncomeTax.rf_net_local_tax) : 0;
 
 					if (fRcStatutoryGaapProfitLossBeforeTax !== 0) {
-						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = /*Number(parseFloat(*/(fRcStatutoryProvisionForIncomeTax /
-							fRcStatutoryGaapProfitLossBeforeTax)/*).toFixed(2))*/ * 100;
-						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = /*Number(parseFloat(*/(fValor4 / fRcStatutoryGaapProfitLossBeforeTax)/*).toFixed(
-							2))*/ * 100;
+						oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = /*Number(parseFloat(*/ (fRcStatutoryProvisionForIncomeTax /
+							fRcStatutoryGaapProfitLossBeforeTax) /*).toFixed(2))*/ * 100;
+						oIncomeTax.it_effective_tax_rate_as_per_the_tax_return = /*Number(parseFloat(*/ (fValor4 / fRcStatutoryGaapProfitLossBeforeTax)
+							/*).toFixed(
+														2))*/
+							* 100;
 					} else {
 						if (fRcStatutoryProvisionForIncomeTax > 0) {
 							oIncomeTax.it_effective_tax_rate_as_per_the_statutory_financials = 100;
@@ -869,6 +872,23 @@ sap.ui.define(
 							this.byId("textAreaIncomeTaxDetails").setEnabled(false);
 						}
 					}
+					
+					// Se o IncomeTaxDetails estiver habilitado significa que ele é obrigatório!
+					if (this.byId("textAreaIncomeTaxDetails").getEnabled()) {
+						// Se estiver vazio, avisa ao usuário que o preenchimento é obrigatório
+						if (!this.byId("textAreaIncomeTaxDetails").getValue()) {
+							this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.Error);
+						}
+						else {
+							// Se estiver preenchido nao exibe/remove o aviso de obrigatoriedade
+							this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.None);	
+						}
+					}
+					else {
+						// Se o IncomeTaxDetails não estiver habilitado ele não é editável, então limpa o campo e remove aviso de obrigatoriedade
+						this.byId("textAreaIncomeTaxDetails").setValue("");
+						this.getModel().setProperty("/IncomeTaxDetailsValueState", sap.ui.core.ValueState.None);	
+					}
 				}
 			},
 
@@ -895,7 +915,7 @@ sap.ui.define(
 							oLossScheduleCorrente.current_year_value = 0;
 						}
 					}
-					
+
 					var aTotalLossesUtilized = this.getModel().getProperty("/TotalLossesUtilized");
 
 					for (var i = 0, length = aLossSchedule.length; i < length; i++) {
@@ -904,16 +924,16 @@ sap.ui.define(
 						if (oLossSchedule) {
 							/*oLossSchedule.current_year_value_utilized = oTaxReconciliation.rf_total_losses_utilized ? Number(oTaxReconciliation.rf_total_losses_utilized) :
 								0;*/
-								
+
 							var fCurrentScheduleLossesUtilized = 0,
 								aCurrentScheduleLossesUtilized = aTotalLossesUtilized.filter(function (o) {
-								return Number(o.schedule_fy) === Number(oLossSchedule.fy);
-							});
-							
+									return Number(o.schedule_fy) === Number(oLossSchedule.fy);
+								});
+
 							for (var j = 0, length2 = aCurrentScheduleLossesUtilized.length; j < length2; j++) {
 								fCurrentScheduleLossesUtilized += aCurrentScheduleLossesUtilized[j].valor ? Number(aCurrentScheduleLossesUtilized[j].valor) : 0;
 							}
-							
+
 							oLossSchedule.current_year_value_utilized = fCurrentScheduleLossesUtilized;
 
 							var valor1 = oLossSchedule.opening_balance ? Number(oLossSchedule.opening_balance) : 0,
@@ -924,18 +944,13 @@ sap.ui.define(
 
 							oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;
 
-							oLossSchedule.justificativaEnabled = 
-								Validador.isNumber(oLossSchedule.adjustments) && Number(oLossSchedule.adjustments) !== 0 
-									? true 
-									: false;
-							
-							oLossSchedule.justificativaValueState = 
-								oLossSchedule.justificativaEnabled 
-									? oLossSchedule.justificativa 
-										? sap.ui.core.ValueState.None
-										: sap.ui.core.ValueState.Error
-									: sap.ui.core.ValueState.None;
-									
+							oLossSchedule.justificativaEnabled =
+								Validador.isNumber(oLossSchedule.adjustments) && Number(oLossSchedule.adjustments) !== 0 ? true : false;
+
+							oLossSchedule.justificativaValueState =
+								oLossSchedule.justificativaEnabled ? oLossSchedule.justificativa ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error :
+								sap.ui.core.ValueState.None;
+
 							if (!oLossSchedule.justificativaEnabled) {
 								oLossSchedule.justificativa = "";
 							}
@@ -969,16 +984,16 @@ sap.ui.define(
 						if (oCreditSchedule) {
 							/*oCreditSchedule.current_year_value_utilized = oTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year ? Number(
 								oTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year) : 0;*/
-								
+
 							var fCurrentScheduleCreditUtilized = 0,
 								aCurrentScheduleCreditUtilized = aOverpayment.filter(function (o) {
-								return Number(o.schedule_fy) === Number(oCreditSchedule.fy);
-							});
-							
+									return Number(o.schedule_fy) === Number(oCreditSchedule.fy);
+								});
+
 							for (var j = 0, length2 = aCurrentScheduleCreditUtilized.length; j < length2; j++) {
 								fCurrentScheduleCreditUtilized += aCurrentScheduleCreditUtilized[j].valor ? Number(aCurrentScheduleCreditUtilized[j].valor) : 0;
 							}
-							
+
 							oCreditSchedule.current_year_value_utilized = fCurrentScheduleCreditUtilized;
 
 							var valor6 = oCreditSchedule.opening_balance ? Number(oCreditSchedule.opening_balance) : 0,
@@ -989,18 +1004,13 @@ sap.ui.define(
 
 							oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;
 
-							oCreditSchedule.justificativaEnabled = 
-								Validador.isNumber(oCreditSchedule.adjustments) && Number(oCreditSchedule.adjustments) !== 0 
-									? true 
-									: false;
-							
-							oCreditSchedule.justificativaValueState = 
-								oCreditSchedule.justificativaEnabled 
-									? oCreditSchedule.justificativa 
-										? sap.ui.core.ValueState.None
-										: sap.ui.core.ValueState.Error
-									: sap.ui.core.ValueState.None;
-									
+							oCreditSchedule.justificativaEnabled =
+								Validador.isNumber(oCreditSchedule.adjustments) && Number(oCreditSchedule.adjustments) !== 0 ? true : false;
+
+							oCreditSchedule.justificativaValueState =
+								oCreditSchedule.justificativaEnabled ? oCreditSchedule.justificativa ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error :
+								sap.ui.core.ValueState.None;
+
 							if (!oCreditSchedule.justificativaEnabled) {
 								oCreditSchedule.justificativa = "";
 							}
@@ -1403,11 +1413,13 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("ItemToReport", function (response) {
 					if (response) {
-						var oItemToReport, oHBox, oRadioButton, oMultiComboBox, oTextArea, oVBox = new sap.m.VBox();
+						var oItemToReport, oHBox, oMultiComboBox, oRadioButton, oTextArea, oVBox = new sap.m.VBox();
 
 						for (var i = 0, length = response.length; i < length; i++) {
 							var obj = {},
 								oVBoxInterno = new sap.m.VBox().addStyleClass("bordered sapUiLargeMarginBottom sapUiContentPadding");
+
+							oRadioButton = null;
 
 							oItemToReport = response[i];
 							obj.idItemToReport = oItemToReport.id_item_to_report;
@@ -1432,7 +1444,7 @@ sap.ui.define(
 									groupName: "group" + i,
 									text: that.getResourceBundle().getText("viewGeralNao"),
 									selected: true
-								});
+								})
 								obj.idRadioButtonNao = oRadioButton.getId();
 								oHBox.addItem(oRadioButton);
 							}
@@ -1462,6 +1474,7 @@ sap.ui.define(
 							}).addStyleClass("sapUiNoContentPadding sapUiSmallMarginBottom");
 							var oList = new sap.m.List();
 							oPainelHistorico.addContent(oList);
+							oPainelHistorico.setVisible(that.getModel().getProperty("/Periodo").numero_ordem !== 1);
 							obj.idPainelHistorico = oList.getId();
 							oVBoxInterno.addItem(oPainelHistorico);
 
@@ -1471,6 +1484,14 @@ sap.ui.define(
 							});
 							obj.idTextArea = oTextArea.getId();
 							oVBoxInterno.addItem(oTextArea);
+
+							if (oRadioButton) {
+								(function (textArea) {
+									oRadioButton.attachSelect(function (oEvent) {
+										textArea.setVisible(!oEvent.getParameter("selected")).setValue("");
+									});
+								})(oTextArea);
+							}
 
 							oVBox.addItem(oVBoxInterno);
 
@@ -1512,7 +1533,8 @@ sap.ui.define(
 								}
 
 								if (sIdTextArea) {
-									sap.ui.getCore().byId(sIdTextArea).setValue(oRespostaItemToReport.resposta);
+									sap.ui.getCore().byId(sIdTextArea).setValue(oRespostaItemToReport.resposta).setVisible(sIdRadioButtonSim ? !!
+										oRespostaItemToReport.ind_se_aplica : true);
 								}
 
 								oComponenteItemToReport.id_resposta_item_to_report = oRespostaItemToReport.id_resposta_item_to_report;
@@ -1534,6 +1556,10 @@ sap.ui.define(
 				NodeAPI.pListarRegistros(sEntidade)
 					.then(function (response) {
 						if (response) {
+							response.sort(function (a, b) {
+								return (a.numero_ordem > b.numero_ordem) ? 1 : ((b.numero_ordem > a.numero_ordem) ? -1 : 0);
+							});
+							
 							for (var i = 0, length = response.length; i < length; i++) {
 								var oRespostaItemToReport = response[i];
 
@@ -1548,19 +1574,19 @@ sap.ui.define(
 
 										switch (oRespostaItemToReport.numero_ordem) {
 										case 1:
-											sLabel = "1º Período";
+											sLabel = that.getResourceBundle().getText("viewGeralPeriodo1");
 											break;
 										case 2:
-											sLabel = "2º Período";
+											sLabel = that.getResourceBundle().getText("viewGeralPeriodo2");
 											break;
 										case 3:
-											sLabel = "3º Período";
+											sLabel = that.getResourceBundle().getText("viewGeralPeriodo3");
 											break;
 										case 4:
-											sLabel = "4º Período";
+											sLabel = that.getResourceBundle().getText("viewGeralPeriodo4");
 											break;
 										case 5:
-											sLabel = "Anual";
+											sLabel = that.getResourceBundle().getText("viewGeralPeriodo5");
 											break;
 										}
 
@@ -2404,67 +2430,82 @@ sap.ui.define(
 						oBtnSalvarFechar = this.byId("btnSalvarFechar"),
 						oBtnSalvar = this.byId("btnSalvar"),
 						oBtnCancelar = this.byId("btnCancelar");
-	
+
 					oBtnSalvarFechar.setEnabled(false);
 					oBtnSalvar.setEnabled(false);
 					oBtnCancelar.setEnabled(false);
-	
+
 					this.setBusy(oBtnPressionado, true);
-	
+
 					this._inserir(function (response) {
 						oBtnSalvarFechar.setEnabled(true);
 						oBtnSalvar.setEnabled(true);
 						oBtnCancelar.setEnabled(true);
-	
+
 						that.setBusy(oBtnPressionado, false);
-	
+
 						if (callback) {
 							callback(JSON.parse(response));
 						}
 					});
 				}
 			},
-			
+
 			_isFormularioValido: function () {
 				var msg = "",
 					bValido = true,
-					oValidacao;
+					aValidacao = [];
 				
-				oValidacao = this._validarJustificativa();
-				
-				if (!oValidacao.valido) {
-					msg += "- " + oValidacao.mensagem + "\n";	
-					bValido = false;
+				aValidacao.push(this._validarJustificativa());
+				aValidacao.push(this._validarIncomeTaxDetails());
+
+				for (var i = 0, length = aValidacao.length; i < length; i++) {
+					var oValidacao = aValidacao[i];
+					
+					if (!oValidacao.valido) {
+						msg += "- " + oValidacao.mensagem + "\n";
+						bValido = false;
+					}	
 				}
-				
+
 				if (!bValido) {
 					jQuery.sap.require("sap.m.MessageBox");
-					
+
 					sap.m.MessageBox.show(msg, {
 						title: this.getResourceBundle().getText("viewGeralAviso")
 					});
 				}
-					
+
 				return bValido;
 			},
-			
+
 			_validarJustificativa: function () {
 				var aLossSchedule = this.getModel().getProperty("/LossSchedule"),
 					aCreditSchedule = this.getModel().getProperty("/CreditSchedule"),
 					aScheduleComJustificativaObrigatoriaVazia;
-					
+
 				var pegarScheduleComJustificativaObrigatoriaVazia = function (aSchedule) {
 					return aSchedule.filter(function (obj) {
-						return obj.justificativaEnabled && !obj.justificativa	
+						return obj.justificativaEnabled && !obj.justificativa
 					});
 				}
-				
+
 				aScheduleComJustificativaObrigatoriaVazia = pegarScheduleComJustificativaObrigatoriaVazia(aLossSchedule);
-				aScheduleComJustificativaObrigatoriaVazia = aScheduleComJustificativaObrigatoriaVazia.concat(pegarScheduleComJustificativaObrigatoriaVazia(aCreditSchedule));
-				
+				aScheduleComJustificativaObrigatoriaVazia = aScheduleComJustificativaObrigatoriaVazia.concat(
+					pegarScheduleComJustificativaObrigatoriaVazia(aCreditSchedule));
+
 				return {
 					valido: !aScheduleComJustificativaObrigatoriaVazia.length,
 					mensagem: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoJustificativa") //"Existem justificativas obrigatórias sem preenchimento"
+				};
+			},
+			
+			_validarIncomeTaxDetails: function () {
+				var bValido = this.getModel().getProperty("/IncomeTaxDetailsValueState") !== sap.ui.core.ValueState.Error;
+				
+				return {
+					valido: bValido,
+					mensagem: this.getResourceBundle().getText("viewGeralTaxVisuPleaseProvide")
 				};	
 			},
 
@@ -2675,6 +2716,7 @@ sap.ui.define(
 						ind_ativo: true
 					}],
 					IncomeTaxDetails: null,
+					IncomeTaxDetailsValueState: null,
 					lossSchedule: [{
 						fiscalYear: 2017,
 						yearOfExpiration: 2017,
@@ -2754,7 +2796,7 @@ sap.ui.define(
 						});
 
 						if (oScheduleCorrente) oScheduleCorrente.ind_corrente = true;
-						
+
 						// Se o período em edição pertencer ao ano corrente de edição do tax package
 						if (that._anoEdicaoIgualAnoCorrente()) {
 							// Atualiza o year of expiration
@@ -2762,7 +2804,7 @@ sap.ui.define(
 								response[i].year_of_expiration = response[i].fy + iPrescricao;
 							}
 						}
-						
+
 						that.getModel().setProperty(sProperty, response);
 						that.onAplicarRegras();
 					} else {
@@ -2776,11 +2818,11 @@ sap.ui.define(
 					oPeriodoEdicaoAberto = Utils.getPeriodoEdicaoTaxPackage(iAnoEdicao),
 					oPeriodoEdicaoCorrente = Utils.getPeriodoEdicaoTaxPackage(),
 					bResultado = true;
-					
+
 				if (oPeriodoEdicaoAberto.fim <= oPeriodoEdicaoCorrente.inicio) {
 					bResultado = false
-				}	
-				
+				}
+
 				return bResultado;
 			},
 
@@ -2886,7 +2928,7 @@ sap.ui.define(
 					}
 				});
 			},
-			
+
 			_carregarValuesUtilized: function (sIdTaxReconciliation) {
 				var that = this;
 
@@ -2907,13 +2949,13 @@ sap.ui.define(
 						that.onAplicarRegras();
 					}
 				});*/
-				
+
 				NodeAPI.pListarRegistros("ScheduleValueUtilized", {
 						fkTaxReconciliation: sIdTaxReconciliation
 					})
 					.then((response) => {
 						var result = response.result;
-						
+
 						var aTotalLossesUtilized = result.filter(function (obj) {
 							return obj["fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo"] === 1;
 						});
@@ -2931,11 +2973,15 @@ sap.ui.define(
 						console.log(err);
 					});
 			},
-			
+
 			onTrocarJustificativa: function (oEvent) {
 				var obj = oEvent.getSource().getBindingContext().getObject();
-				
+
 				obj.justificativaValueState = obj.justificativa ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
+			},
+			
+			onTrocarIncomeTaxDetails: function (oEvent) {
+				this.getModel().setProperty("/IncomeTaxDetailsValueState", oEvent.getSource().getValue() ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error);
 			}
 		});
 	}
