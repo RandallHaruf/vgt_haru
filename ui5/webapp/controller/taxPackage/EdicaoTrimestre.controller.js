@@ -1498,7 +1498,7 @@ sap.ui.define(
 								rows: 5
 							});
 							obj.idTextArea = oTextArea.getId();
-							oVBoxInterno.addItem(oTextArea);
+							oVBoxInterno.addItem(oTextArea.setVisible(false));
 
 							if (oRadioButton) {
 								(function (textArea) {
@@ -1547,9 +1547,8 @@ sap.ui.define(
 									sap.ui.getCore().byId(sIdRadioButtonNao).setSelected(oRespostaItemToReport.ind_se_aplica ? false : true);
 								}
 
-								if (sIdTextArea) {
-									sap.ui.getCore().byId(sIdTextArea).setValue(oRespostaItemToReport.resposta).setVisible(sIdRadioButtonSim ? !!
-										oRespostaItemToReport.ind_se_aplica : true);
+								if (sIdTextArea) { 
+									sap.ui.getCore().byId(sIdTextArea).setValue(oRespostaItemToReport.resposta).setVisible(!!oRespostaItemToReport.ind_se_aplica);
 								}
 
 								oComponenteItemToReport.id_resposta_item_to_report = oRespostaItemToReport.id_resposta_item_to_report;
