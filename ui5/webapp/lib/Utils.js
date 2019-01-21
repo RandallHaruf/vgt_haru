@@ -5,6 +5,10 @@ sap.ui.define(
 	],
 	function (Validador) {
 		return {
+			limparMascaraDecimal: function (sValor) {
+				return sValor.replace(/\./g, "").replace(",", ".");
+			},
+			
 			getPeriodoEdicaoTaxPackage: function (iAno) {
 				// Se não foi passado um ano que se deseja conhecer seu periodo de edição, retorna o período do ano corrente
 				if (!iAno) {

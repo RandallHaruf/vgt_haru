@@ -641,9 +641,9 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":8,"y":314.5}}*/
     entity VALOR_ALIQUOTA {
-            valor                     : Decimal(19, 4);
-            fk_dominio_ano_calendario : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
-            fk_aliquota               : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
-        key id_valor_aliquota         : Integer;
+            valor                 : Decimal(19, 4);
+            fk_aliquota           : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
+        key id_valor_aliquota     : Integer;
+            fk_dominio_ano_fiscal : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
     };
 };

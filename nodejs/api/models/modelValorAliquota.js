@@ -14,8 +14,8 @@ var oSketch = {
 		fkAliquota: {
 			nome: "fk_aliquota.id_aliquota"			
 		},
-		fkDominioAnoCalendario: {
-			nome: "fk_dominio_ano_calendario.id_dominio_ano_calendario"			
+		fkDominioAnoFiscal: {
+			nome: "fk_dominio_ano_fiscal.id_dominio_ano_fiscal"			
 		}
 	}
 };

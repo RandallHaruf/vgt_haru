@@ -47,9 +47,9 @@
 					<Column>
 						<Text text="{i18n>viewRelatorioNome}" />
 					</Column>
-					<Column>
+					<!--<Column>
 						<Text text="{i18n>viewRelatorioValue}" />
-					</Column>
+					</Column>-->
 				</columns>
 		
 				<items>
@@ -58,7 +58,7 @@
 						press="onAbrirObjeto">
 						<cells>
 							<ObjectIdentifier text="{nome}" />
-							<ObjectIdentifier text="{valor}" />
+							<!--<ObjectIdentifier text="{valor}" />-->
 						</cells>
 					</ColumnListItem>
 				</items>
@@ -73,7 +73,7 @@
 						id="formularioObjeto" 
 						editable="true">
 						<f:title>
-							<core:Title text="{i18n>viewAdminInicioMenuTaxPackageCadastroAliquotas}"/>
+							<core:Title text="{i18n>viewAdminCadastroAliquotasImposto}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -90,7 +90,7 @@
 											<Input type="Text" id="inputNomeAliquota" value="{/objeto/nome}" required="true" />
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement>
+									<!--<f:FormElement>
 										<f:label>
 											<Label text="{i18n>viewRelatorioValue} (%)" labelFor="inputValorAliquota" />
 										</f:label>
@@ -127,7 +127,7 @@
 											change="onValidarData"
 											/>
 										</f:fields>
-									</f:FormElement>
+									</f:FormElement>-->
 									<f:FormElement>
 										<f:label>
 											<Label text="{i18n>viewGeralTipo}" class="sapMLabelRequired" />
@@ -144,6 +144,71 @@
 										</f:fields>
 									</f:FormElement>
 								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form 
+						id="formularioAliquotas"
+						editable="true">
+						<f:title>
+							<core:Title text="{i18n>viewAdminInicioMenuTaxPackageCadastroAliquotas}"  />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:FormElement>
+									<!--<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">-->
+									<table:Table 
+										rows="{/Aliquotas}" 
+										id="tableAliquotas" 
+										selectionMode="None"
+										sort="sortAnoFiscal">
+										<table:extension>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<Button icon="sap-icon://add" type="Transparent" press="onAdicionarAliquota" />
+												<!--<SearchField 
+													id="searchObrigacoes"
+													width="15rem" 
+													search="onTextSearch"
+													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
+													value="{/filterValue}" />-->
+											</Toolbar>
+										</table:extension>
+										<table:columns>
+											<table:Column width="60px">
+												<table:template>
+													<Button icon="sap-icon://delete" press="onExcluirAliquota" type="Reject" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewAdminCadastroAliquotasAnoFiscal}" />
+												<table:template>
+													<Select 
+														items="{/DominioAnoFiscal}" 
+														selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}" 
+														change="onTrocarAnoFiscalAliquota"
+														width="100%">
+														<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
+													</Select>
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewAdminCadastroAliquotasValor} (%)" />
+												<table:template>
+													<Input 
+														value="{path: 'valor', 
+																type: 'sap.ui.model.type.Float', 
+																formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  
+																change="onTrocarValorAliquota" />
+												</table:template>
+											</table:Column>										
+										</table:columns>
+									</table:Table>
+								</f:FormElement>
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>

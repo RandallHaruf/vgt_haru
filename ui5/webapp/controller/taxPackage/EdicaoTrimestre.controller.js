@@ -764,11 +764,23 @@ sap.ui.define(
 					oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits +
 						oResultadoFiscal.rf_total_losses_utilized;
 
-					oResultadoFiscal.it_statutory_tax_rate_average = oResultadoFiscal.it_statutory_tax_rate_average ? Number(oResultadoFiscal.it_statutory_tax_rate_average) :
-						0;
-					if (oResultadoFiscal.rf_taxable_income_loss_after_losses > 0 && oResultadoFiscal.it_statutory_tax_rate_average > 0) {
-						oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = oResultadoFiscal.rf_taxable_income_loss_after_losses * (
-							oResultadoFiscal.it_statutory_tax_rate_average / 100);
+					oResultadoFiscal.it_statutory_tax_rate_average = oResultadoFiscal.it_statutory_tax_rate_average ? Number(oResultadoFiscal.it_statutory_tax_rate_average) : 0;
+					oResultadoFiscal.it_jurisdiction_tax_rate_average = oResultadoFiscal.it_jurisdiction_tax_rate_average ? Number(oResultadoFiscal.it_jurisdiction_tax_rate_average) : 0;
+						
+					if (oResultadoFiscal.rf_taxable_income_loss_after_losses > 0) {
+						if (oResultadoFiscal.it_statutory_tax_rate_average) {
+							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 
+								oResultadoFiscal.rf_taxable_income_loss_after_losses 
+								* (oResultadoFiscal.it_statutory_tax_rate_average / 100);
+						}
+						else if (oResultadoFiscal.it_jurisdiction_tax_rate_average) {
+							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 
+								oResultadoFiscal.rf_taxable_income_loss_after_losses 
+								* (oResultadoFiscal.it_jurisdiction_tax_rate_average / 100);
+						}
+						else {
+							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 0;	
+						}
 					} else {
 						oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 0;
 					}
@@ -2426,25 +2438,42 @@ sap.ui.define(
 			},
 
 			_carregarTaxRate: function () {
-				var that = this;
-
-				var oTaxReconAtivo = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
-					return obj.ind_ativo;
-				});
-
-				NodeAPI.listarRegistros("/DeepQuery/Pais/" + this.getModel().getProperty("/Empresa").id_pais, function (response) {
-					if (response) {
-						oTaxReconAtivo.it_jurisdiction_tax_rate_average = response[0].valorAliquota ? Number(response[0].valorAliquota) : 0;
-						that.onAplicarRegras();
-					}
-				});
-
-				NodeAPI.listarRegistros("/DeepQuery/Empresa/" + this.getModel().getProperty("/Empresa").id_empresa, function (response) {
-					if (response) {
-						oTaxReconAtivo.it_statutory_tax_rate_average = response[0].valor ? Number(response[0].valor) : 0;
-						that.onAplicarRegras();
-					}
-				});
+				var that = this,
+					oEmpresa = this.getModel().getProperty("/Empresa"), 
+					oAnoCalendario = this.getModel().getProperty("/AnoCalendario"),
+					oTaxReconAtivo = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+						return obj.ind_ativo;
+					});
+					
+				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para o país da empresa
+				NodeAPI.pListarRegistros("ValorAliquota", {
+						fkAliquota: oEmpresa["fk_imposto_pais"],
+						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
+					})
+					.then(function (res) {
+						oTaxReconAtivo.it_jurisdiction_tax_rate_average = (res.result[0] && res.result[0].valor) ? Number(res.result[0].valor) : 0;
+					})
+					.catch(function (err) {
+						oTaxReconAtivo.it_jurisdiction_tax_rate_average = 0;
+						if (err.status) { // erro de http (400 ou 500)
+							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
+						}
+					});
+				
+				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para a empresa
+				NodeAPI.pListarRegistros("ValorAliquota", {
+						fkAliquota: oEmpresa["fk_imposto_empresa"],
+						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
+					})
+					.then(function (res) {
+						oTaxReconAtivo.it_statutory_tax_rate_average = (res.result[0] && res.result[0].valor) ? Number(res.result[0].valor) : 0;
+					})
+					.catch(function (err) {
+						oTaxReconAtivo.it_statutory_tax_rate_average = 0;
+						if (err.status) { // erro de http (400 ou 500)
+							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
+						}
+					});
 			},
 
 			_salvar: function (oEvent, callback) {

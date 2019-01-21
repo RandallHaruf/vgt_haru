@@ -196,7 +196,8 @@
 										</f:label>
 										<f:fields>
 											<Select id="selectAliquota" items="{/Aliquota}" selectedKey="{/objeto/fk_aliquota.id_aliquota}">
-												<core:Item text="{nome} - {valor}%" key="{id_aliquota}" />
+												<!--<core:Item text="{nome} - {valor}%" key="{id_aliquota}" />-->
+												<core:Item text="{nome}" key="{id_aliquota}" />
 											</Select>
 										</f:fields>
 									</f:FormElement>

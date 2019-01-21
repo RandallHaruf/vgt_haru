@@ -1,5 +1,140 @@
 "use strict";
+
 var aliquota = require("../models/modelAliquota");
+const modelValorAliquota = require('../models/modelValorAliquota');
+
+function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
+	const selecionarValorAliquota = function () {
+		return new Promise(function (resolve, reject) {
+			modelValorAliquota.listar([{
+				coluna: modelValorAliquota.colunas.fkAliquota,
+				valor: iIdImposto
+			}], function (err, result) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(result);
+				}
+			});
+		});
+	};
+	
+	const excluirValorAliquota = function (iIdValorAliquota) {
+		return new Promise(function (resolve, reject) {
+			modelValorAliquota.excluir([{
+				coluna: modelValorAliquota.colunas.id,
+				valor: iIdValorAliquota
+			}], function (err, result) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(result);
+				}
+			});
+		});
+	};
+	
+	const atualizarValorAliquota = function (iIdValorAliquota, aParam) {
+		return new Promise(function (resolve, reject) {
+			modelValorAliquota.atualizar({
+				coluna: modelValorAliquota.colunas.id,
+				valor: iIdValorAliquota
+			}, aParam, function (err, result) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(result);
+				}
+			});
+		});
+	};
+	
+	const inserirValorAliquota = function (aParam) {
+		aParam.push({
+			coluna: modelValorAliquota.colunas.id
+		});
+		return new Promise(function (resolve, reject) {
+			modelValorAliquota.inserir(aParam, function (err, result) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(result);
+				}
+			});
+		});
+	};
+	
+	selecionarValorAliquota()
+		.then(function (aValorAliquotaPersistido) {
+			var aPromiseDelete = [];
+			
+			for (var i = 0, length = aValorAliquotaPersistido.length; i < length; i++) {
+				var oValorAliquotaPersistido = aValorAliquotaPersistido[i];
+		
+				var oValorAliquotaEnviado = aValorAliquota.find(function (obj) {
+					return oValorAliquotaPersistido.id_valor_aliquota === obj.id_valor_aliquota;
+				});
+				
+				if (!oValorAliquotaEnviado) {
+					aPromiseDelete.push(excluirValorAliquota(oValorAliquotaPersistido.id_valor_aliquota));
+				}
+			}
+			
+			return Promise.all(aPromiseDelete);
+		})
+		.then(function (resDelete) {
+			var aPromiseInsertUpdate = [];
+			
+			for (var i = 0, length = aValorAliquota.length; i < length; i++) {
+				var oValorAliquota = aValorAliquota[i];
+				
+				if (oValorAliquota.id_valor_aliquota) {
+					aPromiseInsertUpdate.push(
+						atualizarValorAliquota(oValorAliquota.id_valor_aliquota, [{
+							coluna: modelValorAliquota.colunas.valor,
+							valor: oValorAliquota.valor
+						}, {
+							coluna: modelValorAliquota.colunas.fkAliquota,
+							valor: iIdImposto
+						}, {
+							coluna: modelValorAliquota.colunas.fkDominioAnoFiscal,
+							valor: oValorAliquota[modelValorAliquota.colunas.fkDominioAnoFiscal.nome]
+						}])
+					);
+				}
+				else {
+					aPromiseInsertUpdate.push(
+						inserirValorAliquota([{
+							coluna: modelValorAliquota.colunas.valor,
+							valor: oValorAliquota.valor
+						}, {
+							coluna: modelValorAliquota.colunas.fkAliquota,
+							valor: iIdImposto
+						}, {
+							coluna: modelValorAliquota.colunas.fkDominioAnoFiscal,
+							valor: oValorAliquota[modelValorAliquota.colunas.fkDominioAnoFiscal.nome]
+						}])
+					);
+				}
+			}
+			
+			return Promise.all(aPromiseInsertUpdate);
+		})
+		.then(function (resInsertUpdate) {
+			if (callback) {
+				callback(null, resInsertUpdate);
+			}
+		})
+		.catch(function (err) {
+			if (callback) {
+				callback(err, null);
+			}
+		});
+}
 
 module.exports = {
 
@@ -54,7 +189,21 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			}
 			else {
-				res.send(JSON.stringify(result));
+				if (req.body.aliquotas) {
+					var idImposto = result[0].generated_id;
+					
+					adicionarAliquotas(idImposto, JSON.parse(req.body.aliquotas), function (err2, result2) {
+						if (err) {
+							res.send(JSON.stringify(err2));
+						}
+						else {
+							res.send(JSON.stringify(result2));
+						}
+					});
+				}
+				else {
+					res.send(JSON.stringify(result));
+				}
 			}
 		});
 	},
@@ -74,7 +223,7 @@ module.exports = {
 	},
 	
 	atualizarRegistro: function (req, res) {
-		console.log("REQUEST: " + JSON.stringify(req.params) + JSON.stringify(req.body));
+		//console.log("REQUEST: " + JSON.stringify(req.params) + JSON.stringify(req.body));
 		
 		var idAliquota = req.params.idAliquota;
 		
@@ -111,7 +260,19 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			}
 			else {
-				res.send(JSON.stringify(result));
+				if (req.body.aliquotas) {
+					adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
+						if (err) {
+							res.send(JSON.stringify(err2));
+						}
+						else {
+							res.send(JSON.stringify(result2));
+						}
+					});
+				}
+				else {
+					res.send(JSON.stringify(result));
+				}
 			}
 		});
 	},
