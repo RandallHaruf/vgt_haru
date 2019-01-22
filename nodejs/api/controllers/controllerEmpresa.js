@@ -244,7 +244,51 @@ module.exports = {
 	}
 };
 
-function pegarNumeroOrdemPeriodoCorrente(iAnoCorrente) {
+function pegarPeriodoEdicaoCorrente(sTipo) {
+	var periodo,
+		//dia = sTipo === 1 ? "31" : "20", // Se tax package, 31. Se ttc, 20
+		oDataCorrente = new Date();
+	
+	if (oDataCorrente >= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/02/1" : "/01/21")) && oDataCorrente <= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/04/31" : "/04/20"))) {
+		periodo = {
+			numeroOrdem: 1,
+			ano: oDataCorrente.getFullYear()
+		};
+	}
+	else if (oDataCorrente >= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/05/1" : "/04/21")) && oDataCorrente <= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/07/31" : "/07/20"))) {
+		periodo = {
+			numeroOrdem: 2,
+			ano: oDataCorrente.getFullYear()
+		};
+	}
+	else if (oDataCorrente >= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/08/1" : "/07/21")) && oDataCorrente <= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/10/31" : "/10/20"))) {
+		periodo = {
+			numeroOrdem: 3,
+			ano: oDataCorrente.getFullYear()
+		};
+	}
+	else {
+		if (oDataCorrente.getMonth() === 0 && oDataCorrente.getDate() >= 1 && oDataCorrente.getDate() <= (sTipo === 1 ? 31 : 20)) {
+			periodo = {
+				numeroOrdem: 4,
+				ano: oDataCorrente.getFullYear() - 1
+			};
+		}
+		else {
+			periodo = {
+				numeroOrdem: 4,
+				ano: oDataCorrente.getFullYear()
+			};
+		}
+	}
+	
+	console.log("AQUIAQUIAQUI");
+	console.log(periodo);
+	
+	return periodo;
+}
+
+/*function pegarNumeroOrdemPeriodoCorrente(iAnoCorrente) {
 	var oDataCorrente = new Date(),
 		iNumeroOrdemPeriodoCorrente = -1;
 	
@@ -266,12 +310,12 @@ function pegarNumeroOrdemPeriodoCorrente(iAnoCorrente) {
 	}
 	
 	return iNumeroOrdemPeriodoCorrente;
-}
+}*/
 
 function vincularPeriodos(sIdEmpresa) {
 	// Pega o ano corrente e o numero de ordem do período corrente
 	var iAnoCorrente = (new Date()).getFullYear();
-	var iNumeroOrdemPeriodoCorrente = pegarNumeroOrdemPeriodoCorrente(iAnoCorrente);
+	//var iNumeroOrdemPeriodoCorrente = pegarNumeroOrdemPeriodoCorrente(iAnoCorrente);
 	
 	var sQuery, aParams, result;
 	
@@ -286,6 +330,8 @@ function vincularPeriodos(sIdEmpresa) {
 	
 	result = model.executeSync(sQuery);
 	
+	var periodoEdicaoTTC = pegarPeriodoEdicaoCorrente(2);
+	
 	if (result && result.length > 0) {
 		// Percorre todos os periodos
 		for (var i = 0, length = result.length; i < length; i++) {
@@ -295,7 +341,8 @@ function vincularPeriodos(sIdEmpresa) {
 			sQuery = 'insert into "VGT.REL_EMPRESA_PERIODO"("fk_empresa.id_empresa", "fk_periodo.id_periodo", "ind_ativo", "ind_enviado") values(?, ?, ?, ?)';
 			
 			// Seta a flag de periodo ativo caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
-			if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
+			//if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
+			if (oPeriodo.ano_calendario === periodoEdicaoTTC.ano && oPeriodo.numero_ordem === periodoEdicaoTTC.numeroOrdem) {
 				aParams = [sIdEmpresa, oPeriodo.id_periodo, true, false];
 			}
 			else {
@@ -324,6 +371,8 @@ function vincularPeriodos(sIdEmpresa) {
 			+ 'where "fk_dominio_modulo.id_dominio_modulo" = 2';
 		result = model.executeSync(sQuery);
 		var aPeriodo = result;
+		
+		var periodoEdicaoTaxPackage = pegarPeriodoEdicaoCorrente(1);
 		
 		// Percorre todos os IDs de ano calendario
 		for (var i = 1; i <= iQteAnoCalendario; i++) {
@@ -358,7 +407,8 @@ function vincularPeriodos(sIdEmpresa) {
 					aParams = [sIdTaxPackage, oPeriodo.id_periodo];
 					
 					// Seta a flag de periodo ativo e o status não iniciado caso o ano calendario e o numero de ordem do periodo sejam iguais ao corrente
-					if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
+					//if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
+					if (oPeriodo.ano_calendario === periodoEdicaoTaxPackage.ano && oPeriodo.numero_ordem === periodoEdicaoTaxPackage.numeroOrdem) {
 						aParams = [sIdTaxPackage, oPeriodo.id_periodo, true, 2]; 
 					}
 					// Se não, seta flag ativo para falso e status para fechado mas não enviado
