@@ -79,6 +79,14 @@ sap.ui.define(
 					.addField(oInputNome);
 
 				oFormContainer.addFormElement(oFormElement);
+				
+				var oCheckBox = new sap.m.CheckBox({
+					text: that.getResourceBundle().getText("viewCadastroDiferencaIndicadorDuplicavel")
+				});
+				
+				oFormElement = new sap.ui.layout.form.FormElement().addField(oCheckBox);
+				
+				oFormContainer.addFormElement(oFormElement);
 
 				oForm.addFormContainer(oFormContainer);
 
@@ -103,6 +111,7 @@ sap.ui.define(
 									crossDomain: true,
 									data: {
 										nome: oInputNome.getValue(),
+										indDuplicavel: oCheckBox.getSelected(),
 										fkDominioDiferencaTipo: oSelectTipo.getSelectedKey()
 									},
 									success: function (response) {
@@ -137,6 +146,7 @@ sap.ui.define(
 				var iIdDiferenca = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_diferenca_opcao"];
 				var sNomeCorrente = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).nome;
 				var iFkTipoCorrente = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())["id_dominio_diferenca_tipo"];
+				var bDuplicavel = !!this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()).ind_duplicavel;
 
 				var oForm = new sap.ui.layout.form.Form({
 					editable: true
@@ -188,6 +198,15 @@ sap.ui.define(
 				oFormElement.addField(oInputNome);
 
 				oFormContainer.addFormElement(oFormElement);
+				
+				var oCheckBox = new sap.m.CheckBox({
+					selected: bDuplicavel,
+					text: that.getResourceBundle().getText("viewCadastroDiferencaIndicadorDuplicavel")
+				});
+				
+				oFormElement = new sap.ui.layout.form.FormElement().addField(oCheckBox);
+				
+				oFormContainer.addFormElement(oFormElement);
 
 				oForm.addFormContainer(oFormContainer);
 
@@ -213,6 +232,7 @@ sap.ui.define(
 									crossDomain: true,
 									data: {
 										nome: oInputNome.getValue(),
+										indDuplicavel: oCheckBox.getSelected(),
 										fkDominioDiferencaTipo: oSelectTipo.getSelectedKey()
 									},
 									success: function (response) {

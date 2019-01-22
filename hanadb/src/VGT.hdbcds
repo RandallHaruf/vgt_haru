@@ -197,6 +197,7 @@ context VGT {
         key id_diferenca_opcao        : Integer not null;
             nome                      : String(200);
             fk_dominio_diferenca_tipo : association[*, 0..1] to VGT.DOMINIO_DIFERENCA_TIPO { id_dominio_diferenca_tipo };
+            ind_duplicavel            : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":-1721,"y":1111.5}}*/

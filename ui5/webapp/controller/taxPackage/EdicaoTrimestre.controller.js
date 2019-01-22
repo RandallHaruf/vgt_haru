@@ -1643,6 +1643,27 @@ sap.ui.define(
 					}
 				}
 			},
+			
+			onTrocarDiferenca: function (oEvent) {
+				var sPath = oEvent.getSource().getBindingContext().getPath().indexOf("Permanentes") !== -1 ? "/DiferencasPermanentes" : "/DiferencasTemporarias",
+					oOpcaoSelecionada = oEvent.getParameters("selectedItem").selectedItem.getBindingContext().getObject();
+				
+				if (oOpcaoSelecionada.id_diferenca_opcao && !oOpcaoSelecionada.ind_duplicavel) {
+					var aObjetoComEssaOpcao = this.getModel().getProperty(sPath).filter(function (obj) {
+						return Number(obj["fk_diferenca_opcao.id_diferenca_opcao"])	=== Number(oOpcaoSelecionada.id_diferenca_opcao);
+					});
+					
+					if (aObjetoComEssaOpcao.length > 1) {
+						jQuery.sap.require("sap.m.MessageBox");
+							
+						sap.m.MessageBox.show(this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoDiferencaDuplicada"), {
+							title: this.getResourceBundle().getText("viewGeralAviso")
+						});
+						
+						oEvent.getSource().getBindingContext().getObject()["fk_diferenca_opcao.id_diferenca_opcao"] = null;
+					}
+				}
+			},
 
 			onNovaDiferencaPermanente: function (oEvent) {
 				this.getModel().getProperty("/DiferencasPermanentes").unshift({

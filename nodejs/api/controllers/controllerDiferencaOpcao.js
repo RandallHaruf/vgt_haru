@@ -31,6 +31,9 @@ module.exports = {
 			coluna: model.colunas.nome,
 			valor: req.body.nome ? req.body.nome : null
 		}, {
+			coluna: model.colunas.indDuplicavel,
+			valor: req.body.indDuplicavel ? req.body.indDuplicavel : null
+		}, {
 			coluna: model.colunas.fkDominioDiferencaTipo,
 			valor: req.body.fkDominioDiferencaTipo ? Number(req.body.fkDominioDiferencaTipo) : null
 		}];
@@ -67,6 +70,9 @@ module.exports = {
 		var aParams = [{
 			coluna: model.colunas.nome,
 			valor: req.body.nome ? req.body.nome : null
+		}, {
+			coluna: model.colunas.indDuplicavel,
+			valor: req.body.indDuplicavel ? req.body.indDuplicavel : null
 		}, {
 			coluna: model.colunas.fkDominioDiferencaTipo,
 			valor: req.body.fkDominioDiferencaTipo ? Number(req.body.fkDominioDiferencaTipo) : null

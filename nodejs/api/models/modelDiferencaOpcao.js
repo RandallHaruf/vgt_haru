@@ -10,6 +10,9 @@ var oSketch = {
 		nome: {
 			nome: "nome"
 		},
+		indDuplicavel: {
+			nome: "ind_duplicavel"	
+		},
 		fkDominioDiferencaTipo: {
 			nome: "fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo",
 			number: true

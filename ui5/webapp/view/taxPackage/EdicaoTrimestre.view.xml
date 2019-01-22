@@ -242,7 +242,8 @@
 														templateShareable: false
 													}" 
 													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
-													enabled="{= ${nova} ? true : false}">
+													enabled="{= ${nova} ? true : false}"
+													change="onTrocarDiferenca">
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
 												<Input value="{outro}" />
@@ -304,7 +305,8 @@
 														templateShareable: false
 													}"
 													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
-													enabled="{= ${nova} ? true : false}">
+													enabled="{= ${nova} ? true : false}"
+													change="onTrocarDiferenca">
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
 												<Input value="{outro}" />
