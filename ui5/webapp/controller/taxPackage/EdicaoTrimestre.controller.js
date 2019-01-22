@@ -914,7 +914,7 @@ sap.ui.define(
 								title: this.getResourceBundle().getText("viewGeralAviso"),
 								type: "Message",
 								content: new sap.m.Text({
-									text: "Valor não pode ser inserido pois resulta em closing balance negativo"
+									text: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoUtilizacao")
 								}),
 								endButton: new sap.m.Button({
 									text: "OK",
