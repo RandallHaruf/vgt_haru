@@ -108,28 +108,28 @@
 									}"
 									class="bordered celulasSeparadas">
 									<columns>
-										<Column vAlign="Middle" width="11rem">
+										<Column vAlign="Middle" width="12rem">
 											<Text text=""/>
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAtual}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAnterior}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" />
 										</Column>
 									</columns>
@@ -207,28 +207,28 @@
 									</headerToolbar>
 									<columns>
 										<Column width="4rem" />
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralTipo}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralOutro}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="1º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="2º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="3º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="4º {i18n>viewGeralTrimestre}"  />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralAnual}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralRetificadora}" />
 										</Column>
 									</columns>
@@ -269,28 +269,28 @@
 									</headerToolbar>
 									<columns>
 										<Column width="4rem" />
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralTipo}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralOutro}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="1º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="2º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="3º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="4º {i18n>viewGeralTrimestre}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralAnual}" />
 										</Column>
-										<Column width="11rem" hAlign="Center">
+										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralRetificadora}"/>
 										</Column>
 									</columns>
@@ -373,43 +373,43 @@
 									}"
 									class="bordered celulasSeparadas">
 									<columns>
-										<Column vAlign="Middle" width="11rem">
+										<Column vAlign="Middle" width="12rem">
 											<Text text=""/>
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
 										</Column>
-										<Column width="15rem">
+										<Column width="16rem">
 											<Text text="{i18n>viewGeralTotalLossesUtilized}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewGeralTaxableIncome}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" />
 										</Column>
-										<Column width="15rem">
+										<Column width="16rem">
 											<Text text="{i18n>viewGeralOthertaxes}" />
 										</Column>
-										<Column width="15rem">
+										<Column width="16rem">
 											<Text text="{i18n>viewGeralIncentivosFiscais}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewGeralTotalOtherTaxesAndTaxCredits}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewGeralNetLocalTax}" />
 										</Column>
-										<Column width="15rem">
+										<Column width="16rem">
 											<Text text="WHT" />
 										</Column>
-										<Column width="15rem">
+										<Column width="16rem">
 											<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" />
 										</Column>
-										<Column width="15rem">
+										<Column width="16rem">
 											<Text text="{i18n>viewGeralTotalInterim}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewGeralTaxDueoverpaid}" />
 										</Column>
 									</columns>
@@ -462,25 +462,25 @@
 									}"
 									class="bordered celulasSeparadas">
 									<columns>
-										<Column vAlign="Middle" width="11rem">
+										<Column vAlign="Middle" width="12rem">
 											<Text text=""/>
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}" />
 										</Column>
-										<Column width="11rem">
+										<Column width="12rem">
 											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}" />
 										</Column>
 									</columns>
@@ -531,7 +531,7 @@
 									<Column vAlign="Middle" width="7.5rem">
 										<Text text="Current Year Loss"/>
 									</Column>
-									<Column vAlign="Middle" width="11rem">
+									<Column vAlign="Middle" width="12rem">
 										<Text text="Current Year Loss utilized"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
@@ -540,7 +540,7 @@
 									<Column vAlign="Middle" width="15rem">
 										<Text text="Justificativa"/>
 									</Column>
-									<Column vAlign="Middle" width="11rem">
+									<Column vAlign="Middle" width="12rem">
 										<Text text="Current Year Loss expired"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
@@ -690,7 +690,7 @@
 									<Column vAlign="Middle" width="7.5rem">
 										<Text text="Current Year Credit"/>
 									</Column>
-									<Column vAlign="Middle" width="11rem">
+									<Column vAlign="Middle" width="12rem">
 										<Text text="Current Year Credit utilized"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">
@@ -699,7 +699,7 @@
 									<Column vAlign="Middle" width="15rem">
 										<Text text="Justificativa"/>
 									</Column>
-									<Column vAlign="Middle" width="11rem">
+									<Column vAlign="Middle" width="12rem">
 										<Text text="Current Year Credit expired"/>
 									</Column>
 									<Column vAlign="Middle" width="7.5rem">

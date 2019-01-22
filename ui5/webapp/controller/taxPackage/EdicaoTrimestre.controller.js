@@ -431,9 +431,9 @@ sap.ui.define(
 				dialog.open();
 			},
 
-			_adicionarUtilizacaoSchedule: function (sProperty, sFkTipo) {
+			_adicionarUtilizacaoSchedule: function (sProperty, sFkTipo, iAnoFiscal) {
 				this.getModel().getProperty(sProperty).unshift({
-					schedule_fy: null,
+					schedule_fy: iAnoFiscal ? iAnoFiscal : null,
 					valor: 0,
 					obs: null,
 					"fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo": sFkTipo
@@ -442,8 +442,8 @@ sap.ui.define(
 				this.getModel().refresh();
 			},
 
-			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, sTitulo) {
-				var validarClosingBalanceAposUtilizacao = function (oEv) {
+			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, sTitulo, sValueUtilized) {
+				/*var validarClosingBalanceAposUtilizacao = function (oEv) {
 					var obj = oEv.getSource().getBindingContext().getObject(),
 						currentFYValuesUtilized = that.getModel().getProperty(sProperty).filter(o => Number(o.schedule_fy) === Number(obj.schedule_fy)),
 						totalUtilizedCurrentYear = 0;
@@ -457,9 +457,9 @@ sap.ui.define(
 					alert("Utilized: " + totalUtilizedCurrentYear + " Closing balance: " + closingBalance);
 
 					return (closingBalance + totalUtilizedCurrentYear) >= 0 ? true : false;
-				};
+				};*/
 
-				var aSchedule = this.getModel().getProperty(sSchedule),
+				/*var aSchedule = this.getModel().getProperty(sSchedule),
 					FY = [{}];
 
 				for (var i = 0, length = aSchedule.length; i < length; i++) {
@@ -469,27 +469,82 @@ sap.ui.define(
 						FY.push({
 							key: oSchedule.fy,
 							text: oSchedule.fy,
-							closingBalance: oSchedule.closing_balance
+							closingBalance: oSchedule.closing_balance,
+							valueUtilized: oSchedule.current_year_value_utilized
 						});
 					}
-				}
+				}*/
 
-				this.getModel().setProperty(sScheduleFY, FY);
+				//this.getModel().setProperty(sScheduleFY, FY);
 
-				this.getModel().getProperty(sProperty).sort(function (a, b) {
+				/*this.getModel().getProperty(sProperty).sort(function (a, b) {
 					return (a.schedule_fy > b.schedule_fy) ? -1 : ((b.schedule_fy > a.schedule_fy) ? 1 : 0);
-				});
+				});*/
 
-				var oScrollContainer = new sap.m.ScrollContainer({
+				/*var oScrollContainer = new sap.m.ScrollContainer({
 					horizontal: true,
 					vertical: true,
-					height: "430px"
+					height: "400px"
 				}).addStyleClass("sapUiNoContentPadding");
+				
+				// Criação da tabela com a referência de closing balance para cada FY
+				var oPanelSaldo = new sap.m.Panel({
+					expandable: true,
+					expanded: false,
+					headerText: "Balanço",
+					width: "auto"
+				}).addStyleClass("sapUiResponsiveMargin sapUiNoContentPadding");
+				
+				var oTableSaldo = new sap.m.Table();
+				
+				oTableSaldo.addColumn(new sap.m.Column({
+					vAlign: "Middle"
+				}).setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewEdiçãoTrimestreFY")
+				})));
+				
+				oTableSaldo.addColumn(new sap.m.Column({
+					vAlign: "Middle"
+				}).setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewTaxPackageClosingBalance")
+				})));
+				
+				var oInputFY = new sap.m.Input({
+					value: "{text}"
+				});
+				
+				var oInputClosingBalance = new sap.m.Input({
+					value: "{closingBalance}"
+				});
+				
+				var oTemplate = new sap.m.ColumnListItem({
+					cells: [oInputFY, oInputClosingBalance]
+				});
 
-				/* Criação da tabela de inserção */
+				oTableSaldo.bindItems({
+					path: sScheduleFY,
+					template: oTemplate
+				});
+				
+				oPanelSaldo.addContent(oTableSaldo);
+				
+				// Criação da tabela de inserção 
+				var oPanelUtilizacoes = new sap.m.Panel({
+					expandable: true,
+					expanded: false,
+					headerText: "Utilizações",
+					width: "auto"
+				}).addStyleClass("sapUiResponsiveMargin sapUiNoContentPadding");
+
+				//var oScrollContainerUtilizacoes = new sap.m.ScrollContainer({
+					//horizontal: true,
+					//vertical: true,
+					height: "430px"
+				//}).addStyleClass("sapUiNoContentPadding");
+
 				var oTable = new sap.m.Table();
 
-				/* Toolbar com título da tabela e botão de nova taxa */
+				// Toolbar com título da tabela e botão de nova taxa
 				var oToolbar = new sap.m.Toolbar();
 
 				oToolbar.addContent(new sap.m.ObjectIdentifier({
@@ -508,7 +563,7 @@ sap.ui.define(
 
 				oTable.setHeaderToolbar(oToolbar);
 
-				/* Colunas da tabela */
+				// Colunas da tabela 
 				oTable.addColumn(new sap.m.Column({
 					width: "50px"
 				}));
@@ -534,7 +589,7 @@ sap.ui.define(
 					text: this.getResourceBundle().getText("viewNotificacaoColunaobservacao")
 				})));
 
-				/* Template das células */
+				// Template das células
 				var oBtnExcluir = new sap.m.Button({
 					icon: "sap-icon://delete",
 					type: "Reject",
@@ -578,12 +633,11 @@ sap.ui.define(
 							alert('nao valido');
 						}
 					}
-
-					/*if (this._validarNumeroInserido(oEvent) && isNegativo) {
-						var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
-						var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
-						oEvent.getSource().setValue(sValorFormatado);
-					}*/
+					//if (this._validarNumeroInserido(oEvent) && isNegativo) {
+						//var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+						//var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+						//oEvent.getSource().setValue(sValorFormatado);
+					//}
 				}, this);
 
 				var oInputObservacao = new sap.m.Input({
@@ -599,30 +653,338 @@ sap.ui.define(
 					template: oTemplate
 				});
 
-				oScrollContainer.addContent(oTable);
+				//oScrollContainerUtilizacoes.addContent(oTable);
+				oPanelUtilizacoes.addContent(oTable);
+
+				oScrollContainer.addContent(oPanelSaldo);
+				oScrollContainer.addContent(oPanelUtilizacoes);*/
 
 				var that = this;
 
+				var oVBox = new sap.m.VBox();
+
+				oVBox.addItem(new sap.m.Title({
+					text: sTitulo,
+					titleStyle: "H4",
+					wrapping: true
+				}).addStyleClass("sapUiSmallMarginBegin sapUiSmallMarginTop sapUiSmallMarginBottom"));
+
+				var oScrollContainer = new sap.m.ScrollContainer({
+					horizontal: true,
+					vertical: true,
+					height: "430px"
+				}).addStyleClass("sapUiNoContentPadding");
+
+				var oTableSaldo = new sap.m.Table();
+
+				/*var oToolbar = new sap.m.Toolbar();
+
+				oToolbar.addContent(new sap.m.ObjectIdentifier({
+					title: sTitulo
+				}));
+				
+				oTableSaldo.setHeaderToolbar(oToolbar);*/
+
+				oTableSaldo.addColumn(new sap.m.Column({
+					hAlign: "Center",
+					vAlign: "Middle",
+					width: "35px"
+				}).setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewEdiçãoTrimestreFY")
+				})));
+
+				/*oTableSaldo.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "8rem"
+				}).setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewTaxPackageClosingBalance")
+				})));*/
+
+				oTableSaldo.addColumn(new sap.m.Column({
+					hAlign: "Center",
+					vAlign: "Middle",
+					width: "4.5rem"
+				}).setHeader(new sap.m.Text({
+					text: sValueUtilized
+				})));
+
+				/*oTableSaldo.addColumn(new sap.m.Column({
+					width: "50px"
+				}));*/
+
+				var oInputFY = new sap.m.Label({
+					text: "{fy}"
+				});
+
+				/*var oInputClosingBalance = new sap.m.Input({
+					value: "{closing_balance}"
+				});*/
+				
+				var oHBox = new sap.m.HBox({
+					justifyContent: "End",
+					alignItems: "Center"
+				});
+
+				var oInputValueUtilized = new sap.m.Text({
+					text: "{path: 'current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}).addStyleClass("sapUiSmallMarginEnd");
+
+				var oBtnDetalhes = new sap.m.Button({
+					text: this.getResourceBundle().getText("viewGeralDetalhes")
+				}).attachPress(function (event) {
+					that._dialogDetalhesValueUtilized(event, sProperty, sFkTipo);
+				});
+				
+				oHBox.addItem(oInputValueUtilized);
+				oHBox.addItem(oBtnDetalhes);
+
+				var oTemplate = new sap.m.ColumnListItem({
+					cells: [oInputFY/*, oInputClosingBalance*/, oHBox/*oInputValueUtilized, oBtnDetalhes*/]
+				});
+
+				oTableSaldo.bindItems({
+					path: sSchedule/*FY*/,
+					template: oTemplate,
+					sorter: new sap.ui.model.Sorter("fy", true),
+					filters: [
+						new sap.ui.model.Filter("fy", sap.ui.model.FilterOperator.NE, this.getModel().getProperty("/AnoCalendario").anoCalendario)
+					]
+				});
+
+				oScrollContainer.addContent(oTableSaldo);
+
+				oVBox.addItem(oScrollContainer);
+
 				/* Criação do diálogo com base na tabela */
 				var dialog = new sap.m.Dialog({
-					contentWidth: "650px",
+					contentWidth: "400px",
 					showHeader: false,
 					type: "Message",
-					content: oScrollContainer,
+					content: oVBox,
 					beginButton: new sap.m.Button({
 						text: that.getResourceBundle().getText("viewGeralFechar"),
 						press: function () {
 							dialog.close();
-							that.onAplicarRegras();
+							//that.onAplicarRegras();
 						}
 					}),
 					afterClose: function () {
 						dialog.destroy();
+						/*that.onAplicarRegras();
+						console.log(that.getModel().getProperty(sProperty));*/
+					}
+				}).addStyleClass("sapUiNoContentPadding");
+
+				this.getView().addDependent(dialog);
+
+				dialog.open();
+			},
+
+			_dialogDetalhesValueUtilized: function (oEvent, sProperty, sFkTipo) {
+				var that = this,
+					obj = oEvent.getSource().getBindingContext().getObject(),
+					sPathClosingBalance = oEvent.getSource().getBindingContext().getPath() + "/closing_balance";
+				
+				var oVBox = new sap.m.VBox();
+				
+				var oToolbar = new sap.m.Toolbar();
+				
+				//var oHBox = new sap.m.HBox();
+				
+				oToolbar.addContent(new sap.m.Label({ 
+					text: this.getResourceBundle().getText("viewTaxPackageClosingBalance") + ": "
+				}).addStyleClass("sapUiSmallMarginBegin"));
+				
+				oToolbar.addContent(new sap.m.Text({
+					textAlign: "End",
+					text: "{path: '" + sPathClosingBalance + "', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}));
+				
+				//oToolbar.addContent(oHBox);
+				oToolbar.addContent(new sap.m.ToolbarSpacer());
+				oToolbar.addContent(new sap.m.Button({
+					icon: "sap-icon://add" 
+				}).addStyleClass("sapUiSmallMarginEnd").attachPress(oTable, function () {
+					this._adicionarUtilizacaoSchedule(sProperty, sFkTipo, obj.fy);
+				}, this));
+				
+				oVBox.addItem(oToolbar);
+				
+				var oScrollContainer = new sap.m.ScrollContainer({
+					horizontal: true,
+					vertical: true,
+					height: "300px"
+				}).addStyleClass("sapUiNoContentPadding");
+				
+				var oTable = new sap.m.Table();
+				
+				/*var oToolbar = new sap.m.Toolbar();
+
+				oToolbar.addContent(new sap.m.Button({
+					text: this.getResourceBundle().getText("viewGeralNova"),
+					icon: "sap-icon://add",
+					type: "Emphasized"
+				}).attachPress(oTable, function () {
+					this._adicionarUtilizacaoSchedule(sProperty, sFkTipo, obj.fy);
+				}, this));*/
+				
+				//oToolbar.addContent(new sap.m.ToolbarSpacer());
+				
+				/*oToolbar.addContent(new sap.m.Text({
+					textAlign: "End",
+					text: "{path: '" + oEvent.getSource().getBindingContext().getPath() + "/closing_balance"
+						+ "', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}).addStyleClass("sapUiSmallMarginEnd"));
+				
+				oTable.setHeaderToolbar(oToolbar);*/
+				
+				// Colunas da tabela 
+				oTable.addColumn(new sap.m.Column({
+					width: "50px"
+				}));
+
+				/*oTable.addColumn(new sap.m.Column({
+					width: "100px",
+					vAlign: "Middle"
+				}).setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewEdiçãoTrimestreFY")
+				})));*/
+
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "175px"
+				})/*.setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewGeralValue")
+				}))*/);
+
+				/*oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "175px"
+				}).setHeader(new sap.m.Text({
+					text: this.getResourceBundle().getText("viewNotificacaoColunaobservacao")
+				})));*/
+
+				// Template das células
+				var oBtnExcluir = new sap.m.Button({
+					icon: "sap-icon://delete",
+					type: "Reject",
+					tooltip: "{i18n>viewGeralExcluirLinha}"
+				}).attachPress(oTable, function (oEvent2) {
+					this._excluirTaxaMultipla(oEvent2, sProperty);
+					this.onAplicarRegras();
+				}, this);
+
+				/*var oSelectFY = new sap.m.Select({
+					selectedKey: "{schedule_fy}"
+				}).bindItems({
+					templateShareable: false,
+					path: sScheduleFY,
+					template: new sap.ui.core.ListItem({
+						key: "{key}",
+						text: "{text}"
+					})
+				}).attachChange(function (oEvent3) {
+					if (validarClosingBalanceAposUtilizacao(oEvent3)) {
+						alert('valido');
+					} else {
+						alert('nao valido');
+					}
+				});*/
+
+				var oInputValor = new sap.m.Input({
+					textAlign: "End",
+					value: "{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}).attachChange(function (oEvent2) {
+					if (this._validarNumeroInserido(oEvent2)) {
+						var fValorNegativo = Math.abs(this._limparMascara(oEvent2.getSource().getValue())) * -1;
+						var sValorFormatado = NumberFormat.getFloatInstance({
+							minFractionDigits: 2,
+							maxFractionDigits: 2
+						}).format(fValorNegativo);
+						
+						var closingBalance = this.getModel().getProperty(sPathClosingBalance);
+						
+						if (fValorNegativo + closingBalance >= 0) {
+							oEvent2.getSource().setValue(sValorFormatado);
+						}
+						else {
+							oEvent2.getSource().setValue(0);
+							
+							var dialog = new sap.m.Dialog({
+								title: this.getResourceBundle().getText("viewGeralAviso"),
+								type: "Message",
+								content: new sap.m.Text({
+									text: "Valor não pode ser inserido pois resulta em closing balance negativo"
+								}),
+								endButton: new sap.m.Button({
+									text: "OK",
+									press: function () {
+										dialog.close();
+									}
+								}),
+								afterClose: function () {
+									dialog.destroy();
+								}
+							});
+	
+							dialog.open();
+						}
+
+						/*if (validarClosingBalanceAposUtilizacao(oEvent2)) {
+							alert('valido');
+						} else {
+							alert('nao valido');
+						}*/
+					}
+					this.onAplicarRegras();
+					//if (this._validarNumeroInserido(oEvent) && isNegativo) {
+						//var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+						//var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+						//oEvent.getSource().setValue(sValorFormatado);
+					//}
+				}, this);
+
+				/*var oInputObservacao = new sap.m.Input({
+					value: "{obs}"
+				});*/
+
+				var oTemplate = new sap.m.ColumnListItem({
+					cells: [oBtnExcluir, /*oSelectFY,*/ oInputValor/*, oInputObservacao*/]
+				});
+
+				oTable.bindItems({
+					path: sProperty,
+					template: oTemplate,
+					filters: [
+						new sap.ui.model.Filter("schedule_fy", sap.ui.model.FilterOperator.EQ, obj.fy)
+					]
+				});
+				
+				/*var oBinding = oTable.getBinding("items");
+				var oFilter = new sap.ui.model.Filter("text", sap.ui.model.FilterOperator.Contains, obj.text);
+				oBinding.filter([oFilter]);*/
+				
+				oScrollContainer.addContent(oTable);
+				
+				oVBox.addItem(oScrollContainer);
+				
+				var dialog = new sap.m.Dialog({
+					title: obj.fy,
+					contentWidth: "340px",
+					content: oVBox,
+					endButton: new sap.m.Button({
+						text: that.getResourceBundle().getText("viewGeralFechar"),
+						press: function () {
+							dialog.close();
+						}.bind(this)
+					}),
+					afterClose: function () {
+						dialog.destroy();
 						that.onAplicarRegras();
-						console.log(that.getModel().getProperty(sProperty));
 					}
 				});
 
+				// to get access to the global model
 				this.getView().addDependent(dialog);
 
 				dialog.open();
@@ -637,7 +999,7 @@ sap.ui.define(
 					sFkTipo = 2;
 
 				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
-					"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"));
+					"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditU"));
 			},
 
 			onEditarTotalLossesUtilized: function (oEvent) {
@@ -649,7 +1011,7 @@ sap.ui.define(
 					sFkTipo = 1;
 
 				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
-					"viewGeralTotalLossesUtilized"));
+					"viewGeralTotalLossesUtilized"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossUtilized"));
 			},
 
 			_limparMascara: function (sValor) {
@@ -662,13 +1024,13 @@ sap.ui.define(
 						oEvent.getSource().setValue(0);
 
 						var dialog = new sap.m.Dialog({
-							title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+							title: this.getResourceBundle().getText("viewGeralAviso"),
 							type: "Message",
 							content: new sap.m.Text({
 								text: this.getResourceBundle().getText("viewGeralValorInseridoNaoValido")
 							}),
 							endButton: new sap.m.Button({
-								text: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsFechar"),
+								text: "OK",
 								press: function () {
 									dialog.close();
 								}
@@ -764,22 +1126,20 @@ sap.ui.define(
 					oResultadoFiscal.rf_taxable_income_loss_after_losses = oResultadoFiscal.rf_taxable_income_loss_before_losses_and_tax_credits +
 						oResultadoFiscal.rf_total_losses_utilized;
 
-					oResultadoFiscal.it_statutory_tax_rate_average = oResultadoFiscal.it_statutory_tax_rate_average ? Number(oResultadoFiscal.it_statutory_tax_rate_average) : 0;
-					oResultadoFiscal.it_jurisdiction_tax_rate_average = oResultadoFiscal.it_jurisdiction_tax_rate_average ? Number(oResultadoFiscal.it_jurisdiction_tax_rate_average) : 0;
-						
+					oResultadoFiscal.it_statutory_tax_rate_average = oResultadoFiscal.it_statutory_tax_rate_average ? Number(oResultadoFiscal.it_statutory_tax_rate_average) :
+						0;
+					oResultadoFiscal.it_jurisdiction_tax_rate_average = oResultadoFiscal.it_jurisdiction_tax_rate_average ? Number(oResultadoFiscal.it_jurisdiction_tax_rate_average) :
+						0;
+
 					if (oResultadoFiscal.rf_taxable_income_loss_after_losses > 0) {
 						if (oResultadoFiscal.it_statutory_tax_rate_average) {
-							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 
-								oResultadoFiscal.rf_taxable_income_loss_after_losses 
-								* (oResultadoFiscal.it_statutory_tax_rate_average / 100);
-						}
-						else if (oResultadoFiscal.it_jurisdiction_tax_rate_average) {
-							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 
-								oResultadoFiscal.rf_taxable_income_loss_after_losses 
-								* (oResultadoFiscal.it_jurisdiction_tax_rate_average / 100);
-						}
-						else {
-							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 0;	
+							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits =
+								oResultadoFiscal.rf_taxable_income_loss_after_losses * (oResultadoFiscal.it_statutory_tax_rate_average / 100);
+						} else if (oResultadoFiscal.it_jurisdiction_tax_rate_average) {
+							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits =
+								oResultadoFiscal.rf_taxable_income_loss_after_losses * (oResultadoFiscal.it_jurisdiction_tax_rate_average / 100);
+						} else {
+							oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 0;
 						}
 					} else {
 						oResultadoFiscal.rf_income_tax_before_other_taxes_and_credits = 0;
@@ -1548,11 +1908,9 @@ sap.ui.define(
 									sap.ui.getCore().byId(sIdRadioButtonNao).setSelected(oRespostaItemToReport.ind_se_aplica ? false : true);
 								}
 
-								if (sIdTextArea) { 
+								if (sIdTextArea) {
 									sap.ui.getCore().byId(sIdTextArea).setValue(oRespostaItemToReport.resposta).setVisible(
-										sIdRadioButtonSim 
-											? !!oRespostaItemToReport.ind_se_aplica
-											: true);
+										sIdRadioButtonSim ? !!oRespostaItemToReport.ind_se_aplica : true);
 								}
 
 								oComponenteItemToReport.id_resposta_item_to_report = oRespostaItemToReport.id_resposta_item_to_report;
@@ -1599,21 +1957,21 @@ sap.ui.define(
 														sLabel;
 
 													switch (oResposta.numero_ordem) {
-														case 1:
-															sLabel = that.getResourceBundle().getText("viewGeralPeriodo1");
-															break;
-														case 2:
-															sLabel = that.getResourceBundle().getText("viewGeralPeriodo2");
-															break;
-														case 3:
-															sLabel = that.getResourceBundle().getText("viewGeralPeriodo3");
-															break;
-														case 4:
-															sLabel = that.getResourceBundle().getText("viewGeralPeriodo4");
-															break;
-														case 5:
-															sLabel = that.getResourceBundle().getText("viewGeralPeriodo5");
-															break;
+													case 1:
+														sLabel = that.getResourceBundle().getText("viewGeralPeriodo1");
+														break;
+													case 2:
+														sLabel = that.getResourceBundle().getText("viewGeralPeriodo2");
+														break;
+													case 3:
+														sLabel = that.getResourceBundle().getText("viewGeralPeriodo3");
+														break;
+													case 4:
+														sLabel = that.getResourceBundle().getText("viewGeralPeriodo4");
+														break;
+													case 5:
+														sLabel = that.getResourceBundle().getText("viewGeralPeriodo5");
+														break;
 													}
 
 													var oCustomListItem = new sap.m.CustomListItem();
@@ -1642,8 +2000,8 @@ sap.ui.define(
 													sap.ui.getCore().byId(sIdPainelHistorico).addItem(oCustomListItem);
 												}
 											});
-									}) (oRespostaItemToReport, oComponenteItemToReport);
-									
+									})(oRespostaItemToReport, oComponenteItemToReport);
+
 								}
 							}
 						}
