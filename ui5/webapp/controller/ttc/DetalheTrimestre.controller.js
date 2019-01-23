@@ -484,6 +484,12 @@ sap.ui.define(
 
 			onCalcularTotal: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
+				
+				if (oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 2) {
+					oPagamento.principal = Math.abs(oPagamento.principal ? oPagamento.principal : 0) * -1;
+					oPagamento.juros = Math.abs(oPagamento.juros ? oPagamento.juros : 0) * -1;
+					oPagamento.multa = Math.abs(oPagamento.multa ? oPagamento.multa : 0) * -1;
+				}
 
 				/*var fPrincipal = Utils.stringMoedaParaFloat(oPagamento.principal),
 					fJuros = Utils.stringMoedaParaFloat(oPagamento.juros),
@@ -492,7 +498,7 @@ sap.ui.define(
 				var fPrincipal = oPagamento.principal ? Number(oPagamento.principal) : 0,
 					fJuros = oPagamento.juros ? Number(oPagamento.juros) : 0,
 					fMulta = oPagamento.multa ? Number(oPagamento.multa) : 0;
-
+					
 				oPagamento.total = (fPrincipal + fJuros + fMulta).toFixed(2);
 				this.getModel().refresh();
 
@@ -721,6 +727,7 @@ sap.ui.define(
 							response1[0][i].estadoValueState = sap.ui.core.ValueState.None;
 							response1[0][i].cidadeValueState = sap.ui.core.ValueState.None;
 							response1[0][i].entidadeValueState = sap.ui.core.ValueState.None;
+							response1[0][i].fkDominioTipoTransacaoAnterior = response1[0][i]["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"];
 							
 							var aDominioMoedas = that.getModel().getProperty("/DominioMoeda");	
 							var encontrada = aDominioMoedas.find(function (x) {
@@ -758,6 +765,7 @@ sap.ui.define(
 							response2[0][j].estadoValueState = sap.ui.core.ValueState.None;
 							response2[0][j].cidadeValueState = sap.ui.core.ValueState.None;
 							response2[0][j].entidadeValueState = sap.ui.core.ValueState.None;
+							response2[0][j].fkDominioTipoTransacaoAnterior = response2[0][j]["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"];
 							
 							var aDominioMoedas = that.getModel().getProperty("/DominioMoeda");	
 							var encontrada = aDominioMoedas.find(function (x) {
@@ -1188,11 +1196,38 @@ sap.ui.define(
 
 				return bExiste;
 			},
-			onTipoTransacaoChange: function (oEvent) {
+			
+			onTrocarTipoTransacao: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
-				if (oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 2) {
-					oPagamento[""] = (Math.abs(oPagamento[""])) * -1;
+				
+				var entrouEmCashRefund = function () {
+					return oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 2 
+							&& oPagamento.fkDominioTipoTransacaoAnterior != 2;
+				};
+				
+				var saiuDeCashRefund = function () {
+					return oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] != 2
+							&& oPagamento.fkDominioTipoTransacaoAnterior == 2;
+				};
+				
+				var isOtherSpecify = function () {
+					return oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 5;
+				};
+				
+				if (entrouEmCashRefund() || saiuDeCashRefund()) {
+					oPagamento.principal = 0;
+					oPagamento.juros = 0;
+					oPagamento.multa = 0;
+					this.onCalcularTotal(oEvent);
 				}
+				
+				if (!isOtherSpecify()) {
+					oPagamento.tipo_transacao_outros = "";
+				}
+				
+				oPagamento.fkDominioTipoTransacaoAnterior = oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"];
+				
+				this.getModel().refresh();
 			}
 		});
 	}

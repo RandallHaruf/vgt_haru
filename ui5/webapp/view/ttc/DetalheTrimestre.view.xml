@@ -269,12 +269,12 @@
 													path: '/DominioTipoTransacao',
 													templateShareable: false
 												}"
-												change="onTipoTransacaoChange" 
+												change="onTrocarTipoTransacao" 
 												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
 											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false)}"
 												type="Text" 
 												value="{tipo_transacao_outros}" />
 											<!--<Input textAlign="End" value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  editable="{ind_ativo}" change="onAplicarRegras" />-->
@@ -529,11 +529,12 @@
 													path: '/DominioTipoTransacao',
 													templateShareable: false
 												}"
-												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
+												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}"
+												change="onTrocarTipoTransacao">
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
 											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false) }"
 												type="Text" 
 												value="{tipo_transacao_outros}" />
 											<!--<Input 
