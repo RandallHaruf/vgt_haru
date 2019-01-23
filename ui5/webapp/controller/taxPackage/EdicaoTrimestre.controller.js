@@ -1840,7 +1840,7 @@ sap.ui.define(
 									groupName: "group" + i,
 									text: that.getResourceBundle().getText("viewGeralNao"),
 									selected: true
-								})
+								});
 								obj.idRadioButtonNao = oRadioButton.getId();
 								oHBox.addItem(oRadioButton);
 							}
@@ -2921,9 +2921,9 @@ sap.ui.define(
 
 				var pegarScheduleComJustificativaObrigatoriaVazia = function (aSchedule) {
 					return aSchedule.filter(function (obj) {
-						return obj.justificativaEnabled && !obj.justificativa
+						return obj.justificativaEnabled && !obj.justificativa;
 					});
-				}
+				};
 
 				aScheduleComJustificativaObrigatoriaVazia = pegarScheduleComJustificativaObrigatoriaVazia(aLossSchedule);
 				aScheduleComJustificativaObrigatoriaVazia = aScheduleComJustificativaObrigatoriaVazia.concat(
@@ -3255,7 +3255,7 @@ sap.ui.define(
 					bResultado = true;
 
 				if (oPeriodoEdicaoAberto.fim <= oPeriodoEdicaoCorrente.inicio) {
-					bResultado = false
+					bResultado = false;
 				}
 
 				return bResultado;
@@ -3388,7 +3388,7 @@ sap.ui.define(
 				NodeAPI.pListarRegistros("ScheduleValueUtilized", {
 						fkTaxReconciliation: sIdTaxReconciliation
 					})
-					.then((response) => {
+					.then(function (response) {
 						var result = response.result;
 
 						var aTotalLossesUtilized = result.filter(function (obj) {
@@ -3404,7 +3404,7 @@ sap.ui.define(
 
 						that.onAplicarRegras();
 					})
-					.catch((err) => {
+					.catch(function (err) {
 						console.log(err);
 					});
 			},
