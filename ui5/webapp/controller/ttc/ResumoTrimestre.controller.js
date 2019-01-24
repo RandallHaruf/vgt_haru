@@ -91,6 +91,137 @@ sap.ui.define(
 
 				return parseInt(days) + 1;
 			},
+			
+			_dialogAviso: function (sMensagem, callbackAfterClose) {
+				var that = this;
+				
+				var dialog2 = new sap.m.Dialog({
+					title: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+					type: "Message",
+					content: new sap.m.Text({
+						text: sMensagem
+					}),
+					endButton: new sap.m.Button({
+						text: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
+						press: function () {
+							dialog2.close();
+						}
+					}),
+					afterClose: function () {
+						dialog2.destroy();
+						
+						if (callbackAfterClose) {
+							callbackAfterClose();
+						}
+					}
+				});
+	
+				dialog2.open();
+			},
+			
+			_dialogImpostoNaoDeclarado: function (aImpostoNaoDeclarado, callback) {
+				var msgBorne = [];
+				var msgCollected = [];
+				
+				for (var i = 0, length = aImpostoNaoDeclarado.length; i < length; i++) {
+					if (aImpostoNaoDeclarado[i]["fk_category.id_tax_category"] === 1) {
+						msgBorne.push(aImpostoNaoDeclarado[i].tax);
+					}
+					else {
+						msgCollected.push(aImpostoNaoDeclarado[i].tax);
+					}
+				}
+				
+				if (msgBorne.length || msgCollected.length) {
+					var oVBox = new sap.m.VBox();
+					
+					var oHBox = new sap.m.HBox({
+						justifyContent: "Center"
+					}).addItem(new sap.m.Text({
+						text: this.getResourceBundle().getText("viewTTCDetalheTrimestreMensagemAvisoImpostoNaoDeclarado")
+					}).addStyleClass("sapUiSmallMarginTop sapUiSmallMarginBottom"));
+					
+					oVBox.addItem(oHBox);
+					
+					var criarPainelTax = function (aMsgTax, sTitulo) {
+						if (aMsgTax.length) {
+							var oPanel = new sap.m.Panel({
+								expandable: true,
+								expanded: false,
+								headerText: sTitulo
+							});
+							
+							var oHBoxInterno = new sap.m.VBox();
+							
+							for (var i = 0, length = aMsgTax.length; i < length; i++) { 
+								var oText = new sap.m.Text({ 
+									text: aMsgTax[i] 
+								}).addStyleClass("bulletItem");
+								
+								oHBoxInterno.addItem(oText);
+							}
+							
+							oPanel.addContent(oHBoxInterno);
+							
+							oVBox.addItem(oPanel);
+						}	
+					};
+					
+					criarPainelTax(msgBorne, this.getResourceBundle().getText("viewGeralBorne"));
+					
+					criarPainelTax(msgCollected, this.getResourceBundle().getText("viewGeralCollected"));
+					
+					var dialog = new sap.m.Dialog({
+						contentHeight: "150px",
+						title: this.getResourceBundle().getText("viewGeralAviso"),
+						type: "Message",
+						content: oVBox,
+						beginButton: new sap.m.Button({
+							text: this.getResourceBundle().getText("viewGeralCancelar"),
+							press: function () {
+								dialog.close();
+							}
+						}), 
+						endButton: new sap.m.Button({
+							text: this.getResourceBundle().getText("viewGeralContinuar"),
+							press: function () {
+								dialog.close();
+								
+								if (callback) {
+									callback();
+								}
+							}
+						}),
+						afterClose: function () {
+							dialog.destroy();
+						}
+					}).addStyleClass("sapUiNoContentPadding");
+				
+					dialog.open();
+				}
+				else {
+					if (callback) {
+						callback();
+					}
+				}
+			},
+			
+			_realizarEncerramentoPeriodo: function (idEmpresa, idPeriodo) {
+				var that = this;
+				
+				NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
+						idEmpresa: idEmpresa,
+						idPeriodo: idPeriodo
+					}, function (response) {
+						var json = JSON.parse(response);
+
+						if (json.success) {
+							that._atualizarDados();
+						} else {
+							that._dialogAviso(json.message);
+						}
+					});
+			},
 
 			onSubmeterPeriodo: function (oPeriodo) {
 				var that = this,
@@ -101,42 +232,37 @@ sap.ui.define(
 					type: "Message",
 					content: new sap.m.Text({
 						text: this.getView().getModel("i18n").getResourceBundle().getText(
-							"viewResumoTrimestreJSTEXTSVocêtemcertezaquedesejafecharoperíodo"),
+							"viewResumoTrimestreJSTEXTSVocêtemcertezaquedesejafecharoperíodo")
 					}),
 					beginButton: new sap.m.Button({
 						text: this.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSSubmeter"),
 						press: function () {
-							NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
-								idEmpresa: sIdEmpresa,
-								idPeriodo: oPeriodo.id_periodo
-							}, function (response) {
-								dialog.close();
-
-								var json = JSON.parse(response);
-
-								if (json.success) {
-									that._atualizarDados();
-								} else {
-									var dialog2 = new sap.m.Dialog({
-										title: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
-										type: "Message",
-										content: new sap.m.Text({
-											text: json.message
-										}),
-										endButton: new sap.m.Button({
-											text: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSFechar"),
-											press: function () {
-												dialog2.close();
-											}
-										}),
-										afterClose: function () {
-											dialog2.destroy();
-										}
-									});
-
-									dialog2.open();
-								}
-							});
+							NodeAPI.pListarRegistros("VerificarImpostoNaoDeclarado", {
+									idEmpresa: sIdEmpresa,
+									idPeriodo: oPeriodo.id_periodo
+								})
+								.then(function (res) {
+									dialog.close();
+									
+									if (res.result.length) {
+										that._dialogImpostoNaoDeclarado(res.result, function () {
+											that._realizarEncerramentoPeriodo(sIdEmpresa, oPeriodo.id_periodo);
+										});
+									}	
+									else {
+										that._realizarEncerramentoPeriodo(sIdEmpresa, oPeriodo.id_periodo);
+									}
+								})
+								.catch(function (err) {
+									dialog.close();
+									
+									if (err.status) {
+										that._dialogAviso(err.status + " - " + err.statusText + "\nMessage: " + err.responseJSON.error.message);
+									}
+									else {
+										that._dialogAviso(err.message);
+									}
+								});
 						}
 					}),
 					endButton: new sap.m.Button({

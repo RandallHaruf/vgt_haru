@@ -252,7 +252,38 @@ function pegarResumoEmpresa (aPagamentosBorne, aPagamentosCollected) {
 	return aResumoEmpresa;
 }
 
-function pagamentosObrigatoriosDeclarados(iIdEmpresa, iIdPeriodo) {
+function pegarImpostosNaoDeclarados(iIdEmpresa, iIdPeriodo) {
+	var sQuery = 
+		'select * '
+		+ 'from "VGT.TAX" tax '
+		+ 'where '
+		+ 'tax."id_tax" not in ( '
+		+ 'select nameOfTax."fk_tax.id_tax" '
+		+ 'from "VGT.PAGAMENTO" pagamento '
+		+ 'inner join "VGT.NAME_OF_TAX" nameOfTax '
+		+ 'on pagamento."fk_name_of_tax.id_name_of_tax" = nameOfTax."id_name_of_tax" '
+		+ 'where '
+		+ 'pagamento."fk_empresa.id_empresa" = ? '
+		+ 'and pagamento."fk_periodo.id_periodo" = ? '
+		+ ') ',
+		aParam = [iIdEmpresa, iIdPeriodo];
+		
+	return new Promise(function (resolve, reject) {
+		db.executeStatement({
+			statement: sQuery,
+			parameters: aParam
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(result);
+			}
+		});
+	});
+}
+
+/*function pagamentosObrigatoriosDeclarados(iIdEmpresa, iIdPeriodo) {
 	var bPagamentosDeclarados = false;
 	
 	var aParams = [iIdEmpresa, iIdPeriodo, iIdEmpresa],
@@ -294,9 +325,30 @@ function pagamentosObrigatoriosDeclarados(iIdEmpresa, iIdPeriodo) {
 	}
 	
 	return bPagamentosDeclarados;
-}
+}*/
 
 module.exports = {
+	verificarImpostosNaoDeclarados: function (req, res, next) {
+		if (req.query.idPeriodo && isNumber(req.query.idPeriodo)
+			&& req.query.idEmpresa && isNumber(req.query.idEmpresa)) {
+			pegarImpostosNaoDeclarados(Number(req.query.idEmpresa), Number(req.query.idPeriodo))
+				.then(function (aImpostoNaoDeclarado) {
+					res.status(200).json({
+						result: aImpostoNaoDeclarado
+					});
+				})
+				.catch(function (err) {
+					next(err);
+				});
+		}
+		else {
+			var msg = "ID do período e ID da empresa são obrigatórios";
+			var error = new Error(msg);
+			error.status = 400;
+			next(error);
+		}
+	},
+	
 	encerrarTrimestre: function (req, res) {
 		if (req.body.idPeriodo && isNumber(req.body.idPeriodo)
 			&& req.body.idEmpresa && isNumber(req.body.idEmpresa)) {
