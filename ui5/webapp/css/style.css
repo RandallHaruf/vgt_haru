@@ -16,6 +16,13 @@
 	top: 30%;
 }
 
+.bulletItem {
+    display: list-item !important;
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+    margin-left: 20px !important;
+}
+
 /* Esconde a 'setinha' de direção em tabelas de navegação */
 .myApp .sapMLIBImgNav.sapMLIBType.sapUiIcon.sapUiIconMirrorInRTL {
 	display: none;

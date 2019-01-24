@@ -74,8 +74,8 @@
 									</Toolbar>
 								</headerToolbar>
 								<columns>
-									<Column width="6.5rem" />
-									<Column width="3rem" hAlign="Center">
+									<Column width="7.5rem" />
+									<Column width="4rem" hAlign="Center">
 										<Text text="N/A" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
@@ -93,7 +93,7 @@
 									<Column width="9rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
 									</Column>
-									<Column width="9rem" hAlign="Center" >
+									<Column width="10rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
@@ -105,7 +105,7 @@
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
 									</Column>
-									<Column width="6rem" hAlign="Center">
+									<Column width="7rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
@@ -335,8 +335,8 @@
 									</Toolbar>
 								</headerToolbar>
 								<columns>
-									<Column width="6.5rem" />
-									<Column width="3rem" hAlign="Center">
+									<Column width="7.5rem" />
+									<Column width="4rem" hAlign="Center">
 										<Text text="N/A" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
@@ -354,7 +354,7 @@
 									<Column width="9rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
 									</Column>
-									<Column width="9rem" hAlign="Center">
+									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
@@ -366,7 +366,7 @@
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
 									</Column>
-									<Column width="6rem" hAlign="Center">
+									<Column width="7rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
