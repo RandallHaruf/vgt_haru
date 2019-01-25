@@ -19,7 +19,7 @@
 					<Title text="Beps - Listagem Obrigações"/>
 				</f:heading>
 				<f:navigationActions>
-					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />
+					<!--<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />-->
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>
 			</f:DynamicPageTitle>
@@ -126,12 +126,12 @@
 								
 								<ToolbarSpacer />
 								
-								<Button 
+								<!--<Button 
 									id="botaoNovaObrigacao" 
 									icon="sap-icon://add" 
 									press="onNovaObrigacao" 
 									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}"
-									type="Emphasized"/>
+									type="Emphasized"/>-->
 							</Toolbar>
 						</headerToolbar>
 		
