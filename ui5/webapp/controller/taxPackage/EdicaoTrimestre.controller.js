@@ -1285,7 +1285,10 @@ sap.ui.define(
 					// portanto vira current_year_loss apenas para o retrato do ano equivalente no loss schedule
 					if (oLossScheduleCorrente) {
 						if (oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits < 0) {
-							oLossScheduleCorrente.current_year_value = oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits;
+							//oLossScheduleCorrente.current_year_value = oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits;
+							// 30/01/2019 @pedsf - Foi pedido para alterar a forma como o valor é transferido para o Loss Schedule,
+							// caso ele seja negativo, ele é transferido como valor ABSOLUTO (ignorando sinal)!
+							oLossScheduleCorrente.current_year_value = Math.abs(oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits);
 						} else {
 							oLossScheduleCorrente.current_year_value = 0;
 						}
