@@ -1830,6 +1830,7 @@ sap.ui.define(
 								oVBoxInterno = new sap.m.VBox().addStyleClass("bordered sapUiLargeMarginBottom sapUiContentPadding");
 
 							oRadioButton = null;
+							oMultiComboBox = null;
 
 							oItemToReport = response[i];
 							obj.idItemToReport = oItemToReport.id_item_to_report;
@@ -1875,6 +1876,7 @@ sap.ui.define(
 										})
 									});
 								obj.idMultiComboBox = oMultiComboBox.getId();
+								oMultiComboBox.setVisible(!oItemToReport.flag_sim_nao);
 								oVBoxInterno.addItem(oMultiComboBox);
 							}
 
@@ -1898,11 +1900,14 @@ sap.ui.define(
 							oVBoxInterno.addItem(oTextArea);
 
 							if (oRadioButton) {
-								(function (textArea) {
+								(function (textArea, multiComboBox) {
 									oRadioButton.attachSelect(function (oEvent) {
 										textArea.setVisible(!oEvent.getParameter("selected")).setValue("");
+										if (multiComboBox) {
+											multiComboBox.setVisible(!oEvent.getParameter("selected")).setSelectedKeys(null);
+										}
 									});
-								})(oTextArea);
+								})(oTextArea, oMultiComboBox);
 							}
 
 							oVBox.addItem(oVBoxInterno);
@@ -1952,6 +1957,7 @@ sap.ui.define(
 								oComponenteItemToReport.id_resposta_item_to_report = oRespostaItemToReport.id_resposta_item_to_report;
 
 								if (sIdMultiComboBox) {
+									sap.ui.getCore().byId(sIdMultiComboBox).setVisible(sIdRadioButtonSim ? !!oRespostaItemToReport.ind_se_aplica : true);
 									that._carregarRelacionamentoRespostaItemToReportAnoFiscal(oRespostaItemToReport, sIdMultiComboBox);
 								}
 							}

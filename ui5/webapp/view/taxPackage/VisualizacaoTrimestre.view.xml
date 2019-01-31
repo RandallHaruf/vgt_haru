@@ -8,11 +8,11 @@
 						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
 						<Link text="{i18n>viewTAXMenu2}" press="navToPage2" />
 						<Link text="{i18n>viewTAXMenu3}" press="navToPage3" />
-						<Link text="{i18n>viewTAXMenu4}" enabled="false" />
+						<Link text="{i18n>viewTAXMenu5}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
-					<Title text="Tax Package - {i18n>viewTAXMenu4}"/>
+					<Title text="Tax Package - {i18n>viewTAXMenu5}"/>
 				</f2:heading>
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/empresa}" />
