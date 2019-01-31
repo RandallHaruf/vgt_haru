@@ -8,7 +8,7 @@ sap.ui.define(
 	],
 	function (BaseController, NodeAPI, Utils, Validador, NumberFormat) {
 		"use strict";
-
+		
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
 			onInit: function () {
 				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
@@ -442,7 +442,7 @@ sap.ui.define(
 				this.getModel().refresh();
 			},
 
-			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, sTitulo, sValueUtilized) {
+			_dialogValueUtilized: function (oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, sTitulo, sValueUtilized, sLabelValueExpired) {
 				/*var validarClosingBalanceAposUtilizacao = function (oEv) {
 					var obj = oEv.getSource().getBindingContext().getObject(),
 						currentFYValuesUtilized = that.getModel().getProperty(sProperty).filter(o => Number(o.schedule_fy) === Number(obj.schedule_fy)),
@@ -732,7 +732,7 @@ sap.ui.define(
 				var oBtnDetalhes = new sap.m.Button({
 					text: this.getResourceBundle().getText("viewGeralDetalhes")
 				}).attachPress(function (event) {
-					that._dialogDetalhesValueUtilized(event, sProperty, sFkTipo);
+					that._dialogDetalhesValueUtilized(event, sProperty, sFkTipo, sLabelValueExpired);
 				});
 				
 				oHBox.addItem(oInputValueUtilized);
@@ -780,10 +780,16 @@ sap.ui.define(
 				dialog.open();
 			},
 
-			_dialogDetalhesValueUtilized: function (oEvent, sProperty, sFkTipo) {
+			_dialogDetalhesValueUtilized: function (oEvent, sProperty, sFkTipo, sLabelValueExpired) {
 				var that = this,
 					obj = oEvent.getSource().getBindingContext().getObject(),
-					sPathClosingBalance = oEvent.getSource().getBindingContext().getPath() + "/closing_balance";
+					sPathClosingBalance = oEvent.getSource().getBindingContext().getPath() + "/closing_balance",
+					sLabelClosingBalance = this.getResourceBundle().getText("viewTaxPackageClosingBalance");
+					
+				if (this._isScheduleExpirado(obj)) {
+					sPathClosingBalance = oEvent.getSource().getBindingContext().getPath() + "/current_year_value_expired";
+					sLabelClosingBalance = sLabelValueExpired;
+				}
 				
 				var oVBox = new sap.m.VBox();
 				
@@ -792,7 +798,7 @@ sap.ui.define(
 				//var oHBox = new sap.m.HBox();
 				
 				oToolbar.addContent(new sap.m.Label({ 
-					text: this.getResourceBundle().getText("viewTaxPackageClosingBalance") + ": "
+					text: sLabelClosingBalance + ": "
 				}).addStyleClass("sapUiSmallMarginBegin"));
 				
 				oToolbar.addContent(new sap.m.Text({
@@ -914,7 +920,7 @@ sap.ui.define(
 								title: this.getResourceBundle().getText("viewGeralAviso"),
 								type: "Message",
 								content: new sap.m.Text({
-									text: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoUtilizacao")
+									text: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoUtilizacao", [sLabelClosingBalance])
 								}),
 								endButton: new sap.m.Button({
 									text: "OK",
@@ -999,7 +1005,8 @@ sap.ui.define(
 					sFkTipo = 2;
 
 				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
-					"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditU"));
+					"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditU"),
+					this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditE"));
 			},
 
 			onEditarTotalLossesUtilized: function (oEvent) {
@@ -1011,7 +1018,8 @@ sap.ui.define(
 					sFkTipo = 1;
 
 				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
-					"viewGeralTotalLossesUtilized"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossUtilized"));
+					"viewGeralTotalLossesUtilized"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossUtilized"),
+					this.getResourceBundle().getText("viewTaxPackageCurrentYearLossExpired"));
 			},
 
 			_limparMascara: function (sValor) {
@@ -1269,6 +1277,8 @@ sap.ui.define(
 
 			// @NOVO_SCHEDULE - descomentar
 			_onAplicarFormulasSchedule: function () {
+				var that = this;
+				
 				var oTaxReconciliation = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
 					return obj.ind_ativo === true;
 				});
@@ -1317,10 +1327,19 @@ sap.ui.define(
 							var valor1 = oLossSchedule.opening_balance ? Number(oLossSchedule.opening_balance) : 0,
 								valor2 = oLossSchedule.current_year_value ? Number(oLossSchedule.current_year_value) : 0,
 								valor3 = oLossSchedule.current_year_value_utilized ? Number(oLossSchedule.current_year_value_utilized) : 0,
-								valor4 = oLossSchedule.adjustments ? Number(oLossSchedule.adjustments) : 0,
+								valor4 = oLossSchedule.adjustments ? Number(oLossSchedule.adjustments) : 0;/*,
 								valor5 = oLossSchedule.current_year_value_expired ? Number(oLossSchedule.current_year_value_expired) : 0;
+								
+							oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;*/
 
-							oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;
+							// Se for um retrato expirando, o value expired passsa a agir como closing_balance
+							if (that._isScheduleExpirado(oLossSchedule)) {
+								oLossSchedule.current_year_value_expired = valor1 + valor2 + valor3 + valor4;
+								oLossSchedule.closing_balance = 0;
+							}
+							else {
+								oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 ;
+							}
 
 							oLossSchedule.justificativaEnabled =
 								Validador.isNumber(oLossSchedule.adjustments) && Number(oLossSchedule.adjustments) !== 0 ? true : false;
@@ -1377,10 +1396,19 @@ sap.ui.define(
 							var valor6 = oCreditSchedule.opening_balance ? Number(oCreditSchedule.opening_balance) : 0,
 								valor7 = oCreditSchedule.current_year_value ? Number(oCreditSchedule.current_year_value) : 0,
 								valor8 = oCreditSchedule.current_year_value_utilized ? Number(oCreditSchedule.current_year_value_utilized) : 0,
-								valor9 = oCreditSchedule.adjustments ? Number(oCreditSchedule.adjustments) : 0,
+								valor9 = oCreditSchedule.adjustments ? Number(oCreditSchedule.adjustments) : 0;/*,
 								valor10 = oCreditSchedule.current_year_value_expired ? Number(oCreditSchedule.current_year_value_expired) : 0;
 
-							oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;
+							oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;*/
+							
+							// Se for um retrato expirando, o value expired passsa a agir como closing_balance
+							if (that._isScheduleExpirado(oCreditSchedule)) {
+								oCreditSchedule.current_year_value_expired = valor6 + valor7 + valor8 + valor9;
+								oCreditSchedule.closing_balance = 0;
+							}
+							else {
+								oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9;
+							}
 
 							oCreditSchedule.justificativaEnabled =
 								Validador.isNumber(oCreditSchedule.adjustments) && Number(oCreditSchedule.adjustments) !== 0 ? true : false;
@@ -3248,17 +3276,6 @@ sap.ui.define(
 								response[i].year_of_expiration = response[i].fy + iPrescricao;
 							}
 						}
-						
-						// CODIGO NOVO - COMENTAR AO INICIAR REUNIAO
-						var oScheduleExpirado = response.find(function (obj) {
-							return Number(obj.year_of_expiration) === Number(oAnoCalendario.anoCalendario);
-						});
-						
-						if (oScheduleExpirado) {
-							oScheduleExpirado.current_year_value_expired = oScheduleExpirado.opening_balance;
-							oScheduleExpirado.opening_balance = 0;
-						}
-						// ATE AQUI
 
 						that.getModel().setProperty(sProperty, response);
 						that.onAplicarRegras();
@@ -3266,6 +3283,12 @@ sap.ui.define(
 						that._carregarScheduleInicial(sTipo, sProperty);
 					}
 				});
+			},
+
+			_isScheduleExpirado: function (oSchedule) {
+				var oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
+				
+				return Number(oSchedule.year_of_expiration) === Number(oAnoCalendario.anoCalendario);
 			},
 
 			_anoEdicaoIgualAnoCorrente: function () {
@@ -3345,31 +3368,15 @@ sap.ui.define(
 				var sEntidade = "ScheduleParaNovoPeriodo?parametros=" + JSON.stringify(oParams);
 
 				NodeAPI.listarRegistros(sEntidade, function (response) {
-					
-					// CODIGO NOVO - COMENTAR AO INCIIAR A REUNIAO
+					// Apenas os retratos que não expiraram são exibidos
 					if (response) {
 						var aScheduleValido = response.filter(function (obj) {
 							return Number(obj.year_of_expiration) >= Number(oAnoCalendario.anoCalendario); 
 						});
 						
-						var oScheduleExpirado = aScheduleValido.find(function (obj) {
-							return Number(obj.year_of_expiration) === Number(oAnoCalendario.anoCalendario);
-						});
-						
-						if (oScheduleExpirado) {
-							oScheduleExpirado.current_year_value_expired = oScheduleExpirado.opening_balance;
-							oScheduleExpirado.opening_balance = 0;
-						}
-						
 						that.getModel().setProperty(sProperty, aScheduleValido);
 						that.onAplicarRegras();
 					}
-					
-					// CODIGO ANTIGO - DESCOMENTAR AO INICIAR A REUNIAO
-					/*if (response) {
-						that.getModel().setProperty(sProperty, response);
-						that.onAplicarRegras();
-					}*/
 				});
 			},
 

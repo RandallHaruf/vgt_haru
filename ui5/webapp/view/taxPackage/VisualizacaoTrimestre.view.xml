@@ -758,7 +758,7 @@
 											<Input type="Text" value="{justificativa}" enabled="false" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
+									<t:Column width="13rem" hAlign="End">
 										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}" />
 										<t:template>
 											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
@@ -917,7 +917,7 @@
 											<Input type="Text" value="{justificativa}" enabled="false" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa"  />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
+									<t:Column width="13rem" hAlign="End">
 										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" />
 										<t:template>
 											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
