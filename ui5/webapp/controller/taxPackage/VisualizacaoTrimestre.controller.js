@@ -3260,6 +3260,17 @@ sap.ui.define(
 								response[i].year_of_expiration = response[i].fy + iPrescricao;
 							}
 						}
+						
+						// CODIGO NOVO - COMENTAR AO INICIAR REUNIAO
+						var oScheduleExpirado = response.find(function (obj) {
+							return Number(obj.year_of_expiration) === Number(oAnoCalendario.anoCalendario);
+						});
+						
+						if (oScheduleExpirado) {
+							oScheduleExpirado.current_year_value_expired = oScheduleExpirado.opening_balance;
+							oScheduleExpirado.opening_balance = 0;
+						}
+						// ATE AQUI
 
 						that.getModel().setProperty(sProperty, response);
 						that.onAplicarRegras();
@@ -3346,10 +3357,30 @@ sap.ui.define(
 				var sEntidade = "ScheduleParaNovoPeriodo?parametros=" + JSON.stringify(oParams);
 
 				NodeAPI.listarRegistros(sEntidade, function (response) {
+					// CODIGO NOVO - COMENTAR AO INCIIAR A REUNIAO
 					if (response) {
-						that.getModel().setProperty(sProperty, response);
+						var aScheduleValido = response.filter(function (obj) {
+							return Number(obj.year_of_expiration) >= Number(oAnoCalendario.anoCalendario); 
+						});
+						
+						var oScheduleExpirado = aScheduleValido.find(function (obj) {
+							return Number(obj.year_of_expiration) === Number(oAnoCalendario.anoCalendario);
+						});
+						
+						if (oScheduleExpirado) {
+							oScheduleExpirado.current_year_value_expired = oScheduleExpirado.opening_balance;
+							oScheduleExpirado.opening_balance = 0;
+						}
+						
+						that.getModel().setProperty(sProperty, aScheduleValido);
 						that.onAplicarRegras();
 					}
+					
+					// CODIGO ANTIGO - DESCOMENTAR AO INICIAR A REUNIAO
+					/*if (response) {
+						that.getModel().setProperty(sProperty, response);
+						that.onAplicarRegras();
+					}*/
 				});
 			},
 
