@@ -124,7 +124,7 @@ sap.ui.define(
 				var msgCollected = [];
 				
 				for (var i = 0, length = aImpostoNaoDeclarado.length; i < length; i++) {
-					if (aImpostoNaoDeclarado[i]["fk_category.id_tax_category"] === 1) {
+					if (aImpostoNaoDeclarado[i]["fk_dominio_tax_classification.id_dominio_tax_classification"] === 1) {
 						msgBorne.push(aImpostoNaoDeclarado[i].tax);
 					}
 					else {

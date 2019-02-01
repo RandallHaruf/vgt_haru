@@ -1154,7 +1154,7 @@ sap.ui.define(
 					});
 					
 					if (!oPagamentoComTax.length) {
-						if (aTax[i].id_tax_category === 1) {
+						if (aTax[i].id_dominio_tax_classification === 1) {
 							msgBorne.push(aTax[i].tax);
 						}
 						else {
