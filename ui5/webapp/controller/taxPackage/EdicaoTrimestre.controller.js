@@ -1815,10 +1815,11 @@ sap.ui.define(
 				var that = this;
 				this._salvar(oEvent, function (response) {
 					if (response.success) {
-						sap.m.MessageToast.show("Salvo com sucesso");
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreSalvoSucesso"));
+						
 						that._atualizarDados();
 					} else {
-						sap.m.MessageToast.show("Erro ao salvar");
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewEdiçãoTrimestreTaxJSErro"));
 					}
 				});
 			},

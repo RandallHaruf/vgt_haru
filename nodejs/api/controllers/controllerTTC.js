@@ -256,6 +256,8 @@ function pegarImpostosNaoDeclarados(iIdEmpresa, iIdPeriodo) {
 	var sQuery = 
 		'select * '
 		+ 'from "VGT.TAX" tax '
+		+ 'inner join "VGT.TAX_CATEGORY" taxCategory '
+		+ 'on tax."fk_category.id_tax_category" = taxCategory."id_tax_category" '
 		+ 'where '
 		+ 'tax."id_tax" not in ( '
 		+ 'select nameOfTax."fk_tax.id_tax" '
