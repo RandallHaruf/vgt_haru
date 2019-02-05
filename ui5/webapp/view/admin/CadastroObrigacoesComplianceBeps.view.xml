@@ -119,7 +119,7 @@
 									</f:FormElement>									
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>ViewGeralDataInício} {/displayFormatFull}" labelFor="dataInicio" />
+											<Label text="{i18n>ViewGeralDataInício} yyyy" labelFor="dataInicio" />
 										</f:label>
 										<f:fields>
 											<DatePicker 
@@ -134,7 +134,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>ViewGeralDataFim} {/displayFormatFull}" labelFor="dataFim" />
+											<Label text="{i18n>ViewGeralDataFim} yyyy" labelFor="dataFim" />
 										</f:label>
 										<f:fields>
 											<DatePicker 
