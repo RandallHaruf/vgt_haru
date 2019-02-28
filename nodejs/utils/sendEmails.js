@@ -15,8 +15,7 @@ var nodemailer = require("nodemailer");
 module.exports = {
 	sendEmail: (oProperties, onSuccess, onError) => {
 		
-		/*var sSender = "tenti@tenti.com.br";
-		var sSenderPassword = "T#nt1@2017";*/
+		
 		var sSender = "vgt@tenti.com.br";
 		var sSenderPassword = "Tenti@2018!";
 		

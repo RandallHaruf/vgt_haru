@@ -54,23 +54,23 @@ const send_Not_Email = (numOrdem, anoCal, qtdDia) => {
 					switch(qtdDia){
 						case 15: 
 							vSubj = 'TTC - Pending information – '+numOrdem+' Quarter of '+ anoCal;
-							vHtml = '<!DOCTYPE html><html><body><p>Dear '+lbc_nome+',<br><br>Please access the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>'+nome+'<br><br>Your deadline is due in '+qtdDia+' days. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
+							vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear '+lbc_nome+',<br><br>Please access the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>'+nome+'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in '+qtdDia+' days.</span></strong> Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 							break;
 						case 5: 
 							vSubj = 'TTC - Pending information – '+numOrdem+' Quarter of '+ anoCal;
-							vHtml = '<!DOCTYPE html><html><body><p>Dear '+lbc_nome+',<br><br>Please access the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>'+nome+'<br><br>Your deadline is due in '+qtdDia+' days. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
+							vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear '+lbc_nome+',<br><br>Please access the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>'+nome+'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in '+qtdDia+' days.</span></strong> Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 							break;
 						case 3: 
 							vSubj = 'TTC - URGENT Pending information – '+numOrdem+' Quarter of '+ anoCal;
-							vHtml = '<!DOCTYPE html><html><body><p>Dear '+lbc_nome+'/Country Manager<br><br>This is a reminder regarding the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>'+nome+'<br><br>Your deadline is due in '+qtdDia+' days.<br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
+							vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear '+lbc_nome+'/Country Manager<br><br>This is a reminder regarding the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>'+nome+'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in '+qtdDia+' days.</span></strong><br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 							break;
 						case 2: 
 							vSubj = 'TTC - URGENT Pending information – '+numOrdem+' Quarter of '+ anoCal;
-							vHtml = '<!DOCTYPE html><html><body><p>Dear '+lbc_nome+'/Country Manager<br><br>This is a reminder regarding the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>'+nome+'<br><br>Your deadline is due in '+qtdDia+' days.<br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
+							vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear '+lbc_nome+'/Country Manager<br><br>This is a reminder regarding the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>'+nome+'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in '+qtdDia+' days.</span></strong><br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 							break;
 						case 1: 
 							vSubj = 'TTC - URGENT Pending information – '+numOrdem+' Quarter of '+ anoCal;
-							vHtml = '<!DOCTYPE html><html><body><p>Dear '+lbc_nome+'/Country Manager<br><br>Today is the LAST day to complete the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>'+nome+'<br><br>Please enter the system WITHOUT FURTHER DELAY and complete the information of the previous quarter.<br>Notice that after this date, the previous quarter will be locked. Any change will have to be justified and will require authorization. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
+							vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear '+lbc_nome+'/Country Manager<br><br><strong><span style="text-decoration: underline;">Today is the LAST day</span></strong> to complete the TTC module at <a href="' + caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>'+nome+'<br><br>Please enter the system WITHOUT FURTHER DELAY and complete the information of the previous quarter.<br>Notice that after this date, the previous quarter will be locked. Any change will have to be justified and will require authorization. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 							break;
 					}
 							disparaEmail.sendEmail({
@@ -80,7 +80,7 @@ const send_Not_Email = (numOrdem, anoCal, qtdDia) => {
 									isHtml: true,
 									content: vHtml
 								}
-							}, function(vSuc){
+							}, function(vSuc){ 
 								console.log(vSuc);
 							}, function(vErr){
 								console.log(vErr);

@@ -200,7 +200,8 @@ sap.ui.define(
 								that.getModel().setProperty("/CancelaBotaoCancelar", true);
 							});
 					} else {
-						sap.m.MessageToast.show("Selecione um arquivo");
+						//sap.m.MessageToast.show("Selecione um arquivo");
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
 					}
 
 				} else {
@@ -275,7 +276,9 @@ sap.ui.define(
 											dialog.close();
 										});
 								} else {
-									sap.m.MessageToast.show("Selecione um arquivo");
+									//sap.m.MessageToast.show("Selecione um arquivo");
+									sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
+									
 								}
 
 							}
