@@ -131,7 +131,7 @@
 						<Text text="{i18n>viewArquivosAdminDownload}" />
 					</Column>
 					<Column>
-						<Text text="{i18n>viewArquivosAdminDownload}" />
+						<!--Text text="{i18n>viewArquivosAdminDownload}" /-->
 					</Column>
 					<!--<Column width="100px"></Column>-->
 				</columns>
