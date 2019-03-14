@@ -4,6 +4,11 @@
 	margin-top: 7rem;
 }
 
+.meu-iframe,
+.meu-iframe > div {
+	height: 100%!important;
+}
+
 .myApp .loginView .myLoginForm {
 	width: 280px!important;
 	border: 1px;
@@ -16,11 +21,37 @@
 	top: 30%;
 }
 
+.myApp .custom-generic-tile .sapMTextLineClamp  {
+	height: 30px;
+    width: 134px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -67px;
+    margin-top: -15px;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.myApp .custom-title-vgt {
+	font-size: 1.7rem;
+}
+
 .bulletItem {
     display: list-item !important;
     list-style-type: disc !important;
     list-style-position: outside !important;
     margin-left: 20px !important;
+}
+
+.myApp .sapMInputBaseReadonly,
+.myApp .sapMInputBaseReadonly .sapMInputBaseContentWrapper,
+.myApp .sapMInputBaseReadonlyWrapper,
+.myApp .sapMInputBaseDisabled,
+.myApp .sapMInputBaseDisabledWrapper,
+.myApp .sapMSltDisabled {
+	opacity: 1;
+	background: rgba(175,175,175,0.5);
 }
 
 /* Esconde a 'setinha' de direção em tabelas de navegação */
