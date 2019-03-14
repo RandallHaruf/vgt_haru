@@ -2931,6 +2931,7 @@ sap.ui.define(
 
 				aValidacao.push(this._validarJustificativa());
 				aValidacao.push(this._validarIncomeTaxDetails());
+				aValidacao.push(this._validarMoeda());
 
 				for (var i = 0, length = aValidacao.length; i < length; i++) {
 					var oValidacao = aValidacao[i];
@@ -2951,7 +2952,13 @@ sap.ui.define(
 
 				return bValido;
 			},
-
+			_validarMoeda: function () {
+				var bMoedaPreechida = this.getModel().getProperty("/Moeda");
+				return {
+					valido: !!bMoedaPreechida,
+					mensagem: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoMoeda") // alterar texto
+				};
+			},
 			_validarJustificativa: function () {
 				var aLossSchedule = this.getModel().getProperty("/LossSchedule"),
 					aCreditSchedule = this.getModel().getProperty("/CreditSchedule"),
