@@ -15,9 +15,12 @@ var nodemailer = require("nodemailer");
 module.exports = {
 	sendEmail: (oProperties, onSuccess, onError) => {
 		
+		// COnta inativada em 11/03/2019 Motivo: Blacklist
+		//var sSender = "vgt@tenti.com.br";
+		//var sSenderPassword = "Tenti@2018!";
 		
-		var sSender = "vgt@tenti.com.br";
-		var sSenderPassword = "Tenti@2018!";
+		var sSender = "valeglobaltax@tenti.com.br";
+		var sSenderPassword = "60$Z,TBJ~3Dlz4.Z";
 		
 		var oTransporter = nodemailer.createTransport({
 			host: "smtp.office365.com", // Office 365 server
