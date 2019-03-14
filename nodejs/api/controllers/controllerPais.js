@@ -5,7 +5,23 @@ var pais = require("../models/modelPais");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		pais.listar([], function (err, result) {
+		var aParam = [];
+		
+		if (req.query.aliquota) {
+			aParam.push({
+				coluna: pais.colunas.fkAliquota,
+				valor: req.query.aliquota
+			});
+		}
+		
+		if (req.query.aliquotaIsNull) {
+			aParam.push({
+				coluna: pais.colunas.fkAliquota,
+				isnull: true
+			});
+		}
+		
+		pais.listar(aParam, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			}
@@ -262,6 +278,10 @@ module.exports = {
 		if (req.params.idRegistro) {
 			oWhere.push(' pais."id_pais" = ? ');
 			aParams.push(req.params.idRegistro);
+		}
+		
+		if (req.query.aliquotaIsNull) {
+			oWhere.push(' pais."fk_aliquota.id_aliquota" is null ');
 		}
 
 		if (oWhere.length > 0) {

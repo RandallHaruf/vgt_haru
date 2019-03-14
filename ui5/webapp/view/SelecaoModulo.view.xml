@@ -140,79 +140,93 @@
 						</ColumnListItem>
 					</items>
 				</Table>-->
-				<FlexBox
-					alignItems="Center"
-					justifyContent="End"
-					class="sapUiSmallMarginTop">
-					<items>
-						<VBox
-							class="sapUiLargeMarginEnd">
-							<Label 
-								text="{i18n>viewSelecaoModuloComboboxIdioma}"/>
-							<Select
-								id="selectIdioma"
-								change="onTrocarIdioma">
+				<l:BlockLayout>
+					<l:BlockLayoutRow>
+						<l:BlockLayoutCell>
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell>
+							<FlexBox
+								justifyContent="Center">
+								<Title text="Vale Global Tax" class="custom-title-vgt" />
+							</FlexBox>
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell class="sapUiSmallPaddingEnd">
+							<FlexBox
+								alignItems="Center"
+								justifyContent="End">
 								<items>
-									<core:Item text="{i18n>viewSelecaoModuloComboboxLinguaOpcaoIngles}" key="en-US"/>
-									<core:Item text="{i18n>viewSelecaoModuloComboboxLinguaOpcaoPortugues}" key="pt-BR"/>
+									<VBox
+										class="sapUiLargeMarginEnd">
+										<Label 
+											text="{i18n>viewSelecaoModuloComboboxIdioma}"/>
+										<Select
+											id="selectIdioma"
+											change="onTrocarIdioma">
+											<items>
+												<core:Item text="{i18n>viewSelecaoModuloComboboxLinguaOpcaoIngles}" key="en-US"/>
+												<core:Item text="{i18n>viewSelecaoModuloComboboxLinguaOpcaoPortugues}" key="pt-BR"/>
+											</items>
+										</Select>
+									</VBox>
 								</items>
-							</Select>
-						</VBox>
-					</items>
-				</FlexBox>
+							</FlexBox>
+						</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+				</l:BlockLayout>
+				
 				<Panel
 					backgroundDesign="Transparent"	 
 					expandable="False"
 					class="painelModulos">
 					<GenericTile 
 						id="caixaTTC"
-						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout custom-generic-tile" 
 						header="{i18n>viewSelecaoModuloBotaoTTC}"
 						press="navToTTC"
 						visible="{/ShowTTC}">
-						<TileContent>
+						<!--<TileContent>
 							<ImageContent src="sap-icon://home-share" />
-						</TileContent>
+						</TileContent>-->
 					</GenericTile>
 					<GenericTile 
 						id="caixaTaxPackage"
-						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout custom-generic-tile" 
 						header="{i18n>viewSelecaoModuloBotaoTaxPackage}"
 						press="navToTaxPackage"
 						visible="{/ShowTaxPackage}">
-						<TileContent>
+						<!--<TileContent>
 							<ImageContent src="sap-icon://home-share" />
-						</TileContent>
+						</TileContent>-->
 					</GenericTile>
 					<GenericTile 
 						id="caixaCompliance"
-						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout custom-generic-tile" 
 						header="{i18n>viewSelecaoModuloBotaoCompliance}"
 						press="navToCompliance"
 						visible="{/ShowCompliance}">
-						<TileContent>
+						<!--<TileContent>
 							<ImageContent src="sap-icon://home-share" />
-						</TileContent>
+						</TileContent>-->
 					</GenericTile>
 					<GenericTile 
 						id="caixaBeps"
-						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout custom-generic-tile" 
 						header="{i18n>viewSelecaoModuloBotaoBeps}"
 						press="navToBeps"
 						visible="{/ShowBeps}">
-						<TileContent>
+						<!--<TileContent>
 							<ImageContent src="sap-icon://home-share" />
-						</TileContent>
+						</TileContent>-->
 					</GenericTile>
 					<GenericTile 
 						id="caixaAdmin"
-						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout custom-generic-tile" 
 						header="Admin"
 						press="navToAdmin"
 						visible="{/ShowAdmin}">
-						<TileContent>
+						<!--<TileContent>
 							<ImageContent src="sap-icon://home-share" />
-						</TileContent>
+						</TileContent>-->
 					</GenericTile>
 				</Panel>
 			</VBox>

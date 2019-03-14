@@ -30,8 +30,8 @@ sap.ui.define(
 					aDropdownObrigatorio: [
 						this.byId("comboboxtPais"),
 						this.byId("selectRegiao"),
-						this.byId("selectStatus"),
-						this.byId("selectAliquotaVigente")
+						this.byId("selectStatus")/*,
+						this.byId("selectAliquotaVigente")*/
 					]
 				});
 
@@ -45,6 +45,11 @@ sap.ui.define(
 			},
 
 			_resolverHistoricoAliquota: function (callback) {
+				callback();
+				/*
+				// @pedsf - Codigo comentado em 13/03/19.
+				// Histórico de alíquota já não é mais utilizado e estava causando erro ao atualizar pais sem aliquota.
+				
 				var that = this;
 
 				var oHistoricoAtual = this.getModel().getProperty("/HistoricoAtual");
@@ -89,7 +94,7 @@ sap.ui.define(
 				} else {
 					// Para todos os outros casos a alíquota não foi alterada
 					callback();
-				}
+				}*/
 			},
 
 			_carregarObjetos: function () {

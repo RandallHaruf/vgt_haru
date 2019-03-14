@@ -162,7 +162,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewGeralAliquotaVigente}" labelFor="selectAliquotaVigente" class="sapMLabelRequired" />
+											<Label text="{i18n>viewGeralAliquotaVigente}" labelFor="selectAliquotaVigente" />
 										</f:label>
 										<f:fields>
 											<Select id="selectAliquotaVigente" items="{/Aliquotas}" selectedKey="{/objeto/fkAliquota}">

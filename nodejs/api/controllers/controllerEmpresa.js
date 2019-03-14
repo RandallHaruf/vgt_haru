@@ -7,7 +7,23 @@ var auth = require("../auth")();
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		var aParam = [];
+		
+		if (req.query.aliquota) {
+			aParam.push({
+				coluna: model.colunas.fkAliquota,
+				valor: req.query.aliquota
+			});
+		}
+		
+		if (req.query.aliquotaIsNull) {
+			aParam.push({
+				coluna: model.colunas.fkAliquota,
+				isnull: true
+			});
+		}
+		
+		model.listar(aParam, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {

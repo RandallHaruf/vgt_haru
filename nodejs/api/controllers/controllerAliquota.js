@@ -2,6 +2,9 @@
 
 var aliquota = require("../models/modelAliquota");
 const modelValorAliquota = require('../models/modelValorAliquota');
+const modelPais = require('../models/modelPais');
+const modelEmpresa = require('../models/modelEmpresa');
+const db = require('../db');
 
 function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
 	const selecionarValorAliquota = function () {
@@ -136,6 +139,105 @@ function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
 		});
 }
 
+function adicionarRegistrosRelacionados(iIdImposto, aRegistroRelacionado, iTipoParaDesvincular) {
+	const vincular = function (oRegistroRelacionado) {
+		let modelRegistro = Number(oRegistroRelacionado.idTipo) === 1 ? modelPais : modelEmpresa;
+		
+		return new Promise(function (resolve, reject) {
+			modelRegistro.atualizar({
+				coluna: modelRegistro.colunas.id,
+				valor: oRegistroRelacionado[Number(oRegistroRelacionado.idTipo) === 1 ? "id" : "id_empresa"]
+			}, [{
+				coluna: modelRegistro.colunas.fkAliquota,
+				valor: iIdImposto
+			}], function (err, result) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(result);
+				}
+			});
+		});
+	};
+	
+	const desvincular = function (oRegistroRelacionado) {
+		let modelRegistro = Number(oRegistroRelacionado.idTipo) === 1 ? modelPais : modelEmpresa;
+		
+		return new Promise(function (resolve, reject) {
+			if (Number(oRegistroRelacionado[Number(oRegistroRelacionado.idTipo) === 1 ? "fkAliquota" : "fk_aliquota.id_aliquota"]) !== Number(iIdImposto)) {
+				resolve();
+			}
+			else {
+				modelRegistro.atualizar({
+					coluna: modelRegistro.colunas.id,
+					valor:  oRegistroRelacionado[Number(oRegistroRelacionado.idTipo) === 1 ? "id" : "id_empresa"]
+				}, [{
+					coluna: modelRegistro.colunas.fkAliquota,
+					valor: null
+				}], function (err, result) {
+					if (err) {
+						reject(err);
+					}
+					else {
+						resolve(result);
+					}
+				});
+			}
+		});
+	};
+	
+	const desvincularTipo = function () {
+		return new Promise(function (resolve, reject) {
+			let sQuery = 
+				'update ' + (Number(iTipoParaDesvincular) === 1 ? '"VGT.PAIS"' : '"VGT.EMPRESA"') + ' set '
+				+ '"fk_aliquota.id_aliquota" = null '
+				+ 'where '
+				+ '"fk_aliquota.id_aliquota" = ?',
+				aParam = [iIdImposto];
+				
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParam
+			}, function (err, result) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(result);
+				}
+			});
+		});
+	};
+	
+	return new Promise(function (resolve, reject) {
+		var aPromise = [];
+	
+		for (var i = 0, length = aRegistroRelacionado.length; i < length; i++) {
+			var oRegistroRelacionado = aRegistroRelacionado[i];
+		
+			if (oRegistroRelacionado.selecionada == "true") {
+				aPromise.push(vincular(oRegistroRelacionado));
+			}
+			else {
+				aPromise.push(desvincular(oRegistroRelacionado));
+			}
+		}
+		
+		if (iTipoParaDesvincular) {
+			aPromise.push(desvincularTipo());
+		}
+		
+		Promise.all(aPromise)
+			.then(function () {
+				resolve();
+			})	
+			.catch(function (err) {
+				reject(err);
+			});
+	});
+}
+
 module.exports = {
 
 	listarRegistros: function (req, res) {
@@ -189,20 +291,33 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			}
 			else {
-				if (req.body.aliquotas) {
-					var idImposto = result[0].generated_id;
-					
-					adicionarAliquotas(idImposto, JSON.parse(req.body.aliquotas), function (err2, result2) {
-						if (err) {
-							res.send(JSON.stringify(err2));
-						}
-						else {
-							res.send(JSON.stringify(result2));
-						}
-					});
+				const finalizarAtualizacao = function () {
+					if (req.body.aliquotas) {
+						adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
+							if (err) {
+								res.send(JSON.stringify(err2));
+							}
+							else {
+								res.send(JSON.stringify(result2));
+							}
+						});
+					}
+					else {
+						res.send(JSON.stringify(result));
+					}
+				};
+				
+				if (req.body.registrosRelacionados) {
+					adicionarRegistrosRelacionados(idAliquota, req.body.registrosRelacionados) 
+						.then(function (res) {
+							finalizarAtualizacao();
+						})	
+						.catch(function (err) {
+							res.send(JSON.stringify(err));
+						});
 				}
 				else {
-					res.send(JSON.stringify(result));
+					finalizarAtualizacao();
 				}
 			}
 		});
@@ -260,18 +375,33 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			}
 			else {
-				if (req.body.aliquotas) {
-					adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
-						if (err) {
-							res.send(JSON.stringify(err2));
-						}
-						else {
-							res.send(JSON.stringify(result2));
-						}
-					});
+				const finalizarAtualizacao = function () {
+					if (req.body.aliquotas) {
+						adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
+							if (err) {
+								res.send(JSON.stringify(err2));
+							}
+							else {
+								res.send(JSON.stringify(result2));
+							}
+						});
+					}
+					else {
+						res.send(JSON.stringify(result));
+					}
+				};
+				
+				if (req.body.registrosRelacionados) {
+					adicionarRegistrosRelacionados(idAliquota, req.body.registrosRelacionados, req.body.tipoParaDesvincular) 
+						.then(function (res) {
+							finalizarAtualizacao();
+						})	
+						.catch(function (err) {
+							res.send(JSON.stringify(err));
+						});
 				}
 				else {
-					res.send(JSON.stringify(result));
+					finalizarAtualizacao();
 				}
 			}
 		});

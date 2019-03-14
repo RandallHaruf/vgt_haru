@@ -168,6 +168,7 @@
 										sort="sortAnoFiscal">
 										<table:extension>
 											<Toolbar>
+												<Button type="Emphasized" text="Adicionar Limite" press="onAdicionarLimite" />
 												<ToolbarSpacer/>
 												<Button icon="sap-icon://add" type="Transparent" press="onAdicionarAliquota" />
 												<!--<SearchField 
@@ -201,11 +202,97 @@
 												<table:template>
 													<Input 
 														value="{path: 'valor', 
-																type: 'sap.ui.model.type.Float', 
-																formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  
-																change="onTrocarValorAliquota" />
+															type: 'sap.ui.model.type.Float', 
+															formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  
+															change="onTrocarValorAliquota" />
 												</table:template>
 											</table:Column>										
+										</table:columns>
+									</table:Table>
+								</f:FormElement>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form 
+						editable="true"
+						visible="{= Number(${/objeto/idTipo}) === 1 ? true : false}">
+						<f:title>
+							<core:Title text="{i18n>viewGeralPais}"  />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:FormElement>
+									<!--<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">-->
+									<table:Table id="tabelaPaisAliquotas" rows="{/Pais}" selectionMode="None">
+										<table:extension>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<SearchField 
+													width="15rem" 
+													search="onTextSearchPais"
+													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
+													value="{/filterValuePais}" />
+											</Toolbar>
+										</table:extension>
+										<table:columns>
+											<table:Column width="45px">
+												<table:template>
+													<CheckBox selected="{selecionada}" enabled="{= (Number(${/idObjeto}) === Number(${fkAliquota})) || !${fkAliquota}}" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewGeralNome}" />
+												<table:template>
+													<Text text="{nomePais}" />
+												</table:template>
+											</table:Column>										
+										</table:columns>
+									</table:Table>
+								</f:FormElement>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<f:Form 
+						editable="true"
+						visible="{= Number(${/objeto/idTipo}) === 2 ? true : false}">
+						<f:title>
+							<core:Title text="{i18n>viewRelatorioEmpresa}" />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:FormElement>
+									<!--<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">-->
+									<table:Table id="tabelaEmpresaAliquotas" rows="{/Empresa}" selectionMode="None">
+										<table:extension>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<SearchField 
+													width="15rem" 
+													search="onTextSearchEmpresa"
+													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
+													value="{/filterValueEmpresa}" />
+											</Toolbar>
+										</table:extension>
+										<table:columns>
+											<table:Column width="45px">
+												<table:template>
+													<CheckBox selected="{selecionada}" enabled="{= (Number(${/idObjeto}) === Number(${fk_aliquota.id_aliquota})) || !${fk_aliquota.id_aliquota}}" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewGeralNome}" />
+												<table:template>
+													<Text text="{nome}" />
+												</table:template>
+											</table:Column>									
 										</table:columns>
 									</table:Table>
 								</f:FormElement>

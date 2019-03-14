@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/control/NumericIcon",
-		"ui5ns/ui5/model/Constants"
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, NumericIcon, Constants) {
+	function (BaseController, NumericIcon, Constants, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.SelecaoModulo", {
 
 			onStartUpload: function (oEvent) {
@@ -358,9 +359,55 @@ sap.ui.define(
 				this.byId("selectIdioma").setSelectedKey(sap.ui.getCore().getConfiguration().getLanguage());
 
 				this.getRouter().getRoute("selecaoModulo").attachPatternMatched(this._onRouteMatched, this);
+				
+				// teste 1
+				/*NodeAPI.pCriarRegistro("ScheduleValueUtilized", {
+						valor: 250
+					})
+					.then((res) => {
+						return NodeAPI.pLerRegistro("ScheduleValueUtilized", res.result.generated_id);
+					})
+					.then((res) => {
+						NodeAPI.pAtualizarRegistro("ScheduleValueUtilized", res.result.id_schedule_value_utilized, {
+								valor: 300
+							})
+							.then((innerRes) => {
+								return NodeAPI.pLerRegistro("ScheduleValueUtilized", res.result.id_schedule_value_utilized);	
+							})
+							.then((innerRes) => {
+								return NodeAPI.pExcluirRegistro("ScheduleValueUtilized", res.result.id_schedule_value_utilized);
+							})
+							.then((innerRes) => {
+								console.log(innerRes);
+							})
+							.catch((innerErr) => {
+								console.log(innerErr)	
+							});
+					})
+					.catch((err) => {
+						console.log(err);
+					});*/
+				
+				// teste 2	
+				/*NodeAPI.pLerRegistro("ScheduleValueUtilized", 78)
+					.then((res) => {
+						console.log(res);
+					})
+					.catch((err) => {
+						console.log(err);
+					})*/
 			},
 
 			_onRouteMatched: function (oEvent) {
+				/*if ( self !== top ) {
+				// you're in an iframe
+				alert('Dentro de um iframe');
+				}
+				else {
+				alert('Fora de um iframe');	
+				}*/
+				
+				
 				this.setBusy(this.byId("painelSelecaoModulo"), true);
 
 				this.setModel(new sap.ui.model.json.JSONModel());

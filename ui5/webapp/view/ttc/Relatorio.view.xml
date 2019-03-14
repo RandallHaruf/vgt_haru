@@ -174,10 +174,19 @@
 							<Text text="{i18n>viewRelatorioNomeT}"/>
 						</Column>
 						<Column width="10rem">
+							<Text text="{i18n>viewRelatorioNomeDoOrgao}"/>
+						</Column>
+						<Column width="10rem">
 							<Text text="{i18n>viewRelatorioJurisdicao}"/>
 						</Column>
 						<Column width="10rem">
 							<Text text="{i18n>viewRelatorioPais}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}"/>
+						</Column>
+						<Column width="10rem">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}"/>
 						</Column>
 						<Column width="10rem">
 							<Text text="{i18n>viewRelatorioAnoFiscal}" />
@@ -190,7 +199,7 @@
 						</Column>
 						<Column width="10rem">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}"/>
-						</Column>		
+						</Column>			
 						<Column width="10rem">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}"/>
 						</Column>
@@ -227,8 +236,11 @@
 								<Text text="{tblTaxCategory.category}"/>
 								<Text text="{tblTax.tax}"/>
 								<Text text="{tblNameOfTax.name_of_tax}"/>
+								<Text text="{tblPagamento.administracao_governamental}"/>
 								<Text text="{tblDominioJurisdicao.jurisdicao}"/>
 								<Text text="{tblDominioPais.pais}"/>
+								<Text text="{tblPagamento.estado}"/>
+								<Text text="{tblPagamento.cidade}"/>
 								<Text text="{tblDominioAnoFiscal.ano_fiscal}" />
 								<Text text="{tblDominioMoeda.acronimo}" />
 								<Text text="{tblDominioTipoTransacao.tipo_transacao}" />

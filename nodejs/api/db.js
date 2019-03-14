@@ -275,7 +275,12 @@ module.exports = {
 					for (var i = 0; i < aParams.length; i++) {
 						var oParam = aParams[i];
 						
-						sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i == aParams.length-1 ? "" : " and ");
+						if (oParam.isnull) {
+							sStatement += "\"" + oParam.coluna.nome + "\" is null" + (i == aParams.length-1 ? "" : " and ");
+						}
+						else {
+							sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i == aParams.length-1 ? "" : " and ");
+						}
 						
 						if (oParam.coluna.identity && sOrderBy !== "") {
 							sOrderBy = ' order by "' +  oParam.coluna.nome + '"';

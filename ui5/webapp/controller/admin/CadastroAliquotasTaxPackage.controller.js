@@ -1,4 +1,4 @@
-sap.ui.define(
+sap.ui.define( 
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
@@ -8,6 +8,168 @@ sap.ui.define(
 	],
 	function (BaseController, Constants, Validador,NodeAPI, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroAliquotasTaxPackage", {
+			
+			onAdicionarLimite: function (oEvent) {
+				var that = this;
+				
+				var oForm = new sap.ui.layout.form.Form({
+					editable: true
+				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
+					singleContainerFullSize: false
+				}));
+
+				var oFormContainer = new sap.ui.layout.form.FormContainer();
+
+				var oLabel = new sap.m.Label({
+					text: "Ano Inicial"
+				}).addStyleClass("sapMLabelRequired");
+
+				var oSelectAnoInicial = new sap.m.Select()
+					.bindItems({
+						templateShareable: false,
+						path: "/DominioAnoFiscal",
+						template: new sap.ui.core.ListItem({
+							key: "{id_dominio_ano_fiscal}",
+							text: "{ano_fiscal}"
+						})
+					});
+
+				oFormElement = new sap.ui.layout.form.FormElement()
+					.setLabel(oLabel)
+					.addField(oSelectAnoInicial);
+					
+				oFormContainer.addFormElement(oFormElement);
+				
+				oLabel = new sap.m.Label({
+					text: "Ano Final"
+				}).addStyleClass("sapMLabelRequired");
+				
+				var oSelectAnoFinal = new sap.m.Select()
+					.bindItems({
+						templateShareable: false,
+						path: "/DominioAnoFiscal",
+						template: new sap.ui.core.ListItem({
+							key: "{id_dominio_ano_fiscal}",
+							text: "{ano_fiscal}"
+						})
+					});
+				
+				oFormElement = new sap.ui.layout.form.FormElement()
+					.setLabel(oLabel)
+					.addField(oSelectAnoFinal);
+
+				oFormContainer.addFormElement(oFormElement);
+				
+				oLabel = new sap.m.Label({
+					text: "Valor"
+				}).addStyleClass("sapMLabelRequired");
+
+				var oInput = new sap.m.Input({
+					value: "{path: '/valorJanela', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+				}).attachChange(function (oEvent2) {
+					that.onTrocarValorAliquota(oEvent2);
+				});
+				
+				oFormElement = new sap.ui.layout.form.FormElement()
+					.setLabel(oLabel)
+					.addField(oInput);
+
+				oFormContainer.addFormElement(oFormElement);
+
+				oForm.addFormContainer(oFormContainer);
+				
+				var dialog = new sap.m.Dialog({
+					showHeader: false,
+					content: oForm,
+					beginButton: new sap.m.Button({
+						text: "Inserir",
+						press: function () {
+							if (!oSelectAnoInicial.getSelectedKey()
+								|| !oSelectAnoFinal.getSelectedKey()
+								|| !oInput.getValue()) {
+								jQuery.sap.require("sap.m.MessageBox");
+								sap.m.MessageBox.show(that.getResourceBundle().getText(
+									"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+									title: that.getResourceBundle().getText("viewGeralAviso")
+								});	
+							}
+							else if (Number(oSelectAnoInicial.getSelectedItem().getText()) > Number(oSelectAnoFinal.getSelectedItem().getText())) {
+								jQuery.sap.require("sap.m.MessageBox");
+								sap.m.MessageBox.show("Ano Inicial não pode ser anterior ao Ano Final", {
+									title: that.getResourceBundle().getText("viewGeralAviso")
+								});	
+							}
+							else {
+								var anoInicial = Number(oSelectAnoInicial.getSelectedItem().getText()),
+									anoFinal = Number(oSelectAnoFinal.getSelectedItem().getText());
+									
+								// utilizar "map" para criar um array com os objetos de dominioAnoFiscal da janela selecionada
+								
+								// para cada ano selecionado:
+								// - caso ele não exista na lista de aliquotas, adicionar com o valor inserido para a janela;
+								// - case ele já exista na lista de alíquotas, atualizar o valor pelo inserido para a janela;
+								
+								// refresh do model
+									
+								for (var i = anoInicial; i <= anoFinal; i++) {
+									this.getModel().getProperty("/Aliquotas").unshift({
+										"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": null,
+										valor: oInput.getValue() // limpar a máscara
+									});	
+								}
+								
+								this.getModel().refresh();
+								/*this.getModel().getProperty("/Aliquotas").unshift({
+									"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": null,
+									valor: 0
+								});
+								this.getModel().refresh();*/
+								
+								dialog.close();
+							}
+						}
+					}),
+					endButton: new sap.m.Button({
+						text: "Cancelar",
+						press: function () {
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						this.getModel().setProperty("/valorJanela", 0);
+						dialog.destroy();
+					}
+				});
+
+				this.getView().addDependent(dialog);
+
+				dialog.open();	
+			},
+			
+			onTextSearchPais: function (oEvent) {
+				this.onTextSearch(oEvent, "nomePais", "/filterValuePais", "tabelaPaisAliquotas");
+			},
+			
+			onTextSearchEmpresa: function (oEvent) {
+				this.onTextSearch(oEvent, "nome", "/filterValueEmpresa", "tabelaEmpresaAliquotas");
+			},
+			
+			onTextSearch: function (oEvent, sColuna, sFiltro, sIdTabela) {
+				var sQuery = oEvent ? oEvent.getParameter("query") : null;
+				this._oTxtFilter = null;
+	
+				if (sQuery !== null) {
+					this._oTxtFilter = new sap.ui.model.Filter([
+						new sap.ui.model.Filter(sColuna, sap.ui.model.FilterOperator.Contains, sQuery)
+					], false);
+				}
+	
+				this.getView().getModel().setProperty(sFiltro, sQuery);
+	
+				if (oEvent && this._oTxtFilter) {
+					this.byId(sIdTabela).getBinding("rows").filter(this._oTxtFilter, "Application");
+				}
+			},
 			
 			onTrocarValorAliquota: function (oEvent) {
 				if (!Validador.isNumber(Utils.limparMascaraDecimal(oEvent.getSource().getValue()))) {
@@ -203,6 +365,21 @@ sap.ui.define(
 						res.unshift({});
 						that.getModel().setProperty("/DominioAnoFiscal", res);
 					});
+					
+				return new Promise(function (resolve, reject) {
+					Promise.all([
+							NodeAPI.pListarRegistros("Empresa"),
+							NodeAPI.pListarRegistros("DeepQuery/Pais")
+						])
+						.then(function (res) {
+							that.getModel().setProperty("/Empresa", res[0]);
+							that.getModel().setProperty("/Pais", res[1]);
+							resolve();
+						})	
+						.catch(function (err) {
+							reject(err);
+						});
+				});
 			},
 
 			_carregarObjetoSelecionado: function (iIdObjeto) {
@@ -231,6 +408,17 @@ sap.ui.define(
 						};
 
 						that.getModel().setProperty("/objeto", obj);
+						that.getModel().setProperty("/tipoInicial", obj.idTipo);
+						
+						that.getModel().setProperty("/Pais", that.getModel().getProperty("/Pais").map(function (pais) {
+							pais.selecionada = Number(pais.fkAliquota) === Number(iIdObjeto);
+							return pais;
+						}));
+						
+						that.getModel().setProperty("/Empresa", that.getModel().getProperty("/Empresa").map(function (empresa) {
+							empresa.selecionada = Number(empresa["fk_aliquota.id_aliquota"]) === Number(iIdObjeto);
+							return empresa;
+						}));
 						
 						// carga das aliquotas que vem no response[1]
 						var aValorAliquota = aResponse[1].result;
@@ -253,6 +441,9 @@ sap.ui.define(
 			_limparFormulario: function () {
 				this.getModel().setProperty("/objeto", {});
 				this.getModel().setProperty("/Aliquotas", []);
+				this.getModel().setProperty("/Pais", []);
+				this.getModel().setProperty("/Empresa", []);
+				this.getModel().setProperty("/valorJanela", 0);
 			},
 
 			_atualizarObjeto: function () {
@@ -263,6 +454,14 @@ sap.ui.define(
 				var obj = this.getModel().getProperty("/objeto");
 				var idObjeto = this.getModel().getProperty("/idObjeto");
 				var aValorAliquota = this.getModel().getProperty("/Aliquotas");
+				var aPais = this.getModel().getProperty("/Pais").map(function (pais) {
+					pais.idTipo = 1;
+					return pais;
+				});
+				var aEmpresa = this.getModel().getProperty("/Empresa").map(function (empresa) {
+					empresa.idTipo = 2;
+					return empresa;
+				});
 
 				jQuery.ajax(Constants.urlBackend + "Aliquota/" + idObjeto, {
 					type: "PUT",
@@ -276,7 +475,9 @@ sap.ui.define(
 						dataInicio: obj.dataInicio,
 						dataFim: obj.dataFim,
 						fkTipo: obj.idTipo,
-						aliquotas: JSON.stringify(aValorAliquota)
+						aliquotas: JSON.stringify(aValorAliquota),
+						registrosRelacionados: Number(obj.idTipo) === 1 ? aPais : aEmpresa,
+						tipoParaDesvincular: this._pegarQualTipoPrecisaSerLimpo(this.getModel().getProperty("/tipoInicial"), obj.idTipo)
 					},
 					success: function (response) {
 						that.byId("botaoCancelar").setEnabled(true);
@@ -295,7 +496,15 @@ sap.ui.define(
 				that.setBusy(that.byId("botaoSalvar"), true);
 				var obj = this.getModel().getProperty("/objeto");
 				var aValorAliquota = this.getModel().getProperty("/Aliquotas");
-
+				var aPais = this.getModel().getProperty("/Pais").map(function (pais) {
+					pais.idTipo = 1;
+					return pais;
+				});
+				var aEmpresa = this.getModel().getProperty("/Empresa").map(function (empresa) {
+					empresa.idTipo = 2;
+					return empresa;
+				});
+				
 				jQuery.ajax(Constants.urlBackend + "Aliquota", {
 					type: "POST",
 					xhrFields: {
@@ -308,7 +517,8 @@ sap.ui.define(
 						dataInicio: obj.dataInicio,
 						dataFim: obj.dataFim,
 						fkTipo: obj.idTipo,
-						aliquotas: JSON.stringify(aValorAliquota)
+						aliquotas: JSON.stringify(aValorAliquota),
+						registrosRelacionados: Number(obj.idTipo) === 1 ? aPais : aEmpresa
 					},
 					success: function (response) {
 						that.byId("botaoCancelar").setEnabled(true);
@@ -321,6 +531,20 @@ sap.ui.define(
 
 			_navToPaginaListagem: function () {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
+			},
+			
+			_pegarQualTipoPrecisaSerLimpo: function (tipoInicial, tipoCorrente) {
+				var inicial = Number(tipoInicial),
+					corrente = Number(tipoCorrente);
+					
+				// Se nada mudou retorna null
+				if (inicial === corrente) {
+					return null;
+				}
+				// Se algo mudou, retorna o inicial, pois ele é quem precisa ter seus vínculos removidos do banco
+				else {
+					return inicial;
+				}
 			},
 
 			/* Métodos fixos */
@@ -336,7 +560,8 @@ sap.ui.define(
 					objeto: {},
 					idObjeto: 0,
 					isUpdate: false,
-					Aliquotas: []
+					Aliquotas: [],
+					valorJanela: 0
 				}));
 
 				this.byId("paginaListagem").addEventDelegate({
@@ -347,16 +572,24 @@ sap.ui.define(
 
 				this.byId("paginaObjeto").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarCamposFormulario();
-
-						if (oEvent.data.path) {
-							that.getModel().setProperty("/isUpdate", true);
-							that.getModel().setProperty("/idObjeto", that.getModel().getObject(oEvent.data.path).id_aliquota);
-
-							that._carregarObjetoSelecionado(that.getModel().getObject(oEvent.data.path).id_aliquota);
-						} else {
-							that.getModel().setProperty("/isUpdate", false);
-						}
+						const execucaoNormal = function () {
+							if (oEvent.data.path) {
+								that.getModel().setProperty("/isUpdate", true);
+								that.getModel().setProperty("/idObjeto", that.getModel().getObject(oEvent.data.path).id_aliquota);
+	
+								that._carregarObjetoSelecionado(that.getModel().getObject(oEvent.data.path).id_aliquota);
+							} else {
+								that.getModel().setProperty("/isUpdate", false);
+							}
+						};
+						
+						that._carregarCamposFormulario()
+							.then(function () {
+								execucaoNormal();	
+							})
+							.catch(function () {
+								execucaoNormal();
+							});
 					},
 
 					onAfterHide: function (oEvent) {
