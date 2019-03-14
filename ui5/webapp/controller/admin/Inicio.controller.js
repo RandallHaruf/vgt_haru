@@ -292,11 +292,11 @@ sap.ui.define(
 												icon: "sap-icon://person-placeholder",
 												key: "usuario"
 											},*/
-						/*{
+						{
 							title: that.getResourceBundle().getText("viewAdminInicioMenuUsuario"),
 							icon: "sap-icon://account",
 							key: "usuario"
-						},*/
+						},
 						{
 							title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackageCadastroAliquotas"),
 							icon: "sap-icon://waiver",
