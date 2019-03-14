@@ -205,97 +205,103 @@ sap.ui.define(
 					}
 
 				} else {
-					DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
-					this.getModel().setProperty("/CancelaBotaoConfirmar", false);
-					this.getModel().setProperty("/CancelaBotaoCancelar", false);
-
-					var oBtnCancelar = new sap.m.Button({
-						text: "{i18n>formularioObrigacaoBotaoCancelar}"
-					});
-
-					var dialog = new sap.m.Dialog({
-						title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
-						type: "Message",
-						content: new sap.m.Text({
-							//ATTENTION! You are in the process of closing the Obligation, Are you sure you want to continue?
-							text: "{i18n>viewMensagemObrigacao}"
-						}),
-						beginButton: new sap.m.Button({
-							text: "{i18n>viewGeralSim}",
-							press: function (oEvent2) {
-								if (oFileUploader.getValue()) {
-									oEvent2.getSource().setEnabled(false);
-									oBtnCancelar.setEnabled(false);
-									that.setBusy(dialog, true);
-									oData.indConclusao = true;
-									oBtnEnviar.setEnabled(false);
-									that.setBusy(oBtnEnviar, true);
-									Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDocumento", oData)
-										.then(function (response) {
-											//sap.m.MessageToast.show(response);
-											that._atualizarDocumentos('/Documentos', oData.id, oTable);
-
-											var IntMes = DataConclusao.getMonth(); //Number(DataConclusao.toString());
-											IntMes = IntMes + 1;
-											var strMes = IntMes.toString();
-
-											that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" +
-												DataConclusao.getDate();
-											that._AtualizaStatusObrigacao(DataFormatada);
-
-											var obj = that.getModel().getProperty("/RespostaObrigacao");
-
-											NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
-												suporteContratado: obj["suporte_contratado"],
-												suporteEspecificacao: obj["suporte_especificacao"],
-												suporteValor: obj["suporte_valor"],
-												fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-												fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
-												fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-												fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-												fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
-												dataExtensao: obj["data_extensao"],
-												dataConclusao: obj["data_conclusao"]
-											}, function (response2) {
-												that.getRouter().navTo("complianceListagemObrigacoes");
-												that.getModel().setProperty("/CancelaBotaoConfirmar", true);
-												that.getModel().setProperty("/CancelaBotaoCancelar", true);
-												oFileUploader.setValue("");
+					if (oFileUploader.getValue()) {
+						DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
+						this.getModel().setProperty("/CancelaBotaoConfirmar", false);
+						this.getModel().setProperty("/CancelaBotaoCancelar", false);
+	
+						var oBtnCancelar = new sap.m.Button({
+							text: "{i18n>formularioObrigacaoBotaoCancelar}"
+						});
+	
+						var dialog = new sap.m.Dialog({
+							title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
+							type: "Message",
+							content: new sap.m.Text({
+								//ATTENTION! You are in the process of closing the Obligation, Are you sure you want to continue?
+								text: "{i18n>viewMensagemObrigacao}"
+							}),
+							beginButton: new sap.m.Button({
+								text: "{i18n>viewGeralSim}",
+								press: function (oEvent2) {
+									if (oFileUploader.getValue()) {
+										oEvent2.getSource().setEnabled(false);
+										oBtnCancelar.setEnabled(false);
+										that.setBusy(dialog, true);
+										oData.indConclusao = true;
+										oBtnEnviar.setEnabled(false);
+										that.setBusy(oBtnEnviar, true);
+										Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDocumento", oData)
+											.then(function (response) {
+												//sap.m.MessageToast.show(response);
+												that._atualizarDocumentos('/Documentos', oData.id, oTable);
+	
+												var IntMes = DataConclusao.getMonth(); //Number(DataConclusao.toString());
+												IntMes = IntMes + 1;
+												var strMes = IntMes.toString();
+	
+												that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" +
+													DataConclusao.getDate();
+												that._AtualizaStatusObrigacao(DataFormatada);
+	
+												var obj = that.getModel().getProperty("/RespostaObrigacao");
+	
+												NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
+													suporteContratado: obj["suporte_contratado"],
+													suporteEspecificacao: obj["suporte_especificacao"],
+													suporteValor: obj["suporte_valor"],
+													fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
+													fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
+													fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
+													fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
+													fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
+													dataExtensao: obj["data_extensao"],
+													dataConclusao: obj["data_conclusao"]
+												}, function (response2) {
+													that.getRouter().navTo("complianceListagemObrigacoes");
+													that.getModel().setProperty("/CancelaBotaoConfirmar", true);
+													that.getModel().setProperty("/CancelaBotaoCancelar", true);
+													oFileUploader.setValue("");
+													oBtnEnviar.setEnabled(true);
+													that.setBusy(oBtnEnviar, false);
+													dialog.close();
+												});
+	
+											})
+											.catch(function (err) {
+												sap.m.MessageToast.show(err);
 												oBtnEnviar.setEnabled(true);
 												that.setBusy(oBtnEnviar, false);
+												that.getModel().setProperty("/CancelaBotaoConfirmar", true);
+												that.getModel().setProperty("/CancelaBotaoCancelar", true);
 												dialog.close();
 											});
-
-										})
-										.catch(function (err) {
-											sap.m.MessageToast.show(err);
-											oBtnEnviar.setEnabled(true);
-											that.setBusy(oBtnEnviar, false);
-											that.getModel().setProperty("/CancelaBotaoConfirmar", true);
-											that.getModel().setProperty("/CancelaBotaoCancelar", true);
-											dialog.close();
-										});
-								} else {
-									//sap.m.MessageToast.show("Selecione um arquivo");
-									sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
-									
+									} else {
+										//sap.m.MessageToast.show("Selecione um arquivo");
+										sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
+										
+									}
+	
 								}
-
+							}),
+							endButton: oBtnCancelar,
+							afterClose: function () {
+								this.getModel().setProperty("/CancelaBotaoCancelar", true);
+								dialog.destroy();
 							}
-						}),
-						endButton: oBtnCancelar,
-						afterClose: function () {
-							dialog.destroy();
-						}
-					});
-
-					oBtnCancelar.attachPress(function (oEvent2) {
-						dialog.close();
-					});
-
-					this.getView().addDependent(dialog);
-
-					dialog.open();
+						});
+	
+						oBtnCancelar.attachPress(function (oEvent2) {
+							dialog.close();
+						});
+	
+						this.getView().addDependent(dialog);
+	
+						dialog.open();
+					} else {
+						//sap.m.MessageToast.show("Selecione um arquivo");
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
+					}
 				}
 			},
 
