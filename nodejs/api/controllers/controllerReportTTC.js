@@ -382,10 +382,10 @@ module.exports = {
 				stringDistinct = 'Select distinct min("tblPagamento.data_pagamento") "min(tblPagamento.data_pagamento)", max("tblPagamento.data_pagamento") "max(tblPagamento.data_pagamento)" from (';
 				break;	
 			case "tblDominioMoeda.acronimo":
-				stringDistinct = 'Select "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
+				stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
 				break;
 			case "tblDominioTipoTransacao.tipo_transacao":
-				stringDistinct = 'Select "tblDominioTipoTransacao.id_dominio_tipo_transacao" , "tblDominioTipoTransacao.tipo_transacao" from (';
+				stringDistinct = 'Select distinct "tblDominioTipoTransacao.id_dominio_tipo_transacao" , "tblDominioTipoTransacao.tipo_transacao" from (';
 				break;				
 		}
 		
