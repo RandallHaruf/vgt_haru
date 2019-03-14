@@ -103,27 +103,39 @@ sap.ui.define(
 								var anoInicial = Number(oSelectAnoInicial.getSelectedItem().getText()),
 									anoFinal = Number(oSelectAnoFinal.getSelectedItem().getText());
 									
-								// utilizar "map" para criar um array com os objetos de dominioAnoFiscal da janela selecionada
+								// criar um array com os objetos de dominioAnoFiscal da janela selecionada
+								var aAnoFiscal = that.getModel().getProperty("/DominioAnoFiscal").filter(function (obj, x, y) {
+									return Number(obj.ano_fiscal) >= anoInicial && Number(obj.ano_fiscal) <= anoFinal;
+								});
 								
 								// para cada ano selecionado:
 								// - caso ele não exista na lista de aliquotas, adicionar com o valor inserido para a janela;
 								// - case ele já exista na lista de alíquotas, atualizar o valor pelo inserido para a janela;
+								var aAliquota = this.getModel().getProperty("/Aliquotas"),
+									novoValor = Utils.limparMascaraDecimal(oInput.getValue());
 								
-								// refresh do model
+								for (var i = 0; i < aAnoFiscal.length; i++) {
+									var oAnoJaInserido = aAliquota.find(function (obj) {
+										return obj["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] === aAnoFiscal[i].id_dominio_ano_fiscal;	
+									});
 									
-								for (var i = anoInicial; i <= anoFinal; i++) {
-									this.getModel().getProperty("/Aliquotas").unshift({
-										"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": null,
-										valor: oInput.getValue() // limpar a máscara
-									});	
+									if (oAnoJaInserido) {
+										oAnoJaInserido.valor = novoValor;
+									}
+									else {
+										aAliquota.unshift({
+											"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": aAnoFiscal[i].id_dominio_ano_fiscal,
+											valor: novoValor
+										});
+									}
 								}
 								
-								this.getModel().refresh();
-								/*this.getModel().getProperty("/Aliquotas").unshift({
-									"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": null,
-									valor: 0
+								aAliquota.sort(function (a, b) {
+									return b["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] - a["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"];
 								});
-								this.getModel().refresh();*/
+								
+								// refresh do model
+								this.getModel().refresh();
 								
 								dialog.close();
 							}
@@ -200,7 +212,7 @@ sap.ui.define(
 				var idAnoFiscal = oEvent.getSource().getBindingContext().getObject()["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"];
 				
 				var aliquotaComAnoFiscalSelecionado = this.getModel().getProperty("/Aliquotas").filter(function (obj) {
-					return obj["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] === idAnoFiscal;
+					return Number(obj["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]) === Number(idAnoFiscal);
 				});
 				
 				if (aliquotaComAnoFiscalSelecionado.length > 1) {
@@ -360,7 +372,7 @@ sap.ui.define(
 					}
 				});
 				
-				NodeAPI.pListarRegistros("DominioAnoFiscal")
+				NodeAPI.pListarRegistros("DominioAnoFiscal?full=true")
 					.then(function (res) {
 						res.unshift({});
 						that.getModel().setProperty("/DominioAnoFiscal", res);
