@@ -429,12 +429,12 @@ sap.ui.define(
 					.then(function (response) {
 						for (var i = 0; i < response.length; i++) {
 							if (response[i].ind_declaracao) {
-								response[i].label_declaracao = "Declaração: SIM.\n";
+								response[i].label_declaracao = that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDeclaracaoSim");
 								if (response[i].data_envio_declaracao) {
-									response[i].label_declaracao += "Envio Declaração: " + response[i].data_envio_declaracao;
+									response[i].label_declaracao += that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoEnvioDeclaracao") + response[i].data_envio_declaracao;
 								}
 							} else {
-								response[i].label_declaracao = "Declaração: NÃO";
+								response[i].label_declaracao = that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDeclaracaoNao");
 							}
 						}
 						that.getModel().setProperty(sProperty, response);
@@ -459,7 +459,7 @@ sap.ui.define(
 				var oHBox = new sap.m.HBox();
 
 				var oCheckBox = new sap.m.CheckBox({
-					text: "Declaração",
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDeclaracao"),
 					selected: "{/IsDeclaracao}"
 				}).addStyleClass("sapUiSmallMarginEnd");
 
@@ -478,9 +478,10 @@ sap.ui.define(
 					id: "fileUploader",
 					name: "myFileUpload",
 					uploadUrl: "",
+					buttonText:that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoProcurar"),
 					width: "400px",
-					tooltip: "Enviar o arquivo para o Nodejs",
-					placeholder: "Escolha um arquivo"
+					tooltip: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoEnviarArquivoParaNodeJS"),
+					placeholder: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoEscolhaUmArquivo")
 				});
 
 				var oTable = new sap.m.Table({
@@ -488,7 +489,7 @@ sap.ui.define(
 				});
 
 				var oButton = new sap.m.Button({
-					text: "Enviar Arquivo"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoEnviarArquivo")
 				}).attachPress(function (oEvent) {
 					this.onEnviarArquivo(oEvent, oPeriodo, oFileUploader, sProperty, oTable);
 				}, this);
@@ -508,18 +509,18 @@ sap.ui.define(
 				var oToolbar = new sap.m.Toolbar();
 
 				oToolbar.addContent(new sap.m.Text({
-					text: "Documentos"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDocumentos")
 				}));
 
 				oTable.setHeaderToolbar(oToolbar);
 
 				// colunas
 				oTable.addColumn(new sap.m.Column().setHeader(new sap.m.Text({
-					text: "Nome do Arquivo"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoNomeDoArquivo")
 				})));
 
 				oTable.addColumn(new sap.m.Column().setHeader(new sap.m.Text({
-					text: "Data Upload"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDataDeUpload")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
@@ -541,7 +542,7 @@ sap.ui.define(
 				var oButton2 = new sap.m.Button({
 					icon: "sap-icon://download-from-cloud",
 					type: "Accept",
-					tooltip: "Baixar Arquivo",
+					tooltip: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoBaixarArquivo"),
 					enabled: "{btnDownloadEnabled}"
 				}).addStyleClass("sapUiSmallMarginEnd").attachPress(oTable, function (oEvent2) {
 					this.onBaixarArquivo(oEvent2, oPeriodo);
@@ -550,7 +551,7 @@ sap.ui.define(
 				var oButton3 = new sap.m.Button({
 					icon: "sap-icon://delete",
 					type: "Reject",
-					tooltip: "Excluir Arquivo",
+					tooltip: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoExcluirArquivo"),
 					enabled: "{btnExcluirEnabled}"
 				}).attachPress(oTable, function (oEvent3) {
 					this.onExcluirArquivo(oEvent3, oPeriodo, sProperty, oTable);
@@ -575,10 +576,10 @@ sap.ui.define(
 				oVBox.addItem(oScrollContainer);
 
 				var dialog = new sap.m.Dialog({
-					title: "Anexar Declaração",
+					title: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoAnexarDeclaracao"),
 					content: oVBox,
 					endButton: new sap.m.Button({
-						text: "fechar",
+						text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoEndButton"),
 						press: function () {
 							dialog.close();
 						}.bind(this)
@@ -628,7 +629,7 @@ sap.ui.define(
 							that.setBusy(oBtnEnviar, false);
 						});
 				} else {
-					sap.m.MessageToast.show("Selecione um arquivo");
+					sap.m.MessageToast.show(that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoSelecioneUmArquivo"));
 				}
 			},
 
@@ -652,7 +653,7 @@ sap.ui.define(
 						that.getModel().refresh();
 					})
 					.catch(function (err) {
-						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoErroAoBaixarArquivo") + oArquivo.nome_arquivo);
 
 						oArquivo.btnExcluirEnabled = true;
 						oArquivo.btnDownloadEnabled = true;
@@ -683,7 +684,7 @@ sap.ui.define(
 							that.getModel().refresh();
 						})
 						.catch(function (err) {
-							sap.m.MessageToast.show("Erro ao excluir arquivo: " + oArquivo.nome_arquivo);
+							sap.m.MessageToast.show(that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoErroAoExcluirArquivo") + oArquivo.nome_arquivo);
 
 							oArquivo.btnExcluirEnabled = true;
 							oArquivo.btnDownloadEnabled = true;
@@ -698,7 +699,7 @@ sap.ui.define(
 					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 					type: "Message",
 					content: new sap.m.Text({
-						text: "Você tem certeza que deseja excluir este arquivo?"
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoCertezaDeExcluir")
 					}),
 					beginButton: new sap.m.Button({
 						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
@@ -787,18 +788,18 @@ sap.ui.define(
 				var oToolbar = new sap.m.Toolbar();
 
 				oToolbar.addContent(new sap.m.Text({
-					text: "Documentos"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDocumentos")
 				}));
 
 				oTable.setHeaderToolbar(oToolbar);
 
 				// colunas
 				oTable.addColumn(new sap.m.Column().setHeader(new sap.m.Text({
-					text: "Nome do Arquivo"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoNomeDoArquivo")
 				})));
 
 				oTable.addColumn(new sap.m.Column().setHeader(new sap.m.Text({
-					text: "Data Upload"
+					text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoDataDeUpload")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
@@ -820,7 +821,7 @@ sap.ui.define(
 				var oButton2 = new sap.m.Button({
 					icon: "sap-icon://download-from-cloud",
 					type: "Accept",
-					tooltip: "Baixar Arquivo",
+					tooltip: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoBaixarArquivo"),
 					enabled: "{btnDownloadEnabled}"
 				}).addStyleClass("sapUiSmallMarginEnd").attachPress(oTable, function (oEvent2) {
 					this.onBaixarArquivo(oEvent2, oPeriodo);
@@ -854,10 +855,10 @@ sap.ui.define(
 				oVBox.addItem(oScrollContainer);
 
 				var dialog = new sap.m.Dialog({
-					title: "Visualizar Declaração",
+					title: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoVisualizarDeclaracao"),
 					content: oVBox,
 					endButton: new sap.m.Button({
-						text: "fechar",
+						text: that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoEndButton"),
 						press: function () {
 							dialog.close();
 						}.bind(this)
