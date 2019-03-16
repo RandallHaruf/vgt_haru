@@ -291,6 +291,8 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			}
 			else {
+				var idAliquota = result[0].generated_id;
+				
 				const finalizarAtualizacao = function () {
 					if (req.body.aliquotas) {
 						adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {

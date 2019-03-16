@@ -148,7 +148,7 @@
 						</f:formContainers>
 					</f:Form>
 					<f:Form 
-						id="formularioAliquotas"
+						id="formularioAliquotas2"
 						editable="true">
 						<f:title>
 							<core:Title text="{i18n>viewAdminInicioMenuTaxPackageCadastroAliquotas}"  />
@@ -162,6 +162,75 @@
 								<f:FormElement>
 									<!--<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">-->
 									<table:Table 
+										rows="{/PeriodoAliquota}" 
+										id="tableAliquotas2" 
+										selectionMode="None">
+										<table:extension>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<Button icon="sap-icon://add" type="Transparent" press="onAdicionarPeriodo" />
+											</Toolbar>
+										</table:extension>
+										<table:columns>
+											<table:Column width="60px">
+												<table:template>
+													<Button icon="sap-icon://delete" press="onExcluirPeriodo" type="Reject" />
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewGeralAnoInicio}" />
+												<table:template>
+													<Select 
+														items="{/DominioAnoFiscal}" 
+														selectedKey="{idAnoInicial}" 
+														change="onTrocarPeriodo"
+														width="100%">
+														<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
+													</Select>
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewGeralAnoFim}" />
+												<table:template>
+													<Select 
+														items="{/DominioAnoFiscal}" 
+														selectedKey="{idAnoFinal}" 
+														change="onTrocarPeriodo"
+														width="100%">
+														<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
+													</Select>
+												</table:template>
+											</table:Column>
+											<table:Column>
+												<Label text="{i18n>viewAdminCadastroAliquotasValor} (%)" />
+												<table:template>
+													<Input 
+														value="{path: 'valor', 
+															type: 'sap.ui.model.type.Float', 
+															formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  
+															change="onTrocarValorAliquota" />
+												</table:template>
+											</table:Column>										
+										</table:columns>
+									</table:Table>
+								</f:FormElement>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
+					<!--<f:Form 
+						id="formularioAliquotas"
+						editable="true">
+						<f:title>
+							<core:Title text="{i18n>viewAdminInicioMenuTaxPackageCadastroAliquotas}"  />
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:FormElement>
+									<table:Table 
 										rows="{/Aliquotas}" 
 										id="tableAliquotas" 
 										selectionMode="None"
@@ -171,12 +240,6 @@
 												<Button type="Emphasized" text="Adicionar Limite" press="onAdicionarLimite" />
 												<ToolbarSpacer/>
 												<Button icon="sap-icon://add" type="Transparent" press="onAdicionarAliquota" />
-												<!--<SearchField 
-													id="searchObrigacoes"
-													width="15rem" 
-													search="onTextSearch"
-													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
-													value="{/filterValue}" />-->
 											</Toolbar>
 										</table:extension>
 										<table:columns>
@@ -212,7 +275,7 @@
 								</f:FormElement>
 							</f:FormContainer>
 						</f:formContainers>
-					</f:Form>
+					</f:Form>-->
 					<f:Form 
 						editable="true"
 						visible="{= Number(${/objeto/idTipo}) === 1 ? true : false}">

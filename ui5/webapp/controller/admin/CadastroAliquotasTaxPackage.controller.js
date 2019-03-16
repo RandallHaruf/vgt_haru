@@ -9,6 +9,201 @@ sap.ui.define(
 	function (BaseController, Constants, Validador,NodeAPI, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroAliquotasTaxPackage", {
 			
+			_checarPeriodoCoincicente: function (oPeriodoAliquotaNovo) {
+				var aPeriodoAliquota = this.getModel().getProperty("/PeriodoAliquota")
+					bIsCoincidente = false;	
+				
+				// Checa se o novo período está contido em algum outro período estipulado
+				for (var i = 0, length = aPeriodoAliquota.length; i < length; i++) {
+					var oPeriodoAliquota = aPeriodoAliquota[i];
+					
+					if (oPeriodoAliquota !== oPeriodoAliquotaNovo) {
+						if (oPeriodoAliquota.idAnoInicial && oPeriodoAliquota.idAnoFinal) {
+							if (oPeriodoAliquotaNovo.idAnoInicial) {
+								if (Number(oPeriodoAliquotaNovo.idAnoInicial) >= Number(oPeriodoAliquota.idAnoInicial)
+									&& Number(oPeriodoAliquotaNovo.idAnoInicial) <= Number(oPeriodoAliquota.idAnoFinal)) {
+									bIsCoincidente = true;
+									break;
+								}
+							}
+							
+							if (oPeriodoAliquotaNovo.idAnoFinal) {
+								if (Number(oPeriodoAliquotaNovo.idAnoFinal) >= Number(oPeriodoAliquota.idAnoInicial)
+									&& Number(oPeriodoAliquotaNovo.idAnoFinal) <= Number(oPeriodoAliquota.idAnoFinal)) {
+									bIsCoincidente = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				// Se chegou nesse ponto e o novo periodo não está contido em nenhum outro, checa se ele contém algum período (apenas se ambos os anos estiverem selecionados)
+				if (!bIsCoincidente && oPeriodoAliquotaNovo.idAnoInicial && oPeriodoAliquotaNovo.idAnoFinal) {
+					var idAnoInicial = Number(oPeriodoAliquotaNovo.idAnoInicial);
+					var idAnoFinal = Number(oPeriodoAliquotaNovo.idAnoFinal);
+					
+					for (var i = 0, length = aPeriodoAliquota.length; i < length; i++) {
+						var oPeriodoAliquota = aPeriodoAliquota[i];
+						
+						if (oPeriodoAliquota !== oPeriodoAliquotaNovo) {
+							if (oPeriodoAliquota.idAnoInicial) {
+								if (Number(oPeriodoAliquota.idAnoInicial) >= idAnoInicial
+									&& Number(oPeriodoAliquota.idAnoInicial) <= idAnoFinal) {
+									bIsCoincidente = true;
+									break;
+								}
+							}
+							
+							if (oPeriodoAliquota.idAnoFinal) {
+								if (Number(oPeriodoAliquota.idAnoFinal) >= idAnoInicial
+									&& Number(oPeriodoAliquota.idAnoFinal) <= idAnoFinal) {
+									bIsCoincidente = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				return bIsCoincidente;
+			},
+			
+			_transformarAliquotasEmPeriodos: function () {
+				var aAliquota = this.getModel().getProperty("/Aliquotas").sort(function (x, y) {
+						return Number(x["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]) - Number(y["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]);
+				    }),
+					aPeriodoAliquota = [],
+					iIndexPeriodoCorrente = -1,
+					valorAnterior;
+				
+				for (var i = 0, length = aAliquota.length; i < length; i++) {
+					var oAliquota = aAliquota[i];
+					
+					if (valorAnterior !== oAliquota.valor) {
+						aPeriodoAliquota.push({
+							idAnoInicial: oAliquota["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"],
+							idAnoFinal: oAliquota["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"],
+							valor: oAliquota.valor
+						});
+						
+						iIndexPeriodoCorrente++;
+					}
+					else {
+						aPeriodoAliquota[iIndexPeriodoCorrente].idAnoFinal = oAliquota["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"];
+					}
+					
+					valorAnterior = oAliquota.valor;
+				}
+				
+				aPeriodoAliquota.sort(function (a, b) {
+					return b.idAnoInicial - a.idAnoInicial;
+				});
+				
+				this.getModel().setProperty("/PeriodoAliquota", aPeriodoAliquota);
+				this.getModel().refresh();
+			},
+			
+			_refazerArrayAliquotas: function () {
+				var aPeriodoAliquota = 	this.getModel().getProperty("/PeriodoAliquota"),
+					aAliquota = [];
+				
+				for (var i = 0, length = aPeriodoAliquota.length; i < length; i++) {
+					var oPeriodoAliquota = aPeriodoAliquota[i];
+					
+					if (oPeriodoAliquota.idAnoInicial && oPeriodoAliquota.idAnoFinal) {
+						for (var j = Number(oPeriodoAliquota.idAnoInicial), length2 = Number(oPeriodoAliquota.idAnoFinal); j <= length2; j++) {
+							aAliquota.push({
+								"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": j,
+								valor: oPeriodoAliquota.valor
+							});
+						}
+					}
+				}
+				
+				this.getModel().setProperty("/Aliquotas", aAliquota);
+				this.getModel().refresh();
+			},
+			
+			onExcluirPeriodo: function (oEvent) {
+				var that = this;
+
+				var oExcluir = oEvent.getSource().getBindingContext().getObject();
+				var aPeriodoAliquota = this.getModel().getProperty("/PeriodoAliquota");
+
+				var dialog = new sap.m.Dialog({
+					title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+					type: "Message",
+					content: new sap.m.Text({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsVocetemcertezaquedesejaexcluiralinha")
+					}),
+					beginButton: new sap.m.Button({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
+						press: function () {
+							for (var i = 0; i < aPeriodoAliquota.length; i++) {
+								if (aPeriodoAliquota[i] === oExcluir) {
+									aPeriodoAliquota.splice(i, 1);
+									that.getModel().refresh();
+									break;
+								}
+							}
+							
+							that._refazerArrayAliquotas();
+
+							dialog.close();
+						}
+					}),
+					endButton: new sap.m.Button({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
+						press: function () {
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+
+				dialog.open();
+			},
+			
+			onTrocarPeriodo: function (oEvent) {
+				var obj = oEvent.getSource().getBindingContext().getObject();
+				
+				var aAliquota = this.getModel().getProperty("/Aliquotas"),
+					iIdAnoSelecionado = oEvent.getSource().getSelectedKey(),
+					iIdAnoSelecionado = iIdAnoSelecionado ? Number(iIdAnoSelecionado) : -1,
+					// Indica que um mesmo periodo tem ano inicio e ano fim igual (o que não é problema)
+					bPeriodoComAnoIgual = Number(obj.idAnoInicial) === Number(obj.idAnoFinal), 
+					// Indica que o período contém algum outro, ou está contido em outro período (o que é problema)
+					bPeriodoCoincidente = this._checarPeriodoCoincicente(obj);
+				
+				var aAliquotaComMesmoAno = aAliquota.filter(function (oAliquota) {
+					return Number(oAliquota["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]) === iIdAnoSelecionado;
+				});
+				
+				if (bPeriodoCoincidente || (!bPeriodoComAnoIgual && aAliquotaComMesmoAno.length > 1)) {
+					jQuery.sap.require("sap.m.MessageBox");
+							
+					sap.m.MessageBox.show(this.getResourceBundle().getText("viewAdminCadastroAliquotasMensagemAliquotaRepetida"), {
+						title: this.getResourceBundle().getText("viewGeralAviso")
+					});
+					
+					oEvent.getSource().setSelectedKey(null);
+				}
+				
+				this._refazerArrayAliquotas();
+			},
+			
+			onAdicionarPeriodo: function (oEvent) {
+				this.getModel().getProperty("/PeriodoAliquota").unshift({
+					idAnoInicial: 0,
+					idAnoFinal: 0,
+					valor: 0
+				});
+				this.getModel().refresh();
+			},
+			
 			onAdicionarLimite: function (oEvent) {
 				var that = this;
 				
@@ -206,6 +401,8 @@ sap.ui.define(
 					
 					dialog.open();
 				}
+				
+				this._refazerArrayAliquotas();
 			},
 			
 			onTrocarAnoFiscalAliquota: function (oEvent) {
@@ -308,6 +505,24 @@ sap.ui.define(
 					
 					if (!oValorAliquota["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]) {
 						bValorAliquotaValido = false;
+					}
+				}
+				
+				if (!bValorAliquotaValido) {
+					msg += sMensagemValidacaoAliquota + "\n";
+					bFormularioValido = false;
+				}
+				
+				var bPeriodoAliquotaValido = true,
+					sMensagemValidacaoPeriodoAliquota = "- " + this.getResourceBundle().getText("viewAdminCadastroAliquotasMensagemAliquotaSemVigencia"),
+					aPeriodoAliquota = this.getModel().getProperty("/PeriodoAliquota");
+				
+				for (var i = 0, length = aPeriodoAliquota.length; i < length; i++) {
+					var oPeriodoAliquota = aPeriodoAliquota[i];
+					
+					if (!oPeriodoAliquota.idAnoInicial || !oPeriodoAliquota.idAnoFinal) {
+						bValorAliquotaValido = false;
+						break;
 					}
 				}
 				
@@ -441,6 +656,8 @@ sap.ui.define(
 					    
 						that.getModel().setProperty("/Aliquotas", aValorAliquota);
 						
+						that._transformarAliquotasEmPeriodos();
+						
 						that.setBusy(that.byId("paginaObjeto"), false);
 					})
 					.catch(function (err) {
@@ -456,6 +673,7 @@ sap.ui.define(
 				this.getModel().setProperty("/Pais", []);
 				this.getModel().setProperty("/Empresa", []);
 				this.getModel().setProperty("/valorJanela", 0);
+				this.getModel().setProperty("/PeriodoAliquota", []);
 			},
 
 			_atualizarObjeto: function () {
@@ -573,7 +791,8 @@ sap.ui.define(
 					idObjeto: 0,
 					isUpdate: false,
 					Aliquotas: [],
-					valorJanela: 0
+					valorJanela: 0,
+					PeriodoAliquota: []
 				}));
 
 				this.byId("paginaListagem").addEventDelegate({

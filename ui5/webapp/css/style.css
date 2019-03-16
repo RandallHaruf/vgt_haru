@@ -31,10 +31,13 @@
     margin-top: -15px;
     font-size: 1.4rem;
     text-align: center;
+    color: rgba(0, 126, 122, 1);
 }
 
 .myApp .custom-title-vgt {
 	font-size: 1.7rem;
+	color: rgba(0, 126, 122, 1);
+	font-weight: bold;
 }
 
 .bulletItem {
