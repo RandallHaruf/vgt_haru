@@ -181,11 +181,20 @@ sap.ui.define(
 				var aAliquotaComMesmoAno = aAliquota.filter(function (oAliquota) {
 					return Number(oAliquota["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"]) === iIdAnoSelecionado;
 				});
-				
+			
 				if (bPeriodoCoincidente || (!bPeriodoComAnoIgual && aAliquotaComMesmoAno.length > 1)) {
 					jQuery.sap.require("sap.m.MessageBox");
 							
 					sap.m.MessageBox.show(this.getResourceBundle().getText("viewAdminCadastroAliquotasMensagemAliquotaRepetida"), {
+						title: this.getResourceBundle().getText("viewGeralAviso")
+					});
+					
+					oEvent.getSource().setSelectedKey(null);
+				}
+				else if (obj.idAnoInicial && obj.idAnoFinal && Number(obj.idAnoFinal) < Number(obj.idAnoInicial)) {
+					jQuery.sap.require("sap.m.MessageBox");
+							
+					sap.m.MessageBox.show(this.getResourceBundle().getText("viewAdminCadastroAliquotasMensagemPeriodoAnoFimAnteriorAnoInicio"), {
 						title: this.getResourceBundle().getText("viewGeralAviso")
 					});
 					

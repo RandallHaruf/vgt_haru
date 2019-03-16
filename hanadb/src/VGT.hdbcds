@@ -99,11 +99,10 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":448,"y":159.5}}*/
     entity LOG {
-        key id_log          : Integer not null;
-            id_usuario      : Integer;
-            nome_usuario    : String(200);
-            data_operacao   : LocalDate;
-            interacao_banco : String(4000);
+        key id_log               : Integer64 not null;
+            id_usuario           : Integer64;
+            datahora_operacao    : UTCDateTime;
+            json_interacao_banco : String(5000);
     };
 
     /*@@layout{"layoutInfo":{"x":-157,"y":431.5}}*/

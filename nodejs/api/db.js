@@ -3,6 +3,30 @@
 var hana = require("@sap/hana-client");
 var cfenv = require("cfenv");
 
+function log (oConnection, sStatement, aParameter, idUsuario) {
+	try {
+		if (sStatement.toUpperCase().indexOf("DELETE") > -1
+			|| sStatement.toUpperCase().indexOf("INSERT") > -1
+			|| sStatement.toUpperCase().indexOf("UPDATE") > -1) {
+			var jsonInteracao = JSON.stringify({
+				statement: sStatement,
+				parameters: aParameter
+			});
+			
+			var sQuery = 
+				'insert into "VGT.LOG"("id_log", "id_usuario", "datahora_operacao", "json_interacao_banco") '
+				+ 'values ("identity_VGT.LOG_id_log".nextval, ?, CURRENT_TIMESTAMP, ?)',
+				aParam = [(idUsuario ? idUsuario : 0), jsonInteracao];
+			
+			oConnection.exec(sQuery, aParam);
+		}
+	}
+	catch (e) {
+		console.log("Erro ao logar operação");
+		console.log(e);
+	}
+}
+
 function generateInsertObject (sTabela, aParams) {
 	var sGeneratedIdStm = "";
 	var sStatement = 'insert into "' + sTabela + '"(';
@@ -149,6 +173,8 @@ module.exports = {
 				console.log("- PARAMETERS: " + JSON.stringify(oStatement.parameters) + "\n");
 			}
 			
+			log(oConnection, oStatement.statement, oStatement.parameters, oSettings ? oSettings.idUsuario : 0);
+			
 			oConnection.exec(oStatement.statement, oStatement.parameters, function (err, result) {
 				if (callback) {
 					callback(err, result);
@@ -181,6 +207,8 @@ module.exports = {
 			if (aParams && aParams.length > 0) {
 				console.log("- PARAMETERS: " + JSON.stringify(aParams) + "\n");
 			}
+			
+			log(oConnection, sStatement, aParams, oSettings ? oSettings.idUsuario : 0);
 			
 			var resultSet = oConnection.exec(sStatement, aParams);
 			if (!oSettings || !oSettings.connection) {
