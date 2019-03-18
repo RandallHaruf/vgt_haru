@@ -21,7 +21,7 @@
 	top: 30%;
 }
 
-.myApp .custom-generic-tile .sapMTextLineClamp  {
+.myApp .custom-generic-tile span {
 	height: 30px;
     width: 134px;
     position: absolute;
