@@ -397,7 +397,16 @@ sap.ui.define(
 						console.log(err);
 					})*/
 			},
-
+			onIdAnoAtual: function (oEvent){
+				var that = this;
+				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendarioAteCorrente", function (response) {
+					var obj = response.find(function (x) {
+						return x.ano_calendario === new Date().getFullYear();
+					});					
+					that.getModel().setProperty("/idAnoAtual", obj["id_dominio_ano_calendario"]);
+				});
+		
+			},
 			_onRouteMatched: function (oEvent) {
 				/*if ( self !== top ) {
 				// you're in an iframe
@@ -409,7 +418,7 @@ sap.ui.define(
 				
 				
 				this.setBusy(this.byId("painelSelecaoModulo"), true);
-
+				this.onIdAnoAtual();
 				this.setModel(new sap.ui.model.json.JSONModel());
 				this.getModel().setProperty("/ShowTTC", false);
 				this.getModel().setProperty("/ShowTaxPackage", false);
@@ -450,15 +459,21 @@ sap.ui.define(
 			},
 
 			navToTTC: function (oEvent) {
-				this.getRouter().navTo("ttcListagemEmpresas");
+				this.getRouter().navTo("ttcListagemEmpresas",{
+					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+				});
 			},
 
 			navToTaxPackage: function (oEvent) {
-				this.getRouter().navTo("taxPackageListagemEmpresas");
+				this.getRouter().navTo("taxPackageListagemEmpresas",{
+					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+				});
 			},
 
 			navToCompliance: function (oEvent) {
-				this.getRouter().navTo("complianceListagemObrigacoes");
+				this.getRouter().navTo("complianceListagemObrigacoes",{
+					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+				});
 			},
 
 			navToBeps: function (oEvent) {

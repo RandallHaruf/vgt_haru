@@ -20,10 +20,10 @@ sap.ui.define(
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
+				this.getModel().setProperty("/AnoCalendarioSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario);
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
 				this.setBusy(this.byId("tabelaObrigacoes"), false);
-				
 			},
 
 			onFiltrar: function (oEvent) {
@@ -108,7 +108,8 @@ sap.ui.define(
 			onDetalharObrigacao: function (oEvent) {
 				this.setBusy(this.byId("tabelaObrigacoes"), true);
 				var oParametros = {
-					Obrigacao: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())
+					Obrigacao: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()),
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 
 				this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {

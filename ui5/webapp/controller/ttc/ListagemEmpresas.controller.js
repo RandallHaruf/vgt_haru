@@ -45,11 +45,13 @@ sap.ui.define(
 				this.setBusy(this.byId("tabelaEmpresas"), false);
 				
 				var that = this;
-				
+				var parametro = JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario;
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
 					if (response) {
 						that.getModel().setProperty("/DominioAnoCalendario", response);
-						
+						that.getModel().setProperty("/AnoCalendarioSelecionado",parametro);
+						that._atualizarDados();
+						/*
 						var oAnoCorrente = response.find(function (element) {
 							return element.ano_calendario === (new Date()).getFullYear();
 						});
@@ -58,7 +60,7 @@ sap.ui.define(
 							that.getModel().setProperty("/AnoCalendarioSelecionado", oAnoCorrente.id_dominio_ano_calendario);      
 							
 							that._atualizarDados();
-						}
+						}*/
 					}
 				});
 				

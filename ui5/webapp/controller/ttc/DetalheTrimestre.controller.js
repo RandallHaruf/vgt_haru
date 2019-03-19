@@ -517,7 +517,9 @@ sap.ui.define(
 				var that = this;
 				this._confirmarCancelamento(function () {
 					that._limparModel();
-					that.getRouter().navTo("ttcListagemEmpresas");
+					that.getRouter().navTo("ttcListagemEmpresas",{
+						parametros: JSON.stringify({idAnoCalendario: that.getModel().getProperty("/AnoCalendario")["idAnoCalendario"]})
+					});
 				});
 			},
 

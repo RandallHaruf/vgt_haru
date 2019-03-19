@@ -121,13 +121,18 @@ sap.ui.define(
 								dataExtensao: obj["data_extensao"]
 							}, function (response) {
 								that.getView().byId("fileUploader").setValue("");
-								that.getRouter().navTo("complianceListagemObrigacoes");
+								that.onVoltarParaListagem();
 							});
 						}
 					}
 				}); //sap.m.MessageToast.show("Cancelar inserção");
 			},
-
+			onVoltarParaListagem: function () {
+				this.getRouter().navTo("complianceListagemObrigacoes",{
+					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")})
+				});
+			},
+			
 			onCancelar: function () {
 				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
@@ -135,7 +140,7 @@ sap.ui.define(
 					title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							that.getRouter().navTo("complianceListagemObrigacoes");
+							that.onVoltarParaListagem();
 						}
 					}
 				});
@@ -147,7 +152,7 @@ sap.ui.define(
 			},
 
 			navToPage2: function () {
-				this.getRouter().navTo("complianceListagemObrigacoes");
+				this.onVoltarParaListagem();
 			},
 
 			onTrocarSuporte: function () {
@@ -258,7 +263,7 @@ sap.ui.define(
 													dataExtensao: obj["data_extensao"],
 													dataConclusao: obj["data_conclusao"]
 												}, function (response2) {
-													that.getRouter().navTo("complianceListagemObrigacoes");
+													that.onVoltarParaListagem();
 													that.getModel().setProperty("/CancelaBotaoConfirmar", true);
 													that.getModel().setProperty("/CancelaBotaoCancelar", true);
 													oFileUploader.setValue("");
@@ -472,6 +477,8 @@ sap.ui.define(
 				});
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
+				var idAnoCalendario = oParametros.idAnoCalendario;
+				this.getModel().setProperty("/AnoSelecionadoAnteriormente",idAnoCalendario);
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
 					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] != 4 ? true : false;
