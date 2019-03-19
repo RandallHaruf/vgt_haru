@@ -1080,40 +1080,49 @@ sap.ui.define(
 
 			_carregarToolbar: function (sIdEmpresa, sIdAnoCalendario) {
 				var that = this,
-					sRota = "DeepQuery/RelacionamentoTaxPackagePeriodo?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario + "&modulo=2",
+					sRota = "DeepQuery/RelacionamentoTaxPackagePeriodo?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario + "&modulo=2"/*,
 					aIdToolbar = ["toolbarPrimeiroPeriodo", "toolbarSegundoPeriodo", "toolbarTerceiroPeriodo", "toolbarQuartoPeriodo", "toolbarAnual",
 						"toolbarRetificadora"
-					];
+					]*/;
+				
+				var aIdToolbar = {};
+				aIdToolbar[1] = "toolbarPrimeiroPeriodo";
+				aIdToolbar[2] = "toolbarSegundoPeriodo";
+				aIdToolbar[3] = "toolbarTerceiroPeriodo";
+				aIdToolbar[4] = "toolbarQuartoPeriodo";
+				aIdToolbar[5] = "toolbarAnual";
+				aIdToolbar[6] = "toolbarRetificadora";
 
 				this._setToolbarBusy(aIdToolbar, true);
 
 				// Realiza a limpeza das toolbar antes de carregar as novas para
 				// garantir que caso um ano calendário não tenha relacionamento com períodos ele
 				// não tenha acesso errôneo ao formulário
-				for (var i = 0, length = aIdToolbar.length; i < length; i++) {
-					var sIdToolbar = aIdToolbar[i];
-					this.byId(sIdToolbar).removeAllContent();
-				}
+				that.byId(aIdToolbar[1]).removeAllContent();
+				that.byId(aIdToolbar[2]).removeAllContent();
+				that.byId(aIdToolbar[3]).removeAllContent();
+				that.byId(aIdToolbar[4]).removeAllContent();
+				that.byId(aIdToolbar[5]).removeAllContent();
+				that.byId(aIdToolbar[6]).removeAllContent();
 
 				NodeAPI.listarRegistros(sRota, function (response) {
 					if (response) {
-						for (var i = 0, j = 0, length = response.length; i < length; i++) {
+						for (var i = 0, length = response.length; i < length; i++) {
 							var oPeriodo = response[i];
 
 							if (oPeriodo.numero_ordem <= 4) {
 								if (oPeriodo.ind_ativo) {
-									that._popularToolbarEstimativaCorrente(aIdToolbar[j], oPeriodo);
+									that._popularToolbarEstimativaCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								} else {
-									that._popularToolbarEstimativaFechada(aIdToolbar[j], oPeriodo);
+									that._popularToolbarEstimativaFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								}
-								j++;
-							} else if (oPeriodo.numero_ordem === 5 || oPeriodo.numero_ordem === length) {
+							// Se o período for anual OU for a ÚLTIMA retificadora
+							} else if (oPeriodo.numero_ordem === 5 || (oPeriodo.numero_ordem === 6 && i === length-1)) {
 								if (oPeriodo.ind_ativo) {
-									that._popularToolbarAnualCorrente(aIdToolbar[j], oPeriodo);
+									that._popularToolbarAnualCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								} else {
-									that._popularToolbarAnualFechada(aIdToolbar[j], oPeriodo);
+									that._popularToolbarAnualFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								}
-								j++;
 							}
 						}
 					}
@@ -1324,7 +1333,7 @@ sap.ui.define(
 			},
 
 			_setToolbarBusy: function (aIdToolbar, bBusy) {
-				for (var i = 0, length = aIdToolbar.length; i < length; i++) {
+				for (var i = 1, length = Object.keys(aIdToolbar).length; i <= length; i++) {
 					var sIdToolbar = aIdToolbar[i];
 					if (bBusy) {
 						this.byId(sIdToolbar).setBusyIndicatorDelay(100);

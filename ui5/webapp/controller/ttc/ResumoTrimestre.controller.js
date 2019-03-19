@@ -630,25 +630,27 @@ sap.ui.define(
 
 				var sEntidade = "DeepQuery/RelacionamentoEmpresaPeriodo?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario + "&modulo=1"; // TTC
 
-				var aIdToolbar = ["toolbarPrimeiroPeriodo", "toolbarSegundoPeriodo", "toolbarTerceiroPeriodo", "toolbarQuartoPeriodo"];
+				//var aIdToolbar = ["toolbarPrimeiroPeriodo", "toolbarSegundoPeriodo", "toolbarTerceiroPeriodo", "toolbarQuartoPeriodo"];
+				var aIdToolbar = {};
+				aIdToolbar[1] = "toolbarPrimeiroPeriodo";
+				aIdToolbar[2] = "toolbarSegundoPeriodo";
+				aIdToolbar[3] = "toolbarTerceiroPeriodo";
+				aIdToolbar[4] = "toolbarQuartoPeriodo";
 
 				NodeAPI.listarRegistros(sEntidade, function (response) {
-					that.byId(aIdToolbar[0]).removeAllContent();
 					that.byId(aIdToolbar[1]).removeAllContent();
 					that.byId(aIdToolbar[2]).removeAllContent();
 					that.byId(aIdToolbar[3]).removeAllContent();
+					that.byId(aIdToolbar[4]).removeAllContent();
 
 					if (response) {
 						for (var i = 0; i < response.length; i++) {
-
-							//response[i][""] = 
-
 							var oPeriodo = response[i];
 
 							if (oPeriodo.ind_ativo) {
-								that._popularToolbarPeriodoCorrente(aIdToolbar[i], oPeriodo);
+								that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 							} else {
-								that._popularToolbarPeriodoFechado(aIdToolbar[i], oPeriodo);
+								that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 							}
 						}
 					}
