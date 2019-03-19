@@ -115,7 +115,7 @@
 					"target": "detalheEmpresaVinculada"
 				},
 				{
-					"pattern": "complianceListagemObrigacoes",
+					"pattern": "complianceListagemObrigacoes/{parametros}",
 					"name": "complianceListagemObrigacoes",
 					"target": [
 						"complianceListagemObrigacoes"
@@ -164,7 +164,7 @@
 					]
 				},
 				{
-					"pattern": "ttcListagemEmpresas",
+					"pattern": "ttcListagemEmpresas/{parametros}",
 					"name": "ttcListagemEmpresas",
 					"target": [
 						"ttcListagemEmpresas"
@@ -199,7 +199,7 @@
 					]
 				},
 				{
-					"pattern": "taxPackageListagemEmpresas",
+					"pattern": "taxPackageListagemEmpresas/{parametros}",
 					"name": "taxPackageListagemEmpresas",
 					"target": [
 						"taxPackageListagemEmpresas"
