@@ -7,22 +7,34 @@ sap.ui.define(
 	],
 	function (BaseController, MessageToast, JSONModel, Constants) {
 		"use strict";
-
+		
 		return BaseController.extend("ui5ns.ui5.controller.Login", {
 
 			onInit: function () {
-				fetch(Constants.urlBackend + "verifica-auth", {
-						credentials: 'include'
-					})
-					.then((res) => {
-						res.json()
-							.then((response) => {
-								if (response.success) {
-									MessageToast.show(response.msg);
-									this.getRouter().navTo("selecaoModulo");
-								}
-							})
-					});
+				var that = this;
+				
+				if (!this.isIFrame()) {
+					this.byId("loginForm").setVisible(true);	
+					
+					fetch(Constants.urlBackend + "verifica-auth", {
+							credentials: 'include'
+						})
+						.then((res) => {
+							res.json()
+								.then((response) => {
+									if (response.success) {
+										if (!that.isIFrame()) {
+											MessageToast.show(response.msg);
+										}
+										this.getRouter().navTo("selecaoModulo");
+									}
+								})
+						});
+				}
+				else {
+					this.getRouter().navTo("selecaoModulo");
+				}
+				
 				this.getRouter().getRoute("login").attachPatternMatched(this._onRouteMatched, this);	
 			},
 

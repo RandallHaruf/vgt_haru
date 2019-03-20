@@ -1,3 +1,7 @@
+.meu-iframe > div {
+	height: 100%;
+}
+
 .myApp .viewSelecaoModulo .painelModulos {
 	text-align: center;
 	/*top: 15%;*/

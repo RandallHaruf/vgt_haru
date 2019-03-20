@@ -79,11 +79,11 @@ sap.ui.define(
 					showHeader: false,
 					placement: sap.m.PlacementType.Bottom,
 					content: [
-						oHomeButton,
+						oHomeButton/*,
 						new Button({
 							text: that.getResourceBundle().getText("viewAdminInicioLabelBotaoSair"),
 							type: sap.m.ButtonType.Transparent
-						})
+						})*/
 					]
 				}).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
 
@@ -91,7 +91,6 @@ sap.ui.define(
 			},
 
 			handleNotificationsPress: function (oEvent) {
-
 				var that = this;
 
 				var countObrig = 0;
@@ -115,7 +114,6 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura?status=1", function (response) { // 1 TTC
 					if (response) {
-
 						for (var i = 0, length = response.length; i < length; i++) {
 							countTTC++;
 						}
@@ -127,9 +125,9 @@ sap.ui.define(
 					that.getModel().setProperty("/RequisicaoReabertura", response);
 
 				});
+				
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoReaberturaTaxPackage?status=1", function (response) { // 1 TAX Packege
 					if (response) {
-
 						for (var i = 0, length = response.length; i < length; i++) {
 							countTAX++;
 						}
@@ -140,7 +138,7 @@ sap.ui.define(
 					});
 					that.getModel().setProperty("/RequisicaoReaberturaTaxPackage", response);
 				});
-				
+
 				NodeAPI.get("DeepQuery/RequisicaoEncerramentoPeriodoTaxPackage", {
 						queryString: {
 							status: 1 // em andamento
@@ -156,7 +154,6 @@ sap.ui.define(
 						alert(err.statusText);
 					});
 
-				//var oList = new sap.m.List();
 				var viewId = this.getView().getId();
 
 				var vbox = new sap.m.VBox();
@@ -177,31 +174,13 @@ sap.ui.define(
 					width: "auto"
 				}).addStyleClass("sapUiResponsiveMargin");
 				vbox.addItem(Texto03);
-				
+
 				var Texto04 = new sap.m.Text({
 					text: "{i18n>viewNotificacaolinhaRequisicaoEncerramentoPeriodoTaxPackage} ({/ContadorTaxPackageEncerramentoPeriodo})",
 					width: "auto"
 				}).addStyleClass("sapUiResponsiveMargin");
 				vbox.addItem(Texto04);
 
-				/*var panel01 = new sap.m.Panel({
-					headerText: "alguma coisa",
-					width: "auto",
-					expanded: false,
-					expandable: true
-				}).addStyleClass("sapUiResponsiveMargin");
-				vbox.addItem(panel01);*/
-				//<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTitutoObrigacao} ({/ContadorObrig/modelcountObrig})" width="auto" class="sapUiResponsiveMargin">
-				/* Carregar notificações dinamicamente */
-				/*
-				oList.addItem(new sap.m.NotificationListItem({
-					title: "Requisição de Reabertura",
-					description: "TTC - 1º trimestre/2016",
-					authorName: "João da Silva",
-					datetime: "1 hora",
-					priority: "High"
-				}));
-				*/
 				var popover = new Popover({
 					title: that.getResourceBundle().getText("viewAdminInicioTituloNotificacoes"),
 					placement: sap.m.PlacementType.Bottom,
@@ -266,8 +245,7 @@ sap.ui.define(
 						res.json()
 							.then((response) => {
 								if (response.success) {
-									//alert(response.nome + "  " + response.id);
-										that.getModel().setProperty("/NomeUsuario", response.nome);
+									that.getModel().setProperty("/NomeUsuario", response.nome);
 								} else {
 									MessageToast.show(response.error.msg);
 									this.getRouter().navTo("Login");
@@ -282,42 +260,37 @@ sap.ui.define(
 						MessageToast.show(err);
 						this.getRouter().navTo("Login");
 					});
-					
-				var that = this;
 
+				var that = this;
+				
 				this.getModel("viewModel").setProperty("/menu", {
-					navigation: [
-						/*{
-												title: that.getResourceBundle().getText("viewAdminInicioMenuUsuario"),
-												icon: "sap-icon://person-placeholder",
-												key: "usuario"
-											},*/
-						{
-							title: that.getResourceBundle().getText("viewAdminInicioMenuUsuario"),
-							icon: "sap-icon://account",
-							key: "usuario"
-						},
-						{
-							title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackageCadastroAliquotas"),
-							icon: "sap-icon://waiver",
-							key: "taxPackageCadastroAliquotas"
-						}, {
-							title: that.getResourceBundle().getText("viewAdminInicioMenuPais"),
-							icon: "sap-icon://choropleth-chart",
-							key: "pais"
-						}, {
-							title: that.getResourceBundle().getText("viewAdminInicioMenuEmpresa"),
-							icon: "sap-icon://building",
-							key: "empresa"
-						}, {
-							title: that.getResourceBundle().getText("viewAdminInicioMenuTTC"),
-							icon: "sap-icon://batch-payments",
-							expanded: false,
-							items: [{
+					navigation: [{
+						title: that.getResourceBundle().getText("viewAdminInicioMenuUsuario"),
+						icon: "sap-icon://account",
+						key: "usuario"
+					}, {
+						title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackageCadastroAliquotas"),
+						icon: "sap-icon://waiver",
+						key: "taxPackageCadastroAliquotas"
+					}, {
+						title: that.getResourceBundle().getText("viewAdminInicioMenuPais"),
+						icon: "sap-icon://choropleth-chart",
+						key: "pais"
+					}, {
+						title: that.getResourceBundle().getText("viewAdminInicioMenuEmpresa"),
+						icon: "sap-icon://building",
+						key: "empresa"
+					}, {
+						title: that.getResourceBundle().getText("viewAdminInicioMenuTTC"),
+						icon: "sap-icon://batch-payments",
+						expanded: false,
+						items: [
+							/*{
 								title: "Visualizar Módulo",
 								key: "ttcModulo",
 								route: "ttcListagemEmpresas"
-							}, {
+							},*/
+							{
 								title: that.getResourceBundle().getText("viewGeralCambio"),
 								key: "ttcCambio"
 							}, {
@@ -329,46 +302,54 @@ sap.ui.define(
 							}, {
 								title: that.getResourceBundle().getText("viewGeralNomeT"),
 								key: "ttcCadastroTributos"
-							}]
-						}, {
-							title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackage"),
-							icon: "sap-icon://product",
-							expanded: false,
-							items: [{
+							}
+						]
+					}, {
+						title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackage"),
+						icon: "sap-icon://product",
+						expanded: false,
+						items: [
+							/*{
 								title: that.getResourceBundle().getText("viewGeralVisualizarM"),
 								key: "taxPackageModulo"
-							}, {
+							},*/
+							{
 								title: that.getResourceBundle().getText("viewGeralItemsTR"),
 								key: "taxPackageCadastroItemsToReport"
 							}, {
 								title: that.getResourceBundle().getText("viewGeralAdicoesEExclusoes"),
 								key: "taxPackageCadastroAdicoesExclusoes"
-							}]
-						}, {
-							title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBeps"),
-							icon: "sap-icon://activities",
-							expanded: false,
-							items: [{
-									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarCompliance"),
-									key: "complianceModulo"
-								}, {
-									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarBeps"),
-									key: "bepsModulo"
-								}, {
-									title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
-									key: "cadastroObrigacoes"
-								},
-								{
-									title: that.getResourceBundle().getText("viewArquivosAdminMenu"),
-									key: "listaArquivos"
-								}
-								/*, {
-																title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
-																key: "cadastroObrigacoes"
-															}*/
-							]
-						}
-					]
+							}
+						]
+					}, {
+						title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBeps"),
+						icon: "sap-icon://activities",
+						expanded: false,
+						items: [
+							/*{
+								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarCompliance"),
+								key: "complianceModulo"
+							}, {
+								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarBeps"),
+								key: "bepsModulo"
+							},*/
+							{
+								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
+								key: "cadastroObrigacoes"
+							}, {
+								title: that.getResourceBundle().getText("viewArquivosAdminMenu"),
+								key: "listaArquivos"
+							}
+							/*, {
+								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
+								key: "cadastroObrigacoes"
+							}*/
+						]
+					}, {
+						title: that.getResourceBundle().getText("viewGeralVisualizarM"),
+						icon: "sap-icon://detail-view",
+						key: "iframe"
+					}]
 				});
 			}
 		});
