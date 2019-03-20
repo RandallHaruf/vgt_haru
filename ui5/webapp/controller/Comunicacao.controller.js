@@ -37,7 +37,7 @@ sap.ui.define(
 						that.getModel().setProperty("/corpo", "");
 						that.getModel().setProperty("/assunto", "");
 						that.getModel().setProperty("/bEmailButton", true);
-						sap.m.MessageToast.show("Email enviado com sucesso");
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewEnviarMensagem"));
 					}
 				});
 

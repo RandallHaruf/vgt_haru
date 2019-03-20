@@ -133,7 +133,7 @@
 											<Label text="{i18n>viewGeralTipo}" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
-											<Select id="selectTipo" items="{/DominioAliquotaTipo}" selectedKey="{/objeto/idTipo}">
+											<Select id="selectTipo" items="{ path: '/DominioAliquotaTipo', templateShareable: false }" selectedKey="{/objeto/idTipo}">
 												<core:Item text="{tipo}" key="{id_dominio_aliquota_tipo}" />
 												<!--<items>
 													<core:Item text=""/>
@@ -181,7 +181,7 @@
 												<Label text="{i18n>viewGeralAnoInicio}" />
 												<table:template>
 													<Select 
-														items="{/DominioAnoFiscal}" 
+														items="{ path: '/DominioAnoFiscal', templateShareable: false }" 
 														selectedKey="{idAnoInicial}" 
 														change="onTrocarPeriodo"
 														width="100%">
@@ -193,7 +193,7 @@
 												<Label text="{i18n>viewGeralAnoFim}" />
 												<table:template>
 													<Select 
-														items="{/DominioAnoFiscal}" 
+														items="{ path: '/DominioAnoFiscal', templateShareable: false}" 
 														selectedKey="{idAnoFinal}" 
 														change="onTrocarPeriodo"
 														width="100%">
