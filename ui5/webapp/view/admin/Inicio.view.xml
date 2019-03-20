@@ -43,9 +43,6 @@
 		<tnt:mainContents>
 			<NavContainer id="pageContainer">
 				<pages>
-					<!--<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Usuario" />
-					</ScrollContainer>--> 
 					<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroUsuario" id="usuarioXMLView" />
 					</ScrollContainer>
@@ -70,21 +67,21 @@
 					<ScrollContainer id="ttcCadastroTributos" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroNameOfTaxTTC" id="ttcCadastroTributosXMLView" />
 					</ScrollContainer>
-					<ScrollContainer id="taxPackageModulo" horizontal="false" vertical="true" height="100%">
+					<!--<ScrollContainer id="taxPackageModulo" horizontal="false" vertical="true" height="100%">
 						<Text text="Redirecionar para visualização do Tax Package"></Text>
-					</ScrollContainer>
+					</ScrollContainer>-->
 					<ScrollContainer id="taxPackageCadastroItemsToReport" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage" id="taxPackageCadastroItemsToReportXMLView" />
 					</ScrollContainer>
 					<ScrollContainer id="taxPackageCadastroAdicoesExclusoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroDiferencasTaxPackage" id="taxPackageCadastroAdicoesExclusoesXMLView" />
 					</ScrollContainer>
-					<ScrollContainer id="complianceModulo" horizontal="false" vertical="true" height="100%">
+					<!--<ScrollContainer id="complianceModulo" horizontal="false" vertical="true" height="100%">
 						<Text text="Redirecionar para visualização do Compliace"></Text>
 					</ScrollContainer>
 					<ScrollContainer id="bepsModulo" horizontal="false" vertical="true" height="100%">
 						<Text text="Redirecionar para visualização do Beps"></Text>
-					</ScrollContainer>
+					</ScrollContainer>-->
 					<ScrollContainer id="cadastroTipoObrigacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroTipoObrigacoesComplianceBeps" id="cadastroTipoObrigacoesXMLView" />
 					</ScrollContainer>
@@ -96,6 +93,9 @@
 					</ScrollContainer>
 					<ScrollContainer id="listaNotificacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaNotificacoes" id="listaNotificacoesXMLView" />
+					</ScrollContainer>
+					<ScrollContainer id="iframe" horizontal="false" vertical="true" height="100%" class="meu-iframe">
+						<core:HTML content="&lt;iframe src=&quot;index.html&quot; height=&quot;100%&quot; width=&quot;100%&quot; &gt;&lt;/iframe&gt;"></core:HTML>
 					</ScrollContainer>
 				</pages>
 			</NavContainer>

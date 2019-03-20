@@ -8,6 +8,10 @@ sap.ui.define(
 
 		return Controller.extend("vale.Compliance.controller.BaseController", {
 			
+			onInit: function () {
+				alert("oi");
+			},
+			
 			getRouter : function () {
 				return sap.ui.core.UIComponent.getRouterFor(this);
 			},
@@ -41,6 +45,12 @@ sap.ui.define(
 			
 			fromURIComponent: function (sParam) {
 				return JSON.parse(decodeURIComponent(sParam));
+			},
+			
+			mostrarAcessoRapidoInception: function () {
+				this.getView().byId("acessoRapidoLogout").setVisible(false);
+				this.getView().byId("acessoRapidoEmpresas").setVisible(false);
+				this.getView().byId("acessoRapidoComunicacao").setVisible(false);
 			},
 			
 			onAcessoRapido: function (oEvent) {

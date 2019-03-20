@@ -408,54 +408,58 @@ sap.ui.define(
 		
 			},
 			_onRouteMatched: function (oEvent) {
-				/*if ( self !== top ) {
-				// you're in an iframe
-				alert('Dentro de um iframe');
+				this.setModel(new sap.ui.model.json.JSONModel());
+				
+				this.onIdAnoAtual();
+				
+				if (!this.isIFrame()) {
+					this.setBusy(this.byId("painelSelecaoModulo"), true);
+					this.getModel().setProperty("/ShowTTC", false);
+					this.getModel().setProperty("/ShowTaxPackage", false);
+					this.getModel().setProperty("/ShowCompliance", false);
+					this.getModel().setProperty("/ShowBeps", false);
+					this.getModel().setProperty("/ShowAdmin", false);
+					
+					fetch(Constants.urlBackend + "verifica-auth", {
+							credentials: "include"
+						})
+						.then((res) => {
+							res.json()
+								.then((response) => {
+									this.setBusy(this.byId("painelSelecaoModulo"), false);
+	
+									if (response.success) {
+										this.getModel().setProperty("/ShowTTC", response.modulos && response.modulos.includes(1) ? true : false);
+										this.getModel().setProperty("/ShowTaxPackage", response.modulos && response.modulos.includes(2) ? true : false);
+										this.getModel().setProperty("/ShowCompliance", response.modulos && response.modulos.includes(3) ? true : false);
+										this.getModel().setProperty("/ShowBeps", response.modulos && response.modulos.includes(4) ? true : false);
+										this.getModel().setProperty("/ShowAdmin", response.modulos && response.modulos.includes(5) ? true : false);
+									} else {
+										MessageToast.show(response.error.msg);
+										this.getRouter().navTo("Login");
+									}
+								})
+								.catch((err) => {
+									this.setBusy(this.byId("painelSelecaoModulo"), false)
+									MessageToast.show(err);
+									this.getRouter().navTo("Login");
+								});
+						})
+						.catch((err) => {
+							this.setBusy(this.byId("painelSelecaoModulo"), false)
+							MessageToast.show(err);
+							this.getRouter().navTo("Login");
+						});
 				}
 				else {
-				alert('Fora de um iframe');	
-				}*/
-				
-				
-				this.setBusy(this.byId("painelSelecaoModulo"), true);
-				this.onIdAnoAtual();
-				this.setModel(new sap.ui.model.json.JSONModel());
-				this.getModel().setProperty("/ShowTTC", false);
-				this.getModel().setProperty("/ShowTaxPackage", false);
-				this.getModel().setProperty("/ShowCompliance", false);
-				this.getModel().setProperty("/ShowBeps", false);
-				this.getModel().setProperty("/ShowAdmin", false);
-				
-				fetch(Constants.urlBackend + "verifica-auth", {
-						credentials: "include"
-					})
-					.then((res) => {
-						res.json()
-							.then((response) => {
-								this.setBusy(this.byId("painelSelecaoModulo"), false);
-
-								if (response.success) {
-									this.getModel().setProperty("/ShowTTC", response.modulos && response.modulos.includes(1) ? true : false);
-									this.getModel().setProperty("/ShowTaxPackage", response.modulos && response.modulos.includes(2) ? true : false);
-									this.getModel().setProperty("/ShowCompliance", response.modulos && response.modulos.includes(3) ? true : false);
-									this.getModel().setProperty("/ShowBeps", response.modulos && response.modulos.includes(4) ? true : false);
-									this.getModel().setProperty("/ShowAdmin", response.modulos && response.modulos.includes(5) ? true : false);
-								} else {
-									MessageToast.show(response.error.msg);
-									this.getRouter().navTo("Login");
-								}
-							})
-							.catch((err) => {
-								this.setBusy(this.byId("painelSelecaoModulo"), false)
-								MessageToast.show(err);
-								this.getRouter().navTo("Login");
-							});
-					})
-					.catch((err) => {
-						this.setBusy(this.byId("painelSelecaoModulo"), false)
-						MessageToast.show(err);
-						this.getRouter().navTo("Login");
-					});
+					this.mostrarAcessoRapidoInception();                   
+					
+					this.getModel().setProperty("/ShowTTC", true);
+					this.getModel().setProperty("/ShowTaxPackage", true);
+					this.getModel().setProperty("/ShowCompliance", true);
+					this.getModel().setProperty("/ShowBeps", true);
+					this.getModel().setProperty("/ShowAdmin", false);
+				}
 			},
 
 			navToTTC: function (oEvent) {
