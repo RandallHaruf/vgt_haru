@@ -366,6 +366,10 @@ function vincularPeriodos(sIdEmpresa) {
 			}
 			
 			model.executeSync(sQuery, aParams);
+			
+			if (oPeriodo.ano_calendario === periodoEdicaoTTC.ano && oPeriodo.numero_ordem === periodoEdicaoTTC.numeroOrdem) {
+				break;
+			}
 		}
 	}
 	
@@ -388,7 +392,8 @@ function vincularPeriodos(sIdEmpresa) {
 		result = model.executeSync(sQuery);
 		var aPeriodo = result;
 		
-		var periodoEdicaoTaxPackage = pegarPeriodoEdicaoCorrente(1);
+		var periodoEdicaoTaxPackage = pegarPeriodoEdicaoCorrente(1),
+			bIsPeriodoCorrente = false;
 		
 		// Percorre todos os IDs de ano calendario
 		for (var i = 1; i <= iQteAnoCalendario; i++) {
@@ -426,6 +431,7 @@ function vincularPeriodos(sIdEmpresa) {
 					//if (oPeriodo.ano_calendario === iAnoCorrente && oPeriodo.numero_ordem === iNumeroOrdemPeriodoCorrente) {
 					if (oPeriodo.ano_calendario === periodoEdicaoTaxPackage.ano && oPeriodo.numero_ordem === periodoEdicaoTaxPackage.numeroOrdem) {
 						aParams = [sIdTaxPackage, oPeriodo.id_periodo, true, 2]; 
+						bIsPeriodoCorrente = true;
 					}
 					// Se não, seta flag ativo para falso e status para fechado mas não enviado
 					else {
@@ -433,6 +439,28 @@ function vincularPeriodos(sIdEmpresa) {
 					}
 					
 					model.executeSync(sQuery, aParams);
+					
+					if (bIsPeriodoCorrente) {
+						// Se o 4º trimestre for o período corrente de edição, 
+						// é preciso criar os vínculos de edição ANUAL e da primeira RETIFICADORA com ind_ativo = false
+						if (oPeriodo.numero_ordem === 4) {
+							j++;
+							aParams = [sIdTaxPackage, aPeriodoAno[j].id_periodo, false, 1];
+							
+							model.executeSync(sQuery, aParams);
+							
+							j++;
+							aParams = [sIdTaxPackage, aPeriodoAno[j].id_periodo, false, 1];
+							
+							model.executeSync(sQuery, aParams);
+						}
+						
+						break;
+					}
+				}
+				
+				if (bIsPeriodoCorrente) {
+					break;
 				}
 			}	
 		}

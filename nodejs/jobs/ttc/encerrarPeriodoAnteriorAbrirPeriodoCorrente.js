@@ -102,17 +102,10 @@ const criarRelacionamentoPeriodoCorrente = (iAnoCorrente, iNumeroOrdemCorrente) 
 		aPromise.push(pegarEmpresas());
 		aPromise.push(pegarPeriodo(iAnoCorrente, iNumeroOrdemCorrente));
 		
-		/*if (iNumeroOrdemCorrente === 4) {
-			aPromise.push(pegarPeriodo(iAnoCorrente, 5));	
-			aPromise.push(pegarPeriodo(iAnoCorrente, 6));
-		}*/
-		
 		Promise.all(aPromise)
 			.then((res) => {
 				let aEmpresa = res[0],
-					oPeriodoCorrente = res[1][0]/*,
-					oPeriodoAnual = res[2],
-					oPeriodoRetificadora = res[3]*/;
+					oPeriodoCorrente = res[1][0];
 				
 				let aPromiseCriar = [];
 				
@@ -120,14 +113,6 @@ const criarRelacionamentoPeriodoCorrente = (iAnoCorrente, iNumeroOrdemCorrente) 
 					let idEmpresa = aEmpresa[i].id_empresa;
 					
 					aPromiseCriar.push(criarRelacionamento(oPeriodoCorrente.id_periodo, idEmpresa));
-					
-					/*if (oPeriodoAnual) {
-						aPromiseCriar.push(criarRelacionamento(oPeriodoAnual.id_periodo, idEmpresa, false));	
-					}
-					
-					if (oPeriodoRetificadora) {
-						aPromiseCriar.push(criarRelacionamento(oPeriodoRetificadora.id_periodo, idEmpresa, false));	
-					}*/
 				}	
 				
 				Promise.all(aPromiseCriar)
