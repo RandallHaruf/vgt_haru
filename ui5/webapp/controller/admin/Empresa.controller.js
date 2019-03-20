@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, NodeAPI, Validador, Utils) {
+	function (BaseController, NodeAPI, Validador, Utils,Constants) {
 		jQuery.sap.require("sap.m.MessageBox");
 
 		return BaseController.extend("ui5ns.ui5.controller.admin.Empresa", {
@@ -84,6 +85,18 @@ sap.ui.define(
 					obj["valueStateJurisdicaoNi"] = sap.ui.core.ValueState.None;
 				}
 			},
+			onPreencherStatus: function (oEvent) {
+				var obj = this.getModel().getProperty("/objeto");
+				if(obj["fk_dominio_empresa_status.id_dominio_empresa_status"] > 3 && obj["fk_dominio_empresa_status.id_dominio_empresa_status"] < 7 ){
+					obj["data_liquidada_requerida"] = true;
+					obj["data_liquidada_visible"] = true;
+				}
+				else{
+					obj["data_liquidada_requerida"] = false;
+					obj["data_liquidada_visible"] = false;
+					obj["data_encerramento"] = undefined;
+				}
+			},
 			_nomeColunaIdentificadorNaListagemObjetos: "id_empresa",
 
 			_validarFormulario: function () {
@@ -113,7 +126,10 @@ sap.ui.define(
 					continua = false;
 					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
-
+				if(obj["fk_dominio_empresa_status.id_dominio_empresa_status"] > 3 && obj["fk_dominio_empresa_status.id_dominio_empresa_status"] < 7 && !obj["data_encerramento"]){
+					continua = false;
+					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
+				}
 				oValidacao.formularioValido = (oValidacao.formularioValido && continua);
 				if (!oValidacao.formularioValido) {
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
@@ -299,6 +315,8 @@ sap.ui.define(
 							Utils.traduzEmpresaStatusTipo(aDominioEmpresaStatus[i]["id_dominio_empresa_status"], that);
 					}
 					that.getModel().setProperty("/DominioEmpresaStatus", Utils.orderByArrayParaBox(aDominioEmpresaStatus, "status"));
+					that.onPreencherStatus();
+
 				});
 
 				NodeAPI.listarRegistros("Aliquota?tipo=empresa", function (response) {
@@ -316,8 +334,14 @@ sap.ui.define(
 				that.setBusy(that.byId("formularioObjeto"), true);
 				NodeAPI.lerRegistro("Empresa", iIdObjeto, function (response) {
 					that.getModel().setProperty("/objeto", response);
+					that.onPreencherStatus();
 					that.getModel().setProperty("/idAliquotaVigente", response["fk_aliquota.id_aliquota"]);
-
+					if(that.getModel().getProperty("/objeto/fk_dominio_empresa_status.id_dominio_empresa_status") > 3 && that.getModel().getProperty("/objeto/fk_dominio_empresa_status.id_dominio_empresa_status") < 7  ){
+						that.getModel().setProperty("/TravaCampo",true);
+					}
+					else{
+						that.getModel().setProperty("/TravaCampo",false);
+					}
 					that.setBusy(that.byId("formularioObjeto"), false);
 
 					var pais = that.getModel().getProperty("/objeto/fk_pais.id_pais");
@@ -400,6 +424,7 @@ sap.ui.define(
 						lbcNome: obj["lbc_nome"],
 						lbcEmail: obj["lbc_email"],
 						comentarios: obj["comentarios"],
+						data_encerramento: obj["data_encerramento"],
 						fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
 						fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
 						fkAliquota: obj["fk_aliquota.id_aliquota"],
@@ -411,60 +436,77 @@ sap.ui.define(
 							var aObrigacoesSelecionadas = that._getSelecaoObrigacoes(resp);
 							var DmenosX = that.getModel().getProperty("/DmenosXAnos");
 							var AnoCalendario = that.getModel().getProperty("/DominioAnoCalendario");
-
-							for (var i = 0; i < aObrigacoesSelecionadas["inserir"].length; i++) {
-								var oObrigacoesInserir = aObrigacoesSelecionadas["inserir"][i];
-								NodeAPI.criarRegistro("RelModeloEmpresa", {
-									fkIdModeloObrigacao: oObrigacoesInserir["tblModeloObrigacao.id_modelo"],
-									fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-									prazoEntregaCustomizado: oObrigacoesInserir["data_selecionada"],
-									indAtivo: true
-								}, function (res) {
-									/*var DmenosX = then.getModel().getProperty("/DmenosXAnos");
-									var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");*/
-									for (var k = 0; k < AnoCalendario.length; k++) {
-										var oAnoCalendario = AnoCalendario[k];
-										NodeAPI.criarRegistro("RespostaObrigacao", {
-											suporteContratado: null,
-											suporteEspecificacao: null,
-											suporteValor: null,
-											dataExtensao: null,
-											fkIdDominioMoeda: null,
-											fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
-											fkIdDominioObrigacaoStatusResposta: 4,
-											fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"], //ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-											fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"],
-											data_conclusao: null
-										}, function (re) {});
+							var idDominioAno = that.getModel().getProperty("/DominioAnoCalendario").find(function (x) {
+								return x.ano_calendario === Number(obj["data_encerramento"].substring(0,4));
+							});								
+							if(obj["data_encerramento"]){
+								jQuery.ajax(Constants.urlBackend + "/marcaRespostasComoExcluidas/RespostaObrigacao?empresa=" + sIdObjeto + "&anoCalendario=" + idDominioAno["id_dominio_ano_calendario"], {
+									type: "GET",
+									xhrFields: {
+										withCredentials: true
+									},
+									crossDomain: true,
+									dataType: "json",
+									success: function (respon) {
+										var aResponse = respon;
 									}
-								});
+								});	
 							}
-							for (var i = 0; i < aObrigacoesSelecionadas["desabilitar"].length; i++) {
-								var oObrigacoesDesabilitar = aObrigacoesSelecionadas["desabilitar"][i];
-								NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesDesabilitar["idRelModeloEmpresa"], {
-									fkIdModeloObrigacao: oObrigacoesDesabilitar["tblModeloObrigacao.id_modelo"],
-									fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-									prazoEntregaCustomizado: oObrigacoesDesabilitar["data_selecionada"],
-									indAtivo: false
-								}, function (res) {});
-							}
-							for (var i = 0; i < aObrigacoesSelecionadas["habilitar"].length; i++) {
-								var oObrigacoesHabilitar = aObrigacoesSelecionadas["habilitar"][i];
-								NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesHabilitar["idRelModeloEmpresa"], {
-									fkIdModeloObrigacao: oObrigacoesHabilitar["tblModeloObrigacao.id_modelo"],
-									fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-									prazoEntregaCustomizado: oObrigacoesHabilitar["data_selecionada"],
-									indAtivo: true
-								}, function (res) {});
-							}
-							for (var i = 0; i < aObrigacoesSelecionadas["atualizar"].length; i++) {
-								var oObrigacoesAtualizar = aObrigacoesSelecionadas["atualizar"][i];
-								NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesAtualizar["idRelModeloEmpresa"], {
-									fkIdModeloObrigacao: oObrigacoesAtualizar["tblModeloObrigacao.id_modelo"],
-									fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-									prazoEntregaCustomizado: oObrigacoesAtualizar["data_selecionada"],
-									indAtivo: oObrigacoesAtualizar["indAtivo"]
-								}, function (res) {});
+							else{
+								for (var i = 0; i < aObrigacoesSelecionadas["inserir"].length; i++) {
+									var oObrigacoesInserir = aObrigacoesSelecionadas["inserir"][i];
+									NodeAPI.criarRegistro("RelModeloEmpresa", {
+										fkIdModeloObrigacao: oObrigacoesInserir["tblModeloObrigacao.id_modelo"],
+										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+										prazoEntregaCustomizado: oObrigacoesInserir["data_selecionada"],
+										indAtivo: true
+									}, function (res) {
+										/*var DmenosX = then.getModel().getProperty("/DmenosXAnos");
+										var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");*/
+										for (var k = 0; k < AnoCalendario.length; k++) {
+											var oAnoCalendario = AnoCalendario[k];
+											NodeAPI.criarRegistro("RespostaObrigacao", {
+												suporteContratado: null,
+												suporteEspecificacao: null,
+												suporteValor: null,
+												dataExtensao: null,
+												fkIdDominioMoeda: null,
+												fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
+												fkIdDominioObrigacaoStatusResposta: 4,
+												fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"], //ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"],
+												data_conclusao: null
+											}, function (re) {});
+										}
+									});
+								}
+								for (var i = 0; i < aObrigacoesSelecionadas["desabilitar"].length; i++) {
+									var oObrigacoesDesabilitar = aObrigacoesSelecionadas["desabilitar"][i];
+									NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesDesabilitar["idRelModeloEmpresa"], {
+										fkIdModeloObrigacao: oObrigacoesDesabilitar["tblModeloObrigacao.id_modelo"],
+										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+										prazoEntregaCustomizado: oObrigacoesDesabilitar["data_selecionada"],
+										indAtivo: false
+									}, function (res) {});
+								}
+								for (var i = 0; i < aObrigacoesSelecionadas["habilitar"].length; i++) {
+									var oObrigacoesHabilitar = aObrigacoesSelecionadas["habilitar"][i];
+									NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesHabilitar["idRelModeloEmpresa"], {
+										fkIdModeloObrigacao: oObrigacoesHabilitar["tblModeloObrigacao.id_modelo"],
+										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+										prazoEntregaCustomizado: oObrigacoesHabilitar["data_selecionada"],
+										indAtivo: true
+									}, function (res) {});
+								}
+								for (var i = 0; i < aObrigacoesSelecionadas["atualizar"].length; i++) {
+									var oObrigacoesAtualizar = aObrigacoesSelecionadas["atualizar"][i];
+									NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesAtualizar["idRelModeloEmpresa"], {
+										fkIdModeloObrigacao: oObrigacoesAtualizar["tblModeloObrigacao.id_modelo"],
+										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+										prazoEntregaCustomizado: oObrigacoesAtualizar["data_selecionada"],
+										indAtivo: oObrigacoesAtualizar["indAtivo"]
+									}, function (res) {});
+								}								
 							}
 						});
 

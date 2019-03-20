@@ -28,7 +28,10 @@ var oSketch = {
         fkDominioTipoAcesso: {
             nome: "fk_dominio_tipo_acesso.id_tipo_acesso",
             number: true
-        }        
+        },
+        emailGestor: {
+        	nome: "email_gestor"
+        }
 	}
 };
 

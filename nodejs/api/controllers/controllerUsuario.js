@@ -2,10 +2,10 @@
 
 //var db = require("../db");
 var model = require("../models/modelUsuario");
-/*var modelEmpresa = require("../models/modelEmpresa");
+//var modelEmpresa = require("../models/modelEmpresa");
 var modelRelUsuarioEmpresa = require("../models/modelRelUsuarioEmpresa");
-var modelDominioModulo = require("../models/modelDominioModulo");
-var modelRelUsuarioModulo = require("../models/modelRelUsuarioModulo");*/
+//var modelDominioModulo = require("../models/modelDominioModulo");
+var modelRelUsuarioModulo = require("../models/modelRelUsuarioModulo");
 
 /*function adicionarRegistrosRelacionados(iIdUsuario, aRegistroRelacionado) {
 	const vincular = function (oRegistroRelacionado) {
@@ -133,14 +133,54 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkDominioTipoAcesso,
 			valor: req.body.fkDominioTipoAcesso ? req.body.fkDominioTipoAcesso : null
+		}, {
+			coluna: model.colunas.emailGestor,
+			valor: req.body.emailGestor ? req.body.emailGestor : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
-				console.log(req.body.modulos);
-				console.log(req.body.empresas);
+				
+				var idUsuario = result[0].generated_id;
+				
+				for(let i = 0,length = req.body.modulos.length; i < length; i++){
+					modelRelUsuarioModulo.inserir(
+						[
+							{
+								coluna: modelRelUsuarioModulo.colunas.fkUsuario,
+								valor: idUsuario
+							},
+							{
+								coluna: modelRelUsuarioModulo.colunas.fkModulo,
+								valor: req.body.modulos[i]["id_dominio_modulo"]
+							}
+						]
+						
+					,function ( err1, result1){
+						
+					});
+				}
+				
+				for(let i = 0,length = req.body.empresas.length; i < length; i++){
+					modelRelUsuarioEmpresa.inserir(
+						[
+							{
+								coluna: modelRelUsuarioEmpresa.colunas.fkUsuario,
+								valor: idUsuario
+							},
+							{
+								coluna: modelRelUsuarioEmpresa.colunas.fkEmpresa,
+								valor: req.body.empresas[i]["id_empresa"]
+							}
+						]
+						
+					,function ( err1, result1){
+						
+					});
+				}
+				
 
 				res.send(JSON.stringify(result));
 			}
@@ -188,6 +228,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkDominioTipoAcesso,
 			valor: req.body.fkDominioTipoAcesso ? req.body.fkDominioTipoAcesso : null
+		}, {
+			coluna: model.colunas.emailGestor,
+			valor: req.body.emailGestor ? req.body.emailGestor : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {

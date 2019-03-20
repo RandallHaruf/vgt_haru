@@ -43,6 +43,9 @@ var oSketch = {
 		comentarios: {
 			nome: "comentarios"
 		},
+		data_encerramento: {
+			nome: "data_encerramento"
+		},		
 		fkTipoSocietario: {
 			nome: "fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario",
 			number: true

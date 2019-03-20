@@ -193,6 +193,22 @@ sap.ui.define(
 				that.byId("btnCancelar").setEnabled(false);
 				that.byId("btnSalvar").setEnabled(false);
 				that.setBusy(that.byId("btnSalvar"), true);
+				
+				var aModulos = that.getModel().getProperty("/DominioModulo");
+				var ModulosSelecionados = [];
+				for(var i = 0; i < aModulos.length; i++){
+					if (aModulos[i].selecionado == true) {
+						ModulosSelecionados.push(aModulos[i]);
+					}
+				}
+				
+				var aEmpresas = that.getModel().getProperty("/Empresas");
+				var EmpresasSelecionadas = [];
+				for(var i = 0; i < aEmpresas.length; i++){
+					if (aEmpresas[i].selecionado == true) {
+						EmpresasSelecionadas.push(aEmpresas[i]);
+					}
+				}
 
 				NodeAPI.pCriarRegistro("Usuario", {
 						nome: obj.nome,
@@ -201,8 +217,9 @@ sap.ui.define(
 						user: obj.user,
 						indAtivo: obj["ind_ativo"],
 						fkDominioTipoAcesso: obj["fk_dominio_tipo_acesso.id_tipo_acesso"],
-						modulos: that.getModel().getProperty("/DominioModulo"),
-						empresas: that.getModel().getProperty("/Empresas")
+						emailGestor: obj.email_gestor,
+						modulos: ModulosSelecionados,
+						empresas: EmpresasSelecionadas
 					})
 					.then(function (res) {
 						finalizarProcesso();

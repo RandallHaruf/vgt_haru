@@ -449,6 +449,7 @@ context VGT {
             pass                   : String(200);
             ind_ativo              : Boolean;
             fk_dominio_tipo_acesso : association[*, 0..1] to VGT.DOMINIO_ACESSO_USUARIO { id_tipo_acesso };
+            email_gestor           : String(200);
     };
 
     /*@@layout{"layoutInfo":{"x":-2288,"y":-194.5}}*/

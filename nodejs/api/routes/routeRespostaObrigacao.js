@@ -12,4 +12,5 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().delete("/RespostaObrigacao/:idRegistro", controller.excluirRegistro));
 
 	aRoutes.push(express.Router().get("/DeepQuery/RespostaObrigacao", controller.deepQuery));
+	aRoutes.push(express.Router().get("/marcaRespostasComoExcluidas/RespostaObrigacao", controller.marcaRespostasComoExcluidas));
 };
