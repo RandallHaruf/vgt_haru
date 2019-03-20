@@ -235,9 +235,7 @@ module.exports = {
 		}
 
 		if (req.query.IndAtivoRel) {
-			oWhere.push(
-				' (tblRelModeloEmpresa."ind_ativo" = ? OR tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4)'
-			);
+			oWhere.push(' (tblRelModeloEmpresa."ind_ativo" = ? OR (tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4) OR (tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 3))');
 			aParams.push(req.query.IndAtivoRel);
 		}
 
