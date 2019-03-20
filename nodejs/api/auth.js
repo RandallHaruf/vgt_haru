@@ -293,14 +293,16 @@ module.exports = function (app) {
 	return {
 		filtrarEmpresas: function (req, aEmpresa, sNomeCampoIdEmpresa) {
 			if (req.session && req.session.autenticado) {
-				if (req.session.usuario.nivelAcesso === 0) {
+				// O Nivel de acesso não controla mais o filtro da lista de empresas.
+				// Todos os usuarios são submetidos ao filtro de empresa, salvo quando estão dentro do inception, que o filtro é burlado
+				//if (req.session.usuario.nivelAcesso === 0) {
 					return aEmpresa.filter(function (obj) {
 						return req.session.usuario.empresas.includes(obj[sNomeCampoIdEmpresa]);
 					});
-				}
+				/*}
 				else {
 					return aEmpresa;
-				}
+				}*/
 			}
 			else {
 				return [];

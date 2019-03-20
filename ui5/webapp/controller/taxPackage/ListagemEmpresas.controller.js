@@ -75,8 +75,13 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 				this.setBusy(this.byId("tabelaEmpresas"), false);
 				
+				if (this.isIFrame()) {
+					this.mostrarAcessoRapidoInception(); 
+				}
+				
 				var that = this;
 				var parametro = JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario;
+				
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
 					if (response) {
 						that.getModel().setProperty("/DominioAnoCalendario", response);
@@ -104,8 +109,7 @@ sap.ui.define(
 				this.byId("tabelaEmpresas").setBusyIndicatorDelay(100);
 				this.byId("tabelaEmpresas").setBusy(true);
 				
-				// Passar parametro 'empresas' com um array de IDs para filtrar as empresas do usuário logado!!!
-				NodeAPI.listarRegistros("TaxPackageListagemEmpresas?anoCalendario=" + sIdAnoCalendario, function (response) {
+				NodeAPI.listarRegistros("TaxPackageListagemEmpresas?anoCalendario=" + sIdAnoCalendario + "&full=" + (this.isIFrame() ? "true" : "false"), function (response) {
 					if (response && response.success) {
 						for (var i = 0, length = response.result.length; i < length; i++) {
 							var obj = response.result[i];
