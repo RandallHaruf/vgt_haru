@@ -150,6 +150,7 @@ context VGT {
             fk_dominio_empresa_status          : association[*, 0..1] to VGT.DOMINIO_EMPRESA_STATUS { id_dominio_empresa_status };
             fk_aliquota                        : association[*, 0..1] to VGT.ALIQUOTA { id_aliquota };
             fk_pais                            : association[*, 0..1] to VGT.PAIS { id_pais };
+            data_encerramento                  : LocalDate;
     };
 
     /*@@layout{"layoutInfo":{"x":-687,"y":55.5}}*/
