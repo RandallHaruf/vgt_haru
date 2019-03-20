@@ -16,7 +16,7 @@ function log (oConnection, sStatement, aParameter, idUsuario) {
 			var sQuery = 
 				'insert into "VGT.LOG"("id_log", "id_usuario", "datahora_operacao", "json_interacao_banco") '
 				+ 'values ("identity_VGT.LOG_id_log".nextval, ?, CURRENT_TIMESTAMP, ?)',
-				aParam = [(idUsuario ? idUsuario : 0), jsonInteracao];
+				aParam = [(idUsuario ? idUsuario.session.usuario.id : 0), jsonInteracao];
 			
 			oConnection.exec(sQuery, aParam);
 		}
@@ -173,9 +173,10 @@ module.exports = {
 				console.log("- PARAMETERS: " + JSON.stringify(oStatement.parameters) + "\n");
 			}
 			
-			log(oConnection, oStatement.statement, oStatement.parameters, oSettings ? oSettings.idUsuario : 0);
-			
 			oConnection.exec(oStatement.statement, oStatement.parameters, function (err, result) {
+				if (!err) {
+					log(oConnection, oStatement.statement, oStatement.parameters, oSettings ? oSettings.idUsuario : 0);	
+				}
 				if (callback) {
 					callback(err, result);
 				}
@@ -208,9 +209,10 @@ module.exports = {
 				console.log("- PARAMETERS: " + JSON.stringify(aParams) + "\n");
 			}
 			
+			var resultSet = oConnection.exec(sStatement, aParams);
+			
 			log(oConnection, sStatement, aParams, oSettings ? oSettings.idUsuario : 0);
 			
-			var resultSet = oConnection.exec(sStatement, aParams);
 			if (!oSettings || !oSettings.connection) {
 				this.closeConnection(oConnection);
 			}
@@ -328,14 +330,20 @@ module.exports = {
 			atualizar: function (oCondition, aParams, callback) {
 				var sStatement = 'update "' + sTabela + '" set ';
 				var aValues = [];
+				var idLog;
 				
 				if (aParams.length !== 0) {
 					for (var i = 0; i < aParams.length; i++) {
 						var oParam = aParams[i];
 						
-						sStatement += (sStatement.endsWith(" ") ? ' "' + oParam.coluna.nome + '" = ?' : ',"' + oParam.coluna.nome + '" = ?');
-						
-						aValues.push(oParam.valor);
+						if (oParam.isIdLog) {
+							idLog = oParam.valor;
+						}
+						else {
+							sStatement += (sStatement.endsWith(" ") ? ' "' + oParam.coluna.nome + '" = ?' : ',"' + oParam.coluna.nome + '" = ?');
+							
+							aValues.push(oParam.valor);
+						}
 					}
 				}
 				
@@ -363,6 +371,8 @@ module.exports = {
 					if (callback) {
 						callback(err, result);	
 					}
+				}, {
+					idUsuario: idLog
 				});
 			},
 			
@@ -371,24 +381,30 @@ module.exports = {
 				var sStatement = 'insert into "' + sTabela + '"(';
 				var sValues = " values(";
 				var aValues = [];
+				var idLog;
 				
 				for (var i = 0; i < aParams.length; i++) {
 					var oParam = aParams[i];
 					
-					sStatement += (sStatement.endsWith("(") ? "" : ",") + "\"" + oParam.coluna.nome + "\"";
-					
-					if (oParam.coluna.identity) {
-						/*sGeneratedIdStm = 'select top 1 "' + oParam.coluna.nome + '" "generated_id" ' 
-										+ 'from "' + sTabela + '" order by "' + oParam.coluna.nome + '" desc';*/
-						sGeneratedIdStm = 'select MAX("' + oParam.coluna.nome + '") "generated_id" from "' + sTabela + '"';
-						
-						var sNomeSequence = "\"identity_" + sTabela + "_" + oParam.coluna.nome + "\"";
-						
-						sValues += (sValues.endsWith("(") ? sNomeSequence + ".nextval" : "," + sNomeSequence + ".nextval");
+					if (oParam.isIdLog) {
+						idLog = oParam.valor;
 					}
 					else {
-						sValues += (sValues.endsWith("(") ? "?" : ",?");
-						aValues.push(oParam.valor);
+						sStatement += (sStatement.endsWith("(") ? "" : ",") + "\"" + oParam.coluna.nome + "\"";
+						
+						if (oParam.coluna.identity) {
+							/*sGeneratedIdStm = 'select top 1 "' + oParam.coluna.nome + '" "generated_id" ' 
+											+ 'from "' + sTabela + '" order by "' + oParam.coluna.nome + '" desc';*/
+							sGeneratedIdStm = 'select MAX("' + oParam.coluna.nome + '") "generated_id" from "' + sTabela + '"';
+							
+							var sNomeSequence = "\"identity_" + sTabela + "_" + oParam.coluna.nome + "\"";
+							
+							sValues += (sValues.endsWith("(") ? sNomeSequence + ".nextval" : "," + sNomeSequence + ".nextval");
+						}
+						else {
+							sValues += (sValues.endsWith("(") ? "?" : ",?");
+							aValues.push(oParam.valor);
+						}
 					}
 				}
 				
@@ -404,10 +420,12 @@ module.exports = {
 						if (callback) {
 							callback(err, result);
 						}
+					}, {
+						idUsuario: idLog
 					});
 				}
 				else {
-					var result1 = that.executeStatementSync(sStatement, aValues);
+					var result1 = that.executeStatementSync(sStatement, aValues, { idUsuario: idLog });
 					
 					if (JSON.stringify(result1) === "1") {
 						that.executeStatement({
@@ -416,6 +434,8 @@ module.exports = {
 							if (callback) {
 								callback(err, result);
 							}
+						}, {
+							idUsuario: idLog
 						});
 					}
 					else {
@@ -446,12 +466,19 @@ module.exports = {
 			
 			excluir: function (aParams, callback) {
 				var sStatement = 'delete from "' + sTabela + '" where ';
+				var idLog;
 				
 				if (aParams.length !== 0) {
 					for (var i = 0; i < aParams.length; i++) {
 						var oParam = aParams[i];
 						
-						sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i === aParams.length-1 ? "" : " and ");
+						if (oParam.isIdLog) {
+							idLog = oParam.valor;
+						}
+						else {
+							//sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i === aParams.length-1 ? "" : " and ");
+							sStatement += (sStatement.endsWith('where ') ? "" : " and ") + ' "' + oParam.coluna.nome + '" = ' + oParam.valor + " ";
+						}
 					}
 				}
 				
@@ -461,6 +488,8 @@ module.exports = {
 					if (callback) {
 						callback(err, result);
 					}
+				}, {
+					idUsuario: idLog
 				});
 			}
 		};

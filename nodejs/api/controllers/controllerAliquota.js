@@ -6,7 +6,7 @@ const modelPais = require('../models/modelPais');
 const modelEmpresa = require('../models/modelEmpresa');
 const db = require('../db');
 
-function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
+function adicionarAliquotas(req, iIdImposto, aValorAliquota, callback) {
 	const selecionarValorAliquota = function () {
 		return new Promise(function (resolve, reject) {
 			modelValorAliquota.listar([{
@@ -28,6 +28,9 @@ function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
 			modelValorAliquota.excluir([{
 				coluna: modelValorAliquota.colunas.id,
 				valor: iIdValorAliquota
+			}, {
+				isIdLog: true,
+				valor: req
 			}], function (err, result) {
 				if (err) {
 					reject(err);
@@ -40,6 +43,11 @@ function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
 	};
 	
 	const atualizarValorAliquota = function (iIdValorAliquota, aParam) {
+		aParam.push({
+			isIdLog: true,
+			valor: req
+		});
+		
 		return new Promise(function (resolve, reject) {
 			modelValorAliquota.atualizar({
 				coluna: modelValorAliquota.colunas.id,
@@ -58,6 +66,10 @@ function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
 	const inserirValorAliquota = function (aParam) {
 		aParam.push({
 			coluna: modelValorAliquota.colunas.id
+		});
+		aParam.push({
+			isIdLog: true,
+			valor: req
 		});
 		return new Promise(function (resolve, reject) {
 			modelValorAliquota.inserir(aParam, function (err, result) {
@@ -139,7 +151,7 @@ function adicionarAliquotas(iIdImposto, aValorAliquota, callback) {
 		});
 }
 
-function adicionarRegistrosRelacionados(iIdImposto, aRegistroRelacionado, iTipoParaDesvincular) {
+function adicionarRegistrosRelacionados(req, iIdImposto, aRegistroRelacionado, iTipoParaDesvincular) {
 	const vincular = function (oRegistroRelacionado) {
 		let modelRegistro = Number(oRegistroRelacionado.idTipo) === 1 ? modelPais : modelEmpresa;
 		
@@ -150,6 +162,9 @@ function adicionarRegistrosRelacionados(iIdImposto, aRegistroRelacionado, iTipoP
 			}, [{
 				coluna: modelRegistro.colunas.fkAliquota,
 				valor: iIdImposto
+			}, {
+				isIdLog: true,
+				valor: req
 			}], function (err, result) {
 				if (err) {
 					reject(err);
@@ -175,6 +190,9 @@ function adicionarRegistrosRelacionados(iIdImposto, aRegistroRelacionado, iTipoP
 				}, [{
 					coluna: modelRegistro.colunas.fkAliquota,
 					valor: null
+				}, {
+					isIdLog: true,
+					valor: req
 				}], function (err, result) {
 					if (err) {
 						reject(err);
@@ -206,6 +224,8 @@ function adicionarRegistrosRelacionados(iIdImposto, aRegistroRelacionado, iTipoP
 				else {
 					resolve(result);
 				}
+			}, {
+				idUsuario: req
 			});
 		});
 	};
@@ -284,6 +304,9 @@ module.exports = {
 		}, {
 			coluna: aliquota.colunas.fkTipo,
 			valor: fkTipo
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 		
 		aliquota.inserir(aParams, function (err, result) {
@@ -295,7 +318,7 @@ module.exports = {
 				
 				const finalizarAtualizacao = function () {
 					if (req.body.aliquotas) {
-						adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
+						adicionarAliquotas(req, idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
 							if (err) {
 								res.send(JSON.stringify(err2));
 							}
@@ -370,6 +393,9 @@ module.exports = {
 		}, {
 			coluna: aliquota.colunas.fkTipo,
 			valor: fkTipo
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 		
 		aliquota.atualizar(oCondition, aParams, function (err, result) {
@@ -379,7 +405,7 @@ module.exports = {
 			else {
 				const finalizarAtualizacao = function () {
 					if (req.body.aliquotas) {
-						adicionarAliquotas(idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
+						adicionarAliquotas(req, idAliquota, JSON.parse(req.body.aliquotas), function (err2, result2) {
 							if (err) {
 								res.send(JSON.stringify(err2));
 							}
@@ -413,6 +439,9 @@ module.exports = {
 		aliquota.excluir([{
 			coluna: aliquota.colunas.id,
 			valor: req.params.idAliquota
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
