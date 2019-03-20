@@ -92,7 +92,7 @@
 											<Label text="{i18n>viewEmpresasNome}" labelFor="inputNomeEmpresa" />
 										</f:label>
 										<f:fields>
-											<Input id="inputNomeEmpresa" value="{/objeto/nome}" required="true" />
+											<Input id="inputNomeEmpresa" value="{/objeto/nome}" required="true" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -100,22 +100,22 @@
 											<Label text="{i18n>viewEmpresasNumeroHFM}" labelFor="inputHFMSAP" />
 										</f:label>
 										<f:fields>
-											<Input id="inputHFMSAP" value="{/objeto/num_hfm_sap}" required="true" />
+											<Input id="inputHFMSAP" value="{/objeto/num_hfm_sap}" required="true" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasTINTaxIdentificationNumber}" >
 										<f:fields>
-											<Input id="inputTIN" value="{/objeto/tin}" change="onChangeTin"  />
+											<Input id="inputTIN" value="{/objeto/tin}" change="onChangeTin" enabled="{= !${/TravaCampo}}" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasJurisdicaoT}">
 										<f:fields>
-											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" enabled="{= ${/objeto/tin} ?  true : false }" valueState="{/objeto/valueStateJurisdicaoTin}" change="onPreencherJurisdicaoTin" />
+											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" enabled="{= ${/objeto/tin} ?  !${/TravaCampo} : false }" valueState="{/objeto/valueStateJurisdicaoTin}" change="onPreencherJurisdicaoTin" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasNITaxIdentificationNumber}">
 										<f:fields>
-											<Input id="inputNI" value="{/objeto/ni}"  change="onChangeNi"  />
+											<Input id="inputNI" value="{/objeto/ni}"  change="onChangeNi" enabled="{= !${/TravaCampo}}" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -123,7 +123,7 @@
 											<Label text="{i18n>viewEmpresasJurisdicaoN}" labelFor="inputJurisdicaoNI"  />
 										</f:label>
 										<f:fields>
-											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}"  enabled="{= ${/objeto/ni} ?  true : false }" valueState="{/objeto/valueStateJurisdicaoNi}" change="onPreencherJurisdicaoNi" />
+											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}"  enabled="{= ${/objeto/ni} ?  !${/TravaCampo} : false }" valueState="{/objeto/valueStateJurisdicaoNi}" change="onPreencherJurisdicaoNi" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -131,7 +131,7 @@
 											<Label text="{i18n>viewEmpresasEndereco}" labelFor="inputEndereco" />
 										</f:label>
 										<f:fields>
-											<Input id="inputEndereco" value="{/objeto/endereco}" required="true" />
+											<Input id="inputEndereco" value="{/objeto/endereco}" required="true" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -152,7 +152,8 @@
 											<Select 
 												id="selectTipoSocietario" 
 												items="{/DominioEmpresaTipoSocietario}" 
-												selectedKey="{/objeto/fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario}">
+												selectedKey="{/objeto/fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario}"
+												enabled="{= !${/TravaCampo}}">
 												<core:Item text="{tipo_societario}" key="{id_dominio_empresa_tipo_societario}" />
 											</Select>
 										</f:fields>
@@ -169,7 +170,8 @@
 												valueFormat="yyyy-MM-dd" 
 												value="{/objeto/fy_start_date}" 
 												required="true"
-												change="onTrocarData" />
+												change="onTrocarData"
+												enabled="{= !${/TravaCampo}}"/>
 											<DatePicker 
 												id="datepickerEndDate" 
 												placeholder="{i18n>viewGeralInsiraUmaData}" 
@@ -177,7 +179,8 @@
 												valueFormat="yyyy-MM-dd" 
 												value="{/objeto/fy_end_date}"
 												required="true"
-												change="onTrocarData" />
+												change="onTrocarData"
+												enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -185,17 +188,35 @@
 											<Label text="{i18n>viewEmpresasStatusDaEmpresa}" labelFor="selectStatus" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
-											<Select id="selectStatus" items="{/DominioEmpresaStatus}" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}">
+											<Select id="selectStatus" items="{/DominioEmpresaStatus}" change="onPreencherStatus" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}" enabled="{= !${/TravaCampo}}" >
 												<core:Item text="{status}" key="{id_dominio_empresa_status}" />
 											</Select>
 										</f:fields>
+									</f:FormElement>										
+									<f:FormElement visible="{/objeto/data_liquidada_visible}">										
+										<f:label>
+											<Label text="{i18n>viewEmpresasDataEncerramento}" labelFor="datepickerDateLiquidada" class="sapMLabelRequired"  />
+										</f:label>
+										<f:fields>
+											<DatePicker 
+												id="datepickerDateLiquidada" 
+												placeholder="{i18n>viewGeralInsiraUmaData}" 
+												displayFormat="{/displayFormatFull}"
+												valueFormat="yyyy-MM-dd" 
+												value="{/objeto/data_encerramento}"
+												required="{/objeto/data_liquidada_requerida}"
+												visible="{/objeto/data_liquidada_visible}"
+												change="onTrocarData" 
+												enabled="{= !${/TravaCampo}}"
+												/>
+										</f:fields>										
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
 											<Label text="{i18n>viewEmpresasAliquotaVigente}" labelFor="selectAliquota" />
 										</f:label>
 										<f:fields>
-											<Select id="selectAliquota" items="{/Aliquota}" selectedKey="{/objeto/fk_aliquota.id_aliquota}">
+											<Select id="selectAliquota" items="{/Aliquota}" selectedKey="{/objeto/fk_aliquota.id_aliquota}" enabled="{= !${/TravaCampo}}">
 												<!--<core:Item text="{nome} - {valor}%" key="{id_aliquota}" />-->
 												<core:Item text="{nome}" key="{id_aliquota}" />
 											</Select>
@@ -206,7 +227,7 @@
 											<Label text="LBC {i18n>viewEmpresasNome}" labelFor="inputLBCResponsavel" />
 										</f:label>
 										<f:fields>
-											<Input id="inputLBCResponsavel" value="{/objeto/lbc_nome}" required="true" />
+											<Input id="inputLBCResponsavel" value="{/objeto/lbc_nome}" required="true" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -214,14 +235,15 @@
 											<Label text="LBC Email" labelFor="inputLBCEmail" />
 										</f:label>
 										<f:fields>
-											<Input id="inputLBCEmail" type="Email" value="{/objeto/lbc_email}" required="true" change="onTrocarEmail" />
+											<Input id="inputLBCEmail" type="Email" value="{/objeto/lbc_email}" required="true" change="onTrocarEmail" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasComentarios}">
 										<f:fields>
 											<TextArea 
 												id="textAreaComentarios" 
-												rows="5" value="{/objeto/comentarios}"/>
+												rows="5" value="{/objeto/comentarios}"
+												enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 								</f:formElements>
@@ -230,7 +252,8 @@
 					</f:Form>
 					<f:Form 
 						id="formularioVinculoObrigacoes"
-						editable="true">
+						editable="true"
+						>
 						<f:title>
 							<core:Title text="{i18n>viewEmpresasObrigacoesAcessorias}"  />
 						</f:title>
@@ -251,13 +274,15 @@
 													width="15rem" 
 													search="onTextSearch"
 													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
-													value="{/filterValue}" />
+													value="{/filterValue}"
+													enabled="{= !${/TravaCampo}}"
+													/>
 											</Toolbar>
 										</table:extension>
 										<table:columns>
 											<table:Column width="45px">
 												<table:template>
-													<CheckBox selected="{selecionada}" />
+													<CheckBox selected="{selecionada}" enabled="{= !${/TravaCampo}}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
@@ -276,7 +301,7 @@
 												<Label text="{i18n>viewEmpresaDataPrazo} {/displayFormatSemAno}" />
 												<table:template>
 													<!--<Text text="{= ${tblModeloObrigacao.prazo_entrega}}" />-->
-													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="{/displayFormatSemAno}"/>
+													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="{/displayFormatSemAno}" enabled="{= !${/TravaCampo}}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
@@ -288,6 +313,7 @@
 													value="{data_selecionada}" 
 													editable="{= !!${selecionada} === true ? true : false }" 
 													change="onValidarData"
+													enabled="{= !${/TravaCampo}}"
 													/>
 													<!--<DateTimeInput id="DTI1" type="Date" value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" displayFormat="dd/MM"/>													-->
 												</table:template>
@@ -425,7 +451,8 @@
 						id="btnSalvar"
 						text="{i18n>viewGeralSalvar}" 
 						type="Accept" 
-						press="onSalvar"/>
+						press="onSalvar"
+						enabled="{= !${/TravaCampo}}"/>
 					<Button 
 						id="btnCancelar"
 						text="{i18n>viewGeralCancelar}" 
