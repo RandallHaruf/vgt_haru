@@ -15,14 +15,14 @@ sap.ui.define(
 
 				if (sQuery !== null) {
 					this._oTxtFilter = new sap.ui.model.Filter([
-						new sap.ui.model.Filter("pais", sap.ui.model.FilterOperator.Contains, sQuery)
+						new sap.ui.model.Filter("nome", sap.ui.model.FilterOperator.Contains, sQuery)
 					], false);
 				}
 
 				this.getView().getModel().setProperty("/filterValue", sQuery);
 
 				if (oEvent && this._oTxtFilter) {
-					this.byId("tablePais").getBinding("rows").filter(this._oTxtFilter, "Application");
+					this.byId("tableEmpresa").getBinding("rows").filter(this._oTxtFilter, "Application");
 				}
 			},
 
@@ -57,27 +57,6 @@ sap.ui.define(
 				});
 			},
 
-			onTrocarClassification: function (oEvent) {
-				this.getModel().setProperty("/TaxCategory", {});
-				this.getModel().setProperty("/Tax", {});
-
-				var idClassification = oEvent.getSource().getSelectedKey();
-
-				if (idClassification) {
-					this._carregarCategory(idClassification);
-				}
-			},
-
-			onTrocarCategory: function (oEvent) {
-				this.getModel().setProperty("/Tax", {});
-
-				var idCategory = oEvent.getSource().getSelectedKey();
-
-				if (idCategory) {
-					this._carregarTax(idCategory);
-				}
-			},
-
 			_nomeColunaIdentificadorNaListagemObjetos: "id_usuario",
 
 			_validarFormulario: function () {
@@ -87,9 +66,7 @@ sap.ui.define(
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: jQuery(sIdFormulario + " input[aria-required=true]"),
 					aDropdownObrigatorio: [
-						this.byId("selectClassification"),
-						this.byId("selectCategory"),
-						this.byId("selectTax")
+						this.byId("selectTipoAcesso")
 					]
 				});
 
@@ -122,25 +99,20 @@ sap.ui.define(
 			_carregarCamposFormulario: function () {
 				var that = this;
 
-				/*NodeAPI.listarRegistros("DominioTaxClassification", function (response) {
-					response.unshift({ "id_dominio_tax_classification": null, "classification": ""  });
-						var aResponse = response;
-						for (var i = 0, length = aResponse.length; i < length; i++) {
-							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
-						}
-						that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aResponse,"classification"));						
-					//that.getModel().setProperty("/DominioTaxClassification", response);
-				});*/
-
 				NodeAPI.listarRegistros("DominioAcessoUsuario", function (response) {
-					response = Utils.orderByArrayParaBox(response,"descricao");
+					Utils.orderByArrayParaBox(response, "descricao");
+					response.unshift({});
 					that.getModel().setProperty("/DominioAcessoUsuario", response);
 				});
+				
 				NodeAPI.listarRegistros("DominioModulo", function (response) {
-					var id_usuario = that.getModel().getProperty("/idObjeto");
-					NodeAPI.listarRegistros("DeepQuery/UsuarioModulo?idUsuario=" + id_usuario, function (resposta) {
-						
-						for(var i = 0; i < response.length; i++){
+					Utils.orderByArrayParaBox(response, "modulo");
+					that.getModel().setProperty("/DominioModulo", response);
+					/*var idUsuario = that.getModel().getProperty("/idObjeto");
+					
+					NodeAPI.listarRegistros("DeepQuery/UsuarioModulo?idUsuario=" + idUsuario, function (resposta) {
+
+						for (var i = 0; i < response.length; i++) {
 							var aux = resposta.find(function (x) {
 								return (x["fk_dominio_modulo.id_dominio_modulo"] === response[i]["id_dominio_modulo"]);
 							});
@@ -148,38 +120,14 @@ sap.ui.define(
 								response[i]["marcado"] = true;
 							}
 						}
-						response = Utils.orderByArrayParaBox(response,"modulo");
+						response = Utils.orderByArrayParaBox(response, "modulo");
 						that.getModel().setProperty("/DominioModulo", response);
-						
-					});
+					});*/
 				});
+				
 				NodeAPI.listarRegistros("Empresa", function (response) {
-					response = Utils.orderByArrayParaBox(response,"nome");
+					Utils.orderByArrayParaBox(response, "nome");
 					that.getModel().setProperty("/Empresas", response);
-				});
-			},
-
-			_carregarCategory: function (sIdClassification) {
-				var that = this;
-
-				NodeAPI.listarRegistros("TaxCategory?classification=" + sIdClassification, function (response) {
-					response.unshift({
-						"id_tax_category": null,
-						"category": ""
-					});
-					that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(response, "category"));
-				});
-			},
-
-			_carregarTax: function (sIdCategory) {
-				var that = this;
-
-				NodeAPI.listarRegistros("Tax?category=" + sIdCategory, function (response) {
-					response.unshift({
-						"id_tax": null,
-						"tax": ""
-					});
-					that.getModel().setProperty("/Tax", Utils.orderByArrayParaBox(response, "tax"));
 				});
 			},
 
@@ -194,15 +142,19 @@ sap.ui.define(
 				that.setBusy(that.byId("formularioObjeto"), true);
 				that.getModel().setProperty("/idObjeto", iIdObjeto);
 				NodeAPI.lerRegistro("Usuario", iIdObjeto, function (response) {
+					response.ind_ativo = response.ind_ativo ? true : false;
 					that.getModel().setProperty("/objeto", response);
 
 					//that._carregarDominioTipoAcesso(that);
 					that.setBusy(that.byId("formularioObjeto"), false);
 				});
 			},
+			
 			_limparFormulario: function () {
-				
-				// Limpar outras propriedades do modelo
+				this.getModel().setProperty("/objeto", {});
+				this.getModel().setProperty("/DominioAcessoUsuario", []);
+				this.getModel().setProperty("/DominioModulo", []);
+				this.getModel().setProperty("/Empresas", []);
 			},
 
 			_atualizarObjeto: function (sIdObjeto) {
@@ -229,70 +181,37 @@ sap.ui.define(
 			},
 
 			_inserirObjeto: function () {
-				/*sap.m.MessageToast.show("Inserir Objeto");
-				this._navToPaginaListagem();	*/
-
-				var that = this;
+				var that = this,
+					obj = this.getModel().getProperty("/objeto");
+				
+				var finalizarProcesso = function () {
+					that.byId("btnCancelar").setEnabled(true);
+					that.byId("btnSalvar").setEnabled(true);
+					that.setBusy(that.byId("btnSalvar"), false);
+				};
+				
 				that.byId("btnCancelar").setEnabled(false);
 				that.byId("btnSalvar").setEnabled(false);
 				that.setBusy(that.byId("btnSalvar"), true);
 
-				var obj = this.getModel().getProperty("/objeto");
-
-				NodeAPI.criarRegistro("NameOfTax", {
-					indDefault: true,
-					nameOfTax: obj.nameOfTax,
-					fkTax: obj.tax,
-					idPaises: JSON.stringify(that._getIdsPaisesSelecionados())
-				}, function (response) {
-					that.byId("btnCancelar").setEnabled(true);
-					that.byId("btnSalvar").setEnabled(true);
-					that.setBusy(that.byId("btnSalvar"), false);
-					that._navToPaginaListagem();
-				});
-			},
-
-			_getIdsPaisesSelecionados: function () {
-				var aIds = [];
-
-				var aDominioPais = this.getModel().getProperty("/DominioPais");
-
-				for (var i = 0; i < aDominioPais.length; i++) {
-
-					var oPais = aDominioPais[i];
-
-					if (oPais.selecionado) {
-						aIds.push(oPais["id_dominio_pais"]);
-					}
-				}
-
-				return aIds;
-			},
-
-			_resolverVinculoPais: function (response) {
-				var aDominioPais = this.getModel().getProperty("/DominioPais");
-
-				for (var i = 0; i < aDominioPais.length; i++) {
-
-					var oPais = aDominioPais[i];
-
-					//var aux = response.find(x => x["fk_dominio_pais.id_dominio_pais"] === oPais["id_dominio_pais"]);
-					var aux = response.find(function (x) {
-						return x["fk_dominio_pais.id_dominio_pais"] === oPais["id_dominio_pais"];
+				NodeAPI.pCriarRegistro("Usuario", {
+						nome: obj.nome,
+						email: obj.email,
+						contato: obj.contato,
+						user: obj.user,
+						indAtivo: obj["ind_ativo"],
+						fkDominioTipoAcesso: obj["fk_dominio_tipo_acesso.id_tipo_acesso"],
+						modulos: that.getModel().getProperty("/DominioModulo"),
+						empresas: that.getModel().getProperty("/Empresas")
+					})
+					.then(function (res) {
+						finalizarProcesso();
+						that._navToPaginaListagem();	
+					})
+					.catch(function (err) {
+						alert(err.status + " - " + err.statusText);
+						finalizarProcesso();
 					});
-
-					if (aux) {
-						oPais.selecionado = true;
-					}
-
-					aDominioPais.sort(function (x, y) {
-						// true values first
-						return (x.selecionado === y.selecionado) ? 0 : x.selecionado ? -1 : 1;
-						// false values first
-						// return (x === y)? 0 : x? 1 : -1;
-					});
-
-				}
 			},
 
 			_navToPaginaListagem: function () {
@@ -328,6 +247,7 @@ sap.ui.define(
 
 							that._carregarObjetoSelecionado(id);
 						} else {
+							that.getModel().getProperty("/objeto")["ind_ativo"] = true;
 							that.getModel().setProperty("/isUpdate", false);
 						}
 					},
