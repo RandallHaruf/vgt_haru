@@ -258,7 +258,7 @@ sap.ui.define(
 					that.setBusy(that.byId("tabelaObjetos"), false);
 				});
 
-				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendario", function (response) {
+				NodeAPI.listarRegistros("DominioAnoCalendario?full=true", function (response) {
 					that.getModel().setProperty("/DominioAnoCalendario", response);
 				});
 				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa", function (response) {
@@ -315,7 +315,7 @@ sap.ui.define(
 							Utils.traduzEmpresaStatusTipo(aDominioEmpresaStatus[i]["id_dominio_empresa_status"], that);
 					}
 					that.getModel().setProperty("/DominioEmpresaStatus", Utils.orderByArrayParaBox(aDominioEmpresaStatus, "status"));
-					that.onPreencherStatus();
+					//that.onPreencherStatus();
 
 				});
 

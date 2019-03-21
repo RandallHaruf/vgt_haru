@@ -73,6 +73,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.comentarios,
 			valor: req.body.comentarios ? req.body.comentarios : null
+		},{
+			coluna: model.colunas.data_encerramento,
+			valor: req.body.data_encerramento ? req.body.data_encerramento : null 
 		}, {
 			coluna: model.colunas.fkTipoSocietario,
 			valor: req.body.fkTipoSocietario ? Number(req.body.fkTipoSocietario) : null
@@ -164,6 +167,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.comentarios,
 			valor: req.body.comentarios ? req.body.comentarios : null
+		},{
+			coluna: model.colunas.data_encerramento,
+			valor: req.body.data_encerramento ? req.body.data_encerramento : null 
 		}, {
 			coluna: model.colunas.fkTipoSocietario,
 			valor: req.body.fkTipoSocietario ? Number(req.body.fkTipoSocietario) : null

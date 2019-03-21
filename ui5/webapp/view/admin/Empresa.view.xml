@@ -188,7 +188,7 @@
 											<Label text="{i18n>viewEmpresasStatusDaEmpresa}" labelFor="selectStatus" class="sapMLabelRequired" />
 										</f:label>
 										<f:fields>
-											<Select id="selectStatus" items="{/DominioEmpresaStatus}" change="onPreencherStatus" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}" enabled="{= !${/TravaCampo}}" >
+											<Select id="selectStatus" items="{/DominioEmpresaStatus}" change="onPreencherStatus" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}" enabled="{= !${/TravaCampo}}">
 												<core:Item text="{status}" key="{id_dominio_empresa_status}" />
 											</Select>
 										</f:fields>

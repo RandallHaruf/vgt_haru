@@ -450,7 +450,7 @@ module.exports = {
 			+ 'and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
 			+ 'group by pagamento."fk_empresa.id_empresa", moeda."acronimo"  '
 			+ ') pagamentos '
-			+ 'on empresa."id_empresa" = pagamentos."fk_empresa.id_empresa" ';
+			+ 'on empresa."id_empresa" = pagamentos."fk_empresa.id_empresa" where year(coalesce(empresa."data_encerramento",\'2999-01-01\')) >= (select "ano_calendario" from "VGT.DOMINIO_ANO_CALENDARIO" where "id_dominio_ano_calendario" = '+ sIdAnoCalendario +')';
 			
 		if (aIdEmpresa && aIdEmpresa.length > 0) {
 			sQuery += 'and empresa."id_empresa" in ( ';
