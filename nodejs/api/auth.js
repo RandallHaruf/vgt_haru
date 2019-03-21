@@ -296,9 +296,14 @@ module.exports = function (app) {
 				// O Nivel de acesso não controla mais o filtro da lista de empresas.
 				// Todos os usuarios são submetidos ao filtro de empresa, salvo quando estão dentro do inception, que o filtro é burlado
 				//if (req.session.usuario.nivelAcesso === 0) {
+				if(req.query && req.query.full && req.query.full == "true"){
+					return aEmpresa;
+				}
+				else{
 					return aEmpresa.filter(function (obj) {
 						return req.session.usuario.empresas.includes(obj[sNomeCampoIdEmpresa]);
 					});
+				}
 				/*}
 				else {
 					return aEmpresa;
