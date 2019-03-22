@@ -114,7 +114,7 @@ sap.ui.define(
 				var NomeObrigacao = this.getModel().getProperty("/IdNomeObrigacoesSelecionadas") && this.getModel().getProperty("/IdNomeObrigacoesSelecionadas") != "" ? "&idObrigacoes=" + JSON.stringify(this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")) : "";
 				
 				that.setBusy(that.byId("paginaListagem"), true);
-				NodeAPI.listarRegistros("DeepQuery/ListarTodosDocumentos?ListarSomenteEmVigencia=1&IndAtivoRel=1" + AnoFiscal + Empresa + NomeObrigacao, function (response) {
+				NodeAPI.listarRegistros("DeepQuery/ListarTodosDocumentos?ListarSomenteEmVigencia=1&IndAtivoRel=1&full=true" + AnoFiscal + Empresa + NomeObrigacao, function (response) {
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["Tipo"] = aResponse[i]["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"] == 1 ? "Beps" : "Compliance";
@@ -131,7 +131,7 @@ sap.ui.define(
 				
 				if(this.getModel().getProperty("PrimeiraVez") == 0 || this.getModel().getProperty("PrimeiraVez") == undefined || this.getModel().getProperty("PrimeiraVez") == ""){
 					this.getModel().setProperty("PrimeiraVez", 1);
-					NodeAPI.listarRegistros("Empresa", function (response) {
+					NodeAPI.listarRegistros("Empresa?full=true", function (response) {
 						that.getModel().setProperty("/Empresas", response);
 					});
 					NodeAPI.listarRegistros("ModeloObrigacao", function (response) {
@@ -142,7 +142,7 @@ sap.ui.define(
 					});
 				}
 				
-				var AnoFiscal = this.getModel().getProperty("/IdAnosFiscaisSelecionadas")  ? "&anoFiscal=" + JSON.parse(this.getModel().getProperty("/IdAnosFiscaisSelecionadas")) : "";
+			    /*var AnoFiscal = this.getModel().getProperty("/IdAnosFiscaisSelecionadas")  ? "&anoFiscal=" + JSON.parse(this.getModel().getProperty("/IdAnosFiscaisSelecionadas")) : "";
 				var Empresa = this.getModel().getProperty("/IdEmpresasSelecionadas")  ? "&idEmpresa=" + JSON.parse(this.getModel().getProperty("/IdEmpresasSelecionadas")) : "";
 				var NomeObrigacao = this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")  ? "&idObrigacoes=" + JSON.parse(this.getModel().getProperty("/IdNomeObrigacoesSelecionadas")) : "";
 				
@@ -154,7 +154,7 @@ sap.ui.define(
 					}
 					that.getModel().setProperty("/objetos", aResponse);
 					that.setBusy(that.byId("paginaListagem"), false);
-				});
+				});*/
 			},
 
 			_carregarCamposFormulario: function () {
@@ -191,7 +191,7 @@ sap.ui.define(
 						
 					});
 				});
-				NodeAPI.listarRegistros("Empresa", function (response) {
+				NodeAPI.listarRegistros("Empresa?full=true", function (response) {
 					response = Utils.orderByArrayParaBox(response,"nome");
 					that.getModel().setProperty("/Empresas", response);
 				});

@@ -247,7 +247,7 @@ sap.ui.define(
 				var that = this;
 				that.setBusy(that.byId("tabelaObjetos"), true);
 				that.getModel().setProperty("/objetos", null);
-				NodeAPI.listarRegistros("DeepQuery/Empresa", function (response) {
+				NodeAPI.listarRegistros("DeepQuery/Empresa?full=true", function (response) {
 
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {

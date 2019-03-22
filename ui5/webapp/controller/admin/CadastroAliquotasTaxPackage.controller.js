@@ -604,7 +604,7 @@ sap.ui.define(
 					
 				return new Promise(function (resolve, reject) {
 					Promise.all([
-							NodeAPI.pListarRegistros("Empresa"),
+							NodeAPI.pListarRegistros("Empresa?full=true"),
 							NodeAPI.pListarRegistros("DeepQuery/Pais")
 						])
 						.then(function (res) {
