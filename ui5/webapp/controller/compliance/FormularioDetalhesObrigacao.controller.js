@@ -14,6 +14,7 @@ sap.ui.define(
 
 				//this.setModel(new sap.ui.model.json.JSONModel({}));
 				this.setModel(new sap.ui.model.json.JSONModel({
+					IsIFrame: false,
 					RespostaObrigacao: {
 						/*
 						 {
@@ -127,6 +128,7 @@ sap.ui.define(
 					}
 				}); //sap.m.MessageToast.show("Cancelar inserção");
 			},
+			
 			onVoltarParaListagem: function () {
 				this.getRouter().navTo("complianceListagemObrigacoes",{
 					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")})
@@ -135,24 +137,45 @@ sap.ui.define(
 			
 			onCancelar: function () {
 				var that = this;
-				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
-					title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
-					onClose: function (oAction) {
-						if (sap.m.MessageBox.Action.OK === oAction) {
-							that.onVoltarParaListagem();
+				
+				if (this.isIFrame()) {
+					that.onVoltarParaListagem();
+				}
+				else {
+					jQuery.sap.require("sap.m.MessageBox");
+					sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
+						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
+						onClose: function (oAction) {
+							if (sap.m.MessageBox.Action.OK === oAction) {
+								that.onVoltarParaListagem();
+							}
 						}
-					}
-				});
+					});
+				}
 				//sap.m.MessageToast.show("Cancelar inserção");
 			},
 
 			navToHome: function () {
-				this.getRouter().navTo("selecaoModulo");
+				var that = this;
+				
+				if (this.isIFrame()) {
+					that.getRouter().navTo("selecaoModulo");
+				}
+				else {
+					jQuery.sap.require("sap.m.MessageBox");
+					sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
+						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
+						onClose: function (oAction) {
+							if (sap.m.MessageBox.Action.OK === oAction) {
+								that.getRouter().navTo("selecaoModulo");
+							}
+						}
+					});
+				}
 			},
 
 			navToPage2: function () {
-				this.onVoltarParaListagem();
+				this.onCancelar();
 			},
 
 			onTrocarSuporte: function () {
@@ -465,6 +488,7 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+				this.getModel().setProperty("/IsIFrame", this.isIFrame());
 				this.getModel().setProperty("/IsDeclaracao", false);
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 

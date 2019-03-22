@@ -1,21 +1,14 @@
-<mvc:View
-	controllerName="ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao"
-	xmlns:mvc="sap.ui.core.mvc" 
-	xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" 
-	xmlns:f="sap.ui.layout.form"
-	xmlns:f2="sap.f"
-	xmlns="sap.m" 
-	class="viewComplianceFormularioDetalhesObrigacao"
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns="sap.m" class="viewComplianceFormularioDetalhesObrigacao"
 	xmlns:u="sap.ui.unified">
-	<f2:DynamicPage title="{i18n>viewComplianceFormularioDetalhesObrigacaoTituloPagina}" showFooter="true">
+	<f2:DynamicPage showFooter="{= ${/IsIFrame} ? false : true}">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" enabled="false" />
-						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
-						<Link text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}" enabled="false" />
+						<Link text="Home" press="navToHome"/>
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="navToPage2"/>
+						<Link text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
@@ -49,10 +42,8 @@
 		</f2:header>
 		<f2:content>
 			<VBox class="sapUiSmallMargin">
-				<f:Form id="formularioObrigacao" 
-					editable="true">
+				<f:Form id="formularioObrigacao" editable="true">
 					<f:title>
-						<!--<core:Title text="{i18n>formularioObrigacaoTituloObrigacao}"/>-->
 						<core:Title text="{/RespostaObrigacao/nome_obrigacao}"/>
 					</f:title>
 					<f:layout>
@@ -62,151 +53,84 @@
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
-								<!--<f:FormElement label="{i18n>ViewGeralDataInício}">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao} ({i18n>displayFormatFull})"
+									visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
 									<f:fields>
-										<DatePicker 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
-												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/data_inicial}" 
-												enabled="false"
-												/>
-									</f:fields>
-								</f:FormElement>
-								<f:FormElement label="{i18n>ViewGeralDataFim}">
-									<f:fields>
-										<DatePicker 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
-												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/data_final}" 
-												enabled="false"
-												/>
-									</f:fields>
-								</f:FormElement>-->
-								<f:FormElement label="{i18n>formularioObrigacaoLabelDataConclusao} ({i18n>displayFormatFull})" visible="{= ${/JaDataObrigacaoConcluida} ? false : true }">
-									<f:fields>
-										<DatePicker 
-											placeholder="{i18n>displayFormatFull}" 
-											valueFormat="yyyy-MM-dd" 
-											value="{/RespostaObrigacao/data_conclusao}" 
-											enabled="false"
-											displayFormat="{i18n>displayFormatFull}"
-											change="onValidarData"
-											/>
-										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+										<DatePicker placeholder="{i18n>displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/data_conclusao}" enabled="false"
+											displayFormat="{i18n>displayFormatFull}" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega} ({i18n>displayFormatFull})">
 									<f:fields>
-										<DatePicker 
-												placeholder="{i18n>displayFormatFull}" 
-												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/label_prazo_entrega}" 
-												enabled="false"
-												displayFormat="{i18n>displayFormatFull}"
-												change="onValidarData"
-												/>
-										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+										<DatePicker placeholder="{i18n>displayFormatFull}" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/label_prazo_entrega}" enabled="false"
+											displayFormat="{i18n>displayFormatFull}" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
-											<Input value="{/RespostaObrigacao/pais}" enabled="false" />
+										<Input value="{/RespostaObrigacao/pais}" enabled="false"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao} ({i18n>displayFormatFull})">
 									<f:fields>
-											<DatePicker 
-												placeholder="{i18n>displayFormatFull}" 
-												valueFormat="yyyy-MM-dd" 
-												displayFormat="{i18n>displayFormatFull}"
-												value="{/RespostaObrigacao/data_extensao}" 
-												enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"
-												change="onValidarData"
-												/>
+										<DatePicker placeholder="{i18n>displayFormatFull}" valueFormat="yyyy-MM-dd" displayFormat="{i18n>displayFormatFull}"
+											value="{/RespostaObrigacao/data_extensao}"
+											enabled="{= !!${/RespostaObrigacao/ind_extensao_compliance} === true ? ( ${/JaDataObrigacaoConcluida} ? (!${/JaEstavaPreenchido} ? true : false ) : false) : false}"
+											change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}">
 									<f:fields>
-											<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
+										<Input enabled="false" value="{/RespostaObrigacao/descricao}"></Input>
 									</f:fields>
 								</f:FormElement>
-									<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada" enabled="{=  !!${/JaDataObrigacaoConcluida} ? !!${/JaEstavaIniciada} : false}" selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
+										<CheckBox id="checkObrigacaoIniciada" enabled="{= !!${/JaDataObrigacaoConcluida} ? !!${/JaEstavaIniciada} : false}"
+											selected="{/RespostaObrigacao/ObrigacaoIniciada}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>ViewGeralSuporteHired}">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}" enabled="{=  ${/JaDataObrigacaoConcluida} ? true : false }" />
+										<CheckBox id="checkSuporteContratado" select="onTrocarSuporte" selected="{/RespostaObrigacao/suporte_contratado}"
+											enabled="{= ${/JaDataObrigacaoConcluida} ? true : false }"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
-											<TextArea 
-											value="{/RespostaObrigacao/suporte_especificacao}"
-											id="textAreaSuporte"
-											rows="5" 
-											enabled="{= ${/RespostaObrigacao/suporte_contratado} ?  ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
+										<TextArea value="{/RespostaObrigacao/suporte_especificacao}" id="textAreaSuporte" rows="5"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}"  type="Number" enabled="{= ${/RespostaObrigacao/suporte_contratado} ?  ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
+										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}" type="Number"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralMoeda}">
 									<f:fields>
-										
-										<!--<Select 
-												id="selectTipoMoeda" 
-												items="{/DominioMoeda}" 
-												selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}">
-												<core:Item text="{nome}" key="{id_dominio_moeda}" />
-											</Select>-->
-											<ComboBox
-											items="{/DominioMoeda}"
-											selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}"
-											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"
-											>
-										<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
-											</ComboBox>
+										<ComboBox items="{/DominioMoeda}" selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda.id_dominio_moeda}"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}">
+											<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}"/>
+										</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralEmpresa}">
 									<f:fields>
-												<!--<Select 
-												id="selectTipoEmpresa" 
-												items="{/Empresa}" 
-												selectedKey="{/RespostaObrigacao/fk_id_empresa.id_empresa}">
-												<core:Item text="{nome}" key="{id_empresa}" />
-												</Select>-->
-												<Input id="Empresa" value="{/RespostaObrigacao/nome}" enabled="false" />
+										<Input id="Empresa" value="{/RespostaObrigacao/nome}" enabled="false"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-											<DatePicker 
-											id="datepickerAnoFiscal" 
-											placeholder="Insira uma data" 
-											valueFormat="yyyy-MM-dd" 
-											value="{/RespostaObrigacao/ano_fiscal}" 
-											enabled="false" 
-											change="onValidarData"
-											/>
-											<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+										<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal}"
+											enabled="false" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}">
 									<f:fields>
-										<DatePicker 
-												id="datepickerAnoCalendario" 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
-												valueFormat="yyyy-MM-dd" 
-												value="{/RespostaObrigacao/ano_calendario}" 
-												enabled="false"
-												change="onValidarData"
-												/>
-										<!--<Label text="{/RespostaObrigacao/ano_calendario}"/>-->
+										<DatePicker id="datepickerAnoCalendario" placeholder="{i18n>viewGeralInsiraUmaData}" valueFormat="yyyy-MM-dd"
+											value="{/RespostaObrigacao/ano_calendario}" enabled="false" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 							</f:formElements>
@@ -221,27 +145,22 @@
 						<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 							emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
 					</f:layout>
-				<f:formContainers>
+					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
 								<f:FormElement>
 									<VBox>
-										<VBox>
+										<VBox visible="{= ${/IsIFrame} ? false : true}">
 											<HBox>
-												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}" select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }" />
+												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}"
+													select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }"/>
 											</HBox>
 											<HBox>
-												<DatePicker 
-												id="DataAtual" 
-												valueFormat="yyyy-MM-dd" 
-												visible="{= ${/IsDeclaracao} === true ? true : false}" 
-												change="onValidarData"
-												/>
+												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" change="onValidarData"/>
 											</HBox>
 											<HBox>
-												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}" 
-													buttonText="{i18n>viewGeralEscolhaUmArquivo}"
-													placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}"/>
+												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
+													buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}"/>
 												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
 											</HBox>
 										</VBox>
@@ -264,11 +183,13 @@
 												<ColumnListItem>
 													<cells>
 														<ObjectIdentifier title="{nome_arquivo}" text="{label_declaracao}" class="sapMTableContentMargin"/>
-														<ObjectNumber number="{= ${/Linguagem} === 'EN-US' ? ( ${data_upload} !== null ? ${data_upload}.substring(5,7)+'/'+${data_upload}.substring(8,10)+'/'+${data_upload}.substring(0,4) : null) : ( ${data_upload} !== null ? ${data_upload}.substring(8,10)+'/'+${data_upload}.substring(5,7)+'/'+${data_upload}.substring(0,4) : null)}"/>
+														<ObjectNumber
+															number="{= ${/Linguagem} === 'EN-US' ? ( ${data_upload} !== null ? ${data_upload}.substring(5,7)+'/'+${data_upload}.substring(8,10)+'/'+${data_upload}.substring(0,4) : null) : ( ${data_upload} !== null ? ${data_upload}.substring(8,10)+'/'+${data_upload}.substring(5,7)+'/'+${data_upload}.substring(0,4) : null)}"/>
 														<HBox>
-															<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onBaixarArquivo" enabled="{btnDownloadEnabled}"
-																class="sapUiSmallMarginEnd"/>
-															<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirArq}" press="onExcluirArquivo" enabled="{btnExcluirEnabled}"/>
+															<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onBaixarArquivo"
+																enabled="{btnDownloadEnabled}" class="sapUiSmallMarginEnd"/>
+															<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirArq}" press="onExcluirArquivo" enabled="{btnExcluirEnabled}"
+																visible="{= ${/IsIFrame} ? false : true}"/>
 														</HBox>
 													</cells>
 												</ColumnListItem>
@@ -285,18 +206,9 @@
 		<f2:footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button 
-					text="{i18n>formularioObrigacaoBotaoSalvar}" 
-					type="Accept" 
-					press="onSalvar"
-					enabled="{/CancelaBotaoConfirmar}"/>
-				<Button 
-					text="{i18n>formularioObrigacaoBotaoCancelar}" 
-					type="Reject" 
-					press="onCancelar"
-					enabled="{/CancelaBotaoCancelar}"
-					/>
+				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" enabled="{/CancelaBotaoConfirmar}"/>
+				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" enabled="{/CancelaBotaoCancelar}"/>
 			</Toolbar>
 		</f2:footer>
-	</f2:DynamicPage>	
+	</f2:DynamicPage>
 </mvc:View>

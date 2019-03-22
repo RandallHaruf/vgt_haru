@@ -17,6 +17,14 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+				if (this.isIFrame()) {
+					this.mostrarAcessoRapidoInception();
+					this._parametroInception = "full=true";
+				}
+				else {
+					this._parametroInception = "full=false";
+				}
+				
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
@@ -124,7 +132,7 @@ sap.ui.define(
 			
 			carregarFiltroEmpresa: function () {
 				var that = this;
-				NodeAPI.listarRegistros("Empresa", function (response) {
+				NodeAPI.listarRegistros("Empresa?" + this._parametroInception, function (response) {
 					response = Utils.orderByArrayParaBox(response,"nome");
 					response.unshift({
 						id: null,
@@ -154,11 +162,11 @@ sap.ui.define(
 				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
 				if (oStatus == '0') {
 					oStatus = '';
-				};
+				}
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
 					"&statusResp=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
-					function (response) { // 1 COMPLIANCE
+					function (response) { // 2 COMPLIANCE
 						if (response) {
 							var Todos = 0,
 								NaoIniciada = 0,
@@ -199,9 +207,9 @@ sap.ui.define(
 						}
 					});
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
 					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
-					function (response) { // 1 COMPLIANCE
+					function (response) { // 2 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
 								response[i]["label_prazo_entrega"] = 
@@ -219,6 +227,7 @@ sap.ui.define(
 						}
 					});
 			},
+			
 			_atualizarDadosFiltrado: function () {
 				var that = this;
 
@@ -229,11 +238,11 @@ sap.ui.define(
 				var campoAnoEstaVazio = (!oAnoCalendario ? "&ListarAteAnoAtualMaisUm=1" : "");
 				if (oStatus == '0') {
 					oStatus = '';
-				};
+				}
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
 					"&statusResp=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
-					function (response) { // 1 COMPLIANCE
+					function (response) { // 2 COMPLIANCE
 						if (response) {
 							var Todos = 0,
 								NaoIniciada = 0,
@@ -273,7 +282,7 @@ sap.ui.define(
 						}
 					});
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
 					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
@@ -296,7 +305,9 @@ sap.ui.define(
 
 						}
 					});
-			}
+			},
+			
+			_parametroInception: "full=true"
 		});
 	}
 );
