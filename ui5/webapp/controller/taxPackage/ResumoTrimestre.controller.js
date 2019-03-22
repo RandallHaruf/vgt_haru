@@ -81,6 +81,7 @@ sap.ui.define(
 					parametros: JSON.stringify(oParams)
 				});
 			},
+			
 			ContadorDeTempo: function (idModulo, trimestre) {
 				var Hoje = new Date();
 				var Periodo;
@@ -901,6 +902,11 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+				if (this.isIFrame()) {
+					this.mostrarAcessoRapidoInception();
+					this.byId("btnRequisicoes").setVisible(false);
+				}
+				
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 
 				this.getModel().setProperty("/Empresa", oParametros.empresa);
@@ -1113,17 +1119,27 @@ sap.ui.define(
 							var oPeriodo = response[i];
 
 							if (oPeriodo.numero_ordem <= 4) {
-								if (oPeriodo.ind_ativo) {
-									that._popularToolbarEstimativaCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
-								} else {
-									that._popularToolbarEstimativaFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+								if (that.isIFrame()) {
+									that._popularToolbarEstimativaInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+								}
+								else {
+									if (oPeriodo.ind_ativo) {
+										that._popularToolbarEstimativaCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									} else {
+										that._popularToolbarEstimativaFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									}
 								}
 							// Se o período for anual OU for a ÚLTIMA retificadora
 							} else if (oPeriodo.numero_ordem === 5 || (oPeriodo.numero_ordem === 6 && i === length-1)) {
-								if (oPeriodo.ind_ativo) {
-									that._popularToolbarAnualCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
-								} else {
-									that._popularToolbarAnualFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+								if (that.isIFrame()) {
+									that._popularToolbarAnualInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+								}
+								else {
+									if (oPeriodo.ind_ativo) {
+										that._popularToolbarAnualCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									} else {
+										that._popularToolbarAnualFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									}
 								}
 							}
 						}
@@ -1171,6 +1187,24 @@ sap.ui.define(
 				}
 
 				return false;
+			},
+
+			_popularToolbarEstimativaInception: function (sIdToolbar, oPeriodo) {
+				var that = this;
+
+				var oToolbar = this.byId(sIdToolbar);
+				
+				oToolbar.addContent(new sap.m.ToolbarSpacer());
+				
+				var oButton = new sap.m.Button({
+					icon: "sap-icon://show-edit",
+					text: that.getResourceBundle().getText("viewGeralVisualizar"),
+					type: "Default"
+				}).attachPress(function () {
+					that.onVisualizarPeriodo(oPeriodo);
+				});
+
+				oToolbar.addContent(oButton);
 			},
 
 			_popularToolbarEstimativaCorrente: function (sIdToolbar, oPeriodo) {
@@ -1241,6 +1275,34 @@ sap.ui.define(
 						that.onReabrirPeriodo(oPeriodo);
 					});
 				}
+
+				oToolbar.addContent(oButton);
+			},
+
+			_popularToolbarAnualInception: function (sIdToolbar, oPeriodo) {
+				var that = this;
+
+				var oToolbar = this.byId(sIdToolbar);
+				
+				oToolbar.addContent(new sap.m.ToolbarSpacer());
+
+				var oButton = new sap.m.Button({
+					icon: "sap-icon://attachment",
+					text: that.getResourceBundle().getText("viewTaxPackageResumoTrimestreBaixarDeclaracao"),
+					type: "Accept"
+				}).attachPress(function () {
+					that.onBaixarDeclaracao(oPeriodo);
+				});
+				
+				oToolbar.addContent(oButton);
+				
+				oButton = new sap.m.Button({
+					icon: "sap-icon://show-edit",
+					text: that.getResourceBundle().getText("viewGeralVisualizar"),
+					type: "Default"
+				}).attachPress(function () {
+					that.onVisualizarPeriodo(oPeriodo);
+				});
 
 				oToolbar.addContent(oButton);
 			},

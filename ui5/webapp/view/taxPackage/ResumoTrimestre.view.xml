@@ -25,7 +25,7 @@
 					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f:expandedContent>
 				<f:navigationActions>
-					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" text="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" press="navToRequisicoes" />
+					<Button id="btnRequisicoes" icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" text="{i18n>viewTAXResumoTrimestreBotaoRequisicao}" press="navToRequisicoes" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>
 			</f:DynamicPageTitle>
