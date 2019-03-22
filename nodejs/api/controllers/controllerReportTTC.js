@@ -254,7 +254,11 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
-		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
 			if (aEntrada[12] === null){
 				aEntrada[12] = [];
@@ -466,8 +470,12 @@ module.exports = {
 			+'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblPagamento."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" '
 			+'INNER JOIN "VGT.DOMINIO_MOEDA" AS tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda" '
 			+'INNER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"';
-			
-		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+		
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/req.session.usuario.empresas.length > 0) {
 			var aEmpresas = req.session.usuario.empresas;
 			if (aEntrada[12] === null){
 				aEntrada[12] = [];
@@ -476,7 +484,7 @@ module.exports = {
 				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
 			}
 		}			
-
+		
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";			
 			if (aEntrada[i] !== null){

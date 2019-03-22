@@ -118,7 +118,11 @@ module.exports = {
 			PrazoLEque = aEntrada[7][0]; 	
 		}
 		
-		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+		
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
 			if (aEntrada[13] === null){
 				aEntrada[13] = [];
@@ -261,7 +265,11 @@ module.exports = {
 			PrazoLEque = aEntrada[7][0]; 	
 		}
 		
-		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+		
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
 			if (aEntrada[13] === null){
 				aEntrada[13] = [];

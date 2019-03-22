@@ -36,6 +36,10 @@ sap.ui.define([
 		},
 
 		_handleRouteMatched: function () {
+			if (this.isIFrame()) {
+				this.mostrarAcessoRapidoInception();
+			}
+			
 			this.onExit();
 		},	
 
@@ -237,7 +241,7 @@ sap.ui.define([
 				}
 			});		
 			oWhere[14] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -645,7 +649,7 @@ sap.ui.define([
 			that.setBusy(that.byId("relatorioCompliance"),true);	
 			that.byId("GerarRelatorio").setEnabled(false);	
 			
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao", {
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true

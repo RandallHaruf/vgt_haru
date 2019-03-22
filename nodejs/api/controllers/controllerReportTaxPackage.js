@@ -95,7 +95,11 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
-		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
 			aEntrada[4] = [];
 			for(var j = 0; j < req.session.usuario.empresas.length;j++){
@@ -274,7 +278,11 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.TAX_RECONCILIATION" AS tblTaxReconciliation '
 			+'ON tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" = tblTaxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo"';		
 
-		if (req.session.usuario.nivelAcesso === 0 && req.session.usuario.empresas.length > 0){
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
 			aEntrada[4] = [];
 			for(var j = 0; j < req.session.usuario.empresas.length;j++){

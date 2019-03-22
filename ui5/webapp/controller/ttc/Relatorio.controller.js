@@ -28,6 +28,10 @@ sap.ui.define([
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
 		},
 		_handleRouteMatched: function () {
+			if (this.isIFrame()) {
+				this.mostrarAcessoRapidoInception();
+			}
+			
 			this.onExit();
 		},
 
@@ -215,7 +219,7 @@ sap.ui.define([
 			oWhere.push(null);
 
 			oWhere[13] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -470,7 +474,7 @@ sap.ui.define([
 			var that = this;
 			that.setBusy(that.byId("relatorioDoTTC"), true);
 			that.byId("GerarRelatorio").setEnabled(false);
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC", {
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true

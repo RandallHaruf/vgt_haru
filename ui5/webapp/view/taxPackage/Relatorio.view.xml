@@ -7,7 +7,7 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Tax Package" press="navToPage2" />
+						<!--<Link text="Tax Package" press="navToPage2" />-->
 						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>

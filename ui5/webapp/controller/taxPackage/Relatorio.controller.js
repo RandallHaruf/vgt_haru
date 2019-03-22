@@ -30,6 +30,10 @@ sap.ui.define([
 		},
 
 		_handleRouteMatched: function () {
+			if (this.isIFrame()) {
+				this.mostrarAcessoRapidoInception();
+			}
+			
 			this.onExit();
 		},	
 		
@@ -89,7 +93,7 @@ sap.ui.define([
 			oWhere.push(null);
 			
 			oWhere[5] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage", {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -250,7 +254,7 @@ sap.ui.define([
 			var that = this;
 			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
 			that.byId("GerarRelatorio").setEnabled(false);				
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTaxPackage", {
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
