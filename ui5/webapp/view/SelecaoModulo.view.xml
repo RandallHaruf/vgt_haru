@@ -152,6 +152,7 @@
 						</l:BlockLayoutCell>
 						<l:BlockLayoutCell class="sapUiSmallPaddingEnd">
 							<FlexBox
+								id="selectLinguagem"
 								alignItems="Center"
 								justifyContent="End">
 								<items>

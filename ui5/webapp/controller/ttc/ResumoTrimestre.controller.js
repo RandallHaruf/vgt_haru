@@ -462,6 +462,11 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+				if (this.isIFrame()) {
+					this.mostrarAcessoRapidoInception(); 
+					this.byId("btnRequisicoes").setVisible(false);
+				}
+				
 				var oEmpresa = JSON.parse(oEvent.getParameter("arguments").oEmpresa);
 				var idAnoCalendario = oEvent.getParameter("arguments").idAnoCalendario;
 
@@ -649,10 +654,15 @@ sap.ui.define(
 						for (var i = 0; i < response.length; i++) {
 							var oPeriodo = response[i];
 
-							if (oPeriodo.ind_ativo) {
-								that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
-							} else {
-								that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+							if (that.isIFrame()) {
+								that._popularToolbarInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+							}
+							else {
+								if (oPeriodo.ind_ativo) {
+									that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+								} else {
+									that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+								}
 							}
 						}
 					}
@@ -710,6 +720,23 @@ sap.ui.define(
 					this._popularToolbarPeriodoFechado("toolbarTerceiroPeriodo", 3);
 					this._popularToolbarPeriodoCorrente("toolbarQuartoPeriodo", 4);
 				}*/
+			},
+
+			_popularToolbarInception: function (sIdToolbar, oPeriodo) {
+				var that = this,
+					oToolbar = this.byId(sIdToolbar);
+					
+				oToolbar.addContent(new sap.m.ToolbarSpacer());
+
+				var oButton = new sap.m.Button({
+					icon: "sap-icon://show-edit",
+					text: that.getResourceBundle().getText("viewGeralVisualizar"),
+					type: "Default"
+				}).attachPress(function () {
+					that.onVisualizarPeriodo(oPeriodo);
+				});
+
+				oToolbar.addContent(oButton);
 			},
 
 			_popularToolbarPeriodoFechado: function (sIdToolbar, oPeriodo) {

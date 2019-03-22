@@ -1056,19 +1056,10 @@ module.exports = {
 				else {
 					var auth = require("../auth")();
 					
-					// Necessário para mostrar todas as empresas em modo de visualização no INCEPTION
-					if (req.query.full && req.query.full == "true") {
-						res.send(JSON.stringify({
-							success: true,
-							result: result
-						}));
-					}
-					else {
-						res.send(JSON.stringify({
-							success: true,
-							result: auth.filtrarEmpresas(req, result, "id_empresa")
-						}));
-					}
+					res.send(JSON.stringify({
+						success: true,
+						result: auth.filtrarEmpresas(req, result, "id_empresa")
+					}));
 				}
 			});
 		}

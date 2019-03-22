@@ -452,7 +452,8 @@ sap.ui.define(
 						});
 				}
 				else {
-					this.mostrarAcessoRapidoInception();                   
+					this.mostrarAcessoRapidoInception();   
+					this.byId("selectLinguagem").setVisible(false);
 					
 					this.getModel().setProperty("/ShowTTC", true);
 					this.getModel().setProperty("/ShowTaxPackage", true);
