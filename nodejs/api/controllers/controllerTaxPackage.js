@@ -1039,9 +1039,14 @@ module.exports = {
 				+ ') '
 				+ 'group by taxPackage."fk_empresa.id_empresa" '
 				+ ') retificadoras 		 '
-				+ 'on empresa."id_empresa" = retificadoras."id_empresa" ';
+				+ 'on empresa."id_empresa" = retificadoras."id_empresa" '
+				+ 'where '
+				+ 'year(coalesce(empresa."data_encerramento", \'2999-01-01\')) >= ( ' 
+				+ 'select "ano_calendario" '
+				+ 'from "VGT.DOMINIO_ANO_CALENDARIO" '
+				+ 'where "id_dominio_ano_calendario" = ?)';
 				
-			var aParams = [req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario];
+			var aParams = [req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario, req.query.anoCalendario];
 			
 			db.executeStatement({
 				statement: sQuery,
