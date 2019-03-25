@@ -11,7 +11,7 @@ sap.ui.define(
 
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.VisualizacaoTrimestre", {
 			onInit: function () {
-				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 
 				var oModel = new sap.ui.model.json.JSONModel({});
 				oModel.setSizeLimit(300);

@@ -11,7 +11,7 @@ sap.ui.define(
 		
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
 			onInit: function () {
-				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 
 				var oModel = new sap.ui.model.json.JSONModel({});
 				oModel.setSizeLimit(300);
@@ -1023,7 +1023,12 @@ sap.ui.define(
 			},
 
 			_limparMascara: function (sValor) {
-				return sValor.replace(/\./g, "").replace(",", ".");
+				if (this.isPTBR()) {
+					return sValor.replace(/\./g, "").replace(",", ".");
+				}
+				else {
+					return sValor.replace(/\,/g, "");
+				}
 			},
 
 			_validarNumeroInserido: function (oEvent) {

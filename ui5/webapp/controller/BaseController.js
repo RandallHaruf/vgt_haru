@@ -32,6 +32,10 @@ sap.ui.define(
 				return self !== top;		
 			},
 			
+			isPTBR: function () {
+				return (sap.ui.getCore().getConfiguration().getLanguage().toUpperCase() === "PT-BR");
+			},
+			
 			setBusy: function (oComponent, bBusy) {
 				if (bBusy) {
 					oComponent.setBusyIndicatorDelay(100);

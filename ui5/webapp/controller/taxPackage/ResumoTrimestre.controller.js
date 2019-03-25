@@ -981,10 +981,16 @@ sap.ui.define(
 								break;
 							}
 						}
+						
 						setTimeout(function () {
 							$.each($('.money span'), function (index, el) {
 								var valor = $(el).text();
-								valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+								if (that.isPTBR()) {
+									valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");	
+								}
+								else {
+									valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ",");	
+								}
 								$(el).text(valor);
 							});
 						}, 150);
