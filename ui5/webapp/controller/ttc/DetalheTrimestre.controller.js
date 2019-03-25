@@ -3,117 +3,14 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/jQueryMask",
 		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI, Validador, jQueryMask, Utils) {
+	function (BaseController, NodeAPI, Validador, Utils) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.ttc.DetalheTrimestre", {
 			onInit: function () {
-				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
-
-				var that = this;
-				//jQuery(".money input").mask("000.000.000.000.000,00", {reverse: true});
-
-				/*this._dadosPagamentos =  [
-					{
-						"isNA": false,
-						"idClassification": 1,
-						"classification": "Tax Borne",
-						"fk_category.id_tax_category": 1,
-						"category": "Taxes on Profits",
-						"fk_tax.id_tax": 1,
-						"tax": "Corporate Income Tax",
-						"nameOfTax": "",
-						"nameOfGov": "",
-						"idJurisdicao": 1,
-						"jurisdicao": "Federal",
-						"idPais": 1,
-						"state": "Rio de Janeiro",
-						"city": "Rio de Janeiro",
-						"anoFiscal": 2015,
-						"description": "",
-						"dateOfPayment": "2018-05-15",
-						"currency": "USD",
-						"currencyRate": 1.2,
-						"idTypeOfTransaction": 1,
-						"typeOfTransaction": "Cash Installment/Settlement",
-						"otherSpecify": "",
-						"principal": 999999999.99,
-						"interest": 999999999.99,
-						"fine": 999999999.99,
-						"value":999999999.99,
-						"valueUSD": 999999999.99,
-						"numberOfDocument": "",
-						"beneficiaryCompany": "",
-						opcoesNameOfTax: []
-					},
-					{
-						"isNA": false,
-						"idClassification": 1,
-						"classification": "Tax Borne",
-						"fk_category.id_tax_category": 1,
-						"category": "Taxes on Profits",
-						"fk_tax.id_tax": 1,
-						"tax": "Corporate Income Tax",
-						"nameOfTax": "",
-						"nameOfGov": "",
-						"idJurisdicao": 1,
-						"jurisdicao": "Federal",
-						"idPais": 1,
-						"state": "Rio de Janeiro",
-						"city": "Rio de Janeiro",
-						"anoFiscal": 2016,
-						"description": "",
-						"dateOfPayment": "2018-05-18",
-						"currency": "USD",
-						"currencyRate": 1.2,
-						"idTypeOfTransaction": 1,
-						"typeOfTransaction": "Cash Installment/Settlement",
-						"otherSpecify": "",
-						"principal": 999999999.99,
-						"interest": 999999999.99,
-						"fine": 999999999.99,
-						"value":999999999.99,
-						"valueUSD": 999999999.99,
-						"numberOfDocument": "",
-						"beneficiaryCompany": "",
-						opcoesNameOfTax: []
-					},
-					{
-						"isNA": false,
-						"idClassification": 2,
-						"classification": "Tax Collected",
-						"fk_category.id_tax_category": 1,
-						"category": "Taxes on Profits",
-						"fk_tax.id_tax": 2,
-						"tax": "Taxes withheld on payments of dividends (only) to overseas group companies",
-						"nameOfTax": "",
-						"nameOfGov": "",
-						"idJurisdicao": 2,
-						"jurisdicao": "Estadual",
-						"idPais": 1,
-						"state": "Rio de Janeiro",
-						"city": "Rio de Janeiro",
-						"anoFiscal": 2016,
-						"description": "",
-						"dateOfPayment": "2018-05-16",
-						"currency": "GBP",
-						"currencyRate": 1.8,
-						"idTypeOfTransaction": 1,
-						"typeOfTransaction": "Cash Installment/Settlement",
-						"otherSpecify": "",
-						"principal": 999999999.99,
-						"interest": 999999999.99,
-						"fine": 999999999.99,
-						"value":999999999.99,
-						"valueUSD": 999999999.99,
-						"numberOfDocument": "",
-						"beneficiaryCompany": "",
-						opcoesNameOfTax: []
-					}
-				];*/
+				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 
 				this._dadosPagamentosBorne = [];
 				this._dadosPagamentosCollected = [];
@@ -122,86 +19,15 @@ sap.ui.define(
 					ValueState: sap.ui.core.ValueState.Error,
 					MinDate: null,
 					MaxDate: null,
-					"pagamentos": that._dadosPagamentos,
-					"opcoesClassification": [{
-						"id": 1,
-						"texto": "Tax Borne"
-					}, {
-						"id": 2,
-						"texto": "Tax Collected"
-					}],
-					"opcoesCategory": [{
-						"id": 1,
-						"texto": "Taxes on Profits"
-					}, {
-						"id": 2,
-						"texto": "Taxes on People"
-					}],
-					"opcoesTax": [{
-						"id": 1,
-						"texto": "Corporate Income Tax",
-						"idClassification": 1,
-						"fk_category.id_tax_category": 1
-					}, {
-						"id": 2,
-						"texto": "Taxes withheld on payments of dividends (only) to overseas group companies",
-						"idClassification": 2,
-						"fk_category.id_tax_category": 1
-					}],
-					"opcoesJurisdicao": [{
-						"id": 1,
-						"texto": "Federal"
-					}, {
-						"id": 2,
-						"texto": "Estadual"
-					}, {
-						"id": 3,
-						"texto": "Municipal"
-					}],
-					"opcoesPais": [{
-						"id": 1,
-						"texto": "Brasil"
-					}],
-					"opcoesAnoFiscal": [{
-						"texto": 2015
-					}, {
-						"texto": 2016
-					}, {
-						"texto": 2017
-					}, {
-						"texto": 2018
-					}],
-					"opcoesCurrency": [{
-						"texto": "USD"
-					}, {
-						"texto": "GBP"
-					}, {
-						"texto": "BRL"
-					}],
-					"opcoesTypeOfTransaction": [{
-						"id": 1,
-						"texto": "Cash Installment/Settlement"
-					}, {
-						"id": 2,
-						"texto": "Cash refund/reimbursment (negative value)"
-					}, {
-						"id": 3,
-						"texto": "Payment with income tax credits"
-					}, {
-						"id": 4,
-						"texto": "Payment with other tax credits"
-					}, {
-						"id": 5,
-						"texto": "Other (specify)"
-					}],
+					pagamentos: this._dadosPagamentos,
 					Borne: {
-						Pagamentos: that._dadosPagamentosBorne,
+						Pagamentos: this._dadosPagamentosBorne,
 						TaxCategory: [],
 						Tax: [],
 						NameOfTax: []
 					},
 					Collected: {
-						Pagamentos: that._dadosPagamentosCollected,
+						Pagamentos: this._dadosPagamentosCollected,
 						TaxCategory: [],
 						Tax: [],
 						NameOfTax: []
@@ -268,20 +94,21 @@ sap.ui.define(
 					oPagamento.estadoValueState = sap.ui.core.ValueState.None;
 					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
 				} else if (sIdJurisdicao == "2") { //Estadual
-					if (oPagamento["estado"] == "" || oPagamento["estado"] === null) {
+					if (oPagamento.estado == "" || oPagamento.estado === null) {
 						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
 					}
 					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
 				} else if (sIdJurisdicao == "3") { //Municipal
-					if (oPagamento["estado"] == "" || oPagamento["estado"] === null) {
+					if (oPagamento.estado == "" || oPagamento.estado === null) {
 						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
 					}
-					if (oPagamento["cidade"] == "" || oPagamento["cidade"] === null) {
+					if (oPagamento.cidade == "" || oPagamento.cidade === null) {
 						oPagamento.cidadeValueState = sap.ui.core.ValueState.Error;
 					}
 				}
 
 			},
+			
 			onPreencherEstado: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 				var sTextoCampo = oEvent.getSource().getValue();
@@ -293,6 +120,7 @@ sap.ui.define(
 					}
 				}
 			},
+			
 			onPreencherCidade: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 				var sTextoCampo = oEvent.getSource().getValue();
@@ -320,17 +148,18 @@ sap.ui.define(
 				var index = Number(sPath.substring(sPath.lastIndexOf("/") + 1, sPath.length)) + 1;
 
 				//Limpa Valores não utilizados do objeto copiado
-				oObject["data_pagamento"] = "";
-				oObject["juros"] = "";
-				oObject["multa"] = "";
-				oObject["total"] = "0";
-				oObject["numero_documento"] = "";
+				oObject.data_pagamento = "";
+				oObject.juros = "";
+				oObject.multa = "";
+				oObject.total = "0";
+				oObject.numero_documento = "";
 
 				// Insere o objeto duplicado no índice
 				aDadosPagamentos.splice(index, 0, oObject);
 
 				this.getModel().refresh();
 			},
+			
 			handleSuggest: function (oEvent) {
 				var oInput = oEvent.getSource();
 				if (!oInput.getSuggestionItems().length) {
@@ -342,6 +171,7 @@ sap.ui.define(
 					});
 				}
 			},
+			
 			handleSuggest2: function (oEvent) {
 				var oInput = oEvent.getSource();
 				if (!oInput.getSuggestionItems().length) {
@@ -420,6 +250,7 @@ sap.ui.define(
 					oPagamento["fk_dominio_pais.id_dominio_pais"] = null;
 				}
 			},
+			
 			onPreencherEntidade: function (oEvent) {
 				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				var sEntidade = oEvent.getSource().getValue();
@@ -439,6 +270,7 @@ sap.ui.define(
 				}
 
 			},
+			
 			onTrocarTax: function (oEvent) {
 				// Pega o objeto do tax para ser capaz de recuperar a fk de category
 				var sTaxPath = oEvent.getSource().getSelectedItem().getBindingContext().getPath(),
@@ -490,19 +322,13 @@ sap.ui.define(
 					oPagamento.juros = Math.abs(oPagamento.juros ? oPagamento.juros : 0) * -1;
 					oPagamento.multa = Math.abs(oPagamento.multa ? oPagamento.multa : 0) * -1;
 				}
-
-				/*var fPrincipal = Utils.stringMoedaParaFloat(oPagamento.principal),
-					fJuros = Utils.stringMoedaParaFloat(oPagamento.juros),
-					fMulta = Utils.stringMoedaParaFloat(oPagamento.multa);*/
-
+				
 				var fPrincipal = oPagamento.principal ? Number(oPagamento.principal) : 0,
 					fJuros = oPagamento.juros ? Number(oPagamento.juros) : 0,
 					fMulta = oPagamento.multa ? Number(oPagamento.multa) : 0;
 
 				oPagamento.total = (fPrincipal + fJuros + fMulta).toFixed(2);
 				this.getModel().refresh();
-
-				jQuery(".money.total input").trigger("input");
 			},
 
 			navToHome: function () {
@@ -517,8 +343,10 @@ sap.ui.define(
 				var that = this;
 				this._confirmarCancelamento(function () {
 					that._limparModel();
-					that.getRouter().navTo("ttcListagemEmpresas",{
-						parametros: JSON.stringify({idAnoCalendario: that.getModel().getProperty("/AnoCalendario")["idAnoCalendario"]})
+					that.getRouter().navTo("ttcListagemEmpresas", {
+						parametros: JSON.stringify({
+							idAnoCalendario: that.getModel().getProperty("/AnoCalendario")["idAnoCalendario"]
+						})
 					});
 				});
 			},
@@ -801,98 +629,6 @@ sap.ui.define(
 					that.getModel().refresh();
 					that.byId("dynamicPage").setBusy(false);
 				});
-
-				/*this._dadosPagamentosBorne.length = 0;
-				this._dadosPagamentosBorne.push({
-					"id_pagamento": 1,
-					"ind_nao_aplicavel": false,
-					"administracao_governamental": "TESTE",
-					"estado": "TESTE",
-					"cidade": "TESTE",
-					"projeto": "TESTE",
-					"descricao": "TESTE",
-					"data_pagamento": "2018-10-09",
-					"tipo_transacao_outros": "TESTE",
-					"principal": 999999999.99,
-					"juros": 999999999.99,
-					"multa": 999999999.99,
-					"total": 999999999.99,
-					"numero_documento": "AAAAAAAA",
-					"entidade_beneficiaria": "TESTE",
-					"fk_dominio_moeda.id_dominio_moeda": 1,
-					"fk_dominio_tipo_transacao.id_dominio_tipo_transacao": 1,
-					"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": 1,
-					"fk_jurisdicao.id_dominio_jurisdicao": 1,
-					"fk_dominio_pais.id_dominio_pais": 1,
-					"fk_name_of_tax.id_name_of_tax": null,
-					"fk_empresa.id_empresa": 1,
-					"fk_periodo.id_periodo": 4,
-					"opcoesNameOfTax": [],
-					"fk_category.id_tax_category": null,
-					"fk_tax.id_tax": null,
-					"name_of_tax": ""
-				}, {
-					"id_pagamento": 1,
-					"ind_nao_aplicavel": false,
-					"administracao_governamental": "TESTE",
-					"estado": "TESTE",
-					"cidade": "TESTE",
-					"projeto": "TESTE",
-					"descricao": "TESTE",
-					"data_pagamento": "2018-10-09",
-					"tipo_transacao_outros": "TESTE",
-					"principal": 999999999.99,
-					"juros": 999999999.99,
-					"multa": 999999999.99,
-					"total": 999999999.99,
-					"numero_documento": "AAAAAAAA",
-					"entidade_beneficiaria": "TESTE",
-					"fk_dominio_moeda.id_dominio_moeda": 1,
-					"fk_dominio_tipo_transacao.id_dominio_tipo_transacao": 1,
-					"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": 1,
-					"fk_jurisdicao.id_dominio_jurisdicao": 1,
-					"fk_dominio_pais.id_dominio_pais": 1,
-					"fk_name_of_tax.id_name_of_tax": 78,
-					"fk_empresa.id_empresa": 1,
-					"fk_periodo.id_periodo": 4,
-					"opcoesNameOfTax": [],
-					"fk_category.id_tax_category": null,
-					"fk_tax.id_tax": 1,
-					"name_of_tax": "Meu Name of Tax Customizado"
-				});
-				
-				this._dadosPagamentosCollected.length = 0;
-				this._dadosPagamentosCollected.push({
-					"id_pagamento": 2,
-					"ind_nao_aplicavel": false,
-					"administracao_governamental": "TESTE",
-					"estado": "TESTE",
-					"cidade": "TESTE",
-					"projeto": "TESTE",
-					"descricao": "TESTE",
-					"data_pagamento": "2018-10-09",
-					"tipo_transacao_outros": "TESTE",
-					"principal": 999999999.99,
-					"juros": 999999999.99,
-					"multa": 999999999.99,
-					"total": 999999999.99,
-					"numero_documento": "AAAAAAAA",
-					"entidade_beneficiaria": "TESTE",
-					"fk_dominio_moeda.id_dominio_moeda": 1,
-					"fk_dominio_tipo_transacao.id_dominio_tipo_transacao": 1,
-					"fk_dominio_ano_fiscal.id_dominio_ano_fiscal": 1,
-					"fk_jurisdicao.id_dominio_jurisdicao": 1,
-					"fk_dominio_pais.id_dominio_pais": 1,
-					"fk_name_of_tax.id_name_of_tax": null,
-					"fk_empresa.id_empresa": 1,
-					"fk_periodo.id_periodo": 4,
-					"opcoesNameOfTax": [],
-					"fk_category.id_tax_category": null,
-					"fk_tax.id_tax": null,
-					"name_of_tax": ""
-				});
-				
-				this.getModel().refresh();*/
 			},
 
 			_getDadosPagamentos: function (sObjectPath) {
@@ -1115,28 +851,14 @@ sap.ui.define(
 
 						that._inserirPagamentos(function (response) {
 							oButton.setEnabled(true);
-	
+
 							var json = JSON.parse(response);
-	
+
 							if (callback) {
 								callback(json);
 							}
 						}, oButton);
 					});
-
-					
-
-					/*oButton.setEnabled(false);
-
-					this._inserirPagamentos(function (response) {
-						oButton.setEnabled(true);
-
-						var json = JSON.parse(response);
-
-						if (callback) {
-							callback(json);
-						}
-					}, oButton);*/
 				}
 			},
 
@@ -1146,36 +868,35 @@ sap.ui.define(
 				var aTax = this.getModel().getProperty("/Borne/Tax").concat(this.getModel().getProperty("/Collected/Tax")).filter(function (obj) {
 					return obj.id_tax;
 				});
-				
+
 				var msgBorne = [];
 				var msgCollected = [];
-				
+
 				for (var i = 0, length = aTax.length; i < length; i++) {
 					var oPagamentoComTax = aPagamento.filter(function (obj) {
 						return Number(obj["fk_tax.id_tax"]) === Number(aTax[i].id_tax);
 					});
-					
+
 					if (!oPagamentoComTax.length) {
 						if (aTax[i].id_dominio_tax_classification === 1) {
 							msgBorne.push(aTax[i].tax);
-						}
-						else {
+						} else {
 							msgCollected.push(aTax[i].tax);
 						}
 					}
 				}
-				
+
 				if (msgBorne.length || msgCollected.length) {
 					var oVBox = new sap.m.VBox();
-					
+
 					var oHBox = new sap.m.HBox({
 						justifyContent: "Center"
 					}).addItem(new sap.m.Text({
 						text: this.getResourceBundle().getText("viewTTCDetalheTrimestreMensagemAvisoImpostoNaoDeclarado")
 					}).addStyleClass("sapUiSmallMarginTop sapUiSmallMarginBottom"));
-					
+
 					oVBox.addItem(oHBox);
-					
+
 					var criarPainelTax = function (aMsgTax, sTitulo) {
 						if (aMsgTax.length) {
 							var oPanel = new sap.m.Panel({
@@ -1183,27 +904,27 @@ sap.ui.define(
 								expanded: false,
 								headerText: sTitulo
 							});
-							
+
 							var oHBoxInterno = new sap.m.VBox();
-							
-							for (var i = 0, length = aMsgTax.length; i < length; i++) { 
-								var oText = new sap.m.Text({ 
-									text: aMsgTax[i] 
+
+							for (var i = 0, length = aMsgTax.length; i < length; i++) {
+								var oText = new sap.m.Text({
+									text: aMsgTax[i]
 								}).addStyleClass("bulletItem");
-								
+
 								oHBoxInterno.addItem(oText);
 							}
-							
+
 							oPanel.addContent(oHBoxInterno);
-							
+
 							oVBox.addItem(oPanel);
-						}	
+						}
 					};
-					
+
 					criarPainelTax(msgBorne, this.getResourceBundle().getText("viewGeralBorne"));
-					
+
 					criarPainelTax(msgCollected, this.getResourceBundle().getText("viewGeralCollected"));
-					
+
 					var dialog = new sap.m.Dialog({
 						contentHeight: "150px",
 						title: this.getResourceBundle().getText("viewGeralAviso"),
@@ -1217,16 +938,15 @@ sap.ui.define(
 						}),
 						afterClose: function () {
 							dialog.destroy();
-							
+
 							if (callback) {
 								callback();
 							}
 						}
 					}).addStyleClass("sapUiNoContentPadding");
-				
+
 					dialog.open();
-				}
-				else {
+				} else {
 					if (callback) {
 						callback();
 					}

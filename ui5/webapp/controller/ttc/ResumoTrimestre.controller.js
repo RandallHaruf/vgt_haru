@@ -7,13 +7,13 @@ sap.ui.define(
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants,Utils) {
+	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants, Utils) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ResumoTrimestre", {
 
 			onInit: function () {
-				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				// sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 
 				this.setModel(new JSONModel());
 
@@ -21,9 +21,6 @@ sap.ui.define(
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
-				/*sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreAnoSelecionado ") + oEvent.getSource().getSelectedItem()
-					.getText());*/
-
 				this._atualizarDados();
 			},
 
@@ -91,10 +88,10 @@ sap.ui.define(
 
 				return parseInt(days) + 1;
 			},
-			
+
 			_dialogAviso: function (sMensagem, callbackAfterClose) {
 				var that = this;
-				
+
 				var dialog2 = new sap.m.Dialog({
 					title: that.getView().getModel("i18n").getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
 					type: "Message",
@@ -109,40 +106,39 @@ sap.ui.define(
 					}),
 					afterClose: function () {
 						dialog2.destroy();
-						
+
 						if (callbackAfterClose) {
 							callbackAfterClose();
 						}
 					}
 				});
-	
+
 				dialog2.open();
 			},
-			
+
 			_dialogImpostoNaoDeclarado: function (aImpostoNaoDeclarado, callback) {
 				var msgBorne = [];
 				var msgCollected = [];
-				
+
 				for (var i = 0, length = aImpostoNaoDeclarado.length; i < length; i++) {
 					if (aImpostoNaoDeclarado[i]["fk_dominio_tax_classification.id_dominio_tax_classification"] === 1) {
 						msgBorne.push(aImpostoNaoDeclarado[i].tax);
-					}
-					else {
+					} else {
 						msgCollected.push(aImpostoNaoDeclarado[i].tax);
 					}
 				}
-				
+
 				if (msgBorne.length || msgCollected.length) {
 					var oVBox = new sap.m.VBox();
-					
+
 					var oHBox = new sap.m.HBox({
 						justifyContent: "Center"
 					}).addItem(new sap.m.Text({
 						text: this.getResourceBundle().getText("viewTTCDetalheTrimestreMensagemAvisoImpostoNaoDeclarado")
 					}).addStyleClass("sapUiSmallMarginTop sapUiSmallMarginBottom"));
-					
+
 					oVBox.addItem(oHBox);
-					
+
 					var criarPainelTax = function (aMsgTax, sTitulo) {
 						if (aMsgTax.length) {
 							var oPanel = new sap.m.Panel({
@@ -150,27 +146,27 @@ sap.ui.define(
 								expanded: false,
 								headerText: sTitulo
 							});
-							
+
 							var oHBoxInterno = new sap.m.VBox();
-							
-							for (var i = 0, length = aMsgTax.length; i < length; i++) { 
-								var oText = new sap.m.Text({ 
-									text: aMsgTax[i] 
+
+							for (var i = 0, length = aMsgTax.length; i < length; i++) {
+								var oText = new sap.m.Text({
+									text: aMsgTax[i]
 								}).addStyleClass("bulletItem");
-								
+
 								oHBoxInterno.addItem(oText);
 							}
-							
+
 							oPanel.addContent(oHBoxInterno);
-							
+
 							oVBox.addItem(oPanel);
-						}	
+						}
 					};
-					
+
 					criarPainelTax(msgBorne, this.getResourceBundle().getText("viewGeralBorne"));
-					
+
 					criarPainelTax(msgCollected, this.getResourceBundle().getText("viewGeralCollected"));
-					
+
 					var dialog = new sap.m.Dialog({
 						contentHeight: "150px",
 						title: this.getResourceBundle().getText("viewGeralAviso"),
@@ -181,12 +177,12 @@ sap.ui.define(
 							press: function () {
 								dialog.close();
 							}
-						}), 
+						}),
 						endButton: new sap.m.Button({
 							text: this.getResourceBundle().getText("viewGeralContinuar"),
 							press: function () {
 								dialog.close();
-								
+
 								if (callback) {
 									callback();
 								}
@@ -196,31 +192,30 @@ sap.ui.define(
 							dialog.destroy();
 						}
 					}).addStyleClass("sapUiNoContentPadding");
-				
+
 					dialog.open();
-				}
-				else {
+				} else {
 					if (callback) {
 						callback();
 					}
 				}
 			},
-			
+
 			_realizarEncerramentoPeriodo: function (idEmpresa, idPeriodo) {
 				var that = this;
-				
-				NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
-						idEmpresa: idEmpresa,
-						idPeriodo: idPeriodo
-					}, function (response) {
-						var json = JSON.parse(response);
 
-						if (json.success) {
-							that._atualizarDados();
-						} else {
-							that._dialogAviso(json.message);
-						}
-					});
+				NodeAPI.atualizarRegistro("EncerrarTrimestreTTC", "", {
+					idEmpresa: idEmpresa,
+					idPeriodo: idPeriodo
+				}, function (response) {
+					var json = JSON.parse(response);
+
+					if (json.success) {
+						that._atualizarDados();
+					} else {
+						that._dialogAviso(json.message);
+					}
+				});
 			},
 
 			onSubmeterPeriodo: function (oPeriodo) {
@@ -243,23 +238,21 @@ sap.ui.define(
 								})
 								.then(function (res) {
 									dialog.close();
-									
+
 									if (res.result.length) {
 										that._dialogImpostoNaoDeclarado(res.result, function () {
 											that._realizarEncerramentoPeriodo(sIdEmpresa, oPeriodo.id_periodo);
 										});
-									}	
-									else {
+									} else {
 										that._realizarEncerramentoPeriodo(sIdEmpresa, oPeriodo.id_periodo);
 									}
 								})
 								.catch(function (err) {
 									dialog.close();
-									
+
 									if (err.status) {
 										that._dialogAviso(err.status + " - " + err.statusText + "\nMessage: " + err.responseJSON.error.message);
-									}
-									else {
+									} else {
 										that._dialogAviso(err.message);
 									}
 								});
@@ -297,10 +290,9 @@ sap.ui.define(
 				var that = this;
 
 				var assunto = "TTC - Period reopening - " + vEmpresa + " - " + vPeriodo;
-				//var corpo = that.getModel().getProperty("/corpo");
 				var htmlBody =
-					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TTC module at <a href='" + document.domain + "'>Vale Global Tax (VGT)</a> Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
-				//this.getModel().setProperty("/bEmailButton", false);
+					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TTC module at <a href='" + document.domain +
+					"'>Vale Global Tax (VGT)</a> Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
 
 				jQuery.ajax({ //Desativar botao
 					url: Constants.urlBackend + "EmailSend",
@@ -330,8 +322,6 @@ sap.ui.define(
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
 					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
 				};
-
-				//sIdEmpresa = that.getModel().getProperty("/Empresa");
 
 				var oForm = new sap.ui.layout.form.Form({
 					editable: true
@@ -371,7 +361,7 @@ sap.ui.define(
 				}).addStyleClass("sapMLabelRequired");
 
 				oFormElement = new sap.ui.layout.form.FormElement().setLabel(oLabel).addField(oTextArea);
-				
+
 				oFormContainer.addFormElement(oFormElement);
 
 				oForm.addFormContainer(oFormContainer);
@@ -398,8 +388,7 @@ sap.ui.define(
 									that._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
 									sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
 								});
-							}
-							else {
+							} else {
 								oTextArea.setValueState(sap.ui.core.ValueState.Error);
 								oTextArea.setValueStateText(that.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio"));
 							}
@@ -445,8 +434,10 @@ sap.ui.define(
 			},
 
 			navToPage2: function () {
-				this.getRouter().navTo("ttcListagemEmpresas",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")})
+				this.getRouter().navTo("ttcListagemEmpresas", {
+					parametros: JSON.stringify({
+						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					})
 				});
 			},
 
@@ -462,163 +453,18 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+				var that = this;
+
 				if (this.isIFrame()) {
-					this.mostrarAcessoRapidoInception(); 
+					this.mostrarAcessoRapidoInception();
 					this.byId("btnRequisicoes").setVisible(false);
 				}
-				
+
 				var oEmpresa = JSON.parse(oEvent.getParameter("arguments").oEmpresa);
 				var idAnoCalendario = oEvent.getParameter("arguments").idAnoCalendario;
 
 				this.getModel().setProperty("/AnoCalendarioSelecionado", idAnoCalendario);
 				this.getModel().setProperty("/Empresa", oEmpresa);
-
-				/*this.getModel().setProperty("/PrimeiroPeriodo", [{
-					moeda: "USD",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "USD",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "GBP",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "GBP",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "CHF",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "CHF",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}]);
-				this.getModel().setProperty("/SegundoPeriodo", [{
-					moeda: "USD",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "USD",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}]);
-				this.getModel().setProperty("/TerceiroPeriodo", [{
-					moeda: "USD",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "USD",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}]);
-				this.getModel().setProperty("/QuartoPeriodo", [{
-					moeda: "USD",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "USD",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "borne",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}, {
-					moeda: "BRL",
-					categoria: "collected",
-					primeiroValor: "999.999.999,99",
-					segundoValor: "999.999.999,99",
-					terceiroValor: "999.999.999,99",
-					total: "999.999.999,99"
-				}]);*/
-
-				var that = this;
 
 				NodeAPI.listarRegistros("/DominioAnoCalendario", function (response) {
 					if (response) {
@@ -637,7 +483,6 @@ sap.ui.define(
 
 				var sEntidade = "DeepQuery/RelacionamentoEmpresaPeriodo?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario + "&modulo=1"; // TTC
 
-				//var aIdToolbar = ["toolbarPrimeiroPeriodo", "toolbarSegundoPeriodo", "toolbarTerceiroPeriodo", "toolbarQuartoPeriodo"];
 				var aIdToolbar = {};
 				aIdToolbar[1] = "toolbarPrimeiroPeriodo";
 				aIdToolbar[2] = "toolbarSegundoPeriodo";
@@ -656,8 +501,7 @@ sap.ui.define(
 
 							if (that.isIFrame()) {
 								that._popularToolbarInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
-							}
-							else {
+							} else {
 								if (oPeriodo.ind_ativo) {
 									that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								} else {
@@ -669,63 +513,42 @@ sap.ui.define(
 				});
 
 				this._setBusy(true);
-					
+
 				var oAnoCalendario = this.getModel().getProperty("/DominioAnoCalendario").find(function (obj) {
 					return obj.id_dominio_ano_calendario === Number(sIdAnoCalendario);
 				});
 
-				NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + JSON.stringify(oAnoCalendario), function (response) {
-				//NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario, function (response) {
-					if (response) {
-						var aKeys = Object.keys(response);
-						for (var i = 0, length = aKeys.length; i < length; i++) {
-							var sKey = aKeys[i];
+				NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + JSON.stringify(oAnoCalendario),
+					function (response) {
+						if (response) {
+							var aKeys = Object.keys(response);
+							for (var i = 0, length = aKeys.length; i < length; i++) {
+								var sKey = aKeys[i];
 
-							var aPagamento = response[sKey];
+								var aPagamento = response[sKey];
 
-							for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
-								var oPagamento = aPagamento[j];
+								for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
+									var oPagamento = aPagamento[j];
 
-								oPagamento["categoria"] = Utils.traduzCategoriaPagamento(oPagamento["categoria"],that);           
-							
-								oPagamento["primeiroValor"] = (oPagamento["primeiroValor"] ? parseInt(oPagamento["primeiroValor"], 10) : 0);
-								oPagamento["segundoValor"] = (oPagamento["segundoValor"] ? parseInt(oPagamento["segundoValor"], 10) : 0);
-								oPagamento["terceiroValor"] = (oPagamento["terceiroValor"] ? parseInt(oPagamento["terceiroValor"], 10) : 0);
-								oPagamento["total"] = (oPagamento["total"] ? parseInt(oPagamento["total"], 10) : 0);
+									oPagamento.categoria = Utils.traduzCategoriaPagamento(oPagamento.categoria, that);
+
+									oPagamento.primeiroValor = (oPagamento.primeiroValor ? parseInt(oPagamento.primeiroValor, 10) : 0);
+									oPagamento.segundoValor = (oPagamento.segundoValor ? parseInt(oPagamento.segundoValor, 10) : 0);
+									oPagamento.terceiroValor = (oPagamento.terceiroValor ? parseInt(oPagamento.terceiroValor, 10) : 0);
+									oPagamento.total = (oPagamento.total ? parseInt(oPagamento.total, 10) : 0);
+								}
 							}
+							that.getModel().setProperty("/Resumo", response);
 						}
-						that.getModel().setProperty("/Resumo", response);
-						setTimeout(function () {
-							$.each($('.money span'), function (index, el) {
-								var valor = $(el).text();
-								valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-								$(el).text(valor);
-							});
-						}, 150);
-					}
 
-					that._setBusy(false);
-				});
-
-				/*
-				if ((new Date()).getFullYear() !== Number(this.byId("selectAnoCalendario").getSelectedItem().getText())) {
-					this._popularToolbarPeriodoFechado("toolbarPrimeiroPeriodo", 1);
-					this._popularToolbarPeriodoFechado("toolbarSegundoPeriodo", 2);
-					this._popularToolbarPeriodoFechado("toolbarTerceiroPeriodo", 3);
-					this._popularToolbarPeriodoFechado("toolbarQuartoPeriodo", 4);
-				}
-				else {
-					this._popularToolbarPeriodoFechado("toolbarPrimeiroPeriodo", 1);
-					this._popularToolbarPeriodoFechado("toolbarSegundoPeriodo", 2);
-					this._popularToolbarPeriodoFechado("toolbarTerceiroPeriodo", 3);
-					this._popularToolbarPeriodoCorrente("toolbarQuartoPeriodo", 4);
-				}*/
+						that._setBusy(false);
+					});
 			},
 
 			_popularToolbarInception: function (sIdToolbar, oPeriodo) {
 				var that = this,
 					oToolbar = this.byId(sIdToolbar);
-					
+
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
 				var oButton = new sap.m.Button({
