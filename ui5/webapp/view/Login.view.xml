@@ -3,28 +3,63 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
 	xmlns="sap.m"
 	class="loginView">
-	<FlexBox
-		alignItems="Center"
-		justifyContent="End"
-		class="sapUiSmallMarginTop">
-		<items>
-			<!--<VBox
-				class="sapUiLargeMarginEnd">
-				<Label 
-					text="Língua"/>
-				<Select
-					change="onLanguageChange">
-					<items>
-						<core:Item text="Inglês" key="en-US"/>
-						<core:Item text="Português" key="pt-BR"/>
-					</items>
-				</Select>
-			</VBox>-->
-		</items>
-	</FlexBox>
-	<List
+	<f:Form 
+		id="loginForm"
+		editable="true"
+		class="myLoginForm"
+		visible="false">
+		<f:layout>
+			<f:ResponsiveGridLayout />
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer>
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<HBox justifyContent="Center">
+								<Image src="files/vale-logo-1.png" height="30px" />
+							</HBox>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement>
+						<f:fields>
+							<Input
+								id="inputUsuario"
+								placeholder="{i18n>placeholderUsuario}"
+								type="Text"
+								change="onTrim" />
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement>
+						<f:fields>
+							<Input
+								id="inputSenha"
+								placeholder="{i18n>placeholderSenha}"
+								type="Password"
+								change="onTrim" />
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement>
+						<f:fields>
+							<HBox justifyContent="End">
+								<Button
+									id="buttonLogin"
+									width="86px"
+									type="Accept"
+									text="Login"
+									icon="sap-icon://visits"
+									press="onLogin" />
+							</HBox>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+	<!--<List
 		id="loginForm"
 		headerText="Login" 
 		class="myLoginForm"
@@ -33,13 +68,15 @@
 			<Input
 				id="inputUsuario"
 				placeholder="{i18n>placeholderUsuario}"
-				type="Text" />
+				type="Text"
+				change="onTrim" />
 		</InputListItem>
 		<InputListItem>
 			<Input
 				id="inputSenha"
 				placeholder="{i18n>placeholderSenha}"
-				type="Password" />
+				type="Password"
+				change="onTrim" />
 		</InputListItem>
 		<InputListItem>
 			<Button
@@ -47,7 +84,7 @@
 				type="Accept"
 				text="Login"
 				icon="sap-icon://visits"
-				press="onLogin"/>
+				press="onLogin" />
 		</InputListItem>
-	</List>
+	</List>-->
 </mvc:View>

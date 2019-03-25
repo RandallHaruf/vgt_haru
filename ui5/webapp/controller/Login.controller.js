@@ -39,8 +39,6 @@ sap.ui.define(
 			},
 
 			onLogin: function () {
-				//this.getRouter().navTo("selecaoModulo");
-
 				fetch(Constants.urlBackend + "login", {
 						method: "POST",
 						headers: {
@@ -74,8 +72,11 @@ sap.ui.define(
 						MessageToast.show(err);
 					});
 			},
-
-			onLanguageChange: function (oEvent) {},
+			
+			onTrim: function (oEvent) {
+				oEvent.getSource().setValue(oEvent.getSource().getValue().trim());	
+			},
+			
 			_onRouteMatched: function(){
 			    var that = this;
 				this.byId("inputSenha").onsapenter = function(e) {that.byId("buttonLogin").firePress()};

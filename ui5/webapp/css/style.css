@@ -1,7 +1,3 @@
-.meu-iframe > div {
-	height: 100%;
-}
-
 .myApp .viewSelecaoModulo .painelModulos {
 	text-align: center;
 	/*top: 15%;*/
@@ -11,18 +7,30 @@
 .meu-iframe,
 .meu-iframe > div {
 	height: 100%!important;
+	overflow: hidden;
 }
 
 .myApp .loginView .myLoginForm {
-	width: 280px!important;
+	/*width: 280px!important;
 	border: 1px;
 	border-style: groove;
 	border-radius: 3px;
 	box-shadow: 0 0 15px #ccc;
 	padding-bottom: 1.5rem;
 	margin:auto;
-	/*top: 20%;*/
-	top: 30%;
+	top: 30%;*/
+	
+    border: 1px;
+    border-style: groove;
+    border-radius: 3px;
+    box-shadow: 0 0 15px #ccc;
+    width: 280px!important;
+    height: 198px!important;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-left: -140px;
+    margin-top: -88px;
 }
 
 .myApp .custom-generic-tile span {
