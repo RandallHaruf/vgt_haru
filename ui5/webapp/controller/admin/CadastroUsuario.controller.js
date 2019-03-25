@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, NodeAPI, Validador, Utils) {
+	function (BaseController, NodeAPI, Validador, Utils, Constants) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroUsuario", {
 
 			/* Métodos a implementar */
@@ -105,10 +106,11 @@ sap.ui.define(
 					that.getModel().setProperty("/DominioAcessoUsuario", response);
 				});
 				
-				NodeAPI.listarRegistros("DominioModulo", function (response) {
+				/*NodeAPI.listarRegistros("DominioModulo", function (response) {
 					Utils.orderByArrayParaBox(response, "modulo");
 					that.getModel().setProperty("/DominioModulo", response);
-					/*var idUsuario = that.getModel().getProperty("/idObjeto");
+					
+					var idUsuario = that.getModel().getProperty("/idObjeto");
 					
 					NodeAPI.listarRegistros("DeepQuery/UsuarioModulo?idUsuario=" + idUsuario, function (resposta) {
 
@@ -122,12 +124,29 @@ sap.ui.define(
 						}
 						response = Utils.orderByArrayParaBox(response, "modulo");
 						that.getModel().setProperty("/DominioModulo", response);
-					});*/
+					});
 				});
 				
 				NodeAPI.listarRegistros("Empresa", function (response) {
 					Utils.orderByArrayParaBox(response, "nome");
 					that.getModel().setProperty("/Empresas", response);
+				});*/
+				
+				return new Promise(function (resolve, reject) {
+					Promise.all([
+							NodeAPI.pListarRegistros("DominioModulo"),
+							NodeAPI.pListarRegistros("Empresa?full=true")
+						])
+						.then(function (res) {
+							Utils.orderByArrayParaBox(res[0], "modulo");
+							that.getModel().setProperty("/DominioModulo", res[0]);
+							Utils.orderByArrayParaBox(res[1], "nome");
+							that.getModel().setProperty("/Empresas", res[1]);
+							resolve();
+						})	
+						.catch(function (err) {
+							reject(err);
+						});
 				});
 			},
 
@@ -148,6 +167,49 @@ sap.ui.define(
 					//that._carregarDominioTipoAcesso(that);
 					that.setBusy(that.byId("formularioObjeto"), false);
 				});
+				
+				var promise1 = NodeAPI.pLerRegistro("Usuario", iIdObjeto);
+				var promise2 = NodeAPI.pListarRegistros("RelUsuarioModulo?fkUsuario=" + iIdObjeto);
+				var promise3 = NodeAPI.pListarRegistros("RelUsuarioEmpresa?fkUsuario=" + iIdObjeto);
+				Promise.all([
+						promise1,
+						promise2,
+						promise3
+					])
+					.then(function (aResponse) {
+						var Usuario = JSON.parse(aResponse[0])[0];
+						Usuario.ind_ativo = Usuario.ind_ativo ? true : false;
+						that.getModel().setProperty("/objeto", Usuario);
+						
+						var aModulosUsuario = aResponse[1];
+						var aEmpresasUsuario = aResponse[2];
+						
+						var aModulos = that.getModel().getProperty("/DominioModulo");
+						var aEmpresas = that.getModel().getProperty("/Empresas");
+						
+						for(var i = 0; i < aModulos.length; i++){
+							for(var j = 0; j < aModulosUsuario.length; j++) {
+								if (aModulos[i].id_dominio_modulo == aModulosUsuario[j]["fk_dominio_modulo.id_dominio_modulo"]) {
+									aModulos[i].selecionado = true;
+								}
+							}
+						}
+						for(var i = 0; i < aEmpresas.length; i++){
+							for(var j = 0; j < aEmpresasUsuario.length; j++) {
+								if (aEmpresas[i].id_empresa == aEmpresasUsuario[j]["fk_empresa.id_empresa"]) {
+									aEmpresas[i].selecionado = true;
+								}
+							}
+						}
+						
+						that._resolverCheckbox(that);
+						
+						that.getModel().refresh();
+						
+						
+						
+						that.setBusy(that.byId("formularioObjeto"), false);
+					});
 			},
 			
 			_limparFormulario: function () {
@@ -166,13 +228,36 @@ sap.ui.define(
 				that.byId("btnSalvar").setEnabled(false);
 				that.setBusy(that.byId("btnSalvar"), true);
 
+				var aModulos = that.getModel().getProperty("/DominioModulo");
+				var ModulosSelecionados = [];
+				for(var i = 0; i < aModulos.length; i++){
+					if (aModulos[i].selecionado == true) {
+						ModulosSelecionados.push(aModulos[i]);
+					}
+				}
+				
+				var aEmpresas = that.getModel().getProperty("/Empresas");
+				var EmpresasSelecionadas = [];
+				for(var i = 0; i < aEmpresas.length; i++){
+					if (aEmpresas[i].selecionado == true) {
+						EmpresasSelecionadas.push(aEmpresas[i]);
+					}
+				}
+
 				var obj = this.getModel().getProperty("/objeto");
 
-				NodeAPI.atualizarRegistro("NameOfTax", sIdObjeto, {
-					nameOfTax: obj.nameOfTax,
-					fkTax: obj.tax,
-					idPaises: JSON.stringify(that._getIdsPaisesSelecionados())
-				}, function (response) {
+				NodeAPI.atualizarRegistro("Usuario", sIdObjeto, {
+					nome: obj.nome,
+					email: obj.email,
+					contato: obj.contato,
+					user: obj.user,
+					indAtivo: obj["ind_ativo"],
+					fkDominioTipoAcesso: obj["fk_dominio_tipo_acesso.id_tipo_acesso"],
+					emailGestor: obj.email_gestor,
+					modulos: ModulosSelecionados,
+					empresas: EmpresasSelecionadas
+				}
+				, function (response) {
 					that.byId("btnCancelar").setEnabled(true);
 					that.byId("btnSalvar").setEnabled(true);
 					that.setBusy(that.byId("btnSalvar"), false);
@@ -234,6 +319,51 @@ sap.ui.define(
 			_navToPaginaListagem: function () {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
 			},
+			
+			_resolverCheckbox: function (that) {
+				var Usuario = that.getModel().getProperty("/objeto");	
+				var Modulos = that.getModel().getProperty("/DominioModulo");
+				var Empresas = that.getModel().getProperty("/Empresas");
+				
+				for(let i = 0; i < Modulos.length; i++){
+					switch(Number(Usuario["fk_dominio_tipo_acesso.id_tipo_acesso"])){
+						case 0:
+							if (Modulos[i]["id_dominio_modulo"] == 5){
+								Modulos[i].selecionado = false;
+								Modulos[i].habilitado = false;
+							}
+							else{
+								Modulos[i].habilitado = true;
+							}
+							break;
+						case 1:
+							if(Modulos[i]["id_dominio_modulo"] != 5){
+								Modulos[i].selecionado = false;
+							}
+							else{
+								Modulos[i].selecionado = true;
+							}
+							Modulos[i].habilitado = false;
+							break;
+						case 2:
+							if (Modulos[i]["id_dominio_modulo"] == 5){
+								Modulos[i].selecionado = true;
+								Modulos[i].habilitado = false;
+							}
+							else{
+								Modulos[i].habilitado = true;
+							}
+							break;
+					}
+				}
+				for(let i = 0; i < Empresas.length; i++){
+					switch(Number(Usuario["fk_dominio_tipo_acesso.id_tipo_acesso"])){
+						case 1:
+							Empresas[i].selecionado = false;
+							Empresas[i].habilitado = false;
+					}
+				}
+			},
 
 			/* Métodos fixos */
 			onInit: function () {
@@ -255,18 +385,28 @@ sap.ui.define(
 				this.byId("paginaObjeto").addEventDelegate({
 					onAfterShow: function (oEvent) {
 						that._carregarCamposFormulario();
-
-						if (oEvent.data.path) {
-							var id = that.getModel().getObject(oEvent.data.path)[that._nomeColunaIdentificadorNaListagemObjetos];
-
-							that.getModel().setProperty("/isUpdate", true);
-							that.getModel().setProperty("/idObjeto", id);
-
-							that._carregarObjetoSelecionado(id);
-						} else {
-							that.getModel().getProperty("/objeto")["ind_ativo"] = true;
-							that.getModel().setProperty("/isUpdate", false);
+						
+						const execucaoNormal = function () {
+							if (oEvent.data.path) {
+								var id = that.getModel().getObject(oEvent.data.path)[that._nomeColunaIdentificadorNaListagemObjetos];
+	
+								that.getModel().setProperty("/isUpdate", true);
+								that.getModel().setProperty("/idObjeto", id);
+	
+								that._carregarObjetoSelecionado(id);
+							} else {
+								that.getModel().getProperty("/objeto")["ind_ativo"] = true;
+								that.getModel().setProperty("/isUpdate", false);
+							}	
 						}
+						
+						that._carregarCamposFormulario()
+							.then(function () {
+								execucaoNormal();	
+							})
+							.catch(function () {
+								execucaoNormal();
+							});
 					},
 
 					onAfterHide: function (oEvent) {
@@ -298,6 +438,31 @@ sap.ui.define(
 
 			onCancelar: function (oEvent) {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
+			},
+			
+			changeTipoAcesso: function (oEvent) {
+				var that = this;
+				this._resolverCheckbox(that);
+				this.getModel().refresh();
+			},
+			onTrocarSenha: function (oEvent){
+				this.setBusy(this.byId("btnTrocarSenha"),true);
+				var idObjeto = this.getModel().getProperty("/idObjeto");
+				var that = this;
+				$.ajax({
+					type:"GET",
+					url: Constants.urlBackend + "Usuario/" + idObjeto + "/ResetSenha",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true
+				}).done(function() {
+				  sap.m.MessageToast.show(that.getResourceBundle().getText("viewUsuarioAdminConfirmacaoEmail"));
+				  that.setBusy(that.byId("btnTrocarSenha"),false);
+				}).fail(function (err) {
+				  sap.m.MessageToast.show(err.responseJSON.error.msg);
+				  that.setBusy(that.byId("btnTrocarSenha"),false);
+				})
 			}
 		});
 	}

@@ -433,13 +433,14 @@ sap.ui.define(
 													obrigacoes: JSON.stringify(this._getSelecaoObrigacoes())*/
 					}, function (response) {
 						NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa?idEmpresaNaQualMeRelaciono=" + sIdObjeto, function (resp) {
+							var obj = that.getModel().getProperty("/objeto");
 							var aObrigacoesSelecionadas = that._getSelecaoObrigacoes(resp);
 							var DmenosX = that.getModel().getProperty("/DmenosXAnos");
 							var AnoCalendario = that.getModel().getProperty("/DominioAnoCalendario");
-							var idDominioAno = that.getModel().getProperty("/DominioAnoCalendario").find(function (x) {
-								return x.ano_calendario === Number(obj["data_encerramento"].substring(0,4));
-							});								
 							if(obj["data_encerramento"]){
+								var idDominioAno = that.getModel().getProperty("/DominioAnoCalendario").find(function (x) {
+									return x.ano_calendario === Number(obj["data_encerramento"].substring(0,4));
+								});	
 								jQuery.ajax(Constants.urlBackend + "/marcaRespostasComoExcluidas/RespostaObrigacao?empresa=" + sIdObjeto + "&anoCalendario=" + idDominioAno["id_dominio_ano_calendario"], {
 									type: "GET",
 									xhrFields: {

@@ -69,7 +69,7 @@
 										</f:label>
 										<f:fields>
 											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true" enabled="{= !${/isUpdate}}"/>
-											<!--<Button text="{i18n>viewUsuarioAdminTrocarSenha}" width="200px" press="onTrocarSenha"/>-->
+											<Button text="{i18n>viewUsuarioAdminTrocarSenha}" id="btnTrocarSenha" width="200px" visible="{= ${/isUpdate}}" press="onTrocarSenha"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -85,14 +85,14 @@
 											<Label text="{i18n>viewUsuarioAdminTipoAcesso}" class="sapMLabelRequired"/>
 										</f:label>
 										<f:fields>
-											<Select id="selectTipoAcesso" items="{/DominioAcessoUsuario}" selectedKey="{/objeto/fk_dominio_tipo_acesso.id_tipo_acesso}">
+											<Select id="selectTipoAcesso" items="{/DominioAcessoUsuario}" change="changeTipoAcesso" selectedKey="{/objeto/fk_dominio_tipo_acesso.id_tipo_acesso}">
 												<core:Item text="{descricao}" key="{id_tipo_acesso}"/>
 											</Select>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewUsuarioAdminEmailGestor}" class="required" labelFor="inputEmailGestor"/>
+											<Label text="{i18n>viewUsuarioAdminEmailGestor}" class="sapMLabelRequired" labelFor="inputEmailGestor"/>
 										</f:label>
 										<f:fields>
 											<Input type="Text" id="inputEmailGestor" value="{/objeto/email_gestor}"/>
@@ -123,7 +123,7 @@
 											<table:columns>
 												<table:Column width="45px">
 													<table:template>
-														<CheckBox selected="{selecionado}"/>
+														<CheckBox selected="{selecionado}" enabled="{habilitado}"/>
 													</table:template>
 												</table:Column>
 												<table:Column>
@@ -162,7 +162,7 @@
 											<table:columns>
 												<table:Column width="45px">
 													<table:template>
-														<CheckBox selected="{selecionado}" />
+														<CheckBox selected="{selecionado}" enabled="{habilitado}" />
 													</table:template>
 												</table:Column>
 												<table:Column>

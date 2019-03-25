@@ -61,5 +61,28 @@ module.exports = {
 				});
 			}
 		}
+	},
+	comunicarSenha: function (EmailUsuario,NomeUsuario,Password){
+		if(EmailUsuario != "" && NomeUsuario != "" && Password != ""){
+			var emailDestino = EmailUsuario;
+			var emailAssunto = "Profile information";
+			var corpoEmail = "<p>Dear " + NomeUsuario + ",</p>"
+			+"<p>Your password is: " + Password + "</p>";
+			
+			return new Promise(function (resolve, reject) {
+				sendEmails.sendEmail({
+						to: emailDestino,
+						subject: emailAssunto,
+						body: {
+							isHtml: true,
+							content: corpoEmail
+						}
+					}, function (sucesso) {
+						resolve(JSON.stringify(sucesso));
+					}, function (err2) {
+						reject(JSON.stringify(err2));
+					});	
+			});
+		}
 	}
 };

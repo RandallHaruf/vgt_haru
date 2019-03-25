@@ -256,6 +256,19 @@ const criarUsuario = function (req, res) {
 		});
 	}
 };
+function encrypt(sPassword) {
+	return new Promise(function (resolve, reject) {
+		bcrypt.hash(sPassword, 5, function (err, hash) {
+			if (err) {
+				reject();
+			}
+			else{
+				resolve(hash);	
+			}
+
+			});
+	});
+}
 
 module.exports = function (app) {
 	if (app) {
@@ -291,6 +304,8 @@ module.exports = function (app) {
 	}
 	
 	return {
+		encrypt: encrypt,
+		
 		filtrarEmpresas: function (req, aEmpresa, sNomeCampoIdEmpresa) {
 			if (req.session && req.session.autenticado) {
 				// O Nivel de acesso não controla mais o filtro da lista de empresas.

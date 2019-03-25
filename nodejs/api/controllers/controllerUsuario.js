@@ -6,6 +6,8 @@ var model = require("../models/modelUsuario");
 var modelRelUsuarioEmpresa = require("../models/modelRelUsuarioEmpresa");
 //var modelDominioModulo = require("../models/modelDominioModulo");
 var modelRelUsuarioModulo = require("../models/modelRelUsuarioModulo");
+var controllerEmailSend = require("./controllerEmailSend");
+var auth = require("../auth")();
 
 /*function adicionarRegistrosRelacionados(iIdUsuario, aRegistroRelacionado) {
 	const vincular = function (oRegistroRelacionado) {
@@ -108,83 +110,76 @@ module.exports = {
 		});
 	},
 
-	criarRegistro: function (req, res) {
-
-		var aParams = [{
-			coluna: model.colunas.id
-		}, {
-			coluna: model.colunas.nome,
-			valor: req.body.nome ? req.body.nome : null
-		}, {
-			coluna: model.colunas.email,
-			valor: req.body.email ? req.body.email : null
-		}, {
-			coluna: model.colunas.contato,
-			valor: req.body.contato ? req.body.contato : null
-		}, {
-			coluna: model.colunas.user,
-			valor: req.body.user ? req.body.user : null
-		}, {
-			coluna: model.colunas.pass,
-			valor: "$2a$05$vo2B9vu8Z0wANmDgdhVKkuu/rT0uIr9MY7htbM9GwmNt1.rtDkUDC" //req.body.pass ? req.body.pass : null
-		}, {
-			coluna: model.colunas.indAtivo,
-			valor: req.body.indAtivo ? req.body.indAtivo : null
-		}, {
-			coluna: model.colunas.fkDominioTipoAcesso,
-			valor: req.body.fkDominioTipoAcesso ? req.body.fkDominioTipoAcesso : null
-		}, {
-			coluna: model.colunas.emailGestor,
-			valor: req.body.emailGestor ? req.body.emailGestor : null
-		}];
-
-		model.inserir(aParams, function (err, result) {
-			if (err) {
-				res.send(JSON.stringify(err));
-			} else {
-				
-				var idUsuario = result[0].generated_id;
-				
-				for(let i = 0,length = req.body.modulos.length; i < length; i++){
-					modelRelUsuarioModulo.inserir(
-						[
-							{
-								coluna: modelRelUsuarioModulo.colunas.fkUsuario,
-								valor: idUsuario
-							},
-							{
-								coluna: modelRelUsuarioModulo.colunas.fkModulo,
-								valor: req.body.modulos[i]["id_dominio_modulo"]
-							}
-						]
-						
-					,function ( err1, result1){
-						
-					});
+	criarRegistro: function (req, res, next) {
+		const continuaCadastro = function (hash) {
+			var aParams = [{
+				coluna: model.colunas.id
+			}, {
+				coluna: model.colunas.nome,
+				valor: req.body.nome ? req.body.nome : null
+			}, {
+				coluna: model.colunas.email,
+				valor: req.body.email ? req.body.email : null
+			}, {
+				coluna: model.colunas.contato,
+				valor: req.body.contato ? req.body.contato : null
+			}, {
+				coluna: model.colunas.user,
+				valor: req.body.user ? req.body.user : null
+			}, {
+				coluna: model.colunas.pass,
+				valor: hash //req.body.pass ? req.body.pass : null
+			}, {
+				coluna: model.colunas.indAtivo,
+				valor: req.body.indAtivo ? req.body.indAtivo : null
+			}, {
+				coluna: model.colunas.fkDominioTipoAcesso,
+				valor: req.body.fkDominioTipoAcesso ? req.body.fkDominioTipoAcesso : null
+			}, {
+				coluna: model.colunas.emailGestor,
+				valor: req.body.emailGestor ? req.body.emailGestor : null
+			}];
+		
+			model.inserir(aParams, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				} else {
+		
+					var idUsuario = result[0].generated_id;
+		
+					Promise.all([
+						deleteRelUsuarios('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
+						inserirRelUsuario('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
+						deleteRelUsuarios('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas),
+						inserirRelUsuario('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas)
+						])
+						.then (function (aResponse) {
+							controllerEmailSend.comunicarSenha(req.body.email,req.body.nome,novaSenha);
+							res.send(JSON.stringify(result));
+						})
+						.catch(function (err) {
+							console.log(err);
+							let msg = 'Erro inesperado no método "controllerUsuario/atualizarRegistro": ' + err.message;
+							const error = new Error(msg);
+							next(error);
+						});
+		
 				}
-				
-				for(let i = 0,length = req.body.empresas.length; i < length; i++){
-					modelRelUsuarioEmpresa.inserir(
-						[
-							{
-								coluna: modelRelUsuarioEmpresa.colunas.fkUsuario,
-								valor: idUsuario
-							},
-							{
-								coluna: modelRelUsuarioEmpresa.colunas.fkEmpresa,
-								valor: req.body.empresas[i]["id_empresa"]
-							}
-						]
-						
-					,function ( err1, result1){
-						
-					});
-				}
-				
-
-				res.send(JSON.stringify(result));
-			}
-		});
+			});
+		};
+		
+		var novaSenha = gerarNovaSenha();
+		
+		auth.encrypt(novaSenha)
+			.then(function (hash) {
+				continuaCadastro(hash);
+			})
+			.catch(function (err) {
+				console.log(err);
+				let msg = 'Erro inesperado no método "controllerUsuario/criarRegistro": ' + err.message;
+				const error = new Error(msg);
+				next(error);
+			});
 	},
 
 	lerRegistro: function (req, res) {
@@ -200,7 +195,7 @@ module.exports = {
 		});
 	},
 
-	atualizarRegistro: function (req, res) {
+	atualizarRegistro: function (req, res, next) {
 
 		var oCondition = {
 			coluna: model.colunas.id,
@@ -237,7 +232,23 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
-				res.send(JSON.stringify(result));
+				var idUsuario = req.params.idRegistro;
+
+				Promise.all([
+					deleteRelUsuarios('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
+					inserirRelUsuario('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
+					deleteRelUsuarios('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas),
+					inserirRelUsuario('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas)
+					])
+					.then (function (aResponse) {
+						res.send(JSON.stringify(result));
+					})
+					.catch(function (err) {
+						console.log(err);
+						let msg = 'Erro inesperado no método "controllerUsuario/atualizarRegistro": ' + err.message;
+						const error = new Error(msg);
+						next(error);
+					});
 			}
 		});
 	},
@@ -295,5 +306,161 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});
+	},
+	
+	resetarSenha: function(req,res, next) {
+		var idUsuario = req.params.idRegistro,
+			novaSenha = gerarNovaSenha(),
+			hash,
+			email,
+			nome;
+		
+		auth.encrypt(novaSenha)
+			.then((response) => {
+				hash = response;
+				return pegarEmail(idUsuario);
+			})
+			.then((retorno) => {
+				email = retorno[0].email;
+				nome = retorno[0].nome;
+				return atualizarSenha(idUsuario, hash);
+			})
+			.then(() => {
+				return controllerEmailSend.comunicarSenha(email,nome,novaSenha);
+			})
+			.then(() => {
+				res.send();
+			})
+			.catch((err) => {
+				console.log(err);
+				let msg = 'Erro inesperado no método "controllerUsuario/resetarSenha": ' + err.message;
+				const error = new Error(msg);
+				next(error);
+			});
+		
+		/*return new Promise(function (resolve, reject) {
+			model.execute({
+				statement: sStatement
+			}, function (err, result) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});
+		});*/
 	}
+	
 };
+
+function pegarEmail(idUsuario) {
+	var sStatement = 'SELECT "VGT.USUARIO"."nome","VGT.USUARIO"."email" FROM "VGT.USUARIO" WHERE "VGT.USUARIO"."id_usuario" = ' + idUsuario;
+	return new Promise(function (resolve, reject) {
+		model.execute({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+}
+
+function atualizarSenha(idUsuario,sHash) {
+	var sStatement = 'UPDATE "VGT.USUARIO" SET "VGT.USUARIO"."pass" = \'' + sHash + '\' WHERE "VGT.USUARIO"."id_usuario" = ' + idUsuario;
+	return new Promise(function (resolve, reject) {
+		model.execute({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
+function deleteRelUsuarios(sTblName, iIdUsuario, aIdRels) {
+	var sStatement = "delete from " + sTblName + " ";
+	var sIdRels = "";
+	if (sTblName == '"VGT.REL_USUARIO_MODULO"') {
+		if(aIdRels){
+			for (var i = 0; i < aIdRels.length; i++) {
+				sIdRels += (sIdRels != "" ? ",'" : "'") + aIdRels[i]["id_dominio_modulo"] + "'";
+			}	
+			sStatement += " where " + sTblName + ".\"fk_dominio_modulo.id_dominio_modulo\" NOT IN (" + sIdRels + ") ";
+		}
+	} else {
+		if(aIdRels){
+			for (var i = 0; i < aIdRels.length; i++) {
+				sIdRels += (sIdRels != "" ? ",'" : "'") + aIdRels[i]["id_empresa"] + "'";
+			}
+			sStatement += " where " + sTblName + ".\"fk_empresa.id_empresa\" NOT IN (" + sIdRels + ") ";
+		}
+	}
+	
+	if(aIdRels){
+		sStatement += "and " + sTblName + ".\"fk_usuario.id_usuario\" = " + iIdUsuario;
+	}
+	else{
+		sStatement += "where " + sTblName + ".\"fk_usuario.id_usuario\" = " + iIdUsuario;
+	}
+	
+
+	return new Promise(function (resolve, reject) {
+		model.execute({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
+function inserirRelUsuario(sTblName, iIdUsuario, aIdRels) {
+	
+	const inserir = function (idRel) {
+		var sStatement = "upsert ";
+		if (sTblName == '"VGT.REL_USUARIO_MODULO"') {
+			sStatement += sTblName + " values (" + iIdUsuario + ", " + idRel + ") where " + sTblName + ".\"fk_dominio_modulo.id_dominio_modulo\" = " + idRel + " ";
+		} else {
+			sStatement += sTblName + " values (" + iIdUsuario + ", " + idRel + ") where " + sTblName + ".\"fk_empresa.id_empresa\" = " + idRel + " ";
+		}
+		
+		sStatement += "and " + sTblName + ".\"fk_usuario.id_usuario\" = " + iIdUsuario;	
+		
+		
+		return new Promise(function (resolve, reject) {
+			model.execute({
+				statement: sStatement
+			}, function (err, result) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});
+		});
+	};
+	
+	var aPromise = [];
+	
+	if(aIdRels){
+		for (let i = 0, length = aIdRels.length; i < length; i++) {
+			aPromise.push(inserir((sTblName == '"VGT.REL_USUARIO_MODULO"') ? aIdRels[i].id_dominio_modulo : aIdRels[i].id_empresa));
+		}
+	}
+	
+	
+	return Promise.all(aPromise);
+}
+
+function gerarNovaSenha() {
+	return Math.random().toString(36).slice(-10);
+}

@@ -8,6 +8,7 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().post("/Usuario", controller.criarRegistro));
 
 	aRoutes.push(express.Router().get("/Usuario/:idRegistro", controller.lerRegistro));
+	aRoutes.push(express.Router().get("/Usuario/:idRegistro/ResetSenha", controller.resetarSenha));
 	aRoutes.push(express.Router().put("/Usuario/:idRegistro", controller.atualizarRegistro));
 	aRoutes.push(express.Router().delete("/Usuario/:idRegistro", controller.excluirRegistro));
 
