@@ -674,6 +674,8 @@ sap.ui.define([
 						? that.getResourceBundle().getText("viewGeralSim") 
 						: that.getResourceBundle().getText("viewGeralNao") ;
 						
+						aRegistro[i]["tblRespostaObrigacao.suporte_valor"] = that._aplicarMascara(aRegistro[i]["tblRespostaObrigacao.suporte_valor"]);
+						
 						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);	
 						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);  
 					}		
@@ -683,6 +685,15 @@ sap.ui.define([
 					that.byId("GerarRelatorio").setEnabled(true);						
 				}
 			});				
-		}
+		},
+		
+		_aplicarMascara: function (numero) {
+			if (this.isPTBR()) {
+				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
+			}
+			else {
+				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/%/g, ',') : "0";
+			}
+		},
 	});
 });

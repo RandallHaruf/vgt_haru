@@ -2,6 +2,48 @@ sap.ui.define(
 	[],
 	function () {
 		return {
+			_limparMascara: function (sValor) {
+				if (sap.ui.getCore().getConfiguration().getLanguage().toUpperCase() === "PT-BR") {
+					return sValor.replace(/\./g, "").replace(",", ".");
+				}
+				else {
+					return sValor.replace(/\,/g, "");
+				}
+			},
+			
+			validarNumeroInserido: function (oEvent, that) {
+				if (oEvent && oEvent.getSource()) {
+					if (!this.isNumber(this._limparMascara(oEvent.getSource().getValue()))) {
+						oEvent.getSource().setValue(0);
+
+						var dialog = new sap.m.Dialog({
+							title: that.getResourceBundle().getText("viewGeralAviso"),
+							type: "Message",
+							content: new sap.m.Text({
+								text: that.getResourceBundle().getText("viewGeralValorInseridoNaoValido")
+							}),
+							endButton: new sap.m.Button({
+								text: "OK",
+								press: function () {
+									dialog.close();
+								}
+							}),
+							afterClose: function () {
+								dialog.destroy();
+							}
+						});
+
+						dialog.open();
+
+						return false;
+					} else {
+						return true;
+					}
+				}
+
+				return false;
+			},
+			
 			validarFormularioAdmin: function (oParametros) {
 				var sMensagem = "";
 				

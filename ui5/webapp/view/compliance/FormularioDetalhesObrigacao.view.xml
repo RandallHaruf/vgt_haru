@@ -104,8 +104,11 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<Input id="ValorSuporte" value="{/RespostaObrigacao/suporte_valor}" type="Number"
-											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"/>
+										<Input 
+											id="ValorSuporte"
+											value="{path: '/RespostaObrigacao/suporte_valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"
+											change="onTrocarValorSuporte" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralMoeda}">

@@ -266,22 +266,26 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] = 
+						/*aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] = 
 							aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] 
 								? Number(aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;
-						aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] = 
+								: "0" ;*/
+						aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"]);
+						/*aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] = 
 							aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] 
 								? Number(aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;
-						aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] = 
+								: "0" ;*/
+						aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"]);
+						/*aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] = 
 							aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] 
 								? Number(aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;
-						aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] = 
+								: "0" ;*/
+						aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"]);
+						/*aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] = 
 							aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] 
 								? Number(aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;
+								: "0" ;*/
+						aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"]);
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 								
 					}						
 					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
@@ -291,7 +295,14 @@ sap.ui.define([
 			});				
 		},		
 		
-		
+		_aplicarMascara: function (numero) {
+			if (this.isPTBR()) {
+				return numero ? Number(numero).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";	
+			}
+			else {
+				return numero ? Number(numero).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";	
+			}
+		},
 		
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));

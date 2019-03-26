@@ -316,7 +316,7 @@ sap.ui.define(
 								// - caso ele não exista na lista de aliquotas, adicionar com o valor inserido para a janela;
 								// - case ele já exista na lista de alíquotas, atualizar o valor pelo inserido para a janela;
 								var aAliquota = this.getModel().getProperty("/Aliquotas"),
-									novoValor = Utils.limparMascaraDecimal(oInput.getValue());
+									novoValor = Utils.limparMascaraDecimal(oInput.getValue(), this);
 								
 								for (var i = 0; i < aAnoFiscal.length; i++) {
 									var oAnoJaInserido = aAliquota.find(function (obj) {
@@ -388,28 +388,7 @@ sap.ui.define(
 			},
 			
 			onTrocarValorAliquota: function (oEvent) {
-				if (!Validador.isNumber(Utils.limparMascaraDecimal(oEvent.getSource().getValue()))) {
-					oEvent.getSource().setValue(0);
-
-					var dialog = new sap.m.Dialog({
-						title: this.getResourceBundle().getText("viewGeralAviso"),
-						type: "Message",
-						content: new sap.m.Text({
-							text: this.getResourceBundle().getText("viewGeralValorInseridoNaoValido")
-						}),
-						endButton: new sap.m.Button({
-							text: "OK",
-							press: function () {
-								dialog.close();
-							}
-						}),
-						afterClose: function () {
-							dialog.destroy();
-						}
-					});
-					
-					dialog.open();
-				}
+				Validador.validarNumeroInserido(oEvent, this);
 				
 				this._refazerArrayAliquotas();
 			},
@@ -788,7 +767,7 @@ sap.ui.define(
 
 			/* Métodos fixos */
 			onInit: function () {
-				sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
+				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 				
 				var that = this;
 

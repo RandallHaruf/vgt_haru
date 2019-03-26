@@ -5,9 +5,10 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/lib/Arquivo",
 		"ui5ns/ui5/lib/jQueryMask",
-		"ui5ns/ui5/model/Constants"
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/Validador"
 	],
-	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants) {
+	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador) {
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
@@ -185,6 +186,10 @@ sap.ui.define(
 					obj["fk_id_dominio_moeda.id_dominio_moeda"] = "";
 					obj["suporte_valor"] = "";
 				}
+			},
+			
+			onTrocarValorSuporte: function (oEvent) {
+				Validador.validarNumeroInserido(oEvent, this);
 			},
 
 			onEnviarArquivo: function (oEvent, sProperty) {

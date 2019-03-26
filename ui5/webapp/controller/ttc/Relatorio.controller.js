@@ -488,14 +488,18 @@ sap.ui.define([
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"] ? Utils.stringDataDoBancoParaStringDDMMYYYY(
 							aRegistro[i]["tblPagamento.data_pagamento"]) : null;
-						aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(
-							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
-						aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(
-							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
-						aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i][
-							"tblPagamento.principal"]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
-						aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(
-							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
+						/*aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(
+							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.juros"] = that._aplicarMascara(aRegistro[i]["tblPagamento.juros"]);
+						/*aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(
+							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.multa"] = that._aplicarMascara(aRegistro[i]["tblPagamento.multa"]);
+						/*aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i][
+							"tblPagamento.principal"]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.principal"] = that._aplicarMascara(aRegistro[i]["tblPagamento.principal"]);
+						/*aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(
+							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.total"] = that._aplicarMascara(aRegistro[i]["tblPagamento.total"]);
 
 						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
 							"tblDominioTaxClassification.id_dominio_tax_classification"
@@ -513,6 +517,15 @@ sap.ui.define([
 					that.byId("GerarRelatorio").setEnabled(true);
 				}
 			});
+		},
+		
+		_aplicarMascara: function (numero) {
+			if (this.isPTBR()) {
+				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
+			}
+			else {
+				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/%/g, ',') : "0";
+			}
 		},
 
 		onDataExport: sap.m.Table.prototype.exportData || function (oEvent) {

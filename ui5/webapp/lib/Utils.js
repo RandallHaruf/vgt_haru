@@ -5,8 +5,13 @@ sap.ui.define(
 	],
 	function (Validador) {
 		return {
-			limparMascaraDecimal: function (sValor) {
-				return sValor.replace(/\./g, "").replace(",", ".");
+			limparMascaraDecimal: function (sValor, that) {
+				if (that && !that.isPTBR()) {
+						return sValor.replace(/\,/g, "");
+				}
+				else {
+					return sValor.replace(/\./g, "").replace(",", ".");	
+				}
 			},
 			
 			getPeriodoEdicaoTaxPackage: function (iAno) {
