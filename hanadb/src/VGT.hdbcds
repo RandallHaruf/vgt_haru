@@ -648,4 +648,11 @@ context VGT {
         key id_valor_aliquota     : Integer;
             fk_dominio_ano_fiscal : association[*, 0..1] to VGT.DOMINIO_ANO_FISCAL { id_dominio_ano_fiscal };
     };
+
+    /*@@layout{"layoutInfo":{"x":1344,"y":688.5}}*/
+    entity VIGENCIA_CUSTOMIZADA {
+        key fk_id_rel_modelo_empresa          : association[*, 0..1] to VGT.REL_MODELO_EMPRESA { id_rel_modelo_empresa };
+        key fk_dominio_ano_calendario_inicial : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
+        key fk_dominio_ano_calendario_final   : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
+    };
 };
