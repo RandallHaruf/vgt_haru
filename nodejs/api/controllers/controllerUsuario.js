@@ -214,10 +214,10 @@ module.exports = {
 		}, {
 			coluna: model.colunas.user,
 			valor: req.body.user ? req.body.user : null
-		}, {
+		}/*, {
 			coluna: model.colunas.pass,
 			valor: req.body.pass ? req.body.pass : null
-		}, {
+		}*/, {
 			coluna: model.colunas.indAtivo,
 			valor: req.body.indAtivo ? req.body.indAtivo : null
 		}, {
@@ -462,5 +462,15 @@ function inserirRelUsuario(sTblName, iIdUsuario, aIdRels) {
 }
 
 function gerarNovaSenha() {
-	return Math.random().toString(36).slice(-10);
+	var senha = Math.random().toString(36).slice(-6);
+	var letrasMaiusculas = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+	var caracteresEspeciais = ["!","@","#","$","%","¨","*"];
+	senha += letrasMaiusculas[gerarNumeroAleatorioIntervalo(letrasMaiusculas.length - 1, 0)];//Adiciona letra maiscula
+	senha += letrasMaiusculas[gerarNumeroAleatorioIntervalo(letrasMaiusculas.length - 1, 0)].toLowerCase();//Adiciona letra maiscula
+	senha += caracteresEspeciais[gerarNumeroAleatorioIntervalo(caracteresEspeciais.length - 1, 0)];//Adiciona caracter especial
+	senha += gerarNumeroAleatorioIntervalo(9,0);
+	return senha;
+}
+function gerarNumeroAleatorioIntervalo(max,min){
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }

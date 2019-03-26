@@ -60,7 +60,7 @@
 											<Label text="{i18n>viewUsuarioAdminLogin}" class="required" labelFor="inputLogin"/>
 										</f:label>
 										<f:fields>
-											<Input type="Text" id="inputLogin" value="{/objeto/user}" required="true" enabled="{= !${/isUpdate}}"/>
+											<Input type="Text" id="inputLogin" value="{/objeto/user}" required="true" />
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -68,7 +68,7 @@
 											<Label text="{i18n>viewUsuarioAdminEmail}" class="required" labelFor="inputEmail"/>
 										</f:label>
 										<f:fields>
-											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true" enabled="{= !${/isUpdate}}"/>
+											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true" />
 											<Button text="{i18n>viewUsuarioAdminTrocarSenha}" id="btnTrocarSenha" width="200px" visible="{= ${/isUpdate}}" press="onTrocarSenha"/>
 										</f:fields>
 									</f:FormElement>
