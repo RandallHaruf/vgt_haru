@@ -25,7 +25,7 @@ sap.ui.define(
         				"suporte_valor": 1000.00,
         				"fk_id_dominio_moeda.id_dominio_moeda": 1,
         				"fk_id_rel_modelo_empresa.id_rel_modelo_empresa": "1",
-        				"fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal": "1",
+        				"id_ano_fiscal_calculado": "1",
         				"fk_id_dominio_ano_calendario.id_dominio_ano_calendario": 1,
         			},
 						*/
@@ -116,11 +116,12 @@ sap.ui.define(
 								suporteEspecificacao: obj["suporte_especificacao"],
 								suporteValor: obj["suporte_valor"],
 								fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-								fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
-								fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-								fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
-								dataExtensao: obj["data_extensao"]
+								fkIdRelModeloEmpresa: obj["id_rel_modelo_empresa"],
+								fkIdDominioAnoFiscal: obj["id_ano_fiscal_calculado"],
+								fkIdDominioAnoCalendario: obj["id_dominio_ano_calendario"],
+								fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
+								dataExtensao: obj["data_extensao"],
+								indIniciada: true
 							}, function (response) {
 								that.getView().byId("fileUploader").setValue("");
 								that.onVoltarParaListagem();
@@ -129,20 +130,21 @@ sap.ui.define(
 					}
 				}); //sap.m.MessageToast.show("Cancelar inserção");
 			},
-			
+
 			onVoltarParaListagem: function () {
-				this.getRouter().navTo("complianceListagemObrigacoes",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")})
+				this.getRouter().navTo("complianceListagemObrigacoes", {
+					parametros: JSON.stringify({
+						idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")
+					})
 				});
 			},
-			
+
 			onCancelar: function () {
 				var that = this;
-				
+
 				if (this.isIFrame()) {
 					that.onVoltarParaListagem();
-				}
-				else {
+				} else {
 					jQuery.sap.require("sap.m.MessageBox");
 					sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
 						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
@@ -158,11 +160,10 @@ sap.ui.define(
 
 			navToHome: function () {
 				var that = this;
-				
+
 				if (this.isIFrame()) {
 					that.getRouter().navTo("selecaoModulo");
-				}
-				else {
+				} else {
 					jQuery.sap.require("sap.m.MessageBox");
 					sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
 						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
@@ -187,7 +188,7 @@ sap.ui.define(
 					obj["suporte_valor"] = "";
 				}
 			},
-			
+
 			onTrocarValorSuporte: function (oEvent) {
 				Validador.validarNumeroInserido(oEvent, this);
 			},
@@ -242,11 +243,11 @@ sap.ui.define(
 						DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
 						this.getModel().setProperty("/CancelaBotaoConfirmar", false);
 						this.getModel().setProperty("/CancelaBotaoCancelar", false);
-	
+
 						var oBtnCancelar = new sap.m.Button({
 							text: "{i18n>formularioObrigacaoBotaoCancelar}"
 						});
-	
+
 						var dialog = new sap.m.Dialog({
 							title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
 							type: "Message",
@@ -268,28 +269,30 @@ sap.ui.define(
 											.then(function (response) {
 												//sap.m.MessageToast.show(response);
 												that._atualizarDocumentos('/Documentos', oData.id, oTable);
-	
+
 												var IntMes = DataConclusao.getMonth(); //Number(DataConclusao.toString());
 												IntMes = IntMes + 1;
 												var strMes = IntMes.toString();
-	
-												that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" +
+
+												that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes +
+													"-" +
 													DataConclusao.getDate();
 												that._AtualizaStatusObrigacao(DataFormatada);
-	
+
 												var obj = that.getModel().getProperty("/RespostaObrigacao");
-	
+
 												NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
 													suporteContratado: obj["suporte_contratado"],
 													suporteEspecificacao: obj["suporte_especificacao"],
 													suporteValor: obj["suporte_valor"],
 													fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-													fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
-													fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-													fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-													fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
+													fkIdRelModeloEmpresa: obj["id_rel_modelo_empresa"],
+													fkIdDominioAnoFiscal: obj["id_ano_fiscal_calculado"],
+													fkIdDominioAnoCalendario: obj["id_dominio_ano_calendario"],
+													fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
 													dataExtensao: obj["data_extensao"],
-													dataConclusao: obj["data_conclusao"]
+													dataConclusao: obj["data_conclusao"],
+													indIniciada: true
 												}, function (response2) {
 													that.onVoltarParaListagem();
 													that.getModel().setProperty("/CancelaBotaoConfirmar", true);
@@ -299,7 +302,7 @@ sap.ui.define(
 													that.setBusy(oBtnEnviar, false);
 													dialog.close();
 												});
-	
+
 											})
 											.catch(function (err) {
 												sap.m.MessageToast.show(err);
@@ -312,9 +315,9 @@ sap.ui.define(
 									} else {
 										//sap.m.MessageToast.show("Selecione um arquivo");
 										sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
-										
+
 									}
-	
+
 								}
 							}),
 							endButton: oBtnCancelar,
@@ -323,13 +326,13 @@ sap.ui.define(
 								dialog.destroy();
 							}
 						});
-	
+
 						oBtnCancelar.attachPress(function (oEvent2) {
 							dialog.close();
 						});
-	
+
 						this.getView().addDependent(dialog);
-	
+
 						dialog.open();
 					} else {
 						//sap.m.MessageToast.show("Selecione um arquivo");
@@ -358,7 +361,8 @@ sap.ui.define(
 					IntMes = Number(arryData[1].toString());
 					IntMes = IntMes - 1;
 					strMes = IntMes.toString();
-					prazo_entrega_customizado = new Date(this.getModel().getProperty("/RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' + arryData[2]);
+					prazo_entrega_customizado = new Date(this.getModel().getProperty("/RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' +
+						arryData[2]);
 				} else {
 					prazo_entrega_customizado = null;
 				}
@@ -507,17 +511,32 @@ sap.ui.define(
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 				var idAnoCalendario = oParametros.idAnoCalendario;
-				this.getModel().setProperty("/AnoSelecionadoAnteriormente",idAnoCalendario);
+				this.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
-					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] != 4 ? true : false;
+					"status_obrigacao_calculado"] != 4 ? true : false;
 				this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
-					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? true : false));
+					"status_obrigacao_calculado"] == 4 ? true : false));
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
 				this.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
-				this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
+				
+				if (!idObrigacao) {
+					NodeAPI.pCriarRegistro('RespostaObrigacao', {
+							fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"]
+						})
+						.then(function (res) {
+							var generatedId = JSON.parse(res)[0].generated_id;
+							
+							that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
+							
+							that._atualizarDocumentos('/Documentos', generatedId, this.byId("tabelaDocumentos"));
+						});
+				}
+				else {
+					this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
+				}
 			}
 		});
 	}

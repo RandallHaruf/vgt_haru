@@ -125,7 +125,7 @@ module.exports = {
 				
 				var client = hana.createConnection(),
 					sConnString = "serverNode=" + dbHost + ":" + dbPort + ";encrypt=true;uid=" + dbUser + ";pwd=" + dbPassword + ";sslValidateCertificate=false;currentschema=" +dbSchema;
-					console.log("sConnString = "+ sConnString);
+					//console.log("sConnString = "+ sConnString);
 				
 				client.connect(sConnString);
 				

@@ -61,7 +61,13 @@ module.exports = {
 				
 				if (resultRel) {
 					sQuery =
-						'select * '
+						'select diferenca.*, '
+						+ 'diferencaOpcao.*, '
+						+ 'dominioTipo.*, '
+						+ 'rel.*, '
+						+ 'taxRecon."id_tax_reconciliation", '
+						+ 'periodo.*, '
+						+ 'taxPackage."id_tax_package" '
 						+ 'from "VGT.DIFERENCA" diferenca '
 						+ 'left outer join "VGT.DIFERENCA_OPCAO" diferencaOpcao '
 						+ 'on diferenca."fk_diferenca_opcao.id_diferenca_opcao" = diferencaOpcao."id_diferenca_opcao" '

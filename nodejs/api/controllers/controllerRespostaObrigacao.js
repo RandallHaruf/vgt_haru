@@ -48,6 +48,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataConclusao,
 			valor: req.body.dataConclusao ? req.body.dataConclusao : null
+		}, {
+			coluna: model.colunas.indIniciada,
+			valor: req.body.indIniciada ? req.body.indIniciada : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -109,6 +112,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataConclusao,
 			valor: req.body.dataConclusao ? req.body.dataConclusao : null
+		}, {
+			coluna: model.colunas.indIniciada,
+			valor: req.body.indIniciada ? req.body.indIniciada : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -175,6 +181,29 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
+		var sStatement = model.pegarQueryRespostaObrigacaoCalculada(
+			req.query.tipoObrigacao,
+			req.query.anoCalendario, 
+			req.query.empresa, 
+			req.query.statusResposta
+		);
+		
+		model.execute({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				res.send(JSON.stringify(err));
+			}
+			else {
+				var auth = require("../auth")();
+				res.send(JSON.stringify(auth.filtrarEmpresas(req, result, "id_empresa")));
+			}
+		});
+	},
+	
+	/*
+	// @pedsf 29/03/19 - Deep query antiga onde nem todas as iformações eram resolvidas em query
+	deepQuery: function (req, res) {
 
 		var sStatement =
 			'select * from ( ' +
@@ -235,7 +264,7 @@ module.exports = {
 		}
 
 		if (req.query.IndAtivoRel) {
-			oWhere.push(' (tblRelModeloEmpresa."ind_ativo" = ? OR (tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4) OR (tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 3))');
+			oWhere.push(' (tblRelModeloEmpresa."ind_ativo" = ? OR ((tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 4) AND (tblRespostaObrigacao."fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status" != 3)))');
 			aParams.push(req.query.IndAtivoRel);
 		}
 
@@ -289,5 +318,5 @@ module.exports = {
 				res.send(JSON.stringify(auth.filtrarEmpresas(req, result, "id_empresa")));
 			}
 		});
-	}
+	}*/
 };

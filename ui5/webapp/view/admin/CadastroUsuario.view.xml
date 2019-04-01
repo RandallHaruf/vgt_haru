@@ -60,7 +60,7 @@
 											<Label text="{i18n>viewUsuarioAdminLogin}" class="required" labelFor="inputLogin"/>
 										</f:label>
 										<f:fields>
-											<Input type="Text" id="inputLogin" value="{/objeto/user}" required="true" />
+											<Input type="Text" id="inputLogin" value="{/objeto/user}" required="true"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
@@ -68,7 +68,7 @@
 											<Label text="{i18n>viewUsuarioAdminEmail}" class="required" labelFor="inputEmail"/>
 										</f:label>
 										<f:fields>
-											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true" />
+											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true"/>
 											<Button text="{i18n>viewUsuarioAdminTrocarSenha}" id="btnTrocarSenha" width="200px" visible="{= ${/isUpdate}}" press="onTrocarSenha"/>
 										</f:fields>
 									</f:FormElement>
@@ -85,7 +85,8 @@
 											<Label text="{i18n>viewUsuarioAdminTipoAcesso}" class="sapMLabelRequired"/>
 										</f:label>
 										<f:fields>
-											<Select id="selectTipoAcesso" items="{/DominioAcessoUsuario}" change="changeTipoAcesso" selectedKey="{/objeto/fk_dominio_tipo_acesso.id_tipo_acesso}">
+											<Select items="{ path: '/DominioAcessoUsuario', templateShareable: false }" id="selectTipoAcesso" change="changeTipoAcesso"
+												selectedKey="{/objeto/fk_dominio_tipo_acesso.id_tipo_acesso}">
 												<core:Item text="{descricao}" key="{id_tipo_acesso}"/>
 											</Select>
 										</f:fields>
@@ -162,7 +163,7 @@
 											<table:columns>
 												<table:Column width="45px">
 													<table:template>
-														<CheckBox selected="{selecionado}" enabled="{habilitado}" />
+														<CheckBox selected="{selecionado}" enabled="{habilitado}"/>
 													</table:template>
 												</table:Column>
 												<table:Column>
