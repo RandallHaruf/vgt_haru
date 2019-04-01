@@ -1,17 +1,12 @@
-<mvc:View
-	controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core"
-	xmlns:f="sap.f"
-	xmlns="sap.m"
-	class="viewComplianceListagemObrigacoes">
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:f="sap.f" xmlns="sap.m" class="viewComplianceListagemObrigacoes">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome" />
-						<Link text="{i18n>ViewComplianceListagemObrigacoesL}" enabled="false" />
+						<Link text="Home" press="navToHome"/>
+						<Link text="{i18n>ViewComplianceListagemObrigacoesL}" enabled="false"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
@@ -19,111 +14,55 @@
 				</f:heading>
 				<f:navigationActions>
 					<!--<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />-->
-					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 			</f:DynamicPageTitle>
 		</f:title>
 		<f:content>
-			<IconTabBar
-				id="iconTabBarObrigacoes"
-				select="onFiltrar"
-				expandable="false">
+			<IconTabBar id="iconTabBarObrigacoes" select="onFiltrar" expandable="false">
 				<items>
-					<IconTabFilter
-						showAll="true"
-						count="{/Contadores/modelTodos}"
-						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"
-						key="0" />
-					<IconTabSeparator />
-					<IconTabFilter
-						icon="sap-icon://sys-help"
-						iconColor="Default"
-						count="{/Contadores/modelNaoIniciada}"
-						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
-						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}"
-						key="4" />
-					<IconTabFilter
-						icon="sap-icon://lateness"
-						iconColor="Neutral"
-						count="{/Contadores/modelAguardando}"
-						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
-						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}"
-						key="1" />
-					<IconTabFilter
-						icon="sap-icon://alert"
-						iconColor="Negative"
-						count="{/Contadores/modelEmAtraso}"
-						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
-						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}"
-						key="5" />
-					<IconTabFilter
-						icon="sap-icon://accept"
-						iconColor="Positive"
-						count="{/Contadores/modelEntregueNoPrazo}"
-						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
-						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}"
-						key="6" />
-					<IconTabFilter
-						icon="sap-icon://customer-history"
-						iconColor="Critical"
-						count="{/Contadores/modelEntregueForaPrazo}"
-						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
-						tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}"
-						key="7" />
+					<IconTabFilter showAll="true" count="{/Contadores/modelTodos}" text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}" key="0"/>
+					<IconTabSeparator/>
+					<IconTabFilter icon="sap-icon://sys-help" iconColor="Default" count="{/Contadores/modelNaoIniciada}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro2}" key="4"/>
+					<IconTabFilter icon="sap-icon://lateness" iconColor="Neutral" count="{/Contadores/modelAguardando}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro3}" key="1"/>
+					<IconTabFilter icon="sap-icon://alert" iconColor="Negative" count="{/Contadores/modelEmAtraso}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro4}" key="5"/>
+					<IconTabFilter icon="sap-icon://accept" iconColor="Positive" count="{/Contadores/modelEntregueNoPrazo}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro5}" key="6"/>
+					<IconTabFilter icon="sap-icon://customer-history" iconColor="Critical" count="{/Contadores/modelEntregueForaPrazo}"
+						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}" key="7"/>
 				</items>
 				<content>
-					<Table
-						id="tabelaObrigacoes"
-						items="{
-							path: '/Obrigacao',
-							sorter: {
-								path: 'nome',
-								group: true
-							}
-						}"
-						growing="true"
-						enableBusyIndicator="true"
-						growingScrollToLoad="true"
-						updateFinished="onTerminouAtualizar">
-		
+					<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
+						growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 						<headerToolbar>
 							<Toolbar>
 								<!--Title 
 									id="cabecalhoTabelaObrigacoes" 
 									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
-								<Label
-								text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
-								>
-								</Label>
-								<Select
-									tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"
-									id="selectEmpresa" items="{/Empresa}" selectedKey="{/IdEmpresaSelecionado}"
-									change="onTrocarEmpresa">
+								<Label text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"></Label>
+								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}" id="selectEmpresa" items="{/Empresa}"
+									selectedKey="{/IdEmpresaSelecionado}" change="onTrocarEmpresa">
 									<items>
-										<core:Item text="{nome}" key="{id_empresa}" />
+										<core:Item text="{nome}" key="{id_empresa}"/>
 										<!--<core:Item text="Empresa A"/>
 										<core:Item text="Empresa B"/>
 										<core:Item text="Empresa C"/>-->
 									</items>
 								</Select>
-								<Label
-								text="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
-								>
-								</Label>
-								<Select
-									tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"
-									id="selectAnoCalendario" items="{/DominioAnoCalendario}" selectedKey="{/AnoCalendarioSelecionado}"
-									change="onTrocarAnoCalendario">
+								<Label text="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"></Label>
+								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}" id="selectAnoCalendario" items="{/DominioAnoCalendario}"
+									selectedKey="{/AnoCalendarioSelecionado}" change="onTrocarAnoCalendario">
 									<items>
-										<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+										<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}"/>
 										<!--<core:Item text="2018"/>
 										<core:Item text="2017"/>
 										<core:Item text="2016"/>-->
 									</items>
 								</Select>
-								
-								<ToolbarSpacer />
-								
+								<ToolbarSpacer/>
 								<!--<Button 
 									id="botaoNovaObrigacao" 
 									icon="sap-icon://add" 
@@ -132,62 +71,45 @@
 									type="Emphasized"/>-->
 							</Toolbar>
 						</headerToolbar>
-		
 						<columns>
 							<Column>
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}" />
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 							</Column>
-							<Column
-								minScreenWidth="Tablet"
-								demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}" />
+							<Column minScreenWidth="Tablet" demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
 							</Column>
-							<Column
-								minScreenWidth="Tablet"
-								demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}" />
+							<Column minScreenWidth="Tablet" demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
 							</Column>
-							<Column
-								minScreenWidth="Tablet"
-								demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}" />
+							<Column minScreenWidth="Tablet" demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 							</Column>
-							<Column
-								minScreenWidth="Tablet"
-								demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}" />
+							<Column minScreenWidth="Tablet" demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 							</Column>
-							<Column
-								minScreenWidth="Tablet"
-								demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}" />
+							<Column minScreenWidth="Tablet" demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
 							</Column>
-							<Column
-								minScreenWidth="Tablet"
-								demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}" />
+							<Column minScreenWidth="Tablet" demandPopin="true">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
 							</Column>
 							<Column>
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}" />
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 							</Column>
 						</columns>
-		
 						<items>
-							<ColumnListItem
-								type="Navigation"
-								press="onDetalharObrigacao">
+							<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 								<cells>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
-									<Text text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}" />
-									<Text text="{= ${/Linguagem} === 'EN-US' ? ( ${data_extensao} !== null ? ${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(0,4) : null) : ( ${data_extensao} !== null ? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) : null)}" />
-									<Text text="{ano_fiscal}"/>
+									<Text
+										text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}"/>
+									<Text
+										text="{= ${/Linguagem} === 'EN-US' ? ( ${data_extensao} !== null ? ${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(0,4) : null) : ( ${data_extensao} !== null ? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) : null)}"/>
+									<Text text="{ano_fiscal_calculado}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>
 									<!--core:Icon src="{viewModel>suporteContratado}"/-->
-									<Text text="{= !!${suporte_contratado} 
-									? ${i18n>viewGeralSim}
-									: ${i18n>viewGeralNao}
-									}"/>
+									<Text text="{= !!${suporte_contratado} ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao} }"/>
 									<Text text="{descricao_obrigacao_status}"/>
 								</cells>
 							</ColumnListItem>

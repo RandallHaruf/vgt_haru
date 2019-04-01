@@ -126,7 +126,7 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-										<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal}"
+										<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal_calculado}"
 											enabled="false" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>

@@ -6,12 +6,306 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, NodeAPI, Validador, Utils,Constants) {
+	function (BaseController, NodeAPI, Validador, Utils, Constants) {
 		jQuery.sap.require("sap.m.MessageBox");
 
 		return BaseController.extend("ui5ns.ui5.controller.admin.Empresa", {
 
 			/* Métodos a implementar */
+			onAlterarVigencia: function (oEvent) {
+				var obj = oEvent.getSource().getBindingContext().getObject(),
+					anoInicial = obj["tblModeloObrigacao.data_inicial"].substring(0, 4),
+					anoFinal = obj["tblModeloObrigacao.data_final"].substring(0, 4);
+
+				this._dialogVigenciaCustomizada(obj, Number(anoInicial), Number(anoFinal), oEvent.getSource().getBindingContext().getPath() +
+					"/vigenciaCustomizada");
+			},
+
+			_excluirPeriodo: function (oEvent, sCaminhoVigencia, oModeloObrigacao) {
+				var that = this;
+
+				var oExcluir = oEvent.getSource().getBindingContext().getObject();
+				var aObjeto = this.getModel().getProperty(sCaminhoVigencia);
+
+				var dialog = new sap.m.Dialog({
+					title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+					type: "Message",
+					content: new sap.m.Text({
+						text: this.getView().getModel("i18n").getResourceBundle().getText(
+							"ViewDetalheTrimestreJSTextsVocetemcertezaquedesejaexcluiralinha")
+					}),
+					beginButton: new sap.m.Button({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
+						press: function () {
+							if (!oExcluir.inserir) {
+								oModeloObrigacao.vigenciaExcluida.push(oExcluir);
+							}
+
+							for (var i = 0; i < aObjeto.length; i++) {
+								if (aObjeto[i] === oExcluir) {
+									aObjeto.splice(i, 1);
+									that.getModel().refresh();
+									break;
+								}
+							}
+
+							dialog.close();
+						}
+					}),
+					endButton: new sap.m.Button({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralCancelar"),
+						press: function () {
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+
+				dialog.open();
+			},
+
+			_dialogVigenciaCustomizada: function (oModeloObrigacao, iAnoInicioHerdado, iAnoFimHerdado, sCaminhoVigenciaCustomizada) {
+				var that = this;
+
+				var bHabilita = !!oModeloObrigacao.selecionada && !this.getModel().getProperty("/TravaCampo");
+
+				var oTable = new sap.ui.table.Table({
+					width: "400px",
+					selectionMode: "None",
+					rows: "{" + sCaminhoVigenciaCustomizada + "}",
+					visibleRowCount: 4
+				});
+
+				var oToolbar = new sap.m.Toolbar();
+
+				oToolbar.addContent(new sap.m.Text({
+					text: "Original: " + iAnoInicioHerdado + " a " + iAnoFimHerdado
+				}));
+
+				oToolbar.addContent(new sap.m.ToolbarSpacer());
+
+				var oButtonAdd = new sap.m.Button({
+					icon: "sap-icon://add",
+					type: "Transparent"
+				}).attachPress(function () {
+					that.getModel().getProperty(sCaminhoVigenciaCustomizada).unshift({
+						inserir: true
+					});
+					that.getModel().refresh();
+				}).setEnabled(bHabilita);
+
+				oToolbar.addContent(oButtonAdd);
+
+				oTable.addExtension(oToolbar);
+
+				var oColumnDelete = new sap.ui.table.Column({
+					width: "60px"
+				});
+
+				var oButtonDelete = new sap.m.Button({
+					icon: "sap-icon://delete",
+					type: "Reject",
+					enabled: bHabilita
+				}).attachPress(function (oEvent) {
+					that._excluirPeriodo(oEvent, sCaminhoVigenciaCustomizada, oModeloObrigacao);
+				});
+
+				oColumnDelete.setTemplate(oButtonDelete);
+
+				oTable.addColumn(oColumnDelete);
+
+				var oColumnAnoInicial = new sap.ui.table.Column();
+
+				oColumnAnoInicial.setLabel(new sap.m.Label({
+					text: "{i18n>viewGeralAnoInicio}"
+				}));
+
+				var oSelectAnoInicial = new sap.m.Select({
+						selectedKey: "{fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario}",
+						width: "100%",
+						enabled: bHabilita
+					})
+					.bindItems({
+						templateShareable: false,
+						path: "/DominioAnoCalendarioVigencia",
+						template: new sap.ui.core.Item({
+							key: "{id_dominio_ano_calendario}",
+							text: "{ano_calendario}"
+						})
+					})
+					.attachChange(function (oEvent) {
+						var oPeriodo = oEvent.getSource().getBindingContext().getObject();
+						if (!oPeriodo.inserir) {
+							oPeriodo.atualizar = true;
+						}
+						that._validarPeriodo(oEvent, oPeriodo, sCaminhoVigenciaCustomizada);
+					});
+
+				oColumnAnoInicial.setTemplate(oSelectAnoInicial);
+
+				oTable.addColumn(oColumnAnoInicial);
+
+				var oColumnAnoFinal = new sap.ui.table.Column();
+
+				oColumnAnoFinal.setLabel(new sap.m.Label({
+					text: "{i18n>viewGeralAnoFim}"
+				}));
+
+				var oSelectAnoFinal = new sap.m.Select({
+						selectedKey: "{fk_dominio_ano_calendario_final.id_dominio_ano_calendario}",
+						width: "100%",
+						enabled: bHabilita
+					})
+					.bindItems({
+						templateShareable: false,
+						path: "/DominioAnoCalendarioVigencia",
+						template: new sap.ui.core.Item({
+							key: "{id_dominio_ano_calendario}",
+							text: "{ano_calendario}"
+						})
+					})
+					.attachChange(function (oEvent) {
+						var oPeriodo = oEvent.getSource().getBindingContext().getObject();
+						if (!oPeriodo.inserir) {
+							oPeriodo.atualizar = true;
+						}
+						that._validarPeriodo(oEvent, oPeriodo, sCaminhoVigenciaCustomizada);
+					});
+
+				oColumnAnoFinal.setTemplate(oSelectAnoFinal);
+
+				oTable.addColumn(oColumnAnoFinal);
+
+				var dialog = new sap.m.Dialog({
+					title: that.getResourceBundle().getText("viewEmpresaAlterarVigencia"),
+					content: oTable,
+					endButton: new sap.m.Button({
+						text: that.getResourceBundle().getText("viewGeralFechar"),
+						press: function () {
+
+							var aVigenciaCustomizada = that.getModel().getProperty(sCaminhoVigenciaCustomizada);
+
+							var oVigenciaNaoPreenchida = aVigenciaCustomizada.find(function (oVigenciaCustomizada) {
+								return (!oVigenciaCustomizada["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"] ||
+									!oVigenciaCustomizada["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]);
+							});
+
+							if (oVigenciaNaoPreenchida) {
+								jQuery.sap.require("sap.m.MessageBox");
+
+								sap.m.MessageBox.show(that.getResourceBundle().getText("viewAdminEmpresaPeriodoNaoPreenchido"), {
+									title: that.getResourceBundle().getText("viewGeralAviso")
+								});
+							} else {
+								dialog.close();
+							}
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+
+				// to get access to the global model
+				this.getView().addDependent(dialog);
+
+				dialog.open();
+			},
+
+			_validarPeriodo: function (oEvent, oPeriodoVigenciaNovo, sCaminhoVigencia) {
+
+				var inicial = oPeriodoVigenciaNovo["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"];
+				var final = oPeriodoVigenciaNovo["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"];
+				var bIsAnoFimMaiorInicio = true;
+
+				if (inicial && final && Number(final) < Number(inicial)) {
+					jQuery.sap.require("sap.m.MessageBox");
+
+					sap.m.MessageBox.show(this.getResourceBundle().getText("viewAdminCadastroAliquotasMensagemPeriodoAnoFimAnteriorAnoInicio"), {
+						title: this.getResourceBundle().getText("viewGeralAviso")
+					});
+
+					oEvent.getSource().setSelectedKey(null);
+					bIsAnoFimMaiorInicio = false;
+				}
+
+				if (bIsAnoFimMaiorInicio) {
+					var aPeriodoVigencia = this.getModel().getProperty(sCaminhoVigencia),
+						bIsCoincidente = false;
+
+					// Checa se o novo período está contido em algum outro período estipulado
+					for (var i = 0, length = aPeriodoVigencia.length; i < length; i++) {
+						var oPeriodoVigencia = aPeriodoVigencia[i];
+
+						if (oPeriodoVigencia !== oPeriodoVigenciaNovo) {
+							if (oPeriodoVigencia["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"] && oPeriodoVigencia[
+									"fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) {
+								if (oPeriodoVigenciaNovo["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) {
+									if (Number(oPeriodoVigenciaNovo["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) >= Number(oPeriodoVigencia[
+											"fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) && Number(oPeriodoVigenciaNovo[
+											"fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) <=
+										Number(oPeriodoVigencia["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"])) {
+										bIsCoincidente = true;
+										break;
+									}
+								}
+
+								if (oPeriodoVigenciaNovo["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) {
+									if (Number(oPeriodoVigenciaNovo["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) >= Number(oPeriodoVigencia[
+											"fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) && Number(oPeriodoVigenciaNovo[
+											"fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) <=
+										Number(oPeriodoVigencia["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"])) {
+										bIsCoincidente = true;
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					// Se chegou nesse ponto e o novo periodo não está contido em nenhum outro, checa se ele contém algum período (apenas se ambos os anos estiverem selecionados)
+					if (!bIsCoincidente && oPeriodoVigenciaNovo["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"] && oPeriodoVigenciaNovo[
+							"fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) {
+						var idAnoInicial = Number(oPeriodoVigenciaNovo["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]);
+						var idAnoFinal = Number(oPeriodoVigenciaNovo["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]);
+
+						for (var i = 0, length = aPeriodoVigencia.length; i < length; i++) {
+							var oPeriodoVigencia = aPeriodoVigencia[i];
+
+							if (oPeriodoVigencia !== oPeriodoVigenciaNovo) {
+								if (oPeriodoVigencia["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) {
+									if (Number(oPeriodoVigencia["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) >= idAnoInicial && Number(
+											oPeriodoVigencia["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) <= idAnoFinal) {
+										bIsCoincidente = true;
+										break;
+									}
+								}
+
+								if (oPeriodoVigencia["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) {
+									if (Number(oPeriodoVigencia["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) >= idAnoInicial && Number(
+											oPeriodoVigencia["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]) <= idAnoFinal) {
+										bIsCoincidente = true;
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					if (bIsCoincidente) {
+						jQuery.sap.require("sap.m.MessageBox");
+
+						sap.m.MessageBox.show(this.getResourceBundle().getText("viewAdminEmpresaPeriodoCoincidente"), {
+							title: this.getResourceBundle().getText("viewGeralAviso")
+						});
+
+						oEvent.getSource().setSelectedKey(null);
+					}
+				}
+			},
+
 			onTextSearch: function (oEvent) {
 				var sQuery = oEvent ? oEvent.getParameter("query") : null;
 				this._oTxtFilter = null;
@@ -48,6 +342,7 @@ sap.ui.define(
 					});
 				}
 			},
+
 			onChangeTin: function (oEvent) {
 				var obj = this.getModel().getProperty("/objeto");
 				if (obj["tin"]) {
@@ -85,18 +380,20 @@ sap.ui.define(
 					obj["valueStateJurisdicaoNi"] = sap.ui.core.ValueState.None;
 				}
 			},
+
 			onPreencherStatus: function (oEvent) {
 				var obj = this.getModel().getProperty("/objeto");
-				if(obj["fk_dominio_empresa_status.id_dominio_empresa_status"] > 3 && obj["fk_dominio_empresa_status.id_dominio_empresa_status"] < 7 ){
+				if (obj["fk_dominio_empresa_status.id_dominio_empresa_status"] > 3 && obj["fk_dominio_empresa_status.id_dominio_empresa_status"] <
+					7) {
 					obj["data_liquidada_requerida"] = true;
 					obj["data_liquidada_visible"] = true;
-				}
-				else{
+				} else {
 					obj["data_liquidada_requerida"] = false;
 					obj["data_liquidada_visible"] = false;
 					obj["data_encerramento"] = undefined;
 				}
 			},
+
 			_nomeColunaIdentificadorNaListagemObjetos: "id_empresa",
 
 			_validarFormulario: function () {
@@ -126,7 +423,8 @@ sap.ui.define(
 					continua = false;
 					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
-				if(obj["fk_dominio_empresa_status.id_dominio_empresa_status"] > 3 && obj["fk_dominio_empresa_status.id_dominio_empresa_status"] < 7 && !obj["data_encerramento"]){
+				if (obj["fk_dominio_empresa_status.id_dominio_empresa_status"] > 3 && obj["fk_dominio_empresa_status.id_dominio_empresa_status"] <
+					7 && !obj["data_encerramento"]) {
 					continua = false;
 					oValidacao.mensagem = this.getResourceBundle().getText("ViewGeralOrbigatorio");
 				}
@@ -259,7 +557,9 @@ sap.ui.define(
 				});
 
 				NodeAPI.listarRegistros("DominioAnoCalendario?full=true", function (response) {
-					that.getModel().setProperty("/DominioAnoCalendario", response);
+					that.getModel().setProperty("/DominioAnoCalendario", response.slice()); // slice faz uma copia do array
+					response.unshift({});
+					that.getModel().setProperty("/DominioAnoCalendarioVigencia", response.slice()); // é necessário para que mudanças na segunda propriedade nao reflitam na primeira
 				});
 				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa", function (response) {
 					that.getModel().setProperty("/RelModeloEmpresa", response);
@@ -272,6 +572,11 @@ sap.ui.define(
 				var obj = this.getModel().getProperty("/objeto/fk_pais.id_pais");
 				if (obj) {
 					NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + obj, function (response) {
+						response = response.map(function (oRes) {
+							oRes.vigenciaCustomizada = [];
+							oRes.vigenciaExcluida = [];
+							return oRes;
+						});
 						that.getModel().setProperty("/ModeloObrigacao", response);
 						that.setBusy(that.byId("tableObrigacoes"), false);
 					});
@@ -336,11 +641,11 @@ sap.ui.define(
 					that.getModel().setProperty("/objeto", response);
 					that.onPreencherStatus();
 					that.getModel().setProperty("/idAliquotaVigente", response["fk_aliquota.id_aliquota"]);
-					if(that.getModel().getProperty("/objeto/fk_dominio_empresa_status.id_dominio_empresa_status") > 3 && that.getModel().getProperty("/objeto/fk_dominio_empresa_status.id_dominio_empresa_status") < 7  ){
-						that.getModel().setProperty("/TravaCampo",true);
-					}
-					else{
-						that.getModel().setProperty("/TravaCampo",false);
+					if (that.getModel().getProperty("/objeto/fk_dominio_empresa_status.id_dominio_empresa_status") > 3 && that.getModel().getProperty(
+							"/objeto/fk_dominio_empresa_status.id_dominio_empresa_status") < 7) {
+						that.getModel().setProperty("/TravaCampo", true);
+					} else {
+						that.getModel().setProperty("/TravaCampo", false);
 					}
 					that.setBusy(that.byId("formularioObjeto"), false);
 
@@ -387,6 +692,8 @@ sap.ui.define(
 					query: ""
 				});*/
 				// Limpar outras propriedades do modelo
+				this.getModel().setProperty("/DominioAnoCalendario", []);
+				this.getModel().setProperty("/DominioAnoCalendarioVigencia", []);
 				this.getModel().setProperty("/DominioEmpresaTipoSocietario", {});
 				this.getModel().setProperty("/DominioEmpresaStatus", {});
 				this.getModel().setProperty("/Pais", {});
@@ -396,6 +703,7 @@ sap.ui.define(
 				this.getModel().setProperty("/HistoricoAtual", {});
 				this.getModel().setProperty("/idAliquotaVigente", 0);
 				this.getModel().setProperty("/ModeloObrigacao", {});
+				this.getModel().setProperty("/TravaCampo", false);
 			},
 
 			_atualizarObjeto: function (sIdObjeto) {
@@ -437,52 +745,59 @@ sap.ui.define(
 							var aObrigacoesSelecionadas = that._getSelecaoObrigacoes(resp);
 							var DmenosX = that.getModel().getProperty("/DmenosXAnos");
 							var AnoCalendario = that.getModel().getProperty("/DominioAnoCalendario");
-							if(obj["data_encerramento"]){
-								var idDominioAno = that.getModel().getProperty("/DominioAnoCalendario").find(function (x) {
-									return x.ano_calendario === Number(obj["data_encerramento"].substring(0,4));
-								});	
-								jQuery.ajax(Constants.urlBackend + "/marcaRespostasComoExcluidas/RespostaObrigacao?empresa=" + sIdObjeto + "&anoCalendario=" + idDominioAno["id_dominio_ano_calendario"], {
-									type: "GET",
-									xhrFields: {
-										withCredentials: true
-									},
-									crossDomain: true,
-									dataType: "json",
-									success: function (respon) {
-										var aResponse = respon;
-									}
-								});	
-							}
-							else{
-								for (var i = 0; i < aObrigacoesSelecionadas["inserir"].length; i++) {
-									var oObrigacoesInserir = aObrigacoesSelecionadas["inserir"][i];
-									NodeAPI.criarRegistro("RelModeloEmpresa", {
-										fkIdModeloObrigacao: oObrigacoesInserir["tblModeloObrigacao.id_modelo"],
-										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-										prazoEntregaCustomizado: oObrigacoesInserir["data_selecionada"],
-										indAtivo: true
-									}, function (res) {
-										/*var DmenosX = then.getModel().getProperty("/DmenosXAnos");
-										var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");*/
-										for (var k = 0; k < AnoCalendario.length; k++) {
-											var oAnoCalendario = AnoCalendario[k];
-											NodeAPI.criarRegistro("RespostaObrigacao", {
-												suporteContratado: null,
-												suporteEspecificacao: null,
-												suporteValor: null,
-												dataExtensao: null,
-												fkIdDominioMoeda: null,
-												fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
-												fkIdDominioObrigacaoStatusResposta: 4,
-												fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"], //ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"],
-												data_conclusao: null
-											}, function (re) {});
+							if (obj["data_encerramento"]) {
+								/*var idDominioAno = that.getModel().getProperty("/DominioAnoCalendario").find(function (x) {
+									return x.ano_calendario === Number(obj["data_encerramento"].substring(0, 4));
+								});
+								jQuery.ajax(Constants.urlBackend + "/marcaRespostasComoExcluidas/RespostaObrigacao?empresa=" + sIdObjeto +
+									"&anoCalendario=" + idDominioAno["id_dominio_ano_calendario"], {
+										type: "GET",
+										xhrFields: {
+											withCredentials: true
+										},
+										crossDomain: true,
+										dataType: "json",
+										success: function (respon) {
+											var aResponse = respon;
 										}
-									});
+								});*/
+							} else {
+								for (var i = 0; i < aObrigacoesSelecionadas["inserir"].length; i++) {
+
+									(function (oObrigacoesInserir) {
+										NodeAPI.criarRegistro("RelModeloEmpresa", {
+											fkIdModeloObrigacao: oObrigacoesInserir["tblModeloObrigacao.id_modelo"],
+											fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+											prazoEntregaCustomizado: oObrigacoesInserir["data_selecionada"],
+											indAtivo: true
+										}, function (res) {
+											var idRelModeloEmpresa = JSON.parse(res)[0].generated_id;
+
+											that._persistirVigenciaCustomizada(oObrigacoesInserir, idRelModeloEmpresa);
+
+											/*for (var k = 0; k < AnoCalendario.length; k++) {
+												var oAnoCalendario = AnoCalendario[k];
+												NodeAPI.criarRegistro("RespostaObrigacao", {
+													suporteContratado: null,
+													suporteEspecificacao: null,
+													suporteValor: null,
+													dataExtensao: null,
+													fkIdDominioMoeda: null,
+													fkIdRelModeloEmpresa: idRelModeloEmpresa,
+													fkIdDominioObrigacaoStatusResposta: 4,
+													fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"], //ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+													fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"],
+													data_conclusao: null
+												}, function (re) {});
+											}*/
+										});
+									})(aObrigacoesSelecionadas["inserir"][i]);
 								}
 								for (var i = 0; i < aObrigacoesSelecionadas["desabilitar"].length; i++) {
 									var oObrigacoesDesabilitar = aObrigacoesSelecionadas["desabilitar"][i];
+
+									that._persistirVigenciaCustomizada(oObrigacoesDesabilitar, oObrigacoesDesabilitar["idRelModeloEmpresa"]);
+
 									NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesDesabilitar["idRelModeloEmpresa"], {
 										fkIdModeloObrigacao: oObrigacoesDesabilitar["tblModeloObrigacao.id_modelo"],
 										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
@@ -492,6 +807,9 @@ sap.ui.define(
 								}
 								for (var i = 0; i < aObrigacoesSelecionadas["habilitar"].length; i++) {
 									var oObrigacoesHabilitar = aObrigacoesSelecionadas["habilitar"][i];
+
+									that._persistirVigenciaCustomizada(oObrigacoesHabilitar, oObrigacoesHabilitar["idRelModeloEmpresa"]);
+
 									NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesHabilitar["idRelModeloEmpresa"], {
 										fkIdModeloObrigacao: oObrigacoesHabilitar["tblModeloObrigacao.id_modelo"],
 										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
@@ -501,26 +819,27 @@ sap.ui.define(
 								}
 								for (var i = 0; i < aObrigacoesSelecionadas["atualizar"].length; i++) {
 									var oObrigacoesAtualizar = aObrigacoesSelecionadas["atualizar"][i];
+
+									that._persistirVigenciaCustomizada(oObrigacoesAtualizar, oObrigacoesAtualizar["idRelModeloEmpresa"]);
+
 									NodeAPI.atualizarRegistro("RelModeloEmpresa", oObrigacoesAtualizar["idRelModeloEmpresa"], {
 										fkIdModeloObrigacao: oObrigacoesAtualizar["tblModeloObrigacao.id_modelo"],
 										fkIdEmpresa: sIdObjeto, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
 										prazoEntregaCustomizado: oObrigacoesAtualizar["data_selecionada"],
 										indAtivo: oObrigacoesAtualizar["indAtivo"]
 									}, function (res) {});
-								}								
+								}
 							}
-						});
-
-						that._resolverHistoricoAliquota(function () {
-							that.byId("btnCancelar").setEnabled(true);
-							that.byId("btnSalvar").setEnabled(true);
-							that.setBusy(that.byId("btnSalvar"), false);
-							that._navToPaginaListagem();
+							
+							that._resolverHistoricoAliquota(function () {
+								that.byId("btnCancelar").setEnabled(true);
+								that.byId("btnSalvar").setEnabled(true);
+								that.setBusy(that.byId("btnSalvar"), false);
+								that._navToPaginaListagem();
+							});
 						});
 					});
-
 				});
-
 			},
 
 			_inserirObjeto: function () {
@@ -563,32 +882,38 @@ sap.ui.define(
 						//Cria o Registro de Rel_Modelo_Empresa
 						for (var k = 0; k < modelosObrigacao.length; k++) {
 							if (modelosObrigacao[k]["selecionada"] !== undefined) {
-								NodeAPI.criarRegistro("RelModeloEmpresa", {
-									fkIdModeloObrigacao: modelosObrigacao[k]["tblModeloObrigacao.id_modelo"],
-									fkIdEmpresa: JSON.parse(response)[0].generated_id, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
-									prazoEntregaCustomizado: modelosObrigacao[k]["data_selecionada"],
-									indAtivo: true
-								}, function (res) {
-									var DmenosX = then.getModel().getProperty("/DmenosXAnos");
-									var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
-									for (var i = 0; i < AnoCalendario.length; i++) {
-										var oAnoCalendario = AnoCalendario[i];
-										NodeAPI.criarRegistro("RespostaObrigacao", {
-											suporteContratado: null,
-											suporteEspecificacao: null,
-											suporteValor: null,
-											dataExtensao: null,
-											fkIdDominioMoeda: null,
-											fkIdRelModeloEmpresa: JSON.parse(res)[0].generated_id,
-											fkIdDominioObrigacaoStatusResposta: 4,
-											fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"], //ALTERAR PARA AMARRACAO COM D-1 DE PAIS
-											fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"],
-											data_conclusao: null
-										}, function (re) {
+								(function (oModeloObrigacao) {
+									NodeAPI.criarRegistro("RelModeloEmpresa", {
+										fkIdModeloObrigacao: oModeloObrigacao["tblModeloObrigacao.id_modelo"],
+										fkIdEmpresa: JSON.parse(response)[0].generated_id, //modelosObrigacao[k]["tblModeloObrigacao.fk_id_dominio_obrigacao_status.id_dominio_obrigacao_status"],
+										prazoEntregaCustomizado: oModeloObrigacao["data_selecionada"],
+										indAtivo: true
+									}, function (res) {
+										var idRelModeloEmpresa = JSON.parse(res)[0].generated_id;
 
-										});
-									}
-								});
+										that._persistirVigenciaCustomizada(oModeloObrigacao, idRelModeloEmpresa);
+
+										var DmenosX = then.getModel().getProperty("/DmenosXAnos");
+										var AnoCalendario = then.getModel().getProperty("/DominioAnoCalendario");
+										/*for (var i = 0; i < AnoCalendario.length; i++) {
+											var oAnoCalendario = AnoCalendario[i];
+											NodeAPI.criarRegistro("RespostaObrigacao", {
+												suporteContratado: null,
+												suporteEspecificacao: null,
+												suporteValor: null,
+												dataExtensao: null,
+												fkIdDominioMoeda: null,
+												fkIdRelModeloEmpresa: idRelModeloEmpresa,
+												fkIdDominioObrigacaoStatusResposta: 4,
+												fkIdDominioAnoFiscal: oAnoCalendario["id_dominio_ano_calendario"] - DmenosX[0]["anoObrigacaoCompliance"], //ALTERAR PARA AMARRACAO COM D-1 DE PAIS
+												fkIdDominioAnoCalendario: oAnoCalendario["id_dominio_ano_calendario"],
+												data_conclusao: null
+											}, function (re) {
+
+											});
+										}*/
+									});
+								})(modelosObrigacao[k]);
 							}
 						}
 
@@ -680,16 +1005,43 @@ sap.ui.define(
 					var aux = response.find(function (x) {
 						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
 						//return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
-						return (x["tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"] && !!x[
-							"tblRelModeloEmpresa.ind_ativo"] === true);
-
+						return (x["tblRelModeloEmpresa.fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"]);
 					});
 
 					if (aux) {
-						oObrigacao.selecionadaInicialmente = true;
-						oObrigacao.selecionada = true;
-						oObrigacao.data_selecionada = aux["tblRelModeloEmpresa.prazo_entrega_customizado"];
+						if (!!aux["tblRelModeloEmpresa.ind_ativo"] === true) {
+							oObrigacao.selecionadaInicialmente = true;
+							oObrigacao.selecionada = true;
+							oObrigacao.data_selecionada = aux["tblRelModeloEmpresa.prazo_entrega_customizado"];
+						}
 					}
+
+					(function (modeloObrigacao) {
+						if (aux) {
+							NodeAPI.pListarRegistros("VigenciaCustomizada", {
+									fkRelModeloEmpresa: aux["tblRelModeloEmpresa.id_rel_modelo_empresa"]
+								})
+								.then(function (res) {
+									res.result = res.result.map(function (oVigencia) {
+										oVigencia.fkAnoInicialPersistido = oVigencia["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"];
+										oVigencia.fkAnoFinalPersistido = oVigencia["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"];
+										return oVigencia;
+									});
+									res.result.sort(function (x, y) {
+										return Number(y["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]) - Number(x[
+											"fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"]);
+									});
+									modeloObrigacao.vigenciaCustomizada = res.result;
+									modeloObrigacao.vigenciaExcluida = [];
+								})
+								.catch(function (err) {
+									alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+								});
+						} else {
+							modeloObrigacao.vigenciaCustomizada = [];
+							modeloObrigacao.vigenciaExcluida = [];
+						}
+					})(oObrigacao);
 				}
 
 				this.getModel().refresh();
@@ -706,6 +1058,38 @@ sap.ui.define(
 						oPais.selecionado = true;
 					}
 				}*/
+			},
+
+			_persistirVigenciaCustomizada: function (oModeloObrigacao, idRelModeloEmpresa) {
+				for (var i = 0; i < oModeloObrigacao.vigenciaCustomizada.length; i++) {
+					var oVigenciaCustomizada = oModeloObrigacao.vigenciaCustomizada[i];
+
+					if (oVigenciaCustomizada.inserir) {
+						NodeAPI.pCriarRegistro("VigenciaCustomizada", {
+							fkRelModeloEmpresa: idRelModeloEmpresa,
+							fkDominioAnoCalendarioInicial: oVigenciaCustomizada["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"],
+							fkDominioAnoCalendarioFinal: oVigenciaCustomizada["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]
+						});
+					} else if (oVigenciaCustomizada.atualizar) {
+						var sId = oVigenciaCustomizada["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"] + "&" + oVigenciaCustomizada.fkAnoInicialPersistido +
+							"&" + oVigenciaCustomizada.fkAnoFinalPersistido
+
+						NodeAPI.pAtualizarRegistro("VigenciaCustomizada", sId, {
+							fkDominioAnoCalendarioInicial: oVigenciaCustomizada["fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"],
+							fkDominioAnoCalendarioFinal: oVigenciaCustomizada["fk_dominio_ano_calendario_final.id_dominio_ano_calendario"]
+						});
+					}
+				}
+
+				for (var i = 0; i < oModeloObrigacao.vigenciaExcluida.length; i++) {
+					var oVigenciaExcluida = oModeloObrigacao.vigenciaExcluida[i];
+
+					var sId = oVigenciaExcluida["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"] + "&" + oVigenciaExcluida[
+						"fk_dominio_ano_calendario_inicial.id_dominio_ano_calendario"] + "&" + oVigenciaExcluida[
+						"fk_dominio_ano_calendario_final.id_dominio_ano_calendario"];
+
+					NodeAPI.pExcluirRegistro("VigenciaCustomizada", sId);
+				}
 			},
 
 			_navToPaginaListagem: function () {

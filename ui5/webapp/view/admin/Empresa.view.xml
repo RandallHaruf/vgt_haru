@@ -1,95 +1,51 @@
-<core:View
-	controllerName="ui5ns.ui5.controller.admin.Empresa"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" 
-	xmlns:f="sap.ui.layout.form"
-	xmlns:dnd="sap.ui.core.dnd"
-	xmlns:table="sap.ui.table"
-	xmlns="sap.m">
+<core:View controllerName="ui5ns.ui5.controller.admin.Empresa" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" xmlns:dnd="sap.ui.core.dnd" xmlns:table="sap.ui.table" xmlns="sap.m">
 	<NavContainer id="myNav" class="fixNavContainer">
-		<Page
-			id="paginaListagem"
-			showHeader="false"
-			visible="true">
-			<Table
-				id="tabelaObjetos"
-				items="{
-					path: '/objetos',
-					sorter: [{
-						path: 'pais', group: true
-					}, {
-						path: 'nome'
-					}, {
-						path: 'status'
-					}]
-				}"
-				growing="true"
-				enableBusyIndicator="true"
-				growingScrollToLoad="true"
-				updateFinished="onTerminouAtualizar">
-		
+		<Page id="paginaListagem" showHeader="false" visible="true">
+			<Table id="tabelaObjetos" items="{ path: '/objetos', sorter: [{ path: 'pais', group: true }, { path: 'nome' }, { path: 'status' }] }"
+				growing="true" enableBusyIndicator="true" growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 				<headerToolbar>
 					<Toolbar>
-						<Title 
-							id="cabecalhoTabelaObjetos" 
-							text="{i18n>viewGeralEmpresas}"/>
-						<ToolbarSpacer />
-						<Button 
-							id="botaoNovoObjeto" 
-							icon="sap-icon://add" 
-							press="onNovoObjeto" 
-							text="{i18n>viewGeralNovo}"
-							type="Emphasized"/>
+						<Title id="cabecalhoTabelaObjetos" text="{i18n>viewGeralEmpresas}"/>
+						<ToolbarSpacer/>
+						<Button id="botaoNovoObjeto" icon="sap-icon://add" press="onNovoObjeto" text="{i18n>viewGeralNovo}" type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>
-		
 				<columns>
 					<Column>
-						<Text text="{i18n>viewEmpresasNome}" />
+						<Text text="{i18n>viewEmpresasNome}"/>
 					</Column>
-					<!--<Column>
-						<Text text="{i18n>viewEmpresasPais}" />
-					</Column>-->
 					<Column>
-						<Text text="Status" />
+						<Text text="Status"/>
 					</Column>
 				</columns>
-		
 				<items>
-					<ColumnListItem
-						type="Navigation"
-						press="onAbrirObjeto">
+					<ColumnListItem type="Navigation" press="onAbrirObjeto">
 						<cells>
 							<ObjectIdentifier title="{nome}"/>
-						<!--	<Text text="{pais}" />-->
-							<Text text="{status}" />
+							<Text text="{status}"/>
 						</cells>
 					</ColumnListItem>
 				</items>
 			</Table>
 		</Page>
-		<Page
-			id="paginaObjeto"
-			showHeader="false">
+		<Page id="paginaObjeto" showHeader="false">
 			<content>
 				<VBox class="sapUiSmallMargin">
-					<f:Form 
-						id="formularioObjeto" 
-						editable="true">
+					<f:Form id="formularioObjeto" editable="true">
 						<f:title>
-			                <core:Title text="{i18n>viewGeralEmpresa}"/>
+							<core:Title text="{i18n>viewGeralEmpresa}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
 						</f:layout>
-					<f:formContainers>
+						<f:formContainers>
 							<f:FormContainer title="{i18n>viewEmpresasCadastro}">
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasNome}" labelFor="inputNomeEmpresa" />
+											<Label text="{i18n>viewEmpresasNome}" labelFor="inputNomeEmpresa"/>
 										</f:label>
 										<f:fields>
 											<Input id="inputNomeEmpresa" value="{/objeto/nome}" required="true" enabled="{= !${/TravaCampo}}"/>
@@ -97,38 +53,40 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasNumeroHFM}" labelFor="inputHFMSAP" />
+											<Label text="{i18n>viewEmpresasNumeroHFM}" labelFor="inputHFMSAP"/>
 										</f:label>
 										<f:fields>
 											<Input id="inputHFMSAP" value="{/objeto/num_hfm_sap}" required="true" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
-									<f:FormElement label="{i18n>viewEmpresasTINTaxIdentificationNumber}" >
+									<f:FormElement label="{i18n>viewEmpresasTINTaxIdentificationNumber}">
 										<f:fields>
-											<Input id="inputTIN" value="{/objeto/tin}" change="onChangeTin" enabled="{= !${/TravaCampo}}" />
+											<Input id="inputTIN" value="{/objeto/tin}" change="onChangeTin" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasJurisdicaoT}">
 										<f:fields>
-											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" enabled="{= ${/objeto/tin} ?  !${/TravaCampo} : false }" valueState="{/objeto/valueStateJurisdicaoTin}" change="onPreencherJurisdicaoTin" />
+											<Input id="inputJurisdicaoTIN" value="{/objeto/jurisdicao_tin}" enabled="{= ${/objeto/tin} ? !${/TravaCampo} : false }"
+												valueState="{/objeto/valueStateJurisdicaoTin}" change="onPreencherJurisdicaoTin"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasNITaxIdentificationNumber}">
 										<f:fields>
-											<Input id="inputNI" value="{/objeto/ni}"  change="onChangeNi" enabled="{= !${/TravaCampo}}" />
+											<Input id="inputNI" value="{/objeto/ni}" change="onChangeNi" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasJurisdicaoN}" labelFor="inputJurisdicaoNI"  />
+											<Label text="{i18n>viewEmpresasJurisdicaoN}" labelFor="inputJurisdicaoNI"/>
 										</f:label>
 										<f:fields>
-											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}"  enabled="{= ${/objeto/ni} ?  !${/TravaCampo} : false }" valueState="{/objeto/valueStateJurisdicaoNi}" change="onPreencherJurisdicaoNi" />
+											<Input id="inputJurisdicaoNI" value="{/objeto/jurisdicao_ni}" enabled="{= ${/objeto/ni} ? !${/TravaCampo} : false }"
+												valueState="{/objeto/valueStateJurisdicaoNi}" change="onPreencherJurisdicaoNi"/>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasEndereco}" labelFor="inputEndereco" />
+											<Label text="{i18n>viewEmpresasEndereco}" labelFor="inputEndereco"/>
 										</f:label>
 										<f:fields>
 											<Input id="inputEndereco" value="{/objeto/endereco}" required="true" enabled="{= !${/TravaCampo}}"/>
@@ -136,95 +94,72 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais" />
+											<Label text="{i18n>viewEmpresasPais}" labelFor="comboboxPais"/>
 										</f:label>
 										<f:fields>
-											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" enabled="{= !${/isUpdate}}" required="true" selectionChange="onSelectChange">
+											<ComboBox id="comboboxPais" items="{/Pais}" selectedKey="{/objeto/fk_pais.id_pais}" enabled="{= !${/isUpdate}}" required="true"
+												selectionChange="onSelectChange">
 												<core:Item text="{nomePais}" key="{id}"/>
 											</ComboBox>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewDetalhesDaEmpresaVinculadaTipoSocietario}" class="sapMLabelRequired" />
+											<Label text="{i18n>viewDetalhesDaEmpresaVinculadaTipoSocietario}" class="sapMLabelRequired"/>
 										</f:label>
 										<f:fields>
-											<Select 
-												id="selectTipoSocietario" 
-												items="{/DominioEmpresaTipoSocietario}" 
-												selectedKey="{/objeto/fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario}"
+											<Select id="selectTipoSocietario" items="{ path: '/DominioEmpresaTipoSocietario', templateShareable: false }"
+												selectedKey="{/objeto/fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario}" enabled="{= !${/TravaCampo}}">
+												<core:Item text="{tipo_societario}" key="{id_dominio_empresa_tipo_societario}"/>
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewRelatorioAnoFiscal} {/displayFormatFull}"/>
+										</f:label>
+										<f:fields>
+											<DatePicker id="datepickerStartDate" placeholder="{i18n>viewGeralInsiraUmaData}" displayFormat="{/displayFormatFull}"
+												valueFormat="yyyy-MM-dd" value="{/objeto/fy_start_date}" required="true" change="onTrocarData" enabled="{= !${/TravaCampo}}"/>
+											<DatePicker id="datepickerEndDate" placeholder="{i18n>viewGeralInsiraUmaData}" displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd"
+												value="{/objeto/fy_end_date}" required="true" change="onTrocarData" enabled="{= !${/TravaCampo}}"/>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewEmpresasStatusDaEmpresa}" labelFor="selectStatus" class="sapMLabelRequired"/>
+										</f:label>
+										<f:fields>
+											<Select items="{ path: '/DominioEmpresaStatus', templateShareable: false }" id="selectStatus" change="onPreencherStatus"
+												selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}" enabled="{= !${/TravaCampo}}">
+												<core:Item text="{status}" key="{id_dominio_empresa_status}"/>
+											</Select>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement visible="{/objeto/data_liquidada_visible}">
+										<f:label>
+											<Label text="{i18n>viewEmpresasDataEncerramento}" labelFor="datepickerDateLiquidada" class="sapMLabelRequired"/>
+										</f:label>
+										<f:fields>
+											<DatePicker id="datepickerDateLiquidada" placeholder="{i18n>viewGeralInsiraUmaData}" displayFormat="{/displayFormatFull}"
+												valueFormat="yyyy-MM-dd" value="{/objeto/data_encerramento}" required="{/objeto/data_liquidada_requerida}"
+												visible="{/objeto/data_liquidada_visible}" change="onTrocarData" enabled="{= !${/TravaCampo}}"/>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:label>
+											<Label text="{i18n>viewEmpresasAliquotaVigente}" labelFor="selectAliquota"/>
+										</f:label>
+										<f:fields>
+											<Select items="{ path: '/Aliquota', templateShareable: false }" id="selectAliquota" selectedKey="{/objeto/fk_aliquota.id_aliquota}"
 												enabled="{= !${/TravaCampo}}">
-												<core:Item text="{tipo_societario}" key="{id_dominio_empresa_tipo_societario}" />
-											</Select>
-										</f:fields>
-									</f:FormElement>
-								<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewRelatorioAnoFiscal} {/displayFormatFull}" />
-										</f:label>
-										<f:fields>
-											<DatePicker 
-												id="datepickerStartDate" 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
-												displayFormat="{/displayFormatFull}"
-												valueFormat="yyyy-MM-dd" 
-												value="{/objeto/fy_start_date}" 
-												required="true"
-												change="onTrocarData"
-												enabled="{= !${/TravaCampo}}"/>
-											<DatePicker 
-												id="datepickerEndDate" 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
-												displayFormat="{/displayFormatFull}"
-												valueFormat="yyyy-MM-dd" 
-												value="{/objeto/fy_end_date}"
-												required="true"
-												change="onTrocarData"
-												enabled="{= !${/TravaCampo}}"/>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewEmpresasStatusDaEmpresa}" labelFor="selectStatus" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectStatus" items="{/DominioEmpresaStatus}" change="onPreencherStatus" selectedKey="{/objeto/fk_dominio_empresa_status.id_dominio_empresa_status}" enabled="{= !${/TravaCampo}}">
-												<core:Item text="{status}" key="{id_dominio_empresa_status}" />
-											</Select>
-										</f:fields>
-									</f:FormElement>										
-									<f:FormElement visible="{/objeto/data_liquidada_visible}">										
-										<f:label>
-											<Label text="{i18n>viewEmpresasDataEncerramento}" labelFor="datepickerDateLiquidada" class="sapMLabelRequired"  />
-										</f:label>
-										<f:fields>
-											<DatePicker 
-												id="datepickerDateLiquidada" 
-												placeholder="{i18n>viewGeralInsiraUmaData}" 
-												displayFormat="{/displayFormatFull}"
-												valueFormat="yyyy-MM-dd" 
-												value="{/objeto/data_encerramento}"
-												required="{/objeto/data_liquidada_requerida}"
-												visible="{/objeto/data_liquidada_visible}"
-												change="onTrocarData" 
-												enabled="{= !${/TravaCampo}}"
-												/>
-										</f:fields>										
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewEmpresasAliquotaVigente}" labelFor="selectAliquota" />
-										</f:label>
-										<f:fields>
-											<Select id="selectAliquota" items="{/Aliquota}" selectedKey="{/objeto/fk_aliquota.id_aliquota}" enabled="{= !${/TravaCampo}}">
-												<!--<core:Item text="{nome} - {valor}%" key="{id_aliquota}" />-->
-												<core:Item text="{nome}" key="{id_aliquota}" />
+												<core:Item text="{nome}" key="{id_aliquota}"/>
 											</Select>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="LBC {i18n>viewEmpresasNome}" labelFor="inputLBCResponsavel" />
+											<Label text="LBC {i18n>viewEmpresasNome}" labelFor="inputLBCResponsavel"/>
 										</f:label>
 										<f:fields>
 											<Input id="inputLBCResponsavel" value="{/objeto/lbc_nome}" required="true" enabled="{= !${/TravaCampo}}"/>
@@ -232,7 +167,7 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="LBC Email" labelFor="inputLBCEmail" />
+											<Label text="LBC Email" labelFor="inputLBCEmail"/>
 										</f:label>
 										<f:fields>
 											<Input id="inputLBCEmail" type="Email" value="{/objeto/lbc_email}" required="true" change="onTrocarEmail" enabled="{= !${/TravaCampo}}"/>
@@ -240,22 +175,16 @@
 									</f:FormElement>
 									<f:FormElement label="{i18n>viewEmpresasComentarios}">
 										<f:fields>
-											<TextArea 
-												id="textAreaComentarios" 
-												rows="5" value="{/objeto/comentarios}"
-												enabled="{= !${/TravaCampo}}"/>
+											<TextArea id="textAreaComentarios" rows="5" value="{/objeto/comentarios}" enabled="{= !${/TravaCampo}}"/>
 										</f:fields>
 									</f:FormElement>
 								</f:formElements>
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>
-					<f:Form 
-						id="formularioVinculoObrigacoes"
-						editable="true"
-						>
+					<f:Form id="formularioVinculoObrigacoes" editable="true">
 						<f:title>
-							<core:Title text="{i18n>viewEmpresasObrigacoesAcessorias}"  />
+							<core:Title text="{i18n>viewEmpresasObrigacoesAcessorias}"/>
 						</f:title>
 						<f:layout>
 							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
@@ -264,19 +193,12 @@
 						<f:formContainers>
 							<f:FormContainer>
 								<f:FormElement>
-									<!--<table:Table rows="{/ObrigacaoAcessoria}" id="tableObrigacoes" selectionMode="None">-->
 									<table:Table rows="{/ModeloObrigacao}" id="tableObrigacoes" selectionMode="None">
 										<table:extension>
 											<Toolbar>
 												<ToolbarSpacer/>
-												<SearchField 
-													id="searchObrigacoes"
-													width="15rem" 
-													search="onTextSearch"
-													placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
-													value="{/filterValue}"
-													enabled="{= !${/TravaCampo}}"
-													/>
+												<SearchField id="searchObrigacoes" width="15rem" search="onTextSearch" placeholder="{i18n>ViewGeralProcurar} {i18n>viewRelatorioNome}"
+													value="{/filterValue}" enabled="{= !${/TravaCampo}}"/>
 											</Toolbar>
 										</table:extension>
 										<table:columns>
@@ -286,38 +208,36 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresasTipo}" />
+												<Label text="{i18n>viewEmpresasTipo}"/>
 												<table:template>
-													<Text text="{tblTipoObrigacao.tipo}" />
+													<Text text="{tblTipoObrigacao.tipo}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresasNome}" />
+												<Label text="{i18n>viewEmpresasNome}"/>
 												<table:template>
-													<Text text="{tblModeloObrigacao.nome_obrigacao}" />
+													<Text text="{tblModeloObrigacao.nome_obrigacao}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresaDataPrazo} {/displayFormatSemAno}" />
+												<Label text="{i18n>viewEmpresaDataPrazo} {/displayFormatSemAno}"/>
 												<table:template>
-													<!--<Text text="{= ${tblModeloObrigacao.prazo_entrega}}" />-->
-													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="{/displayFormatSemAno}" enabled="{= !${/TravaCampo}}"/>
+													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="{/displayFormatSemAno}"
+														enabled="{= !${/TravaCampo}}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresaDataCustomizada} {/displayFormatSemAno}" />
+												<Label text="{i18n>viewEmpresaDataCustomizada} {/displayFormatSemAno}"/>
 												<table:template>
-													<DatePicker 
-													displayFormat="{/displayFormatSemAno}" 
-													valueFormat='yyyy-MM-dd' 
-													value="{data_selecionada}" 
-													editable="{= !!${selecionada} === true ? true : false }" 
-													change="onValidarData"
-													enabled="{= !${/TravaCampo}}"
-													/>
-													<!--<DateTimeInput id="DTI1" type="Date" value="{data_selecionada}" editable="{= !!${selecionada} === true ? true : false }" displayFormat="dd/MM"/>													-->
+													<DatePicker displayFormat="{/displayFormatSemAno}" valueFormat='yyyy-MM-dd' value="{data_selecionada}"
+														editable="{= !!${selecionada} === true ? true : false }" change="onValidarData" enabled="{= !${/TravaCampo}}"/>
 												</table:template>
-											</table:Column>											
+											</table:Column>
+											<table:Column width="8.7rem">
+												<table:template>
+													<Button text="{i18n>viewEmpresaAlterarVigencia}" press="onAlterarVigencia" /> <!-- enabled="{= !!${selecionada} === true ? true : false }" -->
+												</table:template>
+											</table:Column>
 										</table:columns>
 									</table:Table>
 								</f:FormElement>
@@ -326,11 +246,7 @@
 					</f:Form>
 					<Panel headerText="{i18n>viewEmpresasHistoricoObrigacoes}" expandable="true" class="sapUiNoContentPadding" visible="false">
 						<content>
-							<!--<f:Form editable="true" visible="{/showHistorico}">-->
 							<f:Form editable="true" visible="false">
-								<!--<f:title>
-									<core:Title text="Histórico de Obrigações" />
-								</f:title>-->
 								<f:layout>
 									<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 										emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
@@ -340,42 +256,29 @@
 										<f:formElements>
 											<f:FormElement>
 												<f:fields>
-													<ScrollContainer
-														horizontal="true"
-														vertical="true"
-														width="100%"
-														height="400px">
-														<Table 
-															items="{
-																path: '/objeto/historicoObrigacoes',
-																sorter: [{
-																	path: 'tipo'
-																}, {
-																	path: 'nome'
-																}]
-															}"
-															sticky="ColumnHeaders">
+													<ScrollContainer horizontal="true" vertical="true" width="100%" height="400px">
+														<Table items="{ path: '/objeto/historicoObrigacoes', sorter: [{ path: 'tipo' }, { path: 'nome' }] }" sticky="ColumnHeaders">
 															<columns>
 																<Column>
-																	<Text text="{i18n>viewEmpresasTipo}" />
+																	<Text text="{i18n>viewEmpresasTipo}"/>
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasNome}" />
+																	<Text text="{i18n>viewEmpresasNome}"/>
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasDataI}" />
+																	<Text text="{i18n>viewEmpresasDataI}"/>
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasDataF}" />
+																	<Text text="{i18n>viewEmpresasDataF}"/>
 																</Column>
 															</columns>
 															<items>
 																<ColumnListItem>
 																	<cells>
-																		<Text text="{tipo}" />
-																		<Text text="{nome}" />
-																		<DatePicker valueFormat='yyyy-MM-dd' value="{data_inicio_rel}" editable="false" />
-																		<DatePicker valueFormat='yyyy-MM-dd' value="{data_fim_rel}" editable="false" />
+																		<Text text="{tipo}"/>
+																		<Text text="{nome}"/>
+																		<DatePicker valueFormat='yyyy-MM-dd' value="{data_inicio_rel}" editable="false"/>
+																		<DatePicker valueFormat='yyyy-MM-dd' value="{data_fim_rel}" editable="false"/>
 																	</cells>
 																</ColumnListItem>
 															</items>
@@ -391,10 +294,7 @@
 					</Panel>
 					<Panel headerText="{i18n>viewEmpresasHistoricoAliquotas}" expandable="true" class="sapUiNoContentPadding" visible="{= ${/showHistorico}}">
 						<content>
-							<f:Form editable="true" >
-								<!--<f:title>
-									<core:Title text="Histórico de Alíquotas" />
-								</f:title>-->
+							<f:Form editable="true">
 								<f:layout>
 									<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
 										emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
@@ -404,31 +304,25 @@
 										<f:formElements>
 											<f:FormElement>
 												<f:fields>
-													<ScrollContainer
-														horizontal="true"
-														vertical="true"
-														width="100%"
-														height="400px">
-														<Table 
-															items="{/objeto/historicoAliquotas}" 
-															sticky="ColumnHeaders">
+													<ScrollContainer horizontal="true" vertical="true" width="100%" height="400px">
+														<Table items="{/objeto/historicoAliquotas}" sticky="ColumnHeaders">
 															<columns>
 																<Column vAlign="Middle">
-																	<Text text="{i18n>viewEmpresasNome}" />
+																	<Text text="{i18n>viewEmpresasNome}"/>
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasDataI} {/displayFormatFull}" />
+																	<Text text="{i18n>viewEmpresasDataI} {/displayFormatFull}"/>
 																</Column>
 																<Column>
-																	<Text text="{i18n>viewEmpresasDataF} {/displayFormatFull}" />
+																	<Text text="{i18n>viewEmpresasDataF} {/displayFormatFull}"/>
 																</Column>
 															</columns>
 															<items>
 																<ColumnListItem>
 																	<cells>
-																		<ObjectIdentifier title="{nome}" />
-																		<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false" />
-																		<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false" />
+																		<ObjectIdentifier title="{nome}"/>
+																		<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_inicio_rel}" editable="false"/>
+																		<DatePicker displayFormat="{/displayFormatFull}" valueFormat="yyyy-MM-dd" value="{data_fim_rel}" editable="false"/>
 																	</cells>
 																</ColumnListItem>
 															</items>
@@ -447,17 +341,8 @@
 			<footer>
 				<Toolbar>
 					<ToolbarSpacer/>
-					<Button 
-						id="btnSalvar"
-						text="{i18n>viewGeralSalvar}" 
-						type="Accept" 
-						press="onSalvar"
-						enabled="{= !${/TravaCampo}}"/>
-					<Button 
-						id="btnCancelar"
-						text="{i18n>viewGeralCancelar}" 
-						type="Reject" 
-						press="onCancelar"/>
+					<Button id="btnSalvar" text="{i18n>viewGeralSalvar}" type="Accept" press="onSalvar" enabled="{= !${/TravaCampo}}"/>
+					<Button id="btnCancelar" text="{i18n>viewGeralCancelar}" type="Reject" press="onCancelar"/>
 				</Toolbar>
 			</footer>
 		</Page>

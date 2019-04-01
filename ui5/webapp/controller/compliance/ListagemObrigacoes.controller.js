@@ -5,9 +5,9 @@ sap.ui.define(
 		"sap/ui/model/Filter",
 		"sap/m/MessageToast",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Utils"	
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, models, Filter, MessageToast, NodeAPI,Utils) {
+	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemObrigacoes", {
 
 			onInit: function (oEvent) {
@@ -20,11 +20,10 @@ sap.ui.define(
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this._parametroInception = "full=true";
-				}
-				else {
+				} else {
 					this._parametroInception = "full=false";
 				}
-				
+
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
@@ -51,7 +50,6 @@ sap.ui.define(
 				var oBinding = this.byId("tabelaObrigacoes").getBinding("items");
 
 				oBinding.filter(oFilter);
-				
 
 				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
 					"/AnoCalendarioSelecionado") : "";
@@ -92,7 +90,7 @@ sap.ui.define(
 				if () {
 					
 				}*/
-				
+
 			},
 
 			onTrocarAnoCalendario: function (oEvent) {
@@ -122,22 +120,22 @@ sap.ui.define(
 
 				this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {
 					parametros: JSON.stringify(oParametros)
-					
+
 				});
 			},
 
 			onNavBack: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},
-			
+
 			carregarFiltroEmpresa: function () {
 				var that = this;
 				NodeAPI.listarRegistros("Empresa?" + this._parametroInception, function (response) {
-					response = Utils.orderByArrayParaBox(response,"nome");
+					response = Utils.orderByArrayParaBox(response, "nome");
 					response.unshift({
 						id: null,
 						nome: that.getResourceBundle().getText("viewGeralTodos")
-					});					
+					});
 					that.getModel().setProperty("/Empresa", response);
 				});
 			},
@@ -164,8 +162,9 @@ sap.ui.define(
 					oStatus = '';
 				}
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
-					"&statusResp=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+					"&" + this._parametroInception +
+					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
 					function (response) { // 2 COMPLIANCE
 						if (response) {
 							var Todos = 0,
@@ -175,7 +174,7 @@ sap.ui.define(
 								EntregueNoPrazo = 0,
 								EntregueForaPrazo = 0;
 							for (var i = 0, length = response.length; i < length; i++) {
-								switch (response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"]) {
+								switch (response[i]["status_obrigacao_calculado"]) {
 								case 4:
 									NaoIniciada++;
 									break;
@@ -207,27 +206,29 @@ sap.ui.define(
 						}
 					});
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
-					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+					"&" + this._parametroInception +
+					"&statusResposta=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
 					function (response) { // 2 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
-								response[i]["label_prazo_entrega"] = 
+								/*response[i]["label_prazo_entrega"] = 
 									(response[i]["prazo_entrega_customizado"] !== null) 
 									? response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
-									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);
-									
-								response[i]["prazo_entrega_customizado"] = 
-									(response[i]["prazo_entrega_customizado"] !== null) 
-									? response[i]["ano_calendario"] +"-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
-									: null;
+									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);*/
+								response[i]["label_prazo_entrega"] = response[i]["prazo_entrega_calculado"];
+
+								response[i]["prazo_entrega_customizado"] =
+									(response[i]["prazo_entrega_customizado"] !== null) ? response[i]["ano_calendario"] + "-" + response[i][
+										"prazo_entrega_customizado"
+									].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) : null;
 							}
 							that.getModel().setProperty("/Obrigacao", response);
 
 						}
 					});
 			},
-			
+
 			_atualizarDadosFiltrado: function () {
 				var that = this;
 
@@ -240,8 +241,9 @@ sap.ui.define(
 					oStatus = '';
 				}
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
-					"&statusResp=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+					"&" + this._parametroInception +
+					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 2 COMPLIANCE
 						if (response) {
 							var Todos = 0,
@@ -251,7 +253,7 @@ sap.ui.define(
 								EntregueNoPrazo = 0,
 								EntregueForaPrazo = 0;
 							for (var i = 0, length = response.length; i < length; i++) {
-								switch (response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"]) {
+								switch (response[i]["status_obrigacao_calculado"]) {
 								case 4:
 									NaoIniciada++;
 									break;
@@ -282,31 +284,33 @@ sap.ui.define(
 						}
 					});
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipo=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario + "&" + this._parametroInception +
-					"&statusResp=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=2&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
+					"&" + this._parametroInception +
+					"&statusResposta=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
-								response[i]["label_prazo_entrega"] = 
+								/*response[i]["label_prazo_entrega"] = 
 									(response[i]["prazo_entrega_customizado"] !== null) 
 									? response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
-									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);
-									
-								response[i]["prazo_entrega_customizado"] = 
-									(response[i]["prazo_entrega_customizado"] !== null) 
-									? response[i]["ano_calendario"] +"-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
-									: null;
-								
-								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"],that);
-								response[i]["descricao_obrigacao_status"] =  Utils.traduzStatusObrigacao(response[i]["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],that);
-								response[i]["descricao"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],that);
+									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);*/
+								response[i]["label_prazo_entrega"] = response[i]["prazo_entrega_calculado"];
+
+								response[i]["prazo_entrega_customizado"] =
+									(response[i]["prazo_entrega_customizado"] !== null) ? response[i]["ano_calendario"] + "-" + response[i][
+										"prazo_entrega_customizado"
+									].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) : null;
+
+								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"], that);
+								response[i]["descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(response[i]["status_obrigacao_calculado"], that);
+								response[i]["descricao"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"], that);
 							}
 							that.getModel().setProperty("/Obrigacao", response);
 
 						}
 					});
 			},
-			
+
 			_parametroInception: "full=true"
 		});
 	}
