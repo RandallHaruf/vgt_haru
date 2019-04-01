@@ -1,17 +1,19 @@
 sap.ui.define(
 	[
-			"ui5ns/ui5/controller/BaseController",
+		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/lib/Arquivo",
 		"ui5ns/ui5/lib/jQueryMask",
-		"ui5ns/ui5/model/Constants"
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/Validador"
 	],
-	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants) {
+	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador) {
 		return BaseController.extend("ui5ns.ui5.controller.beps.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
 				this.setModel(new sap.ui.model.json.JSONModel({
+                    IsIFrame: false,
 					RespostaObrigacao: {
 						/*
 						 {
@@ -21,7 +23,7 @@ sap.ui.define(
         				"suporte_valor": 1000.00,
         				"fk_id_dominio_moeda.id_dominio_moeda": 1,
         				"fk_id_rel_modelo_empresa.id_rel_modelo_empresa": "1",
-        				"fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal": "1",
+        				"id_ano_fiscal_calculado": "1",
         				"fk_id_dominio_ano_calendario.id_dominio_ano_calendario": 1,
         			},
 						*/
@@ -78,7 +80,7 @@ sap.ui.define(
 				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
 				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar"), {
-					title: "Confirm",
+					title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//that.getRouter().navTo("complianceListagemObrigacoes");
@@ -113,40 +115,68 @@ sap.ui.define(
 								suporteEspecificacao: obj["suporte_especificacao"],
 								suporteValor: obj["suporte_valor"],
 								fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-								fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
-								fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-								fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-								fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
-								dataExtensao: obj["data_extensao"]
+								fkIdRelModeloEmpresa: obj["id_rel_modelo_empresa"],
+								fkIdDominioAnoFiscal: obj["id_ano_fiscal_calculado"],
+								fkIdDominioAnoCalendario: obj["id_dominio_ano_calendario"],
+								fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
+								dataExtensao: obj["data_extensao"],
+								indIniciada: true
 							}, function (response) {
 								that.getView().byId("fileUploader").setValue("");
-								that.getRouter().navTo("bepsListagemObrigacoes");
+                                that.onVoltarParaListagem();
+								//that.getRouter().navTo("bepsListagemObrigacoes");
 							});
 						}
 					}
 				}); //sap.m.MessageToast.show("Cancelar inserção");
 			},
 			
+            onVoltarParaListagem: function () {
+				this.getRouter().navTo("bepsListagemObrigacoes", {
+					parametros: JSON.stringify({
+						idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")
+					})
+				});
+			},
+
 			onCancelar: function () {
 				var that = this;
-				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
-					title: "Confirm",
-					onClose: function (oAction) {
-						if (sap.m.MessageBox.Action.OK === oAction) {
-							that.getRouter().navTo("bepsListagemObrigacoes");
+                if (this.isIFrame()) {
+					that.onVoltarParaListagem();
+				} else {
+					jQuery.sap.require("sap.m.MessageBox");
+					sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
+						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
+						onClose: function (oAction) {
+							if (sap.m.MessageBox.Action.OK === oAction) {
+								that.onVoltarParaListagem();
+							}
 						}
-					}
-				});
+					});
+				}
 				//sap.m.MessageToast.show("Cancelar inserção");
 			},
 			
 			navToHome: function () {
-				this.getRouter().navTo("selecaoModulo");
+				var that = this;
+
+				if (this.isIFrame()) {
+					that.getRouter().navTo("selecaoModulo");
+				} else {
+					jQuery.sap.require("sap.m.MessageBox");
+					sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgCancelar"), {
+						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
+						onClose: function (oAction) {
+							if (sap.m.MessageBox.Action.OK === oAction) {
+								that.getRouter().navTo("selecaoModulo");
+							}
+						}
+					});
+				}
 			},
 
 			navToPage2: function () {
-				this.getRouter().navTo("bepsListagemObrigacoes");
+				this.onCancelar();
 			},
 
 			onTrocarSuporte: function () {
@@ -156,6 +186,10 @@ sap.ui.define(
 					obj["fk_id_dominio_moeda.id_dominio_moeda"] = "";
 					obj["suporte_valor"] = "";
 				}
+			},
+
+            onTrocarValorSuporte: function (oEvent) {
+				Validador.validarNumeroInserido(oEvent, this);
 			},
 
 			onEnviarArquivo: function (oEvent, sProperty) {
@@ -203,6 +237,7 @@ sap.ui.define(
 					}
 
 				} else {
+                    if (oFileUploader.getValue()) {
 					DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
 					this.getModel().setProperty("/CancelaBotaoConfirmar", false);
 					this.getModel().setProperty("/CancelaBotaoCancelar", false);
@@ -238,7 +273,8 @@ sap.ui.define(
 											IntMes = IntMes + 1;
 											var strMes = IntMes.toString();
 
-											that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes + "-" +
+											that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes +
+													"-" +
 												DataConclusao.getDate();
 											that._AtualizaStatusObrigacao(DataFormatada);
 
@@ -249,14 +285,15 @@ sap.ui.define(
 												suporteEspecificacao: obj["suporte_especificacao"],
 												suporteValor: obj["suporte_valor"],
 												fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-												fkIdRelModeloEmpresa: obj["fk_id_rel_modelo_empresa.id_rel_modelo_empresa"],
-												fkIdDominioAnoFiscal: obj["fk_id_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-												fkIdDominioAnoCalendario: obj["fk_id_dominio_ano_calendario.id_dominio_ano_calendario"],
-												fkIdDominioObrigacaoStatusResposta: obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"],
+												fkIdRelModeloEmpresa: obj["id_rel_modelo_empresa"],
+													fkIdDominioAnoFiscal: obj["id_ano_fiscal_calculado"],
+													fkIdDominioAnoCalendario: obj["id_dominio_ano_calendario"],
+													fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
 												dataExtensao: obj["data_extensao"],
-												dataConclusao: obj["data_conclusao"]
+												dataConclusao: obj["data_conclusao"],
+                                                indIniciada: true
 											}, function (response2) {
-												that.getRouter().navTo("bepsListagemObrigacoes");
+												that.onVoltarParaListagem();
 												that.getModel().setProperty("/CancelaBotaoConfirmar", true);
 												that.getModel().setProperty("/CancelaBotaoCancelar", true);
 												oFileUploader.setValue("");
@@ -282,6 +319,7 @@ sap.ui.define(
 						}),
 						endButton: oBtnCancelar,
 						afterClose: function () {
+                            this.getModel().setProperty("/CancelaBotaoCancelar", true);
 							dialog.destroy();
 						}
 					});
@@ -293,7 +331,11 @@ sap.ui.define(
 					this.getView().addDependent(dialog);
 
 					dialog.open();
-				}
+				} else {
+						//sap.m.MessageToast.show("Selecione um arquivo");
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
+					}
+                }
 			},
 
 			_AtualizaStatusObrigacao: function (Data) {
@@ -316,7 +358,8 @@ sap.ui.define(
 					IntMes = Number(arryData[1].toString());
 					IntMes = IntMes - 1;
 					strMes = IntMes.toString();
-					prazo_entrega_customizado = new Date(this.getModel().getProperty("/RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' + arryData[2]);
+					prazo_entrega_customizado = new Date(this.getModel().getProperty("/RespostaObrigacao")["ano_calendario"] + '-' + strMes + '-' +
+						arryData[2]);
 				} else {
 					prazo_entrega_customizado = null;
 				}
@@ -370,16 +413,20 @@ sap.ui.define(
 				Arquivo.download("DownloadDocumento?arquivo=" + oArquivo.id_documento)
 					.then(function (response) {
 						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
-
-						oArquivo.btnExcluirEnabled = true;
+						
+						if(!oArquivo.ind_conclusao){
+							oArquivo.btnExcluirEnabled = true;	
+						}
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
 						that.getModel().refresh();
 					})
 					.catch(function (err) {
-					 sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
-
-						oArquivo.btnExcluirEnabled = true;
+					    sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
+					    
+						if(!oArquivo.ind_conclusao){
+							oArquivo.btnExcluirEnabled = true;	
+						}
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
 						that.getModel().refresh();
@@ -403,16 +450,18 @@ sap.ui.define(
 						.then(function (response) {
 							//sap.m.MessageToast.show(response);
 							that._atualizarDocumentos('/Documentos', idObrigacao, oTable);
-
-							oArquivo.btnExcluirEnabled = true;
+							if(!oArquivo.ind_conclusao){
+								oArquivo.btnExcluirEnabled = true;	
+							}
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
 							that.getModel().refresh();
 						})
 						.catch(function (err) {
 						sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
-
-							oArquivo.btnExcluirEnabled = true;
+							if(!oArquivo.ind_conclusao){
+								oArquivo.btnExcluirEnabled = true;	
+							}
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
 							that.getModel().refresh();
@@ -450,6 +499,7 @@ sap.ui.define(
 				dialog.open();
 			},
 			_onRouteMatched: function (oEvent) {
+                this.getModel().setProperty("/IsIFrame", this.isIFrame());
 				this.getModel().setProperty("/IsDeclaracao", false);
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 
@@ -460,19 +510,36 @@ sap.ui.define(
 					}
 
 				});
-				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
+				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
+                var idAnoCalendario = oParametros.idAnoCalendario;
+				this.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
 				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
-					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] != 4 ? true : false;
+					"status_obrigacao_calculado"] != 4 ? true : false;
 				this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
-					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4 ? true : false));
+					"status_obrigacao_calculado"] == 4 ? true : false));
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
-				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
-				this.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
-				this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
-			}
+				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));				
+                this.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
+				
+				if (!idObrigacao) {
+					NodeAPI.pCriarRegistro('RespostaObrigacao', {
+							fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"]
+						})
+						.then(function (res) {
+							var generatedId = JSON.parse(res)[0].generated_id;
+							
+							that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
+							
+							that._atualizarDocumentos('/Documentos', generatedId, that.byId("tabelaDocumentos"));
+						});
+				}
+				else {
+					this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
+				}
+			}			
 		});
 	}
 );
