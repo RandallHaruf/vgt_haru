@@ -671,7 +671,7 @@ context VGT {
             tamanho                      : Integer;
             data_upload                  : LocalDate;
             nome_arquivo                 : String(25);
-            fk_id_dominio_mes            : association[*, 0..*] to VGT.DOMINIO_MES { id_dominio_mes };
-            fk_id_dominio_ano_calendario : association[*, 0..*] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
+            fk_id_dominio_mes            : association[*, 0..1] to VGT.DOMINIO_MES { id_dominio_mes };
+            fk_id_dominio_ano_calendario : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
     };
 };
