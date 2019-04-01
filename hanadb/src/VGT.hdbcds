@@ -655,4 +655,23 @@ context VGT {
         key fk_dominio_ano_calendario_inicial : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
         key fk_dominio_ano_calendario_final   : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
     };
+
+    /*@@layout{"layoutInfo":{"x":-1409,"y":2079.5}}*/
+    entity DOMINIO_MES {
+        key id_dominio_mes : Integer not null;
+            nome_mes       : String(15);
+            mes            : Integer;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2633,"y":939.5}}*/
+    entity ARQUIVO_CAMBIO_TTC {
+        key id_arquivo_cambio_ttc        : Integer not null;
+            arquivo                      : LargeBinary;
+            mimetype                     : String(25);
+            tamanho                      : Integer;
+            data_upload                  : LocalDate;
+            nome_arquivo                 : String(25);
+            fk_id_dominio_mes            : association[*, 0..*] to VGT.DOMINIO_MES { id_dominio_mes };
+            fk_id_dominio_ano_calendario : association[*, 0..*] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
+    };
 };
