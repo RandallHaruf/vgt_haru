@@ -364,6 +364,7 @@ context VGT {
         key id_diferenca       : Integer64;
             outro              : String(200);
             fk_diferenca_opcao : association[*, 0..1] to VGT.DIFERENCA_OPCAO { id_diferenca_opcao };
+            ind_enviada        : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":-2052,"y":1335.5}}*/
@@ -593,6 +594,7 @@ context VGT {
         fk_id_dominio_obrigacao_status_resposta : association[*, 0..1] to VGT.DOMINIO_OBRIGACAO_STATUS { id_dominio_obrigacao_status };
         data_extensao                           : LocalDate;
         data_conclusao                          : LocalDate;
+        ind_iniciada                            : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":1019,"y":817.5}}*/
