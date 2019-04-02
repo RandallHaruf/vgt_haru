@@ -16,7 +16,7 @@ sap.ui.define(
 						encodedQueryString += "&";
 					}
 					
-					encodedQueryString += aKey[i] + "=" + encodeURIComponent(oQueryString[aKey[i]]);
+					encodedQueryString += aKey[i] + "=" + encodeURIComponent(oQueryString[aKey[i]] !== undefined && oQueryString[aKey[i]] !== null ? oQueryString[aKey[i]] : "");
 				}
 			}
 			
