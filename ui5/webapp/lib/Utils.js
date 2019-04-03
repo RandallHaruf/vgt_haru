@@ -162,6 +162,51 @@ sap.ui.define(
 				}
 				return traducao;
 			},
+			
+			traduzNomeMes: function (id,that){
+				
+				var traducao = "";
+				switch (id){
+					case 1:
+						traducao = that.getResourceBundle().getText("NomesMes1");
+						break;
+					case 2:
+						traducao = that.getResourceBundle().getText("NomesMes2");
+						break;
+					case 3:
+						traducao = that.getResourceBundle().getText("NomesMes3");
+						break;
+					case 4:
+						traducao = that.getResourceBundle().getText("NomesMes4");
+						break;
+					case 5:
+						traducao = that.getResourceBundle().getText("NomesMes5");
+						break;
+					case 6:
+						traducao = that.getResourceBundle().getText("NomesMes6");
+						break;
+					case 7:
+						traducao = that.getResourceBundle().getText("NomesMes7");
+						break;
+					case 8:
+						traducao = that.getResourceBundle().getText("NomesMes8");
+						break;
+					case 9:
+						traducao = that.getResourceBundle().getText("NomesMes9");
+						break;
+					case 10:
+						traducao = that.getResourceBundle().getText("NomesMes10");
+						break;
+					case 11:
+						traducao = that.getResourceBundle().getText("NomesMes11");
+						break;
+					case 12:
+						traducao = that.getResourceBundle().getText("NomesMes12");
+						break;
+				}
+				return traducao;
+			},
+			
 			traduzDominioTaxClassification: function (id,that){
 				
 				var traducao = "";
