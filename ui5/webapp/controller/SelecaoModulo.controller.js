@@ -482,7 +482,9 @@ sap.ui.define(
 			},
 
 			navToBeps: function (oEvent) {
-				this.getRouter().navTo("bepsListagemObrigacoes");
+				this.getRouter().navTo("bepsListagemObrigacoes",{
+					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+				});
 			},
 
 			navToAdmin: function (oEvent) {

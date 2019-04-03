@@ -12,11 +12,11 @@
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
-						<Link text="Listagem Obrigações" enabled="false" />
+						<Link text="{i18n>ViewComplianceListagemObrigacoesL}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="Beps - Listagem Obrigações"/>
+					<Title text="{i18n>viewBepsListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:navigationActions>
 					<!--<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />-->
@@ -180,16 +180,15 @@
 								press="onDetalharObrigacao">
 								<cells>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
-									<Text text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}" />
-									<Text text="{= ${/Linguagem} === 'EN-US' ? ( ${data_extensao} !== null ? ${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(0,4) : null) : ( ${data_extensao} !== null ? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) : null)}" />
-									<Text text="{ano_fiscal}"/>
+									<Text
+										text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}"/>
+									<Text
+										text="{= ${/Linguagem} === 'EN-US' ? ( ${data_extensao} !== null ? ${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(0,4) : null) : ( ${data_extensao} !== null ? ${data_extensao}.substring(8,10)+'/'+${data_extensao}.substring(5,7)+'/'+${data_extensao}.substring(0,4) : null)}"/>
+									<Text text="{ano_fiscal_calculado}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>
 									<!--core:Icon src="{viewModel>suporteContratado}"/-->
-									<Text text="{= !!${suporte_contratado} 
-									? ${i18n>viewGeralSim}
-									: ${i18n>viewGeralNao}
-									}"/>
+									<Text text="{= !!${suporte_contratado} ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao} }"/>
 									<Text text="{descricao_obrigacao_status}"/>
 								</cells>
 							</ColumnListItem>

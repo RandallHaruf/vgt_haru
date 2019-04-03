@@ -234,7 +234,7 @@
 					]
 				},
 				{
-					"pattern": "bepsListagemObrigacoes",
+					"pattern": "bepsListagemObrigacoes/{parametros}",
 					"name": "bepsListagemObrigacoes",
 					"target": [
 						"bepsListagemObrigacoes"

@@ -416,16 +416,18 @@ sap.ui.define(
 				Arquivo.download("DownloadDocumento?arquivo=" + oArquivo.id_documento)
 					.then(function (response) {
 						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
-
-						oArquivo.btnExcluirEnabled = true;
+						if(!oArquivo.ind_conclusao){
+							oArquivo.btnExcluirEnabled = true;	
+						}
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
 						that.getModel().refresh();
 					})
 					.catch(function (err) {
-						sap.m.MessageToast.show("Erro ao baixar arquivo: " + oArquivo.nome_arquivo);
-
-						oArquivo.btnExcluirEnabled = true;
+						sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
+						if(!oArquivo.ind_conclusao){
+							oArquivo.btnExcluirEnabled = true;	
+						}
 						oArquivo.btnDownloadEnabled = true;
 						that.setBusy(oButton, false);
 						that.getModel().refresh();
@@ -449,16 +451,18 @@ sap.ui.define(
 						.then(function (response) {
 							//sap.m.MessageToast.show(response);
 							that._atualizarDocumentos('/Documentos', idObrigacao, oTable);
-
-							oArquivo.btnExcluirEnabled = true;
+							if(!oArquivo.ind_conclusao){
+								oArquivo.btnExcluirEnabled = true;	
+							}
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
 							that.getModel().refresh();
 						})
 						.catch(function (err) {
-							sap.m.MessageToast.show("Erro ao excluir arquivo: " + oArquivo.nome_arquivo);
-
-							oArquivo.btnExcluirEnabled = true;
+							sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
+							if(!oArquivo.ind_conclusao){
+								oArquivo.btnExcluirEnabled = true;	
+							}
 							oArquivo.btnDownloadEnabled = true;
 							that.setBusy(oButton, false);
 							that.getModel().refresh();
@@ -531,7 +535,7 @@ sap.ui.define(
 							
 							that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
 							
-							that._atualizarDocumentos('/Documentos', generatedId, this.byId("tabelaDocumentos"));
+							that._atualizarDocumentos('/Documentos', generatedId, that.byId("tabelaDocumentos"));
 						});
 				}
 				else {
