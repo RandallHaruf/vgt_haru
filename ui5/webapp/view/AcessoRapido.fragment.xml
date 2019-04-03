@@ -13,7 +13,22 @@
 					<MenuItem text="{i18n>viewGeralRelatorio}" icon="sap-icon://manager-insight">
 						<items>
 							<MenuItem text="TTC" id="acessoRapidoRelatorioTTC" />
-							<MenuItem text="Tax Package" id="acessoRapidoRelatorioTaxPackage" />
+							<MenuItem text="{i18n>viewAdminInicioMenuTaxPackage}">
+								<items>
+									<MenuItem text="{i18n>viewGeralItemsTR}" id="acessoRapidoRelatorioItemsToReport" />
+									<MenuItem text="{i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}" >
+										<items>
+											<MenuItem text="{i18n>viewEdiçãoTrimestreResultadoContabil}" id="acessoRapidoRelatorioAccountingResult" /><!--
+											<MenuItem text="{i18n>viewGeralAdicoesEExclusoes}" id="acessoRapidoRelatorioTemporaryAndPermanentDifferences"/>
+											<MenuItem text="{i18n>viewEdiçãoTrimestreResultadoFiscal}" id="acessoRapidoRelatorioFiscalResult" />											
+											<MenuItem text="{i18n>viewEdiçãoTrimestreImpostoRenda}" id="acessoRapidoRelatorioIncomeTax" />-->
+										</items>
+									</MenuItem>
+									<MenuItem text="{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}" id="acessoRapidoRelatorioLossSchedule" />
+									<MenuItem text="{i18n>viewTaxpackageEdiçãoTrimestreCreditSchedule}" id="acessoRapidoRelatorioCreditSchedule" />
+									<!--<MenuItem text="Beps" id="acessoRapidoRelatorioBeps" />-->
+								</items>
+							</MenuItem>								
 							<MenuItem text="Compliance/Beps" id="acessoRapidoRelatorioCompliance" />
 							<!--<MenuItem text="Beps" id="acessoRapidoRelatorioBeps" />-->
 						</items>

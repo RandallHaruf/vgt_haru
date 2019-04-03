@@ -1,0 +1,177 @@
+<mvc:View controllerName="ui5ns.ui5.controller.taxPackage.RelatorioItemsToReport" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<!--<Link text="Tax Package" press="navToPage2" />-->
+						<Link text="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" save="onSaveView"></vm:VariantManagement>
+				</f:heading>
+				<f:actions>
+					<Text 
+						text="{i18n>viewRelatorioExportar}"	/>
+					<!--<Button
+						text="{i18n>viewRelatorioImprimir}"
+						type="Transparent"
+						icon="sap-icon://print" />-->
+					<Button
+						text="CSV"
+						type="Transparent"
+						press="onDataExportCSV"/>
+					<!--<Button
+						text="{i18n>viewRelatorioExportar} TXT"
+						type="Transparent" />-->
+					<Button
+						text="XLS"
+						type="Transparent"
+						press="onDataExportCSV"/>
+					<!--<Button
+						text="{i18n>viewRelatorioExportar} PDF"
+						type="Transparent"/>-->
+				</f:actions>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Header -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+						<fb:filterItems>
+							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
+								<fb:control>
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
+								<fb:control>
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
+								<fb:control>
+									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
+										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/><!--text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>-->
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem><!--
+							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
+								<fb:control>
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
+										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>-->
+							<fb:FilterItem name="E" label="{i18n>viewGeralFlagSN}">
+								<fb:control>
+									<MultiComboBox id="selectFlagSN" selectionFinish="onSelectChange" items="{ path: '/FlagSN' }" selectedKeys="{/FlagSNSelecionado}">
+										<core:Item key="{tblItemToReport.flag_sim_nao}" text="{tblItemToReport.flag_sim_nao}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>	
+							<fb:FilterItem name="F" label="{i18n>viewGeralFlagAno}">
+								<fb:control>
+									<MultiComboBox id="selectFlagAno" selectionFinish="onSelectChange" items="{ path: '/FlagAno' }" selectedKeys="{/FlagAnoSelecionado}">
+										<core:Item key="{tblItemToReport.flag_ano}" text="{tblItemToReport.flag_ano}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>	
+							<fb:FilterItem name="G" label="{i18n>viewGeralQUestion}">
+								<fb:control>
+									<MultiComboBox id="selectPergunta" selectionFinish="onSelectChange" items="{ path: '/Pergunta' }" selectedKeys="{/PerguntaSelecionada}">
+										<core:Item key="{tblItemToReport.pergunta}" text="{tblItemToReport.pergunta}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>	
+							<fb:FilterItem name="H" label="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?">
+								<fb:control>
+									<MultiComboBox id="selectRespondeuSim" selectionFinish="onSelectChange" items="{ path: '/RespondeuSim' }" selectedKeys="{/RespondeuSimSelecionado}">
+										<core:Item key="{tblRespostaItemToReport.ind_se_aplica}" text="{tblRespostaItemToReport.ind_se_aplica}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>		
+							<fb:FilterItem name="I" label="{i18n>viewRelatorioAnoFiscal}">
+								<fb:control>
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange" items="{ path: '/AnoFiscal' }" selectedKeys="{/AnoFiscalSelecionado}">
+										<core:Item key="{Ano_Fiscal_Filtro}" text="{Ano_Fiscal_Agregado}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
+						</fb:filterItems>
+					</fb:FilterBar>
+					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
+					<Button
+					id="GerarRelatorio"
+					text="{i18n>viewGeralBtnRelatorioTaxP}"
+					type="Emphasized"
+					press="onGerarRelatorio"/>	
+					</HBox>	
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<!-- DynamicPage Content -->
+		<f:content>
+			<ScrollContainer horizontal="true" vertical="true" height="100%">
+				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
+					<columns>
+						<Column width="4rem">
+							<Text text="{i18n>viewRelatorioEmpresa}"/>
+						</Column>
+						<Column width="4rem">
+							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						</Column>
+						<Column width="4rem">
+							<Text text="{i18n>viewGeralPeriodo}"/>
+						</Column>
+						<Column width="4rem">
+							<Text text="{i18n>viewGeralFlagSN}"/>
+						</Column>
+						<Column width="4rem">
+							<Text text="{i18n>viewGeralFlagAno}"/>
+						</Column>
+						<Column width="4rem">
+							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+						</Column>	
+						<Column width="4rem">
+							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?"/>
+						</Column>						
+						<Column width="12rem">							
+							<Text text="{i18n>viewGeralQUestion}"/>
+						</Column>
+						<Column width="12rem">
+							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}"/>
+						</Column>	
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{tblEmpresa.nome}"/>
+								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+								<Text text="{tblPeriodo.periodo}"/>
+								<Text text="{tblItemToReport.flag_sim_nao}"/>
+								<Text text="{tblItemToReport.flag_ano}"/>
+								<Text text="{Ano_Fiscal_Agregado}"/>	
+								<Text text="{tblRespostaItemToReport.ind_se_aplica}"/>								
+								<Text text="{tblItemToReport.pergunta}"/>
+								<Text text="{tblRespostaItemToReport.resposta}"/>		
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</ScrollContainer>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

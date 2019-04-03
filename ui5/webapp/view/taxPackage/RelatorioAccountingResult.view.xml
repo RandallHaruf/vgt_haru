@@ -1,0 +1,199 @@
+<mvc:View controllerName="ui5ns.ui5.controller.taxPackage.RelatorioAccountingResult" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link text="Home" press="navToHome" />
+						<!--<Link text="Tax Package" press="navToPage2" />-->
+						<Link text="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreResultadoContabil}" enabled="false" />
+					</Breadcrumbs>
+				</f:breadcrumbs>
+				<f:heading>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreResultadoContabil}" save="onSaveView"></vm:VariantManagement>
+				</f:heading>
+				<f:actions>
+					<Text 
+						text="{i18n>viewRelatorioExportar}"	/>
+					<!--<Button
+						text="{i18n>viewRelatorioImprimir}"
+						type="Transparent"
+						icon="sap-icon://print" />-->
+					<Button
+						text="CSV"
+						type="Transparent"
+						press="onDataExportCSV"/>
+					<!--<Button
+						text="{i18n>viewRelatorioExportar} TXT"
+						type="Transparent" />-->
+					<Button
+						text="XLS"
+						type="Transparent"
+						press="onDataExportCSV"/>
+					<!--<Button
+						text="{i18n>viewRelatorioExportar} PDF"
+						type="Transparent"/>-->
+				</f:actions>
+				<f:navigationActions>
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Header -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+						<fb:filterItems>
+							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
+								<fb:control>
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="B" label="{i18n>viewRelatorioAnoFiscal}">
+								<fb:control>
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
+								<fb:control>
+									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
+										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
+								<fb:control>
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
+										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+						</fb:filterItems>
+					</fb:FilterBar>
+					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
+					<Button
+					id="GerarRelatorio"
+					text="{i18n>viewGeralBtnRelatorioTaxP}"
+					type="Emphasized"
+					press="onGerarRelatorio"/>	
+					</HBox>	
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<!-- DynamicPage Content -->
+		<f:content>
+			<ScrollContainer horizontal="true" vertical="true" height="100%">
+				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
+					<columns>
+						<Column id = "coluna1" width="{/remtblEmpresa.nome}">
+							<Text text="{i18n>viewRelatorioEmpresa}"/>
+						</Column>
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
+							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						</Column>
+						<Column width="{/remtblPeriodo.periodo}">
+							<Text text="{i18n>viewGeralPeriodo}"/>
+						</Column>
+						<Column width="{/remtblDominioMoeda.acronimo}">
+							<Text text="{i18n>viewGeralMoeda}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}">
+							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.rc_current_income_tax_current_year}">
+							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAtual}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.rc_current_income_tax_previous_year}">
+							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAnterior}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.rc_deferred_income_tax}">
+							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}"/>
+						</Column>	
+						<Column width="{/remtblTaxReconciliation.rc_non_recoverable_wht}">
+							<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.rc_statutory_provision_for_income_tax}">
+							<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax}">
+							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}"/>
+						</Column>						
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text id = "texto1" text="{tblEmpresa.nome}"/>
+								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+								<Text text="{tblPeriodo.periodo}"/>
+								<Text text="{tblDominioMoeda.acronimo}"/>
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_current_income_tax_current_year',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_current_income_tax_previous_year',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_deferred_income_tax',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_non_recoverable_wht',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_statutory_provision_for_income_tax',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />								
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</ScrollContainer>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>
