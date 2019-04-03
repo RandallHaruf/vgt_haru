@@ -69,6 +69,27 @@ sap.ui.define(
 				else if (oItem === this.byId("acessoRapidoRelatorioTaxPackage")) {
 					this.getRouter().navTo("taxPackageRelatorio");
 				}
+				else if (oItem === this.byId("acessoRapidoRelatorioAccountingResult")) {
+					this.getRouter().navTo("taxPackageRelatorioAccountingResult");
+				}				
+				else if (oItem === this.byId("acessoRapidoRelatorioCreditSchedule")) {
+					this.getRouter().navTo("taxPackageRelatorioCreditSchedule");
+				}
+				else if (oItem === this.byId("acessoRapidoRelatorioFiscalResult")) {
+					this.getRouter().navTo("taxPackageRelatorioFiscalResult");
+				}
+				else if (oItem === this.byId("acessoRapidoRelatorioIncomeTax")) {
+					this.getRouter().navTo("taxPackageRelatorioIncomeTax");
+				}
+				else if (oItem === this.byId("acessoRapidoRelatorioItemsToReport")) {
+					this.getRouter().navTo("taxPackageRelatorioItemsToReport");
+				}
+				else if (oItem === this.byId("acessoRapidoRelatorioLossSchedule")) {
+					this.getRouter().navTo("taxPackageRelatorioLossSchedule");
+				}
+				else if (oItem === this.byId("acessoRapidoRelatorioTemporaryAndPermanentDifferences")) {
+					this.getRouter().navTo("taxPackageRelatorioTemporaryAndPermanentDifferences");
+				}				
 				else if (oItem === this.byId("acessoRapidoRelatorioCompliance")) {
 					this.getRouter().navTo("complianceRelatorio");
 				}

@@ -213,6 +213,55 @@
 					]
 				},
 				{
+					"pattern": "taxPackageRelatorioAccountingResult",
+					"name": "taxPackageRelatorioAccountingResult",
+					"target": [
+						"taxPackageRelatorioAccountingResult"
+					]
+				},
+				{
+					"pattern": "taxPackageRelatorioCreditSchedule",
+					"name": "taxPackageRelatorioCreditSchedule",
+					"target": [
+						"taxPackageRelatorioCreditSchedule"
+					]
+				},
+				{
+					"pattern": "taxPackageRelatorioFiscalResult",
+					"name": "taxPackageRelatorioFiscalResult",
+					"target": [
+						"taxPackageRelatorioFiscalResult"
+					]
+				},
+				{
+					"pattern": "taxPackageRelatorioIncomeTax",
+					"name": "taxPackageRelatorioIncomeTax",
+					"target": [
+						"taxPackageRelatorioIncomeTax"
+					]
+				},
+				{
+					"pattern": "taxPackageRelatorioItemsToReport",
+					"name": "taxPackageRelatorioItemsToReport",
+					"target": [
+						"taxPackageRelatorioItemsToReport"
+					]
+				},
+				{
+					"pattern": "taxPackageRelatorioLossSchedule",
+					"name": "taxPackageRelatorioLossSchedule",
+					"target": [
+						"taxPackageRelatorioLossSchedule"
+					]
+				},
+				{
+					"pattern": "taxPackageRelatorioTemporaryAndPermanentDifferences",
+					"name": "taxPackageRelatorioTemporaryAndPermanentDifferences",
+					"target": [
+						"taxPackageRelatorioTemporaryAndPermanentDifferences"
+					]
+				},
+				{
 					"pattern": "taxPackageResumoTrimestre/{parametros}",
 					"name": "taxPackageResumoTrimestre",
 					"target": [
@@ -391,6 +440,41 @@
 				"taxPackageRelatorio": {
 					"viewName": "taxPackage/Relatorio",
 					"viewId": "taxPackageRelatorio",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioAccountingResult": {
+					"viewName": "taxPackage/RelatorioAccountingResult",
+					"viewId": "taxPackageRelatorioAccountingResult",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioCreditSchedule": {
+					"viewName": "taxPackage/RelatorioCreditSchedule",
+					"viewId": "taxPackageRelatorioCreditSchedule",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioFiscalResult": {
+					"viewName": "taxPackage/RelatorioFiscalResult",
+					"viewId": "taxPackageRelatorioFiscalResult",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioIncomeTax": {
+					"viewName": "taxPackage/RelatorioIncomeTax",
+					"viewId": "taxPackageRelatorioIncomeTax",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioItemsToReport": {
+					"viewName": "taxPackage/RelatorioItemsToReport",
+					"viewId": "taxPackageRelatorioItemsToReport",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioLossSchedule": {
+					"viewName": "taxPackage/RelatorioLossSchedule",
+					"viewId": "taxPackageRelatorioLossSchedule",
+					"viewLevel": 3
+				},
+				"taxPackageRelatorioTemporaryAndPermanentDifferences": {
+					"viewName": "taxPackage/RelatorioTemporaryAndPermanentDifferences",
+					"viewId": "taxPackageRelatorioTemporaryAndPermanentDifferences",
 					"viewLevel": 3
 				},
 				"taxPackageResumoTrimestre": {
