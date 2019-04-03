@@ -6,7 +6,6 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns="sap.m"
 	class="loginView">
-	<!-- texto teste-->
 	<f:Form 
 		id="loginForm"
 		editable="true"
