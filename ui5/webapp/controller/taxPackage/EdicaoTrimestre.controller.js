@@ -3056,7 +3056,7 @@ sap.ui.define(
 
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para o país da empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
-						fkAliquota: oEmpresa["fk_imposto_pais"],
+						fkAliquota: oEmpresa["fk_imposto_pais"] ? oEmpresa["fk_imposto_pais"] : 0,
 						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
 					})
 					.then(function (res) {
@@ -3071,7 +3071,7 @@ sap.ui.define(
 
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para a empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
-						fkAliquota: oEmpresa["fk_imposto_empresa"],
+						fkAliquota: oEmpresa["fk_imposto_empresa"] ? oEmpresa["fk_imposto_empresa"] : 0,
 						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
 					})
 					.then(function (res) {
