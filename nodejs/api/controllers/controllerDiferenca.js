@@ -22,6 +22,9 @@ module.exports = {
 			coluna: model.colunas.outro,
 			valor: req.body.outro ? req.body.outro : null
 		}, {
+			coluna: model.colunas.indEnviada,
+			valor: req.body.indEnviada ? req.body.indEnviada : null
+		}, {
 			coluna: model.colunas.fkDiferencaOpcao,
 			valor: req.body.fkDiferencaOpcao ? Number(req.body.fkDiferencaOpcao) : null
 		}];
@@ -58,6 +61,9 @@ module.exports = {
 		var aParams = [{
 			coluna: model.colunas.outro,
 			valor: req.body.outro ? req.body.outro : null
+		},  {
+			coluna: model.colunas.indEnviada,
+			valor: req.body.indEnviada ? req.body.indEnviada : null
 		}, {
 			coluna: model.colunas.fkDiferencaOpcao,
 			valor: req.body.fkDiferencaOpcao ? Number(req.body.fkDiferencaOpcao) : null

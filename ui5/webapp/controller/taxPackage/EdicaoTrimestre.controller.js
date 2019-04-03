@@ -4,11 +4,13 @@ sap.ui.define(
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/lib/Validador",
-		"sap/ui/core/format/NumberFormat"
+		"sap/ui/core/format/NumberFormat",
+		"ui5ns/ui5/lib/jszip",
+		"ui5ns/ui5/lib/XLSX",
 	],
 	function (BaseController, NodeAPI, Utils, Validador, NumberFormat) {
 		"use strict";
-		
+
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.EdicaoTrimestre", {
 			onInit: function () {
 				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
@@ -20,6 +22,163 @@ sap.ui.define(
 				this._zerarModel();
 
 				this.getRouter().getRoute("taxPackageEdicaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+			},
+
+			onImportarDados: function (oEvent) {
+				var that = this,
+					eventSource = oEvent.getSource(),
+					file = eventSource.oFileUpload.files[0];
+
+				var reader = new FileReader();
+
+				reader.onload = function (e) {
+					var data = e.target.result;
+
+					var workbook = XLSX.read(data, {
+						type: 'binary'
+					});
+
+					var oTaxReconciliation = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+						return obj.ind_ativo;
+					});
+					
+					var processarDiferenca = function (XL_row_object, sCaminhoDiferencas, sCaminhoOpcaoDiferenca) {
+						var sChaveProcurar = "",
+							iNumeroOrdemPeriodo = that.getModel().getProperty("/Periodo").numero_ordem;
+
+						switch (true) {
+						case iNumeroOrdemPeriodo === 1:
+							sChaveProcurar = "valor1";
+							break;
+						case iNumeroOrdemPeriodo === 2:
+							sChaveProcurar = "valor2";
+							break;
+						case iNumeroOrdemPeriodo === 3:
+							sChaveProcurar = "valor3";
+							break;
+						case iNumeroOrdemPeriodo === 4:
+							sChaveProcurar = "valor4";
+							break;
+						case iNumeroOrdemPeriodo === 5:
+							sChaveProcurar = "valor5";
+							break;
+						case iNumeroOrdemPeriodo >= 6:
+							sChaveProcurar = "valor6";
+							break;
+						}
+
+						var aDiferenca = that.getModel().getProperty(sCaminhoDiferencas),
+							aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca);
+
+						for (var i = 0; i < XL_row_object.length; i++) {
+							var objXlsx = XL_row_object[i];
+
+							var keys = Object.keys(objXlsx);
+
+							if (keys.indexOf('Type') > -1) {
+								var oDiferencaComOpcaoJaInserida = aDiferenca.find(function (obj) {
+									return Number(objXlsx.Type) === Number(obj["fk_diferenca_opcao.id_diferenca_opcao"]);
+								});
+
+								if (oDiferencaComOpcaoJaInserida) {
+
+									var oOpcaoDiferenca = aOpcaoDiferenca.find(function (obj) {
+										return Number(objXlsx.Type) === obj.id_diferenca_opcao;
+									});
+									
+									if (oOpcaoDiferenca.ind_duplicavel) {
+										var novaDiferenca = {};
+										novaDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] = objXlsx.Type;
+										novaDiferenca["outro"] = objXlsx.Other;
+										novaDiferenca[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
+
+										aDiferenca.push(novaDiferenca);
+									}
+									else {
+										// Permite alterar o campo outro apenas se estiver importando uma diferença que foi inseria no mesmo período de edição.
+										if (Number(iNumeroOrdemPeriodo) === Number(oDiferencaComOpcaoJaInserida.numero_ordem)) {
+											oDiferencaComOpcaoJaInserida["outro"] = objXlsx.Other;
+										}
+										oDiferencaComOpcaoJaInserida[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
+									}
+
+								} 
+								else {
+									var novaDiferenca = {};
+									novaDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] = objXlsx.Type;
+									novaDiferenca["outro"] = objXlsx.Other;
+									novaDiferenca[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
+
+									aDiferenca.push(novaDiferenca);
+								}
+							}
+						}
+					};
+
+					var processarTaxaMultipla = function (XL_row_object, sCaminhoTaxaMultipla, iIdTipoTaxaMultipla) {
+						var aOtherTax = that.getModel().getProperty(sCaminhoTaxaMultipla);
+							
+						for (var i = 0; i < XL_row_object.length; i++) {
+							var objXlsx = XL_row_object[i];
+							
+							aOtherTax.push({
+								descricao: objXlsx.Description,
+								valor: Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0,
+								"fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla": iIdTipoTaxaMultipla
+							});
+						}
+					};
+
+					workbook.SheetNames.forEach(function (sheetName) {
+						// Here is your object
+						var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+
+						if (sheetName === "Accounting Result" && XL_row_object[0]) {
+							
+							oTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax =
+								Validador.isNumber(XL_row_object[0]["Statutory GAAP Profit / (loss) before tax"]) ? XL_row_object[0][
+									"Statutory GAAP Profit / (loss) before tax"
+								] : 0;
+							oTaxReconciliation.rc_current_income_tax_current_year =
+								Validador.isNumber(XL_row_object[0]["Current income tax – Current year"]) ? XL_row_object[0][
+									"Current income tax – Current year"
+								] : 0;
+							oTaxReconciliation.rc_current_income_tax_previous_year =
+								Validador.isNumber(XL_row_object[0]["Current income tax – Previous Year"]) ? XL_row_object[0][
+									"Current income tax – Previous Year"
+								] : 0;
+							oTaxReconciliation.rc_deferred_income_tax =
+								Validador.isNumber(XL_row_object[0]["Deferred Income Tax"]) ? XL_row_object[0]["Deferred Income Tax"] : 0;
+							oTaxReconciliation.rc_non_recoverable_wht =
+								Validador.isNumber(XL_row_object[0]["Non- Recoverable WHT"]) ? XL_row_object[0]["Non- Recoverable WHT"] : 0;
+								
+						} 
+						else if (sheetName === "Permanent Differences") {
+							processarDiferenca(XL_row_object, "/DiferencasPermanentes", "/DiferencaOpcao/Permanente");
+						}
+						else if (sheetName === "Temporary Differences") {
+							processarDiferenca(XL_row_object, "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria");
+						}
+						else if (sheetName === "Other Taxes") {
+							processarTaxaMultipla(XL_row_object, "/OtherTaxes", 1);
+						}
+						else if (sheetName === "Tax Incentives") {
+							processarTaxaMultipla(XL_row_object, "/IncentivosFiscais", 2);
+						}
+						else if (sheetName === "WHT") {
+							processarTaxaMultipla(XL_row_object, "/WHT", 3);
+						}
+					});
+
+					that.onAplicarRegras();
+					eventSource.setValue("");
+				};
+
+				reader.onerror = function (ex) {
+					console.log(ex);
+				};
+
+				reader.readAsBinaryString(file);
 			},
 
 			_adicionarTaxaMultipla: function (sProperty, sFkTipo) {
@@ -719,7 +878,7 @@ sap.ui.define(
 				/*var oInputClosingBalance = new sap.m.Input({
 					value: "{closing_balance}"
 				});*/
-				
+
 				var oHBox = new sap.m.HBox({
 					justifyContent: "End",
 					alignItems: "Center"
@@ -734,16 +893,16 @@ sap.ui.define(
 				}).attachPress(function (event) {
 					that._dialogDetalhesValueUtilized(event, sProperty, sFkTipo, sLabelValueExpired);
 				});
-				
+
 				oHBox.addItem(oInputValueUtilized);
 				oHBox.addItem(oBtnDetalhes);
 
 				var oTemplate = new sap.m.ColumnListItem({
-					cells: [oInputFY/*, oInputClosingBalance*/, oHBox/*oInputValueUtilized, oBtnDetalhes*/]
+					cells: [oInputFY /*, oInputClosingBalance*/ , oHBox /*oInputValueUtilized, oBtnDetalhes*/ ]
 				});
 
 				oTableSaldo.bindItems({
-					path: sSchedule/*FY*/,
+					path: sSchedule /*FY*/ ,
 					template: oTemplate,
 					sorter: new sap.ui.model.Sorter("fy", true),
 					filters: [
@@ -785,45 +944,46 @@ sap.ui.define(
 					obj = oEvent.getSource().getBindingContext().getObject(),
 					sPathClosingBalance = oEvent.getSource().getBindingContext().getPath() + "/closing_balance",
 					sLabelClosingBalance = this.getResourceBundle().getText("viewTaxPackageClosingBalance");
-					
+
 				if (this._isScheduleExpirado(obj)) {
 					sPathClosingBalance = oEvent.getSource().getBindingContext().getPath() + "/current_year_value_expired";
 					sLabelClosingBalance = sLabelValueExpired;
 				}
-				
+
 				var oVBox = new sap.m.VBox();
-				
+
 				var oToolbar = new sap.m.Toolbar();
-				
+
 				//var oHBox = new sap.m.HBox();
-				
-				oToolbar.addContent(new sap.m.Label({ 
+
+				oToolbar.addContent(new sap.m.Label({
 					text: sLabelClosingBalance + ": "
 				}).addStyleClass("sapUiSmallMarginBegin"));
-				
+
 				oToolbar.addContent(new sap.m.Text({
 					textAlign: "End",
-					text: "{path: '" + sPathClosingBalance + "', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+					text: "{path: '" + sPathClosingBalance +
+						"', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
 				}));
-				
+
 				//oToolbar.addContent(oHBox);
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 				oToolbar.addContent(new sap.m.Button({
-					icon: "sap-icon://add" 
+					icon: "sap-icon://add"
 				}).addStyleClass("sapUiSmallMarginEnd").attachPress(oTable, function () {
 					this._adicionarUtilizacaoSchedule(sProperty, sFkTipo, obj.fy);
 				}, this));
-				
+
 				oVBox.addItem(oToolbar);
-				
+
 				var oScrollContainer = new sap.m.ScrollContainer({
 					horizontal: true,
 					vertical: true,
 					height: "300px"
 				}).addStyleClass("sapUiNoContentPadding");
-				
+
 				var oTable = new sap.m.Table();
-				
+
 				/*var oToolbar = new sap.m.Toolbar();
 
 				oToolbar.addContent(new sap.m.Button({
@@ -833,9 +993,9 @@ sap.ui.define(
 				}).attachPress(oTable, function () {
 					this._adicionarUtilizacaoSchedule(sProperty, sFkTipo, obj.fy);
 				}, this));*/
-				
+
 				//oToolbar.addContent(new sap.m.ToolbarSpacer());
-				
+
 				/*oToolbar.addContent(new sap.m.Text({
 					textAlign: "End",
 					text: "{path: '" + oEvent.getSource().getBindingContext().getPath() + "/closing_balance"
@@ -843,7 +1003,7 @@ sap.ui.define(
 				}).addStyleClass("sapUiSmallMarginEnd"));
 				
 				oTable.setHeaderToolbar(oToolbar);*/
-				
+
 				// Colunas da tabela 
 				oTable.addColumn(new sap.m.Column({
 					width: "50px"
@@ -857,11 +1017,13 @@ sap.ui.define(
 				})));*/
 
 				oTable.addColumn(new sap.m.Column({
-					vAlign: "Middle",
-					width: "175px"
-				})/*.setHeader(new sap.m.Text({
-					text: this.getResourceBundle().getText("viewGeralValue")
-				}))*/);
+						vAlign: "Middle",
+						width: "175px"
+					})
+					/*.setHeader(new sap.m.Text({
+										text: this.getResourceBundle().getText("viewGeralValue")
+									}))*/
+				);
 
 				/*oTable.addColumn(new sap.m.Column({
 					vAlign: "Middle",
@@ -907,15 +1069,14 @@ sap.ui.define(
 							minFractionDigits: 2,
 							maxFractionDigits: 2
 						}).format(fValorNegativo);
-						
+
 						var closingBalance = this.getModel().getProperty(sPathClosingBalance);
-						
+
 						if (fValorNegativo + closingBalance >= 0) {
 							oEvent2.getSource().setValue(sValorFormatado);
-						}
-						else {
+						} else {
 							oEvent2.getSource().setValue(0);
-							
+
 							var dialog = new sap.m.Dialog({
 								title: this.getResourceBundle().getText("viewGeralAviso"),
 								type: "Message",
@@ -932,7 +1093,7 @@ sap.ui.define(
 									dialog.destroy();
 								}
 							});
-	
+
 							dialog.open();
 						}
 
@@ -944,9 +1105,9 @@ sap.ui.define(
 					}
 					this.onAplicarRegras();
 					//if (this._validarNumeroInserido(oEvent) && isNegativo) {
-						//var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
-						//var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
-						//oEvent.getSource().setValue(sValorFormatado);
+					//var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+					//var sValorFormatado = NumberFormat.getFloatInstance({minFractionDigits: 2, maxFractionDigits: 2}).format(fValorNegativo);
+					//oEvent.getSource().setValue(sValorFormatado);
 					//}
 				}, this);
 
@@ -955,7 +1116,7 @@ sap.ui.define(
 				});*/
 
 				var oTemplate = new sap.m.ColumnListItem({
-					cells: [oBtnExcluir, /*oSelectFY,*/ oInputValor/*, oInputObservacao*/]
+					cells: [oBtnExcluir, /*oSelectFY,*/ oInputValor /*, oInputObservacao*/ ]
 				});
 
 				oTable.bindItems({
@@ -965,15 +1126,15 @@ sap.ui.define(
 						new sap.ui.model.Filter("schedule_fy", sap.ui.model.FilterOperator.EQ, obj.fy)
 					]
 				});
-				
+
 				/*var oBinding = oTable.getBinding("items");
 				var oFilter = new sap.ui.model.Filter("text", sap.ui.model.FilterOperator.Contains, obj.text);
 				oBinding.filter([oFilter]);*/
-				
+
 				oScrollContainer.addContent(oTable);
-				
+
 				oVBox.addItem(oScrollContainer);
-				
+
 				var dialog = new sap.m.Dialog({
 					title: obj.fy,
 					contentWidth: "340px",
@@ -1005,7 +1166,8 @@ sap.ui.define(
 					sFkTipo = 2;
 
 				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
-					"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditU"),
+						"viewGeralOverpaymentFromPriorYearAppliedToCurrentYear"), this.getResourceBundle().getText(
+						"viewEdiçãoTrimestreCurrentYearCreditU"),
 					this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditE"));
 			},
 
@@ -1018,15 +1180,14 @@ sap.ui.define(
 					sFkTipo = 1;
 
 				this._dialogValueUtilized(oEvent, sProperty, sScheduleFY, sSchedule, sFkTipo, this.getResourceBundle().getText(
-					"viewGeralTotalLossesUtilized"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossUtilized"),
+						"viewGeralTotalLossesUtilized"), this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossUtilized"),
 					this.getResourceBundle().getText("viewTaxPackageCurrentYearLossExpired"));
 			},
 
 			_limparMascara: function (sValor) {
 				if (this.isPTBR()) {
 					return sValor.replace(/\./g, "").replace(",", ".");
-				}
-				else {
+				} else {
 					return sValor.replace(/\,/g, "");
 				}
 			},
@@ -1283,7 +1444,7 @@ sap.ui.define(
 			// @NOVO_SCHEDULE - descomentar
 			_onAplicarFormulasSchedule: function () {
 				var that = this;
-				
+
 				var oTaxReconciliation = this.getModel().getProperty("/TaxReconciliation").find(function (obj) {
 					return obj.ind_ativo === true;
 				});
@@ -1332,18 +1493,18 @@ sap.ui.define(
 							var valor1 = oLossSchedule.opening_balance ? Number(oLossSchedule.opening_balance) : 0,
 								valor2 = oLossSchedule.current_year_value ? Number(oLossSchedule.current_year_value) : 0,
 								valor3 = oLossSchedule.current_year_value_utilized ? Number(oLossSchedule.current_year_value_utilized) : 0,
-								valor4 = oLossSchedule.adjustments ? Number(oLossSchedule.adjustments) : 0;/*,
-								valor5 = oLossSchedule.current_year_value_expired ? Number(oLossSchedule.current_year_value_expired) : 0;
-								
-							oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;*/
+								valor4 = oLossSchedule.adjustments ? Number(oLossSchedule.adjustments) : 0;
+							/*,
+															valor5 = oLossSchedule.current_year_value_expired ? Number(oLossSchedule.current_year_value_expired) : 0;
+															
+														oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 + valor5;*/
 
 							// Se for um retrato expirando, o value expired passsa a agir como closing_balance
 							if (that._isScheduleExpirado(oLossSchedule)) {
 								oLossSchedule.current_year_value_expired = valor1 + valor2 + valor3 + valor4;
 								oLossSchedule.closing_balance = 0;
-							}
-							else {
-								oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4 ;
+							} else {
+								oLossSchedule.closing_balance = valor1 + valor2 + valor3 + valor4;
 							}
 
 							oLossSchedule.justificativaEnabled =
@@ -1401,17 +1562,17 @@ sap.ui.define(
 							var valor6 = oCreditSchedule.opening_balance ? Number(oCreditSchedule.opening_balance) : 0,
 								valor7 = oCreditSchedule.current_year_value ? Number(oCreditSchedule.current_year_value) : 0,
 								valor8 = oCreditSchedule.current_year_value_utilized ? Number(oCreditSchedule.current_year_value_utilized) : 0,
-								valor9 = oCreditSchedule.adjustments ? Number(oCreditSchedule.adjustments) : 0;/*,
-								valor10 = oCreditSchedule.current_year_value_expired ? Number(oCreditSchedule.current_year_value_expired) : 0;
+								valor9 = oCreditSchedule.adjustments ? Number(oCreditSchedule.adjustments) : 0;
+							/*,
+															valor10 = oCreditSchedule.current_year_value_expired ? Number(oCreditSchedule.current_year_value_expired) : 0;
 
-							oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;*/
-							
+														oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9 + valor10;*/
+
 							// Se for um retrato expirando, o value expired passsa a agir como closing_balance
 							if (that._isScheduleExpirado(oCreditSchedule)) {
 								oCreditSchedule.current_year_value_expired = valor6 + valor7 + valor8 + valor9;
 								oCreditSchedule.closing_balance = 0;
-							}
-							else {
+							} else {
 								oCreditSchedule.closing_balance = valor6 + valor7 + valor8 + valor9;
 							}
 
@@ -1679,23 +1840,24 @@ sap.ui.define(
 					}
 				}
 			},
-			
+
 			onTrocarDiferenca: function (oEvent) {
-				var sPath = oEvent.getSource().getBindingContext().getPath().indexOf("Permanentes") !== -1 ? "/DiferencasPermanentes" : "/DiferencasTemporarias",
+				var sPath = oEvent.getSource().getBindingContext().getPath().indexOf("Permanentes") !== -1 ? "/DiferencasPermanentes" :
+					"/DiferencasTemporarias",
 					oOpcaoSelecionada = oEvent.getParameters("selectedItem").selectedItem.getBindingContext().getObject();
-				
+
 				if (oOpcaoSelecionada.id_diferenca_opcao && !oOpcaoSelecionada.ind_duplicavel) {
 					var aObjetoComEssaOpcao = this.getModel().getProperty(sPath).filter(function (obj) {
-						return Number(obj["fk_diferenca_opcao.id_diferenca_opcao"])	=== Number(oOpcaoSelecionada.id_diferenca_opcao);
+						return Number(obj["fk_diferenca_opcao.id_diferenca_opcao"]) === Number(oOpcaoSelecionada.id_diferenca_opcao);
 					});
-					
+
 					if (aObjetoComEssaOpcao.length > 1) {
 						jQuery.sap.require("sap.m.MessageBox");
-							
+
 						sap.m.MessageBox.show(this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoDiferencaDuplicada"), {
 							title: this.getResourceBundle().getText("viewGeralAviso")
 						});
-						
+
 						oEvent.getSource().getBindingContext().getObject()["fk_diferenca_opcao.id_diferenca_opcao"] = null;
 					}
 				}
@@ -1717,8 +1879,15 @@ sap.ui.define(
 			},
 
 			onExcluirPermanente: function (oEvent) {
-				var oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
-				this._onExcluirDiferenca(oExcluir, "/DiferencasPermanentes");
+				var that = this,
+					oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+
+				this._onExcluirDiferenca(oExcluir, "/DiferencasPermanentes", function () {
+					// Se nao foi uma diferença recém adicionada e não persistida no banco, adiciona a lista de exclusões.
+					if (!oExcluir.nova) {
+						that.getModel().getProperty("/DiferencasPermanentesExcluidas").push(oExcluir.id_diferenca);
+					}
+				});
 			},
 
 			onNovaDiferencaTemporaria: function (oEvent) {
@@ -1737,8 +1906,15 @@ sap.ui.define(
 			},
 
 			onExcluirTemporaria: function (oEvent) {
-				var oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
-				this._onExcluirDiferenca(oExcluir, "/DiferencasTemporarias");
+				var that = this,
+					oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+
+				this._onExcluirDiferenca(oExcluir, "/DiferencasTemporarias", function () {
+					// Se nao foi uma diferença recém adicionada e não persistida no banco, adiciona a lista de exclusões.
+					if (!oExcluir.nova) {
+						that.getModel().getProperty("/DiferencasTemporariasExcluidas").push(oExcluir.id_diferenca);
+					}
+				});
 			},
 
 			onNovaAdicao: function (oEvent) {
@@ -1777,7 +1953,7 @@ sap.ui.define(
 				this._onExcluirDiferenca(oExcluir, "/taxReconciliation/adicoesExclusoes/temporaryDifferences/itens");
 			},
 
-			_onExcluirDiferenca: function (oExcluir, sProperty) {
+			_onExcluirDiferenca: function (oExcluir, sProperty, callbackConfirmacao) {
 				var that = this;
 
 				jQuery.sap.require("sap.m.MessageBox");
@@ -1799,6 +1975,10 @@ sap.ui.define(
 
 							that.getModel().setProperty(sProperty, aData);
 							that.onAplicarRegras();
+
+							if (callbackConfirmacao) {
+								callbackConfirmacao();
+							}
 						}
 					}
 				});
@@ -1821,7 +2001,7 @@ sap.ui.define(
 				this._salvar(oEvent, function (response) {
 					if (response.success) {
 						sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreSalvoSucesso"));
-						
+
 						that._atualizarDados();
 					} else {
 						sap.m.MessageToast.show(that.getResourceBundle().getText("viewEdiçãoTrimestreTaxJSErro"));
@@ -2597,8 +2777,10 @@ sap.ui.define(
 			navToPage2: function () {
 				var that = this;
 				this._confirmarCancelamento(function () {
-					that.getRouter().navTo("taxPackageListagemEmpresas",{
-						parametros: JSON.stringify({idAnoCalendario: that.getModel().getProperty("/AnoCalendario").idAnoCalendario})
+					that.getRouter().navTo("taxPackageListagemEmpresas", {
+						parametros: JSON.stringify({
+							idAnoCalendario: that.getModel().getProperty("/AnoCalendario").idAnoCalendario
+						})
 					});
 				});
 			},
@@ -2866,12 +3048,12 @@ sap.ui.define(
 
 			_carregarTaxRate: function () {
 				var that = this,
-					oEmpresa = this.getModel().getProperty("/Empresa"), 
+					oEmpresa = this.getModel().getProperty("/Empresa"),
 					oAnoCalendario = this.getModel().getProperty("/AnoCalendario"),
 					oTaxReconAtivo = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
 						return obj.ind_ativo;
 					});
-					
+
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para o país da empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
 						fkAliquota: oEmpresa["fk_imposto_pais"],
@@ -2886,7 +3068,7 @@ sap.ui.define(
 							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
 						}
 					});
-				
+
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para a empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
 						fkAliquota: oEmpresa["fk_imposto_empresa"],
@@ -3005,7 +3187,9 @@ sap.ui.define(
 				});
 
 				var aDiferencaPermanente = this.getModel().getProperty("/DiferencasPermanentes"),
+					aDiferencaPermanenteExcluida = this.getModel().getProperty("/DiferencasPermanentesExcluidas"),
 					aDiferencaTemporaria = this.getModel().getProperty("/DiferencasTemporarias"),
+					aDiferencaTemporariaExcluida = this.getModel().getProperty("/DiferencasTemporariasExcluidas"),
 					aRespostaItemToReport = this._formatarRespostaItemToReport(),
 					aOtherTax = this.getModel().getProperty("/OtherTaxes"),
 					aIncentivosFiscais = this.getModel().getProperty("/IncentivosFiscais"),
@@ -3038,8 +3222,12 @@ sap.ui.define(
 				console.table(oTaxReconciliation);
 				console.log("   -- Diferenças Permanentes\n");
 				console.table(aDiferencaPermanente);
+				console.log("   -- Diferenças Permanentes Excluídas\n");
+				console.table(aDiferencaPermanenteExcluida);
 				console.log("   -- Diferenças Temporárias\n");
 				console.table(aDiferencaTemporaria);
+				console.log("   -- Diferenças Temporárias Excluídas\n");
+				console.table(aDiferencaTemporariaExcluida);
 				console.log("   -- Other Taxes\n");
 				console.table(aOtherTax);
 				console.log("   -- Incentivos Fiscais\n");
@@ -3067,7 +3255,9 @@ sap.ui.define(
 					taxReconciliationRcRfIt: this.getModel().getProperty("/TaxReconciliation"),
 					incomeTaxDetails: this.getModel().getProperty("/IncomeTaxDetails"),
 					diferencasPermanentes: aDiferencaPermanente,
+					diferencasPermanentesExcluidas: aDiferencaPermanenteExcluida,
 					diferencasTemporarias: aDiferencaTemporaria,
+					diferencasTemporariasExcluidas: aDiferencaTemporariaExcluida,
 					respostaItemToReport: aRespostaItemToReport,
 					lossSchedule: aLossSchedule,
 					totalLossesUtilized: aTotalLossesUtilized,
@@ -3169,7 +3359,9 @@ sap.ui.define(
 						Temporaria: []
 					},
 					DiferencasPermanentes: [],
+					DiferencasPermanentesExcluidas: [],
 					DiferencasTemporarias: [],
+					DiferencasTemporariasExcluidas: [],
 					TotalDiferencaPermanente: 0,
 					TotalDiferencaTemporaria: 0,
 					Moeda: null,
@@ -3302,7 +3494,7 @@ sap.ui.define(
 
 			_isScheduleExpirado: function (oSchedule) {
 				var oAnoCalendario = this.getModel().getProperty("/AnoCalendario");
-				
+
 				return Number(oSchedule.year_of_expiration) === Number(oAnoCalendario.anoCalendario);
 			},
 
@@ -3386,9 +3578,9 @@ sap.ui.define(
 					// Apenas os retratos que não expiraram são exibidos
 					if (response) {
 						var aScheduleValido = response.filter(function (obj) {
-							return Number(obj.year_of_expiration) >= Number(oAnoCalendario.anoCalendario); 
+							return Number(obj.year_of_expiration) >= Number(oAnoCalendario.anoCalendario);
 						});
-						
+
 						that.getModel().setProperty(sProperty, aScheduleValido);
 						that.onAplicarRegras();
 					}

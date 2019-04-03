@@ -1,6 +1,7 @@
 "use strict";
 
 var model = require("../models/modelRequisicaoEncerramentoPeriodoTaxPackage");
+const modelDiferenca = require('../models/modelDiferenca');
 
 module.exports = {
 
@@ -115,6 +116,11 @@ module.exports = {
 							// submete ele a procedure de atualização do schedule para
 							// saber se é preciso atualizar as informações de schedule no banco para períodos futuros
 							if (Number(req.body.fkDominioRequisicaoEncerramentoPeriodoStatus) === 2) {
+								modelDiferenca.setarComoEnviada(req.body.fkRelTaxPackagePeriodo)
+									.catch((err) => {
+										console.log(err);
+									});
+								
 								model.execute({
 									statement: 'call "atualizar_schedule"(?)',
 									parameters: [req.body.fkRelTaxPackagePeriodo]

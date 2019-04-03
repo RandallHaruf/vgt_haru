@@ -1,5 +1,5 @@
 <mvc:View controllerName="ui5ns.ui5.controller.taxPackage.EdicaoTrimestre" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns:l="sap.ui.layout" xmlns="sap.m" xmlns:t="sap.ui.table">
+	xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns:l="sap.ui.layout" xmlns:uni="sap.ui.unified" xmlns="sap.m" xmlns:t="sap.ui.table">
 	<f2:DynamicPage showFooter="true" class="semContentPadding">
 		<f2:title>
 			<f2:DynamicPageTitle>
@@ -14,6 +14,9 @@
 				<f2:heading>
 					<Title text="Tax Package - {i18n>viewTAXMenu4}"/>
 				</f2:heading>
+				<f2:navigationActions>
+					<!--<uni:FileUploader buttonOnly="true" buttonText="Importar" icon="sap-icon://excel-attachment" change="onImportarDados" />-->
+				</f2:navigationActions>
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f2:snappedContent>
@@ -235,14 +238,14 @@
 									<items>
 										<ColumnListItem> 
 											<cells>
-												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirPermanente" enabled="{= ${nova} ? true : false}" />
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirPermanente" enabled="{= !${ind_enviada}}"  />
 												<Select
 													items="{
 														path: '/DiferencaOpcao/Permanente',
 														templateShareable: false
 													}" 
 													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
-													enabled="{= ${nova} ? true : false}"
+													enabled="{= !${ind_enviada}}"
 													change="onTrocarDiferenca">
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>
@@ -298,14 +301,14 @@
 									<items>
 										<ColumnListItem>
 											<cells>
-												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirTemporaria" enabled="{= ${nova} ? true : false}" />
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirTemporaria" enabled="{= !${ind_enviada}}" />
 												<Select
 													items="{
 														path: '/DiferencaOpcao/Temporaria',
 														templateShareable: false
 													}"
 													selectedKey="{fk_diferenca_opcao.id_diferenca_opcao}"
-													enabled="{= ${nova} ? true : false}"
+													enabled="{= !${ind_enviada}}"
 													change="onTrocarDiferenca">
 													<core:Item text="{nome}" key="{id_diferenca_opcao}" />
 												</Select>

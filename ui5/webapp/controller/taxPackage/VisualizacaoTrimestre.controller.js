@@ -1723,8 +1723,15 @@ sap.ui.define(
 			},
 
 			onExcluirPermanente: function (oEvent) {
-				var oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
-				this._onExcluirDiferenca(oExcluir, "/DiferencasPermanentes");
+				var that = this,
+					oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+				
+				this._onExcluirDiferenca(oExcluir, "/DiferencasPermanentes", function () {
+					// Se nao foi uma diferença recém adicionada e não persistida no banco, adiciona a lista de exclusões.
+					if (!oExcluir.nova) {
+						that.getModel().getProperty("/DiferencasPermanentesExcluidas").push(oExcluir.id_diferenca);
+					}	
+				});
 			},
 
 			onNovaDiferencaTemporaria: function (oEvent) {
@@ -1743,8 +1750,15 @@ sap.ui.define(
 			},
 
 			onExcluirTemporaria: function (oEvent) {
-				var oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
-				this._onExcluirDiferenca(oExcluir, "/DiferencasTemporarias");
+				var that = this,
+					oExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
+				
+				this._onExcluirDiferenca(oExcluir, "/DiferencasTemporarias", function () {
+					// Se nao foi uma diferença recém adicionada e não persistida no banco, adiciona a lista de exclusões.
+					if (!oExcluir.nova) {
+						that.getModel().getProperty("/DiferencasTemporariasExcluidas").push(oExcluir.id_diferenca);
+					}	
+				});
 			},
 
 			onNovaAdicao: function (oEvent) {
@@ -1783,7 +1797,7 @@ sap.ui.define(
 				this._onExcluirDiferenca(oExcluir, "/taxReconciliation/adicoesExclusoes/temporaryDifferences/itens");
 			},
 
-			_onExcluirDiferenca: function (oExcluir, sProperty) {
+			_onExcluirDiferenca: function (oExcluir, sProperty, callbackConfirmacao) {
 				var that = this;
 
 				jQuery.sap.require("sap.m.MessageBox");
@@ -1805,6 +1819,10 @@ sap.ui.define(
 
 							that.getModel().setProperty(sProperty, aData);
 							that.onAplicarRegras();
+							
+							if (callbackConfirmacao) {
+								callbackConfirmacao();
+							}
 						}
 					}
 				});
@@ -3004,7 +3022,9 @@ sap.ui.define(
 				});
 
 				var aDiferencaPermanente = this.getModel().getProperty("/DiferencasPermanentes"),
+					aDiferencaPermanenteExcluida = this.getModel().getProperty("/DiferencasPermanentesExcluidas"),
 					aDiferencaTemporaria = this.getModel().getProperty("/DiferencasTemporarias"),
+					aDiferencaTemporariaExcluida = this.getModel().getProperty("/DiferencasTemporariasExcluidas"),
 					aRespostaItemToReport = this._formatarRespostaItemToReport(),
 					aOtherTax = this.getModel().getProperty("/OtherTaxes"),
 					aIncentivosFiscais = this.getModel().getProperty("/IncentivosFiscais"),
@@ -3037,8 +3057,12 @@ sap.ui.define(
 				console.table(oTaxReconciliation);
 				console.log("   -- Diferenças Permanentes\n");
 				console.table(aDiferencaPermanente);
+				console.log("   -- Diferenças Permanentes Excluídas\n");
+				console.table(aDiferencaPermanenteExcluida);
 				console.log("   -- Diferenças Temporárias\n");
 				console.table(aDiferencaTemporaria);
+				console.log("   -- Diferenças Temporárias Excluídas\n");
+				console.table(aDiferencaTemporariaExcluida);
 				console.log("   -- Other Taxes\n");
 				console.table(aOtherTax);
 				console.log("   -- Incentivos Fiscais\n");
@@ -3066,7 +3090,9 @@ sap.ui.define(
 					taxReconciliationRcRfIt: this.getModel().getProperty("/TaxReconciliation"),
 					incomeTaxDetails: this.getModel().getProperty("/IncomeTaxDetails"),
 					diferencasPermanentes: aDiferencaPermanente,
+					diferencasPermanentesExcluidas: aDiferencaPermanenteExcluida,
 					diferencasTemporarias: aDiferencaTemporaria,
+					diferencasTemporariasExcluidas: aDiferencaTemporariaExcluida,
 					respostaItemToReport: aRespostaItemToReport,
 					lossSchedule: aLossSchedule,
 					totalLossesUtilized: aTotalLossesUtilized,

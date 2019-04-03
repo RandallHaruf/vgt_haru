@@ -1,6 +1,7 @@
 "use strict";
 
-var db = require("../db");
+const db = require("../db");
+const modelDiferenca = require('../models/modelDiferenca');
 
 module.exports = {
 	listarTaxPackage: function (req, res) {
@@ -86,7 +87,8 @@ module.exports = {
 						+ 'where '
 						+ 'periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
 						+ 'and periodo."numero_ordem" <= ? '
-						+ 'and taxPackage."fk_empresa.id_empresa" = ? ';
+						+ 'and taxPackage."fk_empresa.id_empresa" = ? '
+						+ 'order by periodo."numero_ordem"';
 						
 					aParams = [resultRel[0]["fk_dominio_ano_calendario.id_dominio_ano_calendario"], resultRel[0].numero_ordem, resultRel[0]["fk_empresa.id_empresa"]];
 					
@@ -221,7 +223,9 @@ module.exports = {
 				oTaxReconciliation = oTaxPackage.taxReconciliationRcRfIt.find(obj => obj.ind_ativo === true),
 				sIncomeTaxDetails = oTaxPackage.incomeTaxDetails,
 				aDiferencaPermanente = oTaxPackage.diferencasPermanentes,
+				aDiferencaPermanenteExcluida = oTaxPackage.diferencasPermanentesExcluidas,
 				aDiferencaTemporaria = oTaxPackage.diferencasTemporarias,
+				aDiferencaTemporariaExcluida = oTaxPackage.diferencasTemporariasExcluidas,
 				iNumeroOrdemPeriodo = oTaxPackage.periodo.numero_ordem,
 				aRespostaItemToReport = oTaxPackage.respostaItemToReport,
 				/*oLossSchedule = oTaxPackage.lossSchedule,
@@ -245,6 +249,8 @@ module.exports = {
 			
 			inserirDiferenca(sIdTaxReconciliation, aDiferencaPermanente, sChaveValorDiferenca);
 			inserirDiferenca(sIdTaxReconciliation, aDiferencaTemporaria, sChaveValorDiferenca);
+			
+			excluirDiferenca(aDiferencaPermanenteExcluida.concat(aDiferencaTemporariaExcluida));
 			
 			inserirRespostaItemToReport(sIdRelTaxPackagePeriodo, aRespostaItemToReport);
 			
@@ -1133,6 +1139,11 @@ module.exports = {
 						});
 					}
 					else {
+						modelDiferenca.setarComoEnviada(req.body.relTaxPackagePeriodo)
+							.catch((err) => {
+								console.log(err);
+							});
+						
 						// Se é um período que não requer aprovação de envio,
 						// submete ele a procedure de atualização do schedule imediatamente para
 						// saber se é preciso atualizar as informações de schedule no banco
@@ -1493,6 +1504,17 @@ function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenc
 		}
 	}
 }*/
+
+function excluirDiferenca(aDiferencaExcluida) {
+	for (var i = 0, length = aDiferencaExcluida.length; i < length; i++) {
+		var idDiferencaExcluida = aDiferencaExcluida[i];
+		
+		db.executeStatementSync(
+			'delete from "VGT.REL_TAX_RECONCILIATION_DIFERENCA" where "fk_diferenca.id_diferenca" = ?', [idDiferencaExcluida]);
+		db.executeStatementSync(
+			'delete from "VGT.DIFERENCA" where "id_diferenca" = ?', [idDiferencaExcluida]);
+	}
+}
 
 function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToReport) {
 	var sQuery, aParams, result;
