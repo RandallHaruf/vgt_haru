@@ -292,14 +292,6 @@ context VGT {
             fk_periodo                              : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_periodo.id_periodo };
     };
 
-    /*@@layout{"layoutInfo":{"x":-1042,"y":1264.5}}*/
-    entity CAMBIO_TTC {
-        key id_cambio_ttc    : Integer not null;
-            data             : LocalDate;
-            fk_dominio_moeda : association[*, 1..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
-            cambio_usd       : Decimal(19, 4);
-            cambio_brl       : Decimal(19, 4);
-    };
 
     /*@@layout{"layoutInfo":{"x":-901,"y":827.5}}*/
     entity TAX_PACKAGE {
@@ -672,8 +664,18 @@ context VGT {
             mimetype                     : String(25);
             tamanho                      : Integer;
             data_upload                  : LocalDate;
-            nome_arquivo                 : String(25);
+            nome_arquivo                 : String(50);
             fk_id_dominio_mes            : association[*, 0..1] to VGT.DOMINIO_MES { id_dominio_mes };
             fk_id_dominio_ano_calendario : association[*, 0..1] to VGT.DOMINIO_ANO_CALENDARIO { id_dominio_ano_calendario };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-1042,"y":1264.5}}*/
+    entity CAMBIO_TTC {
+        key id_cambio_ttc   		: Integer not null;
+            data            		: LocalDate;
+            fk_dominio_moeda		: association[*, 1..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+            cambio_usd      		: Decimal(19, 4);
+            cambio_brl      		: Decimal(19, 4);
+            fk_arquivo_cambio_ttc	: association[*, 1..1] to VGT.ARQUIVO_CAMBIO_TTC{ id_arquivo_cambio_ttc };
     };
 };

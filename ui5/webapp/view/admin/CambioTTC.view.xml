@@ -66,22 +66,90 @@
 					<f:formContainers>
 						<f:FormContainer>
 							<f:formElements>
+								<!--<f:FormElement>
+									<f:fields>
+										<Label
+										text="{i18n>viewCambioTituloMes}">
+										</Label>
+										<Select
+											tooltip="{i18n>viewCambioSelectMes}"
+											id="selectDominioMesInsert" items="{/DominioMesInsert}" selectedKey="{/IdMesSelecionadoInsert}">
+											<items>
+												<core:Item text="{nome_mes}" key="{id_dominio_mes}" />
+											</items>
+										</Select>
+										<Label
+										text="{i18n>viewCambioTituloAno}">
+										</Label>
+										<Select
+											tooltip="{i18n>viewCambioSelectAno}"
+											id="selectAnoCalendarioInsert" items="{/DominioAnoCalendarioInsert}" selectedKey="{/AnoCalendarioSelecionadoInsert}">
+											<items>
+												<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+											</items>
+										</Select>
+										<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
+											buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}"/>
+										<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo"/>
+									</f:fields>
+								</f:FormElement>-->
 								<f:FormElement>
 									<f:fields>
-										<Table items="{/historico}">
+										<Table items="{/arquivosCambio}">
+											<headerToolbar>
+												<Toolbar>
+													<Label
+													text="{i18n>viewCambioTituloMes}">
+													</Label>
+													<Select
+														tooltip="{i18n>viewCambioSelectMes}"
+														id="selectDominioMes" items="{/DominioMes}" selectedKey="{/IdMesSelecionado}"
+														change="recarregarObjetos">
+														<items>
+															<core:Item text="{nome_mes}" key="{id_dominio_mes}" />
+														</items>
+													</Select>
+													<Label
+													text="{i18n>viewCambioTituloAno}">
+													</Label>
+													<Select
+														tooltip="{i18n>viewCambioSelectAno}"
+														id="selectAnoCalendario" items="{/DominioAnoCalendario}" selectedKey="{/AnoCalendarioSelecionado}"
+														change="recarregarObjetos">
+														<items>
+															<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+														</items>
+													</Select>
+													<Button
+													icon="sap-icon://add" type="Emphasized"
+													press="onAbrirDialogArquivo"
+													/>
+												</Toolbar>
+											</headerToolbar>
 											<columns>
 												<Column>
 													<Text text="{i18n>viewCambioArquivo}" />
 												</Column>
 												<Column>
-													<Text text="{i18n>viewCambioData}" />
+													<Text text="{i18n>viewCambioTituloMes}" />
+												</Column>
+												<Column>
+													<Text text="{i18n>viewCambioTituloAno}" />
+												</Column>
+												<Column>
+													<Text text="{i18n>viewCambioTituloDownload}" />
 												</Column>
 											</columns>
 											<items>
-												<ColumnListItem>
+												<ColumnListItem
+												type="Navigation"
+												>
 													<cells>
-														<Link text="{nome}" target="_blank" href="{link}" />
-														<Text text="{data}" />
+														<Text text="{nome_arquivo}" />
+														<Text text="{nome_mes}" />
+														<Text text="{ano_calendario}" />
+														<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onAbrirObjeto" enabled="{btnDownloadEnabled}"
+														class="sapUiSmallMarginEnd"/>
 													</cells>
 												</ColumnListItem>
 											</items>
