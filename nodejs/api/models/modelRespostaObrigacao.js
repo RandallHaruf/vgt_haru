@@ -55,7 +55,18 @@ var oSketch = {
 
 var oModel = db.model("VGT.RESPOSTA_OBRIGACAO", oSketch);
 
-oModel.pegarQueryRespostaObrigacaoCalculada = function (idTipoObrigacao, idAnoCalendario, idEmpresa, idStatusResposta) {
+oModel.pegarQueryRespostaObrigacaoCalculada = function (aIdTipoObrigacao, aIdAnoCalendario, aIdEmpresa, aIdStatusResposta) {
+	const concatenarIn = function (stm, aIds) {
+		for (var i = 0, length = aIds.length; i < length; i++) {
+			if (i !== 0) {
+				stm += ' , ';
+			}
+			stm += aIds[i];
+		}
+		stm += ') ';
+		
+		return stm;
+	};
 	
 	var statement =	
 		'select t.*, '
@@ -129,8 +140,10 @@ oModel.pegarQueryRespostaObrigacaoCalculada = function (idTipoObrigacao, idAnoCa
 					+ 'from "VGT.DOMINIO_ANO_CALENDARIO" '
 					+ 'where ';
 				
-	if (idAnoCalendario) {
-		statement += '"id_dominio_ano_calendario" = ' + idAnoCalendario + ' ';
+	if (aIdAnoCalendario && aIdAnoCalendario.length) {
+		statement += '"id_dominio_ano_calendario" in (';
+		
+		statement = concatenarIn(statement, aIdAnoCalendario);
 	}
 	else {
 		statement += '"ano_calendario" >= 2018 and "ano_calendario" <= year(CURRENT_DATE)+1 ';
@@ -144,20 +157,24 @@ oModel.pegarQueryRespostaObrigacaoCalculada = function (idTipoObrigacao, idAnoCa
 			+ 'left outer join "VGT.DOMINIO_MOEDA" moeda '
 				+ 'ON respostaObrigacao."fk_id_dominio_moeda.id_dominio_moeda" = moeda."id_dominio_moeda"  '
 				
-	if (idTipoObrigacao) {
+	if (aIdTipoObrigacao && aIdTipoObrigacao.length) {
 		statement += 
 			'where '
-				+ 'modeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" = ' + idTipoObrigacao + ' ';
+				+ 'modeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" in (';
+				
+		statement = concatenarIn(statement, aIdTipoObrigacao);
 	}
 		
-	if (idEmpresa) {
-		if (idTipoObrigacao) {
+	if (aIdEmpresa && aIdEmpresa.length) {
+		if (aIdTipoObrigacao && aIdTipoObrigacao.length) {
 			statement += ' and ';
 		}
 		else {
 			statement += ' where ';
 		}
-		statement += ' relModeloEmpresa."fk_id_empresa.id_empresa" = ' + idEmpresa + ' ';
+		statement += ' relModeloEmpresa."fk_id_empresa.id_empresa" in (';
+		
+		statement = concatenarIn(statement, aIdEmpresa);
 	}
 		
 	statement += 
@@ -219,8 +236,10 @@ oModel.pegarQueryRespostaObrigacaoCalculada = function (idTipoObrigacao, idAnoCa
 		
 	statement = 'select * from (' + statement + ') t2 where (t2."ind_ativo" = true or (t2."id_resposta_obrigacao" is not null and t2."status_obrigacao_calculado" != 4)) '
 		
-	if (idStatusResposta) {
-		statement += 'and t2."status_obrigacao_calculado" = ' + idStatusResposta + ' ';
+	if (aIdStatusResposta && aIdStatusResposta.length) {
+		statement += 'and t2."status_obrigacao_calculado" in (';
+		
+		statement = concatenarIn(statement, aIdStatusResposta);
 	}
 		
 	return 'select * from (' + statement + ') vw_resposta_obrigacao ';

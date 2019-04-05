@@ -182,10 +182,10 @@ module.exports = {
 
 	deepQuery: function (req, res) {
 		var sStatement = model.pegarQueryRespostaObrigacaoCalculada(
-			req.query.tipoObrigacao,
-			req.query.anoCalendario, 
-			req.query.empresa, 
-			req.query.statusResposta
+			req.query.tipoObrigacao ? JSON.parse(req.query.tipoObrigacao) : [],
+			req.query.anoCalendario ? JSON.parse(req.query.anoCalendario) : [], 
+			req.query.empresa ? JSON.parse(req.query.empresa) : [], 
+			req.query.statusResposta ? JSON.parse(req.query.statusResposta) : []
 		);
 		
 		model.execute({
