@@ -24,14 +24,14 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -127,31 +127,31 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="4rem">
+						<Column width="{/remtblEmpresa.nome}">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="4rem">
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
 							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>
-						<Column width="4rem">
+						<Column width="{/remtblPeriodo.periodo}">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="4rem">
+						<Column width="{/remtblItemToReport.flag_sim_nao}">
 							<Text text="{i18n>viewGeralFlagSN}"/>
 						</Column>
-						<Column width="4rem">
+						<Column width="{/remtblItemToReport.flag_ano}">
 							<Text text="{i18n>viewGeralFlagAno}"/>
 						</Column>
-						<Column width="4rem">
+						<Column width="{/remAno_Fiscal_Agregado}">
 							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
 						</Column>	
-						<Column width="4rem">
+						<Column width="{/remtblRespostaItemToReport.ind_se_aplica}">
 							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?"/>
 						</Column>						
-						<Column width="12rem">							
+						<Column width="{/remtblItemToReport.pergunta}">							
 							<Text text="{i18n>viewGeralQUestion}"/>
 						</Column>
-						<Column width="12rem">
+						<Column width="{/remtblRespostaItemToReport.resposta}">
 							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}"/>
 						</Column>	
 					</columns>

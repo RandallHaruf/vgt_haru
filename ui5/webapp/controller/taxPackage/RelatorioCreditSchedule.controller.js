@@ -11,21 +11,24 @@ sap.ui.define([
 	"sap/ui/core/util/ExportTypeCSV",	
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
-	"ui5ns/ui5/lib/Utils"	
-], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils) {
+	"ui5ns/ui5/lib/Utils",
+	"ui5ns/ui5/lib/Validador"
+], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils,Validador) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.taxPackage.RelatorioCreditSchedule", {
 		onInit: function () {
-			
+
 			var oModel = new sap.ui.model.json.JSONModel({
 			});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
-			/*
-			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);	*/		
+			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
+			var array = this.getModel().getProperty("/TabelaDaView");
+			for (var k = 0, length = array.length; k < length; k++) {
+				Utils.ajustaRem(this,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35,8)
+			}	
 			this.getRouter().getRoute("taxPackageRelatorioCreditSchedule").attachPatternMatched(this._handleRouteMatched, this);				
 		},
 
@@ -76,6 +79,9 @@ sap.ui.define([
 		onGerarRelatorio: function (oEvent) {
 			this._geraRelatorioTax(); 
 		},
+		onGerarCsv: function (oEvent) {
+			this._geraRelatorioTax(true); 
+		},		
 
 		_atualizarDados: function () {
 			var that = this;
@@ -137,7 +143,7 @@ sap.ui.define([
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
 					}							
-					that.getModel().setProperty("/Periodo", aRegistro);
+					that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
 				}
 			});	
 			oWhere[5] = ["tblDominioMoeda.acronimo"];
@@ -158,9 +164,14 @@ sap.ui.define([
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
-
+			var array = this.getModel().getProperty("/TabelaDaView");
+			var coluna = [];
+			for (var k = 0, length = array.length; k < length; k++) {
+				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+			}	
+			
 			var oExport = new Export({
-
+			
 				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
 				exportType : new ExportTypeCSV({
 					separatorChar : ";"
@@ -171,80 +182,9 @@ sap.ui.define([
 
 				// binding information for the rows aggregation
 				rows : {
-					path : "/ReportTaxPackage"
+					path : "/CSV"
 				},
-				// column definitions with column name and binding info for the content
-				columns : [{
-					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
-					template : {
-						content : "{tblEmpresa.nome}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
-					template : {
-						content : "{tblDominioAnoCalendario.ano_calendario}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralPeriodo"),
-					template : {
-						content : "{tblPeriodo.periodo}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralMoeda"),
-					template : {
-						content : "{tblDominioMoeda.acronimo}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreFY"),
-					template : {
-						content : "{tblSchedule.fy}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreYearofExpiration"),
-					template : {
-						content : "{tblSchedule.year_of_expiration}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreOpeningBalance"),
-					template : {
-						content : "{tblSchedule.opening_balance}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCredit"),
-					template : {
-						content : "{tblSchedule.current_year_value}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditU"),
-					template : {
-						content : "{tblSchedule.current_year_value_utilized}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreAdjustments"),
-					template : {
-						content : "{tblSchedule.adjustments}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreJustificativa"),
-					template : {
-						content : "{tblSchedule.justificativa}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearCreditE"),
-					template : {
-						content : "{tblSchedule.current_year_value_expired}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreClosingBalance"),
-					template : {
-						content : "{tblSchedule.closing_balance}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreOBS"),
-					template : {
-						content : "{tblSchedule.obs}"
-					}
-				}]
+				columns : coluna
 			});
 			
 			// download exported file
@@ -261,7 +201,7 @@ sap.ui.define([
 			});
 		},	
 		
-		_geraRelatorioTax: function () {
+		_geraRelatorioTax: function (ifExport) {
 
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
@@ -276,10 +216,6 @@ sap.ui.define([
 			oWhere.push(null);
 			oWhere.push(null);
 			
-			this._preencheReportTax(oWhere);			
-		},
-		
-		_preencheReportTax: function (oWhere){
 			var that = this;
 			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
 			that.byId("GerarRelatorio").setEnabled(false);				
@@ -294,31 +230,37 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {/*
-						aRegistro[i]["tblSchedule.opening_balance"] = that._aplicarMascara(aRegistro[i]["tblSchedule.opening_balance"]);
-						aRegistro[i]["tblSchedule.current_year_value"] = that._aplicarMascara(aRegistro[i]["tblSchedule.current_year_value"]);
-						aRegistro[i]["tblSchedule.current_year_value_utilized"] = that._aplicarMascara(aRegistro[i]["tblSchedule.current_year_value_utilized"]);
-						aRegistro[i]["tblSchedule.current_year_value_expired"] = that._aplicarMascara(aRegistro[i]["tblSchedule.current_year_value_expired"]);
-						aRegistro[i]["tblSchedule.closing_balance"] = that._aplicarMascara(aRegistro[i]["tblSchedule.closing_balance"]);			
-						aRegistro[i]["tblSchedule.adjustments"] = that._aplicarMascara(aRegistro[i]["tblSchedule.adjustments"]);*/	
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 								
-					}						
-					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
-					that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
-					that.byId("GerarRelatorio").setEnabled(true);						
+					}
+					Utils.conteudoView("relatorioDoTaxPackage",that,"/TabelaDaView");
+					var array = that.getModel().getProperty("/TabelaDaView");
+					var property = ifExport ? "/CSV" : "/ReportTaxPackage";
+					var valor;
+					if(property === "/CSV"){
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
+								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
+								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
+							}
+						}						
+						that.getModel().setProperty(property, aRegistro);
+						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+						that.onDataExportCSV();
+					}
+					else{
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}						
+						that.getModel().setProperty(property, aRegistro);
+						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+					}
 				}
-			});				
-		},		
-		
-		_aplicarMascara: function (numero) {
-			if (this.isPTBR()) {
-				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";	
-			}
-			else {
-				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";	
-			}
+			});			
 		},
-		
+
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
 		},

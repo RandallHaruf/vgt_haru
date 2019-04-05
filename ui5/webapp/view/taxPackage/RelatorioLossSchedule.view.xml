@@ -24,14 +24,14 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExportCSV"/>
+					press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -92,46 +92,46 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="6rem">
+						<Column width="{/remtblEmpresa.nome}">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
 							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblPeriodo.periodo}">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblDominioMoeda.acronimo}">
 							<Text text="{i18n>viewGeralMoeda}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblSchedule.fy}">
 							<Text text="{i18n>viewEdiçãoTrimestreFY}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblSchedule.year_of_expiration}">
 							<Text text="{i18n>viewEdiçãoTrimestreYearofExpiration}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.opening_balance}">
 							<Text text="{i18n>viewEdiçãoTrimestreOpeningBalance}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.current_year_value}">
 							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}"/>
 						</Column>	
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.current_year_value_utilized}">
 							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.adjustments}">
 							<Text text="{i18n>viewEdiçãoTrimestreAdjustments}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.justificativa}">
 							<Text text="{i18n>viewEdiçãoTrimestreJustificativa}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.current_year_value_expired}">
 							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.closing_balance}">
 							<Text text="{i18n>viewEdiçãoTrimestreClosingBalance}"/>
 						</Column>		
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.obs}">
 							<Text text="{i18n>viewEdiçãoTrimestreOBS}"/>
 						</Column>
 					</columns>

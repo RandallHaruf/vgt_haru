@@ -232,13 +232,9 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 								
-					}	
+					}
 					Utils.conteudoView("relatorioDoTaxPackage",that,"/TabelaDaView");
 					var array = that.getModel().getProperty("/TabelaDaView");
-					for (var k = 0, length = array.length; k < length; k++) {
-						Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
-					}	
-					
 					var property = ifExport ? "/CSV" : "/ReportTaxPackage";
 					var valor;
 					if(property === "/CSV"){
@@ -247,13 +243,16 @@ sap.ui.define([
 								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
 								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
 							}
-						}									
+						}						
 						that.getModel().setProperty(property, aRegistro);
 						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
 						that.byId("GerarRelatorio").setEnabled(true);						
 						that.onDataExportCSV();
 					}
 					else{
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}						
 						that.getModel().setProperty(property, aRegistro);
 						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
 						that.byId("GerarRelatorio").setEnabled(true);						

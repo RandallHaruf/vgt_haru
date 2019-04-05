@@ -127,7 +127,7 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" AS tblRelRespostaItemToReportAnoFiscal '
 			+'ON tblRelRespostaItemToReportAnoFiscal."fk_resposta_item_to_report.id_resposta_item_to_report" = tblRespostaItemToReport."id_resposta_item_to_report" '
 			+'LEFT OUTER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal  '
-			+'ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblRelRespostaItemToReportAnoFiscal."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" ';
+			+'ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblRelRespostaItemToReportAnoFiscal."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" ';	
 
 
 		var oWhere = [];
@@ -252,7 +252,7 @@ module.exports = {
 			}
 		}		
 			
-		sStatement +=' ORDER BY "tblEmpresa.id_empresa"';
+		sStatement +=' order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc';
 		
 		db.executeStatement({
 			statement: sStatement,
@@ -281,6 +281,7 @@ module.exports = {
 				break;
 			case "tblDominioAnoCalendario.ano_calendario":
 				stringDistinct = 'Select distinct "tblDominioAnoCalendario.id_dominio_ano_calendario" , "tblDominioAnoCalendario.ano_calendario" from (';
+				//stringDistinctFilter = 'order by "tblDominioAnoCalendario.ano_calendario"';	
 				break;		
 			case "tblPeriodo.id_periodo":
 				//stringDistinct = 'select distinct "tblPeriodo.id_periodo", "tblPeriodo.periodo" , "tblDominioAnoCalendario.ano_calendario" , "tblPeriodo.numero_ordem" from (';
@@ -526,7 +527,12 @@ module.exports = {
 		
 		oWhere = [];
 		if (aEntrada[9] !== null){
-			sStatement += " and "
+			if(stringDistinctFilter == ""){
+				sStatement += " Where "
+			}
+			else{
+				sStatement += " and " 
+			}
 			stringtemporaria = "";
 			filtro = ' "Ano_Fiscal_Filtro" like ? ';	
 			for (i = 0; i < aEntrada[9].length; i++) {
@@ -535,7 +541,7 @@ module.exports = {
 					aParams.push('%'+aEntrada[9][i]+'%');								
 				}	 
 				else{
-					i == 0 ? stringtemporaria = stringtemporaria + filtro : i == aEntrada[9].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
+					i == 0 ? stringtemporaria = stringtemporaria + filtro : i == aEntrada[9].length - 1 ? (stringtemporaria = stringtemporaria +  ' or ' + filtro , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or ' + filtro; 
 					aParams.push('%'+aEntrada[9][i]+'%');
 				}					
 			}			
@@ -562,7 +568,7 @@ module.exports = {
 		});
 	},
 	deepQueryLOSSSCHEDULE: function (req, res) {
-
+//USO DESCONTINUADO
 		var sStatement =
 			  'SELECT '
 			  +'tblEmpresa."id_empresa" AS "tblEmpresa.id_empresa", '
@@ -663,7 +669,12 @@ module.exports = {
 							filtro = ' tblPeriodo."numero_ordem" = ? ';		
 							break;
 						case 3:
-							filtro = ' tblDominioMoeda."id_dominio_moeda" = ? ';
+							if(aEntrada[i][k] == ""){
+								filtro = ' tblDominioMoeda."id_dominio_moeda" is null ';
+							}
+							else{
+								filtro = ' tblDominioMoeda."id_dominio_moeda" = ? ';
+							}
 							break;
 						case 4:
 							filtro = ' tblEmpresa."id_empresa" = ? ';
@@ -671,11 +682,15 @@ module.exports = {
 					}
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);
-						aParams.push(aEntrada[i][k]);								
+						if(aEntrada[i][k] != ""){
+							aParams.push(aEntrada[i][k]);	
+						}								
 					}	 
 					else{
 						k == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : k == aEntrada[i].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
-						aParams.push(aEntrada[i][k]);
+						if(aEntrada[i][k] != ""){
+							aParams.push(aEntrada[i][k]);	
+						}
 					}
 				}	
 			}
@@ -720,20 +735,26 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		
-		switch(aEntrada[5][0]){
-			case "tblEmpresa.nome":
-				stringDistinct = 'Select distinct "tblEmpresa.id_empresa" , "tblEmpresa.nome"  from (';
-				break;
-			case "tblDominioAnoCalendario.ano_calendario":
-				stringDistinct = 'Select distinct "tblDominioAnoCalendario.id_dominio_ano_calendario" , "tblDominioAnoCalendario.ano_calendario" from (';
-				stringDistinctFilter = 'order by "tblDominioAnoCalendario.ano_calendario"';	
-				break;		
-			case "tblPeriodo.id_periodo":
-				stringDistinct = 'select distinct "tblPeriodo.numero_ordem" from (';
-				break;	
-			case "tblDominioMoeda.acronimo":
-				stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
-				break;	
+		if(aEntrada[5] == null || aEntrada[5] == undefined){
+			stringDistinct = 'Select * from (';	
+			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc, "tblSchedule.fy" desc';
+		}
+		else{
+			switch(aEntrada[5][0]){
+				case "tblEmpresa.nome":
+					stringDistinct = 'Select distinct "tblEmpresa.id_empresa" , "tblEmpresa.nome"  from (';
+					break;
+				case "tblDominioAnoCalendario.ano_calendario":
+					stringDistinct = 'Select distinct "tblDominioAnoCalendario.id_dominio_ano_calendario" , "tblDominioAnoCalendario.ano_calendario" from (';
+					stringDistinctFilter = 'order by "tblDominioAnoCalendario.ano_calendario"';					
+					break;		
+				case "tblPeriodo.id_periodo":
+					stringDistinct = 'select distinct "tblPeriodo.numero_ordem" from (';
+					break;	
+				case "tblDominioMoeda.acronimo":
+					stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
+					break;	
+			}			
 		}
 		
 		var sStatement = 
@@ -897,6 +918,7 @@ module.exports = {
 		
 		if(aEntrada[5] == null || aEntrada[5] == undefined){
 			stringDistinct = 'Select * from (';	
+			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc, "tblSchedule.fy" desc';
 		}
 		else{
 			switch(aEntrada[5][0]){
@@ -1078,6 +1100,7 @@ module.exports = {
 		
 		if(aEntrada[5] == null || aEntrada[5] == undefined){
 			stringDistinct = 'Select * from (';	
+			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc';
 		}
 		else{
 			switch(aEntrada[5][0]){
@@ -1256,6 +1279,7 @@ module.exports = {
 		
 		if(aEntrada[5] == null || aEntrada[5] == undefined){
 			stringDistinct = 'Select * from (';	
+			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc';
 		}
 		else{
 			switch(aEntrada[5][0]){
@@ -1439,6 +1463,7 @@ module.exports = {
 		
 		if(aEntrada[5] == null || aEntrada[5] == undefined){
 			stringDistinct = 'Select * from (';	
+			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc';
 		}
 		else{
 			switch(aEntrada[5][0]){
@@ -1605,5 +1630,218 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});
-	}		
+	},
+	deepQueryDistinctTemporaryAndPermanentDifferences: function (req, res) {
+		var oWhere = [];
+		var aParams = [];
+		var stringtemporaria = "";
+		var stringDistinct = "";
+		var stringDistinctFilter = "";
+		var filtro = "";
+		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
+		
+		if(aEntrada[7] == null || aEntrada[7] == undefined){
+			stringDistinct = 'Select * from (';	
+			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc';
+		}
+		else{
+			switch(aEntrada[7][0]){
+				case "tblEmpresa.nome":
+					stringDistinct = 'Select distinct "tblEmpresa.id_empresa" , "tblEmpresa.nome"  from (';
+					break;
+				case "tblDominioAnoCalendario.ano_calendario":
+					stringDistinct = 'Select distinct "tblDominioAnoCalendario.id_dominio_ano_calendario" , "tblDominioAnoCalendario.ano_calendario" from (';
+					stringDistinctFilter = 'order by "tblDominioAnoCalendario.ano_calendario"';
+					break;		
+				case "tblPeriodo.id_periodo":
+					stringDistinct = 'select distinct "tblPeriodo.numero_ordem" from (';
+					break;	
+				case "tblDominioMoeda.acronimo":
+					stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
+					break;	
+				case "tblDiferencaOpcao.nome":
+					stringDistinct = 'select distinct "tblDiferencaOpcao.nome","tblDiferencaOpcao.id_diferenca_opcao" from (';
+					break;	
+				case "tblDominioDiferencaTipo.tipo":
+					stringDistinct = 'Select distinct "tblDominioDiferencaTipo.tipo" , "tblDominioDiferencaTipo.id_dominio_diferenca_tipo" from (';
+					break;						
+			}			
+		}
+
+		
+		var sStatement = 
+			stringDistinct 
+			+'SELECT tblEmpresa."id_empresa" AS "tblEmpresa.id_empresa", '
+			+'tblEmpresa."nome" AS "tblEmpresa.nome", '
+			+'tblEmpresa."num_hfm_sap" AS "tblEmpresa.num_hfm_sap", '
+			+'tblEmpresa."tin" AS "tblEmpresa.tin", '
+			+'tblEmpresa."jurisdicao_tin" AS "tblEmpresa.jurisdicao_tin", '
+			+'tblEmpresa."ni" AS "tblEmpresa.ni", '
+			+'tblEmpresa."jurisdicao_ni" AS "tblEmpresa.jurisdicao_ni", '
+			+'tblEmpresa."endereco" AS "tblEmpresa.endereco", '
+			+'tblEmpresa."fy_start_date" AS "tblEmpresa.fy_start_date", '
+			+'tblEmpresa."fy_end_date" AS "tblEmpresa.fy_end_date", '
+			+'tblEmpresa."lbc_nome" AS "tblEmpresa.lbc_nome", '
+			+'tblEmpresa."lbc_email" AS "tblEmpresa.lbc_email", '
+			+'tblEmpresa."comentarios" AS "tblEmpresa.comentarios", '
+			+'tblEmpresa."fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario" AS "tblEmpresa.fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario", '
+			+'tblEmpresa."fk_dominio_empresa_status.id_dominio_empresa_status" AS "tblEmpresa.fk_dominio_empresa_status.id_dominio_empresa_status", '
+			+'tblEmpresa."fk_aliquota.id_aliquota" AS "tblEmpresa.fk_aliquota.id_aliquota", '
+			+'tblEmpresa."fk_pais.id_pais" AS "tblEmpresa.fk_pais.id_pais", '
+			+'tblTaxPackage."fk_empresa.id_empresa" AS "tblTaxPackage.fk_empresa.id_empresa", '
+			+'tblTaxPackage."fk_dominio_moeda.id_dominio_moeda" AS "tblTaxPackage.fk_dominio_moeda.id_dominio_moeda", '
+			+'tblTaxPackage."id_tax_package" AS "tblTaxPackage.id_tax_package", '
+			+'tblDominioMoeda."id_dominio_moeda" AS "tblDominioMoeda.id_dominio_moeda", '
+			+'tblDominioMoeda."acronimo" AS "tblDominioMoeda.acronimo", '
+			+'tblDominioMoeda."nome" AS "tblDominioMoeda.nome", '
+			+'tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" AS "tblRelTaxPackagePeriodo.id_rel_tax_package_periodo", '
+			+'tblRelTaxPackagePeriodo."fk_tax_package.id_tax_package" AS "tblRelTaxPackagePeriodo.fk_tax_package.id_tax_package", '
+			+'tblRelTaxPackagePeriodo."fk_periodo.id_periodo" AS "tblRelTaxPackagePeriodo.fk_periodo.id_periodo", '
+			+'tblRelTaxPackagePeriodo."ind_ativo" AS "tblRelTaxPackagePeriodo.ind_ativo", '
+			+'tblRelTaxPackagePeriodo."status_envio" AS "tblRelTaxPackagePeriodo.status_envio", '
+			+'tblRelTaxPackagePeriodo."data_envio" AS "tblRelTaxPackagePeriodo.data_envio", '
+			+'tblPeriodo."id_periodo" AS "tblPeriodo.id_periodo", '
+			+'tblPeriodo."periodo" AS "tblPeriodo.periodo", '
+			+'tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" AS "tblPeriodo.fk_dominio_ano_calendario.id_dominio_ano_calendario", '
+			+'tblPeriodo."fk_dominio_modulo.id_dominio_modulo" AS "tblPeriodo.fk_dominio_modulo.id_dominio_modulo", '
+			+'tblPeriodo."numero_ordem" AS "tblPeriodo.numero_ordem", '
+			+'tblDominioAnoCalendario."id_dominio_ano_calendario" AS "tblDominioAnoCalendario.id_dominio_ano_calendario", '
+			+'tblDominioAnoCalendario."ano_calendario" AS "tblDominioAnoCalendario.ano_calendario", '
+			+'tblDominioModulo."id_dominio_modulo" AS "tblDominioModulo.id_dominio_modulo", '
+			+'tblDominioModulo."modulo" AS "tblDominioModulo.modulo", '
+			+'tblTaxReconciliation."rf_taxable_income_loss_before_losses_and_tax_credits" AS "tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits", '
+			+'tblTaxReconciliation."rf_total_losses_utilized" AS "tblTaxReconciliation.rf_total_losses_utilized", '
+			+'tblTaxReconciliation."rf_taxable_income_loss_after_losses" AS "tblTaxReconciliation.rf_taxable_income_loss_after_losses", '
+			+'tblTaxReconciliation."rf_income_tax_before_other_taxes_and_credits" AS "tblTaxReconciliation.rf_income_tax_before_other_taxes_and_credits", '
+			+'tblTaxReconciliation."rf_other_taxes" AS "tblTaxReconciliation.rf_other_taxes", '
+			+'tblTaxReconciliation."rf_incentivos_fiscais" AS "tblTaxReconciliation.rf_incentivos_fiscais", '
+			+'tblTaxReconciliation."rf_total_other_taxes_and_tax_credits" AS "tblTaxReconciliation.rf_total_other_taxes_and_tax_credits", '
+			+'tblTaxReconciliation."rf_net_local_tax" AS "tblTaxReconciliation.rf_net_local_tax", '
+			+'tblTaxReconciliation."rf_wht" AS "tblTaxReconciliation.rf_wht", '
+			+'tblTaxReconciliation."rf_overpayment_from_prior_year_applied_to_current_year" AS "tblTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year", '
+			+'tblTaxReconciliation."rf_total_interim_taxes_payments_antecipacoes" AS "tblTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes", '
+			+'tblTaxReconciliation."rf_tax_due_overpaid" AS "tblTaxReconciliation.rf_tax_due_overpaid", '
+			+'tblRelTaxReconciliationDiferenca."fk_tax_reconciliation.id_tax_reconciliation" AS "tblRelTaxReconciliationDiferenca.fk_tax_reconciliation.id_tax_reconciliation", '
+			+'tblRelTaxReconciliationDiferenca."fk_diferenca.id_diferenca" AS "tblRelTaxReconciliationDiferenca.fk_diferenca.id_diferenca", '
+			+'tblRelTaxReconciliationDiferenca."valor" AS "tblRelTaxReconciliationDiferenca.valor", '			
+			+'tblDiferenca."id_diferenca" AS "tblDiferenca.id_diferenca", '
+			+'tblDiferenca."outro" AS "tblDiferenca.outro", '
+			+'tblDiferenca."fk_diferenca_opcao.id_diferenca_opcao" AS "tblDiferenca.fk_diferenca_opcao.id_diferenca_opcao", '
+			+'tblDiferenca."ind_enviada" AS "tblDiferenca.ind_enviada", '
+			+'tblDiferencaOpcao."id_diferenca_opcao" AS "tblDiferencaOpcao.id_diferenca_opcao", '
+			+'tblDiferencaOpcao."nome" AS "tblDiferencaOpcao.nome", '
+			+'tblDiferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo" AS "tblDiferencaOpcao.fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo", '
+			+'tblDiferencaOpcao."ind_duplicavel" AS "tblDiferencaOpcao.ind_duplicavel", '
+			+'tblDominioDiferencaTipo."id_dominio_diferenca_tipo" AS "tblDominioDiferencaTipo.id_dominio_diferenca_tipo", '
+			+'tblDominioDiferencaTipo."tipo" AS "tblDominioDiferencaTipo.tipo" '	
+			+'FROM "VGT.EMPRESA" AS tblEmpresa '
+			+'INNER JOIN "VGT.TAX_PACKAGE" AS tblTaxPackage '
+			+'ON tblTaxPackage."fk_empresa.id_empresa" = tblEmpresa."id_empresa" '
+			+'LEFT OUTER JOIN "VGT.DOMINIO_MOEDA" AS tblDominioMoeda '
+			+'ON tblDominioMoeda."id_dominio_moeda" = tblTaxPackage."fk_dominio_moeda.id_dominio_moeda" '
+			+'INNER JOIN "VGT.REL_TAX_PACKAGE_PERIODO" AS tblRelTaxPackagePeriodo '
+			+'ON tblRelTaxPackagePeriodo."fk_tax_package.id_tax_package" = tblTaxPackage."id_tax_package" '
+			+'INNER JOIN "VGT.PERIODO" AS tblPeriodo '
+			+'ON tblRelTaxPackagePeriodo."fk_periodo.id_periodo" = tblPeriodo."id_periodo" '
+			+'INNER JOIN "VGT.DOMINIO_ANO_CALENDARIO" AS tblDominioAnoCalendario '
+			+'ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
+			+'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo '
+			+'ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+			+'INNER JOIN "VGT.TAX_RECONCILIATION" AS tblTaxReconciliation '
+			+'ON tblTaxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" '
+	        +'INNER JOIN "VGT.REL_TAX_RECONCILIATION_DIFERENCA" AS tblRelTaxReconciliationDiferenca ON tblRelTaxReconciliationDiferenca."fk_tax_reconciliation.id_tax_reconciliation" = tblTaxReconciliation."id_tax_reconciliation" '
+	        +'INNER JOIN "VGT.DIFERENCA" AS tblDiferenca ON tblDiferenca."id_diferenca" = tblRelTaxReconciliationDiferenca."fk_diferenca.id_diferenca" '
+	        +'INNER JOIN "VGT.DIFERENCA_OPCAO" AS tblDiferencaOpcao ON tblDiferencaOpcao."id_diferenca_opcao" = tblDiferenca."fk_diferenca_opcao.id_diferenca_opcao" '
+	        +'INNER JOIN "VGT.DOMINIO_DIFERENCA_TIPO" AS tblDominioDiferencaTipo ON tblDominioDiferencaTipo."id_dominio_diferenca_tipo" = tblDiferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo"	';
+
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+		}
+
+		for (var i = 0; i < aEntrada.length - 1; i++) {
+			filtro = "";
+			if (aEntrada[i] !== null){
+				stringtemporaria = "";
+				for (var k = 0; k < aEntrada[i].length; k++) {
+					switch (i){
+						case 0:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
+							break;
+						case 1:
+							filtro = ' tblDominioAnoCalendario."id_dominio_ano_calendario" = ? ';
+							break;
+						case 2:
+							//filtro = ' tblPeriodo."id_periodo" = ? ';
+							filtro = ' tblPeriodo."numero_ordem" = ? ';
+							break;
+						case 3:
+							if(aEntrada[i][k] == ""){
+								filtro = ' tblDominioMoeda."id_dominio_moeda" is null ';
+							}
+							else{
+								filtro = ' tblDominioMoeda."id_dominio_moeda" = ? ';
+							}
+							break;			
+						case 4:
+							filtro = ' tblEmpresa."id_empresa" = ? ';
+							break;	
+						case 5:
+							filtro = ' tblDiferencaOpcao."id_diferenca_opcao" = ? ';
+							break;	
+						case 6:
+							filtro = ' tblDominioDiferencaTipo."id_dominio_diferenca_tipo" = ? ';
+							break;								
+					}
+					if(aEntrada[i].length == 1){
+						oWhere.push(filtro);
+						if(aEntrada[i][k] != ""){
+							aParams.push(aEntrada[i][k]);	
+						}								
+					}	 
+					else{
+						k == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : k == aEntrada[i].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
+						if(aEntrada[i][k] != ""){
+							aParams.push(aEntrada[i][k]);	
+						}
+					}	
+				}	
+			}
+		}
+		sStatement += " where"
+			+' tblDominioAnoCalendario."ano_calendario" <= year(CURRENT_DATE) '
+			+'AND tblDominioModulo."id_dominio_modulo" = 2 ';
+		
+		if (oWhere.length > 0) {
+			sStatement += ' AND ';
+			
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+
+		sStatement += ") " + stringDistinctFilter;
+		
+		db.executeStatement({
+			statement: sStatement,
+			parameters: aParams
+		}, function (err, result) {
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		});
+	}	
 };

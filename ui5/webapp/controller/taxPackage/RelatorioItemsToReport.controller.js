@@ -11,8 +11,9 @@ sap.ui.define([
 	"sap/ui/core/util/ExportTypeCSV",	
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
-	"ui5ns/ui5/lib/Utils"	
-], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils) {
+	"ui5ns/ui5/lib/Utils",
+	"ui5ns/ui5/lib/Validador"
+], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils,Validador) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.taxPackage.RelatorioItemsToReport", {
@@ -23,9 +24,11 @@ sap.ui.define([
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
-			/*
-			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);	*/		
+			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
+			var array = this.getModel().getProperty("/TabelaDaView");
+			for (var k = 0, length = array.length; k < length; k++) {
+				Utils.ajustaRem(this,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35,8)
+			}		
 			this.getRouter().getRoute("taxPackageRelatorioItemsToReport").attachPatternMatched(this._handleRouteMatched, this);				
 		},
 
@@ -81,7 +84,9 @@ sap.ui.define([
 		onGerarRelatorio: function (oEvent) {
 			this._geraRelatorioTax(); 
 		},
-
+		onGerarCsv: function (oEvent) {
+			this._geraRelatorioTax(true); 
+		},	
 		_atualizarDados: function () {
 			var that = this;
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
@@ -134,6 +139,9 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
+					aRegistro.sort(function (x, y) {
+						return Number(Number(x["tblDominioAnoCalendario.ano_calendario"]-y["tblDominioAnoCalendario.ano_calendario"]));
+					});					
 					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
 				}
 			});	
@@ -152,7 +160,7 @@ sap.ui.define([
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
 					}							
-					that.getModel().setProperty("/Periodo", aRegistro);
+					that.getModel().setProperty("/Periodo", Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
 				}
 			});	
 			oWhere[10] = ["tblDominioMoeda.acronimo"];
@@ -182,7 +190,7 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Pergunta", aRegistro);
+					that.getModel().setProperty("/Pergunta", Utils.orderByArrayParaBox(aRegistro,"tblItemToReport.pergunta"));
 				}
 			});			
 			oWhere[10] = ["tblItemToReport.flag_ano"];
@@ -270,7 +278,44 @@ sap.ui.define([
 				}
 			});				
 		},
-		
+		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
+			var array = this.getModel().getProperty("/TabelaDaView");
+			var coluna = [];
+			for (var k = 0, length = array.length; k < length; k++) {
+				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+			}	
+			
+			var oExport = new Export({
+			
+				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
+				exportType : new ExportTypeCSV({
+					separatorChar : ";"
+				}),
+
+				// Pass in the model created above
+				models : this.getView().getModel(),
+
+				// binding information for the rows aggregation
+				rows : {
+					path : "/CSV"
+				},
+				columns : coluna
+			});
+			
+			// download exported file
+			oExport.saveFile(
+				Utils.dateNowParaArquivo()
+				+"_"
+				+this.getResourceBundle().getText("viewGeralRelatorio") 
+				+"_" 
+				+ this.getResourceBundle().getText("viewEdiçãoTrimestreImpostoRenda")
+				).catch(function(oError) {
+				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
+			}).then(function() {
+				oExport.destroy();
+			});
+		},			
+		/*
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
 
 			var oExport = new Export({
@@ -348,9 +393,9 @@ sap.ui.define([
 			}).then(function() {
 				oExport.destroy();
 			});
-		},	
+		},	*/
 		
-		_geraRelatorioTax: function () {
+		_geraRelatorioTax: function (ifExport) {
 
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
@@ -374,10 +419,6 @@ sap.ui.define([
 			oWhere.push(oAnoFiscalSelecionado);
 			oWhere.push(null);
 			
-			this._preencheReportTax(oWhere);			
-		},
-		
-		_preencheReportTax: function (oWhere){
 			var that = this;
 			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
 			that.byId("GerarRelatorio").setEnabled(false);				
@@ -393,34 +434,38 @@ sap.ui.define([
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						/*aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] = 
-							aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] 
-								? Number(aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;*/
-						aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax"]);
-						/*aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] = 
-							aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] 
-								? Number(aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;*/
-						aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits"]);
-						/*aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] = 
-							aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] 
-								? Number(aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;*/
-						aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rf_net_local_tax"]);
-						/*aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] = 
-							aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] 
-								? Number(aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"]).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
-								: "0" ;*/
-						aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"] = that._aplicarMascara(aRegistro[i]["tblTaxReconciliation.rf_tax_due_overpaid"]);
-						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 								
-					}						
-					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
-					that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
-					that.byId("GerarRelatorio").setEnabled(true);						
+						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 	
+					}
+					Utils.conteudoView("relatorioDoTaxPackage",that,"/TabelaDaView");
+					var array = that.getModel().getProperty("/TabelaDaView");
+					var property = ifExport ? "/CSV" : "/ReportTaxPackage";
+					var valor;
+					if(property === "/CSV"){
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
+								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
+								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
+							}
+						}						
+						that.getModel().setProperty(property, aRegistro);
+						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+						that.onDataExportCSV();
+					}
+					else{
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["Ano_Fiscal_Agregado"] = aRegistro[i]["Ano_Fiscal_Agregado"] ? aRegistro[i]["Ano_Fiscal_Agregado"].replace(/\\\r,|,/g,"\n") : aRegistro[i]["Ano_Fiscal_Agregado"];
+						}						
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}						
+						that.getModel().setProperty(property, aRegistro);
+						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+					}
 				}
-			});				
-		},		
+			});			
+		},	
 		
 		_aplicarMascara: function (numero) {
 			if (this.isPTBR()) {

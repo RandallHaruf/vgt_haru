@@ -235,10 +235,6 @@ sap.ui.define([
 					}
 					Utils.conteudoView("relatorioDoTaxPackage",that,"/TabelaDaView");
 					var array = that.getModel().getProperty("/TabelaDaView");
-					for (var k = 0, length = array.length; k < length; k++) {
-						Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
-					}
-
 					var property = ifExport ? "/CSV" : "/ReportTaxPackage";
 					var valor;
 					if(property === "/CSV"){
@@ -254,6 +250,9 @@ sap.ui.define([
 						that.onDataExportCSV();
 					}
 					else{
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}						
 						that.getModel().setProperty(property, aRegistro);
 						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
 						that.byId("GerarRelatorio").setEnabled(true);						
