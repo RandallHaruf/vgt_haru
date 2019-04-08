@@ -180,6 +180,17 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				var idUsuario = req.session.usuario.id;
+				for (var i = 0; i < result.length; i++){
+					var oCorrente = result[i];
+					if (oCorrente.id_usuario == idUsuario) {
+						oCorrente.btnSalvarHabilitado = false;
+					}
+					else {
+						oCorrente.btnSalvarHabilitado = true;
+					}
+				}
+				
 				res.send(JSON.stringify(result));
 			}
 		});
