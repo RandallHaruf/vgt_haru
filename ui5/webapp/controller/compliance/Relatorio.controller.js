@@ -224,123 +224,143 @@ sap.ui.define([
 			/* ----- ESTE TRECHO DE CODIGO FOI PARA A FUNCAO geraRelatorio
 			this._preencheReportObrigacao(oWhere);
 			*/
-
-			oWhere[14] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoAcessoriaTipo.tipo"));
-				}
-			});		
-			oWhere[14] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome"));
-				}
-			});				
-			oWhere[14] = ["tblDominioPais.pais"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);           
-					}					
-					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro,"tblDominioPais.pais"));
-				}
-			});		
-			oWhere[14] = ["tblModeloObrigacao.nome_obrigacao"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ModeloObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblModeloObrigacao.nome_obrigacao"));
-				}
-			});	
-			oWhere[14] = ["tblDominioPeriodicidadeObrigacao.descricao"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);           
+			if(oDominioObrigacaoAcessoriaTipo === null){
+				oWhere[14] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoAcessoriaTipo.tipo"));
 					}
-					that.getModel().setProperty("/DomPeriodicidadeObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioPeriodicidadeObrigacao.descricao"));
-				}
-			});	
-			oWhere[14] = ["tblDominioAnoFiscal.ano_fiscal"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
-				}
-			});		
-			oWhere[14] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioObrigacaoStatus.descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(aRegistro[i]["tblDominioObrigacaoStatus.id_dominio_obrigacao_status"],that);           
-					}					
-					that.getModel().setProperty("/DominioStatusObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoStatus.descricao_obrigacao_status"));
-				}
-			});	
+				});					
+			}
+			if(oEmpresa === null){
+				oWhere[14] = ["tblEmpresa.nome"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome"));
+					}
+				});					
+			}
+			if(oDominioPais === null){
+				oWhere[14] = ["tblDominioPais.pais"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);           
+						}					
+						that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro,"tblDominioPais.pais"));
+					}
+				});					
+			}
+			if(oObrigacaoAcessoria === null){
+				oWhere[14] = ["tblModeloObrigacao.nome_obrigacao"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblModeloObrigacao.nome_obrigacao"] = aRegistro[i]["tblModeloObrigacao.nome_obrigacao"] + " - " +Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that); 
+						}					
+						that.getModel().setProperty("/ModeloObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblModeloObrigacao.nome_obrigacao"));
+					}
+				});					
+			}
+			if(oDomPeriodicidadeObrigacao === null){
+				oWhere[14] = ["tblDominioPeriodicidadeObrigacao.descricao"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);           
+						}
+						that.getModel().setProperty("/DomPeriodicidadeObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioPeriodicidadeObrigacao.descricao"));
+					}
+				});					
+			}
+			if(oDominioAnoFiscal === null){
+				oWhere[14] = ["tblDominioAnoFiscal.ano_fiscal"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							aRegistro.sort(function (x, y) {
+								return Number(Number(y["tblDominioAnoFiscal.ano_fiscal"]-x["tblDominioAnoFiscal.ano_fiscal"]));
+							});						
+						that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
+					}
+				});					
+			}
+			if(oDominioStatusObrigacao === null){
+				oWhere[14] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioObrigacaoStatus.descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(aRegistro[i]["tblDominioObrigacaoStatus.id_dominio_obrigacao_status"],that);           
+						}					
+						that.getModel().setProperty("/DominioStatusObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoStatus.descricao_obrigacao_status"));
+					}
+				});					
+			}
+
 			oWhere[14] = ["prazo_de_entrega_calculado"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -360,7 +380,7 @@ sap.ui.define([
 				}
 			});	
 			oWhere[14] = ["tblRespostaObrigacao.data_extensao"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -379,21 +399,27 @@ sap.ui.define([
 					));	
 				}
 			});		
-			oWhere[14] = ["tblDominioAnoCalendario.ano_calendario"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportObrigacao", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);	
-				}
-			});				
+			if(oDominioAnoCalendario === null){
+				oWhere[14] = ["tblDominioAnoCalendario.ano_calendario"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							aRegistro.sort(function (x, y) {
+								return Number(Number(y["tblDominioAnoCalendario.ano_calendario"]-x["tblDominioAnoCalendario.ano_calendario"]));
+							});						
+						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);	
+					}
+				});					
+			}			
+			
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
@@ -640,7 +666,7 @@ sap.ui.define([
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
 			oWhere.push(null);	
-		
+			oWhere.push(null);			
 			this._preencheReportObrigacao(oWhere);
 		},
 		
@@ -649,7 +675,7 @@ sap.ui.define([
 			that.setBusy(that.byId("relatorioCompliance"),true);	
 			that.byId("GerarRelatorio").setEnabled(false);	
 			
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -678,6 +704,7 @@ sap.ui.define([
 						
 						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);	
 						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);  
+						aRegistro[i]["tblDominioObrigacaoStatus.descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(aRegistro[i]["tblDominioObrigacaoStatus.id_dominio_obrigacao_status"],that);           						
 					}		
 					that.getModel().setProperty("/ReportObrigacao", aRegistro);
 					
