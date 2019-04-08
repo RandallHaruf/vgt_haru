@@ -276,7 +276,9 @@
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false)}"
 												type="Text" 
-												value="{tipo_transacao_outros}" />
+												value="{tipo_transacao_outros}"
+												valueState="{tipo_transacao_outros_value_state}"
+												change="onTrocarTipoTransacaoOutros"/>
 											<!--<Input textAlign="End" value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  editable="{ind_ativo}" change="onAplicarRegras" />-->
 											<Input 
 												class="money"
@@ -534,9 +536,11 @@
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
 											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false) }"
+												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false)}"
 												type="Text" 
-												value="{tipo_transacao_outros}" />
+												value="{tipo_transacao_outros}"
+												valueState="{tipo_transacao_outros_value_state}"
+												change="onTrocarTipoTransacaoOutros"/>
 											<!--<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"

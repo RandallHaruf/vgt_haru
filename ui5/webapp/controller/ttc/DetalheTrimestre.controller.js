@@ -982,6 +982,12 @@ sap.ui.define(
 					} else if (oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 3) {
 						JurisdicaoTest = (!oPagamento.estado || !oPagamento.cidade);
 					}
+					
+					//verificar a necessidade de outros tipos de transacao
+					var OutrosTiposTest = false;
+					if(oPagamento["tipo_transacao_outros_value_state"] == sap.ui.core.ValueState.Error){
+						OutrosTiposTest = true;
+					}
 
 					//var achouValor = aAllTaxas.find()
 					if ((!!!oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] ||
@@ -990,7 +996,7 @@ sap.ui.define(
 								boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria)) || !oPagamento[
 								"fk_dominio_pais.id_dominio_pais"] || !oPagamento.principal || !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
 							//|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
-							|| JurisdicaoTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento.principal))) || (!!
+							|| JurisdicaoTest || OutrosTiposTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento.principal))) || (!!
 							!
 							oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento.name_of_tax))) {
 						bValido = false;
@@ -1050,11 +1056,24 @@ sap.ui.define(
 
 				if (!isOtherSpecify()) {
 					oPagamento.tipo_transacao_outros = "";
+					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.None;
+				}
+				else{
+					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.Error;
 				}
 
 				oPagamento.fkDominioTipoTransacaoAnterior = oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"];
 
 				this.getModel().refresh();
+			},
+			onTrocarTipoTransacaoOutros: function (oEvent){
+				var oPagamento = oEvent.getSource().getBindingContext().getObject();
+				if(oPagamento["tipo_transacao_outros"]){
+					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.None;
+				}
+				else{
+					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.Error;
+				}
 			}
 		});
 	}
