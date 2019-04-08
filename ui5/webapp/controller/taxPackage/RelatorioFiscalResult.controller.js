@@ -97,70 +97,80 @@ sap.ui.define([
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
 			oWhere.push(null);
-			
-			oWhere[5] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
-				}
-			});	
-			oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
-				}
-			});	
-			oWhere[5] = ["tblPeriodo.id_periodo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-						for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
-					}							
-					that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
-				}
-			});	
-			oWhere[5] = ["tblDominioMoeda.acronimo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
-				}
-			});				
+			if(oEmpresa === null){
+				oWhere[5] = ["tblEmpresa.nome"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
+					}
+				});					
+			}
+
+			if(oDominioAnoCalendario === null){
+				oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+					}
+				});				
+			}			
+	
+			if(oPeriodoSelecionadas === null){
+				oWhere[5] = ["tblPeriodo.id_periodo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
+						}							
+						that.getModel().setProperty("/Periodo", Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
+					}
+				});					
+			}			
+
+			if(oMoedaSelecionadas === null){
+				oWhere[5] = ["tblDominioMoeda.acronimo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
+					}
+				});					
+			}					
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {

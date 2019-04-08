@@ -101,103 +101,115 @@ sap.ui.define([
 			oWhere.push(oTipoDiferencaSelecionadas);
 			oWhere.push(oDominioTipoDiferencaSelecionadas);				
 			oWhere.push(null);
+			if(oEmpresa === null){
+				oWhere[7] = ["tblEmpresa.nome"];
+				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
+					}
+				});					
+			}
+			if(oDominioAnoCalendario === null){
+				oWhere[7] = ["tblDominioAnoCalendario.ano_calendario"];
+				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+					}
+				});					
+			}
+			if(oPeriodoSelecionadas === null){
+				oWhere[7] = ["tblPeriodo.id_periodo"];
+				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							for (var i = 0, length = aRegistro.length; i < length; i++) {
+								aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
+							}									
+						that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
+					}
+				});					
+			}
+			if(oMoedaSelecionadas === null){
+				oWhere[7] = ["tblDominioMoeda.acronimo"];
+				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
+					}
+				});					
+			}
+			if(oTipoDiferencaSelecionadas === null){
+				oWhere[7] = ["tblDiferencaOpcao.nome"];
+				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/TipoDiferenca", Utils.orderByArrayParaBox(aRegistro,"tblDiferencaOpcao.nome"));
+					}
+				});					
+			}
+			if(oDominioTipoDiferencaSelecionadas === null){
+				oWhere[7] = ["tblDominioDiferencaTipo.tipo"];
+				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							for (var i = 0, length = aRegistro.length; i < length; i++) {
+								aRegistro[i]["tblDominioDiferencaTipo.tipo"] = Utils.traduzDominioDiferencaTipo(aRegistro[i]["tblDominioDiferencaTipo.id_dominio_diferenca_tipo"],that);           
+							}						
+						that.getModel().setProperty("/DominioTipoDiferenca", Utils.orderByArrayParaBox(aRegistro,"tblDominioDiferencaTipo.tipo"));
+					}
+				});					
+			}
 			
-			oWhere[7] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
-				}
-			});	
-			oWhere[7] = ["tblDominioAnoCalendario.ano_calendario"];
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
-				}
-			});	
-			oWhere[7] = ["tblPeriodo.id_periodo"];
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-						for (var i = 0, length = aRegistro.length; i < length; i++) {
-							aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
-						}									
-					that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
-				}
-			});	
-			oWhere[7] = ["tblDominioMoeda.acronimo"];
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
-				}
-			});			
-			oWhere[7] = ["tblDiferencaOpcao.nome"];
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/TipoDiferenca", Utils.orderByArrayParaBox(aRegistro,"tblDiferencaOpcao.nome"));
-				}
-			});	
-			oWhere[7] = ["tblDominioDiferencaTipo.tipo"];
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-						for (var i = 0, length = aRegistro.length; i < length; i++) {
-							aRegistro[i]["tblDominioDiferencaTipo.tipo"] = Utils.traduzDominioDiferencaTipo(aRegistro[i]["tblDominioDiferencaTipo.id_dominio_diferenca_tipo"],that);           
-						}						
-					that.getModel().setProperty("/DominioTipoDiferenca", Utils.orderByArrayParaBox(aRegistro,"tblDominioDiferencaTipo.tipo"));
-				}
-			});				
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {

@@ -89,78 +89,104 @@ sap.ui.define([
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-
+			var oFYSelecionadas = this.getModel().getProperty("/FYSelecionadas")? this.getModel().getProperty("/FYSelecionadas")[0] !== undefined ? this.getModel().getProperty("/FYSelecionadas") : null : null;
+			
 			var oWhere = []; 
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(oFYSelecionadas);			
 			oWhere.push(null);
-			
-			oWhere[5] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
-				}
-			});	
-			oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
-				}
-			});	
-			oWhere[5] = ["tblPeriodo.id_periodo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-						for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
-					}							
-					that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
-				}
-			});	
-			oWhere[5] = ["tblDominioMoeda.acronimo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
-				}
-			});				
+			if(oEmpresa === null){
+				oWhere[6] = ["tblEmpresa.nome"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
+					}
+				});					
+			}
+			if(oDominioAnoCalendario === null){
+				oWhere[6] = ["tblDominioAnoCalendario.ano_calendario"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+					}
+				});					
+			}
+			if(oPeriodoSelecionadas === null){
+				oWhere[6] = ["tblPeriodo.id_periodo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
+						}							
+						that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
+					}
+				});					
+			}
+			if(oMoedaSelecionadas === null){
+				oWhere[6] = ["tblDominioMoeda.acronimo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
+					}
+				});						
+			}
+			if(oFYSelecionadas === null){
+				oWhere[6] = ["tblSchedule.fy"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/FY",aRegistro);
+					}
+				});					
+			}			
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
@@ -207,13 +233,15 @@ sap.ui.define([
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-
+			var oFYSelecionadas = this.getModel().getProperty("/FYSelecionadas")? this.getModel().getProperty("/FYSelecionadas")[0] !== undefined ? this.getModel().getProperty("/FYSelecionadas") : null : null;
+			
 			var oWhere = []; 
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(oFYSelecionadas);			
 			oWhere.push(null);
 			
 			var that = this;

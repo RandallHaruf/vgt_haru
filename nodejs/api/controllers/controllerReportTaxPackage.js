@@ -735,12 +735,12 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		
-		if(aEntrada[5] == null || aEntrada[5] == undefined){
+		if(aEntrada[6] == null || aEntrada[6] == undefined){
 			stringDistinct = 'Select * from (';	
 			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc, "tblSchedule.fy" desc';
 		}
 		else{
-			switch(aEntrada[5][0]){
+			switch(aEntrada[6][0]){
 				case "tblEmpresa.nome":
 					stringDistinct = 'Select distinct "tblEmpresa.id_empresa" , "tblEmpresa.nome"  from (';
 					break;
@@ -754,6 +754,10 @@ module.exports = {
 				case "tblDominioMoeda.acronimo":
 					stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
 					break;	
+				case "tblSchedule.fy":
+					stringDistinct = 'Select distinct "tblSchedule.fy" from (';
+					stringDistinctFilter = 'order by "tblSchedule.fy" desc';					
+					break;					
 			}			
 		}
 		
@@ -862,6 +866,9 @@ module.exports = {
 						case 4:
 							filtro = ' tblEmpresa."id_empresa" = ? ';
 							break;	
+						case 5:
+							filtro = ' tblSchedule."fy" = ? ';
+							break;								
 					}
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);
@@ -916,12 +923,12 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		
-		if(aEntrada[5] == null || aEntrada[5] == undefined){
+		if(aEntrada[6] == null || aEntrada[6] == undefined){
 			stringDistinct = 'Select * from (';	
 			stringDistinctFilter = 'order by "tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc, "tblPeriodo.numero_ordem" asc, "tblSchedule.fy" desc';
 		}
 		else{
-			switch(aEntrada[5][0]){
+			switch(aEntrada[6][0]){
 				case "tblEmpresa.nome":
 					stringDistinct = 'Select distinct "tblEmpresa.id_empresa" , "tblEmpresa.nome"  from (';
 					break;
@@ -935,6 +942,10 @@ module.exports = {
 				case "tblDominioMoeda.acronimo":
 					stringDistinct = 'Select distinct "tblDominioMoeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
 					break;	
+				case "tblSchedule.fy":
+					stringDistinct = 'Select distinct "tblSchedule.fy" from (';
+					stringDistinctFilter = 'order by "tblSchedule.fy" desc';					
+					break;						
 			}			
 		}
 
@@ -1044,6 +1055,9 @@ module.exports = {
 						case 4:
 							filtro = ' tblEmpresa."id_empresa" = ? ';
 							break;	
+						case 5:
+							filtro = ' tblSchedule."fy" = ? ';
+							break;								
 					}
 					if(aEntrada[i].length == 1){
 						oWhere.push(filtro);

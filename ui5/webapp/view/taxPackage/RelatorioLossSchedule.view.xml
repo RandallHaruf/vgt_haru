@@ -75,6 +75,13 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="E" label="{i18n>viewEdiçãoTrimestreFY}">
+								<fb:control>
+									<MultiComboBox id="selectFY" selectionFinish="onSelectChange" items="{ path: '/FY' }" selectedKeys="{/FYSelecionadas}">
+										<core:Item key="{tblSchedule.fy}" text="{tblSchedule.fy}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
