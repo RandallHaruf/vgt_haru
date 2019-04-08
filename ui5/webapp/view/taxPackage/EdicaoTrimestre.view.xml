@@ -15,7 +15,7 @@
 					<Title text="Tax Package - {i18n>viewTAXMenu4}"/>
 				</f2:heading>
 				<f2:navigationActions>
-					<!--<uni:FileUploader buttonOnly="true" buttonText="Importar" icon="sap-icon://excel-attachment" change="onImportarDados" />-->
+					<uni:FileUploader buttonOnly="true" buttonText="Importar" icon="sap-icon://excel-attachment" change="onImportarDados" fileType="xlsx" />
 				</f2:navigationActions>
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/empresa}" />

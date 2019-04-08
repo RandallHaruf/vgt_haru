@@ -13,4 +13,5 @@ aRoutes.push(express.Router().delete("/ReportObrigacao/:idRegistro", controller.
 */
 aRoutes.push(express.Router().post("/DeepQuery/ReportObrigacao", controller.deepQuery));
 aRoutes.push(express.Router().post("/DeepQueryDistinct/ReportObrigacao", controller.deepQueryDistinct));
+aRoutes.push(express.Router().post("/DeepQueryNewDistinct/ReportObrigacao", controller.deepQueryNewDistinct));
 };

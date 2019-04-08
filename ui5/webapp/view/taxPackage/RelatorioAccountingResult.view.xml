@@ -24,14 +24,14 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -64,7 +64,7 @@
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
-										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>
+										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -92,7 +92,7 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column id = "coluna1" width="{/remtblEmpresa.nome}">
+						<Column width="{/remtblEmpresa.nome}">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
 						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
@@ -129,7 +129,7 @@
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text id = "texto1" text="{tblEmpresa.nome}"/>
+								<Text text="{tblEmpresa.nome}"/>
 								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
 								<Text text="{tblPeriodo.periodo}"/>
 								<Text text="{tblDominioMoeda.acronimo}"/>

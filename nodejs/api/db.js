@@ -297,33 +297,43 @@ module.exports = {
 			},*/
 			
 			listar: function (aParams, callback) {
-				var sStatement = 'select * from "' + sTabela + '" ';
-				var sOrderBy = "";
-				
-				if (aParams.length !== 0) {
-					sStatement += " where ";
-					for (var i = 0; i < aParams.length; i++) {
-						var oParam = aParams[i];
-						
-						if (oParam.isnull) {
-							sStatement += "\"" + oParam.coluna.nome + "\" is null" + (i == aParams.length-1 ? "" : " and ");
+				return new Promise((resolve, reject) => {
+					var sStatement = 'select * from "' + sTabela + '" ';
+					var sOrderBy = "";
+					
+					if (aParams.length !== 0) {
+						sStatement += " where ";
+						for (var i = 0; i < aParams.length; i++) {
+							var oParam = aParams[i];
+							
+							if (oParam.isnull) {
+								sStatement += "\"" + oParam.coluna.nome + "\" is null" + (i == aParams.length-1 ? "" : " and ");
+							}
+							else {
+								sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i == aParams.length-1 ? "" : " and ");
+							}
+							
+							if (oParam.coluna.identity && sOrderBy !== "") {
+								sOrderBy = ' order by "' +  oParam.coluna.nome + '"';
+							}
+						}
+					}
+					
+					that.executeStatement({
+						statement: sStatement
+					}, function (err, result) {
+						if (callback) {
+							callback(err, result);
 						}
 						else {
-							sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i == aParams.length-1 ? "" : " and ");
+							if (err) {
+								reject(err);
+							}
+							else {
+								resolve(result);
+							}
 						}
-						
-						if (oParam.coluna.identity && sOrderBy !== "") {
-							sOrderBy = ' order by "' +  oParam.coluna.nome + '"';
-						}
-					}
-				}
-				
-				that.executeStatement({
-					statement: sStatement
-				}, function (err, result) {
-					if (callback) {
-						callback(err, result);
-					}
+					});
 				});
 			},
 			

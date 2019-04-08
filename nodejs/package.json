@@ -18,7 +18,8 @@
 		"cookie-session": "1.3.2",
 		"password-validator": "latest",
 		"bcryptjs": "latest",
-		"path": "^0.12.7"
+		"path": "^0.12.7",
+		"exceljs": "1.9.0"
 	},
 	"devDependencies": {
 		"gulp": "3.9.1",

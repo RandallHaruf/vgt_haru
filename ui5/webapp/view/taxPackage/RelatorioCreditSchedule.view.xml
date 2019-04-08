@@ -24,14 +24,14 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -54,7 +54,7 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="{i18n>viewRelatorioAnoFiscal}">
+							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
 									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
 										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
@@ -64,7 +64,7 @@
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
-										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>
+										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -75,6 +75,13 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="E" label="{i18n>viewEdiçãoTrimestreFY}">
+								<fb:control>
+									<MultiComboBox id="selectFY" selectionFinish="onSelectChange" items="{ path: '/FY' }" selectedKeys="{/FYSelecionadas}">
+										<core:Item key="{tblSchedule.fy}" text="{tblSchedule.fy}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
@@ -92,46 +99,46 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="6rem">
+						<Column width="{/remtblEmpresa.nome}">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
 							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblPeriodo.periodo}">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblDominioMoeda.acronimo}">
 							<Text text="{i18n>viewGeralMoeda}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblSchedule.fy}">
 							<Text text="{i18n>viewEdiçãoTrimestreFY}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblSchedule.year_of_expiration}">
 							<Text text="{i18n>viewEdiçãoTrimestreYearofExpiration}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.opening_balance}">
 							<Text text="{i18n>viewEdiçãoTrimestreOpeningBalance}"/>
 						</Column>
-						<Column width="10rem">
-							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}"/>
+						<Column width="{/remtblSchedule.current_year_value}">
+							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}"/>
 						</Column>	
-						<Column width="10rem">
-							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}"/>
+						<Column width="{/remtblSchedule.current_year_value_utilized}">
+							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.adjustments}">
 							<Text text="{i18n>viewEdiçãoTrimestreAdjustments}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.justificativa}">
 							<Text text="{i18n>viewEdiçãoTrimestreJustificativa}"/>
 						</Column>
-						<Column width="10rem">
-							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}"/>
+						<Column width="{/remtblSchedule.current_year_value_expired}">
+							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}"/>
 						</Column>
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.closing_balance}">
 							<Text text="{i18n>viewEdiçãoTrimestreClosingBalance}"/>
 						</Column>		
-						<Column width="10rem">
+						<Column width="{/remtblSchedule.obs}">
 							<Text text="{i18n>viewEdiçãoTrimestreOBS}"/>
 						</Column>
 					</columns>

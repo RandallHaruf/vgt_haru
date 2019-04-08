@@ -42,7 +42,42 @@ sap.ui.define(
 					};
 				}
 			},
-			
+			aplicarMascara: function (numero,that) {
+				if (that.isPTBR()) {
+					return numero ? Number(numero).toFixed(2).replace(".",",").replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";	
+				}
+				else {
+					return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";	
+				}
+			},			
+			conteudoView: function(nomeDoIdDaTabela,that,propriedadeDaTabela){
+				var cabecalho;
+				var atributo;
+				var array = []
+				for (var k = 0, length = that.byId(nomeDoIdDaTabela).getColCount()-2; k < length; k++) {
+					cabecalho = that.byId(nomeDoIdDaTabela).getColumns()[k].mAggregations.header.mProperties.text //Nome do Cabeçalho 
+					atributo = that.byId(nomeDoIdDaTabela).mBindingInfos.items.template.mAggregations.cells[k].mBindingInfos.text.parts[0].path // nome do atributo
+					array.push({textoNomeDaColuna: cabecalho,propriedadeDoValorDaLinha: atributo});
+				}	
+				that.getModel().setProperty(propriedadeDaTabela,array);
+			},		
+			ajustaRem: function (that,array,campoNumerico,nomeDoCabecalho,remInicial,remProporcional,remfixo){
+				//this = Para setar a Propriedade Desejada com nome /rem+campoNumerico
+				//array = Array com um numero que voce quer que o rem da coluna fique proporcional ao maior valor que ocorra dele
+				//campoNumerico = nome string do campo no qual esta o valor da coluna
+				//remInicial = width inicial desejado
+				//remProporcional = Proporção da notação cientifica do valor que sera aplicada			
+				//valores ideais remInicial = 3 e remProporcional = 1.35
+				var ordenadorAdjustments = array.slice();
+					ordenadorAdjustments.sort(function (x, y) {
+						return Number((Math.abs(Number(y[campoNumerico]))?Math.abs(Number(y[campoNumerico])):y[campoNumerico]?y[campoNumerico].length:0)-(Math.abs(Number(x[campoNumerico]))?Math.abs(Number(x[campoNumerico])):x[campoNumerico]?x[campoNumerico].length:0));
+					});
+					var numero = (Math.abs(Number(ordenadorAdjustments[0][campoNumerico])? Number(ordenadorAdjustments[0][campoNumerico]) : 10**(Number(ordenadorAdjustments[0][campoNumerico]?ordenadorAdjustments[0][campoNumerico].length:0)/5))+1).toExponential(0).split("+");
+					var texto = 5 + (nomeDoCabecalho.length/10);
+					remfixo 
+					? that.getModel().setProperty("/rem"+campoNumerico,remfixo+"rem")
+					: that.getModel().setProperty("/rem"+campoNumerico,JSON.stringify(Math.max((remInicial+(Number(numero[numero.length-1]))/remProporcional),(texto)))+"rem");
+			},				
 			stringMoedaParaFloat: function (sMoeda) {
 				var fConversao = 0.00;
 				if (sMoeda) {

@@ -8,11 +8,11 @@
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Tax Package" press="navToPage2" />-->
-						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreImpostoRenda}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Tax Package" save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreImpostoRenda}" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -24,14 +24,14 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -54,7 +54,7 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="{i18n>viewRelatorioAnoFiscal}">
+							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
 									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
 										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
@@ -64,7 +64,7 @@
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
-										<core:Item key="{tblPeriodo.id_periodo}" text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>
+										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -92,30 +92,39 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="6rem">
+						<Column width="{/remtblEmpresa.nome}">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
+							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblPeriodo.periodo}">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblDominioMoeda.acronimo}">
 							<Text text="{i18n>viewGeralMoeda}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}"/>
+						<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_statutory_financials}">
+							<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}"/>
+						<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_tax_return}">
+							<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}"/>
+						<Column width="{/remtblTaxReconciliation.it_jurisdiction_tax_rate_average}">
+							<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}"/>
-						</Column>			
+						<Column width="{/remtblTaxReconciliation.it_statutory_tax_rate_average}">
+							<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}"/>
+						</Column>	
+						<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_statutory_financials}">
+							<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_tax_return}">
+							<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}"/>
+						</Column>
+						<Column width="{/remtblTaxReconciliation.it_details_if_tax_returns_income_differs_from_fs}">
+							<Text text="{i18n>viewTaxpackageEdiçãoTrimestrePleaseprovidedetailsifTaxReturnsIncomediffersfromFS}"/>
+						</Column>
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -124,10 +133,55 @@
 								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
 								<Text text="{tblPeriodo.periodo}"/>
 								<Text text="{tblDominioMoeda.acronimo}"/>
-								<Text text="{tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}"/>
-								<Text text="{tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}"/>
-								<Text text="{tblTaxReconciliation.rf_net_local_tax}"/>
-								<Text text="{tblTaxReconciliation.rf_tax_due_overpaid}"/>								
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.it_income_tax_as_per_the_statutory_financials',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.it_income_tax_as_per_the_tax_return',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.it_jurisdiction_tax_rate_average',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.it_statutory_tax_rate_average',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.it_effective_tax_rate_as_per_the_statutory_financials',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.it_effective_tax_rate_as_per_the_tax_return',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />	
+								<Text text="{tblTaxReconciliation.it_details_if_tax_returns_income_differs_from_fs}"/>								
 							</cells>
 						</ColumnListItem>
 					</items>

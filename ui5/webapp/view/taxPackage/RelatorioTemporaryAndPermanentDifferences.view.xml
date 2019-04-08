@@ -8,11 +8,11 @@
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Tax Package" press="navToPage2" />-->
-						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Tax Package" save="onSaveView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" save="onSaveView"></vm:VariantManagement>
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -24,14 +24,14 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} TXT"
 						type="Transparent" />-->
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExportCSV"/>
+						press="onGerarCsv"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -54,7 +54,7 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="B" label="{i18n>viewRelatorioAnoFiscal}">
+							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
 									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
 										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
@@ -64,7 +64,7 @@
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
-										<core:Item key="{tblPeriodo.id_periodo}" text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>
+										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -75,6 +75,20 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="E" label="{i18n>viewGeralTipo}">
+								<fb:control>
+									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/TipoDiferenca' }" selectedKeys="{/IdTipoDiferencaSelecionadas}">
+										<core:Item key="{tblDiferencaOpcao.id_diferenca_opcao}" text="{tblDiferencaOpcao.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
+							<fb:FilterItem name="F" label="{i18n>viewGeralDiferencas}">
+								<fb:control>
+									<MultiComboBox id="selectDiferencas" selectionFinish="onSelectChange" items="{ path: '/DominioTipoDiferenca' }" selectedKeys="{/IdDominioTipoDiferencaSelecionadas}">
+										<core:Item key="{tblDominioDiferencaTipo.id_dominio_diferenca_tipo}" text="{tblDominioDiferencaTipo.tipo}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
@@ -92,29 +106,29 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="6rem">
+						<Column width="{/remtblEmpresa.nome}">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
+							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblPeriodo.periodo}">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="{/remtblDominioMoeda.acronimo}">
 							<Text text="{i18n>viewGeralMoeda}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}"/>
+						<Column width="{/remtblDiferencaOpcao.nome}">
+							<Text text="{i18n>viewGeralTipo}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}"/>
+						<Column width="{/remtblDiferenca.outro}">
+							<Text text="{i18n>viewGeralOutro}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}"/>
+						<Column width="{/remtblRelTaxReconciliationDiferenca.valor}">
+							<Text text="{i18n>viewGeralValue}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}"/>
+						<Column width="{/remtblDominioDiferencaTipo.tipo}">
+							<Text text="{i18n>viewGeralDiferencas}"/>
 						</Column>			
 					</columns>
 					<items>
@@ -124,10 +138,17 @@
 								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
 								<Text text="{tblPeriodo.periodo}"/>
 								<Text text="{tblDominioMoeda.acronimo}"/>
-								<Text text="{tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}"/>
-								<Text text="{tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}"/>
-								<Text text="{tblTaxReconciliation.rf_net_local_tax}"/>
-								<Text text="{tblTaxReconciliation.rf_tax_due_overpaid}"/>								
+								<Text text="{tblDiferencaOpcao.nome}"/>
+								<Text text="{tblDiferenca.outro}"/>
+								<Text
+								text="{
+								  path: 'tblRelTaxReconciliationDiferenca.valor',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text text="{tblDominioDiferencaTipo.tipo}"/>							
 							</cells>
 						</ColumnListItem>
 					</items>

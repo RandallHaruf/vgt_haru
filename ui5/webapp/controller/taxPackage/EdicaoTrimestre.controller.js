@@ -26,159 +26,265 @@ sap.ui.define(
 
 			onImportarDados: function (oEvent) {
 				var that = this,
-					eventSource = oEvent.getSource(),
-					file = eventSource.oFileUpload.files[0];
-
-				var reader = new FileReader();
-
-				reader.onload = function (e) {
-					var data = e.target.result;
-
-					var workbook = XLSX.read(data, {
-						type: 'binary'
-					});
-
-					var oTaxReconciliation = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
-						return obj.ind_ativo;
-					});
-					
-					var processarDiferenca = function (XL_row_object, sCaminhoDiferencas, sCaminhoOpcaoDiferenca) {
-						var sChaveProcurar = "",
-							iNumeroOrdemPeriodo = that.getModel().getProperty("/Periodo").numero_ordem;
-
-						switch (true) {
-						case iNumeroOrdemPeriodo === 1:
-							sChaveProcurar = "valor1";
-							break;
-						case iNumeroOrdemPeriodo === 2:
-							sChaveProcurar = "valor2";
-							break;
-						case iNumeroOrdemPeriodo === 3:
-							sChaveProcurar = "valor3";
-							break;
-						case iNumeroOrdemPeriodo === 4:
-							sChaveProcurar = "valor4";
-							break;
-						case iNumeroOrdemPeriodo === 5:
-							sChaveProcurar = "valor5";
-							break;
-						case iNumeroOrdemPeriodo >= 6:
-							sChaveProcurar = "valor6";
-							break;
-						}
-
-						var aDiferenca = that.getModel().getProperty(sCaminhoDiferencas),
-							aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca);
-
-						for (var i = 0; i < XL_row_object.length; i++) {
-							var objXlsx = XL_row_object[i];
-
-							var keys = Object.keys(objXlsx);
-
-							if (keys.indexOf('Type') > -1) {
-								var oDiferencaComOpcaoJaInserida = aDiferenca.find(function (obj) {
-									return Number(objXlsx.Type) === Number(obj["fk_diferenca_opcao.id_diferenca_opcao"]);
+					eventSource = oEvent.getSource();
+							
+				try {
+					if (eventSource.getValue()) {
+						var file = eventSource.oFileUpload.files[0];
+		
+						var reader = new FileReader();
+		
+						reader.onload = function (e) {
+							try {
+								var data = e.target.result;
+			
+								var workbook = that._lerPlanilha(data);
+			
+								var oTaxReconciliation = that.getModel().getProperty("/TaxReconciliation").find(function (obj) {
+									return obj.ind_ativo;
 								});
-
-								if (oDiferencaComOpcaoJaInserida) {
-
-									var oOpcaoDiferenca = aOpcaoDiferenca.find(function (obj) {
-										return Number(objXlsx.Type) === obj.id_diferenca_opcao;
-									});
-									
-									if (oOpcaoDiferenca.ind_duplicavel) {
-										var novaDiferenca = {};
-										novaDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] = objXlsx.Type;
-										novaDiferenca["outro"] = objXlsx.Other;
-										novaDiferenca[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
-
-										aDiferenca.push(novaDiferenca);
+								
+								var processarDiferenca = function (XL_row_object, sCaminhoDiferencas, sCaminhoOpcaoDiferenca) {
+									var sChaveProcurar = "",
+										iNumeroOrdemPeriodo = that.getModel().getProperty("/Periodo").numero_ordem;
+			
+									switch (true) {
+									case iNumeroOrdemPeriodo === 1:
+										sChaveProcurar = "valor1";
+										break;
+									case iNumeroOrdemPeriodo === 2:
+										sChaveProcurar = "valor2";
+										break;
+									case iNumeroOrdemPeriodo === 3:
+										sChaveProcurar = "valor3";
+										break;
+									case iNumeroOrdemPeriodo === 4:
+										sChaveProcurar = "valor4";
+										break;
+									case iNumeroOrdemPeriodo === 5:
+										sChaveProcurar = "valor5";
+										break;
+									case iNumeroOrdemPeriodo >= 6:
+										sChaveProcurar = "valor6";
+										break;
 									}
-									else {
-										// Permite alterar o campo outro apenas se estiver importando uma diferença que foi inseria no mesmo período de edição.
-										if (Number(iNumeroOrdemPeriodo) === Number(oDiferencaComOpcaoJaInserida.numero_ordem)) {
-											oDiferencaComOpcaoJaInserida["outro"] = objXlsx.Other;
+			
+									var aDiferenca = that.getModel().getProperty(sCaminhoDiferencas),
+										aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca);
+			
+									for (var i = 0; i < XL_row_object.length; i++) {
+										var objXlsx = XL_row_object[i];
+			
+										var keys = Object.keys(objXlsx);
+			
+										if (keys.indexOf('Type') > -1 && objXlsx.KEY) {
+											var oDiferencaComOpcaoJaInserida = aDiferenca.find(function (obj) {
+												return Number(objXlsx.KEY) === Number(obj["fk_diferenca_opcao.id_diferenca_opcao"]);
+											});
+			
+											if (oDiferencaComOpcaoJaInserida) {
+			
+												var oOpcaoDiferenca = aOpcaoDiferenca.find(function (obj) {
+													return Number(objXlsx.KEY) === obj.id_diferenca_opcao;
+												});
+												
+												if (oOpcaoDiferenca.ind_duplicavel) {
+													var novaDiferenca = {};
+													novaDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] = objXlsx.KEY;
+													novaDiferenca["outro"] = objXlsx.Other;
+													novaDiferenca[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
+			
+													aDiferenca.push(novaDiferenca);
+												}
+												else {
+													// Permite alterar o campo outro apenas se estiver importando uma diferença que foi inseria no mesmo período de edição.
+													if (Number(iNumeroOrdemPeriodo) === Number(oDiferencaComOpcaoJaInserida.numero_ordem)) {
+														oDiferencaComOpcaoJaInserida["outro"] = objXlsx.Other;
+													}
+													oDiferencaComOpcaoJaInserida[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
+												}
+			
+											} 
+											else {
+												var novaDiferenca = {};
+												novaDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] = objXlsx.KEY;
+												novaDiferenca["outro"] = objXlsx.Other;
+												novaDiferenca[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
+			
+												aDiferenca.push(novaDiferenca);
+											}
 										}
-										oDiferencaComOpcaoJaInserida[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
 									}
-
-								} 
-								else {
-									var novaDiferenca = {};
-									novaDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] = objXlsx.Type;
-									novaDiferenca["outro"] = objXlsx.Other;
-									novaDiferenca[sChaveProcurar] = Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0;
-
-									aDiferenca.push(novaDiferenca);
+								};
+			
+								var processarTaxaMultipla = function (XL_row_object, sCaminhoTaxaMultipla, iIdTipoTaxaMultipla) {
+									var aOtherTax = that.getModel().getProperty(sCaminhoTaxaMultipla);
+										
+									for (var i = 0; i < XL_row_object.length; i++) {
+										var objXlsx = XL_row_object[i];
+										
+										if (objXlsx.Description) {
+											aOtherTax.push({
+												descricao: objXlsx.Description,
+												valor: Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0,
+												"fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla": iIdTipoTaxaMultipla
+											});
+										}
+									}
+								};
+			
+								workbook.SheetNames.forEach(function (sheetName) {
+									// Here is your object
+									var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+			
+									if (sheetName === "Accounting Result" && XL_row_object[0]) {
+										
+										oTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax =
+											Validador.isNumber(XL_row_object[0]["Statutory GAAP Profit / (loss) before tax"]) ? XL_row_object[0][
+												"Statutory GAAP Profit / (loss) before tax"
+											] : 0;
+										oTaxReconciliation.rc_current_income_tax_current_year =
+											Validador.isNumber(XL_row_object[0]["Current income tax – Current year"]) ? XL_row_object[0][
+												"Current income tax – Current year"
+											] : 0;
+										oTaxReconciliation.rc_current_income_tax_previous_year =
+											Validador.isNumber(XL_row_object[0]["Current income tax – Previous Year"]) ? XL_row_object[0][
+												"Current income tax – Previous Year"
+											] : 0;
+										oTaxReconciliation.rc_deferred_income_tax =
+											Validador.isNumber(XL_row_object[0]["Deferred Income Tax"]) ? XL_row_object[0]["Deferred Income Tax"] : 0;
+										oTaxReconciliation.rc_non_recoverable_wht =
+											Validador.isNumber(XL_row_object[0]["Non- Recoverable WHT"]) ? XL_row_object[0]["Non- Recoverable WHT"] : 0;
+											
+									} 
+									else if (sheetName === "Permanent Differences") {
+										processarDiferenca(XL_row_object, "/DiferencasPermanentes", "/DiferencaOpcao/Permanente");
+									}
+									else if (sheetName === "Temporary Differences") {
+										processarDiferenca(XL_row_object, "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria");
+									}
+									else if (sheetName === "Other Taxes") {
+										processarTaxaMultipla(XL_row_object, "/OtherTaxes", 1);
+									}
+									else if (sheetName === "Tax Incentives") {
+										processarTaxaMultipla(XL_row_object, "/IncentivosFiscais", 2);
+									}
+									else if (sheetName === "WHT") {
+										processarTaxaMultipla(XL_row_object, "/WHT", 3);
+									}
+								});
+			
+								that.onAplicarRegras();
+								eventSource.setValue("");
+							}
+							catch (err) {
+								eventSource.setValue("");
+								that._exibirErroImportacao(err.message);
+							}
+						};
+		
+						reader.onerror = function (ex) {
+							eventSource.setValue("");
+							that._exibirErroImportacao(ex.message);
+						};
+		
+						reader.readAsBinaryString(file);
+					}
+				}
+				catch (e) {
+					eventSource.setValue("");
+					this._exibirErroImportacao(e.message);
+				}
+			},
+			
+			_lerPlanilha: function (data) {
+				var that = this;
+				
+				var workbook = XLSX.read(data, {
+					type: 'binary'
+				});	
+				
+				try {
+					if (workbook.Sheets["Accounting Result"]["A1"].v === "Statutory GAAP Profit / (loss) before tax"
+						&& workbook.Sheets["Accounting Result"]["B1"].v === "Current income tax – Current year"
+						&& workbook.Sheets["Accounting Result"]["C1"].v === "Current income tax – Previous Year"
+						&& workbook.Sheets["Accounting Result"]["D1"].v === "Deferred Income Tax"
+						&& workbook.Sheets["Accounting Result"]["E1"].v === "Non- Recoverable WHT"
+						&& workbook.Sheets["Temporary Differences"]["A1"].v === "Type"
+						&& workbook.Sheets["Temporary Differences"]["B1"].v === "Other"
+						&& workbook.Sheets["Temporary Differences"]["C1"].v === "Value"
+						&& workbook.Sheets["Temporary Differences"]["AB1"].v === "KEY"
+						&& workbook.Sheets["Permanent Differences"]["A1"].v === "Type"
+						&& workbook.Sheets["Permanent Differences"]["B1"].v === "Other"
+						&& workbook.Sheets["Permanent Differences"]["C1"].v === "Value"
+						&& workbook.Sheets["Permanent Differences"]["AB1"].v === "KEY"
+						&& workbook.Sheets["Other Taxes"]["A1"].v === "Description"
+						&& workbook.Sheets["Other Taxes"]["B1"].v === "Value"
+						&& workbook.Sheets["Tax Incentives"]["A1"].v === "Description"
+						&& workbook.Sheets["Tax Incentives"]["B1"].v === "Value"
+						&& workbook.Sheets["WHT"]["A1"].v === "Description"
+						&& workbook.Sheets["WHT"]["B1"].v === "Value"
+						&& workbook.Sheets["Dados"]) {
+						var ws = workbook.Sheets["Dados"];
+						
+						var oOpcoesNaPlanilha = Object.keys(ws).reduce(function (results, item) { 
+							if (item.indexOf('B') > -1) {
+								results.aTemporaria.push(ws[item].v); 
+							}
+							else if (item.indexOf('E') > -1) {
+								results.aPermanente.push(ws[item].v); 
+							}
+							return results;
+						}, { aTemporaria: [], aPermanente: [] });
+						
+						var checarOpcoes = function (aOpcoesNaPlanilha, sCaminhoOpcoes) {
+							var aOpcaoNoBanco = that.getModel().getProperty(sCaminhoOpcoes);
+							
+							for (var i = 0, length = aOpcoesNaPlanilha.length; i < length; i++) {
+								var oBusca = aOpcaoNoBanco.find(function (obj) {
+									return obj.id_diferenca_opcao === aOpcoesNaPlanilha[i];
+								});
+								
+								if (!oBusca) {
+									throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao"));
 								}
 							}
-						}
-					};
-
-					var processarTaxaMultipla = function (XL_row_object, sCaminhoTaxaMultipla, iIdTipoTaxaMultipla) {
-						var aOtherTax = that.getModel().getProperty(sCaminhoTaxaMultipla);
+						};
+						
+						checarOpcoes(oOpcoesNaPlanilha.aTemporaria, "/DiferencaOpcao/Temporaria");
+						checarOpcoes(oOpcoesNaPlanilha.aPermanente, "/DiferencaOpcao/Permanente");
 							
-						for (var i = 0; i < XL_row_object.length; i++) {
-							var objXlsx = XL_row_object[i];
-							
-							aOtherTax.push({
-								descricao: objXlsx.Description,
-								valor: Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0,
-								"fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla": iIdTipoTaxaMultipla
-							});
+						return workbook;	
+					}
+					else {
+						throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao"));
+					}
+				}
+				catch (e) {
+					console.log("Planilha fora do padrão: " + e.message)
+					throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao"));
+				}
+			},
+			
+			_exibirErroImportacao: function (sErro) {
+				var dialog = new sap.m.Dialog({
+					title: this.getResourceBundle().getText("viewGeralMensagemErroImport"),
+					type: "Message",
+					content: new sap.m.Text({
+						text: sErro
+					}),
+					endButton: new sap.m.Button({
+						text: "OK",
+						press: function () {
+							dialog.close();
 						}
-					};
-
-					workbook.SheetNames.forEach(function (sheetName) {
-						// Here is your object
-						var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-
-						if (sheetName === "Accounting Result" && XL_row_object[0]) {
-							
-							oTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax =
-								Validador.isNumber(XL_row_object[0]["Statutory GAAP Profit / (loss) before tax"]) ? XL_row_object[0][
-									"Statutory GAAP Profit / (loss) before tax"
-								] : 0;
-							oTaxReconciliation.rc_current_income_tax_current_year =
-								Validador.isNumber(XL_row_object[0]["Current income tax – Current year"]) ? XL_row_object[0][
-									"Current income tax – Current year"
-								] : 0;
-							oTaxReconciliation.rc_current_income_tax_previous_year =
-								Validador.isNumber(XL_row_object[0]["Current income tax – Previous Year"]) ? XL_row_object[0][
-									"Current income tax – Previous Year"
-								] : 0;
-							oTaxReconciliation.rc_deferred_income_tax =
-								Validador.isNumber(XL_row_object[0]["Deferred Income Tax"]) ? XL_row_object[0]["Deferred Income Tax"] : 0;
-							oTaxReconciliation.rc_non_recoverable_wht =
-								Validador.isNumber(XL_row_object[0]["Non- Recoverable WHT"]) ? XL_row_object[0]["Non- Recoverable WHT"] : 0;
-								
-						} 
-						else if (sheetName === "Permanent Differences") {
-							processarDiferenca(XL_row_object, "/DiferencasPermanentes", "/DiferencaOpcao/Permanente");
-						}
-						else if (sheetName === "Temporary Differences") {
-							processarDiferenca(XL_row_object, "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria");
-						}
-						else if (sheetName === "Other Taxes") {
-							processarTaxaMultipla(XL_row_object, "/OtherTaxes", 1);
-						}
-						else if (sheetName === "Tax Incentives") {
-							processarTaxaMultipla(XL_row_object, "/IncentivosFiscais", 2);
-						}
-						else if (sheetName === "WHT") {
-							processarTaxaMultipla(XL_row_object, "/WHT", 3);
-						}
-					});
-
-					that.onAplicarRegras();
-					eventSource.setValue("");
-				};
-
-				reader.onerror = function (ex) {
-					console.log(ex);
-				};
-
-				reader.readAsBinaryString(file);
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+	
+				dialog.open();
 			},
 
 			_adicionarTaxaMultipla: function (sProperty, sFkTipo) {

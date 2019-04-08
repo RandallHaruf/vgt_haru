@@ -11,22 +11,24 @@ sap.ui.define([
 	"sap/ui/core/util/ExportTypeCSV",	
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
-	"ui5ns/ui5/lib/Utils"	
-], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils) {
+	"ui5ns/ui5/lib/Utils",
+	"ui5ns/ui5/lib/Validador"
+], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils,Validador) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.taxPackage.RelatorioLossSchedule", {
 		onInit: function () {
-			
+
 			var oModel = new sap.ui.model.json.JSONModel({
 			});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
-			/*
-			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);	*/	
-			//this.getModel().setProperty("/remtblSchedule.adjustments", "6rem"); //se for necessario efetuar proporção do width
+			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
+			var array = this.getModel().getProperty("/TabelaDaView");
+			for (var k = 0, length = array.length; k < length; k++) {
+				Utils.ajustaRem(this,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35,8)
+			}	
 			this.getRouter().getRoute("taxPackageRelatorioLossSchedule").attachPatternMatched(this._handleRouteMatched, this);				
 		},
 
@@ -77,6 +79,9 @@ sap.ui.define([
 		onGerarRelatorio: function (oEvent) {
 			this._geraRelatorioTax(); 
 		},
+		onGerarCsv: function (oEvent) {
+			this._geraRelatorioTax(true); 
+		},		
 
 		_atualizarDados: function () {
 			var that = this;
@@ -84,84 +89,115 @@ sap.ui.define([
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-
+			var oFYSelecionadas = this.getModel().getProperty("/FYSelecionadas")? this.getModel().getProperty("/FYSelecionadas")[0] !== undefined ? this.getModel().getProperty("/FYSelecionadas") : null : null;
+			
 			var oWhere = []; 
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(oFYSelecionadas);			
 			oWhere.push(null);
-			
-			oWhere[5] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
-				}
-			});	
-			oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
-				}
-			});	
-			oWhere[5] = ["tblPeriodo.id_periodo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-						for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
-					}							
-					that.getModel().setProperty("/Periodo", aRegistro);
-				}
-			});	
-			oWhere[5] = ["tblDominioMoeda.acronimo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
-				}
-			});				
+			if(oEmpresa === null){
+				oWhere[6] = ["tblEmpresa.nome"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
+					}
+				});					
+			}
+			if(oDominioAnoCalendario === null){
+				oWhere[6] = ["tblDominioAnoCalendario.ano_calendario"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+					}
+				});					
+			}
+			if(oPeriodoSelecionadas === null){
+				oWhere[6] = ["tblPeriodo.id_periodo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+							for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
+						}							
+						that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
+					}
+				});					
+			}
+			if(oMoedaSelecionadas === null){
+				oWhere[6] = ["tblDominioMoeda.acronimo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
+					}
+				});						
+			}
+			if(oFYSelecionadas === null){
+				oWhere[6] = ["tblSchedule.fy"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/FY",aRegistro);
+					}
+				});					
+			}
 		},
 		
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
-
+			var array = this.getModel().getProperty("/TabelaDaView");
+			var coluna = [];
+			for (var k = 0, length = array.length; k < length; k++) {
+				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+			}	
+			
 			var oExport = new Export({
-
+			
 				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
 				exportType : new ExportTypeCSV({
 					separatorChar : ";"
@@ -172,80 +208,9 @@ sap.ui.define([
 
 				// binding information for the rows aggregation
 				rows : {
-					path : "/ReportTaxPackage"
+					path : "/CSV"
 				},
-				// column definitions with column name and binding info for the content
-				columns : [{
-					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
-					template : {
-						content : "{tblEmpresa.nome}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
-					template : {
-						content : "{tblDominioAnoCalendario.ano_calendario}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralPeriodo"),
-					template : {
-						content : "{tblPeriodo.periodo}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralMoeda"),
-					template : {
-						content : "{tblDominioMoeda.acronimo}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreFY"),
-					template : {
-						content : "{tblSchedule.fy}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreYearofExpiration"),
-					template : {
-						content : "{tblSchedule.year_of_expiration}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreOpeningBalance"),
-					template : {
-						content : "{tblSchedule.opening_balance}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLoss"),
-					template : {
-						content : "{tblSchedule.current_year_value}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossUtilized"),
-					template : {
-						content : "{tblSchedule.current_year_value_utilized}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreAdjustments"),
-					template : {
-						content : "{tblSchedule.adjustments}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreJustificativa"),
-					template : {
-						content : "{tblSchedule.justificativa}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreCurrentYearLossExpired"),
-					template : {
-						content : "{tblSchedule.current_year_value_expired}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreClosingBalance"),
-					template : {
-						content : "{tblSchedule.closing_balance}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewEdiçãoTrimestreOBS"),
-					template : {
-						content : "{tblSchedule.obs}"
-					}
-				}]
+				columns : coluna
 			});
 			
 			// download exported file
@@ -262,29 +227,27 @@ sap.ui.define([
 			});
 		},	
 		
-		_geraRelatorioTax: function () {
+		_geraRelatorioTax: function (ifExport) {
 
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-
+			var oFYSelecionadas = this.getModel().getProperty("/FYSelecionadas")? this.getModel().getProperty("/FYSelecionadas")[0] !== undefined ? this.getModel().getProperty("/FYSelecionadas") : null : null;
+			
 			var oWhere = []; 
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(oFYSelecionadas);
 			oWhere.push(null);
 			
-			this._preencheReportTax(oWhere);			
-		},
-		
-		_preencheReportTax: function (oWhere){
 			var that = this;
 			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
 			that.byId("GerarRelatorio").setEnabled(false);				
-			jQuery.ajax(Constants.urlBackend + "DeepQueryLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -295,41 +258,37 @@ sap.ui.define([
 				},
 				success: function (response) {
 					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {	
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 								
 					}
-					//that.ajustaRem(that,aRegistro,"tblSchedule.adjustments",3,1.35);
-					that.getModel().setProperty("/ReportTaxPackage", aRegistro);
-					that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
-					that.byId("GerarRelatorio").setEnabled(true);						
+					Utils.conteudoView("relatorioDoTaxPackage",that,"/TabelaDaView");
+					var array = that.getModel().getProperty("/TabelaDaView");
+					var property = ifExport ? "/CSV" : "/ReportTaxPackage";
+					var valor;
+					if(property === "/CSV"){
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
+								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
+								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
+							}
+						}						
+						that.getModel().setProperty(property, aRegistro);
+						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+						that.onDataExportCSV();
+					}
+					else{
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}						
+						that.getModel().setProperty(property, aRegistro);
+						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+					}
 				}
-			});				
-		},	
-		/* //ADICIONAR FUTURAMENTE NO UTILS
-		ajustaRem: function (this,array,campoNumerico,remInicial,remProporcional){
-			//this = Para setar a Propriedade Desejada com nome /rem+campoNumerico
-			//array = Array com um numero que voce quer que o rem da coluna fique proporcional ao maior valor que ocorra dele
-			//campoNumerico = nome string do campo no qual esta o valor da coluna
-			//remInicial = width inicial desejado
-			//remProporcional = Proporção da notação cientifica do valor que sera aplicada
-			//valores ideais remInicial = 3 e remProporcional = 1.35
-			var ordenadorAdjustments = array.slice();
-				ordenadorAdjustments.sort(function (x, y) {
-					return Number(Number(y[campoNumerico])-x[campoNumerico]);
-				});
-				var numero = Number(ordenadorAdjustments[0][campoNumerico]).toExponential(1).split("+");
-				this.getModel().setProperty("/rem"+campoNumerico,JSON.stringify(remInicial+(Number(numero[numero.length-1]))/remProporcional)+"rem");
-		},		
-		*/
-		_aplicarMascara: function (numero) {
-			if (this.isPTBR()) {
-				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";	
-			}
-			else {
-				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";	
-			}
+			});			
 		},
-		
+
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
 		},

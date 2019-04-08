@@ -142,8 +142,8 @@ sap.ui.define(
 					oStatus = '';
 				}
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=1&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&" + this._parametroInception +
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
+					"]&" + this._parametroInception +
 					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
 					function (response) { // 1 BEPS
 						if (response) {
@@ -186,9 +186,9 @@ sap.ui.define(
 						}
 					});
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=1&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&" + this._parametroInception +
-					"&statusResposta=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
+					"]&" + this._parametroInception +
+					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
 					function (response) { // 1 BEPS
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
@@ -220,8 +220,8 @@ sap.ui.define(
 					oStatus = '';
 				};
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=1&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&" + this._parametroInception +
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
+					"]&" + this._parametroInception +
 					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 1 Beps
 						if (response) {
@@ -264,9 +264,9 @@ sap.ui.define(
 						}
 					});
 
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=1&empresa=" + oEmpresa + "&anoCalendario=" + oAnoCalendario +
-					"&" + this._parametroInception +
-					"&statusResposta=" + oStatus + "&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
+					"]&" + this._parametroInception +
+					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
 					function (response) { // 1 BEPS
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
