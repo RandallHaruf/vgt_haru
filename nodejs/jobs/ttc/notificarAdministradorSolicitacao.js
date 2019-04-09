@@ -44,7 +44,6 @@ const retornaRequisicoesAtrasadasTTC = () => {
 };*/
 
 const verificaAtrasosEMandaEmail = () => {
-	console.log("ao menos entrou");
 	Promise.all(
 			[
 				retornaRequisicoesAtrasadasTTC()

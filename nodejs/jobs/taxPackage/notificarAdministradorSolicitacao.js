@@ -47,7 +47,6 @@ const retornaRequisicoesAtrasadasEncerramentoTaxPackage = () => {
 
 
 const verificaAtrasosEMandaEmail = () => {
-	console.log("Ao menos entrou");
 	Promise.all(
 			[
 				retornaRequisicoesAtrasadasReaberturaTaxPackage(),

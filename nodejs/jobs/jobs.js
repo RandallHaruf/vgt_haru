@@ -24,5 +24,4 @@ module.exports = function () {
 	require('./taxPackage/encerrarPeriodoAnteriorAbrirPeriodoCorrente')();
 	require('./ttc/notificarAdministradorSolicitacao')();
 	require('./taxPackage/notificarAdministradorSolicitacao')();
-	console.log(new Date());
 };
