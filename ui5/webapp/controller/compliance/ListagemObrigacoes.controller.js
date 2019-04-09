@@ -5,25 +5,42 @@ sap.ui.define(
 		"sap/ui/model/Filter",
 		"sap/m/MessageToast",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/Arquivo"
 	],
-	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils) {
+	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo) {
 		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemObrigacoes", {
 
 			onInit: function (oEvent) {
 				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
-				this.setModel(new sap.ui.model.json.JSONModel({}));
+				this.setModel(new sap.ui.model.json.JSONModel({
+					RepositorioDocumento: [],
+					FiltroEmpresa: [],
+					ValorFiltroEmpresa: [],
+					//FiltroTipoObrigacao: [],
+					FiltroNomeObrigacao: [],
+					ValorFiltroNomeObrigacao: [],
+					ValorFiltroNomeArquivo: ""
+				}));
 				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 			},
 
 			_onRouteMatched: function (oEvent) {
+				var that = this;
+				
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this._parametroInception = "full=true";
 				} else {
 					this._parametroInception = "full=false";
 				}
-
+				
+				/*NodeAPI.pListarRegistros("DominioObrigacaoAcessoriaTipo")
+					.then(function (res) {
+						that.getModel().setProperty("/FiltroTipoObrigacao", res);
+					});*/
+				
+				this.getModel().setProperty("/RepositorioDocumento", []);
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
@@ -31,6 +48,255 @@ sap.ui.define(
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
 				this.setBusy(this.byId("tabelaObrigacoes"), false);
+			},
+			
+			onProcurarArquivos: function (oEvent) {
+				var that = this;
+				
+				if (!this._dialogProcurarArquivos) {
+					var oVBox = new sap.m.VBox();
+					
+					var oToolbar = new sap.m.Toolbar();
+					
+					oToolbar.addContent(new sap.m.Input({
+						placeholder: "{i18n>viewComplianceListagemObrigacoesNomeArquivo}",
+						value: "{/ValorFiltroNomeArquivo}"
+					}).attachChange(function (event) {
+						that._listarArquivos();	
+					}));
+					
+					oToolbar.addContent(new sap.m.ToolbarSpacer());
+					
+					var oFilterButton = new sap.m.Button({
+						icon: "sap-icon://filter",
+						tooltip: "View Filter Settings",
+						type: "Transparent"
+					}).attachPress(function (event) {
+						that._onFiltrarArquivos(event);
+					});
+					
+					oToolbar.addContent(oFilterButton);
+					
+					var oScrollContainer = new sap.m.ScrollContainer({
+						width: "100%",
+						height: "500px",
+						vertical: true
+					});
+					
+					oVBox.addItem(oToolbar);
+					
+					var oTable = new sap.m.Table({
+						id: "tabelaProcurarArquivos",
+						growing: true
+					});
+					
+					/* Colunas */ 
+					oTable.addColumn(new sap.m.Column({
+						vAlign: "Middle"
+					}).setHeader(new sap.m.Text({
+						text: "{i18n>viewComplianceListagemObrigacoesNomeArquivo}"
+					})));
+					
+					/*oTable.addColumn(new sap.m.Column({
+						vAlign: "Middle",
+						demandPopin: true,
+						minScreenWidth: "Large"
+					}).setHeader(new sap.m.Text({
+						text: "Tipo"
+					})));*/
+					
+					oTable.addColumn(new sap.m.Column({
+						vAlign: "Middle",
+						demandPopin: true,
+						minScreenWidth: "Large"
+					}).setHeader(new sap.m.Text({
+						text: "{i18n>viewComplianceListagemObrigacoesNomeObrigacao}"
+					})));
+					
+					oTable.addColumn(new sap.m.Column({
+						width: "50px"
+					}));
+	
+					/* Template das células */
+					var oTextNome = new sap.m.Text({
+						text: "{nome_arquivo}"
+					});
+					
+					/*var oTextTipo = new sap.m.Text({
+						text: "{tipo}"
+					});*/
+					
+					var oTextObrigacao = new sap.m.Text({
+						text: "{nome_obrigacao}"
+					});
+				
+					var oButtonDownload = new sap.m.Button({
+						icon: "sap-icon://download-from-cloud",
+						type: "Accept",
+						enabled: "{btnDownloadEnabled}"
+					}).attachPress(function (event) {
+						that._onBaixarArquivo(event);
+					});
+	
+					var oTemplate = new sap.m.ColumnListItem({
+						cells: [oTextNome, /*oTextTipo,*/ oTextObrigacao, oButtonDownload]
+					});
+	
+					oTable.bindItems({
+						path: "/RepositorioDocumento",
+						template: oTemplate,
+						sorter: [
+							new sap.ui.model.Sorter("nome_empresa", false, true),
+							//new sap.ui.model.Sorter("tipo"),
+							new sap.ui.model.Sorter("nome_obrigacao"),
+							new sap.ui.model.Sorter("nome_arquivo")
+						]
+					});
+					
+					oScrollContainer.addContent(oTable);
+					
+					oVBox.addItem(oScrollContainer);
+					
+					var dialog = new sap.m.Dialog({
+						title: "{i18n>viewComplianceListagemObrigacoesProcurarArquivo}",
+						showHeader: true,
+						type: "Message",
+						content: oVBox,
+						endButton: new sap.m.Button({
+							text: "OK",
+							press: function () {
+								dialog.close();
+							}
+						}),
+						afterClose: function () {
+							//dialog.destroy();
+							that.getModel().setProperty("/RepositorioDocumento", []);	
+							that.getModel().setProperty("/ValorFiltroEmpresa", []);	
+							that.getModel().setProperty("/ValorFiltroNomeObrigacao", []);	
+							that.getModel().setProperty("/ValorFiltroNomeArquivo", "");	
+							that.getView().removeDependent(that._oFilterDialog);
+							that._oFilterDialog = null;
+						}
+					}).addStyleClass("sapUiNoContentPadding");
+		
+					this.getView().addDependent(dialog);
+		
+					this._dialogProcurarArquivos = dialog;
+				}
+				
+				this._dialogProcurarArquivos.open();
+				
+				this._listarArquivos();
+			},
+			
+			_onFiltrarArquivos: function (oEvent) {
+				var that = this;
+				
+				if (!this._oFilterDialog) {
+					var oFilterDialog = new sap.m.ViewSettingsDialog();
+				
+					oFilterDialog.attachConfirm(function (event) {
+						that._onConfirmarFiltroArquivos(event);
+					});
+					
+					/*var oFilterItemTipo = new sap.m.ViewSettingsFilterItem({
+						text: "Tipo",
+						key: "filtroTipo",
+						multiSelect: true
+					});
+					
+					oFilterItemTipo.bindItems({
+						path: "/FiltroTipoObrigacao",
+						template: new sap.m.ViewSettingsItem({ text: "{tipo}", key: "{id_dominio_obrigacao_acessoria_tipo}" })
+					});
+					
+					oFilterDialog.addFilterItem(oFilterItemTipo);*/
+					
+					var oFilterItemEmpresa = new sap.m.ViewSettingsFilterItem({
+						text: that.getResourceBundle().getText("viewGeralEmpresa"),
+						key: "filtroEmpresa",
+						multiSelect: true
+					});
+					
+					oFilterItemEmpresa.bindItems({
+						path: "/FiltroEmpresa",
+						template: new sap.m.ViewSettingsItem({ text: "{nome}", key: "{id_empresa}" })
+					});
+					
+					oFilterDialog.addFilterItem(oFilterItemEmpresa);
+					
+					var oFilterItemNomeObrigacao = new sap.m.ViewSettingsFilterItem({
+						text: that.getResourceBundle().getText("viewComplianceListagemObrigacoesNomeObrigacao"),
+						key: "filtroNomeObrigacao",
+						multiSelect: true
+					});
+					
+					oFilterItemNomeObrigacao.bindItems({
+						path: "/FiltroNomeObrigacao",
+						template: new sap.m.ViewSettingsItem({ text: "{nome}", key: "{nome}" })
+					});
+					
+					oFilterDialog.addFilterItem(oFilterItemNomeObrigacao);
+					
+					this.getView().addDependent(oFilterDialog);
+					
+					this._oFilterDialog = oFilterDialog;
+				}
+				
+				this._oFilterDialog.open();
+			},
+
+			_onConfirmarFiltroArquivos: function (oEvent) {
+				var aFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
+					//aFiltroTipo = [],
+					aFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao");
+					
+				// Reseta os valores de filtros anteriores
+				aFiltroEmpresa.length = 0;
+				aFiltroNomeObrigacao.length = 0;
+				
+				// Preenche os novos valores de filtro
+				if (oEvent.getParameter("filterItems") && oEvent.getParameter("filterItems").length) {
+					for (var i = 0, length = oEvent.getParameter("filterItems").length; i < length; i++) {
+						switch (oEvent.getParameter("filterItems")[i].getParent().getKey()) {
+							case "filtroEmpresa":
+								aFiltroEmpresa.push(oEvent.getParameter("filterItems")[i].getKey());
+								break;
+							/*case "filtroTipo":
+								aFiltroTipo.push(oEvent.getParameter("filterItems")[i].getKey());
+								break;*/
+							case "filtroNomeObrigacao":
+								aFiltroNomeObrigacao.push(oEvent.getParameter("filterItems")[i].getKey());
+								break;
+						}
+					}
+				}
+				
+				this._listarArquivos();
+			},
+			
+			_onBaixarArquivo: function (oEvent) {
+				var that = this,
+					oButton = oEvent.getSource(),
+					oArquivo = oEvent.getSource().getBindingContext().getObject();
+
+				oArquivo.btnDownloadEnabled = false;
+				this.getModel().refresh();
+				this.setBusy(oButton, true);
+
+				Arquivo.download("DownloadDocumento?arquivo=" + oArquivo.id_documento)
+					.then(function (response) {
+						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
+						oArquivo.btnDownloadEnabled = true;
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					})
+					.catch(function (err) {
+						sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
+						oArquivo.btnDownloadEnabled = true;
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					});
 			},
 
 			onFiltrar: function (oEvent) {
@@ -128,10 +394,25 @@ sap.ui.define(
 				this.getRouter().navTo("selecaoModulo");
 			},
 
+			_carregarFiltroNomeObrigacao: function () {
+				var aDoc = this.getModel().getProperty("/RepositorioDocumento");	
+				
+				var distinctResult = aDoc.reduce(function (distinctObject, element) {
+					if (distinctObject.strings.indexOf(element.nome_obrigacao) === -1) {
+						distinctObject.strings.push(element.nome_obrigacao);
+						distinctObject.objects.push({ nome: element.nome_obrigacao });
+					}
+					return distinctObject;
+				}, { strings: [], objects: [] });
+				
+				this.getModel().setProperty("/FiltroNomeObrigacao", distinctResult.objects);
+			},
+
 			carregarFiltroEmpresa: function () {
 				var that = this;
 				NodeAPI.listarRegistros("Empresa?" + this._parametroInception, function (response) {
 					response = Utils.orderByArrayParaBox(response, "nome");
+					that.getModel().setProperty("/FiltroEmpresa", response.concat());
 					response.unshift({
 						id: null,
 						nome: that.getResourceBundle().getText("viewGeralTodos")
@@ -309,6 +590,45 @@ sap.ui.define(
 
 						}
 					});
+			},
+			
+			_listarArquivos: function () {
+				var that = this, 
+					aValorFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
+					aValorFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao"),
+					sValorFiltroNomeArquivo = this.getModel().getProperty("/ValorFiltroNomeArquivo");
+				
+				this.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivos"), true);
+				
+				var oQueryString = {};
+				
+				if (aValorFiltroEmpresa && aValorFiltroEmpresa.length) {
+					oQueryString.empresa = JSON.stringify(aValorFiltroEmpresa);
+				}
+				
+				//if (aTipo && aTipo.length) oQueryString.tipo = JSON.stringify(aTipo);
+				
+				if (aValorFiltroNomeObrigacao && aValorFiltroNomeObrigacao.length) {
+					oQueryString.nomeObrigacao = JSON.stringify(aValorFiltroNomeObrigacao);
+				}
+				
+				if (sValorFiltroNomeArquivo) {
+					oQueryString.nomeArquivo = sValorFiltroNomeArquivo;
+				}
+				
+				// Fixa a pesquisa por documentos relacionados a obrigações do tipo COMPLIANCE
+				oQueryString.tipo = JSON.stringify([2]);
+				oQueryString.full = this.isIFrame() ? true : false;
+				
+				NodeAPI.pListarRegistros("DeepQuery/Documento", oQueryString)
+					.then(function (res) {
+						that.getModel().setProperty("/RepositorioDocumento", res.result);	
+						// Carrega o filtro de nome de obrigação apenas na listagem geral (evita que as opções desapareçam)
+						if (!sValorFiltroNomeArquivo && !aValorFiltroEmpresa.length && !aValorFiltroNomeObrigacao.length) {
+							that._carregarFiltroNomeObrigacao();
+						}
+						that.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivos"), false);
+					});	
 			},
 
 			_parametroInception: "full=true"

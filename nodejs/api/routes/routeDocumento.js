@@ -11,4 +11,6 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().get("/DownloadDocumento", controller.downloadArquivo));
 	aRoutes.push(express.Router().post("/UploadDocumento", upload.single("file"), controller.uploadArquivo));
 	aRoutes.push(express.Router().delete("/ExcluirDocumento/:idRegistro", controller.excluirArquivo));
+	
+	aRoutes.push(express.Router().get("/DeepQuery/Documento", controller.deepQuery));
 };
