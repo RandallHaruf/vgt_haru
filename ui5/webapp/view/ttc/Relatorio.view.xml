@@ -25,14 +25,15 @@
 					<Button
 						text="CSV"
 						type="Transparent"
-						press="onDataExport"/>
-					<!--<Button
-						text="{i18n>viewRelatorioExportar} TXT"
-						type="Transparent" />-->
+						press="onGerarCsv"/>
+					<Button
+						text="TXT"
+						type="Transparent"
+						press="onGerarTxt"/>
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onDataExport"/>
+						press="onGerarXlsx"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
@@ -156,7 +157,7 @@
 		<!-- DynamicPage Content  -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table id="relatorioDoTTC" items="{ path: '/ReportTTC', sorter: [{path:'tblPagamento.data_pagamento'}] }">
+				<Table id="relatorioDoTTC" items="{ path: '/ReportTTC' }"> <!--items="{ path: '/ReportTTC', sorter: [{path:'tblPagamento.data_pagamento'}] }">-->
 					<columns>
 						<Column width="6rem">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>

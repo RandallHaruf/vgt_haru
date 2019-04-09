@@ -336,7 +336,7 @@ module.exports = {
 				sStatement += oWhere[i];
 			}
 		}
-		
+		sStatement+=' order by tblEmpresa."id_empresa", tblDominioTaxClassification."classification" , tblTaxCategory."category" ';
 		model.execute({
 			statement: sStatement,
 			parameters: aParams

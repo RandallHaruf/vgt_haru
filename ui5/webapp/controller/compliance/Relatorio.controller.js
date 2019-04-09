@@ -376,47 +376,51 @@ sap.ui.define([
 					}
 				});					
 			}
-
-			oWhere[14] = ["prazo_de_entrega_calculado"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ObrigacaoPrazoMin", Utils.bancoParaJsDate(
-						aRegistro[0] ? aRegistro[0]["min(prazo_de_entrega_calculado)"] : null
-					));
-					that.getModel().setProperty("/ObrigacaoPrazoMax", Utils.bancoParaJsDate(
-						aRegistro[0] ? aRegistro[0]["max(prazo_de_entrega_calculado)"] : null
-					));	
-				}
-			});	
-			oWhere[14] = ["tblRespostaObrigacao.data_extensao"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/ObrigacaoExtensaoMin", Utils.bancoParaJsDate(
-						aRegistro[0] ? aRegistro[0]["min(tblRespostaObrigacao.data_extensao)"] : null
-					));
-					that.getModel().setProperty("/ObrigacaoExtensaoMax", Utils.bancoParaJsDate(
-						aRegistro[0] ? aRegistro[0]["max(tblRespostaObrigacao.data_extensao)"] : null
-					));	
-				}
-			});		
+			if(oDataPrazoEntregaInicio === null && oDataPrazoEntregaFim === null ){
+				oWhere[14] = ["prazo_de_entrega_calculado"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/ObrigacaoPrazoMin", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["min(prazo_de_entrega_calculado)"] : null
+						));
+						that.getModel().setProperty("/ObrigacaoPrazoMax", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["max(prazo_de_entrega_calculado)"] : null
+						));	
+					}
+				});					
+			}
+			if(oDataExtensaoInicio === null && oDataExtensaoFim === null){
+				oWhere[14] = ["tblRespostaObrigacao.data_extensao"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/ObrigacaoExtensaoMin", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["min(tblRespostaObrigacao.data_extensao)"] : null
+						));
+						that.getModel().setProperty("/ObrigacaoExtensaoMax", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["max(tblRespostaObrigacao.data_extensao)"] : null
+						));	
+					}
+				});					
+			}
+	
 			if(oDominioAnoCalendario === null){
 				oWhere[14] = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {

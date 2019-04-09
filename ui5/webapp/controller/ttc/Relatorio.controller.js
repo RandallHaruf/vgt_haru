@@ -10,9 +10,13 @@ sap.ui.define([
 	"sap/ui/core/util/Export",
 	"sap/ui/core/util/ExportTypeCSV",
 	"sap/m/TablePersoController",
-	"sap/m/MessageBox"
+	"sap/m/MessageBox",
+	"ui5ns/ui5/lib/Validador",	
+	"ui5ns/ui5/lib/jszip",
+	"ui5ns/ui5/lib/XLSX",
+	"ui5ns/ui5/lib/FileSaver"
 ], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Utils, Export, ExportTypeCSV,
-	TablePersoController, MessageBox) {
+	TablePersoController, MessageBox,Validador) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.ttc.Relatorio", {
@@ -162,7 +166,16 @@ sap.ui.define([
 			this._geraRelatorio();
 		},
 		onGerarRelatorio: function (oEvent) {
-			this._geraRelatorioTTC();
+			this._geraRelatorio("/ReportTTC"); 
+		},
+		onGerarCsv: function (oEvent) {
+			this._geraRelatorio("/CSV"); 
+		},		
+		onGerarXlsx: function (oEvent) {
+			this._geraRelatorio("/XLSX"); 
+		},			
+		onGerarTxt: function (oEvent) {
+			this._geraRelatorio("/TXT"); 
 		},
 
 		_atualizarDados: function () {
@@ -217,205 +230,226 @@ sap.ui.define([
 			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
 			oWhere.push(null);
-
-			oWhere[13] = ["tblEmpresa.nome"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro, "tblEmpresa.nome"));
-				}
-			});
-			oWhere[13] = ["tblDominioTaxClassification.classification"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
-							"tblDominioTaxClassification.id_dominio_tax_classification"
-						], that);
+			if(oEmpresa === null){
+				oWhere[13] = ["tblEmpresa.nome"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro, "tblEmpresa.nome"));
 					}
-
-					that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aRegistro,
-						"tblDominioTaxClassification.classification"));
-				}
-			});
-			oWhere[13] = ["tblTaxCategory.category"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-
-					that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(aRegistro, "tblTaxCategory.category"));
-				}
-			});
-			oWhere[13] = ["tblTax.tax"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-
-					that.getModel().setProperty("/Tax", Utils.orderByArrayParaBox(aRegistro, "tblTax.tax"));
-				}
-			});
-			oWhere[13] = ["tblNameOfTax.name_of_tax"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-
-					that.getModel().setProperty("/NameOfTax", Utils.orderByArrayParaBox(aRegistro, "tblNameOfTax.name_of_tax"));
-				}
-			});
-			oWhere[13] = ["tblDominioJurisdicao.jurisdicao"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i][
-							"tblDominioJurisdicao.id_dominio_jurisdicao"
-						], that);
+				});				
+			}
+			if(oDominioTaxClassification === null){
+				oWhere[13] = ["tblDominioTaxClassification.classification"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
+								"tblDominioTaxClassification.id_dominio_tax_classification"
+							], that);
+						}
+	
+						that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aRegistro,
+							"tblDominioTaxClassification.classification"));
 					}
-
-					that.getModel().setProperty("/DominioJurisdicao", Utils.orderByArrayParaBox(aRegistro, "tblDominioJurisdicao.jurisdicao"));
-				}
-			});
-			oWhere[13] = ["tblDominioPais.pais"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"], that);
+				});				
+			}
+			if(oTaxCategory === null){
+				oWhere[13] = ["tblTaxCategory.category"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+	
+						that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(aRegistro, "tblTaxCategory.category"));
 					}
-					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro, "tblDominioPais.pais"));
-				}
-			});
-			oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
-				}
-			});
-			oWhere[13] = ["tblPagamento.data_pagamento"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DataPagamentoMin", Utils.bancoParaJsDate(
-						aRegistro[0] ? aRegistro[0]["min(tblPagamento.data_pagamento)"] : null
-					));
-					that.getModel().setProperty("/DataPagamentoMax", Utils.bancoParaJsDate(
-						aRegistro[0] ? aRegistro[0]["max(tblPagamento.data_pagamento)"] : null
-					));
-				}
-			});
-			oWhere[13] = ["tblDominioMoeda.acronimo"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro, "tblDominioMoeda.acronimo"));
-				}
-			});
-			oWhere[13] = ["tblDominioTipoTransacao.tipo_transacao"];
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC", {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i][
-							"tblDominioTipoTransacao.id_dominio_tipo_transacao"
-						], that);
+				});				
+			}
+			if(oTax === null){
+				oWhere[13] = ["tblTax.tax"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+	
+						that.getModel().setProperty("/Tax", Utils.orderByArrayParaBox(aRegistro, "tblTax.tax"));
 					}
-					that.getModel().setProperty("/DominioTipoTransacao", Utils.orderByArrayParaBox(aRegistro,
-						"tblDominioTipoTransacao.tipo_transacao"));
-				}
-			});
+				});				
+			}
+			if(oNameOfTax === null){
+				oWhere[13] = ["tblNameOfTax.name_of_tax"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+	
+						that.getModel().setProperty("/NameOfTax", Utils.orderByArrayParaBox(aRegistro, "tblNameOfTax.name_of_tax"));
+					}
+				});				
+			}
+			if(oDominioJurisdicao === null){
+				oWhere[13] = ["tblDominioJurisdicao.jurisdicao"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i][
+								"tblDominioJurisdicao.id_dominio_jurisdicao"
+							], that);
+						}
+	
+						that.getModel().setProperty("/DominioJurisdicao", Utils.orderByArrayParaBox(aRegistro, "tblDominioJurisdicao.jurisdicao"));
+					}
+				});				
+			}
+			if(oDominioPais === null){
+				oWhere[13] = ["tblDominioPais.pais"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"], that);
+						}
+						that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro, "tblDominioPais.pais"));
+					}
+				});				
+			}
+			if(oDominioAnoFiscal === null){
+				oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
+					}
+				});				
+			}
+			if(oDataInicio === null && oDataFim === null){
+				oWhere[13] = ["tblPagamento.data_pagamento"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DataPagamentoMin", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["min(tblPagamento.data_pagamento)"] : null
+						));
+						that.getModel().setProperty("/DataPagamentoMax", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["max(tblPagamento.data_pagamento)"] : null
+						));
+					}
+				});				
+			}
+			if(oDominioMoeda === null){
+				oWhere[13] = ["tblDominioMoeda.acronimo"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro, "tblDominioMoeda.acronimo"));
+					}
+				});				
+			}
+			if(oDominioTipoTransacao === null){
+				oWhere[13] = ["tblDominioTipoTransacao.tipo_transacao"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i][
+								"tblDominioTipoTransacao.id_dominio_tipo_transacao"
+							], that);
+						}
+						that.getModel().setProperty("/DominioTipoTransacao", Utils.orderByArrayParaBox(aRegistro,
+							"tblDominioTipoTransacao.tipo_transacao"));
+					}
+				});				
+			}
 		},
 
-		_geraRelatorioTTC: function () {
+		_geraRelatorio: function (ifExport) {
 			var vetorInicio = [];
 			var vetorFim = [];
 
@@ -467,7 +501,75 @@ sap.ui.define([
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
 			oWhere.push(null);
 
-			this._preencheReportTTC(oWhere);
+			var that = this;
+			that.setBusy(that.byId("relatorioDoTTC"), true);
+			that.byId("GerarRelatorio").setEnabled(false);
+			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC?full=" + (this.isIFrame() ? "true" : "false"), {
+				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"] ? Utils.stringDataDoBancoParaStringDDMMYYYY(
+							aRegistro[i]["tblPagamento.data_pagamento"]) : null;
+						/*aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(
+							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.juros"] = that._aplicarMascara(aRegistro[i]["tblPagamento.juros"]);
+						/*aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(
+							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.multa"] = that._aplicarMascara(aRegistro[i]["tblPagamento.multa"]);
+						/*aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i][
+							"tblPagamento.principal"]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.principal"] = that._aplicarMascara(aRegistro[i]["tblPagamento.principal"]);
+						/*aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(
+							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
+						aRegistro[i]["tblPagamento.total"] = that._aplicarMascara(aRegistro[i]["tblPagamento.total"]);
+
+						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
+							"tblDominioTaxClassification.id_dominio_tax_classification"
+						], that);
+						aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i][
+							"tblDominioJurisdicao.id_dominio_jurisdicao"
+						], that);
+						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"], that);
+						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i][
+							"tblDominioTipoTransacao.id_dominio_tipo_transacao"
+						], that);
+					}
+					Utils.conteudoView("relatorioDoTTC",that,"/TabelaDaView");
+					var array = that.getModel().getProperty("/TabelaDaView");
+					var valor;
+					if(ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT"){
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
+								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
+								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
+							}
+						}						
+						that.getModel().setProperty(ifExport, aRegistro);
+						that.setBusy(that.byId("relatorioDoTTC"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+						that.onDataExport(ifExport);
+					}
+					else{/*
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}		*/				
+						that.getModel().setProperty(ifExport, aRegistro);
+						that.setBusy(that.byId("relatorioDoTTC"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+					}/*					
+					that.getModel().setProperty("/ReportTTC", aRegistro);
+					that.setBusy(that.byId("relatorioDoTTC"), false);
+					that.byId("GerarRelatorio").setEnabled(true);*/
+				}
+			});
 		},
 
 		_preencheReportTTC: function (oWhere) {
@@ -527,7 +629,53 @@ sap.ui.define([
 				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/%/g, ',') : "0";
 			}
 		},
-
+		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
+			var array = this.getModel().getProperty("/TabelaDaView");
+			var coluna = [];
+			var excel = [];
+			for (var k = 0, length = array.length; k < length; k++) {
+				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+				excel.push(array[k]["textoNomeDaColuna"]);
+			}	
+			var valores = this.getModel().getProperty(tipo);
+				var wsAccountResultData = [];
+				wsAccountResultData.push(excel);	
+				for (var i = 0, length = valores.length; i < length; i++) {
+				excel = [];
+				    for (var j = 0, length2 = array.length; j < length2; j++) {
+				    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
+				    }
+				wsAccountResultData.push(excel);
+				};		
+				
+				var wbTaxPackage  = XLSX.utils.book_new();
+				var wsAccountResultName = this.getResourceBundle().getText("viewAdminInicioMenuTTC");
+				var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
+				XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
+				var wopts = {};
+				var formato = "";
+				if(tipo === "/XLSX"){
+					wopts = { bookType:'xlsx'/*, bookSST:false*/, type:'array' };
+					formato = ".xlsx";
+				}
+				else if (tipo === "/TXT"){
+					wopts = { bookType:'txt'/*, bookSST:false*/, type:'array' };
+					formato = ".txt";
+				}
+				else{
+					wopts = { bookType:'csv'/*, bookSST:false*/, type:'array' };
+					formato = ".csv";
+				}
+				var wbout = XLSX.write(wbTaxPackage,wopts);
+				saveAs(new Blob([wbout],{type:"application/octet-stream"}), 
+					Utils.dateNowParaArquivo()
+					+"_"
+					+this.getResourceBundle().getText("viewGeralRelatorio") 
+					+"_" 
+					+ this.getResourceBundle().getText("viewAdminInicioMenuTTC")
+					+formato);				
+		}		
+/*
 		onDataExport: sap.m.Table.prototype.exportData || function (oEvent) {
 
 			var oExport = new Export({
@@ -673,6 +821,6 @@ sap.ui.define([
 			}).then(function () {
 				oExport.destroy();
 			});
-		}
+		}*/
 	});
 });
