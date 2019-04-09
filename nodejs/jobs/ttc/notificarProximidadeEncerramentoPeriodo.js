@@ -47,7 +47,7 @@ const send_Not_Email = (numOrdem, anoCal, qtdDia) => {
 				for(var i = 0; i < Retorno.length; i++){
 					var nome = Retorno[i]['Empr.nome'];
 					var lbc_nome = Retorno[i]['Usu.nome']; 
-					var lbc_email = "fms.catarino@gmail.com" ; //Retorno[i]['Usu.email'];
+					var lbc_email = Retorno[i]['Usu.email'];
 					var vSubj = '';
 					var vHtml = '';
 					

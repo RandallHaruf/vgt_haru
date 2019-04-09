@@ -8,10 +8,6 @@ sap.ui.define(
 
 		return Controller.extend("vale.Compliance.controller.BaseController", {
 			
-			onInit: function () {
-				alert("oi");
-			},
-			
 			getRouter : function () {
 				return sap.ui.core.UIComponent.getRouterFor(this);
 			},
