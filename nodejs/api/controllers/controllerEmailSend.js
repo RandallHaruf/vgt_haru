@@ -62,6 +62,7 @@ module.exports = {
 			}
 		}
 	},
+	
 	comunicarSenha: function (EmailUsuario,NomeUsuario,Password){
 		if(EmailUsuario != "" && NomeUsuario != "" && Password != ""){
 			var emailDestino = EmailUsuario;
@@ -76,6 +77,26 @@ module.exports = {
 						body: {
 							isHtml: true,
 							content: corpoEmail
+						}
+					}, function (sucesso) {
+						resolve(JSON.stringify(sucesso));
+					}, function (err2) {
+						reject(JSON.stringify(err2));
+					});	
+			});
+		}
+	},
+	
+	comunicaReabertura: function (sBody,sAssunto){
+		if(sBody && sAssunto){
+			var EmailDestino = config.emailComunicacao;
+				return new Promise(function (resolve, reject) {
+				sendEmails.sendEmail({
+						to: EmailDestino,
+						subject: sAssunto,
+						body: {
+							isHtml: true,
+							content: sBody
 						}
 					}, function (sucesso) {
 						resolve(JSON.stringify(sucesso));

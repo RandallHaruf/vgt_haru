@@ -22,4 +22,7 @@ module.exports = function () {
 	require('./ttc/notificarProximidadeEncerramentoPeriodo')();
 	require('./Compliance_Beps/marcarComAtrasoObrigacoesVencidas')();
 	require('./taxPackage/encerrarPeriodoAnteriorAbrirPeriodoCorrente')();
+	require('./ttc/notificarAdministradorSolicitacao')();
+	require('./taxPackage/notificarAdministradorSolicitacao')();
+	console.log(new Date());
 };
