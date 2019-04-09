@@ -12,366 +12,67 @@
 			id="paginaListagem"
 			showHeader="false"
 			visible="true">
-			<!--
-			<f:Form 
-						editable="true">
-						<f:layout>
-							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
-								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
-						</f:layout>
-						
-						<f:formContainers>
-							<f:FormContainer title="{i18n>viewArquivosAdminFiltros}">
-								<f:formElements>
-									<f:FormElement>
-										<f:fields>
-											<MultiComboBox id="selectEmpresa" items="{ path: '/Empresas' }" selectedKeys="{/IdEmpresasSelecionadas}" >
-												<core:Item key="{id_empresa}" text="{nome}"/>																				
-											</MultiComboBox>
-										</f:fields>
-										<f:fields>
-											<MultiComboBox id="selectNomeObrigacao" items="{ path: '/Obrigacoes' }" selectedKeys="{/IdNomeObrigacoesSelecionadas}" >
-												<core:Item key="{id_modelo}" text="{nome_obrigacao}"/>																				
-											</MultiComboBox>
-										</f:fields>
-										<f:fields>
-											<MultiComboBox id="selectAnoFiscal" items="{ path: '/AnosFiscais' }" selectedKeys="{/IdAnosFiscaisSelecionadas}" >
-												<core:Item key="{ano_fiscal}" text="{ano_fiscal}"/>																				
-											</MultiComboBox>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:fields>
-											<Button text="{i18n>viewArquivosAdminPesquisar}" width="200px" press="RecarregarObjetos"/>
-										</f:fields>
-									</f:FormElement>
-								</f:formElements>
-							</f:FormContainer>
-						</f:formContainers>
-						
-					</f:Form>
-			-->
-			<l:BlockLayout>
-				<l:BlockLayoutRow>
-					<l:BlockLayoutCell>
-						<VBox>
-							<Label text="{i18n>viewArquivosAdminEmpresa}" />
-							<MultiComboBox id="selectEmpresa" items="{ path: '/Empresas' }" selectedKeys="{/IdEmpresasSelecionadas}" >
-								<core:Item key="{id_empresa}" text="{nome}"/>																				
-							</MultiComboBox>
-						</VBox>
-					</l:BlockLayoutCell>
-					<l:BlockLayoutCell>
-						<VBox>
-							<Label text="{i18n>viewArquivosAdminNomeObrigacao}" />
-							<MultiComboBox id="selectNomeObrigacao" items="{ path: '/Obrigacoes' }" selectedKeys="{/IdNomeObrigacoesSelecionadas}" >
-								<core:Item key="{id_modelo}" text="{nome_obrigacao}"/>																				
-							</MultiComboBox>
-						</VBox>
-					</l:BlockLayoutCell>
-					<l:BlockLayoutCell>
-						<VBox>
-							<Label text="{i18n>viewArquivosAdminAnoFiscal}" />
-							<MultiComboBox id="selectAnoFiscal" items="{ path: '/AnosFiscais' }" selectedKeys="{/IdAnosFiscaisSelecionadas}" >
-								<core:Item key="{ano_fiscal}" text="{ano_fiscal}"/>																				
-							</MultiComboBox>
-						</VBox>
-					</l:BlockLayoutCell>
-				</l:BlockLayoutRow>
-				<l:BlockLayoutRow>
-					<l:BlockLayoutCell>
-						<VBox alignItems="Center">
-							<Button text="{i18n>viewArquivosAdminPesquisar}" width="200px" press="RecarregarObjetos"/>
-						</VBox>
-					</l:BlockLayoutCell>
-				</l:BlockLayoutRow>
-			</l:BlockLayout>
-			<Table
-				id="tabelaObjetos"
-				items="{
-					path: '/objetos',
-					sorter: [{
-						path: 'classification',
-						group: true
-					}, {
-						path: 'category'
-					}, {
-						path: 'tax'
-					}, {
-						path: 'name_of_tax'
-					}]
-				}"
-				growing="true"
-				enableBusyIndicator="true"
-				growingScrollToLoad="true"
-				updateFinished="onTerminouAtualizar">
-		
-				<headerToolbar>
-					<Toolbar>
-						<Title 
-							id="cabecalhoTabelaObjetos" 
-							text="{i18n>viewArquivosAdminMenu}"/>
-						<ToolbarSpacer />
-					</Toolbar>
-				</headerToolbar>
-				<columns>
-					<Column>
-						<Text text="{i18n>viewArquivosAdminTipoObrigacao}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>viewArquivosAdminEmpresa}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>viewArquivosAdminNomeObrigacao}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>viewArquivosAdminAnoFiscal}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>viewArquivosAdminDownload}" />
-					</Column>
-					<Column>
-						<!--Text text="{i18n>viewArquivosAdminDownload}" /-->
-					</Column>
-					<!--<Column width="100px"></Column>-->
-				</columns>
-		
-				<items>
-					<ColumnListItem
-						type="Navigation"
-						>
-						<cells>
-							<ObjectIdentifier text="{Tipo}"/>
-							<ObjectIdentifier text="{nome}"/>
-							<ObjectIdentifier text="{nome_obrigacao}"/>
-							<ObjectIdentifier text="{ano_fiscal}"/>
-							<ObjectIdentifier text="{data_upload}"/>
-							<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onAbrirObjeto" enabled="{btnDownloadEnabled}"
-							class="sapUiSmallMarginEnd"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-		</Page>
-		<Page
-			id="paginaObjeto"
-			showHeader="false">
-			<content>
-				<VBox class="sapUiSmallMargin">
-					<f:Form 
-						id="formularioObjeto" 
-						editable="true">
-						<f:title>
-							<core:Title text="{i18n>viewUsuarioAdminUsuarios}"/>
-						</f:title>
-						<f:layout>
-							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
-								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
-						</f:layout>
-						<f:formContainers>
-							<f:FormContainer title="{i18n>viewGeralCadastro}">
-								<f:formElements>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminNome}" class="required" labelFor="inputNome" />
-										</f:label>
-										<f:fields>
-											<Input type="Text" id="inputNome" value="{/objeto/nome}" required="true" />
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminLogin}" class="required" labelFor="inputLogin" />
-										</f:label>
-										<f:fields>
-											<Input type="Text" id="inputLogin" value="{/objeto/user}" required="true" enabled="false" />
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminEmail}" class="required" labelFor="inputEmail" />
-										</f:label>
-										<f:fields>
-											<Input type="Text" id="inputEmail" value="{/objeto/email}" required="true" enabled="false" />
-											<Button text="{i18n>viewUsuarioAdminTrocarSenha}" width="200px" press="onTrocarSenha"/>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminContato}" class="required" labelFor="inputContato" />
-										</f:label>
-										<f:fields>
-											<Input type="Number" id="inputContato" value="{/objeto/contato}" required="true" />
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminAtivo}" class="required" labelFor="chkAtivo" />
-										</f:label>
-										<f:fields>
-											<CheckBox text="Ativo" id="chkAtivo" selected="{= !!${/objeto/user} ? true : false}" />
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminTipoAcesso}" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectClassification" items="{/DominioAcessoUsuario}" selectedKey="{/objeto/fk_dominio_tipo_acesso.id_tipo_acesso}">
-												<core:Item text="{descricao}" key="{id_tipo_acesso}" />
-											</Select>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewUsuarioAdminEmailGestor}" class="required" labelFor="inputEmailGestor" />
-										</f:label>
-										<f:fields>
-											<Input type="Text" id="inputEmailGestor" value="{/objeto/email_gestor}" />
-										</f:fields>
-									</f:FormElement>
-									
-									
-									<!--<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewGeralClassificacao}" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectClassification" items="{/DominioTaxClassification}" change="onTrocarClassification" selectedKey="{/objeto/classification}">
-												<core:Item text="{classification}" key="{id_dominio_tax_classification}" />
-											</Select>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewRelatorioCategoria}" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectCategory" items="{/TaxCategory}" change="onTrocarCategory" selectedKey="{/objeto/category}">
-												<core:Item text="{category}" key="{id_tax_category}" />
-											</Select>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewGeralTaxa}" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectTax" items="{/Tax}" selectedKey="{/objeto/tax}">
-												<core:Item text="{tax}" key="{id_tax}" />
-											</Select>
-										</f:fields>
-									</f:FormElement>
-									<f:FormElement>
-										<f:label>
-											<Label text="{i18n>viewGeralNomeT}" labelFor="inputNameOfTax" />
-										</f:label>
-										<f:fields>
-											<Input type="Text" id="inputNameOfTax" value="{/objeto/nameOfTax}" required="true" />
-										</f:fields>
-									</f:FormElement>-->
-								</f:formElements>
-							</f:FormContainer>
-						</f:formContainers>
-					</f:Form>
-					<f:Form>
-						<f:title>
-							<core:Title text="{i18n>viewUsuarioAdminVinculos}" />
-						</f:title>
-						<f:layout>
-							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
-								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
-						</f:layout>
-						<f:formContainers>
-							<f:FormContainer>
-								<f:formElements>
-									<f:FormElement>
-										<table:Table rows="{/DominioModulo}" id="tableModulos" selectionMode="None" enableColumnReordering="true">
-											<table:extension>
-												<Toolbar>
-													<ToolbarSpacer/>
-													<SearchField 
-														id="searchModulo"
-														width="15rem" 
-														search="onTextSearch" 
-														placeholder="{i18n>ViewGeralProcurar} {i18n>viewUsuarioAdminModulo}"														
-														value="{/filterValue}" />
-												</Toolbar>
-											</table:extension>
-											<table:columns>
-												<table:Column width="45px">
-													<table:template>
-														<CheckBox selected="{= ${marcado} ? true : false}" />
-													</table:template>
-												</table:Column>
-												<table:Column>
-													<Label text="{i18n>viewUsuarioAdminModulos}" />
-													<table:template>
-														<Text text="{modulo}" />
-													</table:template>
-												</table:Column>
-											</table:columns>
-										</table:Table>
-									</f:FormElement>
-								</f:formElements>
-							</f:FormContainer>
-						</f:formContainers>
-						<f:layout>
-							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
-								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
-						</f:layout>
-						<f:formContainers>
-							<f:FormContainer>
-								<f:formElements>
-									<f:FormElement>
-										<table:Table rows="{/Empresas}" id="tableEmpresas" selectionMode="None" enableColumnReordering="true">
-											<table:extension>
-												<Toolbar>
-													<ToolbarSpacer/>
-													<SearchField 
-														id="searchEmpresa"
-														width="15rem" 
-														search="onTextSearch" 
-														placeholder="{i18n>ViewGeralProcurar} {i18n>viewUsuarioAdminEmpresa}"														
-														value="{/filterValue}" />
-												</Toolbar>
-											</table:extension>
-											<table:columns>
-												<table:Column width="45px">
-													<table:template>
-														<CheckBox selected="false" />
-													</table:template>
-												</table:Column>
-												<table:Column>
-													<Label text="{i18n>viewUsuarioAdminEmpresas}" />
-													<table:template>
-														<Text text="{nome}" />
-													</table:template>
-												</table:Column>
-											</table:columns>
-										</table:Table>
-									</f:FormElement>
-								</f:formElements>
-							</f:FormContainer>
-						</f:formContainers>
-					</f:Form>
-				</VBox>
-			</content>
-			<footer>
+			<VBox>
 				<Toolbar>
-					<ToolbarSpacer/>
-					<Button 
-						id="btnSalvar"
-						text="{i18n>viewGeralSalvar}" 
-						type="Accept" 
-						press="onSalvar"/>
-					<Button 
-						id="btnCancelar"
-						text="{i18n>viewGeralCancelar}" 
-						type="Reject" 
-						press="onCancelar"/>
+					<Input placeholder="{i18n>viewComplianceListagemObrigacoesNomeArquivo}" value="{/ValorFiltroNomeArquivo}" change="_listarArquivos" />
+					<ToolbarSpacer />
+					<Button icon="sap-icon://filter" type="Transparent" tooltip="{i18n>viewGeralTooltipVisualizarOpcoesFiltro}" press="onAbrirConfiguracaoFiltro" />
 				</Toolbar>
-			</footer>
+				<ScrollContainer vertical="true" height="100%" width="100%">
+					<Table 
+						id="tabelaObjetos"
+						growing="true"
+						items="{
+							path: '/objetos',
+							sorter: [{
+								path: 'nome_empresa',
+								group: true
+							}, {
+								path: 'tipo'
+							}, {
+								path: 'nome_obrigacao'
+							}, {
+								path: 'ano_fiscal_calculado'
+							}, {
+								path: 'ind_conclusao',
+								descending: true
+							}, {
+								path: 'nome_arquivo'
+							}]
+						}">
+						<columns>
+							<Column>
+								<ObjectIdentifier title="{i18n>viewComplianceListagemObrigacoesNomeArquivo}" />
+							</Column>
+							<Column minScreenWidth="XLarge" demandPopin="true">
+								<ObjectIdentifier title="{i18n>viewArquivosAdminTipoObrigacao}" />
+							</Column>
+							<Column minScreenWidth="XLarge" demandPopin="true">
+								<ObjectIdentifier title="{i18n>viewArquivosAdminNomeObrigacao}" />
+							</Column>
+							<Column minScreenWidth="XLarge" demandPopin="true">
+								<ObjectIdentifier title="{i18n>viewArquivosAdminAnoFiscal}" />
+							</Column>
+							<Column minScreenWidth="XLarge" demandPopin="true">
+								<ObjectIdentifier title="{i18n>viewArquivosAdminDownload}" />
+							</Column>
+							<Column width="50px"></Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<ObjectIdentifier title="{nome_arquivo}"/>
+									<Text text="{tipo}"/>
+									<Text text="{nome_obrigacao}"/>
+									<Text text="{ano_fiscal_calculado}"/>
+									<Text text="{= ${ind_conclusao} ? ${data_conclusao} : ''}"/>
+									<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onBaixarArquivo" enabled="{btnDownloadEnabled}" />
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</ScrollContainer>
+			</VBox>
 		</Page>
 	</NavContainer>
 </mvc:View>

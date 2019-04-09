@@ -308,7 +308,8 @@ module.exports = {
 		try {
 			var aFiltroEmpresa = req.query.empresa ? JSON.parse(req.query.empresa) : [],
 				aFiltroTipo = req.query.tipo ? JSON.parse(req.query.tipo) : [],
-				aFiltroNomeObrigacao = req.query.nomeObrigacao ? JSON.parse(req.query.nomeObrigacao) : [];
+				aFiltroNomeObrigacao = req.query.nomeObrigacao ? JSON.parse(req.query.nomeObrigacao) : [],
+				aFiltroAnoFiscal = req.query.anoFiscal ? JSON.parse(req.query.anoFiscal) : [];
 			
 			var sQuery = 
 				'select t."id_documento", '
@@ -317,7 +318,11 @@ module.exports = {
 				+ 't."nome" "nome_empresa", '
 				+ 't."id_modelo" "id_modelo_obrigacao", '
 				+ 't."nome_obrigacao", '
-				+ 't."tipo" '
+				+ 't."tipo", '
+				+ 't."id_ano_fiscal_calculado", '
+				+ 't."ano_fiscal_calculado", '
+				+ 't."ind_conclusao", '
+				+ 't."data_conclusao" '
 				+ 'from ('
 				+ modelRespostaObrigacao.pegarQueryRespostaObrigacaoCalculada()
 				+ 'inner join "VGT.DOCUMENTO_OBRIGACAO" doc '
@@ -326,7 +331,7 @@ module.exports = {
 				+ 'on vw_resposta_obrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" = tipoObrigacao."id_dominio_obrigacao_acessoria_tipo" ) t ',
 				aParam = [];
 			
-			if (req.query.nomeArquivo || aFiltroEmpresa.length || aFiltroTipo.length || aFiltroNomeObrigacao.length) {
+			if (req.query.nomeArquivo || aFiltroEmpresa.length || aFiltroTipo.length || aFiltroNomeObrigacao.length || aFiltroAnoFiscal.length) {
 				sQuery += ' where ';
 			}
 			
@@ -339,6 +344,7 @@ module.exports = {
 			sQuery = concatenarIn(sQuery, 't."id_empresa"', aFiltroEmpresa, aParam, req.query.nomeArquivo);
 			sQuery = concatenarIn(sQuery, 't."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"', aFiltroTipo, aParam, ((req.query.nomeArquivo || aFiltroEmpresa.length) && aFiltroTipo.length));
 			sQuery = concatenarIn(sQuery, 't."nome_obrigacao"', aFiltroNomeObrigacao, aParam, ((req.query.nomeArquivo || aFiltroEmpresa.length || aFiltroTipo.length) && aFiltroNomeObrigacao.length));
+			sQuery = concatenarIn(sQuery, 't."id_ano_fiscal_calculado"', aFiltroAnoFiscal, aParam, ((req.query.nomeArquivo || aFiltroEmpresa.length || aFiltroTipo.length || aFiltroNomeObrigacao.length) && aFiltroAnoFiscal.length));
 			
 			db.executeStatement({
 				statement: sQuery,

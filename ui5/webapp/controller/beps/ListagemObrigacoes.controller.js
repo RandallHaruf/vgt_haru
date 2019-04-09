@@ -64,7 +64,7 @@ sap.ui.define(
 					
 					var oFilterButton = new sap.m.Button({
 						icon: "sap-icon://filter",
-						tooltip: "View Filter Settings",
+						tooltip: "{i18n>viewGeralTooltipVisualizarOpcoesFiltro}",
 						type: "Transparent"
 					}).attachPress(function (event) {
 						that._onFiltrarArquivos(event);
