@@ -25,13 +25,14 @@
 						text="CSV"
 						type="Transparent"
 						press="onGerarCsv"/>
-					<!--<Button
-						text="{i18n>viewRelatorioExportar} TXT"
-						type="Transparent" />-->
+					<Button
+						text="TXT"
+						type="Transparent"
+						press="onGerarTxt"/>
 					<Button
 						text="XLS"
 						type="Transparent"
-						press="onGerarCsv"/>
+						press="onGerarXlsx"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
