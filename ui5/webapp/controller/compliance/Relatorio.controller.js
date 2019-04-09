@@ -11,8 +11,12 @@ sap.ui.define([
 	"sap/ui/core/util/ExportTypeCSV",	
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
-	"ui5ns/ui5/lib/Utils"	
-], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Export, ExportType ,ExportTypeCSV, TablePersoController,MessageBox,Utils) {
+	"ui5ns/ui5/lib/Utils",
+	"ui5ns/ui5/lib/Validador",	
+	"ui5ns/ui5/lib/jszip",
+	"ui5ns/ui5/lib/XLSX",
+	"ui5ns/ui5/lib/FileSaver"	
+], function (jQuery, Controller, Filter, JSONModel, BaseController, NodeAPI, Constants, Export, ExportType ,ExportTypeCSV, TablePersoController,MessageBox,Utils,Validador) {
 	"use strict";
 
 	return BaseController.extend("ui5ns.ui5.controller.compliance.Relatorio", {
@@ -29,7 +33,12 @@ sap.ui.define([
 					"value": this.getResourceBundle().getText("viewGeralNao")
 				}]				
 			}));
+			var oModel = new sap.ui.model.json.JSONModel({
+			});		
+			oModel.setSizeLimit(5000);
+			this.getView().setModel(oModel);
 			this._atualizarDados();
+			
 			/*this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);*/		
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._handleRouteMatched, this);			
@@ -69,8 +78,17 @@ sap.ui.define([
 			this._geraRelatorio();                                  	
 		},
 		onGerarRelatorio: function (oEvent) {
-			this._geraRelatorio(); 
+			this._geraRelatorio("/ReportObrigacao"); 
+		},
+		onGerarCsv: function (oEvent) {
+			this._geraRelatorio("/CSV"); 
 		},		
+		onGerarXlsx: function (oEvent) {
+			this._geraRelatorio("/XLSX"); 
+		},			
+		onGerarTxt: function (oEvent) {
+			this._geraRelatorio("/TXT"); 
+		},
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
 		},
@@ -421,7 +439,7 @@ sap.ui.define([
 			}			
 			
 		},
-		
+		/*
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
 
 			var oExport = new Export({
@@ -629,8 +647,54 @@ sap.ui.define([
 				oExport.destroy();
 			});
 		},		
-		
-		_geraRelatorio: function () {
+		*/
+		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
+			var array = this.getModel().getProperty("/TabelaDaView");
+			var coluna = [];
+			var excel = [];
+			for (var k = 0, length = array.length; k < length; k++) {
+				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+				excel.push(array[k]["textoNomeDaColuna"]);
+			}	
+			var valores = this.getModel().getProperty(tipo);
+				var wsAccountResultData = [];
+				wsAccountResultData.push(excel);	
+				for (var i = 0, length = valores.length; i < length; i++) {
+				excel = [];
+				    for (var j = 0, length2 = array.length; j < length2; j++) {
+				    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
+				    }
+				wsAccountResultData.push(excel);
+				};		
+				
+				var wbTaxPackage  = XLSX.utils.book_new();
+				var wsAccountResultName = this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina");
+				var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
+				XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
+				var wopts = {};
+				var formato = "";
+				if(tipo === "/XLSX"){
+					wopts = { bookType:'xlsx'/*, bookSST:false*/, type:'array' };
+					formato = ".xlsx";
+				}
+				else if (tipo === "/TXT"){
+					wopts = { bookType:'txt'/*, bookSST:false*/, type:'array' };
+					formato = ".txt";
+				}
+				else{
+					wopts = { bookType:'csv'/*, bookSST:false*/, type:'array' };
+					formato = ".csv";
+				}
+				var wbout = XLSX.write(wbTaxPackage,wopts);
+				saveAs(new Blob([wbout],{type:"application/octet-stream"}), 
+					Utils.dateNowParaArquivo()
+					+"_"
+					+this.getResourceBundle().getText("viewGeralRelatorio") 
+					+"_" 
+					+ this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina")
+					+formato);				
+		},			
+		_geraRelatorio: function (ifExport) {
 
 			var vetorInicioEntrega = [];
 			var vetorInicioExtensao = [];
@@ -667,7 +731,72 @@ sap.ui.define([
 			oWhere.push(oCheckSuporteContratado);
 			oWhere.push(null);	
 			oWhere.push(null);			
-			this._preencheReportObrigacao(oWhere);
+			//this._preencheReportObrigacao(oWhere);
+			var that = this;
+			that.setBusy(that.byId("relatorioCompliance"),true);	
+			that.byId("GerarRelatorio").setEnabled(false);	
+			
+			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				type: "POST",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true,
+				data: {
+					parametros: JSON.stringify(oWhere)
+				},
+				success: function (response) {
+					var aRegistro = JSON.parse(response);
+					for (var i = 0, length = aRegistro.length; i < length; i++) {
+						aRegistro[i]["prazo_de_entrega_calculado"] = aRegistro[i]["prazo_de_entrega_calculado"] 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(
+							aRegistro[i]["tblDominioAnoCalendario.ano_calendario"]+aRegistro[i]["prazo_de_entrega_calculado"].substring(4,10)
+							) 
+						: null;
+						aRegistro[i]["tblRespostaObrigacao.data_extensao"] = aRegistro[i]["tblRespostaObrigacao.data_extensao"] 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblRespostaObrigacao.data_extensao"]) 
+						: null;
+						//TRADUZIR DESCRICAO DA OBRIGACAO STATUS
+						aRegistro[i]["tblRespostaObrigacao.suporte_contratado"] = !!aRegistro[i]["tblRespostaObrigacao.suporte_contratado"] === true 
+						? that.getResourceBundle().getText("viewGeralSim") 
+						: that.getResourceBundle().getText("viewGeralNao") ;
+						
+						aRegistro[i]["tblRespostaObrigacao.suporte_valor"] = that._aplicarMascara(aRegistro[i]["tblRespostaObrigacao.suporte_valor"]);
+						
+						aRegistro[i]["tblDominioPeriodicidadeObrigacao.descricao"] = Utils.traduzPeriodo(aRegistro[i]["tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"],that);	
+						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"],that);  
+						aRegistro[i]["tblDominioObrigacaoStatus.descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(aRegistro[i]["tblDominioObrigacaoStatus.id_dominio_obrigacao_status"],that);           						
+					}		
+					Utils.conteudoView("relatorioCompliance",that,"/TabelaDaView");
+					var array = that.getModel().getProperty("/TabelaDaView");
+					var valor;
+					if(ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT"){
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
+								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
+								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
+							}
+						}						
+						that.getModel().setProperty(ifExport, aRegistro);
+						that.setBusy(that.byId("relatorioCompliance"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+						that.onDataExport(ifExport);
+					}
+					else{/*
+						for (var k = 0, length = array.length; k < length; k++) {
+							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
+						}*/						
+						that.getModel().setProperty(ifExport, aRegistro);
+						that.setBusy(that.byId("relatorioCompliance"),false);		
+						that.byId("GerarRelatorio").setEnabled(true);						
+					}					
+					/*
+					that.getModel().setProperty("/ReportObrigacao", aRegistro);
+					
+					that.setBusy(that.byId("relatorioCompliance"),false);	
+					that.byId("GerarRelatorio").setEnabled(true);	*/					
+				}
+			});				
 		},
 		
 		_preencheReportObrigacao: function (oWhere){

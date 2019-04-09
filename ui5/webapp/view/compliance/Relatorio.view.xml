@@ -23,17 +23,17 @@
 							icon="sap-icon://print" 
 							press="onImprimir"/>-->
 					<Button
-							text="CSV"
-							type="Transparent"
-							press="onDataExportCSV"/>
-					<!--<Button
-							text="{i18n>viewRelatorioExportar} TXT"
-							type="Transparent" 
-							press="onDataExportTXT"/>-->
+						text="CSV"
+						type="Transparent"
+						press="onGerarCsv"/>
 					<Button
-							text="XLS"
-							type="Transparent"
-							press="onDataExportCSV"/>
+						text="TXT"
+						type="Transparent"
+						press="onGerarTxt"/>
+					<Button
+						text="XLS"
+						type="Transparent"
+						press="onGerarXlsx"/>
 					<!--<Button
 							text="{i18n>viewRelatorioExportar} PDF"
 							type="Transparent"/>-->
@@ -54,7 +54,7 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="J" label="{i18n>viewComplianceListagemObrigacoesColunaTipo}">
 								<fb:control>
@@ -169,8 +169,8 @@
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
-			<ScrollContainer id="relatorioCompliance" horizontal="true" vertical="true" height="100%">
-				<Table items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
+			<ScrollContainer  horizontal="true" vertical="true" height="100%">
+				<Table id="relatorioCompliance" items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
 					<columns>
 						<Column width="6rem">
 							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"/>
