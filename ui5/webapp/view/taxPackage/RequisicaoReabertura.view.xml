@@ -5,11 +5,7 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.f"
 	xmlns="sap.m">
-	<f:DynamicPage
-		title="{i18n>viewTPRequisicaoReaberturaTituloPagina}"
-		showNavButton="true"
-		navButtonPress="onNavBack"
-		toggleHeaderOnTitleClick="false">
+	<f:DynamicPage toggleHeaderOnTitleClick="false">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
