@@ -72,7 +72,11 @@ sap.ui.define(
 			},
 			
 			navToPage2: function () {
-				this.getRouter().navTo("taxPackageListagemEmpresas");
+				this.getRouter().navTo("taxPackageListagemEmpresas",{
+					parametros: JSON.stringify({
+						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
+					})
+				});
 			},
 			
 			navToPage3: function () {

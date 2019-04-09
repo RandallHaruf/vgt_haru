@@ -20630,7 +20630,7 @@ function sheet_to_csv(sheet, opts) {
 }
 
 function sheet_to_txt(sheet, opts) {
-	if(!opts) opts = {}; opts.FS = "\t"; opts.RS = "\n";
+	if(!opts) opts = {}; opts.FS = ";"/*"\t"*/; opts.RS = "\n";
 	var s = sheet_to_csv(sheet, opts);
 	if(typeof cptable == 'undefined' || opts.type == 'string') return s;
 	var o = cptable.utils.encode(1200, s, 'str');

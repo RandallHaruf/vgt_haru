@@ -75,7 +75,11 @@ sap.ui.define(
 			},
 			
 			navToPage2: function () {
-				this.getRouter().navTo("ttcListagemEmpresas");
+				this.getRouter().navTo("ttcListagemEmpresas", {
+					parametros: JSON.stringify({
+						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
+					})
+				});
 			},
 			
 			navToPage3: function () {

@@ -12,7 +12,10 @@ sap.ui.define([
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
 	"ui5ns/ui5/lib/Utils",
-	"ui5ns/ui5/lib/Validador"
+	"ui5ns/ui5/lib/Validador",
+	"ui5ns/ui5/lib/jszip",
+	"ui5ns/ui5/lib/XLSX",
+	"ui5ns/ui5/lib/FileSaver"
 ], function (jQuery, Controller, Filter, JSONModel, BaseController,NodeAPI,Constants,Export,ExportType,ExportTypeCSV,TablePersoController,MessageBox,Utils,Validador) {
 	"use strict";
 
@@ -77,11 +80,17 @@ sap.ui.define([
 			//this._geraRelatorio(); 			
 		},
 		onGerarRelatorio: function (oEvent) {
-			this._geraRelatorioTax(); 
+			this._geraRelatorioTax("/ReportTaxPackage"); 
 		},
 		onGerarCsv: function (oEvent) {
-			this._geraRelatorioTax(true); 
+			this._geraRelatorioTax("/CSV"); 
 		},		
+		onGerarXlsx: function (oEvent) {
+			this._geraRelatorioTax("/XLSX"); 
+		},			
+		onGerarTxt: function (oEvent) {
+			this._geraRelatorioTax("/TXT"); 
+		},
 
 		_atualizarDados: function () {
 			var that = this;
@@ -188,7 +197,7 @@ sap.ui.define([
 				});					
 			}
 		},
-		
+		/*
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
 			var array = this.getModel().getProperty("/TabelaDaView");
 			var coluna = [];
@@ -226,7 +235,55 @@ sap.ui.define([
 				oExport.destroy();
 			});
 		},	
+		*/
 		
+		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
+			var array = this.getModel().getProperty("/TabelaDaView");
+			var coluna = [];
+			var excel = [];
+			for (var k = 0, length = array.length; k < length; k++) {
+				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+				excel.push(array[k]["textoNomeDaColuna"]);
+			}	
+			var valores = this.getModel().getProperty(tipo);
+				var wsAccountResultData = [];
+				wsAccountResultData.push(excel);	
+				for (var i = 0, length = valores.length; i < length; i++) {
+				excel = [];
+				    for (var j = 0, length2 = array.length; j < length2; j++) {
+				    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
+				    }
+				wsAccountResultData.push(excel);
+				};		
+				
+				var wbTaxPackage  = XLSX.utils.book_new();
+				var wsAccountResultName = this.getResourceBundle().getText("viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE");
+				var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
+				XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
+				var wopts = {};
+				var formato = "";
+				if(tipo === "/XLSX"){
+					wopts = { bookType:'xlsx'/*, bookSST:false*/, type:'array' };
+					formato = ".xlsx";
+				}
+				else if (tipo === "/TXT"){
+					wopts = { bookType:'txt'/*, bookSST:false*/, type:'array' };
+					formato = ".txt";
+				}
+				else{
+					wopts = { bookType:'csv'/*, bookSST:false*/, type:'array' };
+					formato = ".csv";
+				}
+				var wbout = XLSX.write(wbTaxPackage,wopts);
+				saveAs(new Blob([wbout],{type:"application/octet-stream"}), 
+					Utils.dateNowParaArquivo()
+					+"_"
+					+this.getResourceBundle().getText("viewGeralRelatorio") 
+					+"_" 
+					+ this.getResourceBundle().getText("viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE")
+					+formato);				
+		},	
+				
 		_geraRelatorioTax: function (ifExport) {
 
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
@@ -263,25 +320,24 @@ sap.ui.define([
 					}
 					Utils.conteudoView("relatorioDoTaxPackage",that,"/TabelaDaView");
 					var array = that.getModel().getProperty("/TabelaDaView");
-					var property = ifExport ? "/CSV" : "/ReportTaxPackage";
 					var valor;
-					if(property === "/CSV"){
+					if(ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT"){
 						for (var i = 0, length = aRegistro.length; i < length; i++) {
 							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
 								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
 								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
 							}
 						}						
-						that.getModel().setProperty(property, aRegistro);
+						that.getModel().setProperty(ifExport, aRegistro);
 						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
 						that.byId("GerarRelatorio").setEnabled(true);						
-						that.onDataExportCSV();
+						that.onDataExport(ifExport);
 					}
 					else{
 						for (var k = 0, length = array.length; k < length; k++) {
 							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
 						}						
-						that.getModel().setProperty(property, aRegistro);
+						that.getModel().setProperty(ifExport, aRegistro);
 						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
 						that.byId("GerarRelatorio").setEnabled(true);						
 					}

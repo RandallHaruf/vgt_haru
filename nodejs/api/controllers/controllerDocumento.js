@@ -2,6 +2,7 @@
 "use strict";
 
 var db = require("../db");
+var modelRespostaObrigacao = require('../models/modelRespostaObrigacao');
 
 function closeConnection(oConnection) {
 	try {
@@ -174,6 +175,7 @@ module.exports = {
 			}));
 		}
 	},
+	
 	listarTodosArquivos: function (req, res) {
 
 		var sStatement =  'SELECT * FROM ( ' 
@@ -296,5 +298,85 @@ module.exports = {
 		res.send(JSON.stringify(auth.filtrarEmpresas(req, result, "id_empresa")));
 		}
 		});
+	},
+	
+	/**
+	* 05/04/2019 @pedsf - Novo método para listar arquivos de respostas de obrigações 
+	* que re-utiliza as mesmas validações aplicadas na listagem de obrigações do compliance/beps
+	**/
+	deepQuery: function (req, res, next) {
+		try {
+			var aFiltroEmpresa = req.query.empresa ? JSON.parse(req.query.empresa) : [],
+				aFiltroTipo = req.query.tipo ? JSON.parse(req.query.tipo) : [],
+				aFiltroNomeObrigacao = req.query.nomeObrigacao ? JSON.parse(req.query.nomeObrigacao) : [];
+			
+			var sQuery = 
+				'select t."id_documento", '
+				+ 't."nome_arquivo", '
+				+ 't."id_empresa", '
+				+ 't."nome" "nome_empresa", '
+				+ 't."id_modelo" "id_modelo_obrigacao", '
+				+ 't."nome_obrigacao", '
+				+ 't."tipo" '
+				+ 'from ('
+				+ modelRespostaObrigacao.pegarQueryRespostaObrigacaoCalculada()
+				+ 'inner join "VGT.DOCUMENTO_OBRIGACAO" doc '
+				+ 'on vw_resposta_obrigacao."id_resposta_obrigacao" = doc."fk_id_resposta_obrigacao.id_resposta_obrigacao" '
+				+ 'inner join "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" tipoObrigacao '
+				+ 'on vw_resposta_obrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" = tipoObrigacao."id_dominio_obrigacao_acessoria_tipo" ) t ',
+				aParam = [];
+			
+			if (req.query.nomeArquivo || aFiltroEmpresa.length || aFiltroTipo.length || aFiltroNomeObrigacao.length) {
+				sQuery += ' where ';
+			}
+			
+			
+			if (req.query.nomeArquivo) {
+				sQuery += ' UPPER(t."nome_arquivo") like ? ';
+				aParam.push('%' + req.query.nomeArquivo.toUpperCase() + '%');
+			}
+			
+			sQuery = concatenarIn(sQuery, 't."id_empresa"', aFiltroEmpresa, aParam, req.query.nomeArquivo);
+			sQuery = concatenarIn(sQuery, 't."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"', aFiltroTipo, aParam, ((req.query.nomeArquivo || aFiltroEmpresa.length) && aFiltroTipo.length));
+			sQuery = concatenarIn(sQuery, 't."nome_obrigacao"', aFiltroNomeObrigacao, aParam, ((req.query.nomeArquivo || aFiltroEmpresa.length || aFiltroTipo.length) && aFiltroNomeObrigacao.length));
+			
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParam
+			}, (err, result) => {
+				if (err) {
+					console.log(err);
+					next(err);
+				}	
+				else {
+					var auth = require("../auth")();
+					res.status(200).json({
+						result: auth.filtrarEmpresas(req, result, "id_empresa")
+					});
+				}
+			});
+		}
+		catch (e) {
+			console.log(e);
+			next("Erro inesperado ao listar arquivos: " + err.message);
+		}
 	}
 };
+
+function concatenarIn(sStatement, sNomeColuna, aValor, aParam, bAnd) {
+	if (aValor.length) {
+		sStatement += (bAnd ? ' and ' : ' ') + sNomeColuna + ' in ('
+					
+		for (var i = 0, length = aValor.length; i < length; i++) {
+			if (i !== 0) {
+				sStatement += ',';
+			}
+			sStatement += '?';
+			aParam.push(aValor[i]);
+		}
+		
+		sStatement += ') ';
+	}
+	
+	return sStatement;
+}

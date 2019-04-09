@@ -235,7 +235,7 @@ sap.ui.define(
 								that.onAtualizaInfo();
 							});
 						}.bind(this)
-					}),
+					}).setEnabled(oItemSelecionado.btnSalvarHabilitado),
 					endButton: new sap.m.Button({
 						text: "{i18n>viewGeralSair}",
 						press: function () {
@@ -426,7 +426,8 @@ sap.ui.define(
 								//that.getRouter().navTo("complianceListagemObrigacoes");
 							});
 						}.bind(this)
-					}),
+					})/*.setEnabled(oItemSelecionado.btnSalvarHabilitado)*/
+					,
 					endButton: new sap.m.Button({
 						text: "{i18n>viewGeralSair}",
 						press: function () {
@@ -622,7 +623,7 @@ sap.ui.define(
 								//that.getRouter().navTo("complianceListagemObrigacoes");
 							});
 						}.bind(this)
-					}),
+					}).setEnabled(oItemSelecionadoTTC.btnSalvarHabilitado),
 					endButton: new sap.m.Button({
 						text: "{i18n>viewGeralSair}",
 						press: function () {
@@ -771,7 +772,7 @@ sap.ui.define(
 								//that.getRouter().navTo("complianceListagemObrigacoes");
 							});
 						}.bind(this)
-					}),
+					}).setEnabled(oItemSelecionadoTAX.btnSalvarHabilitado),
 					endButton: new sap.m.Button({
 						text: "{i18n>viewGeralSair}",
 						press: function () {

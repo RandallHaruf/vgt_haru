@@ -63,6 +63,7 @@
 									</items>
 								</Select>
 								<ToolbarSpacer/>
+								<Button text="{i18n>viewComplianceListagemObrigacoesProcurarArquivo}" type="Emphasized" icon="sap-icon://browse-folder" press="onProcurarArquivos" />
 								<!--<Button 
 									id="botaoNovaObrigacao" 
 									icon="sap-icon://add" 

@@ -250,6 +250,18 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				//não permite que o usuário que imputou os dados seja o mesmo que irá gerar aprovação como administrador
+				/*var idUsuario = req.session.usuario.id;
+				for (var i = 0; i < result.length; i++){
+					var oCorrente = result[i];
+					if (oCorrente.id_usuario == idUsuario) {
+						oCorrente.btnSalvarHabilitado = false;
+					}
+					else {
+						oCorrente.btnSalvarHabilitado = true;
+					}
+				}*/
+				
 				res.send(JSON.stringify(result));
 			}
 		});
