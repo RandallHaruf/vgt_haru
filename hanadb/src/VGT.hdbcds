@@ -671,11 +671,20 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":-1042,"y":1264.5}}*/
     entity CAMBIO_TTC {
-        key id_cambio_ttc   		: Integer not null;
-            data            		: LocalDate;
-            fk_dominio_moeda		: association[*, 1..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
-            cambio_usd      		: Decimal(19, 4);
-            cambio_brl      		: Decimal(19, 4);
-            fk_arquivo_cambio_ttc	: association[*, 1..1] to VGT.ARQUIVO_CAMBIO_TTC{ id_arquivo_cambio_ttc };
+        key id_cambio_ttc         : Integer not null;
+            data                  : LocalDate;
+            fk_dominio_moeda      : association[*, 1..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+            cambio_usd            : Decimal(19, 4);
+            cambio_brl            : Decimal(19, 4);
+            fk_arquivo_cambio_ttc : association[*, 1..1] to VGT.ARQUIVO_CAMBIO_TTC { id_arquivo_cambio_ttc };
+    };
+
+    /*@@layout{"layoutInfo":{"x":-2652,"y":132.5}}*/
+    entity TEMPLATE_REPORT {
+        key id_template_report : Integer;
+            tela               : String(10);
+            parametros         : String(4000);
+            fk_usuario         : association[*, 0..1] to VGT.USUARIO;
+            ind_isIFrame       : Boolean;
     };
 };

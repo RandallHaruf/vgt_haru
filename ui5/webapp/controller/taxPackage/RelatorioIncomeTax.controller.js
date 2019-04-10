@@ -79,6 +79,200 @@ sap.ui.define([
 		onImprimir: function (oEvent) {
 			//this._geraRelatorio(); 			
 		},
+
+		_adicionarTaxaMultipla: function (sProperty) {
+			this.getModel().getProperty(sProperty).unshift({
+				descricao: null,
+				descricaoValueState: sap.ui.core.ValueState.Error,
+				valor: JSON.stringify(this.getModel().getProperty("/Preselecionado"))
+			});
+
+			this.getModel().refresh();
+		},
+
+		_excluirTaxaMultipla: function (oEvent, sProperty) {
+			var aTaxaMultipla = this.getModel().getProperty(sProperty);
+			var oExcluir = oEvent.getSource().getBindingContext().getObject();
+
+			for (var i = 0, length = aTaxaMultipla.length; i < length; i++) {
+				if (aTaxaMultipla[i] === oExcluir) {
+					aTaxaMultipla.splice(i, 1);
+					break;
+				}
+			}
+
+			this.getModel().refresh();
+		},
+
+		_dialogTaxaMultipla: function (sTitulo, sProperty, isNegativo) {
+			var oScrollContainer = new sap.m.ScrollContainer({
+				horizontal: true,
+				vertical: true,
+				height: "330px"
+			}).addStyleClass("sapUiNoContentPadding");
+
+			/* Criação da tabela de inserção */
+			var oTable = new sap.m.Table();
+
+			/* Toolbar com título da tabela e botão de nova taxa */
+			var oToolbar = new sap.m.Toolbar();
+
+			oToolbar.addContent(new sap.m.ObjectIdentifier({
+				title: sTitulo
+			}));
+
+			oToolbar.addContent(new sap.m.ToolbarSpacer());
+
+			oToolbar.addContent(new sap.m.Button({
+				text: this.getResourceBundle().getText("viewGeralNova"),
+				icon: "sap-icon://add",
+				type: "Emphasized"
+			}).attachPress(oTable, function () {
+				this._adicionarTaxaMultipla(sProperty);
+			}, this));
+
+			oTable.setHeaderToolbar(oToolbar);
+
+			/* Colunas da tabela */
+			oTable.addColumn(new sap.m.Column({
+				width: "50px"
+			}));
+			oTable.addColumn(new sap.m.Column({
+				width: "50px"
+			}));
+			oTable.addColumn(new sap.m.Column({
+				vAlign: "Middle"
+			}).setHeader(new sap.m.Text({
+				text: this.getResourceBundle().getText("ViewRelatorioDescricao")
+			})));
+			/*
+			oTable.addColumn(new sap.m.Column({
+				vAlign: "Middle"
+			}).setHeader(new sap.m.Text({
+				text: this.getResourceBundle().getText("viewRelatorioValue")
+			})));*/
+
+			/* Template das células */
+			var oBtnExcluir = new sap.m.Button({
+				icon: "sap-icon://delete",
+				type: "Reject",
+				tooltip: "{i18n>viewGeralExcluirLinha}"
+			}).attachPress(oTable, function (oEvent2) {
+				this._excluirTaxaMultipla(oEvent2, sProperty);
+			}, this);
+			
+			var oBtnSelecionar = new sap.m.Button({
+				icon: "sap-icon://filter",
+				type: "Accept",
+				tooltip: "Filtrar"
+			}).attachPress(oTable, function (oEvent2) {
+				this.onTemplateGet();
+			}, this);
+			
+			var oInputDescricao = new sap.m.Input({
+				value: "{descricao}",
+				valueState: "{descricaoValueState}",
+				valueStateText: this.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio")
+			}).attachChange(function (oEvent) {
+				var obj = oEvent.getSource().getBindingContext().getObject();
+				obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
+			});
+			/*
+			var oInputValor = new sap.m.Input({
+				textAlign: "End",
+				value: "{path: 'valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+			}).attachChange(function (oEvent) {
+				if (this._validarNumeroInserido(oEvent) && isNegativo) {
+					var fValorNegativo = Math.abs(this._limparMascara(oEvent.getSource().getValue())) * -1;
+					var sValorFormatado = NumberFormat.getFloatInstance({
+						minFractionDigits: 2,
+						maxFractionDigits: 2
+					}).format(fValorNegativo);
+					oEvent.getSource().setValue(sValorFormatado);
+				}
+			}, this);*/
+
+			var oTemplate = new sap.m.ColumnListItem({
+				cells: [oBtnExcluir,oBtnSelecionar, oInputDescricao/*, oInputValor*/]
+			});
+
+			oTable.bindItems({
+				path: sProperty,
+				template: oTemplate
+			});
+
+			oScrollContainer.addContent(oTable);
+
+			var that = this;
+
+			/* Criação do diálogo com base na tabela */
+			var dialog = new sap.m.Dialog({
+				contentWidth: "500px",
+				showHeader: false,
+				type: "Message",
+				content: oScrollContainer,
+				beginButton: new sap.m.Button({
+					text: that.getResourceBundle().getText("viewGeralFechar"),
+					press: function () {
+						var aTaxa = that.getModel().getProperty(sProperty),
+							bValido = true;
+
+						if (aTaxa && aTaxa.length) {
+							var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+								return !obj.descricao;
+							});
+
+							if (aTaxaSemDescricao.length) {
+								bValido = false;
+							}
+						}
+						
+						if (bValido) {
+							dialog.close();
+							//that.onAplicarRegras();
+						} else {
+							jQuery.sap.require("sap.m.MessageBox");
+							sap.m.MessageBox.show(that.getResourceBundle().getText(
+								"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+								title: that.getResourceBundle().getText("viewGeralAviso")
+							});
+						}
+					}
+				}),
+				afterClose: function () {
+					dialog.destroy();
+				}
+			});
+
+			this.getView().addDependent(dialog);
+
+			dialog.open();
+		},
+		onDialogOpen: function (oEvent){
+			this.onTemplateSet();
+			this._dialogTaxaMultipla("TEMPLATE","/Empresa");
+		},
+		onTemplateSet: function (oEvent){
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
+			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
+			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;			
+			var oWhere = [];
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioAnoCalendario);
+			oWhere.push(oPeriodoSelecionadas);
+			oWhere.push(oMoedaSelecionadas);
+			this.getModel().setProperty("/Preselecionado",oWhere);			
+		},
+		onTemplateGet: function (oEvent){
+			this._onClearSelecoes();
+			this._atualizarDados();
+			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
+			this.getModel().setProperty("/IdEmpresasSelecionadas",forcaSelecao[0]);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas",forcaSelecao[1]);
+			this.getModel().setProperty("/IdPeriodoSelecionadas",forcaSelecao[2]);
+			this.getModel().setProperty("/IdMoedaSelecionadas",forcaSelecao[3]);			
+		},		
 		onGerarRelatorio: function (oEvent) {
 			this._geraRelatorioTax("/ReportTaxPackage"); 
 		},
@@ -91,6 +285,7 @@ sap.ui.define([
 		onGerarTxt: function (oEvent) {
 			this._geraRelatorioTax("/TXT"); 
 		},
+	
 		_atualizarDados: function () {
 			var that = this;
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
