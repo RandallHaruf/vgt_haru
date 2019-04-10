@@ -230,7 +230,7 @@ sap.ui.define(
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
-					text: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaNameTax")
+					text: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaTax")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
@@ -262,7 +262,7 @@ sap.ui.define(
 				});
 
 				var oTextNameOfTax = new sap.m.Text({
-					text: "{name_of_tax}"
+					text: "{tax}"
 				});
 
 				var oTextDataPagamento = new sap.m.Text({
@@ -2875,9 +2875,10 @@ sap.ui.define(
 
 			_carregarPagamentosTTC: function (sIdTaxReconciliation) {
 				var that = this,
-					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
+					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa,
+					idAnoCalendario = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
 
-				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa, function (response) {
+				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&taxIsExportavelTaxPackage=true&anoFiscal=" + idAnoCalendario, function (response) {
 					if (response) {
 						that.getModel().setProperty("/PagamentosTTC", response);
 
@@ -2898,7 +2899,7 @@ sap.ui.define(
 					
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para o país da empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
-						fkAliquota: oEmpresa["fk_imposto_pais"],
+						fkAliquota: oEmpresa["fk_imposto_pais"] ? oEmpresa["fk_imposto_pais"] : 0,
 						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
 					})
 					.then(function (res) {
@@ -2913,7 +2914,7 @@ sap.ui.define(
 				
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para a empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
-						fkAliquota: oEmpresa["fk_imposto_empresa"],
+						fkAliquota: oEmpresa["fk_imposto_empresa"] ? oEmpresa["fk_imposto_empresa"] : 0,
 						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
 					})
 					.then(function (res) {

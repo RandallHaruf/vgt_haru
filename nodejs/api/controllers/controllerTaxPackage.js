@@ -1757,7 +1757,13 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 				+ '"identity_VGT.ANTECIPACAO_id_antecipacao".nextval, ?, ?)';
 			aParams = [oAntecipacao.id_pagamento, sFkTaxReconciliation];
 			
-			db.executeStatementSync(sQuery, aParams);
+			var res = db.executeStatementSync(sQuery, aParams);
+			
+			if (res) {
+				var resGeneratedId = db.executeStatementSync('select MAX("id_antecipacao") "generated_id" from "VGT.ANTECIPACAO"');
+				
+				oAntecipacao.id_antecipacao = resGeneratedId[0].generated_id;
+			}
 		}
 	}
 	
@@ -1774,7 +1780,9 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 				return obj.id_antecipacao === oAntecipacaoPersistida.id_antecipacao;
 			});
 			
-			if (oAntecipacaoEnviada && !oAntecipacaoEnviada.selecionado) {
+			// 10/04/19 @pedsf - A segunda condição foi adicionado para casos onde o objeto relacionado ao persistido nem chegou ao backend.
+			// Isso ocorre quando o pagamento originario foi excluido ou ele foi desflagado no admin como exportado para o TaxP.
+			if ((oAntecipacaoEnviada && !oAntecipacaoEnviada.selecionado) || !oAntecipacaoEnviada) {
 				sQuery = 'delete from "VGT.ANTECIPACAO" where "id_antecipacao" = ?';
 				aParams = [oAntecipacaoPersistida.id_antecipacao];
 				

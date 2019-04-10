@@ -77,7 +77,19 @@ function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriod
 		
 		// Insere o novo pagamento
 		model.inserirSync([{
-			coluna: model.colunas.id
+			// 10/04/19 @pedsf - Foi preciso "sobrescrever" a coluna de id que estava sendo passada ao método inserir,
+			// para ser capaz de gerar um comando de insert que persista o registro com uma PK de valor previamente conhecido, ao invés de 
+			// um novo através do sequenciador. Isso permite que para pagamentos que ja foram inseridos alguma vez o seu ID seja mantido.
+			// Ao chegar neste ponto da request, os objetos de pagamentos que já foram persistidos em algum momento conhecem
+			// o seu ID original (ou seja, valor diferente de -1), o que significa que é preciso desabilitar o comportamento
+			// padrão de disparo de sequence e utilizar efetivamente a proprieadade "valor" passada pelo objeto coluna.
+			// Esta mudança foi necessária ao perceber que pagamentos vínculados a antecipações do TAX PACKAGE precisam manter seus IDs
+			// para que a referência da antecipação não seja perdida.
+			coluna: { 
+				nome: model.colunas.id.nome,
+				identity: (Number(oPagamento[model.colunas.id.nome]) === -1)
+			},
+			valor: oPagamento[model.colunas.id.nome]
 		}, {
 			coluna: model.colunas.indNaoAplicavel,
 			valor: oPagamento[model.colunas.indNaoAplicavel.nome] ? oPagamento[model.colunas.indNaoAplicavel.nome] : false
@@ -454,6 +466,16 @@ module.exports = {
 		if (req.query.tax_classification) {
 			oWhere.push(' category."fk_dominio_tax_classification.id_dominio_tax_classification" = ? ');
 			aParams.push(req.query.tax_classification);
+		}
+		
+		if (req.query.taxIsExportavelTaxPackage) {
+			oWhere.push(' tax."ind_exportavel_tax_package" = ? ');
+			aParams.push(req.query.taxIsExportavelTaxPackage);
+		}
+		
+		if (req.query.anoFiscal) {
+			oWhere.push(' pagamento."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ? ');
+			aParams.push(req.query.anoFiscal);
 		}
 		
 		if (oWhere.length > 0) {
