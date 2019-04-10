@@ -114,26 +114,26 @@
 										<Column vAlign="Middle" width="12rem">
 											<Text text=""/>
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAtual}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAtual}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAnterior}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} – {i18n>viewEdiçãoTrimestreAnoAnterior}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" textAlign="Center" />
 										</Column>
 									</columns>
 									<items>
@@ -201,7 +201,7 @@
 									class="celulasSeparadas sapUiMediumMarginBottom"
 									items="{/DiferencasPermanentes}">
 									<headerToolbar>
-										<Toolbar>
+										<Toolbar class="myCustomButton">
 											<content>
 												<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovaDiferencaPermanente" />
 												<ObjectIdentifier text="{i18n>viewGeralDiferençaPermanente}" />
@@ -264,7 +264,7 @@
 									class="celulasSeparadas sapUiSmallMarginBottom"
 									items="{/DiferencasTemporarias}">
 									<headerToolbar>
-										<Toolbar>
+										<Toolbar class="myCustomButton">
 											<content>
 												<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovaDiferencaTemporaria" />
 												<ObjectIdentifier text="{i18n>viewGeralDiferencaTemporaria}" />
@@ -381,41 +381,41 @@
 										<Column vAlign="Middle" width="12rem">
 											<Text text=""/>
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 										</Column>
-										<Column width="16rem">
-											<Text text="{i18n>viewGeralTotalLossesUtilized}" />
+										<Column width="16rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTotalLossesUtilized}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewGeralTaxableIncome}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTaxableIncome}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" textAlign="Center" />
 										</Column>
-										<Column width="16rem">
-											<Text text="{i18n>viewGeralOthertaxes}" />
+										<Column width="16rem" hAlign="Center">
+											<Text text="{i18n>viewGeralOthertaxes}" textAlign="Center" />
 										</Column>
-										<Column width="16rem">
-											<Text text="{i18n>viewGeralIncentivosFiscais}" />
+										<Column width="16rem" hAlign="Center">
+											<Text text="{i18n>viewGeralIncentivosFiscais}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewGeralTotalOtherTaxesAndTaxCredits}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTotalOtherTaxesAndTaxCredits}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewGeralNetLocalTax}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewGeralNetLocalTax}" textAlign="Center" />
 										</Column>
-										<Column width="16rem">
-											<Text text="WHT" />
+										<Column width="16rem" hAlign="Center">
+											<Text text="WHT" textAlign="Center" />
 										</Column>
-										<Column width="16rem">
-											<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" />
+										<Column width="16rem" hAlign="Center">
+											<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" textAlign="Center" />
 										</Column>
-										<Column width="16rem">
-											<Text text="{i18n>viewGeralTotalInterim}" />
+										<Column width="16rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTotalInterim}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewGeralTaxDueoverpaid}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewGeralTaxDueoverpaid}" textAlign="Center" />
 										</Column>
 									</columns>
 									<items>
@@ -470,23 +470,23 @@
 										<Column vAlign="Middle" width="12rem">
 											<Text text=""/>
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}" textAlign="Center" />
 										</Column>
-										<Column width="12rem">
-											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}" />
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}" textAlign="Center" />
 										</Column>
 									</columns>
 									<items>
@@ -835,62 +835,62 @@
 									</VBox>
 								</t:footer>-->
 								<t:columns>
-									<t:Column width="8.5rem" hAlign="Center">
+									<t:Column width="8.5rem">
 										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
 										<t:template>
 											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="8.5rem" hAlign="Center">
-										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" />
+									<t:Column width="8.5rem" >
+										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}"/>
 										<t:template>
 											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
+									<t:Column width="12rem" >
 										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
 										<t:template>
 											<Text text="{path: 'opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
+									<t:Column width="12rem" >
 										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}" />
 										<t:template>
 											<Text text="{path: 'current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
+									<t:Column width="12rem" >
 										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}" />
 										<t:template>
 											<Text text="{path: 'current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
+									<t:Column width="12rem" hAlign="Center">
+										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}"/>
 										<t:template>
 											<Input textAlign="End" value="{path: 'adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" change="onAplicarRegras" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}"  -->
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
+										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}"/>
 										<t:template>
 											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa" />
 										</t:template>
 									</t:Column>
-									<t:Column width="13rem" hAlign="End">
+									<t:Column width="13rem" >
 										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" />
 										<t:template>
 											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" />
+									<t:Column width="12rem">
+										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}"/>
 										<t:template>
 											<Text text="{path: 'closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
+										<Label text="{i18n>viewEdiçãoTrimestreOBS}"/>
 										<t:template>
 											<Input value="{obs}" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}" -->
 										</t:template>

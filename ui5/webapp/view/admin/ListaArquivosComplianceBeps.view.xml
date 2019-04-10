@@ -41,19 +41,19 @@
 							}]
 						}">
 						<columns>
-							<Column>
+							<Column hAlign="Center">
 								<ObjectIdentifier title="{i18n>viewComplianceListagemObrigacoesNomeArquivo}" />
 							</Column>
-							<Column minScreenWidth="XLarge" demandPopin="true">
+							<Column minScreenWidth="XLarge" demandPopin="true" hAlign="Center">
 								<ObjectIdentifier title="{i18n>viewArquivosAdminTipoObrigacao}" />
 							</Column>
-							<Column minScreenWidth="XLarge" demandPopin="true">
+							<Column minScreenWidth="XLarge" demandPopin="true" hAlign="Center">
 								<ObjectIdentifier title="{i18n>viewArquivosAdminNomeObrigacao}" />
 							</Column>
-							<Column minScreenWidth="XLarge" demandPopin="true">
+							<Column minScreenWidth="XLarge" demandPopin="true" hAlign="Center">
 								<ObjectIdentifier title="{i18n>viewArquivosAdminAnoFiscal}" />
 							</Column>
-							<Column minScreenWidth="XLarge" demandPopin="true">
+							<Column minScreenWidth="XLarge" demandPopin="true" hAlign="Center">
 								<ObjectIdentifier title="{i18n>viewArquivosAdminDownload}" />
 							</Column>
 							<Column width="50px"></Column>

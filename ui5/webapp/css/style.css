@@ -126,6 +126,7 @@ páginas agregadas com o 'position' original... procurar entender melhor o probl
 
 /* Completa os espaços entre as celulas de tabelas com linhas */
 .myApp .celulasSeparadas .sapMListTblCell  {
+	border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
 }
 
@@ -150,4 +151,7 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 
 .myApp .viewTTCResumoTrimestre .tabelaPeriodoMinHeight {
 	min-height: 293px;
+}
+.myCustomButton {
+	border-bottom: 0px;
 }

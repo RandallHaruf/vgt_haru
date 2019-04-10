@@ -765,25 +765,19 @@ sap.ui.define(
 				var oVBox = new sap.m.VBox();
 
 				/*var oVBox2 = new sap.m.VBox();
-
 				var oHBox = new sap.m.HBox();
-
 				var oCheckBox = new sap.m.CheckBox({
 					text: "Declaração",
 					selected: "{/IsDeclaracao}"
 				}).addStyleClass("sapUiSmallMarginEnd");
-
 				var oDatePicker = new sap.m.DatePicker({
 					value: "{/DataEnvioDeclaracao}",
 					valueFormat: "yyyy-MM-dd",
 					enabled: "{= ${/IsDeclaracao} === true ? true : false}"
 				});
-
 				oHBox.addItem(oCheckBox);
 				oHBox.addItem(oDatePicker);
-
 				var oHBox2 = new sap.m.HBox();
-
 				var oFileUploader = new sap.ui.unified.FileUploader({
 					id: "fileUploader",
 					name: "myFileUpload",
@@ -792,20 +786,16 @@ sap.ui.define(
 					tooltip: "Enviar o arquivo para o Nodejs",
 					placeholder: "Escolha um arquivo"
 				});
-
 				var oTable = new sap.m.Table({
 					inset: false
 				});
-
 				var oButton = new sap.m.Button({
 					text: "Enviar Arquivo"
 				}).attachPress(function (oEvent) {
 					this.onEnviarArquivo(oEvent, oPeriodo, oFileUploader, sProperty, oTable);
 				}, this);
-
 				oHBox2.addItem(oFileUploader);
 				oHBox2.addItem(oButton);
-
 				oVBox2.addItem(oHBox);
 				oVBox2.addItem(oHBox2);*/
 

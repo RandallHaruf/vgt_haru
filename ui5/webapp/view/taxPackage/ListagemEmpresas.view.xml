@@ -50,9 +50,9 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column>
+					<Column hAlign="Center">
 						<!--<Text text="Nome" />-->
-						<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" />
+						<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" textAlign="Center"/>
 					</Column>
 					<Column hAlign="Center">  
 						<!--<Text text="1º trimestre" />-->
@@ -75,7 +75,7 @@
 						<Title text="{i18n>viewGeralPeriodo5}" titleStyle="H4" />
 					</Column>
 					<Column
-						hAlign="End">
+						hAlign="Center">
 						<!--<Text text="Qte. Retificadoras" />-->
 						<Title text="{i18n>viewGeralPeriodo6Qtd}" titleStyle="H4" />
 					</Column>
