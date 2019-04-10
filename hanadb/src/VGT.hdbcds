@@ -682,9 +682,10 @@ context VGT {
     /*@@layout{"layoutInfo":{"x":-2652,"y":132.5}}*/
     entity TEMPLATE_REPORT {
         key id_template_report : Integer;
-            tela               : String(10);
+            tela               : String(500);
             parametros         : String(4000);
             fk_usuario         : association[*, 0..1] to VGT.USUARIO;
             ind_isIFrame       : Boolean;
+            descricao          : String(1000);
     };
 };
