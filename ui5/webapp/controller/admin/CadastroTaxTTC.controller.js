@@ -197,7 +197,8 @@ sap.ui.define(
 						var obj = {
 							tax: oObjeto["tax"],
 							fkCategory: oObjeto["id_tax_category"],
-							fkClassification: oObjeto["id_dominio_tax_classification"]
+							fkClassification: oObjeto["id_dominio_tax_classification"],
+							indExportavelTaxPackage: oObjeto["ind_exportavel_tax_package"]
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
@@ -232,7 +233,8 @@ sap.ui.define(
 				crossDomain: true,
 					data: {
 						tax: obj.tax,
-						fkCategory: obj.fkCategory     
+						fkCategory: obj.fkCategory,
+						indExportavelTaxPackage: obj.indExportavelTaxPackage
 					},
 					success: function (response) {
 						that.byId("btnCancelar").setEnabled(true);
@@ -262,7 +264,8 @@ sap.ui.define(
 				crossDomain: true,
 					data: {
 						tax: obj.tax,
-						fkCategory: obj.fkCategory     
+						fkCategory: obj.fkCategory,
+						indExportavelTaxPackage: obj.indExportavelTaxPackage
 					},
 					success: function (response) {
 						that.byId("btnCancelar").setEnabled(true);

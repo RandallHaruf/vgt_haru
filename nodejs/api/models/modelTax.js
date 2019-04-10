@@ -13,6 +13,9 @@ var oSketch = {
 		fkCategory: {
 			nome: "fk_category.id_tax_category",
 			number: true
+		},
+		indExportavelTaxPackage: {
+			nome: "ind_exportavel_tax_package"
 		}
 	} 	
 };

@@ -34,6 +34,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkCategory,
 			valor: req.body.fkCategory ? Number(req.body.fkCategory) : null
+		}, {
+			coluna: model.colunas.indExportavelTaxPackage,
+			valor: req.body.indExportavelTaxPackage ? req.body.indExportavelTaxPackage : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -94,6 +97,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkCategory,
 			valor: req.body.fkCategory ? Number(req.body.fkCategory) : null
+		}, {
+			coluna: model.colunas.indExportavelTaxPackage,
+			valor: req.body.indExportavelTaxPackage ? req.body.indExportavelTaxPackage : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {

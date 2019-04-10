@@ -171,9 +171,10 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":1031,"y":1498.5}}*/
     entity TAX {
-        key id_tax      : Integer not null;
-            tax         : String(100);
-            fk_category : association[*, 0..1] to VGT.TAX_CATEGORY { id_tax_category };
+        key id_tax      			   : Integer not null;
+            tax         			   : String(100);
+            fk_category				   : association[*, 0..1] to VGT.TAX_CATEGORY { id_tax_category };
+            ind_exportavel_tax_package : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":671,"y":1466.5}}*/
