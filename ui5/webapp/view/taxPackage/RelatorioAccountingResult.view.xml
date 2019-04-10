@@ -93,38 +93,38 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="{/remtblEmpresa.nome}">
+						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblPeriodo.periodo}">
+						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="{/remtblDominioMoeda.acronimo}">
+						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
 							<Text text="{i18n>viewGeralMoeda}"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}">
-							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}"/>
+						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rc_current_income_tax_current_year}">
-							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAtual}"/>
+						<Column width="{/remtblTaxReconciliation.rc_current_income_tax_current_year}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAtual}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rc_current_income_tax_previous_year}">
-							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAnterior}"/>
+						<Column width="{/remtblTaxReconciliation.rc_current_income_tax_previous_year}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAnterior}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rc_deferred_income_tax}">
-							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}"/>
+						<Column width="{/remtblTaxReconciliation.rc_deferred_income_tax}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}" textAlign="Center"/>
 						</Column>	
-						<Column width="{/remtblTaxReconciliation.rc_non_recoverable_wht}">
-							<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}"/>
+						<Column width="{/remtblTaxReconciliation.rc_non_recoverable_wht}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rc_statutory_provision_for_income_tax}">
-							<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}"/>
+						<Column width="{/remtblTaxReconciliation.rc_statutory_provision_for_income_tax}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax}">
-							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}"/>
+						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" textAlign="Center"/>
 						</Column>						
 					</columns>
 					<items>

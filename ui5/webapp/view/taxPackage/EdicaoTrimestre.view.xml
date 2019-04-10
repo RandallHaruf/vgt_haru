@@ -586,61 +586,61 @@
 								enableColumnReordering="false">
 								<t:columns>
 									<t:Column width="8.5rem" hAlign="Center">
-										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
+										<Label text="{i18n>viewEdiçãoTrimestreFY}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="8.5rem" hAlign="Center">
-										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" />
+										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
+										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}" />
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLoss}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}" />
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossUtilized}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" />
+										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Input textAlign="End" value="{path: 'adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" change="onAplicarRegras" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}" -->
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" />
+										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa" />
 										</t:template>
 									</t:Column>
 									<t:Column width="13rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}" />
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearLossExpired}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="End">
-										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" />
+										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="{i18n>viewEdiçãoTrimestreOBS}" />
+										<Label text="{i18n>viewEdiçãoTrimestreOBS}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Input value="{obs}" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}" -->
 										</t:template>
@@ -835,62 +835,62 @@
 									</VBox>
 								</t:footer>-->
 								<t:columns>
-									<t:Column width="8.5rem">
-										<Label text="{i18n>viewEdiçãoTrimestreFY}" />
+									<t:Column width="8.5rem" hAlign="Center">
+										<Label text="{i18n>viewEdiçãoTrimestreFY}" textAlign="Center" width="100%" />
 										<t:template>
 											<Text text="{fy}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="8.5rem" >
-										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}"/>
+									<t:Column width="8.5rem" hAlign="Center">
+										<Label text="{i18n>viewEdiçãoTrimestreYearofExpiration}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{year_of_expiration}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" >
-										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}" />
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreOpeningBalance}"  textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'opening_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" >
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}" />
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'current_year_value', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem" >
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}" />
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'current_year_value_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="12rem" hAlign="Center">
-										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}"/>
+										<Label text="{i18n>viewEdiçãoTrimestreAdjustments}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Input textAlign="End" value="{path: 'adjustments', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" change="onAplicarRegras" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}"  -->
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}"/>
+										<Label text="{i18n>viewEdiçãoTrimestreJustificativa}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Input type="Text" value="{justificativa}" enabled="{justificativaEnabled}" valueState="{justificativaValueState}" valueStateText="{i18n>viewGeralCampoNaoPodeSerVazio}" change="onTrocarJustificativa" />
 										</t:template>
 									</t:Column>
-									<t:Column width="13rem" >
-										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" />
+									<t:Column width="13rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'current_year_value_expired', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
-									<t:Column width="12rem">
-										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}"/>
+									<t:Column width="12rem" hAlign="End">
+										<Label text="{i18n>viewEdiçãoTrimestreClosingBalance}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Text text="{path: 'closing_balance', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 										</t:template>
 									</t:Column>
 									<t:Column width="15rem">
-										<Label text="{i18n>viewEdiçãoTrimestreOBS}"/>
+										<Label text="{i18n>viewEdiçãoTrimestreOBS}" textAlign="Center" width="100%"/>
 										<t:template>
 											<Input value="{obs}" enabled="true" /> <!-- enabled="{= ${ind_corrente} === true ? true : false}" -->
 										</t:template>

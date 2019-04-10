@@ -178,7 +178,7 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewGeralAnoInicio}" />
+												<Label text="{i18n>viewGeralAnoInicio}" textAlign="Center" width="100%" />
 												<table:template>
 													<Select 
 														items="{ path: '/DominioAnoFiscal', templateShareable: false }" 
@@ -190,7 +190,7 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewGeralAnoFim}" />
+												<Label text="{i18n>viewGeralAnoFim}" textAlign="Center" width="100%" />
 												<table:template>
 													<Select 
 														items="{ path: '/DominioAnoFiscal', templateShareable: false}" 
@@ -202,7 +202,7 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewAdminCadastroAliquotasValor} (%)" />
+												<Label text="{i18n>viewAdminCadastroAliquotasValor} (%)" textAlign="Center" width="100%" />
 												<table:template>
 													<Input 
 														value="{path: 'valor', 
@@ -308,7 +308,7 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewGeralNome}" />
+												<Label text="{i18n>viewGeralNome}" textAlign="Center" width="100%" />
 												<table:template>
 													<Text text="{nomePais}" />
 												</table:template>
@@ -351,7 +351,7 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewGeralNome}" />
+												<Label text="{i18n>viewGeralNome}" textAlign="Center" width="100%" />
 												<table:template>
 													<Text text="{nome}" />
 												</table:template>

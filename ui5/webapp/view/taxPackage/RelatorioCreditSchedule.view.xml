@@ -100,47 +100,47 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="{/remtblEmpresa.nome}">
+						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblPeriodo.periodo}">
+						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="{/remtblDominioMoeda.acronimo}">
+						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
 							<Text text="{i18n>viewGeralMoeda}"/>
 						</Column>
-						<Column width="{/remtblSchedule.fy}">
+						<Column width="{/remtblSchedule.fy}" hAlign="Center">
 							<Text text="{i18n>viewEdiçãoTrimestreFY}"/>
 						</Column>
-						<Column width="{/remtblSchedule.year_of_expiration}">
-							<Text text="{i18n>viewEdiçãoTrimestreYearofExpiration}"/>
+						<Column width="{/remtblSchedule.year_of_expiration}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreYearofExpiration}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblSchedule.opening_balance}">
-							<Text text="{i18n>viewEdiçãoTrimestreOpeningBalance}"/>
+						<Column width="{/remtblSchedule.opening_balance}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreOpeningBalance}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblSchedule.current_year_value}">
-							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}"/>
+						<Column width="{/remtblSchedule.current_year_value}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCredit}" textAlign="Center"/>
 						</Column>	
-						<Column width="{/remtblSchedule.current_year_value_utilized}">
-							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}"/>
+						<Column width="{/remtblSchedule.current_year_value_utilized}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCreditU}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblSchedule.adjustments}">
+						<Column width="{/remtblSchedule.adjustments}" hAlign="Center">
 							<Text text="{i18n>viewEdiçãoTrimestreAdjustments}"/>
 						</Column>
-						<Column width="{/remtblSchedule.justificativa}">
-							<Text text="{i18n>viewEdiçãoTrimestreJustificativa}"/>
+						<Column width="{/remtblSchedule.justificativa}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreJustificativa}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblSchedule.current_year_value_expired}">
-							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}"/>
+						<Column width="{/remtblSchedule.current_year_value_expired}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreCurrentYearCreditE}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblSchedule.closing_balance}">
-							<Text text="{i18n>viewEdiçãoTrimestreClosingBalance}"/>
+						<Column width="{/remtblSchedule.closing_balance}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreClosingBalance}" textAlign="Center"/>
 						</Column>		
-						<Column width="{/remtblSchedule.obs}">
-							<Text text="{i18n>viewEdiçãoTrimestreOBS}"/>
+						<Column width="{/remtblSchedule.obs}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreOBS}" textAlign="Center"/>
 						</Column>
 					</columns>
 					<items>

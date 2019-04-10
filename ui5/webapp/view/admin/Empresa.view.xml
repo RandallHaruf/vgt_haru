@@ -208,26 +208,26 @@
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresasTipo}"/>
+												<Label text="{i18n>viewEmpresasTipo}" textAlign="Center" width="100%"/>
 												<table:template>
 													<Text text="{tblTipoObrigacao.tipo}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresasNome}"/>
+												<Label text="{i18n>viewEmpresasNome}" textAlign="Center" width="100%"/>
 												<table:template>
 													<Text text="{tblModeloObrigacao.nome_obrigacao}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresaDataPrazo} {/displayFormatSemAno}"/>
+												<Label text="{i18n>viewEmpresaDataPrazo} {/displayFormatSemAno}" textAlign="Center" width="100%"/>
 												<table:template>
 													<DateTimeInput id="DTI2" type="Date" value="{tblModeloObrigacao.prazo_entrega}" editable="false" displayFormat="{/displayFormatSemAno}"
 														enabled="{= !${/TravaCampo}}"/>
 												</table:template>
 											</table:Column>
 											<table:Column>
-												<Label text="{i18n>viewEmpresaDataCustomizada} {/displayFormatSemAno}"/>
+												<Label text="{i18n>viewEmpresaDataCustomizada} {/displayFormatSemAno}" textAlign="Center" width="100%"/>
 												<table:template>
 													<DatePicker displayFormat="{/displayFormatSemAno}" valueFormat='yyyy-MM-dd' value="{data_selecionada}"
 														editable="{= !!${selecionada} === true ? true : false }" change="onValidarData" enabled="{= !${/TravaCampo}}"/>

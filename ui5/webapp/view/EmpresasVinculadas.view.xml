@@ -30,7 +30,7 @@
 					path: '/Registros'
 				}">
 				<columns>
-					<Column>
+					<Column hAlign="Center">
 						<Title text="{i18n>viewDaEmpresaVinculadaEmpresa}" titleStyle="H4" />
 					</Column>
 				</columns>

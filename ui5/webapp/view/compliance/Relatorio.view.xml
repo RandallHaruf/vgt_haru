@@ -172,44 +172,44 @@
 			<ScrollContainer  horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioCompliance" items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
 					<columns>
-						<Column width="6rem">
+						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewEmpresasObrigacoesAcessorias}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewEmpresasObrigacoesAcessorias}" textAlign="Center"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}" textAlign="Center"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>						
-						<Column width="6rem">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}" textAlign="Center"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}" textAlign="Center"/>
 						</Column>
-						<Column width="6rem">
+						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}" textAlign="Center"/>
 						</Column>
-						<Column width="7rem">
-							<Text text="{i18n>formularioObrigacaoLabelValorSuporte}"/>
+						<Column width="7rem" hAlign="Center">
+							<Text text="{i18n>formularioObrigacaoLabelValorSuporte}" textAlign="Center"/>
 						</Column>
-						<Column width="6rem">
-							<Text text="{i18n>formularioObrigacaoLabelObservacoes}"/>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>formularioObrigacaoLabelObservacoes}" textAlign="Center"/>
 						</Column>
 					</columns>
 					<items>

@@ -85,7 +85,7 @@
 				</headerToolbar>
 		
 				<columns>
-					<Column>
+					<Column  hAlign="Center">
 						<Text text="{i18n>viewGeralIdRequisicao}" />
 					</Column>
 					<Column
@@ -104,7 +104,7 @@
 						minScreenWidth="Desktop"
 						demandPopin="true"
 						hAlign="Center">
-						<Text text="{i18n>viewGeralDataRequisicao}" />
+						<Text text="{i18n>viewGeralDataRequisicao}" textAlign="Center"/>
 					</Column>
 					<Column
 						minScreenWidth="Desktop"

@@ -128,7 +128,7 @@
 													</table:template>
 												</table:Column>
 												<table:Column>
-													<Label text="{i18n>viewUsuarioAdminModulos}"/>
+													<Label text="{i18n>viewUsuarioAdminModulos}" textAlign="Center" width="100%"/>
 													<table:template>
 														<Text text="{modulo}"/>
 													</table:template>
@@ -167,7 +167,7 @@
 													</table:template>
 												</table:Column>
 												<table:Column>
-													<Label text="{i18n>viewUsuarioAdminEmpresas}"/>
+													<Label text="{i18n>viewUsuarioAdminEmpresas}" textAlign="Center" width="100%"/>
 													<table:template>
 														<Text text="{nome}"/>
 													</table:template>

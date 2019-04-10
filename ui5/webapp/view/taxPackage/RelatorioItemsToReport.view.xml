@@ -128,31 +128,31 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="{/remtblEmpresa.nome}">
+						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
 							<Text text="{i18n>viewRelatorioEmpresa}"/>
 						</Column>
-						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
 							<Text text="{i18n>viewGeralAnoCalendario}"/>
 						</Column>
-						<Column width="{/remtblPeriodo.periodo}">
+						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
 							<Text text="{i18n>viewGeralPeriodo}"/>
 						</Column>
-						<Column width="{/remtblItemToReport.flag_sim_nao}">
+						<Column width="{/remtblItemToReport.flag_sim_nao}" hAlign="Center">
 							<Text text="{i18n>viewGeralFlagSN}"/>
 						</Column>
-						<Column width="{/remtblItemToReport.flag_ano}">
+						<Column width="{/remtblItemToReport.flag_ano}" hAlign="Center">
 							<Text text="{i18n>viewGeralFlagAno}"/>
 						</Column>
-						<Column width="{/remAno_Fiscal_Agregado}">
+						<Column width="{/remAno_Fiscal_Agregado}" hAlign="Center">
 							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
 						</Column>	
-						<Column width="{/remtblRespostaItemToReport.ind_se_aplica}">
+						<Column width="{/remtblRespostaItemToReport.ind_se_aplica}" hAlign="Center">
 							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?"/>
 						</Column>						
-						<Column width="{/remtblItemToReport.pergunta}">							
+						<Column width="{/remtblItemToReport.pergunta}" hAlign="Center">							
 							<Text text="{i18n>viewGeralQUestion}"/>
 						</Column>
-						<Column width="{/remtblRespostaItemToReport.resposta}">
+						<Column width="{/remtblRespostaItemToReport.resposta}" hAlign="Center">
 							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}"/>
 						</Column>	
 					</columns>
