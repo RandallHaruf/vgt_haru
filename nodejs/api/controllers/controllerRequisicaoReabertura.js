@@ -38,20 +38,30 @@ function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuari
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		/*var aParametros = [];
-		
+		var aParam = [];
+
 		if (req.query.empresa) {
-			aParametros.push({
+			aParam.push({
 				coluna: model.colunas.fkEmpresa,
-				valor: req.body.id_empresa ? req.body.id_empresa : null
-			},
-			{
-				coluna: model.colunas.fkEmpresa,
-				valor: req.body.id_empresa ? req.body.id_empresa : null
-			}
-			);
-		} */
-		model.listar([], function (err, result) {
+				valor: Number(req.query.empresa)
+			});
+		}
+
+		if (req.query.periodo) {
+			aParam.push({
+				coluna: model.colunas.fkPeriodo,
+				valor: Number(req.query.periodo)
+			});
+		}
+
+		if (req.query.status) {
+			aParam.push({
+				coluna: model.colunas.fkDominioRequisicaoReaberturaStatus,
+				valor: Number(req.query.status)
+			});
+		}
+
+		model.listar(aParam, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
@@ -189,12 +199,14 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
-				
+
 				// Atualiza o periodo caso tenha sido aprovação do admin
-				if (req.body.reabrirPeriodo && req.body.fkDominioRequisicaoReaberturaStatus && Number(req.body.fkDominioRequisicaoReaberturaStatus) === 2) { 
-					var sQuery = 'update "VGT.REL_EMPRESA_PERIODO" set "ind_ativo" = ?, "ind_enviado" = ? where "fk_empresa.id_empresa" = ? and "fk_periodo.id_periodo" = ? ';
+				if (req.body.reabrirPeriodo && req.body.fkDominioRequisicaoReaberturaStatus && Number(req.body.fkDominioRequisicaoReaberturaStatus) ===
+					2) {
+					var sQuery =
+						'update "VGT.REL_EMPRESA_PERIODO" set "ind_ativo" = ?, "ind_enviado" = ? where "fk_empresa.id_empresa" = ? and "fk_periodo.id_periodo" = ? ';
 					var aParam = [true, false, req.body.fkEmpresa, req.body.fkPeriodo];
-					
+
 					db.executeStatement({
 						statement: sQuery,
 						parameters: aParam
@@ -204,7 +216,7 @@ module.exports = {
 						}
 					});
 				}
-				
+
 				res.send(JSON.stringify(result));
 			}
 		});
@@ -225,16 +237,13 @@ module.exports = {
 
 	deepQuery: function (req, res) {
 		var sStatement =
-			' SELECT ReqReab.*, ReqStatus.*, Empresa.*, Per.*, Ano_Cal.*  ' 
-			+ ' FROM "VGT.REQUISICAO_REABERTURA" ReqReab ' 
-			+ ' Left Outer Join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ReqStatus ' 
-			+ ' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" ' 
-			+ ' Left Outer Join "VGT.EMPRESA" Empresa ' 
-			+ ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" ' 
-			+ ' Left Outer Join "VGT.PERIODO" Per ' 
-			+ ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" ' 
-			+ ' Left Outer Join "VGT.DOMINIO_ANO_CALENDARIO" Ano_Cal ' 
-			+ ' On Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = Ano_Cal."id_dominio_ano_calendario" ';
+			' SELECT ReqReab.*, ReqStatus.*, Empresa.*, Per.*, Ano_Cal.*  ' + ' FROM "VGT.REQUISICAO_REABERTURA" ReqReab ' +
+			' Left Outer Join "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS" ReqStatus ' +
+			' On ReqReab."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = ReqStatus."id_dominio_requisicao_reabertura_status" ' +
+			' Left Outer Join "VGT.EMPRESA" Empresa ' + ' On ReqReab."fk_empresa.id_empresa" = empresa."id_empresa" ' +
+			' Left Outer Join "VGT.PERIODO" Per ' + ' On ReqReab."fk_periodo.id_periodo" = per."id_periodo" ' +
+			' Left Outer Join "VGT.DOMINIO_ANO_CALENDARIO" Ano_Cal ' +
+			' On Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" = Ano_Cal."id_dominio_ano_calendario" ';
 
 		var oWhere = [];
 		var aParams = [];
@@ -270,16 +279,15 @@ module.exports = {
 				res.send(JSON.stringify(err));
 			} else {
 				var idUsuario = req.session.usuario.id;
-				for (var i = 0; i < result.length; i++){
+				for (var i = 0; i < result.length; i++) {
 					var oCorrente = result[i];
 					if (oCorrente.id_usuario == idUsuario) {
 						oCorrente.btnSalvarHabilitado = false;
-					}
-					else {
+					} else {
 						oCorrente.btnSalvarHabilitado = true;
 					}
 				}
-				
+
 				res.send(JSON.stringify(result));
 			}
 		});

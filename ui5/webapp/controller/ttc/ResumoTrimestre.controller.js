@@ -311,105 +311,139 @@ sap.ui.define(
 				});
 			},
 
-			onReabrirPeriodo: function (oPeriodo) {
-				var that = this;
+			onReabrirPeriodo: function (oEvent, oPeriodo) {
+				var that = this,
+					oButton = oEvent.getSource();
 
-				var oParams = {};
+				that.setBusy(oButton, true);
 
-				oParams.oPeriodo = oPeriodo;
-				oParams.oEmpresa = that.getModel().getProperty("/Empresa");
-				oParams.oAnoCalendario = {
-					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
-					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
-				};
+				NodeAPI.pListarRegistros("RequisicaoReabertura", {
+						status: 1,
+						empresa: oPeriodo["fk_empresa.id_empresa"],
+						periodo: oPeriodo.id_periodo
+					})
+					.then(function (res) {
+						if (res.length > 0) {
+							var popup = new sap.m.Dialog({
+								title: that.getResourceBundle().getText("viewResumoTrimestreJSTEXTSAviso"),
+								type: "Message",
+								content: new sap.m.Text({
+									text: that.getResourceBundle().getText("viewTPRequisicaoReaberturaPendente")
+								}),
+								endButton: new sap.m.Button({
+									text: that.getResourceBundle().getText("viewGeralFechar"),
+									press: function () {
+										popup.close();
+									}
+								})
+							})
+							popup.open();
+						} else {
+							var oParams = {};
 
-				var oForm = new sap.ui.layout.form.Form({
-					editable: true
-				}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
-					singleContainerFullSize: false
-				}));
+							oParams.oPeriodo = oPeriodo;
+							oParams.oEmpresa = that.getModel().getProperty("/Empresa");
+							oParams.oAnoCalendario = {
+								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
+								anoCalendario: that.byId("selectAnoCalendario").getSelectedItem().getText()
+							};
 
-				var oFormContainer = new sap.ui.layout.form.FormContainer();
+							var oForm = new sap.ui.layout.form.Form({
+								editable: true
+							}).setLayout(new sap.ui.layout.form.ResponsiveGridLayout({
+								singleContainerFullSize: false
+							}));
 
-				var oFormElement = new sap.ui.layout.form.FormElement({
-					label: "{i18n>viewGeralEmpresa}"
-				}).addField(new sap.m.Text({
-					text: "{/Empresa/nome}"
-				}));
+							var oFormContainer = new sap.ui.layout.form.FormContainer();
 
-				oFormContainer.addFormElement(oFormElement);
+							var oFormElement = new sap.ui.layout.form.FormElement({
+								label: "{i18n>viewGeralEmpresa}"
+							}).addField(new sap.m.Text({
+								text: "{/Empresa/nome}"
+							}));
 
-				oFormElement = new sap.ui.layout.form.FormElement({
-					label: "{i18n>viewGeralPeriodo}"
-				}).addField(new sap.m.Text({
-					text: oPeriodo.periodo
-				}));
+							oFormContainer.addFormElement(oFormElement);
 
-				oFormContainer.addFormElement(oFormElement);
+							oFormElement = new sap.ui.layout.form.FormElement({
+								label: "{i18n>viewGeralPeriodo}"
+							}).addField(new sap.m.Text({
+								text: oPeriodo.periodo
+							}));
 
-				var oTextArea = new sap.m.TextArea({
-					rows: 5
-				}).attachChange(function (oEvent) {
-					if (oEvent.getSource().getValue()) {
-						oEvent.getSource().setValueState(sap.ui.core.ValueState.None);
-						oEvent.getSource().setValueStateText("");
-					}
-				});
+							oFormContainer.addFormElement(oFormElement);
 
-				var oLabel = new sap.m.Label({
-					text: "{i18n>viewGeralJustificativa}"
-				}).addStyleClass("sapMLabelRequired");
+							var oTextArea = new sap.m.TextArea({
+								rows: 5
+							}).attachChange(function (oEvent) {
+								if (oEvent.getSource().getValue()) {
+									oEvent.getSource().setValueState(sap.ui.core.ValueState.None);
+									oEvent.getSource().setValueStateText("");
+								}
+							});
 
-				oFormElement = new sap.ui.layout.form.FormElement().setLabel(oLabel).addField(oTextArea);
+							var oLabel = new sap.m.Label({
+								text: "{i18n>viewGeralJustificativa}"
+							}).addStyleClass("sapMLabelRequired");
 
-				oFormContainer.addFormElement(oFormElement);
+							oFormElement = new sap.ui.layout.form.FormElement().setLabel(oLabel).addField(oTextArea);
 
-				oForm.addFormContainer(oFormContainer);
+							oFormContainer.addFormElement(oFormElement);
 
-				var dialog = new sap.m.Dialog({
-					title: "{i18n>viewGeralNovaRequisicao}",
-					content: oForm,
-					beginButton: new sap.m.Button({
-						text: "{i18n>viewGeralSalvar}",
-						press: function () {
-							if (oTextArea.getValue()) {
-								NodeAPI.criarRegistro("RequisicaoReabertura", {
-									dataRequisicao: this._formatDate(new Date()),
-									idUsuario: "2", //TROCAR PELA SESSION ID USUARIO
-									nomeUsuario: "Juliana Mauricio",
-									justificativa: oTextArea.getValue(),
-									resposta: "",
-									fkDominioRequisicaoReaberturaStatus: "1",
-									fkEmpresa: oParams.oEmpresa.id_empresa,
-									fkPeriodo: oPeriodo.id_periodo,
-									nomeEmpresa: oParams.oEmpresa.nome
-								}, function (response) {
-									dialog.close();
-									that._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
-									sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
-								});
-							} else {
-								oTextArea.setValueState(sap.ui.core.ValueState.Error);
-								oTextArea.setValueStateText(that.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio"));
-							}
-						}.bind(this)
-					}),
-					endButton: new sap.m.Button({
-						text: "{i18n>viewGeralSair}",
-						press: function () {
-							dialog.close();
-						}.bind(this)
-					}),
-					afterClose: function () {
-						that.getView().removeDependent(dialog);
-						dialog.destroy();
-					}
-				});
+							oForm.addFormContainer(oFormContainer);
 
-				// to get access to the global model
-				this.getView().addDependent(dialog);
+							var dialog = new sap.m.Dialog({
+								title: "{i18n>viewGeralNovaRequisicao}",
+								content: oForm,
+								beginButton: new sap.m.Button({
+									text: "{i18n>viewGeralSalvar}",
+									press: function () {
+										if (oTextArea.getValue()) {
+											NodeAPI.criarRegistro("RequisicaoReabertura", {
+												dataRequisicao: that._formatDate(new Date()),
+												idUsuario: "2", //TROCAR PELA SESSION ID USUARIO
+												nomeUsuario: "Juliana Mauricio",
+												justificativa: oTextArea.getValue(),
+												resposta: "",
+												fkDominioRequisicaoReaberturaStatus: "1",
+												fkEmpresa: oParams.oEmpresa.id_empresa,
+												fkPeriodo: oPeriodo.id_periodo,
+												nomeEmpresa: oParams.oEmpresa.nome
+											}, function (response) {
+												dialog.close();
+												that._onEnviarMensagem(oParams.oEmpresa.nome, oPeriodo.periodo);
+												sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
+											});
+										} else {
+											oTextArea.setValueState(sap.ui.core.ValueState.Error);
+											oTextArea.setValueStateText(that.getResourceBundle().getText("viewGeralCampoNaoPodeSerVazio"));
+										}
+									}.bind(that)
+								}),
+								endButton: new sap.m.Button({
+									text: "{i18n>viewGeralSair}",
+									press: function () {
+										dialog.close();
+									}.bind(that)
+								}),
+								afterClose: function () {
+									that.getView().removeDependent(dialog);
+									dialog.destroy();
+								}
+							});
 
-				dialog.open();
+							// to get access to the global model
+							that.getView().addDependent(dialog);
+
+							dialog.open();
+						}
+
+						that.setBusy(oButton, false);
+					})
+					.catch(function (err) {
+						console.log(err);
+
+						that.setBusy(oButton, false);
+					});
 			},
 
 			onVisualizarPeriodo: function (oPeriodo) {
@@ -584,8 +618,8 @@ sap.ui.define(
 				oButton = new sap.m.Button({
 					icon: "sap-icon://permission",
 					text: that.getResourceBundle().getText("viewGeralReabertura")
-				}).attachPress(function () {
-					that.onReabrirPeriodo(oPeriodo);
+				}).attachPress(function (event) {
+					that.onReabrirPeriodo(event, oPeriodo);
 				});
 
 				oToolbar.addContent(oButton);

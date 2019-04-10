@@ -1,50 +1,17 @@
-<mvc:View
-	controllerName="ui5ns.ui5.controller.admin.CadastroTaxTTC"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" 
-	xmlns:f="sap.ui.layout.form"
-	xmlns:dnd="sap.ui.core.dnd"
-	xmlns:table="sap.ui.table"
-	xmlns="sap.m">
+<mvc:View controllerName="ui5ns.ui5.controller.admin.CadastroTaxTTC" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:dnd="sap.ui.core.dnd" xmlns:table="sap.ui.table" xmlns="sap.m">
 	<NavContainer id="myNav" class="fixNavContainer">
-		<Page
-			id="paginaListagem"
-			showHeader="false"
-			visible="true">
-			<Table
-				id="tabelaObjetos"
-				items="{
-					path: '/objetos',
-					sorter: [{
-						path: 'classification',
-						group: true
-					}, {
-						path: 'category'
-					}, {
-						path: 'tax'
-					}]
-				}"
-				growing="true"
-				enableBusyIndicator="true"
-				growingScrollToLoad="true"
-				updateFinished="onTerminouAtualizar">
-		
+		<Page id="paginaListagem" showHeader="false" visible="true">
+			<Table id="tabelaObjetos"
+				items="{ path: '/objetos', sorter: [{ path: 'classification', group: true }, { path: 'category' }, { path: 'tax' }] }" growing="true"
+				enableBusyIndicator="true" growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 				<headerToolbar>
 					<Toolbar>
-						<Title 
-							id="cabecalhoTabelaObjetos" 
-							text="{i18n>viewGeralTaxa}"/>
-						<ToolbarSpacer />
-						<Button 
-							id="botaoNovoObjeto" 
-							icon="sap-icon://add" 
-							press="onNovoObjeto" 
-							text="{i18n>viewGeralNovo}"
-							type="Emphasized"/>
+						<Title id="cabecalhoTabelaObjetos" text="{i18n>viewGeralTaxa}"/>
+						<ToolbarSpacer/>
+						<Button id="botaoNovoObjeto" icon="sap-icon://add" press="onNovoObjeto" text="{i18n>viewGeralNovo}" type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>
-		
 				<columns>
 					<Column vAlign="Middle" mergeDuplicates="true" hAlign="Center">
 						<Text text="{i18n>viewGeralCategoria}" />
@@ -54,31 +21,24 @@
 					</Column>
 					<Column width="100px"></Column>
 				</columns>
-		
 				<items>
-					<ColumnListItem
-						type="Navigation"
-						press="onAbrirObjeto">
+					<ColumnListItem type="Navigation" press="onAbrirObjeto">
 						<cells>
 							<ObjectIdentifier text="{category}"/>
 							<ObjectIdentifier text="{tax}"/>
 							<HBox>
 								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false" />
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false"/>
 							</HBox>
 						</cells>
 					</ColumnListItem>
 				</items>
 			</Table>
 		</Page>
-		<Page
-			id="paginaObjeto"
-			showHeader="false">
+		<Page id="paginaObjeto" showHeader="false">
 			<content>
 				<VBox class="sapUiSmallMargin">
-					<f:Form 
-						id="formularioObjeto" 
-						editable="true">
+					<f:Form id="formularioObjeto" editable="true">
 						<f:title>
 							<core:Title text="{i18n>viewGeralTaxa}"/>
 						</f:title>
@@ -91,37 +51,36 @@
 								<f:formElements>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewGeralClassificacao}" class="sapMLabelRequired" />
+											<Label text="{i18n>viewGeralClassificacao}" class="sapMLabelRequired"/>
 										</f:label>
 										<f:fields>
-											<Select items="{/DominioTaxClassification}" change="onTrocarClassification" selectedKey="{/objeto/fkClassification}" id="selectClassification">
-												<core:Item text="{classification}" key="{id_dominio_tax_classification}" />
-												<!--<core:Item text="" />
-												<core:Item text="Tax Borne" />
-												<core:Item text="Tax Collected" />-->
+											<Select items="{/DominioTaxClassification}" change="onTrocarClassification" selectedKey="{/objeto/fkClassification}"
+												id="selectClassification">
+												<core:Item text="{classification}" key="{id_dominio_tax_classification}"/>
 											</Select>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewRelatorioCategoria}" class="sapMLabelRequired" />
+											<Label text="{i18n>viewRelatorioCategoria}" class="sapMLabelRequired"/>
 										</f:label>
 										<f:fields>
 											<Select items="{/TaxCategory}" selectedKey="{/objeto/fkCategory}" id="selectCategory">
-												<core:Item text="{category}" key="{id_tax_category}" />
-												<!--<core:Item text="" />
-												<core:Item text="Tax on profits" />
-												<core:Item text="Tax on people" />
-												<core:Item text="Tax on mining" />-->
+												<core:Item text="{category}" key="{id_tax_category}"/>
 											</Select>
 										</f:fields>
 									</f:FormElement>
 									<f:FormElement>
 										<f:label>
-											<Label text="{i18n>viewGeralTaxa}" labelFor="inputTax" />
+											<Label text="{i18n>viewGeralTaxa}" labelFor="inputTax"/>
 										</f:label>
 										<f:fields>
-											<Input id="inputTax" type="Text" value="{/objeto/tax}" required="true" />
+											<Input id="inputTax" type="Text" value="{/objeto/tax}" required="true"/>
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:fields>
+											<CheckBox text="Flag Exportar para o Tax Package" selected="{/objeto/indExportavelTaxPackage}" />
 										</f:fields>
 									</f:FormElement>
 								</f:formElements>
@@ -133,16 +92,8 @@
 			<footer>
 				<Toolbar>
 					<ToolbarSpacer/>
-					<Button 
-					id="btnSalvar"
-						text="{i18n>viewGeralSalvar}" 
-						type="Accept" 
-						press="onSalvar"/>
-					<Button 
-					id="btnCancelar"
-						text="{i18n>viewGeralCancelar}" 
-						type="Reject" 
-						press="onCancelar"/>
+					<Button id="btnSalvar" text="{i18n>viewGeralSalvar}" type="Accept" press="onSalvar"/>
+					<Button id="btnCancelar" text="{i18n>viewGeralCancelar}" type="Reject" press="onCancelar"/>
 				</Toolbar>
 			</footer>
 		</Page>

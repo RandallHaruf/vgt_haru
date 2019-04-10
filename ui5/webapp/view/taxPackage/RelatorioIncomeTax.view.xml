@@ -84,6 +84,16 @@
 					text="{i18n>viewGeralBtnRelatorioTaxP}"
 					type="Emphasized"
 					press="onGerarRelatorio"/>	
+					<Button
+					id="TemplateSet"
+					text="TemplateSet"
+					type="Emphasized"
+					press="onDialogOpen"/>	
+					<Button
+					id="TemplateGet"
+					text="TemplateGet"
+					type="Emphasized"
+					press="onTemplateGet"/>						
 					</HBox>	
 				</f:content>
 			</f:DynamicPageHeader>

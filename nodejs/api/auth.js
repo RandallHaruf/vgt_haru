@@ -70,7 +70,7 @@ const login = function (req, res) {
 					};
 
 					res.send(JSON.stringify(err));
-				} else if (result.length === 0) {
+				} else if (result.length === 0 || !result[0].ind_ativo) {
 					req.session = {
 						autenticado: false
 					};

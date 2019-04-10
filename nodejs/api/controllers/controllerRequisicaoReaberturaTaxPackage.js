@@ -5,7 +5,29 @@ var model = require("../models/modelRequisicaoReaberturaTaxPackage");
 module.exports = {
 
 	listarRegistros: function (req, res) {
-		model.listar([], function (err, result) {
+		var aParam = [];
+	/*	if (req.query.empresa) {
+			aParam.push({
+				coluna: model.colunas.fkEmpresa.id_empresa,
+				valor: Number(req.query.empresa)
+			});
+		} */
+
+		if (req.query.reltaxperiodo) {
+			aParam.push({
+				coluna: model.colunas.fkIdRelTaxPackagePeriodo,
+				valor: Number(req.query.reltaxperiodo)
+			});
+		}
+
+		if (req.query.status) {
+			aParam.push({
+				coluna: model.colunas.fkDominioRequisicaoReaberturaStatus,
+				valor: Number(req.query.status)
+			});
+		} 
+		
+		model.listar(aParam, function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
