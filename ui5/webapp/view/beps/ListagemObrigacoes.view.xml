@@ -73,28 +73,28 @@
 							</Toolbar>
 						</headerToolbar>
 						<columns>
-							<Column>
+							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"/>
+							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}" textAlign="Center"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}"/>
+							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}" textAlign="Center"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
+							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
+							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
+							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
+							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
 							</Column>
-							<Column>
+							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
 							</Column>
 						</columns>

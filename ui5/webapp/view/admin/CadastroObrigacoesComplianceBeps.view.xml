@@ -46,10 +46,10 @@
 				</headerToolbar>
 		
 				<columns>
-					<Column vAlign="Middle">
+					<Column vAlign="Middle" hAlign="Center">
 						<Text text="{i18n>viewGeralNome}" />
 					</Column>
-					<Column vAlign="Middle">
+					<Column vAlign="Middle" hAlign="Center">
 						<Text text="{i18n>viewGeralPais}" />
 					</Column>					
 					<Column width="100px"></Column>

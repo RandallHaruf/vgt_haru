@@ -12,10 +12,10 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewEmpresasNome}"/>
 					</Column>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="Status"/>
 					</Column>
 				</columns>

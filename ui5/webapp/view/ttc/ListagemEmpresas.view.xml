@@ -49,19 +49,19 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column mergeDuplicates="true">
+					<Column mergeDuplicates="true" hAlign="Center">
 						<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" />
 					</Column>
-					<Column>
+					<Column hAlign="Center">
 						<Title text="{i18n>viewGeralMoeda}" titleStyle="H4" />
 					</Column>
-					<Column hAlign="End">
+					<Column hAlign="Center">
 						<Title text="{i18n>viewGeralBorne}" titleStyle="H4" />
 					</Column>
-					<Column hAlign="End">
+					<Column hAlign="Center">
 						<Title text="{i18n>viewGeralCollected}" titleStyle="H4" />
 					</Column>
-					<Column hAlign="End">
+					<Column hAlign="Center">
 						<Title text="Total" titleStyle="H4" />
 					</Column>
 				</columns>

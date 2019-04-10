@@ -44,7 +44,7 @@
 				</headerToolbar>
 		
 				<columns>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewRelatorioNome}" />
 					</Column>
 					<!--<Column>

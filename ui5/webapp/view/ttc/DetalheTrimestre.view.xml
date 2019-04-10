@@ -67,7 +67,7 @@
 									path: '/Borne/Pagamentos'
 								}">
 								<headerToolbar>
-									<Toolbar>
+									<Toolbar class="myCustomButton">
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoBorne" />
 										</content>
@@ -75,71 +75,71 @@
 								</headerToolbar>
 								<columns>
 									<Column width="7.5rem" />
-									<Column width="4rem" hAlign="Center">
-										<Text text="N/A" />
+									<Column width="4rem" hAlign="Center" >
+										<Text text="N/A" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}"/>
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired"  />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired" textAlign="Center"  />
 									</Column>
-									<Column width="15rem" hAlign="Center"> 
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" />
+									<Column width="15rem" hAlign="Center" > 
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" textAlign="Center" />
 									</Column> 
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
 									</Column>
-									<Column width="9rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
+									<Column width="9rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}"  />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
 									</Column>
-									<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
+									<Column width="7rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
 									</Column>
-									<Column width="12rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" />
+									<Column width="12rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" />
+									<Column width="10rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
+									<Column width="10rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
+									<Column width="10rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
+									<Column width="10rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}"  />
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -330,7 +330,7 @@
 									path: '/Collected/Pagamentos'
 								}">
 								<headerToolbar>
-									<Toolbar>
+									<Toolbar class="myCustomButton">
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoCollected" />
 										</content>
@@ -339,71 +339,70 @@
 								<columns>
 									<Column width="7.5rem" />
 									<Column width="4rem" hAlign="Center">
-										<Text text="N/A" />
+										<Text text="N/A" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}"/>
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired"  />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center"> 
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
 									</Column>
 									<Column width="9rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
 									</Column>
 									<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
 									</Column>
 									<Column width="12rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" />
-									</Column>
-							
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>

@@ -127,16 +127,16 @@
 												</Toolbar>
 											</headerToolbar>
 											<columns>
-												<Column>
+												<Column hAlign="Center">
 													<Text text="{i18n>viewCambioArquivo}" />
 												</Column>
-												<Column>
+												<Column hAlign="Center">
 													<Text text="{i18n>viewCambioTituloMes}" />
 												</Column>
-												<Column>
+												<Column hAlign="Center">
 													<Text text="{i18n>viewCambioTituloAno}" />
 												</Column>
-												<Column>
+												<Column hAlign="Center">
 													<Text text="{i18n>viewCambioTituloDownload}" />
 												</Column>
 											</columns>

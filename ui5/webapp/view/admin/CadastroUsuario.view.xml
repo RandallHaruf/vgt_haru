@@ -12,13 +12,13 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewUsuarioAdminNome}"/>
 					</Column>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewUsuarioAdminEmail}"/>
 					</Column>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewUsuarioAdminTipoAcesso}"/>
 					</Column>
 				</columns>
@@ -122,7 +122,7 @@
 									<f:FormElement>
 										<table:Table rows="{/DominioModulo}" id="tableModulos" selectionMode="None" enableColumnReordering="true">
 											<table:columns>
-												<table:Column width="45px">
+												<table:Column width="45px" hAlign="Center">
 													<table:template>
 														<CheckBox selected="{selecionado}" enabled="{habilitado}"/>
 													</table:template>

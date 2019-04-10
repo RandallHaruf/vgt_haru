@@ -74,27 +74,27 @@
 										</Toolbar>
 									</headerToolbar>
 									<columns>
-										<Column mergeDuplicates="true">
+										<Column mergeDuplicates="true" hAlign="Center">
 											<Text text="{i18n>viewGeralMoeda}" />
 										</Column>
 										<Column 
-											hAlign="Begin">
+											hAlign="Center">
 											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes01}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes02}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes03}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="Total" />
 										</Column>
 									</columns>
@@ -170,26 +170,26 @@
 										</Toolbar>
 									</headerToolbar>
 									<columns>
-										<Column mergeDuplicates="true">
+										<Column mergeDuplicates="true" hAlign="Center">
 											<Text text="{i18n>viewGeralMoeda}" />
 										</Column>
-										<Column>
+										<Column hAlign="Center">
 											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes04}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes05}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes06}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="Total" />
 										</Column>
 									</columns>
@@ -265,26 +265,26 @@
 										</Toolbar>
 									</headerToolbar>
 									<columns>
-										<Column mergeDuplicates="true">
+										<Column mergeDuplicates="true" hAlign="Center">
 											<Text text="{i18n>viewGeralMoeda}" />
 										</Column>
-										<Column>
+										<Column hAlign="Center">
 											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes07}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes08}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes09}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="Total" />
 										</Column>
 									</columns>
@@ -360,26 +360,26 @@
 										</Toolbar>
 									</headerToolbar>
 									<columns>
-										<Column mergeDuplicates="true">
+										<Column mergeDuplicates="true" hAlign="Center">
 											<Text text="{i18n>viewGeralMoeda}" />
 										</Column>
-										<Column>
+										<Column hAlign="Center">
 											<Text text="{i18n>viewTTCResumoTrimestreTituloTabelaCategoria}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes10}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes11}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="{i18n>viewGeralMes12}" />
 										</Column>
 										<Column
-											hAlign="End">
+											hAlign="Center">
 											<Text text="Total" />
 										</Column>
 									</columns>
