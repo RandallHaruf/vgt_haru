@@ -290,6 +290,7 @@ context VGT {
             fk_dominio_requisicao_reabertura_status : association[0..1]    to VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS { id_dominio_requisicao_reabertura_status };
             fk_empresa                              : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_empresa.id_empresa };
             fk_periodo                              : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_periodo.id_periodo };
+            data_resposta                           : LocalDate;
     };
 
 
@@ -518,6 +519,7 @@ context VGT {
         resposta                                : String(50);
         fk_dominio_requisicao_reabertura_status : association[*, 0..1] to VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS { id_dominio_requisicao_reabertura_status };
         fk_id_rel_tax_package_periodo           : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
+        data_resposta                           : LocalDate;
     };
 
     /*@@layout{"layoutInfo":{"x":-1816,"y":421.5}}*/
