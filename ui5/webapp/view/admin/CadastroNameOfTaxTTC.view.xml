@@ -48,13 +48,13 @@
 				</headerToolbar>
 		
 				<columns>
-					<Column mergeDuplicates="true">
+					<Column mergeDuplicates="true" hAlign="Center">
 						<Text text="{i18n>viewGeralCategoria}" />
 					</Column>
-					<Column mergeDuplicates="true">
+					<Column mergeDuplicates="true" hAlign="Center">
 						<Text text="{i18n>viewGeralTaxa}" />
 					</Column>
-					<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewGeralNomeT}" />
 					</Column>
 					<Column width="100px"></Column>

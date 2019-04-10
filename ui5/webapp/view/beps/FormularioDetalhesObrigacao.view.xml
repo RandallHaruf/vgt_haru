@@ -174,10 +174,10 @@
 												</Toolbar>
 											</headerToolbar>
 											<columns>
-												<Column>
+												<Column hAlign="Center">
 													<Title text="{i18n>viewGeralNome}"/>
 												</Column>
-												<Column>
+												<Column hAlign="Center">
 													<Title text="{i18n>viewFormularioComplianceBepsDataUp}"/>
 												</Column>
 												<Column width="6.5rem"/>

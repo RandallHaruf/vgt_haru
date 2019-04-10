@@ -46,10 +46,10 @@
 				</headerToolbar>
 		
 				<columns>
-					<Column vAlign="Middle" mergeDuplicates="true">
+					<Column vAlign="Middle" mergeDuplicates="true" hAlign="Center">
 						<Text text="{i18n>viewGeralCategoria}" />
 					</Column>
-					<Column vAlign="Middle">
+					<Column vAlign="Middle" hAlign="Center">
 						<Text text="{i18n>viewGeralTaxa}" />
 					</Column>
 					<Column width="100px"></Column>
