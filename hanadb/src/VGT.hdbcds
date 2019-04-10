@@ -680,4 +680,13 @@ context VGT {
             cambio_brl            : Decimal(19, 4);
             fk_arquivo_cambio_ttc : association[*, 1..1] to VGT.ARQUIVO_CAMBIO_TTC { id_arquivo_cambio_ttc };
     };
+
+    /*@@layout{"layoutInfo":{"x":-2652,"y":132.5}}*/
+    entity TEMPLATE_REPORT {
+        key id_template_report : Integer;
+            tela               : String(10);
+            parametros         : String(4000);
+            fk_usuario         : association[*, 0..1] to VGT.USUARIO;
+            ind_isIFrame       : Boolean;
+    };
 };

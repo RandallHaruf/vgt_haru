@@ -299,6 +299,7 @@ module.exports = {
 			listar: function (aParams, callback) {
 				return new Promise((resolve, reject) => {
 					var sStatement = 'select * from "' + sTabela + '" ';
+					var aParam = [];
 					var sOrderBy = "";
 					
 					if (aParams.length !== 0) {
@@ -310,7 +311,8 @@ module.exports = {
 								sStatement += "\"" + oParam.coluna.nome + "\" is null" + (i == aParams.length-1 ? "" : " and ");
 							}
 							else {
-								sStatement += "\"" + oParam.coluna.nome + "\" = " + oParam.valor + (i == aParams.length-1 ? "" : " and ");
+								sStatement += "\"" + oParam.coluna.nome + "\" = ? " + (i == aParams.length-1 ? "" : " and ");
+								aParam.push(oParam.valor);
 							}
 							
 							if (oParam.coluna.identity && sOrderBy !== "") {
@@ -320,7 +322,8 @@ module.exports = {
 					}
 					
 					that.executeStatement({
-						statement: sStatement
+						statement: sStatement,
+						parameters: aParam
 					}, function (err, result) {
 						if (callback) {
 							callback(err, result);
