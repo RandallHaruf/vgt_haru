@@ -507,6 +507,19 @@
 									<ObjectIdentifier 
 										class="sapUiMediumMarginTop"
 										title="{i18n>viewGeralTaxVisuPleaseProvide}" />
+									<Panel expandable="true" expanded="false" headerText="{i18n>viewTaxPackageEdicaoTrimestreHistoricoItemToReport}"
+										class="sapUiNoContentPadding sapUiSmallMarginBottom" visible="{= ${/Periodo/numero_ordem} !== 1}">
+										<List items="{/HistoricoIncomeTaxDetails}">
+											<items>
+												<CustomListItem>
+													<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+														<Title level="H3" text="{labelPeriodo}" />
+														<Text text="{incomeTaxDetails}" />
+													</VBox>	
+												</CustomListItem>
+											</items>
+										</List>
+									</Panel>
 									<TextArea
 										id="textAreaIncomeTaxDetails"
 										rows="5"

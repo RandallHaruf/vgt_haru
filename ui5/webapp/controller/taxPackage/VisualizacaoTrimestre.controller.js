@@ -2857,9 +2857,18 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros(sEntidade, function (response) {
 					if (response) {
+						that.getModel().setProperty("/HistoricoIncomeTaxDetails", []);
+						
 						for (var i = 0, length = response.length; i < length; i++) {
 							response[i].ind_ativo = false;
 							response[i].labelPeriodo = that._pegarLabelPeriodoTaxReconciliation(response[i].numero_ordem);
+							
+							if (response[i].it_details_if_tax_returns_income_differs_from_fs) {
+								that.getModel().getProperty("/HistoricoIncomeTaxDetails").push({
+									labelPeriodo: response[i].labelPeriodo,
+									incomeTaxDetails: response[i].it_details_if_tax_returns_income_differs_from_fs
+								});
+							}
 						}
 						that.getModel().setProperty("/TaxReconciliation", that.getModel().getProperty("/TaxReconciliation").concat(response));
 						that.getModel().refresh();
@@ -3248,6 +3257,7 @@ sap.ui.define(
 					}],
 					IncomeTaxDetails: null,
 					IncomeTaxDetailsValueState: null,
+					HistoricoIncomeTaxDetails: [],
 					lossSchedule: [{
 						fiscalYear: 2017,
 						yearOfExpiration: 2017,
