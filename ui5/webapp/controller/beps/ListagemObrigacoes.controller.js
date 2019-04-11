@@ -87,6 +87,7 @@ sap.ui.define(
 					
 					/* Colunas */ 
 					oTable.addColumn(new sap.m.Column({
+						hAlign: "Center",
 						vAlign: "Middle"
 					}).setHeader(new sap.m.Text({
 						text: "{i18n>viewComplianceListagemObrigacoesNomeArquivo}"
@@ -101,6 +102,7 @@ sap.ui.define(
 					})));*/
 					
 					oTable.addColumn(new sap.m.Column({
+						hAlign: "Center",
 						vAlign: "Middle",
 						demandPopin: true,
 						minScreenWidth: "Large"

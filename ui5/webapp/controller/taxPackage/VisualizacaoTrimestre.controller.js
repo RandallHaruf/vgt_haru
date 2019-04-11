@@ -78,16 +78,19 @@ sap.ui.define(
 
 				/* Colunas da tabela */
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					width: "50px"
 				}));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
 					text: this.getResourceBundle().getText("ViewRelatorioDescricao")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
 					text: this.getResourceBundle().getText("viewRelatorioValue")
@@ -223,10 +226,12 @@ sap.ui.define(
 
 				/* Colunas da tabela */
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					width: "50px"
 				}));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
@@ -234,6 +239,7 @@ sap.ui.define(
 				})));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
@@ -241,6 +247,7 @@ sap.ui.define(
 				})));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle",
 					width: "150px"
 				}).setHeader(new sap.m.Text({
@@ -248,6 +255,7 @@ sap.ui.define(
 				})));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle",
 					width: "110px",
 					hAlign: "End"
@@ -315,16 +323,19 @@ sap.ui.define(
 
 				/* Colunas da tabela */
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					width: "50px"
 				}));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
 					text: this.getResourceBundle().getText("ViewRelatorioDescricao")
 				})));
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle"
 				}).setHeader(new sap.m.Text({
 					text: this.getResourceBundle().getText("viewRelatorioValue")
@@ -855,6 +866,7 @@ sap.ui.define(
 				
 				// Colunas da tabela 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					width: "50px"
 				}));
 
@@ -866,6 +878,7 @@ sap.ui.define(
 				})));*/
 
 				oTable.addColumn(new sap.m.Column({
+					hAlign:"Center",
 					vAlign: "Middle",
 					width: "175px"
 				})/*.setHeader(new sap.m.Text({
@@ -2522,6 +2535,7 @@ sap.ui.define(
 
 					// Coluna de exclusão da linha
 					oTable.addColumn(new sap.m.Column({
+						hAlign:"Center",
 						width: "50px"
 					}));
 
@@ -2533,6 +2547,7 @@ sap.ui.define(
 
 					// Coluna de tipo de diferença
 					oTable.addColumn(new sap.m.Column({
+						hAlign:"Center",
 						vAlign: "Middle"
 					}).setHeader(new sap.m.Text({
 						text: "Tipo"
@@ -2551,6 +2566,7 @@ sap.ui.define(
 
 					// Coluna de outro caso usuário selecione "outras"
 					oTable.addColumn(new sap.m.Column({
+						hAlign:"Center",
 						vAlign: "Middle"
 					}).setHeader(new sap.m.Text({
 						text: "Outro"
@@ -2562,6 +2578,7 @@ sap.ui.define(
 				} else {
 
 					oTable.addColumn(new sap.m.Column({
+						hAlign:"Center",
 						vAlign: "Middle"
 					}).setHeader(new sap.m.Text({
 						text: ""
@@ -2592,6 +2609,7 @@ sap.ui.define(
 						}));
 
 						oTable.addColumn(new sap.m.Column({
+							hAlign:"Center",
 							vAlign: "Middle"
 						}).setHeader(new sap.m.Text({
 							text: oTemplateColuna.label

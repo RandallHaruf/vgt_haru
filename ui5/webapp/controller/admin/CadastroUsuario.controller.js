@@ -368,7 +368,7 @@ sap.ui.define(
 			/* Métodos fixos */
 			onInit: function () {
 				var that = this;
-
+				
 				that.setModel(new sap.ui.model.json.JSONModel({
 					paises: [],
 					objetos: [],
