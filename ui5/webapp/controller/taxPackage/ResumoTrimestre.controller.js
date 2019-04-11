@@ -269,10 +269,10 @@ sap.ui.define(
 			_onEnviarMensagem: function (vEmpresa, vPeriodo) {
 				var that = this;
 
-				var assunto = "TAX PACKAGE – Period reopening - " + vEmpresa + " - " + vPeriodo;
+				var assunto = "TAX PACKAGE – Quarter reopening - " + vEmpresa + " - " + vPeriodo;
 				//var corpo = that.getModel().getProperty("/corpo");
 				var htmlBody =
-					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TAX PACKAGE module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
+					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TAX PACKAGE module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
 				//this.getModel().setProperty("/bEmailButton", false);
 
 				jQuery.ajax({ //Desativar botao

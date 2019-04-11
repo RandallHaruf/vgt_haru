@@ -289,9 +289,9 @@ sap.ui.define(
 			_onEnviarMensagem: function (vEmpresa, vPeriodo) {
 				var that = this;
 
-				var assunto = "TTC - Period reopening - " + vEmpresa + " - " + vPeriodo;
+				var assunto = "TTC - Quarter reopening - " + vEmpresa + " - " + vPeriodo;
 				var htmlBody =
-					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed period in the TTC module at <a href='" + document.domain +
+					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TTC module at <a href='" + document.domain +
 					"'>Vale Global Tax (VGT)</a> Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
 
 				jQuery.ajax({ //Desativar botao
