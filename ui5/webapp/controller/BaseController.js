@@ -121,6 +121,33 @@ sap.ui.define(
 					
 					oEvent.getSource().setValue("");
 				}
+			},
+			
+			showError: function (error) {
+				jQuery.sap.require("sap.m.MessageBox");
+				
+				var msg;
+				
+				if (typeof error == 'string' || error instanceof String) {
+					msg = error;
+				}
+				else {
+					if (error.responseJSON) {
+						if (error.responseJSON.error.code && this.getResourceBundle().hasText(error.responseJSON.error.code)) {
+							msg = this.getResourceBundle().getText(error.responseJSON.error.code);
+						}
+						else {
+							msg = error.responseJSON.error.message;
+						}
+					}
+					else {
+						msg = error.message;
+					}
+				}
+				
+				sap.m.MessageBox.error(msg, {
+					title: "Error"
+				});
 			}
 		});
 	}

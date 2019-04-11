@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, Constants, Validador, Utils) {
+	function (BaseController, Constants, Validador, Utils, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroCategoryTTC", {
 
 			/* Métodos a implementar */
@@ -35,7 +36,23 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Category: " + nome);	
 
-							jQuery.ajax(Constants.urlBackend + "TaxCategory/" + idExcluir, {
+							NodeAPI.pExcluirRegistro("TaxCategory", idExcluir)
+								.then(function (res) {
+									console.log(res);
+									that._carregarObjetos();
+								})
+								.catch(function (err) {
+									console.log(err);
+									/*if (err.responseJSON) {
+										alert((err.responseJSON.error.code + ' - ' + err.responseJSON.error.message);
+									}
+									else {
+										alert(err.message);
+									}*/
+									that.showError(err);
+								});
+
+							/*jQuery.ajax(Constants.urlBackend + "TaxCategory/" + idExcluir, {
 								type: "DELETE",
 								xhrFields: {
 									withCredentials: true
@@ -43,10 +60,9 @@ sap.ui.define(
 								crossDomain: true,
 								dataType: "json",
 								success: function (response) {
-									//that.getModel().setProperty("/objetos", response);
 									that._carregarObjetos();
 								}
-							});
+							});*/
 						}
 					}
 				});
