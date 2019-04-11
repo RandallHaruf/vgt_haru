@@ -106,7 +106,7 @@ sap.ui.define(
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["descricaoStatus"] = Utils.traduzStatusTiposPais(aResponse[i]["fkDominioPaisStatus"], that);
 						aResponse[i]["nomePais"] = Utils.traduzDominioPais(aResponse[i]["fkDominioPais"],that);
-						aResponse[i]["valorAliquota"] = aResponse[i]["valorAliquota"] ? Number(aResponse[i]["valorAliquota"]).toFixed(2) + "%" : "Nenhuma alíquota vigente";
+						aResponse[i]["valorAliquota"] = aResponse[i]["valorAliquota"] ? Number(aResponse[i]["valorAliquota"]).toFixed(2) + "%" : that.getResourceBundle().getText("viewPaisAdminNenhumaAliquotaVigente");
 					}
 					that.getModel().setProperty("/objetos", aResponse);
 					that.setBusy(that.byId("tabelaObjetos"), false);
