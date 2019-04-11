@@ -61,6 +61,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdRelTaxPackagePeriodo,
 			valor: req.body.fkIdRelTaxPackagePeriodo ? Number(req.body.fkIdRelTaxPackagePeriodo) : null
+		}, {
+			coluna: model.colunas.dataResposta,
+			valor: req.body.dataResposta ? req.body.dataResposta : null
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -113,6 +116,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdRelTaxPackagePeriodo,
 			valor: req.body.fkIdRelTaxPackagePeriodo ? Number(req.body.fkIdRelTaxPackagePeriodo) : null
+		}, {
+			coluna: model.colunas.dataResposta,
+			valor: req.body.dataResposta ? req.body.dataResposta : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {

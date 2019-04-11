@@ -34,6 +34,9 @@ var oSketch = {
 		fkPeriodo: {
 			nome: "fk_periodo.id_periodo",
 			number: true
+		},
+		dataResposta: {
+			nome: "data_resposta"
 		}
 	} 	
 };

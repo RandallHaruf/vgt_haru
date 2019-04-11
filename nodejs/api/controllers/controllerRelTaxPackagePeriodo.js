@@ -104,7 +104,7 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		var sStatement =
+		/*var sStatement =
 			'select * '
 			+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
 			+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
@@ -115,7 +115,21 @@ module.exports = {
 			taxPackage."fk_empresa.id_empresa" = ?
 			and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ?
 			and periodo."fk_dominio_modulo.id_dominio_modulo" = ? */
-
+		
+		var sStatement = 
+			'select '
+			+ 'rel.*, taxPackage.*,periodo.*, '
+			+ 'DAYS_BETWEEN(CURRENT_DATE,ADD_DAYS(TO_DATE(tblRequisicao."data_resposta"),5)) as "DiasRestantes" '
+			+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+			+ 'inner join "VGT.TAX_PACKAGE" taxPackage '
+				+ 'on rel."fk_tax_package.id_tax_package" = taxPackage."id_tax_package" '
+			+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+			+ 'left outer join ( '
+				+ 'select "VGT.REQUISICAO_REABERTURA_TAX_PACKAGE".* ,  row_number() over (partition by "fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo" order by "id_requisicao_reabertura_tax_tackage" desc) as rownumber from "VGT.REQUISICAO_REABERTURA_TAX_PACKAGE" '
+			+ ') tblRequisicao '
+				+ 'on tblRequisicao."fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo" = rel."id_rel_tax_package_periodo" ';
+		
 		var oWhere = [];
 		var aParams = [];
 
@@ -143,6 +157,9 @@ module.exports = {
 				}
 				sStatement += oWhere[i];
 			}
+			sStatement += " and (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) "
+		}else{
+			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) "
 		}
 
 		sStatement += ' order by periodo."numero_ordem" ';

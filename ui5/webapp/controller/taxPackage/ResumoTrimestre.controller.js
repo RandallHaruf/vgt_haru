@@ -1247,7 +1247,11 @@ sap.ui.define(
 						text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(2, oPeriodo.numero_ordem)]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
 					}));
 				} else {
-					// PEGAR A DATA LIMITE QUE A REABERTURA É VALIDA E CALCULAR QUANTO TEMPO FALTA    
+					if(oPeriodo.DiasRestantes && oPeriodo.ind_ativo == true) {
+						oToolbar.addContent(new sap.m.Title({
+							text: that.getResourceBundle().getText("viewGeralFaltamXDias", [oPeriodo.DiasRestantes])
+						}));	
+					}
 				}
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());

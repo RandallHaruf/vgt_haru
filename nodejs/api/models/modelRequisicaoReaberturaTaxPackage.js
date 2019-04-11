@@ -29,6 +29,9 @@ var oSketch = {
         fkIdRelTaxPackagePeriodo: {
             nome: "fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo",
             number: true
+        },
+        dataResposta: {
+        	nome: "data_resposta"
         }
 	}
 };

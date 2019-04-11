@@ -603,6 +603,7 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
+							var dataBanco = this._retornaNovaDataFormatoBanco();
 							//var objTTC = that.getModel().getProperty("/RequisicaoReabertura");
 							//objTTC.id_requisicao_reabertura = oItemSelecionadoTTC.id_requisicao_reabertura;
 							NodeAPI.atualizarRegistro("RequisicaoReabertura", oItemSelecionadoTTC.id_requisicao_reabertura, {
@@ -614,6 +615,7 @@ sap.ui.define(
 								fkDominioRequisicaoReaberturaStatus: oSelect.getSelectedKey(),
 								fkEmpresa: oItemSelecionadoTTC["fk_empresa.id_empresa"],
 								fkPeriodo: oItemSelecionadoTTC["fk_periodo.id_periodo"],
+								dataResposta: dataBanco,
 								reabrirPeriodo: true
 							}, function (response) {
 								that._onEnviarMensagem(oItemSelecionadoTTC.nome, oItemSelecionadoTTC.periodo, "TTC", oItemSelecionadoTTC.id_usuario);
@@ -753,6 +755,7 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
+							var dataBanco = this._retornaNovaDataFormatoBanco();
 							//var objTAX = that.getModel().getProperty("/RequisicaoReaberturaTaxPackage");
 							//objTAX.id_requisicao_reabertura_tax_tackage = oItemSelecionadoTAX.id_requisicao_reabertura;
 							NodeAPI.atualizarRegistro("RequisicaoReaberturaTaxPackage", oItemSelecionadoTAX.id_requisicao_reabertura_tax_tackage, {
@@ -763,6 +766,7 @@ sap.ui.define(
 								resposta: oTextArea.getValue(),
 								fkDominioRequisicaoReaberturaStatus: oSelect.getSelectedKey(),
 								fkIdRelTaxPackagePeriodo: oItemSelecionadoTAX["fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo"],
+								dataResposta: dataBanco,
 								reabrirPeriodo: true
 							}, function (response) {
 								that._onEnviarMensagem(oItemSelecionadoTAX.nome, oItemSelecionadoTAX.periodo, "TAX", oItemSelecionadoTAX.id_usuario);
@@ -887,6 +891,20 @@ sap.ui.define(
 			*/
 			_carregarObjetos: function () {
 				sap.m.MessageToast.show("Carregar objetos");
+			},
+			_retornaNovaDataFormatoBanco: function () {
+		        var year, month, day;
+		        var dataAgora = new Date();
+		        year = String(dataAgora.getFullYear());
+		        month = String(dataAgora.getMonth() + 1);
+		        if (month.length == 1) {
+		            month = "0" + month;
+		        }
+		        day = String(dataAgora.getDate());
+		        if (day.length == 1) {
+		            day = "0" + day;
+		        }
+		        return year + "-" + month + "-" + day;
 			}
 		});
 	});

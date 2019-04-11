@@ -7,9 +7,9 @@ var disparaEmail = require("../../utils/sendEmails");
 function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa,
 	sIdPeriodo, sNomeEmpresa) {
 	// Inclui a requisição nova
-	var aParams = [sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo],
+	var aParams = [sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo, ''],
 		sQuery = ' INSERT INTO ' + ' "VGT.REQUISICAO_REABERTURA" ' +
-		' VALUES("identity_VGT.REQUISICAO_REABERTURA_id_requisicao_reabertura".nextval, ?, ?, ?, ?, ?, ?, ?, ?) ';
+		' VALUES("identity_VGT.REQUISICAO_REABERTURA_id_requisicao_reabertura".nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?) ';
 
 	model.executeSync(sQuery, aParams, {
 		connection: oConnection
@@ -136,6 +136,9 @@ module.exports = {
 			}, {
 				coluna: model.colunas.fkPeriodo,
 				valor: req.body.fkPeriodo ? Number(req.body.fkPeriodo) : null
+			}, {
+				coluna: model.colunas.dataResposta,
+				valor: req.body.dataResposta ? req.body.dataResposta : null
 			}];
 
 			model.inserir(aParams, function (err, result) {
@@ -192,6 +195,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkPeriodo,
 			valor: req.body.fkPeriodo ? Number(req.body.fkPeriodo) : null
+		}, {
+			coluna: model.colunas.dataResposta,
+			valor: req.body.dataResposta ? req.body.dataResposta : null
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {

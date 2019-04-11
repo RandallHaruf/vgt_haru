@@ -17,11 +17,13 @@ const enviarEmail = (conteudo) => {
 
 module.exports = function () {
 	/* Servidor está com 2 horas a mais que o horário de brasília */
-	
+	//Agora que nao estamos mais em horario de verão sao 3 horas de diferenca
 	require('./ttc/encerrarPeriodoAnteriorAbrirPeriodoCorrente')();
 	require('./ttc/notificarProximidadeEncerramentoPeriodo')();
 	require('./Compliance_Beps/marcarComAtrasoObrigacoesVencidas')();
 	require('./taxPackage/encerrarPeriodoAnteriorAbrirPeriodoCorrente')();
 	require('./ttc/notificarAdministradorSolicitacao')();
 	require('./taxPackage/notificarAdministradorSolicitacao')();
+	require('./ttc/encerrarReabertura')();
+	require('./taxPackage/encerrarReabertura')();
 };

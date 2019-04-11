@@ -90,17 +90,36 @@ module.exports = {
 	},
 
 	deepQuery: function (req, res) {
-		var sStatement = 
+		//Antiga query antes da contagem de dias apos requisicao
+		/*var sStatement = 
 			'select * '
 			+ 'from "VGT.REL_EMPRESA_PERIODO" rel '
 			+ 'inner join "VGT.PERIODO" periodo '
-			+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" ';
+			+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+			+ 'left outer join '';
 			/*where
 			rel."fk_empresa.id_empresa" = ?
 			and rel."fk_periodo.id_periodo" = ?
 			and periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario = ? "
 			and periodo."fk_dominio_modulo.id_dominio_modulo" = ? */
-
+		var sStatement = 
+			'select '
+			+ 'rel.*, '
+			+ 'periodo.*, '
+			+ 'tblRequisicao."fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status", '
+			+ 'DAYS_BETWEEN(CURRENT_DATE,ADD_DAYS(TO_DATE(tblRequisicao."data_resposta"),5)) as "DiasRestantes" '
+			+ 'from "VGT.REL_EMPRESA_PERIODO" rel '
+			+ 'inner join "VGT.PERIODO" periodo '
+				+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+			+ 'left outer join ( '
+				+ 'select '
+				+ '"VGT.REQUISICAO_REABERTURA".*, '
+				+ 'row_number() over (partition by "fk_empresa.id_empresa","fk_periodo.id_periodo" order by "id_requisicao_reabertura" desc) as rownumber '
+				+ 'from "VGT.REQUISICAO_REABERTURA" '
+			+ ') tblRequisicao '
+				+ 'on tblRequisicao."fk_empresa.id_empresa" = rel."fk_empresa.id_empresa" '
+				+ 'and tblRequisicao."fk_periodo.id_periodo" = rel."fk_periodo.id_periodo" '
+			
 		var oWhere = [];
 		var aParams = [];
 		
@@ -133,6 +152,9 @@ module.exports = {
 				}
 				sStatement += oWhere[i];
 			}
+			sStatement += " and (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null)"
+		}else{
+			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null)"
 		}
 		
 		sStatement += ' order by periodo."numero_ordem" ';
