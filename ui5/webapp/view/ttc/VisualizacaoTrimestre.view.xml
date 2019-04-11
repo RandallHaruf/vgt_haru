@@ -74,7 +74,7 @@
 								}">
 								<columns>
 									<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" />
+										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
@@ -83,10 +83,10 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" />
@@ -103,14 +103,14 @@
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
 									</Column>
-									<Column width="10rem" hAlign="End">
+									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
@@ -137,7 +137,7 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
 									</Column>
 								</columns>
 								<items>
@@ -201,7 +201,7 @@
 								}">
 								<columns>
 									<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" />
+										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
@@ -210,10 +210,10 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" />
@@ -237,7 +237,7 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
@@ -264,7 +264,7 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i8n>viewTTCDetalheTrimestreColunaBeneficiary}" />
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
 									</Column>
 								</columns>
 								<items>

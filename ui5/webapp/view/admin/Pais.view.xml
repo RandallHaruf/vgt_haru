@@ -53,9 +53,9 @@
 					<Column hAlign="Center">
 						<Text text="{i18n>viewPaisAdminNomeImposto}" />
 					</Column>
-					<!--<Column>
+					<Column hAlign="Center">
 						<Text text="{i18n>viewPaisAdminAliquotaVigente}" />
-					</Column>-->
+					</Column>
 				</columns>
 		
 				<items>
@@ -66,7 +66,7 @@
 							<ObjectIdentifier title="{nomePais}" />
 							<Text text="{descricaoStatus}" />
 							<Text text="{nomeAliquota}" />
-							<!--<Text text="{valorAliquota}%" />-->
+							<Text text="{valorAliquota}" />
 						</cells>
 					</ColumnListItem>
 				</items>

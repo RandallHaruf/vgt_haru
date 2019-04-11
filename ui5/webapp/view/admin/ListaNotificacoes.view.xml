@@ -23,17 +23,19 @@
 						growingScrollToLoad="true"
 						updateFinished="onTerminouAtualizar">
 						<columns>
-							<Column>
+							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaobservacao}" />
 							</Column>
 						</columns>
@@ -64,17 +66,19 @@
 						growingScrollToLoad="true"
 						updateFinished="onTerminouAtualizar">
 						<columns>
-							<Column>
+							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaobservacao}" />
 							</Column>
 						</columns>
@@ -105,17 +109,19 @@
 						growingScrollToLoad="true"
 						updateFinished="onTerminouAtualizar">
 						<columns>
-							<Column>
+							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaobservacao}" />
 							</Column>
 						</columns>
@@ -145,12 +151,13 @@
 						enableBusyIndicator="true"
 						growingScrollToLoad="true">
 						<columns>
-							<Column>
+							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
-								demandPopin="true">
+								demandPopin="true"
+								hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaDiasDiponiveis}" />
 							</Column>
 						</columns>
