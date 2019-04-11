@@ -11,7 +11,7 @@ module.exports = {
 			if(req.query.usarSession){
 				aParam.push({
 					coluna: model.colunas.fkUsuario,
-					valor: req.session.usuario.id_usuario
+					valor: req.session.usuario.id
 				});
 			}
 			model.listar(aParam, (err, result) => {
@@ -34,10 +34,10 @@ module.exports = {
 	criarRegistro: (req, res, next) => {
 		try {
 			let aParam = utils.getAvailableFields(model, req.body);
-			if(req.query.usarSession){
+			if(req.body.usarSession){
 				aParam.push({
 					coluna: model.colunas.fkUsuario,
-					valor: req.session.usuario.id_usuario
+					valor: req.session.usuario.id
 				});
 			}
 			aParam = aParam.concat(utils.getIdentityFields(model));

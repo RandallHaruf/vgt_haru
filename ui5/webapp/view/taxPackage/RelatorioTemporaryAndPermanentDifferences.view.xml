@@ -108,28 +108,28 @@
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
 						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioEmpresa}"/>
+							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
-							<Text text="{i18n>viewGeralPeriodo}"/>
+							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
-							<Text text="{i18n>viewGeralMoeda}"/>
+							<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDiferencaOpcao.nome}" hAlign="Center">
-							<Text text="{i18n>viewGeralTipo}"/>
+							<Text text="{i18n>viewGeralTipo}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDiferenca.outro}" hAlign="Center">
-							<Text text="{i18n>viewGeralOutro}"/>
+							<Text text="{i18n>viewGeralOutro}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblRelTaxReconciliationDiferenca.valor}" hAlign="Center">
-							<Text text="{i18n>viewGeralValue}"/>
+							<Text text="{i18n>viewGeralValue}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioDiferencaTipo.tipo}" hAlign="Center">
-							<Text text="{i18n>viewGeralDiferencas}"/>
+							<Text text="{i18n>viewGeralDiferencas}" textAlign="Center"/>
 						</Column>			
 					</columns>
 					<items>

@@ -93,52 +93,52 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="{/remtblEmpresa.nome}">
+						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
 							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
 							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblPeriodo.periodo}">
+						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
 							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblDominioMoeda.acronimo}">
+						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
 							<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}">
+						<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}" hAlign="Center">
 							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_total_losses_utilized}">
+						<Column width="{/remtblTaxReconciliation.rf_total_losses_utilized}" hAlign="Center">
 							<Text text="{i18n>viewGeralTotalLossesUtilized}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_after_losses}">
+						<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_after_losses}" hAlign="Center">
 							<Text text="{i18n>viewGeralTaxableIncome}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_income_tax_before_other_taxes_and_credits}">
+						<Column width="{/remtblTaxReconciliation.rf_income_tax_before_other_taxes_and_credits}" hAlign="Center">
 							<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" textAlign="Center"/>
 						</Column>	
-						<Column width="{/remtblTaxReconciliation.rf_other_taxes}">
+						<Column width="{/remtblTaxReconciliation.rf_other_taxes}" hAlign="Center">
 							<Text text="{i18n>viewGeralOthertaxes}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_incentivos_fiscais}">
+						<Column width="{/remtblTaxReconciliation.rf_incentivos_fiscais}" hAlign="Center">
 							<Text text="{i18n>viewGeralIncentivosFiscais}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_total_other_taxes_and_tax_credits}">
+						<Column width="{/remtblTaxReconciliation.rf_total_other_taxes_and_tax_credits}" hAlign="Center">
 							<Text text="{i18n>viewGeralTotalOtherTaxesAndTaxCredits}" textAlign="Center"/>
 						</Column>	
-						<Column width="{/remtblTaxReconciliation.rf_net_local_tax}">
+						<Column width="{/remtblTaxReconciliation.rf_net_local_tax}" hAlign="Center">
 							<Text text="{i18n>viewGeralNetLocalTax}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblTaxReconciliation.rf_wht}" hAlign="Center">
 							<Text text="WHT" textAlign="Center"/>
 						</Column>	
-						<Column width="{/remtblTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year}">
+						<Column width="{/remtblTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year}" hAlign="Center">
 							<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes}">
+						<Column width="{/remtblTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes}" hAlign="Center">
 							<Text text="{i18n>viewGeralTotalInterim}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.rf_tax_due_overpaid}">
+						<Column width="{/remtblTaxReconciliation.rf_tax_due_overpaid}" hAlign="Center">
 							<Text text="{i18n>viewGeralTaxDueoverpaid}" textAlign="Center"/>
 						</Column>							
 					</columns>

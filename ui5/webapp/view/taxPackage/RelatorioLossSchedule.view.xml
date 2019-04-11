@@ -101,19 +101,19 @@
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
 						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioEmpresa}"/>
+							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
 							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
-							<Text text="{i18n>viewGeralPeriodo}"/>
+							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
-							<Text text="{i18n>viewGeralMoeda}"/>
+							<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblSchedule.fy}" hAlign="Center">
-							<Text text="{i18n>viewEdiçãoTrimestreFY}"/>
+							<Text text="{i18n>viewEdiçãoTrimestreFY}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblSchedule.year_of_expiration}" hAlign="Center">
 							<Text text="{i18n>viewEdiçãoTrimestreYearofExpiration}" textAlign="Center"/>
@@ -140,7 +140,7 @@
 							<Text text="{i18n>viewEdiçãoTrimestreClosingBalance}" textAlign="Center"/>
 						</Column>		
 						<Column width="{/remtblSchedule.obs}" hAlign="Center">
-							<Text text="{i18n>viewEdiçãoTrimestreOBS}"/>
+							<Text text="{i18n>viewEdiçãoTrimestreOBS}" textAlign="Center"/>
 						</Column>
 					</columns>
 					<items>

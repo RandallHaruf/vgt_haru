@@ -129,31 +129,31 @@
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
 						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioEmpresa}"/>
+							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
-							<Text text="{i18n>viewGeralPeriodo}"/>
+							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblItemToReport.flag_sim_nao}" hAlign="Center">
-							<Text text="{i18n>viewGeralFlagSN}"/>
+							<Text text="{i18n>viewGeralFlagSN}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblItemToReport.flag_ano}" hAlign="Center">
-							<Text text="{i18n>viewGeralFlagAno}"/>
+							<Text text="{i18n>viewGeralFlagAno}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remAno_Fiscal_Agregado}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioAnoFiscal}"/>
+							<Text text="{i18n>viewRelatorioAnoFiscal}" textAlign="Center"/>
 						</Column>	
 						<Column width="{/remtblRespostaItemToReport.ind_se_aplica}" hAlign="Center">
 							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?"/>
 						</Column>						
 						<Column width="{/remtblItemToReport.pergunta}" hAlign="Center">							
-							<Text text="{i18n>viewGeralQUestion}"/>
+							<Text text="{i18n>viewGeralQUestion}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblRespostaItemToReport.resposta}" hAlign="Center">
-							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}"/>
+							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}" textAlign="Center"/>
 						</Column>	
 					</columns>
 					<items>

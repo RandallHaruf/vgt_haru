@@ -1,9 +1,11 @@
 sap.ui.define(
 	[
-		"ui5ns/ui5/lib/Validador"
-		
+		"ui5ns/ui5/lib/Validador",
+		"sap/m/Popover",
+		"ui5ns/ui5/lib/NodeAPI",		
+		"sap/m/Button"
 	],
-	function (Validador) {
+	function (Validador,Popover,NodeAPI,Button) {
 		return {
 			limparMascaraDecimal: function (sValor, that) {
 				if (that && !that.isPTBR()) {
@@ -997,6 +999,238 @@ sap.ui.define(
                       break;
                }
                return traducao;
+			},
+
+			_reportAdicionar: function (sProperty,that) {
+				that.getModel().getProperty(sProperty).unshift({
+					descricao: null,
+					descricaoValueState: sap.ui.core.ValueState.Error,
+					parametros: JSON.stringify(that.getModel().getProperty("/Preselecionado"))
+				});
+				that.getModel().refresh();
+			},
+	
+			_reportExcluir: function (oEvent, sProperty,excluirProperty,that,id) {
+				var array = that.getModel().getProperty(sProperty);
+				var oExcluir = oEvent.getSource().getBindingContext().getObject();
+				var oWhere = that.getModel().getProperty(excluirProperty);
+				for (var i = 0, length = array.length; i < length; i++) {
+					if (array[i] === oExcluir) {
+						if(array[i][id]){
+							oWhere.push(array[i][id]);
+						}
+						array.splice(i, 1);
+					}
+				}
+				that.getModel().refresh();
+			},
+			_reportSelecionar: function (oEvent, sProperty,that) {
+				var aTaxaMultipla = that.getModel().getProperty(sProperty);
+				var oSelecionado = oEvent.getSource().getBindingContext().getObject();
+				that.getModel().setProperty("/Preselecionado", JSON.parse(oSelecionado["parametros"]));
+				that.onTemplateGet();
+				that._dialogFiltro.close();
+			},
+			_dialogReport: function (sTitulo, sProperty,excluirProperty,that,id) {
+				that.getModel().setProperty("/Excluir",[]);
+				if (!that._dialogFiltro) {
+					var oScrollContainer = new sap.m.ScrollContainer({
+						horizontal: true,
+						vertical: true,
+						height: "330px"
+					}).addStyleClass("sapUiNoContentPadding");
+	
+					/* Criação da tabela de inserção */
+					var oTable = new sap.m.Table();
+	
+					/* Toolbar com título da tabela e botão de nova taxa */
+					var oToolbar = new sap.m.Toolbar();
+	
+					oToolbar.addContent(new sap.m.ObjectIdentifier({
+						title: sTitulo
+					}));
+	
+					oToolbar.addContent(new sap.m.ToolbarSpacer());
+	
+					oToolbar.addContent(new sap.m.Button({
+						text: that.getResourceBundle().getText("viewGeralNova"),
+						icon: "sap-icon://add",
+						type: "Emphasized"
+					}).attachPress(oTable, function () {
+						that._reportAdicionar(sProperty,that);
+					}, that));
+	
+					oTable.setHeaderToolbar(oToolbar);
+	
+					/* Colunas da tabela */
+					oTable.addColumn(new sap.m.Column({
+						width: "50px"
+					}));
+	
+					oTable.addColumn(new sap.m.Column({
+						vAlign: "Middle"
+					}).setHeader(new sap.m.Text({
+						text: "Templates"
+					})));
+					oTable.addColumn(new sap.m.Column({
+						vAlign: "Middle",
+						width: "90px"
+					}).setHeader(new sap.m.Text({
+						text: "Selecionar"
+					})));
+	
+					/* Template das células */
+					var oBtnExcluir = new sap.m.Button({
+						icon: "sap-icon://delete",
+						type: "Reject",
+						tooltip: "{i18n>viewGeralExcluirLinha}"
+					}).attachPress(oTable, function (oEvent2) {
+						that._reportExcluir(oEvent2, sProperty,excluirProperty,that,id);
+					}, that);
+	
+					var oInputDescricao = new sap.m.Input({
+						value: "{descricao}",
+						valueState: "{descricaoValueState}",
+						valueStateText: "{i18n>viewGeralCampoNaoPodeSerVazio}"
+					}).attachChange(function (oEvent) {
+						var obj = oEvent.getSource().getBindingContext().getObject();
+							obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
+					});
+					/* Template das células */
+					var oBtnSelecionar = new sap.m.Button({
+						icon: "sap-icon://provision",
+						type: "Accept",
+						tooltip: "Selecionar"
+					}).attachPress(oTable, function (oEvent3) {
+						that._reportSelecionar(oEvent3, sProperty,that);
+					}, that);
+	
+					var oTemplate = new sap.m.ColumnListItem({
+						cells: [oBtnExcluir, oInputDescricao, oBtnSelecionar]
+					});
+	
+					oTable.bindItems({
+						path: sProperty,
+						template: oTemplate
+					});
+	
+					oScrollContainer.addContent(oTable);
+	
+					//var that = this;
+	
+					/* Criação do diálogo com base na tabela */
+					var dialog = new sap.m.Dialog({
+						contentWidth: "500px",
+						showHeader: false,
+						type: "Message",
+						content: oScrollContainer,
+						endButton: new sap.m.Button({
+							text: "Salvar",
+							press: function () {
+								var aTaxa = that.getModel().getProperty(sProperty),
+									bValido = true;
+	
+								if (aTaxa && aTaxa.length) {
+									var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+										return !obj.descricao;
+									});
+	
+									if (aTaxaSemDescricao.length) {
+										bValido = false;
+									}
+								}
+	
+								if (bValido) {
+									
+									//that.onAplicarRegras();
+									var excluir = that.getModel().getProperty("/Excluir");
+									for (var i = 0, length = excluir.length; i < length; i++) {
+										NodeAPI.pExcluirRegistro("TemplateReport", excluir[i])
+											.then(function (res) {
+	
+											})
+											.catch(function (err) {
+												alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+											});										
+									}
+									for (var i = 0, length = aTaxa.length; i < length; i++) {
+										if (aTaxa[i]["descricaoValueState"] === "None" && !aTaxa[i][id]) {
+											NodeAPI.pCriarRegistro("TemplateReport", {
+													tela: that.oView.mProperties.viewName,
+													parametros: aTaxa[i]["parametros"],
+													isIFrame: that.isIFrame() ? "true" : "false",
+													descricao: aTaxa[i]["descricao"],
+													usarSession: 1
+												})
+												.then(function (res) {
+	
+												})
+												.catch(function (err) {
+													alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+												});
+										}
+										else if(aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]){
+											NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id],{
+													tela: that.oView.mProperties.viewName,
+													parametros: aTaxa[i]["parametros"],
+													isIFrame: that.isIFrame() ? "true" : "false",
+													descricao: aTaxa[i]["descricao"],
+													usarSession: 1
+												})
+												.then(function (res) {
+													//var aRegistro = JSON.parse(res.result);
+												})
+												.catch(function (err) {
+													alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+												});										
+										}
+									}
+									dialog.close();
+								} else {
+									jQuery.sap.require("sap.m.MessageBox");
+									sap.m.MessageBox.show(that.getResourceBundle().getText(
+										"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+										title: that.getResourceBundle().getText("viewGeralAviso")
+									});
+								}
+							}
+						}),
+						beginButton: new sap.m.Button({
+							text: "Cancelar",
+							press: function () {
+								var aTaxa = that.getModel().getProperty(sProperty),
+									bValido = true;
+	
+								if (aTaxa && aTaxa.length) {
+									var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+										return !obj.descricao;
+									});
+	
+									if (aTaxaSemDescricao.length) {
+										bValido = false;
+									}
+								}
+	
+								if (bValido) {
+									dialog.close();
+								} else {
+									jQuery.sap.require("sap.m.MessageBox");
+									sap.m.MessageBox.show(that.getResourceBundle().getText(
+										"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+										title: that.getResourceBundle().getText("viewGeralAviso")
+									});
+								}
+							}
+						}),					
+						afterClose: function () {
+							//dialog.destroy();
+						}
+					});
+	
+					that.getView().addDependent(dialog);
+					that._dialogFiltro = dialog;
+				}
+				that._dialogFiltro.open();
 			},
 
 			dateNowParaArquivo: function (){

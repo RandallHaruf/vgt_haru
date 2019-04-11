@@ -12,7 +12,8 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreImpostoRenda}" save="onSaveView"></vm:VariantManagement>
+					<!--<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreImpostoRenda}" save="onSaveView" enabled="false"></vm:VariantManagement>-->
+					<Title text="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreImpostoRenda}" />
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -46,7 +47,7 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar showFilterConfiguration="false" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
@@ -78,23 +79,20 @@
 							</fb:FilterItem>
 						</fb:filterItems>
 					</fb:FilterBar>
-					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-					<Button
-					id="GerarRelatorio"
-					text="{i18n>viewGeralBtnRelatorioTaxP}"
-					type="Emphasized"
-					press="onGerarRelatorio"/>	
-					<Button
-					id="TemplateSet"
-					text="TemplateSet"
-					type="Emphasized"
-					press="onDialogOpen"/>	
-					<Button
-					id="TemplateGet"
-					text="TemplateGet"
-					type="Emphasized"
-					press="onTemplateGet"/>						
-					</HBox>	
+						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
+								<Button
+								id="TemplateSet"
+								text="Layout"
+								class="sapUiSmallMarginEnd"
+								type="Transparent"
+								press="onDialogOpen"/>
+								<Button
+								id="GerarRelatorio"
+								text="{i18n>viewGeralBtnRelatorioTaxP}"
+								class="sapUiSmallMarginEnd"
+								type="Emphasized"
+								press="onGerarRelatorio"/>
+						</HBox>		
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>
@@ -103,38 +101,38 @@
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
-						<Column width="{/remtblEmpresa.nome}">
-							<Text text="{i18n>viewRelatorioEmpresa}"/>
+						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
+							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblDominioAnoCalendario.ano_calendario}">
-							<Text text="{i18n>viewGeralAnoCalendario}"/>
+						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblPeriodo.periodo}">
-							<Text text="{i18n>viewGeralPeriodo}"/>
+						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
+							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblDominioMoeda.acronimo}">
-							<Text text="{i18n>viewGeralMoeda}"/>
+						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
+							<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_statutory_financials}">
-							<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}"/>
+						<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_statutory_financials}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_tax_return}">
-							<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}"/>
+						<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_tax_return}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.it_jurisdiction_tax_rate_average}">
-							<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}"/>
+						<Column width="{/remtblTaxReconciliation.it_jurisdiction_tax_rate_average}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.it_statutory_tax_rate_average}">
-							<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}"/>
+						<Column width="{/remtblTaxReconciliation.it_statutory_tax_rate_average}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}" textAlign="Center"/>
 						</Column>	
-						<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_statutory_financials}">
-							<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}"/>
+						<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_statutory_financials}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_tax_return}">
-							<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}"/>
+						<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_tax_return}" hAlign="Center">
+							<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}" textAlign="Center"/>
 						</Column>
-						<Column width="{/remtblTaxReconciliation.it_details_if_tax_returns_income_differs_from_fs}">
-							<Text text="{i18n>viewTaxpackageEdiçãoTrimestrePleaseprovidedetailsifTaxReturnsIncomediffersfromFS}"/>
+						<Column width="{/remtblTaxReconciliation.it_details_if_tax_returns_income_differs_from_fs}" hAlign="Center">
+							<Text text="{i18n>viewTaxpackageEdiçãoTrimestrePleaseprovidedetailsifTaxReturnsIncomediffersfromFS}" textAlign="Center"/>
 						</Column>
 					</columns>
 					<items>

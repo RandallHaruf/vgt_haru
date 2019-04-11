@@ -13,6 +13,9 @@ var oSketch = {
 		}, 
 		parametros: {
 			nome: "parametros"
+		},  
+		descricao: {
+			nome: "descricao"
 		}, 
 		fkUsuario: {
 			nome: "fk_usuario.id_usuario"

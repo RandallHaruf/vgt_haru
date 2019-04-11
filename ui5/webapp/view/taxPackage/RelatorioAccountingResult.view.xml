@@ -94,16 +94,16 @@
 				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
 						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioEmpresa}"/>
+							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
-							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
+							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
-							<Text text="{i18n>viewGeralPeriodo}"/>
+							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
-							<Text text="{i18n>viewGeralMoeda}"/>
+							<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
 						</Column>
 						<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}" hAlign="Center">
 							<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" textAlign="Center"/>
