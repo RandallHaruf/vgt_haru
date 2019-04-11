@@ -106,6 +106,7 @@ sap.ui.define([
 			}
 			that.getModel().refresh();
 		},
+		
 		_reportSelecionar: function (oEvent, sProperty,that) {
 			var aTaxaMultipla = that.getModel().getProperty(sProperty);
 			var oSelecionado = oEvent.getSource().getBindingContext().getObject();
@@ -113,6 +114,7 @@ sap.ui.define([
 			that.onTemplateGet();
 			that._dialogFiltro.close();
 		},
+		
 		_dialogReport: function (sTitulo, sProperty,excluirProperty,that,id) {
 			that.getModel().setProperty("/Excluir",[]);
 			if (!that._dialogFiltro) {
@@ -334,6 +336,7 @@ sap.ui.define([
 					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
 				});
 		},
+		
 		onTemplateSet: function (oEvent) {
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas") ? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !==
 				undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas") : null : null;
@@ -351,6 +354,7 @@ sap.ui.define([
 			oWhere.push(oMoedaSelecionadas);
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
+		
 		onTemplateGet: function (oEvent) {
 			this._onClearSelecoes();
 			this._atualizarDados();

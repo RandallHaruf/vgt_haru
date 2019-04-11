@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Validador",
 		"sap/m/Popover",
 		"ui5ns/ui5/lib/NodeAPI",		
-		"sap/m/Button"
+		"sap/m/Button",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (Validador,Popover,NodeAPI,Button) {
+	function (Validador,Popover,NodeAPI,Button,Utils) {
 		return {
 			limparMascaraDecimal: function (sValor, that) {
 				if (that && !that.isPTBR()) {
@@ -1032,6 +1033,7 @@ sap.ui.define(
 				that._dialogFiltro.close();
 			},
 			_dialogReport: function (sTitulo, sProperty,excluirProperty,that,id) {
+				var self = this;
 				that.getModel().setProperty("/Excluir",[]);
 				if (!that._dialogFiltro) {
 					var oScrollContainer = new sap.m.ScrollContainer({
@@ -1053,11 +1055,11 @@ sap.ui.define(
 					oToolbar.addContent(new sap.m.ToolbarSpacer());
 	
 					oToolbar.addContent(new sap.m.Button({
-						text: that.getResourceBundle().getText("viewGeralNova"),
+						text: that.getResourceBundle().getText("viewGeralSelecaoAtual"),
 						icon: "sap-icon://add",
 						type: "Emphasized"
 					}).attachPress(oTable, function () {
-						that._reportAdicionar(sProperty,that);
+						self._reportAdicionar(sProperty,that);
 					}, that));
 	
 					oTable.setHeaderToolbar(oToolbar);
@@ -1085,7 +1087,7 @@ sap.ui.define(
 						type: "Reject",
 						tooltip: "{i18n>viewGeralExcluirLinha}"
 					}).attachPress(oTable, function (oEvent2) {
-						that._reportExcluir(oEvent2, sProperty,excluirProperty,that,id);
+						self._reportExcluir(oEvent2, sProperty,excluirProperty,that,id);
 					}, that);
 	
 					var oInputDescricao = new sap.m.Input({
@@ -1102,7 +1104,7 @@ sap.ui.define(
 						type: "Accept",
 						tooltip: "Selecionar"
 					}).attachPress(oTable, function (oEvent3) {
-						that._reportSelecionar(oEvent3, sProperty,that);
+						self._reportSelecionar(oEvent3, sProperty,that);
 					}, that);
 	
 					var oTemplate = new sap.m.ColumnListItem({
@@ -1125,7 +1127,7 @@ sap.ui.define(
 						type: "Message",
 						content: oScrollContainer,
 						endButton: new sap.m.Button({
-							text: "Salvar",
+							text: "{i18n>viewGeralSalvar}",
 							press: function () {
 								var aTaxa = that.getModel().getProperty(sProperty),
 									bValido = true;
@@ -1139,53 +1141,57 @@ sap.ui.define(
 										bValido = false;
 									}
 								}
-	
+							
 								if (bValido) {
 									
 									//that.onAplicarRegras();
 									var excluir = that.getModel().getProperty("/Excluir");
+									var aPromise = [];
+									that.setBusy(that._dialogFiltro, true);
 									for (var i = 0, length = excluir.length; i < length; i++) {
-										NodeAPI.pExcluirRegistro("TemplateReport", excluir[i])
-											.then(function (res) {
-	
-											})
-											.catch(function (err) {
-												alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-											});										
+										aPromise.push(
+											
+											NodeAPI.pExcluirRegistro("TemplateReport", excluir[i])
+												/*.then(function (res) {
+													return Promise.resolve(res);
+												})
+												.catch(function(err) {
+													return Promise.resolve(res);
+												})*/
+											
+										);						
 									}
 									for (var i = 0, length = aTaxa.length; i < length; i++) {
 										if (aTaxa[i]["descricaoValueState"] === "None" && !aTaxa[i][id]) {
-											NodeAPI.pCriarRegistro("TemplateReport", {
+											aPromise.push(NodeAPI.pCriarRegistro("TemplateReport", {
 													tela: that.oView.mProperties.viewName,
 													parametros: aTaxa[i]["parametros"],
 													isIFrame: that.isIFrame() ? "true" : "false",
 													descricao: aTaxa[i]["descricao"],
 													usarSession: 1
-												})
-												.then(function (res) {
-	
-												})
-												.catch(function (err) {
-													alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-												});
+												}));
 										}
 										else if(aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]){
-											NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id],{
+											aPromise.push(NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id],{
 													tela: that.oView.mProperties.viewName,
 													parametros: aTaxa[i]["parametros"],
 													isIFrame: that.isIFrame() ? "true" : "false",
 													descricao: aTaxa[i]["descricao"],
 													usarSession: 1
-												})
-												.then(function (res) {
-													//var aRegistro = JSON.parse(res.result);
-												})
-												.catch(function (err) {
-													alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-												});										
+												}));							
 										}
 									}
-									dialog.close();
+									
+									Promise.all(aPromise)
+										.then(function (res) {
+											console.log(res);
+											that.setBusy(that._dialogFiltro, false);
+											dialog.close();
+										})
+										.catch(function (err) {
+											//alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+											console.log(err);
+										});
 								} else {
 									jQuery.sap.require("sap.m.MessageBox");
 									sap.m.MessageBox.show(that.getResourceBundle().getText(
@@ -1196,7 +1202,7 @@ sap.ui.define(
 							}
 						}),
 						beginButton: new sap.m.Button({
-							text: "Cancelar",
+							text: "{i18n>viewGeralCancelar}",
 							press: function () {
 								var aTaxa = that.getModel().getProperty(sProperty),
 									bValido = true;

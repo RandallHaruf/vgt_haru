@@ -64,6 +64,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", undefined);
 			this.getModel().setProperty("/DataPagamentoInicio", undefined);
 			this.getModel().setProperty("/DataPagamentoFim", undefined);
+			this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportTTC", undefined);
 		},
 		onNavBack: function (oEvent) {
@@ -176,6 +177,94 @@ sap.ui.define([
 		},			
 		onGerarTxt: function (oEvent) {
 			this._geraRelatorio("/TXT"); 
+		},
+
+		onDialogOpen: function (oEvent) {
+			var that = this;
+			this.onTemplateSet();
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report");
+			that.setBusy(that._dialogFiltro, true);
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					usarSession: 1
+				})
+				.then(function (res) {
+					that.getModel().setProperty("/TemplateReport", res.result);
+					that.setBusy(that._dialogFiltro, false);
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				});
+		},
+		
+		onTemplateSet: function (oEvent) {
+			var vetorInicio = [];
+			var vetorFim = [];
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas") ? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !==
+				undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas") : null : null;
+			var oDominioTaxClassification = this.getModel().getProperty("/IdDominioTaxClassificationSelecionadas") ? this.getModel().getProperty(
+				"/IdDominioTaxClassificationSelecionadas")[0] !== undefined ? this.getModel().getProperty(
+				"/IdDominioTaxClassificationSelecionadas") : null : null;
+			var oTaxCategory = this.getModel().getProperty("/IdTaxCategorySelecionadas") ? this.getModel().getProperty(
+				"/IdTaxCategorySelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdTaxCategorySelecionadas") : null : null;
+			var oTax = this.getModel().getProperty("/IdTaxSelecionadas") ? this.getModel().getProperty("/IdTaxSelecionadas")[0] !== undefined ?
+				this.getModel().getProperty("/IdTaxSelecionadas") : null : null;
+			var oNameOfTax = this.getModel().getProperty("/IdNameOfTaxSelecionadas") ? this.getModel().getProperty("/IdNameOfTaxSelecionadas")[
+				0] !== undefined ? this.getModel().getProperty("/IdNameOfTaxSelecionadas") : null : null;
+			var oDominioJurisdicao = this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas") ? this.getModel().getProperty(
+					"/IdDominioJurisdicaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioJurisdicaoSelecionadas") : null :
+				null;
+			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas") ? this.getModel().getProperty(
+				"/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
+			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") ? this.getModel().getProperty(
+					"/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null :
+				null;
+			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas") ? this.getModel().getProperty(
+				"/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
+			var oDominioTipoTransacao = this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") ? this.getModel().getProperty(
+					"/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") :
+				null : null;
+			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio") ? this.getModel().getProperty("/DataPagamentoInicio")[0] !==
+				null ? vetorInicio[0] = (this.getModel().getProperty("/DataPagamentoInicio").getFullYear().toString() + "-" + (this.getModel().getProperty(
+						"/DataPagamentoInicio").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoInicio").getDate()
+					.toString().padStart(2, '0')) : null : null;
+			var oDataFim = this.getModel().getProperty("/DataPagamentoFim") ? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ?
+				vetorFim[0] = (this.getModel().getProperty("/DataPagamentoFim").getFullYear().toString() + "-" + (this.getModel().getProperty(
+						"/DataPagamentoFim").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate()
+					.toString().padStart(2, '0')) : null : null;
+			var oWhere = [];
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioTaxClassification);
+			oWhere.push(oTaxCategory);
+			oWhere.push(oTax);
+			oWhere.push(oNameOfTax);
+			oWhere.push(oDominioJurisdicao);
+			oWhere.push(oDominioPais);
+			oWhere.push(oDominioAnoFiscal);
+			oWhere.push(oDominioMoeda);
+			oWhere.push(oDominioTipoTransacao);
+			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
+			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
+			this.getModel().setProperty("/Preselecionado", oWhere);
+		},
+		
+		onTemplateGet: function (oEvent) {
+			this._onClearSelecoes();
+			this._atualizarDados();
+			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
+			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
+			this.getModel().setProperty("/IdDominioTaxClassificationSelecionadas", forcaSelecao[1]);
+			this.getModel().setProperty("/IdTaxCategorySelecionadas", forcaSelecao[2]);
+			this.getModel().setProperty("/IdTaxSelecionadas", forcaSelecao[3]);
+			this.getModel().setProperty("/IdNameOfTaxSelecionadas", forcaSelecao[4]);
+			this.getModel().setProperty("/IdDominioJurisdicaoSelecionadas", forcaSelecao[5]);
+			this.getModel().setProperty("/IdDominioPaisSelecionadas", forcaSelecao[6]);
+			this.getModel().setProperty("/IdDominioAnoFiscalSelecionadas", forcaSelecao[7]);
+			this.getModel().setProperty("/IdDominioMoedaSelecionadas", forcaSelecao[8]);
+			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", forcaSelecao[9]);
+			this.getModel().setProperty("/DataPagamentoInicio", Utils.bancoParaJsDate(forcaSelecao[10][0]));
+			this.getModel().setProperty("/DataPagamentoFim", Utils.bancoParaJsDate(forcaSelecao[11][0]));			
 		},
 
 		_atualizarDados: function () {

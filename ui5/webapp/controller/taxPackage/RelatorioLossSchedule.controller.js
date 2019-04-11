@@ -68,6 +68,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
 			this.getModel().setProperty("/IdPeriodoSelecionadas", undefined);
 			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
+			this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
 		},
 
@@ -90,6 +91,53 @@ sap.ui.define([
 		},			
 		onGerarTxt: function (oEvent) {
 			this._geraRelatorioTax("/TXT"); 
+		},
+
+
+		onDialogOpen: function (oEvent) {
+			var that = this;
+			this.onTemplateSet();
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report");
+			that.setBusy(that._dialogFiltro, true);
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					usarSession: 1
+				})
+				.then(function (res) {
+					that.getModel().setProperty("/TemplateReport", res.result);
+					that.setBusy(that._dialogFiltro, false);
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				});
+		},
+		
+		onTemplateSet: function (oEvent) {
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
+			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
+			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
+			var oFYSelecionadas = this.getModel().getProperty("/FYSelecionadas")? this.getModel().getProperty("/FYSelecionadas")[0] !== undefined ? this.getModel().getProperty("/FYSelecionadas") : null : null;
+			
+			var oWhere = [];
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioAnoCalendario);
+			oWhere.push(oPeriodoSelecionadas);
+			oWhere.push(oMoedaSelecionadas);
+			oWhere.push(oFYSelecionadas);
+			this.getModel().setProperty("/Preselecionado", oWhere);
+		},
+		
+		onTemplateGet: function (oEvent) {
+			this._onClearSelecoes();
+			this._atualizarDados();
+			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
+			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
+			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao[2]);
+			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao[3]);
+			this.getModel().setProperty("/FYSelecionadas", forcaSelecao[4]);
 		},
 
 		_atualizarDados: function () {

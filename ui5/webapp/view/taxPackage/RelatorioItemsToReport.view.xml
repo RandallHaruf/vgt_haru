@@ -12,7 +12,8 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" save="onSaveView"></vm:VariantManagement>
+					<!--<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" save="onSaveView"></vm:VariantManagement>-->
+					<Title text="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" />
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -46,7 +47,7 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar showFilterConfiguration="false" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
@@ -113,13 +114,20 @@
 							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
-					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-					<Button
-					id="GerarRelatorio"
-					text="{i18n>viewGeralBtnRelatorioTaxP}"
-					type="Emphasized"
-					press="onGerarRelatorio"/>	
-					</HBox>	
+						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
+								<Button
+								id="TemplateSet"
+								text="Layout"
+								class="sapUiSmallMarginEnd"
+								type="Transparent"
+								press="onDialogOpen"/>
+								<Button
+								id="GerarRelatorio"
+								text="{i18n>viewGeralBtnRelatorioTaxP}"
+								class="sapUiSmallMarginEnd"
+								type="Emphasized"
+								press="onGerarRelatorio"/>
+						</HBox>		
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>

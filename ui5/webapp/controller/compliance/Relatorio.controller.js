@@ -69,6 +69,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioStatusObrigacaoSelecionadas", undefined);
 			this.getModel().setProperty("/CheckObrigacaoInicial", undefined);
 			this.getModel().setProperty("/CheckSuporteContratado", undefined);
+			this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportObrigacao", undefined);
 		},
 		onNavBack: function (oEvent) {
@@ -202,6 +203,82 @@ sap.ui.define([
 			});
 		},	
 */		
+
+
+		onDialogOpen: function (oEvent) {
+			var that = this;
+			this.onTemplateSet();
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report");
+			that.setBusy(that._dialogFiltro, true);
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					usarSession: 1
+				})
+				.then(function (res) {
+					that.getModel().setProperty("/TemplateReport", res.result);
+					that.setBusy(that._dialogFiltro, false);
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				});
+		},
+		
+		onTemplateSet: function (oEvent) {
+			var vetorInicioEntrega = [];
+			var vetorInicioExtensao = [];
+			var vetorFimEntrega = [];
+			var vetorFimExtensao = [];			
+			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
+			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
+			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
+			var oObrigacaoAcessoria = this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas") : null : null;
+			var oDomPeriodicidadeObrigacao = this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas") : null : null;
+			var oDominioAnoFiscal = this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoFiscalSelecionadas") : null : null;
+			var oDataPrazoEntregaInicio = this.getModel().getProperty("/DataPrazoEntregaInicio")? this.getModel().getProperty("/DataPrazoEntregaInicio") !== null ? vetorInicioEntrega[0] = (this.getModel().getProperty("/DataPrazoEntregaInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPrazoEntregaInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPrazoEntregaInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataPrazoEntregaFim = this.getModel().getProperty("/DataPrazoEntregaFim")? this.getModel().getProperty("/DataPrazoEntregaFim") !== null ? vetorFimEntrega[0] = (this.getModel().getProperty("/DataPrazoEntregaFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataPrazoEntregaFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataPrazoEntregaFim").getDate().toString().padStart(2,'0')) : null : null;			
+			var oDataExtensaoInicio = this.getModel().getProperty("/DataExtensaoInicio")? this.getModel().getProperty("/DataExtensaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataExtensaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataExtensaoFim = this.getModel().getProperty("/DataExtensaoFim")? this.getModel().getProperty("/DataExtensaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataExtensaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataExtensaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataExtensaoFim").getDate().toString().padStart(2,'0')) : null : null;			
+			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
+			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
+			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
+
+			var oWhere = [];
+			oWhere.push(oDominioObrigacaoAcessoriaTipo);
+			oWhere.push(oEmpresa);
+			oWhere.push(oDominioPais);
+			oWhere.push(oObrigacaoAcessoria);
+			oWhere.push(oDomPeriodicidadeObrigacao);
+			oWhere.push(oDominioAnoFiscal);
+			oWhere.push(oDataPrazoEntregaInicio === null ? null : vetorInicioEntrega);
+			oWhere.push(oDataPrazoEntregaFim === null ? null : vetorFimEntrega);
+			oWhere.push(oDataExtensaoInicio === null? null : vetorInicioExtensao);
+			oWhere.push(oDataExtensaoFim === null? null : vetorFimExtensao);			
+			oWhere.push(oDominioStatusObrigacao);
+			oWhere.push(oDominioAnoCalendario);
+			oWhere.push(oCheckSuporteContratado);
+			this.getModel().setProperty("/Preselecionado", oWhere);
+		},
+		
+		onTemplateGet: function (oEvent) {
+			this._onClearSelecoes();
+			this._atualizarDados();
+			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
+			this.getModel().setProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas", forcaSelecao[0]);
+			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[1]);
+			this.getModel().setProperty("/IdDominioPaisSelecionadas", forcaSelecao[2]);
+			this.getModel().setProperty("/IdObrigacaoAcessoriaSelecionadas", forcaSelecao[3]);
+			this.getModel().setProperty("/IdDomPeriodicidadeObrigacaoSelecionadas", forcaSelecao[4]);
+			this.getModel().setProperty("/IdDominioAnoFiscalSelecionadas", forcaSelecao[5]);
+			this.getModel().setProperty("/DataPrazoEntregaInicio", Utils.bancoParaJsDate(forcaSelecao[6][0]));
+			this.getModel().setProperty("/DataPrazoEntregaFim", Utils.bancoParaJsDate(forcaSelecao[7][0]));
+			this.getModel().setProperty("/DataExtensaoInicio", Utils.bancoParaJsDate(forcaSelecao[8][0]));
+			this.getModel().setProperty("/DataExtensaoFim", Utils.bancoParaJsDate(forcaSelecao[9][0]));
+			this.getModel().setProperty("/IdDominioStatusObrigacaoSelecionadas", forcaSelecao[10]);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[11]);	
+			this.getModel().setProperty("/CheckSuporteContratado", forcaSelecao[12]);			
+		},
+
 		_atualizarDados: function () {
 			var that = this;
 			var vetorInicioEntrega = [];

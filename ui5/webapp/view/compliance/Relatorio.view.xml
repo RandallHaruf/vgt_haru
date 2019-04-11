@@ -12,7 +12,8 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Compliance/Beps" save="onSaveView"></vm:VariantManagement>
+					<!--<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} Compliance/Beps" save="onSaveView"></vm:VariantManagement>-->
+					<Title text="{i18n>viewGeralRelatorio} Compliance/Beps" />
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -54,7 +55,7 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar showFilterConfiguration="false" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="J" label="{i18n>viewComplianceListagemObrigacoesColunaTipo}">
 								<fb:control>
@@ -157,13 +158,20 @@
 							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
-					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-					<Button
-					id="GerarRelatorio"
-					text="{i18n>viewGeralGerar} {i18n>viewGeralRelatorio}"
-					type="Emphasized"
-					press="onGerarRelatorio"/>	
-					</HBox>
+						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
+								<Button
+								id="TemplateSet"
+								text="Layout"
+								class="sapUiSmallMarginEnd"
+								type="Transparent"
+								press="onDialogOpen"/>
+								<Button
+								id="GerarRelatorio"
+								text="{i18n>viewGeralBtnRelatorioTaxP}"
+								class="sapUiSmallMarginEnd"
+								type="Emphasized"
+								press="onGerarRelatorio"/>
+						</HBox>		
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>
@@ -173,13 +181,13 @@
 				<Table id="relatorioCompliance" items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
 					<columns>
 						<Column width="6rem" hAlign="Center">
-							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
-							<Text text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewEmpresasObrigacoesAcessorias}" textAlign="Center"/>
@@ -188,7 +196,7 @@
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
@@ -200,7 +208,7 @@
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaExtensao}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
-							<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
+							<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}" textAlign="Center"/>
 						</Column>
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}" textAlign="Center"/>
