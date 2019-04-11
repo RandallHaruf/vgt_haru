@@ -1150,15 +1150,11 @@ sap.ui.define(
 									that.setBusy(that._dialogFiltro, true);
 									for (var i = 0, length = excluir.length; i < length; i++) {
 										aPromise.push(
-											
-											NodeAPI.pExcluirRegistro("TemplateReport", excluir[i])
-												/*.then(function (res) {
-													return Promise.resolve(res);
-												})
-												.catch(function(err) {
-													return Promise.resolve(res);
-												})*/
-											
+											NodeAPI.pExcluirRegistro("TemplateReport", excluir[i]).catch(
+												function(err){
+													return err;
+												}
+											)
 										);						
 									}
 									for (var i = 0, length = aTaxa.length; i < length; i++) {
@@ -1169,7 +1165,12 @@ sap.ui.define(
 													isIFrame: that.isIFrame() ? "true" : "false",
 													descricao: aTaxa[i]["descricao"],
 													usarSession: 1
-												}));
+												}).catch(
+												function(err){
+													return err;
+												}
+											)
+											);
 										}
 										else if(aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]){
 											aPromise.push(NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id],{
@@ -1178,7 +1179,12 @@ sap.ui.define(
 													isIFrame: that.isIFrame() ? "true" : "false",
 													descricao: aTaxa[i]["descricao"],
 													usarSession: 1
-												}));							
+												}).catch(
+												function(err){
+													return err;
+												}
+											)
+											);							
 										}
 									}
 									
@@ -1187,11 +1193,11 @@ sap.ui.define(
 											console.log(res);
 											that.setBusy(that._dialogFiltro, false);
 											dialog.close();
-										})
+										});/*
 										.catch(function (err) {
 											//alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
 											console.log(err);
-										});
+										});*/
 								} else {
 									jQuery.sap.require("sap.m.MessageBox");
 									sap.m.MessageBox.show(that.getResourceBundle().getText(
