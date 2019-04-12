@@ -559,12 +559,43 @@ module.exports = {
 				aEntrada[13].push(JSON.stringify(aEmpresas[j]));
 			}
 		}
-		if(aEntrada[14] == null || aEntrada[14] == undefined){
-			stringDistinct = 'Select * from (';	
+		var posicaoDoArrayParaDistinct = 19;
+		if(aEntrada[posicaoDoArrayParaDistinct] == null || aEntrada[posicaoDoArrayParaDistinct] == undefined){
+			stringDistinct = 
+				'Select '
+				+'"tblDominioMoeda.nome", '
+				+'"tblDominioMoeda.acronimo", '
+				+'"tblDocumentoObrigacao.ind_conclusao", '
+				+'"tblDocumentoObrigacao.data_upload", '
+				+'"tblDominioObrigacaoAcessoriaTipo.tipo", '
+				+'"tblDominioPais.pais", '
+				+'"tblDominioPeriodicidadeObrigacao.descricao", '
+				+'"tblDominioObrigacaoStatus.descricao_obrigacao_status" , '
+				+'"tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo", '
+				+'"tblEmpresa.nome", '
+				+'"tblEmpresa.id_empresa", '
+				+'"tblDominioPais.id_dominio_pais", '
+				+'"tblModeloObrigacao.nome_obrigacao", '
+				+'"tblModeloObrigacao.id_modelo", '
+				+'"tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao", '
+				+'"tblDominioAnoFiscal.ano_fiscal", '
+				+'"tblDominioAnoFiscal.id_dominio_ano_fiscal", '
+				+'"tblDominioAnoCalendario.id_dominio_ano_calendario", '
+				+'"tblDominioAnoCalendario.ano_calendario", '
+				+'"prazo_de_entrega_calculado", '
+				+'"tblRespostaObrigacao.data_extensao", '
+				+'"tblDominioObrigacaoStatus.id_dominio_obrigacao_status", '
+				+'"tblRespostaObrigacao.suporte_contratado", '
+				+'"tblRespostaObrigacao.suporte_especificacao", '
+				+'"tblRespostaObrigacao.suporte_valor", '
+				+'"tblRespostaObrigacao.data_conclusao", '
+				+'"tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
+				+'"tblRespostaObrigacao.id_resposta_obrigacao" '
+				+'from (';	
 			stringDistinctFilter = 'order by "tblDominioObrigacaoAcessoriaTipo.tipo","tblDominioPais.pais" ,"tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc';
 		}
 		else{
-			switch(aEntrada[14][0]){
+			switch(aEntrada[posicaoDoArrayParaDistinct][0]){
 				case "tblDominioObrigacaoAcessoriaTipo.tipo":
 					stringDistinct = 'Select distinct "tblDominioObrigacaoAcessoriaTipo.tipo", "tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo" from (';
 					break;
@@ -594,13 +625,30 @@ module.exports = {
 					break;	
 				case "tblDominioAnoCalendario.ano_calendario":
 					stringDistinct = 'Select distinct "tblDominioAnoCalendario.ano_calendario", "tblDominioAnoCalendario.id_dominio_ano_calendario" from (';
-					break;				
+					break;		
+				case "tblDominioMoeda.nome":
+					stringDistinct = 'Select distinct "tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda" , "tblDominioMoeda.acronimo" , "tblDominioMoeda.nome" from (';
+					break;
+				case "tblRespostaObrigacao.data_conclusao":
+					stringDistinct = 'Select min("tblRespostaObrigacao.data_conclusao") "min(tblRespostaObrigacao.data_conclusao)" , max("tblRespostaObrigacao.data_conclusao") "max(tblRespostaObrigacao.data_conclusao)" from (';
+					break;	
+				case "tblDocumentoObrigacao.data_upload":
+					stringDistinct = 'Select min("tblDocumentoObrigacao.data_upload") "min(tblDocumentoObrigacao.data_upload)" , max("tblDocumentoObrigacao.data_upload") "max(tblDocumentoObrigacao.data_upload)" from (';
+					break;						
 			}			
 		}		
 
 		
 		var sStatement = 
-			'Select *, '
+			'Select '
+			+'"nome" AS "tblDominioMoeda.nome", '
+			+'"acronimo" AS "tblDominioMoeda.acronimo", '
+			+'"ind_conclusao" AS "tblDocumentoObrigacao.ind_conclusao", '
+			+'"data_upload" AS "tblDocumentoObrigacao.data_upload", '
+			+'* '
+			+'from '
+			+'( '	
+			+'Select *, '
 			+'"tipo" AS "tblDominioObrigacaoAcessoriaTipo.tipo", '
 			+'"pais" AS "tblDominioPais.pais", '
 			+'"descricao" AS "tblDominioPeriodicidadeObrigacao.descricao", '
@@ -608,13 +656,13 @@ module.exports = {
 			+'from  '
 			+'(	'
 			+'SELECT '
-		    +'"fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" AS "tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo", '
-		    +'"nome" AS "tblEmpresa.nome", '
-		    +'"fk_id_empresa.id_empresa" AS "tblEmpresa.id_empresa", '
-		    +'"fk_dominio_pais.id_dominio_pais" AS "tblDominioPais.id_dominio_pais", '
-		    +'"nome_obrigacao" AS "tblModeloObrigacao.nome_obrigacao", '
-		    +'"id_modelo" AS "tblModeloObrigacao.id_modelo", '
-		    +'"fk_id_dominio_periodicidade.id_periodicidade_obrigacao" AS "tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao", '
+			+'"fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" AS "tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo", '
+			+'"nome" AS "tblEmpresa.nome", '
+			+'"fk_id_empresa.id_empresa" AS "tblEmpresa.id_empresa", '
+			+'"fk_dominio_pais.id_dominio_pais" AS "tblDominioPais.id_dominio_pais", '
+			+'"nome_obrigacao" AS "tblModeloObrigacao.nome_obrigacao", '
+			+'"id_modelo" AS "tblModeloObrigacao.id_modelo", '
+			+'"fk_id_dominio_periodicidade.id_periodicidade_obrigacao" AS "tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao", '
 			+'"ano_fiscal_calculado" AS "tblDominioAnoFiscal.ano_fiscal", '
 			+'"id_ano_fiscal_calculado" AS "tblDominioAnoFiscal.id_dominio_ano_fiscal", '
 			+'"id_dominio_ano_calendario" AS "tblDominioAnoCalendario.id_dominio_ano_calendario", '
@@ -624,14 +672,21 @@ module.exports = {
 			+'"status_obrigacao_calculado" AS "tblDominioObrigacaoStatus.id_dominio_obrigacao_status", '
 			+'"suporte_contratado" AS "tblRespostaObrigacao.suporte_contratado", '
 			+'"suporte_especificacao" AS "tblRespostaObrigacao.suporte_especificacao", '
-			+'"suporte_valor" AS "tblRespostaObrigacao.suporte_valor" '
+			+'"suporte_valor" AS "tblRespostaObrigacao.suporte_valor", '
+			+'"data_conclusao" AS "tblRespostaObrigacao.data_conclusao", '
+			+'"fk_id_dominio_moeda.id_dominio_moeda" AS "tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
+			+'"id_resposta_obrigacao" AS "tblRespostaObrigacao.id_resposta_obrigacao" '
 			+' from ('
 			+model.pegarQueryRespostaObrigacaoCalculada()
 			+'))t3 '
-		    +'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" tblDominioObrigacaoAcessoriaTipo ON tblDominioObrigacaoAcessoriaTipo."id_dominio_obrigacao_acessoria_tipo" = t3."tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo" '
-		    +'LEFT OUTER JOIN "VGT.DOMINIO_PAIS" tblDominioPais ON tblDominioPais."id_dominio_pais" = t3."tblDominioPais.id_dominio_pais" '
-		    +'LEFT OUTER JOIN "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" tblDominioPeriodicidadeObrigacao ON tblDominioPeriodicidadeObrigacao."id_periodicidade_obrigacao" = t3."tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao" '
-		    +'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus ON tblDominioObrigacaoStatus."id_dominio_obrigacao_status" = t3."tblDominioObrigacaoStatus.id_dominio_obrigacao_status" ';
+			+'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" tblDominioObrigacaoAcessoriaTipo ON tblDominioObrigacaoAcessoriaTipo."id_dominio_obrigacao_acessoria_tipo" = t3."tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo" '
+			+'LEFT OUTER JOIN "VGT.DOMINIO_PAIS" tblDominioPais ON tblDominioPais."id_dominio_pais" = t3."tblDominioPais.id_dominio_pais" '
+			+'LEFT OUTER JOIN "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" tblDominioPeriodicidadeObrigacao ON tblDominioPeriodicidadeObrigacao."id_periodicidade_obrigacao" = t3."tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao" '
+			+'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus ON tblDominioObrigacaoStatus."id_dominio_obrigacao_status" = t3."tblDominioObrigacaoStatus.id_dominio_obrigacao_status" '
+			+')t4 '
+			+'LEFT OUTER JOIN "VGT.DOMINIO_MOEDA" tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = t4."tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda" '
+			+'LEFT OUTER JOIN "VGT.DOCUMENTO_OBRIGACAO" tblDocumentoObrigacao ON tblDocumentoObrigacao."fk_id_resposta_obrigacao.id_resposta_obrigacao" = t4."tblRespostaObrigacao.id_resposta_obrigacao" ';
+
 
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
@@ -686,7 +741,22 @@ module.exports = {
 							break;		
 						case 13:
 							filtro = ' "tblEmpresa.id_empresa" = ? ';
-							break;								
+							break;		
+						case 14:
+							filtro = ' "tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda" = ? ';
+							break;	
+						case 15:
+							filtro = ' "tblRespostaObrigacao.data_conclusao" >= ? ';
+							break;
+						case 16:
+							filtro = ' "tblRespostaObrigacao.data_conclusao" <= ? ';
+							break;	
+						case 17:
+							filtro = ' "tblDocumentoObrigacao.data_upload" >= ? and "tblDocumentoObrigacao.ind_conclusao" = true';
+							break;
+						case 18:
+							filtro = ' "tblDocumentoObrigacao.data_upload" <= ? and "tblDocumentoObrigacao.ind_conclusao" = true';
+							break;							
 					}
 					if(i !== 6 && i !== 7){	
 						if(aEntrada[i].length == 1){

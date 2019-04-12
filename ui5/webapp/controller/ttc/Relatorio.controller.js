@@ -263,8 +263,8 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioAnoFiscalSelecionadas", forcaSelecao[7]);
 			this.getModel().setProperty("/IdDominioMoedaSelecionadas", forcaSelecao[8]);
 			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", forcaSelecao[9]);
-			this.getModel().setProperty("/DataPagamentoInicio", Utils.bancoParaJsDate(forcaSelecao[10][0]));
-			this.getModel().setProperty("/DataPagamentoFim", Utils.bancoParaJsDate(forcaSelecao[11][0]));			
+			this.getModel().setProperty("/DataPagamentoInicio", forcaSelecao[10]?Utils.bancoParaJsDate(forcaSelecao[10][0]): null);
+			this.getModel().setProperty("/DataPagamentoFim", forcaSelecao[11]?Utils.bancoParaJsDate(forcaSelecao[11][0]): null);			
 		},
 
 		_atualizarDados: function () {

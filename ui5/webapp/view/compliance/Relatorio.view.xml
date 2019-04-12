@@ -155,7 +155,42 @@
 										<core:Item key="{key}" text="{value}" />
 									</ComboBox>
 								</fb:control>
-							</fb:FilterItem>							
+							</fb:FilterItem>	
+							<fb:FilterItem name="M" label="{i18n>viewGeralMoeda}">
+								<fb:control>
+									<MultiComboBox id="selectDominioMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}">
+										<core:Item key="{tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="N" label="{i18n>formularioObrigacaoLabelDataConclusao}">
+								<fb:control>
+									<DateRangeSelection	
+									id="Conclusao" 
+									dateValue="{/DataConclusaoInicio}"	
+									secondDateValue="{/DataConclusaoFim}" 
+									displayFormat="{/displayFormatFull}" 
+									placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" 
+									delimiter="{i18n>viewGeralAte}" 
+									change="onSelectChange" 
+									minDate="{/ObrigacaoConclusaoMin}" 
+									maxDate="{/ObrigacaoConclusaoMax}"/>
+								</fb:control>
+							</fb:FilterItem>	
+							<fb:FilterItem name="O" label="{i18n>viewArquivosAdminDataUpload}">
+								<fb:control>
+									<DateRangeSelection	
+									id="Upload" 
+									dateValue="{/DataUploadInicio}"	
+									secondDateValue="{/DataUploadFim}" 
+									displayFormat="{/displayFormatFull}" 
+									placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" 
+									delimiter="{i18n>viewGeralAte}" 
+									change="onSelectChange" 
+									minDate="{/ObrigacaoUploadMin}" 
+									maxDate="{/ObrigacaoUploadMax}"/>
+								</fb:control>
+							</fb:FilterItem>								
 						</fb:filterItems>
 					</fb:FilterBar>
 						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
@@ -219,6 +254,15 @@
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>formularioObrigacaoLabelObservacoes}" textAlign="Center"/>
 						</Column>
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
+						</Column>	
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>formularioObrigacaoLabelDataConclusao}" textAlign="Center"/>
+						</Column>		
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewArquivosAdminDataUpload}" textAlign="Center"/>
+						</Column>							
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -239,6 +283,9 @@
 								<Text text="{tblRespostaObrigacao.suporte_contratado}"/>								
 								<Text text="{tblRespostaObrigacao.suporte_valor}"/>
 								<Text text="{tblRespostaObrigacao.suporte_especificacao}"/>	
+								<Text text="{tblDominioMoeda.acronimo}"/>		
+								<Text text="{tblRespostaObrigacao.data_conclusao}"/>					
+								<Text text="{tblDocumentoObrigacao.data_upload}"/>									
 							</cells>
 						</ColumnListItem>
 					</items>

@@ -69,6 +69,8 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioStatusObrigacaoSelecionadas", undefined);
 			this.getModel().setProperty("/CheckObrigacaoInicial", undefined);
 			this.getModel().setProperty("/CheckSuporteContratado", undefined);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioMoedaSelecionadas", undefined);			
 			this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportObrigacao", undefined);
 		},
@@ -227,8 +229,13 @@ sap.ui.define([
 		onTemplateSet: function (oEvent) {
 			var vetorInicioEntrega = [];
 			var vetorInicioExtensao = [];
+			var vetorInicioConclusao = [];			
+			var vetorInicioUpload = [];				
 			var vetorFimEntrega = [];
-			var vetorFimExtensao = [];			
+			var vetorFimExtensao = [];	
+			var vetorFimConclusao = [];				
+			var vetorFimUpload = [];
+			
 			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
@@ -242,7 +249,12 @@ sap.ui.define([
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
-
+			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
+			var oDataConclusaoInicio = this.getModel().getProperty("/DataConclusaoInicio")? this.getModel().getProperty("/DataConclusaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataConclusaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataConclusaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataConclusaoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataConclusaoFim = this.getModel().getProperty("/DataConclusaoFim")? this.getModel().getProperty("/DataConclusaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataConclusaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataConclusaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataConclusaoFim").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataUploadInicio = this.getModel().getProperty("/DataUploadInicio")? this.getModel().getProperty("/DataUploadInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataUploadInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataUploadFim = this.getModel().getProperty("/DataUploadFim")? this.getModel().getProperty("/DataUploadFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataUploadFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadFim").getDate().toString().padStart(2,'0')) : null : null;			
+			
 			var oWhere = [];
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
@@ -257,6 +269,12 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
+			oWhere.push(oDominioMoeda);			
+			oWhere.push(oDataConclusaoInicio === null? null : vetorInicioConclusao);
+			oWhere.push(oDataConclusaoFim === null? null : vetorFimConclusao);			
+			oWhere.push(oDataUploadInicio === null? null : vetorInicioUpload);
+			oWhere.push(oDataUploadFim === null? null : vetorFimUpload);	
+			
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
 		
@@ -270,21 +288,31 @@ sap.ui.define([
 			this.getModel().setProperty("/IdObrigacaoAcessoriaSelecionadas", forcaSelecao[3]);
 			this.getModel().setProperty("/IdDomPeriodicidadeObrigacaoSelecionadas", forcaSelecao[4]);
 			this.getModel().setProperty("/IdDominioAnoFiscalSelecionadas", forcaSelecao[5]);
-			this.getModel().setProperty("/DataPrazoEntregaInicio", Utils.bancoParaJsDate(forcaSelecao[6][0]));
-			this.getModel().setProperty("/DataPrazoEntregaFim", Utils.bancoParaJsDate(forcaSelecao[7][0]));
-			this.getModel().setProperty("/DataExtensaoInicio", Utils.bancoParaJsDate(forcaSelecao[8][0]));
-			this.getModel().setProperty("/DataExtensaoFim", Utils.bancoParaJsDate(forcaSelecao[9][0]));
+			this.getModel().setProperty("/DataPrazoEntregaInicio", forcaSelecao[6]?Utils.bancoParaJsDate(forcaSelecao[6][0]): null);
+			this.getModel().setProperty("/DataPrazoEntregaFim", forcaSelecao[7]?Utils.bancoParaJsDate(forcaSelecao[7][0]): null);
+			this.getModel().setProperty("/DataExtensaoInicio", forcaSelecao[8]?Utils.bancoParaJsDate(forcaSelecao[8][0]): null);
+			this.getModel().setProperty("/DataExtensaoFim", forcaSelecao[9]?Utils.bancoParaJsDate(forcaSelecao[9][0]): null);
 			this.getModel().setProperty("/IdDominioStatusObrigacaoSelecionadas", forcaSelecao[10]);
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[11]);	
-			this.getModel().setProperty("/CheckSuporteContratado", forcaSelecao[12]);			
+			this.getModel().setProperty("/CheckSuporteContratado", forcaSelecao[12]);		
+			this.getModel().setProperty("/IdDominioMoedaSelecionadas", Utils.bancoParaJsDate(forcaSelecao[13]));
+			this.getModel().setProperty("/DataConclusaoInicio", forcaSelecao[14]?Utils.bancoParaJsDate(forcaSelecao[14][0]): null);
+			this.getModel().setProperty("/DataConclusaoFim", forcaSelecao[15]?Utils.bancoParaJsDate(forcaSelecao[15][0]): null);
+			this.getModel().setProperty("/DataUploadInicio", forcaSelecao[16]?Utils.bancoParaJsDate(forcaSelecao[16][0]): null);	
+			this.getModel().setProperty("/DataUploadFim", forcaSelecao[17]?Utils.bancoParaJsDate(forcaSelecao[17][0]): null);				
 		},
 
 		_atualizarDados: function () {
 			var that = this;
 			var vetorInicioEntrega = [];
 			var vetorInicioExtensao = [];
+			var vetorInicioConclusao = [];			
+			var vetorInicioUpload = [];				
 			var vetorFimEntrega = [];
-			var vetorFimExtensao = [];			
+			var vetorFimExtensao = [];	
+			var vetorFimConclusao = [];				
+			var vetorFimUpload = [];
+			
 			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
 			var oDominioPais = this.getModel().getProperty("/IdDominioPaisSelecionadas")? this.getModel().getProperty("/IdDominioPaisSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioPaisSelecionadas") : null : null;
@@ -298,7 +326,12 @@ sap.ui.define([
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
-
+			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
+			var oDataConclusaoInicio = this.getModel().getProperty("/DataConclusaoInicio")? this.getModel().getProperty("/DataConclusaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataConclusaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataConclusaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataConclusaoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataConclusaoFim = this.getModel().getProperty("/DataConclusaoFim")? this.getModel().getProperty("/DataConclusaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataConclusaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataConclusaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataConclusaoFim").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataUploadInicio = this.getModel().getProperty("/DataUploadInicio")? this.getModel().getProperty("/DataUploadInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataUploadInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataUploadFim = this.getModel().getProperty("/DataUploadFim")? this.getModel().getProperty("/DataUploadFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataUploadFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadFim").getDate().toString().padStart(2,'0')) : null : null;			
+			
 			var oWhere = []; 
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
@@ -313,14 +346,20 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
-			oWhere.push(null);	
+			oWhere.push(null);
+			oWhere.push(oDominioMoeda);			
+			oWhere.push(oDataConclusaoInicio === null? null : vetorInicioConclusao);
+			oWhere.push(oDataConclusaoFim === null? null : vetorFimConclusao);			
+			oWhere.push(oDataUploadInicio === null? null : vetorInicioUpload);
+			oWhere.push(oDataUploadFim === null? null : vetorFimUpload);				
 			oWhere.push(null);	
 			
 			/* ----- ESTE TRECHO DE CODIGO FOI PARA A FUNCAO geraRelatorio
 			this._preencheReportObrigacao(oWhere);
 			*/
+			var posicaoDoArrayParaDistinct = 19;
 			if(oDominioObrigacaoAcessoriaTipo === null){
-				oWhere[14] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -337,7 +376,7 @@ sap.ui.define([
 				});					
 			}
 			if(oEmpresa === null){
-				oWhere[14] = ["tblEmpresa.nome"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblEmpresa.nome"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -354,7 +393,7 @@ sap.ui.define([
 				});					
 			}
 			if(oDominioPais === null){
-				oWhere[14] = ["tblDominioPais.pais"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioPais.pais"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -374,7 +413,7 @@ sap.ui.define([
 				});					
 			}
 			if(oObrigacaoAcessoria === null){
-				oWhere[14] = ["tblModeloObrigacao.nome_obrigacao"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblModeloObrigacao.nome_obrigacao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -394,7 +433,7 @@ sap.ui.define([
 				});					
 			}
 			if(oDomPeriodicidadeObrigacao === null){
-				oWhere[14] = ["tblDominioPeriodicidadeObrigacao.descricao"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioPeriodicidadeObrigacao.descricao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -414,7 +453,7 @@ sap.ui.define([
 				});					
 			}
 			if(oDominioAnoFiscal === null){
-				oWhere[14] = ["tblDominioAnoFiscal.ano_fiscal"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioAnoFiscal.ano_fiscal"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -434,7 +473,7 @@ sap.ui.define([
 				});					
 			}
 			if(oDominioStatusObrigacao === null){
-				oWhere[14] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -454,7 +493,7 @@ sap.ui.define([
 				});					
 			}
 			if(oDataPrazoEntregaInicio === null && oDataPrazoEntregaFim === null ){
-				oWhere[14] = ["prazo_de_entrega_calculado"];
+				oWhere[posicaoDoArrayParaDistinct] = ["prazo_de_entrega_calculado"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -476,7 +515,7 @@ sap.ui.define([
 				});					
 			}
 			if(oDataExtensaoInicio === null && oDataExtensaoFim === null){
-				oWhere[14] = ["tblRespostaObrigacao.data_extensao"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblRespostaObrigacao.data_extensao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -499,7 +538,7 @@ sap.ui.define([
 			}
 	
 			if(oDominioAnoCalendario === null){
-				oWhere[14] = ["tblDominioAnoCalendario.ano_calendario"];
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
 					type: "POST",
 					xhrFields: {
@@ -517,8 +556,69 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);	
 					}
 				});					
-			}			
+			}	
 			
+			if(oDominioMoeda === null){
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioMoeda.nome"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/DominioMoeda",  Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));	
+					}
+				});					
+			}			
+			if(oDataConclusaoInicio === null && oDataConclusaoFim === null){
+				oWhere[posicaoDoArrayParaDistinct] = ["tblRespostaObrigacao.data_conclusao"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/ObrigacaoConclusaoMin", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["min(tblRespostaObrigacao.data_conclusao)"] : null
+						));
+						that.getModel().setProperty("/ObrigacaoConclusaoMax", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["max(tblRespostaObrigacao.data_conclusao)"] : null
+						));	
+					}
+				});					
+			}	
+			if(oDataUploadInicio === null && oDataUploadFim === null){
+				oWhere[posicaoDoArrayParaDistinct] = ["tblDocumentoObrigacao.data_upload"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						that.getModel().setProperty("/ObrigacaoUploadMin", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["min(tblDocumentoObrigacao.data_upload)"] : null
+						));
+						that.getModel().setProperty("/ObrigacaoUploadMax", Utils.bancoParaJsDate(
+							aRegistro[0] ? aRegistro[0]["max(tblDocumentoObrigacao.data_upload)"] : null
+						));	
+					}
+				});					
+			}			
 		},
 		/*
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
@@ -779,8 +879,12 @@ sap.ui.define([
 
 			var vetorInicioEntrega = [];
 			var vetorInicioExtensao = [];
+			var vetorInicioConclusao = [];			
+			var vetorInicioUpload = [];				
 			var vetorFimEntrega = [];
 			var vetorFimExtensao = [];	
+			var vetorFimConclusao = [];				
+			var vetorFimUpload = [];
 			
 			var oDominioObrigacaoAcessoriaTipo = this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas") : null : null;			
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
@@ -795,7 +899,12 @@ sap.ui.define([
 			var oDominioStatusObrigacao = this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas") : null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
 			var oCheckSuporteContratado = this.getModel().getProperty("/CheckSuporteContratado") ? this.getModel().getProperty("/CheckSuporteContratado") === undefined ? null : this.getModel().getProperty("/CheckSuporteContratado") == "1" ? ["true"] : ["false"] : null;
-
+			var oDominioMoeda = this.getModel().getProperty("/IdDominioMoedaSelecionadas")? this.getModel().getProperty("/IdDominioMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioMoedaSelecionadas") : null : null;
+			var oDataConclusaoInicio = this.getModel().getProperty("/DataConclusaoInicio")? this.getModel().getProperty("/DataConclusaoInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataConclusaoInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataConclusaoInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataConclusaoInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataConclusaoFim = this.getModel().getProperty("/DataConclusaoFim")? this.getModel().getProperty("/DataConclusaoFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataConclusaoFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataConclusaoFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataConclusaoFim").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataUploadInicio = this.getModel().getProperty("/DataUploadInicio")? this.getModel().getProperty("/DataUploadInicio")[0] !== null ? vetorInicioExtensao[0] = (this.getModel().getProperty("/DataUploadInicio").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadInicio").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadInicio").getDate().toString().padStart(2,'0')) : null : null;
+			var oDataUploadFim = this.getModel().getProperty("/DataUploadFim")? this.getModel().getProperty("/DataUploadFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataUploadFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadFim").getDate().toString().padStart(2,'0')) : null : null;			
+			
 			var oWhere = []; 
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
@@ -810,8 +919,14 @@ sap.ui.define([
 			oWhere.push(oDominioStatusObrigacao);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oCheckSuporteContratado);
+			oWhere.push(null);
+			oWhere.push(oDominioMoeda);			
+			oWhere.push(oDataConclusaoInicio === null? null : vetorInicioConclusao);
+			oWhere.push(oDataConclusaoFim === null? null : vetorFimConclusao);			
+			oWhere.push(oDataUploadInicio === null? null : vetorInicioUpload);
+			oWhere.push(oDataUploadFim === null? null : vetorFimUpload);				
 			oWhere.push(null);	
-			oWhere.push(null);			
+			
 			//this._preencheReportObrigacao(oWhere);
 			var that = this;
 			that.setBusy(that.byId("relatorioCompliance"),true);	
