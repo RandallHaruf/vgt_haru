@@ -235,7 +235,9 @@ module.exports = {
 			+'tblDominioMoeda."acronimo" "tblDominioMoeda.acronimo", '
 			+'tblDominioMoeda."nome" "tblDominioMoeda.nome", '
 			+'tblDominioTipoTransacao."id_dominio_tipo_transacao" "tblDominioTipoTransacao.id_dominio_tipo_transacao", '
-			+'tblDominioTipoTransacao."tipo_transacao" "tblDominioTipoTransacao.tipo_transacao" '
+			+'tblDominioTipoTransacao."tipo_transacao" "tblDominioTipoTransacao.tipo_transacao", '
+			+'TO_NVARCHAR(tblPagamento."total" * tblCambioTTC."cambio_usd",\'00.0000\') "conversao_usd", '
+			+'TO_NVARCHAR(tblPagamento."total" * tblCambioTTC."cambio_brl",\'00.0000\') "conversao_brl" '
 			+'FROM "VGT.EMPRESA" AS tblEmpresa '
 			+'INNER JOIN "VGT.PAGAMENTO" AS tblPagamento ON tblPagamento."fk_empresa.id_empresa" = tblEmpresa."id_empresa" '
 			+'INNER JOIN "VGT.NAME_OF_TAX" AS tblNameOfTax ON tblNameOfTax."id_name_of_tax" = tblPagamento."fk_name_of_tax.id_name_of_tax" '
@@ -246,7 +248,8 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.DOMINIO_PAIS" AS tblDominioPais ON tblDominioPais."id_dominio_pais" = tblPagamento."fk_dominio_pais.id_dominio_pais" '
 			+'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblPagamento."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" '
 			+'INNER JOIN "VGT.DOMINIO_MOEDA" AS tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda" '
-			+'INNER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"';
+			+'INNER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"'
+			+'LEFT OUTER JOIN "VGT.CAMBIO_TTC" AS tblCambioTTC ON tblCambioTTC."data" = tblPagamento."data_pagamento" and tblCambioTTC."fk_dominio_moeda.id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda"';
 	
 		var oWhere = [];
 		var aParams = [];

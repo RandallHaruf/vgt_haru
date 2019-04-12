@@ -619,7 +619,8 @@ sap.ui.define([
 						/*aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(
 							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
 						aRegistro[i]["tblPagamento.total"] = that._aplicarMascara(aRegistro[i]["tblPagamento.total"]);
-
+						aRegistro[i]["conversao_brl"] = aRegistro[i]["conversao_brl"] ? that._aplicarMascara(aRegistro[i]["conversao_brl"]) : "-";
+						aRegistro[i]["conversao_usd"] = aRegistro[i]["conversao_usd"] ? that._aplicarMascara(aRegistro[i]["conversao_usd"]) : "-";
 						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
 							"tblDominioTaxClassification.id_dominio_tax_classification"
 						], that);
@@ -691,7 +692,8 @@ sap.ui.define([
 						/*aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(
 							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
 						aRegistro[i]["tblPagamento.total"] = that._aplicarMascara(aRegistro[i]["tblPagamento.total"]);
-
+						aRegistro[i]["conversao_brl"] = that._aplicarMascara(aRegistro[i]["conversao_brl"]);
+						aRegistro[i]["conversao_usd"] = that._aplicarMascara(aRegistro[i]["conversao_usd"]);						
 						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
 							"tblDominioTaxClassification.id_dominio_tax_classification"
 						], that);

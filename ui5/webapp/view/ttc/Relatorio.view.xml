@@ -231,6 +231,12 @@
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue} BRL" textAlign="Center"/>
+						</Column>
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue} USD" textAlign="Center"/>
+						</Column>						
+						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
@@ -261,6 +267,8 @@
 								<Text text="{tblPagamento.juros}"/>
 								<Text text="{tblPagamento.multa}" />
 								<Text text="{tblPagamento.total}" />
+								<Text text="{conversao_brl}" />
+								<Text text="{conversao_usd}" />								
 								<Text text="{tblPagamento.numero_documento}" />
 								<Text text="{tblPagamento.entidade_beneficiaria}"/>							
 							</cells>
