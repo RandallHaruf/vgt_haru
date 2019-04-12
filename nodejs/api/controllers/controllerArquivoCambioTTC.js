@@ -192,39 +192,6 @@ module.exports = {
 		}, {
 			connection: oConnection
 		});*/
-		var aCambios = [
-			{
-				Moeda: "AFN",
-				Dolar: 1.68,
-				Real: 1.8,
-				Data: "2018-02-10"
-			},
-			{
-				Moeda: "AFN",
-				Dolar: 1.68,
-				Real: 1.8,
-				Data: "2018-02-10"
-			},
-			{
-				Moeda: "AFN",
-				Dolar: 1.68,
-				Real: 1.8,
-				Data: "2018-02-10",
-				DarMerda: true
-			},
-			{
-				Moeda: "AFN",
-				Dolar: 1.68,
-				Real: 1.8,
-				Data: "2018-02-10"
-			},
-			{
-				Moeda: "AFN",
-				Dolar: 1.68,
-				Real: 1.8,
-				Data: "2018-02-10"
-			}
-		];
 		
 		/*inserirCambio(aCambios, oConnection, 1)
 			.then((res) =>{
