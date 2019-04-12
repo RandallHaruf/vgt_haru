@@ -13,24 +13,24 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 	let anoCal = (numOrdem === 4) ? (new Date()).getFullYear() - 1 : (new Date()).getFullYear();
 
 	let sQuery =
-		' Select Empr."id_empresa" "Empr.id_empresa", Empr."nome" "Empr.nome", Usu."nome" "Usu.nome", Usu."email" "Usu.email", Usu."email_gestor" "Usu.email_gestor" '
-		+ ' From "VGT.REL_EMPRESA_PERIODO" REmp '
+		' Select Empr."id_empresa" "Empr.id_empresa", Empr."nome" "Empr.nome", Usu."nome" "Usu.nome", Usu."email" "Usu.email", Usu."email_gestor" "Usu.email_gestor" ' 
+		+ ' from "VGT.REL_TAX_PACKAGE_PERIODO" REmp ' 
 		+ ' left join "VGT.PERIODO" Per ' 
 		+ ' on Per."id_periodo" = REmp."fk_periodo.id_periodo" ' 
 		+ ' left join "VGT.DOMINIO_ANO_CALENDARIO" DACal ' 
 		+ ' on DACal."id_dominio_ano_calendario" = Per."fk_dominio_ano_calendario.id_dominio_ano_calendario" ' 
-		+ ' join "VGT.EMPRESA" Empr ' 
-		+ ' on Empr."id_empresa" = REmP."fk_empresa.id_empresa" ' 
-		+ ' left join "VGT.REL_USUARIO_EMPRESA" RUsuEmp '
-		+ ' on RUsuEmp."fk_empresa.id_empresa" = Empr."id_empresa" '
-		+ ' left join "VGT.USUARIO" Usu '
-		+ ' on Usu."id_usuario" = RUsuEmp."fk_usuario.id_usuario" '
-		+ ' Where REmp."ind_ativo" = true '
-		+ ' And REmp."ind_enviado" = false '
-		+ ' And Usu."ind_ativo" = true '
-		+ ' And Per."fk_dominio_modulo.id_dominio_modulo" = 1 '
-		+ ' And Per."numero_ordem" = ? '
-		+ ' And DACal."ano_calendario" = ? '
+		+ ' inner join "VGT.TAX_PACKAGE" taxPackage ' + ' on taxPackage."id_tax_package" = REmp."fk_tax_package.id_tax_package" ' 
+		+ ' join "VGT.EMPRESA" Empr ' + ' on Empr."id_empresa" = taxPackage."fk_empresa.id_empresa" ' 
+		+ ' left join "VGT.REL_USUARIO_EMPRESA" RUsuEmp ' 
+		+ ' on RUsuEmp."fk_empresa.id_empresa" = Empr."id_empresa" ' 
+		+ ' left join "VGT.USUARIO" Usu ' 
+		+ ' on Usu."id_usuario" = RUsuEmp."fk_usuario.id_usuario" ' 
+		+ ' Where REmp."ind_ativo" = true ' 
+		+ ' and (REmp."status_envio" = 2 '
+		+ ' or REmp."status_envio" = 3) ' + ' And Usu."ind_ativo" = true ' 
+		+ ' And Per."fk_dominio_modulo.id_dominio_modulo" = 2 ' 
+		+ ' And Per."numero_ordem" = ? ' 
+		+ ' And DACal."ano_calendario" = ? ' 
 		+ ' Order By Usu."nome" ',
 		aParam = [numOrdem, anoCal];
 		
@@ -74,41 +74,41 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 				
 				switch (qtdDia) {
 					case 15:
-						vSubj = 'TTC - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
-							',<br><br>Please access the TTC module at <a href="' + caminho +
+							',<br><br>Please access the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>' +
 							nome + '<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
 							' days.</span></strong> Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 5:
-						vSubj = 'TTC - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
-							',<br><br>Please access the TTC module at <a href="' + caminho +
+							',<br><br>Please access the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>' +
 							nome + '<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
 							' days.</span></strong> Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 3:
-						vSubj = 'TTC - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
-							'/Country Manager<br><br>This is a reminder regarding the TTC module at <a href="' + caminho +
+							'/Country Manager<br><br>This is a reminder regarding the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
 							'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
 							' days.</span></strong><br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 2:
-						vSubj = 'TTC - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
-							'/Country Manager<br><br>This is a reminder regarding the TTC module at <a href="' + caminho +
+							'/Country Manager<br><br>This is a reminder regarding the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
 							'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
 							' days.</span></strong><br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 1:
-						vSubj = 'TTC - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
-							'/Country Manager<br><br><strong><span style="text-decoration: underline;">Today is the LAST day</span></strong> to complete the TTC module at <a href="' +
+							'/Country Manager<br><br><strong><span style="text-decoration: underline;">Today is the LAST day</span></strong> to complete the Tax Package module at <a href="' +
 							caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
 							'<br><br>Please enter the system WITHOUT FURTHER DELAY and complete the information of the previous quarter.<br>Notice that after this date, the previous quarter will be locked. Any change will have to be justified and will require authorization. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
@@ -137,47 +137,37 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 module.exports = () => {
 	// https://crontab.guru/
 	
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 15));
-	// 05 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 5));
-	// 03 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 3));
-	// 02 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 2));
-	// 01 dia para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 1));
-	
 	// ====================
 	//   4 TRIMESTRE 
-	//   20 de Janeiro
+	//   31 de Janeiro
 	// ====================
 
 	// 15 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('0 0 05 1 *', send_Not_Email.bind(null, 4, 15));
+	scheduler.scheduleJob('0 0 16 1 *', send_Not_Email.bind(null, 4, 15));
 	// 05 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('0 0 15 1 *', send_Not_Email.bind(null, 4, 5));
+	scheduler.scheduleJob('0 0 26 1 *', send_Not_Email.bind(null, 4, 5));
 	// 03 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('0 0 17 1 *', send_Not_Email.bind(null, 4, 3));
+	scheduler.scheduleJob('0 0 28 1 *', send_Not_Email.bind(null, 4, 3));
 	// 02 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('0 0 18 1 *', send_Not_Email.bind(null, 4, 2));
+	scheduler.scheduleJob('0 0 29 1 *', send_Not_Email.bind(null, 4, 2));
 	// 01 dia para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('0 0 19 1 *', send_Not_Email.bind(null, 4, 1));
+	scheduler.scheduleJob('0 0 30 1 *', send_Not_Email.bind(null, 4, 1));
 
 	// ====================
 	//   1 TRIMESTRE
-	//   20 de Abril
+	//   31 de Abril
 	// ====================
 
 	// 15 dias para o Fechamento do 1 Trimestre
-	scheduler.scheduleJob('0 0 05 4 *', send_Not_Email.bind(null, 1, 15));
+	scheduler.scheduleJob('0 0 16 4 *', send_Not_Email.bind(null, 1, 15));
 	// 05 dias para o Fechamento do 1 Trimestre
-	scheduler.scheduleJob('0 0 15 4 *', send_Not_Email.bind(null, 1, 5));
+	scheduler.scheduleJob('0 0 26 4 *', send_Not_Email.bind(null, 1, 5));
 	// 03 dias para o Fechamento do 1 Trimestre
-	scheduler.scheduleJob('0 0 17 4 *', send_Not_Email.bind(null, 1, 3));
+	scheduler.scheduleJob('0 0 28 4 *', send_Not_Email.bind(null, 1, 3));
 	// 02 dias para o Fechamento do 1 Trimestre
-	scheduler.scheduleJob('0 0 18 4 *', send_Not_Email.bind(null, 1, 2));
+	scheduler.scheduleJob('0 0 29 4 *', send_Not_Email.bind(null, 1, 2));
 	// 01 dia para o Fechamento do 1 Trimestre
-	scheduler.scheduleJob('0 0 19 4 *', send_Not_Email.bind(null, 1, 1));
+	scheduler.scheduleJob('0 0 30 4 *', send_Not_Email.bind(null, 1, 1));
 
 	// ====================
 	//   2 TRIMESTRE
@@ -185,29 +175,29 @@ module.exports = () => {
 	// ====================
 
 	// 15 dias para o Fechamento do 2 Trimestre
-	scheduler.scheduleJob('0 0 05 7 *', send_Not_Email.bind(null, 2, 15));
+	scheduler.scheduleJob('0 0 16 7 *', send_Not_Email.bind(null, 2, 15));
 	// 05 dias para o Fechamento do 2 Trimestre
-	scheduler.scheduleJob('0 0 15 7 *', send_Not_Email.bind(null, 2, 5));
+	scheduler.scheduleJob('0 0 26 7 *', send_Not_Email.bind(null, 2, 5));
 	// 03 dias para o Fechamento do 2 Trimestre
-	scheduler.scheduleJob('0 0 17 7 *', send_Not_Email.bind(null, 2, 3));
+	scheduler.scheduleJob('0 0 28 7 *', send_Not_Email.bind(null, 2, 3));
 	// 02 dias para o Fechamento do 2 Trimestre
-	scheduler.scheduleJob('0 0 18 7 *', send_Not_Email.bind(null, 2, 2));
+	scheduler.scheduleJob('0 0 29 7 *', send_Not_Email.bind(null, 2, 2));
 	// 01 dia para o Fechamento do 2 Trimestre
-	scheduler.scheduleJob('0 0 19 7 *', send_Not_Email.bind(null, 2, 1));
+	scheduler.scheduleJob('0 0 30 7 *', send_Not_Email.bind(null, 2, 1));
 
 	// ====================
 	//   3 TRIMESTRE
-	//   20 de Outubro
+	//   31 de Outubro
 	// ====================
 
 	// 15 dias para o Fechamento do 3 Trimestre
-	scheduler.scheduleJob('0 0 05 10 *', send_Not_Email.bind(null, 3, 15));
+	scheduler.scheduleJob('0 0 16 10 *', send_Not_Email.bind(null, 3, 15));
 	// 05 dias para o Fechamento do 3 Trimestre
-	scheduler.scheduleJob('0 0 15 10 *', send_Not_Email.bind(null, 3, 5));
+	scheduler.scheduleJob('0 0 26 10 *', send_Not_Email.bind(null, 3, 5));
 	// 03 dias para o Fechamento do 3 Trimestre
-	scheduler.scheduleJob('0 0 17 10 *', send_Not_Email.bind(null, 3, 3));
+	scheduler.scheduleJob('0 0 28 10 *', send_Not_Email.bind(null, 3, 3));
 	// 02 dias para o Fechamento do 3 Trimestre
-	scheduler.scheduleJob('0 0 18 10 *', send_Not_Email.bind(null, 3, 2));
+	scheduler.scheduleJob('0 0 29 10 *', send_Not_Email.bind(null, 3, 2));
 	// 01 dia para o Fechamento do 3 Trimestre
-	scheduler.scheduleJob('0 0 19 10 *', send_Not_Email.bind(null, 3, 1));
+	scheduler.scheduleJob('0 0 30 10 *', send_Not_Email.bind(null, 3, 1));
 };
