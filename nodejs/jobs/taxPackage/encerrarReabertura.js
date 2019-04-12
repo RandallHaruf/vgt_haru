@@ -42,7 +42,7 @@ const fechaPeriodosUltrapassados = (oPeriodo) => {
 		'update "VGT.REL_TAX_PACKAGE_PERIODO" set "ind_ativo" = ? where "id_rel_tax_package_periodo" = ?';
 
 	let aParametros = [
-			true,
+			false,
 			oPeriodo.id_rel_tax_package_periodo
 		];
 	return new Promise((resolve, reject) => {
