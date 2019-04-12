@@ -106,6 +106,13 @@ sap.ui.define(
 				});*/
 			},
 			
+			onBaixarHistoricoCambio: function (oEvent) {
+				window.location = Constants.urlBackend + "DownloadModeloHistoricoCambio";
+				setTimeout(function(){
+					window.location = Constants.urlBackend + "DownloadExemploHistoricoCambio";	
+				},500);
+			},
+			
 			onNovoObjeto: function (oEvent) {
 				this.byId("myNav").to(this.byId("paginaObjeto"), "flip");
 			},

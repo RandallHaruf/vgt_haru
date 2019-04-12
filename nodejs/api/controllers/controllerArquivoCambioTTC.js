@@ -72,6 +72,18 @@ module.exports = {
 			}));
 		}
 	},
+	
+	downloadModeloHistoricoCambio: function (req, res) {
+		var folder = "download/";
+			
+		res.download(folder + "modeloCambioTTC.csv");
+	},
+	
+	downloadExemploHistoricoCambio: function (req, res) {
+		var folder = "download/";
+			
+		res.download(folder + "exemploCambioTTC.csv");
+	},
 
 	uploadArquivo: function (req, res, next) {
 		// Assumindo que temos req.files (buffer da tabela arquivo_cambio_ttc) req.body.jsonCambio (objeto pra colocar na tabela de cambio_ttc)
