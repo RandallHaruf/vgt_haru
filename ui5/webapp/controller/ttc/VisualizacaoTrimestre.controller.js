@@ -8,7 +8,7 @@ sap.ui.define(
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.ttc.VisualizacaoTrimestre", {
-			onInit: function () {
+			onInit: function (oEvent) {
 				//sap.ui.getCore().getConfiguration().setFormatLocale("pt_BR");
 
 				this.setModel(new sap.ui.model.json.JSONModel({
@@ -16,6 +16,7 @@ sap.ui.define(
 						Borne: [],
 						Collected: []
 					}
+
 				}));
 
 				this.getRouter().getRoute("ttcVisualizacaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
@@ -97,6 +98,11 @@ sap.ui.define(
 								nomeEmpresa: oParams.oEmpresa.nome
 							});
 							sap.m.MessageToast.show(this.getResourceBundle().getText("viewResumoTrimestreToast"));
+
+							//desabilita o botao d reabetura apos o pedido de solicitacao
+							if (this.byId("btnReabrir").getVisible(true))
+								this.byId("btnReabrir").setVisible(false);
+
 							dialog.close();
 						}.bind(this)
 					}),
@@ -120,6 +126,9 @@ sap.ui.define(
 
 			navToHome: function () {
 				this.getRouter().navTo("selecaoModulo");
+
+				if (!this.byId("btnReabrir").getVisible())
+					this.byId("btnReabrir").setVisible(true);
 			},
 
 			navToPage2: function () {
@@ -128,6 +137,9 @@ sap.ui.define(
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario
 					})
 				});
+
+				if (!this.byId("btnReabrir").getVisible())
+					this.byId("btnReabrir").setVisible(true);
 			},
 
 			navToPage3: function () {
@@ -138,19 +150,38 @@ sap.ui.define(
 					oEmpresa: JSON.stringify(oEmpresaSelecionada),
 					idAnoCalendario: sIdAnoCalendarioSelecionado
 				});
+
+				if (!this.byId("btnReabrir").getVisible())
+					this.byId("btnReabrir").setVisible(true);
 			},
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-				
+
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this.byId("btnReabrir").setVisible(false);
 				}
 
 				var oParameters = JSON.parse(oEvent.getParameter("arguments").oParameters);
+
+				if (!this.isIFrame()) {
+
+					//oculta o botao de reabertura caso ja exista uma reabertura solicitada para o periodo
+					if (oParameters.isPendente) {
+						this.byId("btnReabrir").setVisible(false);
+					} else if (!oParameters.isPendente) {
+						// tratamento para checar se o usuario alterou intencionalmente a o parametro da url
+						if (!this.byId("btnReabrir").getVisible()) {
+							this.byId("btnReabrir").setVisible(false);
+						} else
+						if (this.byId("btnReabrir").getVisible())
+							this.byId("btnReabrir").setVisible(true);
+					};
+				}
+
 				oParameters.oPeriodo.periodo = Utils.traduzTrimestreTTC(oParameters.oPeriodo.numero_ordem, that);
-				
+
 				this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
@@ -161,7 +192,8 @@ sap.ui.define(
 				this.byId("tabelaPagamentosBorne").setBusyIndicatorDelay(100);
 				this.byId("tabelaPagamentosBorne").setBusy(true);
 
-				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo + "&tax_classification=1",
+				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
+					"&tax_classification=1",
 					function (response) { // tax_classification = BORNE
 						if (response) {
 							for (var i = 0; i < response.length; i++) {
@@ -177,7 +209,8 @@ sap.ui.define(
 				this.byId("tabelaPagamentosCollected").setBusyIndicatorDelay(100);
 				this.byId("tabelaPagamentosCollected").setBusy(true);
 
-				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo + "&tax_classification=2",
+				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
+					"&tax_classification=2",
 					function (response) { // tax_classification = BORNE
 						if (response) {
 							for (var i = 0; i < response.length; i++) {
@@ -191,5 +224,4 @@ sap.ui.define(
 					});
 			}
 		});
-	}
-);
+	});

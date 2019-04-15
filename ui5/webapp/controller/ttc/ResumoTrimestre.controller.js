@@ -291,7 +291,8 @@ sap.ui.define(
 
 				var assunto = "TTC - Quarter reopening - " + vEmpresa + " - " + vPeriodo;
 				var htmlBody =
-					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TTC module at <a href='" + document.domain +
+					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TTC module at <a href='" + document
+					.domain +
 					"'>Vale Global Tax (VGT)</a> Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
 
 				jQuery.ajax({ //Desativar botao
@@ -451,6 +452,33 @@ sap.ui.define(
 
 				var oParams = {};
 
+				NodeAPI.pListarRegistros("RequisicaoReabertura", {
+					status: 1,
+					empresa: oPeriodo["fk_empresa.id_empresa"],
+					periodo: oPeriodo.id_periodo
+				}).then(function (res) {
+					
+					var isPendente = false;
+					
+					if (res.length > 0)
+						isPendente = true;
+                    
+                    oParams.oPeriodo = oPeriodo;
+					oParams.oEmpresa = that.getModel().getProperty("/Empresa");
+					oParams.isPendente =  isPendente;
+					oParams.oAnoCalendario = {
+						idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
+						anoCalendario: that.byId("selectAnoCalendario").getSelectedItem().getText()
+					};
+                    
+					that.getRouter().navTo("ttcVisualizacaoTrimestre", {
+						oParameters: JSON.stringify(oParams)
+					});
+				});
+
+				// comentado para titulos de teste voltar depois caso necessario 
+				/* console.log("Pendente " + isPendente);
+
 				oParams.oPeriodo = oPeriodo;
 				oParams.oEmpresa = that.getModel().getProperty("/Empresa");
 				oParams.oAnoCalendario = {
@@ -460,7 +488,7 @@ sap.ui.define(
 
 				this.getRouter().navTo("ttcVisualizacaoTrimestre", {
 					oParameters: JSON.stringify(oParams)
-				});
+				}); */
 			},
 
 			navToHome: function () {
@@ -675,10 +703,10 @@ sap.ui.define(
 						text: that.getResourceBundle().getText("viewGeralFaltamXDias", [that.ContadorDeTempo(1, oPeriodo.numero_ordem)])
 					}));
 				} else {
-					if(oPeriodo.DiasRestantes && oPeriodo.ind_ativo == true) {
+					if (oPeriodo.DiasRestantes && oPeriodo.ind_ativo == true) {
 						oToolbar.addContent(new sap.m.Title({
 							text: that.getResourceBundle().getText("viewGeralFaltamXDias", [oPeriodo.DiasRestantes])
-						}));	
+						}));
 					}
 				}
 
@@ -719,5 +747,4 @@ sap.ui.define(
 				this.byId("tabelaQuartoPeriodo").setBusy(bBusy);
 			}
 		});
-	}
-);
+	});
