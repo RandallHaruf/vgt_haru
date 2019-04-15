@@ -78,8 +78,8 @@ module.exports = {
 		});
 	},
 
-	excluirRegistro: function (req, res) {
-		model.excluir([{
+	excluirRegistro: function (req, res, next) {
+		/*model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
 		}], function (err, result) {
@@ -88,7 +88,16 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
-		});
+		});*/
+		model.delete(req.params.idRegistro)
+			.then((result) => {
+				res.status(200).json({
+					result: result
+				});
+			})
+			.catch(function (err) {
+				next(err);
+			});
 	},
 
 	deepQuery: function (req, res) {

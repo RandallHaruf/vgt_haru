@@ -156,3 +156,6 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 .myCustomButton {
 	border-bottom: 0px;
 }
+.customButton {
+	padding-left: 4px;
+}

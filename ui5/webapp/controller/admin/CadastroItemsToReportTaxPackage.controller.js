@@ -1,10 +1,12 @@
 sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
-		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, Constants, Validador) {
+	function (BaseController, NodeAPI, Validador , Utils, Constants) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroItemsToReportTaxPackage", {
 
 			/* Métodos a implementar */
@@ -23,8 +25,7 @@ sap.ui.define(
 			},
 
 			onExcluir: function (oEvent) {
-				var that = this;
-
+				/*var that = this;
 				var iIdExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
 
 				jQuery.sap.require("sap.m.MessageBox");
@@ -45,6 +46,24 @@ sap.ui.define(
 									that._carregarObjetos();
 								}
 							});
+						}
+					}
+				});*/
+				var that = this;
+				var idExcluir = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath())[this._nomeColunaIdentificadorNaListagemObjetos];
+				
+				jQuery.sap.require("sap.m.MessageBox");
+				 sap.m.MessageBox.confirm(that.getResourceBundle().getText("ViewGeralCerteza") , {
+					title: "Info",
+					onClose: function(oAction) { 
+						if (sap.m.MessageBox.Action.OK === oAction) {
+							NodeAPI.pExcluirRegistro("ItemToReport", idExcluir)
+								.then(function (res) {
+									that._carregarObjetos();
+								})
+								.catch(function (err) {
+									that.showError(err);
+								});
 						}
 					}
 				});

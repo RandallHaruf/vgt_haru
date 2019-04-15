@@ -111,7 +111,7 @@
 						minScreenWidth="XXLarge"
 						demandPopin="true"
 						hAlign="Center">
-						<Text text="{i18n>viewGeralDataRequisicao}" />
+						<Text text="{i18n>viewGeralDataRequisicao}" textAlign="Center" />
 					</Column>
 					<Column
 						minScreenWidth="Desktop"

@@ -71,19 +71,19 @@
 								<columns>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" textAlign="Center"/>
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center"/>
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" textAlign="Center"/>
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" textAlign="Center"/>
 									</Column>
 								</columns>
 								<items>
@@ -128,19 +128,19 @@
 								<columns>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -186,19 +186,19 @@
 								<columns>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -242,19 +242,19 @@
 								<columns>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -301,19 +301,19 @@
 								<columns>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -358,19 +358,19 @@
 								<columns>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaStatutoryGAAP}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaNetLocalTax}" textAlign="Center" />
 									</Column>
 									<Column
 										hAlign="Center">
-										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" />
+										<Text text="{i18n>viewTAXResumoTrimestreColunaTaxDue}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
