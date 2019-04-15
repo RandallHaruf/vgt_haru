@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, Constants,Utils) {
+	function (BaseController, Constants,Utils,NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroDiferencasTaxPackage", {
 
 			onInit: function () {
@@ -288,7 +289,7 @@ sap.ui.define(
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Diferença: " + nome);	
-
+/*
 							jQuery.ajax(Constants.urlBackend + "DiferencaOpcao/" + iIdDiferenca, {
 								type: "DELETE",
 								xhrFields: {
@@ -298,7 +299,22 @@ sap.ui.define(
 								success: function (response) {
 									that._carregarObjetos();
 								}
-							});
+							});*/
+							NodeAPI.pExcluirRegistro("DiferencaOpcao", iIdDiferenca)
+								.then(function (res) {
+									console.log(res);
+									that._carregarObjetos();
+								})
+								.catch(function (err) {
+									console.log(err);
+									/*if (err.responseJSON) {
+										alert((err.responseJSON.error.code + ' - ' + err.responseJSON.error.message);
+									}
+									else {
+										alert(err.message);
+									}*/
+									that.showError(err);
+								});							
 						}
 					}
 				});

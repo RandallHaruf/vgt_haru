@@ -56,7 +56,7 @@
 							<ObjectIdentifier text="{nome}"/>
 							<HBox>
 								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false" />
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="true" />
 							</HBox>
 						</cells>
 					</ColumnListItem>
