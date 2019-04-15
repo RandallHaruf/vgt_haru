@@ -109,6 +109,7 @@
 											path: 'numero_ordem'
 										}]
 									}"
+									width="150%"
 									class="bordered celulasSeparadas">
 									<columns>
 										<Column vAlign="Middle" width="12rem">
@@ -376,6 +377,7 @@
 											path: 'numero_ordem'
 										}]
 									}"
+									width="250%"
 									class="bordered celulasSeparadas">
 									<columns>
 										<Column vAlign="Middle" width="12rem">
@@ -465,6 +467,7 @@
 											path: 'numero_ordem'
 										}]
 									}"
+									width="150%"
 									class="bordered celulasSeparadas">
 									<columns>
 										<Column vAlign="Middle" width="12rem">
