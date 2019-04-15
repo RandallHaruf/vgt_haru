@@ -70,7 +70,7 @@
 							<ObjectIdentifier text="{name_of_tax}"/>
 							<HBox>
 								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false" />
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
 							</HBox>
 						</cells>
 					</ColumnListItem>
@@ -175,7 +175,7 @@
 											<table:columns>
 												<table:Column width="45px">
 													<table:template>
-														<CheckBox selected="{selecionado}" />
+														<CheckBox selected="{selecionado}" enabled="{naoTenhoResposta}" />
 													</table:template>
 												</table:Column>
 												<table:Column>

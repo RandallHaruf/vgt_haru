@@ -14,4 +14,5 @@ module.exports = function (aRoutes) {
 
 	aRoutes.push(express.Router().get("/DeepQuery/Pais", pais.deepQuery));
 	aRoutes.push(express.Router().get("/DeepQuery/Pais/:idRegistro", pais.deepQuery));
+	aRoutes.push(express.Router().get("/DeepQuery/DominioPaisNameOfTax", pais.deepQueryNameOfTax));
 };

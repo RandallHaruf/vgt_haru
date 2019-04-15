@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, NodeAPI, Validador , Utils) {
+	function (BaseController, NodeAPI, Validador , Utils, Constants) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroNameOfTaxTTC", {
 			
 			/* Métodos a implementar */
@@ -49,9 +50,16 @@ sap.ui.define(
 					title: "Info",
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
-							NodeAPI.excluirRegistro("NameOfTax", idExcluir, function (response) {
+							/*NodeAPI.excluirRegistro("NameOfTax", idExcluir, function (response) {
 								that._carregarObjetos();	
-							});
+							});*/
+							NodeAPI.pExcluirRegistro("NameOfTax", idExcluir)
+								.then(function (res) {
+									that._carregarObjetos();
+								})
+								.catch(function (err) {
+									that.showError(err);
+								});
 						}
 					}
 				});
@@ -139,29 +147,32 @@ sap.ui.define(
 				
 				var that = this;
 				that.getModel().setProperty("/objetos", null);
-
+				
 				that.setBusy(that.byId("paginaListagem"), true);				
 				NodeAPI.listarRegistros("DeepQuery/NameOfTax?indDefault=true", function (response) {
 						var aResponse = response;
 						for (var i = 0, length = aResponse.length; i < length; i++) {
 							aResponse[i]["classification"] = Utils.traduzDominioTaxClassification(aResponse[i]["id_dominio_tax_classification"],that);
 						}
-						that.getModel().setProperty("/objetos", aResponse);							
+						that.getModel().setProperty("/objetos", aResponse);	
+						that.setBusy(that.byId("paginaListagem"), false);
 					//that.getModel().setProperty("/objetos", response);
 				});
 				
-				NodeAPI.listarRegistros("DominioPais", function (responsePais) {
-					that.setBusy(that.byId("paginaListagem"), false);		
+				
+				/*NodeAPI.listarRegistros("DominioPais", function (responsePais) {
+					that.setBusy(that.byId("paginaListagem"), false);
 						var aPais = responsePais;
 						for (var i = 0, length = aPais.length; i < length; i++) {
 							aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
-						}					
+						}
 					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(responsePais,"pais")); 
-				});
+				});*/
 			},
 			
 			_carregarCamposFormulario: function () {
 				var that = this;
+				var idObjeto = that.getModel().getProperty("/idObjeto");
 				
 				NodeAPI.listarRegistros("DominioTaxClassification", function (response) {
 					response.unshift({ "id_dominio_tax_classification": null, "classification": ""  });
@@ -172,6 +183,7 @@ sap.ui.define(
 						that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aResponse,"classification"));						
 					//that.getModel().setProperty("/DominioTaxClassification", response);
 				});
+				
 			},
 			
 			_carregarCategory: function (sIdClassification) {
@@ -217,8 +229,7 @@ sap.ui.define(
 
 				that.setBusy(that.byId("tablePais"), true);
 				NodeAPI.listarRegistros("RelacionamentoPaisNameOfTax?fkNameOfTax=" + iIdObjeto, function (response) {
-					that._resolverVinculoPais(response);
-					that.setBusy(that.byId("tablePais"), false);
+					that._carregarPaisesComPagamento(response, iIdObjeto);
 				});
 			},
 			
@@ -297,6 +308,28 @@ sap.ui.define(
 				return aIds;
 			},
 			
+			_carregarPaisesComPagamento: function (response, idObjeto){
+				var that = this;
+				$.ajax({
+					type:"GET",
+					url: Constants.urlBackend + "DeepQuery/DominioPaisNameOfTax?idNameOfTax=" + idObjeto,
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true
+				}).done(function(responsePais) {
+					var aPais = JSON.parse(responsePais);
+					for (var i = 0, length = aPais.length; i < length; i++) {
+						aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
+					}
+					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aPais,"pais"));
+					that.setBusy(that.byId("tablePais"), false);
+					that._resolverVinculoPais(response);
+				}).fail(function (err) {
+					that.setBusy(that.byId("paginaListagem"), false);
+				});
+			},
+			
 			_resolverVinculoPais: function (response) {
 				var aDominioPais = this.getModel().getProperty("/DominioPais");
 					
@@ -319,8 +352,8 @@ sap.ui.define(
 				        // false values first
 				        // return (x === y)? 0 : x? 1 : -1;
 				    });
-				
 				}
+				this.getModel().refresh();
 			},
 			
 			_navToPaginaListagem: function () {

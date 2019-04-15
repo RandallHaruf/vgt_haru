@@ -28,7 +28,7 @@
 							<ObjectIdentifier text="{tax}"/>
 							<HBox>
 								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="false"/>
+								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
 							</HBox>
 						</cells>
 					</ColumnListItem>

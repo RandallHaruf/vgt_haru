@@ -18,6 +18,7 @@ let oModel = db.model('VGT.TAX_CATEGORY', {
 	} 	
 });
 
+/*
 oModel.canDelete = function (entryId) {
 	return new Promise((resolve, reject) => {
 		let sQuery = 
@@ -41,6 +42,40 @@ oModel.canDelete = function (entryId) {
 			+ 'tax."fk_category.id_tax_category" = ?)) "qte_vinculos" '
 			+ 'from "DUMMY" ',
 			aParam = [entryId, entryId, entryId];
+	
+		try {
+			db.executeStatement({
+				statement: sQuery,
+				parameters: aParam
+			}, (err, result) => {
+				if (err) {
+					console.log(err);
+					reject(new Error('Erro no método "canDelete" do model "TaxCategory".\n' + err.message));
+				}
+				else {
+					resolve(result && result.length && result[0].qte_vinculos === 0);
+				}
+			});
+		} 
+		catch (e) {
+			console.log(e);
+			reject(new Error('Erro no método "canDelete" do model "TaxCategory".\n' + e.message));
+		}	
+	});
+};
+*/
+
+oModel.canDelete = function (entryId) {
+	return new Promise((resolve, reject) => {
+		let sQuery = 
+		'select ( '
+			+ '(select count(*) '
+			+ 'from "VGT.TAX" tax '
+			+ 'where '
+			+ 'tax."fk_category.id_tax_category" = ?) '
+		+ ') "qte_vinculos" ' 
+		+ 'from "DUMMY" ',
+		aParam = [entryId];
 	
 		try {
 			db.executeStatement({

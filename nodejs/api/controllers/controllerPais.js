@@ -310,5 +310,38 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});
+	},
+	
+	deepQueryNameOfTax: function (req, res) {
+		if(req.query.idNameOfTax){
+			var sStatement = 
+				'select '
+				+ 'tblDominioPais.*,( '
+					+ 'case  tblPagamento."fk_name_of_tax.id_name_of_tax" '
+				        + 'when ? then false '
+				        + 'else true '
+				    + 'end '
+				+ ') "naoTenhoResposta" from "VGT.DOMINIO_PAIS" tblDominioPais '
+				+ 'left outer join "VGT.PAGAMENTO" tblPagamento '
+					+ 'on tblDominioPais."id_dominio_pais" = tblPagamento."fk_dominio_pais.id_dominio_pais" '
+				+ 'where (tblPagamento."fk_name_of_tax.id_name_of_tax" = ? or tblPagamento."fk_name_of_tax.id_name_of_tax" is null) ';
+				
+			var aParams = [
+					req.query.idNameOfTax,
+					req.query.idNameOfTax
+				];
+			
+			pais.execute({
+				statement: sStatement,
+				parameters: aParams
+			}, function (err, result) {
+				if (err) {
+					res.send(JSON.stringify(err));
+				}
+				else {
+					res.send(JSON.stringify(result));
+				}
+			});
+		}
 	}
 };

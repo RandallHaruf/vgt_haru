@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/Utils"	
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/NodeAPI"
 	],
-	function (BaseController, Constants, Validador ,Utils) {
+	function (BaseController, Constants, Validador ,Utils, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.admin.CadastroTaxTTC", {
 			
 			/* Métodos a implementar */
@@ -34,17 +35,23 @@ sap.ui.define(
 					onClose: function(oAction) { 
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							//sap.m.MessageToast.show("Excluir Tax: " + nome);	
-							
-							jQuery.ajax(Constants.urlBackend + "Tax/" + idExcluir, {
+							NodeAPI.pExcluirRegistro("Tax", idExcluir)
+								.then(function (res) {
+									that._carregarObjetos();
+								})
+								.catch(function (err) {
+									that.showError(err);
+								});
+							/*jQuery.ajax(Constants.urlBackend + "Tax/" + idExcluir, {
 								type: "DELETE",
 								xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
+									withCredentials: true
+								},
+								crossDomain: true,
 								success: function (response) {
 									that._carregarObjetos();
 								}
-							});
+							});*/
 						}
 					}
 				});
