@@ -99,6 +99,7 @@
 											templateShareable: false
 										}"
 										selectedKey="{/Moeda}"
+										enabled="{= ${/Periodo/numero_ordem} !== 6 ? true : false}"
 										change="onTrocarMoeda">
 										<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
 									</ComboBox>

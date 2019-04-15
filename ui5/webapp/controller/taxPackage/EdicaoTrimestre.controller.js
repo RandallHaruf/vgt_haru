@@ -3170,12 +3170,12 @@ sap.ui.define(
 						}
 						break;
 					case 6:
-						if (!oMoeda.sIdMoedaRetificadora) {
+						// Se é a primeira vez editando a retificadora, realiza a copia das informações da anual/retificadora
+						if (!aTaxRecon.find(function (obj) { return obj.ind_ativo; }).id_tax_reconciliation) {
 							this._copiarDados(5, 6);
 						}
-						else {
-							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
-						}
+						
+						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
 						break;
 				}
 				
