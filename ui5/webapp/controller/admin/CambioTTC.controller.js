@@ -110,7 +110,7 @@ sap.ui.define(
 				window.location = Constants.urlBackend + "DownloadModeloHistoricoCambio";
 				setTimeout(function(){
 					window.location = Constants.urlBackend + "DownloadExemploHistoricoCambio";	
-				},500);
+				},1000);
 			},
 			
 			onNovoObjeto: function (oEvent) {
@@ -325,8 +325,21 @@ sap.ui.define(
 								Dolar: aux2[1],
 								Real:  aux2[2],
 								Data:  aux2[3]
-							};		
-							cambios.push(obj);
+							};
+							var continua = true;
+							for(let j =0; j < aux2.length; j++){
+								if(aux2[j] == 0 || aux2[j] == "" || aux2[j] == undefined || aux2[j] == null){
+									continua = false;
+								}
+							}
+							if(continua){
+								if(obj.Data.indexOf("-") > 0){
+									var aData = obj.Data.split("-");
+									if(aData[0].length == 4 && aData[1].length == 2 && aData[2].length == 2){
+										cambios.push(obj);	
+									}
+								}		
+							}
 						}
 						resolverAjax(cambios, file, nomeFile, oData);
 					}

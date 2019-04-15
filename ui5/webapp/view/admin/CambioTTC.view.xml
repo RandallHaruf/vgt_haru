@@ -124,7 +124,7 @@
 													icon="sap-icon://add" type="Emphasized"
 													press="onAbrirDialogArquivo"
 													/>
-													<Button icon="sap-icon://manager-insight" type="Emphasized" text="Download" tooltip="Baixar exemplo e modelo de câmbio" press="onBaixarHistoricoCambio" />
+													<Button icon="sap-icon://manager-insight" type="Emphasized" text="Download" tooltip="{i18n>viewCambioTooltipBotao}" press="onBaixarHistoricoCambio" />
 												</Toolbar>
 											</headerToolbar>
 											<columns>

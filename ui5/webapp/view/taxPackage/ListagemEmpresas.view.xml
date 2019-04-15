@@ -18,7 +18,7 @@
 					<Title text="{i18n>viewTAXListagemEmpresaTituloPagina}"/>
 				</f:heading>
 				<f:navigationActions>
-					<Button icon="sap-icon://manager-insight" tooltip="Baixar modelo de import para o Tax Package" text="XLSX" press="onBaixarModeloImport" />
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXListagemEmpresaTooltipBotao}" text="XLSX" press="onBaixarModeloImport" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>
 			</f:DynamicPageTitle>
