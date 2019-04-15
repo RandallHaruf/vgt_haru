@@ -317,22 +317,13 @@ module.exports = {
 		var aParams = [];
 		if(req.query.idNameOfTax){
 			sStatement = 
-				'select '
-				+ 'tblDominioPais.*,( '
-					+ 'case  tblPagamento."fk_name_of_tax.id_name_of_tax" '
-				        + 'when ? then false '
-				        + 'else true '
-				    + 'end '
-				+ ') "naoTenhoResposta" from "VGT.DOMINIO_PAIS" tblDominioPais '
-				+ 'left outer join "VGT.PAGAMENTO" tblPagamento '
-					+ 'on tblDominioPais."id_dominio_pais" = tblPagamento."fk_dominio_pais.id_dominio_pais" '
-				+ 'where (tblPagamento."fk_name_of_tax.id_name_of_tax" = ? or tblPagamento."fk_name_of_tax.id_name_of_tax" is null) ';
+				'select * from '
+				+ '"VGT.PAGAMENTO" tblPagamento '
+				+ 'where tblPagamento."fk_name_of_tax.id_name_of_tax" = ? ';
 				
 			aParams = [
-					req.query.idNameOfTax,
 					req.query.idNameOfTax
 				];
-			
 			pais.execute({
 				statement: sStatement,
 				parameters: aParams
@@ -348,24 +339,10 @@ module.exports = {
 		else{
 			sStatement = 
 				'select '
-				+ 'tblDominioPais.*,( '
-					+ 'case  tblPagamento."fk_name_of_tax.id_name_of_tax" '
-				        + 'when ? then false '
-				        + 'else true '
-				    + 'end '
-				+ ') "naoTenhoResposta" from "VGT.DOMINIO_PAIS" tblDominioPais '
-				+ 'left outer join "VGT.PAGAMENTO" tblPagamento '
-					+ 'on tblDominioPais."id_dominio_pais" = tblPagamento."fk_dominio_pais.id_dominio_pais" '
-				+ 'where (tblPagamento."fk_name_of_tax.id_name_of_tax" = ? or tblPagamento."fk_name_of_tax.id_name_of_tax" is null) ';
-				
-			aParams = [
-					0,
-					0
-				];
-			
+				+ 'tblDominioPais.*, true "naoTenhoResposta" '
+				+ 'from "VGT.DOMINIO_PAIS" tblDominioPais ';
 			pais.execute({
-				statement: sStatement,
-				parameters: aParams
+				statement: sStatement
 			}, function (err, result) {
 				if (err) {
 					res.send(JSON.stringify(err));

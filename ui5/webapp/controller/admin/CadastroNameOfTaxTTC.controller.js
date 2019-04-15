@@ -170,9 +170,10 @@ sap.ui.define(
 				});*/
 			},
 			
-			_carregarCamposFormulario: function () {
+			_carregarCamposFormulario: function (oEvent) {
 				var that = this;
-				var idObjeto = that.getModel().getProperty("/idObjeto");
+				
+				var idObjeto = that.getModel().getObject(oEvent.data.path) ? that.getModel().getObject(oEvent.data.path)[that._nomeColunaIdentificadorNaListagemObjetos] : 0;
 				
 				NodeAPI.listarRegistros("DominioTaxClassification", function (response) {
 					response.unshift({ "id_dominio_tax_classification": null, "classification": ""  });
@@ -183,6 +184,8 @@ sap.ui.define(
 						that.getModel().setProperty("/DominioTaxClassification", Utils.orderByArrayParaBox(aResponse,"classification"));						
 					//that.getModel().setProperty("/DominioTaxClassification", response);
 				});
+				that.setBusy(that.byId("tablePais"), true);
+				that._carregarPaises(idObjeto);
 				
 			},
 			
@@ -227,10 +230,6 @@ sap.ui.define(
 					that.setBusy(that.byId("formularioObjeto"), false);					
 				});
 
-				that.setBusy(that.byId("tablePais"), true);
-				NodeAPI.listarRegistros("RelacionamentoPaisNameOfTax?fkNameOfTax=" + iIdObjeto, function (response) {
-					that._carregarPaisesComPagamento(response, iIdObjeto);
-				});
 			},
 			
 			_limparFormulario: function () {
@@ -240,6 +239,8 @@ sap.ui.define(
 				});
 				// Limpar outras propriedades do modelo
 				this.getModel().setProperty("/TaxCategory", {});
+				this.getModel().setProperty("/DominioPais", {});
+				this.getModel().setProperty("/idObjeto", {});
 				this.getModel().setProperty("/Tax", {});
 				this.getModel().setProperty("/objeto", {});
 			},
@@ -317,14 +318,45 @@ sap.ui.define(
 						withCredentials: true
 					},
 					crossDomain: true
+				}).done(function(responseRespostaNameOfTax) {
+					var aRespostaNameOfTax = JSON.parse(responseRespostaNameOfTax);
+					var aPais = that.getModel().getProperty("/DominioPais");
+					for (var i = 0, length = aPais.length; i < length; i++) {
+						for (var j = 0; j < aRespostaNameOfTax.length; j++){
+							if(aPais[i].id_dominio_pais == aRespostaNameOfTax[j]["fk_dominio_pais.id_dominio_pais"]){
+								aPais[i].naoTenhoResposta = false;
+							}
+						}
+					}
+					that.setBusy(that.byId("tablePais"), false);
+					that._resolverVinculoPais(response);
+				}).fail(function (err) {
+					that.setBusy(that.byId("paginaListagem"), false);
+				});
+			},
+			_carregarPaises: function (idObjeto) {
+				var that = this;
+				$.ajax({
+					type:"GET",
+					url: Constants.urlBackend + "DeepQuery/DominioPaisNameOfTax",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true
 				}).done(function(responsePais) {
 					var aPais = JSON.parse(responsePais);
 					for (var i = 0, length = aPais.length; i < length; i++) {
 						aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
 					}
 					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aPais,"pais"));
-					that.setBusy(that.byId("tablePais"), false);
-					that._resolverVinculoPais(response);
+					if(!idObjeto){
+						that.setBusy(that.byId("tablePais"), false);	
+					}else{
+						NodeAPI.listarRegistros("RelacionamentoPaisNameOfTax?fkNameOfTax=" + idObjeto, function (response) {
+							that._carregarPaisesComPagamento(response, idObjeto);
+						});
+					}
+					
 				}).fail(function (err) {
 					that.setBusy(that.byId("paginaListagem"), false);
 				});
@@ -379,7 +411,7 @@ sap.ui.define(
 				
 				this.byId("paginaObjeto").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarCamposFormulario();
+						that._carregarCamposFormulario(oEvent);
 						
 						if (oEvent.data.path) {
 							var id = that.getModel().getObject(oEvent.data.path)[that._nomeColunaIdentificadorNaListagemObjetos];
