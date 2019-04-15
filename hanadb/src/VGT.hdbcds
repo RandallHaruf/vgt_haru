@@ -310,6 +310,7 @@ context VGT {
             ind_ativo                  : Boolean;
             status_envio               : Integer;
             data_envio                 : LocalDate;
+            fk_dominio_moeda_rel	   : association[*, 0..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
     };
 
     /*@@layout{"layoutInfo":{"x":-2018,"y":1123.5}}*/

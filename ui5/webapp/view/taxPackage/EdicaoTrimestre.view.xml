@@ -98,7 +98,8 @@
 											path: '/DominioMoeda', 
 											templateShareable: false
 										}"
-										selectedKey="{/Moeda}">
+										selectedKey="{/Moeda}"
+										change="onTrocarMoeda">
 										<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
 									</ComboBox>
 								</HBox>

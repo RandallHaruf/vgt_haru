@@ -2967,7 +2967,7 @@ sap.ui.define(
 						that.getModel().setProperty("/DominioMoeda", response);
 
 						var oMoedaSelecionada = response.find(function (obj) {
-							return obj.id_dominio_moeda === oParametros.oPeriodo["fk_dominio_moeda.id_dominio_moeda"];
+							return obj.id_dominio_moeda === oParametros.oPeriodo["fk_dominio_moeda_rel.id_dominio_moeda"];
 						});
 
 						if (oMoedaSelecionada) {
@@ -3024,7 +3024,7 @@ sap.ui.define(
 						}
 						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
 						that.getModel().setProperty("/DiferencasTemporarias", response.diferencaTemporaria);
-						that.getModel().setProperty("/Moeda", response.moeda);
+						//that.getModel().setProperty("/Moeda", response.moeda);
 
 						that.onAplicarRegras();
 					}
@@ -3119,8 +3119,72 @@ sap.ui.define(
 						that.getModel().setProperty("/TaxReconciliation", that.getModel().getProperty("/TaxReconciliation").concat(response));
 						that.getModel().refresh();
 					}
+					that._definirMoeda();
 				});
 			},
+
+			_definirMoeda: function () {
+				var that = this,
+					aTaxRecon = this.getModel().getProperty("/TaxReconciliation"),
+					iNumeroOrdem = Number(this.getModel().getProperty("/Periodo").numero_ordem);
+					
+				var oMoeda = aTaxRecon.reduce(function (result, item) {
+					if (item.numero_ordem >= 1 && item.numero_ordem <= 4 && item["fk_dominio_moeda_rel.id_dominio_moeda"] && result.sIdMoedaEstimativa !== item["fk_dominio_moeda_rel.id_dominio_moeda"]) {
+						result.sIdMoedaEstimativa = item["fk_dominio_moeda_rel.id_dominio_moeda"];
+					}
+					if (item.numero_ordem === 5 && item["fk_dominio_moeda_rel.id_dominio_moeda"] && result.sIdMoedaAnual !== item["fk_dominio_moeda_rel.id_dominio_moeda"]) {
+						result.sIdMoedaAnual = item["fk_dominio_moeda_rel.id_dominio_moeda"];
+					}
+					if (item.numero_ordem === 6 && item["fk_dominio_moeda_rel.id_dominio_moeda"] && result.sIdMoedaRetificadora !== item["fk_dominio_moeda_rel.id_dominio_moeda"]) {
+						result.sIdMoedaRetificadora = item["fk_dominio_moeda_rel.id_dominio_moeda"];
+					}
+					return result;
+				}, { sIdMoedaEstimativa: null, sIdMoedaAnual: null, sIdMoedaRetificadora: null });
+				
+				switch (iNumeroOrdem) {
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaEstimativa);
+						break;
+					case 5:
+						if (oMoeda.sIdMoedaEstimativa && !oMoeda.sIdMoedaAnual) {
+							jQuery.sap.require("sap.m.MessageBox");
+	
+							sap.m.MessageBox.confirm(this.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoManterMoeda"), {
+								title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+								onClose: function (oAction) {
+									if (oAction === sap.m.MessageBox.Action.OK) {
+										that.getModel().setProperty('/Moeda', oMoeda.sIdMoedaEstimativa);
+										that._copiarDados(4, 5);
+									}
+									else {
+										that.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
+									}
+								}
+							});
+						}
+						else {
+							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
+						}
+						break;
+					case 6:
+						if (!oMoeda.sIdMoedaRetificadora) {
+							this._copiarDados(5, 6);
+						}
+						else {
+							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
+						}
+						break;
+				}
+				
+				this.getModel().setProperty('/MoedaAnterior', this.getModel().getProperty('/Moeda'));
+			},
+			
+			_copiarDados: function (iNumeroOrdemOrigem, iNumeroOrdemDestino) {
+				alert('copiar dados de nº ordem ' + iNumeroOrdemOrigem + ' para nº ordem ' + iNumeroOrdemDestino);
+			},	
 
 			_carregarAntecipacoes: function (sIdTaxReconciliation) {
 				var that = this;
@@ -3552,6 +3616,7 @@ sap.ui.define(
 				this.getModel().setProperty("/IncentivosFiscais", []);
 				this.getModel().setProperty("/WHT", []);
 				this.getModel().setProperty("/Moeda", null);
+				this.getModel().setProperty("/MoedaAnterior", null);
 				this.getModel().setProperty("/TaxReconciliation", []);
 				this.getModel().setProperty("/DiferencasPermanentes", []);
 				this.getModel().setProperty("/DiferencasTemporarias", []);
@@ -3790,6 +3855,31 @@ sap.ui.define(
 			onTrocarIncomeTaxDetails: function (oEvent) {
 				this.getModel().setProperty("/IncomeTaxDetailsValueState", oEvent.getSource().getValue() ? sap.ui.core.ValueState.None : sap.ui.core
 					.ValueState.Error);
+			},
+			
+			onTrocarMoeda: function (oEvent) {
+				var that = this,
+					eventSource = oEvent.getSource(),
+					oTaxReconCorrente = this.getModel().getProperty('/TaxReconciliation').find(function (obj) {
+						return obj.ind_ativo;	
+					});
+				
+				jQuery.sap.require("sap.m.MessageBox");
+	
+				// Para estimativas pede confirmação ao usuário se deseja mesmo trocar moeda
+				if (oTaxReconCorrente.numero_ordem >= 1 && oTaxReconCorrente.numero_ordem <= 4 && oTaxReconCorrente["fk_dominio_moeda_rel.id_dominio_moeda"]) {
+					sap.m.MessageBox.confirm(this.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoTrocaMoeda"), {
+						title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+						onClose: function (oAction) {
+							if (oAction === sap.m.MessageBox.Action.OK) {
+								that.getModel().setProperty('/MoedaAnterior', eventSource.getSelectedKey());
+							}
+							else {
+								that.getModel().setProperty('/Moeda', that.getModel().getProperty('/MoedaAnterior'));
+							}
+						}
+					});
+				}
 			}
 		});
 	}

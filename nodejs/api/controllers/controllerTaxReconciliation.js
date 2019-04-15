@@ -246,8 +246,10 @@ module.exports = {
             + 'ON RTP_Per."fk_tax_package.id_tax_package" = TaxPac."id_tax_package" '
             + 'LEFT OUTER JOIN "VGT.PERIODO" Perid '
 			+ 'ON RTP_Per."fk_periodo.id_periodo" = Perid."id_periodo" '
-            + 'LEFT OUTER JOIN "VGT.DOMINIO_MOEDA" Moeda '
-			+ 'ON TaxPac."fk_dominio_moeda.id_dominio_moeda" = Moeda."id_dominio_moeda" ';
+            /*+ 'LEFT OUTER JOIN "VGT.DOMINIO_MOEDA" Moeda '
+			+ 'ON TaxPac."fk_dominio_moeda.id_dominio_moeda" = Moeda."id_dominio_moeda" ';*/
+			+ 'left outer join "VGT.DOMINIO_MOEDA" moeda '
+			+ 'on RTP_Per."fk_dominio_moeda_rel.id_dominio_moeda" = moeda."id_dominio_moeda" ';
 			
 			var oWhere = [];
 			var aParams = [];

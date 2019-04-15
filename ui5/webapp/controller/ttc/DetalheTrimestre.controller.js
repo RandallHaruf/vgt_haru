@@ -153,6 +153,7 @@ sap.ui.define(
 				oObject.multa = "";
 				oObject.total = "0";
 				oObject.numero_documento = "";
+				oObject.id_pagamento = -1;
 
 				// Insere o objeto duplicado no índice
 				aDadosPagamentos.splice(index, 0, oObject);

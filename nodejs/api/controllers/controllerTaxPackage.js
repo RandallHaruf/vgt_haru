@@ -242,7 +242,8 @@ module.exports = {
 				aAntecipacao = oTaxPackage.antecipacoes,
 				aOutrasAntecipacoes = oTaxPackage.outrasAntecipacoes;
 			
-			atualizarMoeda(sIdTaxPackage, sIdMoeda);
+			atualizarMoeda(oTaxPackage.periodo, sIdMoeda);
+			//atualizarMoeda(sIdTaxPackage, sIdMoeda);
 			atualizarStatus(sIdRelTaxPackagePeriodo);
 			
 			var sIdTaxReconciliation = inserirTaxReconciliation(sIdRelTaxPackagePeriodo, oTaxReconciliation, sIncomeTaxDetails);
@@ -1184,13 +1185,72 @@ function jsDateObjectToSqlDateString (oDate) {
 	return oDate.getFullYear() + "-" + (oDate.getMonth() + 1) + "-" + oDate.getDate();
 }
 
-function atualizarMoeda (sIdTaxPackage, sFkMoeda) {
+/*function atualizarMoeda (sIdTaxPackage, sFkMoeda) {
 	var sQuery = 'update "VGT.TAX_PACKAGE" set "fk_dominio_moeda.id_dominio_moeda" = ? where "id_tax_package" = ?',
 		aParams = [sFkMoeda, sIdTaxPackage];
 	
 	var result = db.executeStatementSync(sQuery, aParams);
 	
 	return result === 1;
+}*/
+
+function atualizarMoeda (oPeriodo, idMoeda) {
+	switch (oPeriodo.numero_ordem) {
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			// Atualizar moeda dos vínculos de períodos 1 a 4
+			var sQuery = 
+				'update "VGT.REL_TAX_PACKAGE_PERIODO" '
+				+ 'set "fk_dominio_moeda_rel.id_dominio_moeda" = ? '
+				+ 'where '
+				+ '"id_rel_tax_package_periodo" in ( '
+					+ 'select "id_rel_tax_package_periodo" '
+					+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel '
+					+ 'inner join "VGT.PERIODO" periodo '
+					+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo" '
+					+ 'where '
+					+ 'rel."fk_tax_package.id_tax_package" = ? '
+					+ 'and periodo."numero_ordem" in (1,2,3,4) '
+				+ ') ',
+				aParam = [idMoeda, oPeriodo["fk_tax_package.id_tax_package"]];
+				
+			db.executeStatementSync(sQuery, aParam);
+			break;
+		case 5:
+		case 6:
+			// Atualizar moeda dos vínculos de períodos 5 e o último 6 que esteja aberto
+			var sQuery = 
+				'update "VGT.REL_TAX_PACKAGE_PERIODO" '
+				+ 'set "fk_dominio_moeda_rel.id_dominio_moeda" = ? '
+				+ 'where '
+				+ '"id_rel_tax_package_periodo" in ( '
+					+ 'select "id_rel_tax_package_periodo" '
+					+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" rel  '
+					+ 'inner join "VGT.PERIODO" periodo  '
+					+ 'on rel."fk_periodo.id_periodo" = periodo."id_periodo"  '
+					+ 'where  '
+					+ 'rel."fk_tax_package.id_tax_package" = ? '
+					+ 'and ( '
+						+ 'periodo."numero_ordem" = 5  '
+						+ 'or "id_rel_tax_package_periodo" = ( '
+							+ 'select MAX("id_rel_tax_package_periodo") '
+							+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" '
+							+ 'inner join "VGT.PERIODO" periodo  '
+							+ 'on "fk_periodo.id_periodo" = "id_periodo"  '
+							+ 'where '
+								+ '"fk_tax_package.id_tax_package" = ? '
+								+ 'and "numero_ordem" = 6 '
+								+ 'and "ind_ativo" = true '
+						+ ') '
+					+ ') '
+				+ ')', 
+				aParam = [idMoeda, oPeriodo["fk_tax_package.id_tax_package"], oPeriodo["fk_tax_package.id_tax_package"]];
+				
+			db.executeStatementSync(sQuery, aParam);
+			break;
+	}
 }
 
 function atualizarStatus (sIdRelTaxPackagePeriodo) {
