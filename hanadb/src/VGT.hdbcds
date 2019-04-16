@@ -171,9 +171,9 @@ context VGT {
 
     /*@@layout{"layoutInfo":{"x":1031,"y":1498.5}}*/
     entity TAX {
-        key id_tax      			   : Integer not null;
-            tax         			   : String(100);
-            fk_category				   : association[*, 0..1] to VGT.TAX_CATEGORY { id_tax_category };
+        key id_tax                     : Integer not null;
+            tax                        : String(100);
+            fk_category                : association[*, 0..1] to VGT.TAX_CATEGORY { id_tax_category };
             ind_exportavel_tax_package : Boolean;
     };
 
@@ -305,12 +305,12 @@ context VGT {
     /*@@layout{"layoutInfo":{"x":-1297,"y":967.5}}*/
     entity REL_TAX_PACKAGE_PERIODO {
         key id_rel_tax_package_periodo : Integer64;
-        key fk_tax_package             : association[0..1] to VGT.TAX_PACKAGE { id_tax_package };
-        key fk_periodo                 : association[0..1] to VGT.PERIODO { id_periodo };
+        key fk_tax_package             : association[0..1]    to VGT.TAX_PACKAGE { id_tax_package };
+        key fk_periodo                 : association[0..1]    to VGT.PERIODO { id_periodo };
             ind_ativo                  : Boolean;
             status_envio               : Integer;
             data_envio                 : LocalDate;
-            fk_dominio_moeda_rel	   : association[*, 0..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+            fk_dominio_moeda_rel       : association[*, 0..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
     };
 
     /*@@layout{"layoutInfo":{"x":-2018,"y":1123.5}}*/
@@ -691,5 +691,24 @@ context VGT {
             fk_usuario         : association[*, 0..1] to VGT.USUARIO;
             ind_isIFrame       : Boolean;
             descricao          : String(1000);
+    };
+
+    /*@@layout{"layoutInfo":{"x":1821,"y":347.5}}*/
+    entity DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS {
+        key id_dominio_requisicao_modelo_obrigacao_status : Integer;
+            status_requisicao_obrigacao                   : String(20);
+    };
+
+    /*@@layout{"layoutInfo":{"x":1395,"y":362.5}}*/
+    entity REQUISICAO_MODELO_OBRIGACAO {
+        key id_requisicao_modelo_obrigacao                : Integer;
+            data_requisicao                               : LocalDate;
+            justificativa                                 : String(4000);
+            resposta                                      : String(4000);
+            data_resposta                                 : LocalDate;
+            fk_usuario                                    : association[1, 0..1] to VGT.USUARIO { id_usuario };
+            fk_empresa                                    : association[1, 0..1] to VGT.EMPRESA { id_empresa };
+            fk_modelo_obrigacao                           : association[1, 0..1] to VGT.MODELO_OBRIGACAO { id_modelo };
+            fk_dominio_requisicao_modelo_obrigacao_status : association[1, 0..1] to VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS { id_dominio_requisicao_modelo_obrigacao_status };
     };
 };
