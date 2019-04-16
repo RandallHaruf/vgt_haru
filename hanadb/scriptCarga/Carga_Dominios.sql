@@ -12427,3 +12427,10 @@ upsert "VGT.DOMINIO_MES"("id_dominio_mes","nome_mes","mes") values(9, 'Setembro'
 upsert "VGT.DOMINIO_MES"("id_dominio_mes","nome_mes","mes") values(10, 'Outubro', 10) where "id_dominio_mes" = 10; 
 upsert "VGT.DOMINIO_MES"("id_dominio_mes","nome_mes","mes") values(11, 'Novembro', 11) where "id_dominio_mes" = 11; 
 upsert "VGT.DOMINIO_MES"("id_dominio_mes","nome_mes","mes") values(12, 'Dezembro', 12) where "id_dominio_mes" = 12;
+
+
+-- VGT.REQUISICAO_MODELO_OBRIGACAO_STATUS
+
+upsert "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS"("id_dominio_requisicao_modelo_obrigacao_status","status_requisicao_obrigacao") values(1, 'Pending')
+upsert "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS"("id_dominio_requisicao_modelo_obrigacao_status","status_requisicao_obrigacao") values(2, 'Approved')
+upsert "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS"("id_dominio_requisicao_modelo_obrigacao_status","status_requisicao_obrigacao") values(3, 'Not Approved')
