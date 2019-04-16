@@ -65,9 +65,9 @@
 						type="Navigation"
 						press="onAbrirObjeto">
 						<cells>
-							<ObjectIdentifier text="{category}"/>
-							<ObjectIdentifier text="{tax}"/>
-							<ObjectIdentifier text="{name_of_tax}"/>
+							<ObjectIdentifier text="{category}" class="resolveAlignment"/>
+							<ObjectIdentifier text="{tax}" class="resolveAlignment"/>
+							<ObjectIdentifier text="{name_of_tax}" class="resolveAlignment"/>
 							<HBox>
 								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
 								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" />
