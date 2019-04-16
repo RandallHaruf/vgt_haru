@@ -683,11 +683,23 @@ sap.ui.define(
 				var continua = true;
 				var MoedaSelecionada;
 				var aDominioMoedas = this.getModel().getProperty("/DominioMoeda");
+				
+				var nameOfTaxSelecionado;
+				var aDominioNameOfTax;
 				for (var i = 0; i < aPagamentos.length; i++) {
-					delete aPagamentos[i].opcoesNameOfTax;
-
+					//delete aPagamentos[i].opcoesNameOfTax;
+					aDominioNameOfTax= aPagamentos[i]["opcoesNameOfTax"];
 					MoedaSelecionada = aPagamentos[i]["AcroNome"];
-
+					
+					nameOfTaxSelecionado = aPagamentos[i]["name_of_tax"];
+					
+					var encontradaName = aDominioNameOfTax.find(function (x) {
+						return (x["name_of_tax"] === nameOfTaxSelecionado);
+					});
+					if (encontradaName) {
+						aPagamentos[i]["fk_name_of_tax.id_name_of_tax"] = encontradaName["id_name_of_tax"];
+					}
+					
 					var encontrada = aDominioMoedas.find(function (x) {
 						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
 						//return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
