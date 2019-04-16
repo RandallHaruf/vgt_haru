@@ -37,7 +37,7 @@ sap.ui.define(
 							//sap.m.MessageToast.show("Excluir Obrigação: " + nome);
 
 							//jQuery.ajax(Constants.urlBackend + "ObrigacaoAcessoria/" + idExcluir, {
-							jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + idExcluir, {
+							/*jQuery.ajax(Constants.urlBackend + "ModeloObrigacao/" + idExcluir, {
 								type: "DELETE",
 								xhrFields: {
 									withCredentials: true
@@ -46,7 +46,22 @@ sap.ui.define(
 								success: function (response) {
 									that._carregarObjetos();
 								}
-							});
+							});*/
+							NodeAPI.pExcluirRegistro("ModeloObrigacao", idExcluir)
+								.then(function (res) {
+									console.log(res);
+									that._carregarObjetos();
+								})
+								.catch(function (err) {
+									console.log(err);
+									/*if (err.responseJSON) {
+										alert((err.responseJSON.error.code + ' - ' + err.responseJSON.error.message);
+									}
+									else {
+										alert(err.message);
+									}*/
+									that.showError(err);
+								});								
 
 						}
 					}

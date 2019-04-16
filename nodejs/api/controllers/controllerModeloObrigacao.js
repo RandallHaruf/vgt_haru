@@ -113,7 +113,7 @@ module.exports = {
 			}
 		});
 	},
-
+/*
 	excluirRegistro: function (req, res) {
 		model.excluir([{
 			coluna: model.colunas.id,
@@ -125,7 +125,18 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});
-	},
+	},*/
+	excluirRegistro: function (req, res, next) {
+	model.delete(req.params.idRegistro)
+		.then((result) => {
+			res.status(200).json({
+				result: result
+			});
+		})
+		.catch(function (err) {
+			next(err);
+		});
+	},	
 
 	deepQuery: function (req, res) {
 
