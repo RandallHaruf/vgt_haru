@@ -2,6 +2,8 @@
 
 const utils = require('./utils');
 const model = require('../models/modelRequisicaoModeloObrigacao');
+const modelRelModeloEmpresa = require('../models/modelRelModeloEmpresa');
+const modelModeloObrigacao = require('../models/modelModeloObrigacao');
 
 module.exports = {
 
@@ -29,19 +31,32 @@ module.exports = {
 	criarRegistro: (req, res, next) => {
 		try {
 			let aParam = utils.getAvailableFields(model, req.body);
-
+			let aParamModeloObrigacao = utils.getAvailableFields(modelModeloObrigacao, req.body);
+			
 			aParam = aParam.concat(utils.getIdentityFields(model));
+			aParamModeloObrigacao = aParamModeloObrigacao.concat(utils.getIdentityFields(modelModeloObrigacao));
+			
 			//Criar o modeloObrigacao
-			model.inserir(aParam, (err, result) => {
-				if (err) {
-					next(err);
-				} else {
-					
-					res.status(200).json({
-						result: result[0]
-					});
-				}
-			});
+			if(aParamModeloObrigacao.length && aParam.length){
+				modelModeloObrigacao.inserir(aParamModeloObrigacao, (err, result) => {
+					if (err) {
+						next(err);
+					} else {
+						model.inserir(aParam, (err2, result2) => {
+							if (err2) {
+								next(err2);
+							} else {
+								res.status(200).json({
+									result: result2[0]
+								});
+							}
+						});		
+					}
+				});				
+			}else{
+				next(new Error('Parametros obrigatorios não foram enviados'))
+			}
+
 		} catch (e) {
 			console.log(e);
 			let msg = 'Erro inesperado no método "controllerRequisicaoModeloObrigacao/criarRegistro": ' + e.message;
@@ -88,10 +103,47 @@ module.exports = {
 					next(err);
 				} else {
 					if (result) {
-						//Aqui temos que criar a relacao modelo empresa com a empresa e o id do modelo obrigacao que estão presentes na requsicao que foi aceita além de colocar o status da modelo obrigacao como aceito para aparecer nas listagens da tela de empresa
-						res.status(200).json({
-							result: result
-						});
+						if(req.body[model.colunas.fkDominioRequisicaoModeloObrigacaoStatus.nome]==2){
+							//Aqui temos que criar a relacao modelo empresa com a empresa e o id do modelo obrigacao que estão presentes na requsicao que foi aceita além de colocar o status da modelo obrigacao como aceito para aparecer nas listagens da tela de empresa
+							let fkModeloObrigacao = req.body[model.colunas.fkModeloObrigacao.nome];
+							let fkEmpresa = req.body[model.colunas.fkEmpresa.nome];
+							
+							modelModeloObrigacao.atualizar({
+								coluna: modelModeloObrigacao.colunas.id,
+								valor: fkModeloObrigacao
+							},[{
+								coluna: modelModeloObrigacao.fkIdDominioObrigacaoStatus,
+								valor: 2
+							}], (err2, result2) => {
+								if (err2) {
+									next(err2);
+								} else {
+									modelRelModeloEmpresa.inserir([{
+										coluna: modelRelModeloEmpresa.colunas.fkIdModeloObrigacao,
+										valor: fkModeloObrigacao
+									},{
+										coluna:modelRelModeloEmpresa.colunas.fkIdEmpresa,
+										valor: fkEmpresa
+									},{
+										coluna:modelRelModeloEmpresa.colunas.indAtivo,
+										valor: true
+									}], (err3, result3) => {
+										if (err3) {
+											next(err3);
+										} else {
+											res.status(200).json({
+												result: result3[0]
+											});
+										}										
+									});	
+								}							
+							});
+						}
+						else{
+							res.status(200).json({
+								result: result
+							});							
+						}
 					} else {
 						const error = new Error('Registro não encontrado');
 						error.status = 404;
@@ -134,28 +186,77 @@ module.exports = {
 		}
 	},
 
-	deepQuery: (req, res, next) => {
-		res.send('TODO: DeepQuery da Entidade RequisicaoModeloObrigacao');
+	deepQuery: function (req, res) {
+		var sStatement = 
+			'select '
+			+'* '
+			+'from '
+			+'"VGT.REQUISICAO_MODELO_OBRIGACAO" tblRequisicaoModeloObrigacao '
+			+'INNER JOIN "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS" tblDominioRequisicaoModeloObrigacaoStatus '
+			+'ON tblDominioRequisicaoModeloObrigacaoStatus."id_dominio_requisicao_modelo_obrigacao_status" = tblRequisicaoModeloObrigacao."fk_dominio_requisicao_modelo_obrigacao_status.id_dominio_requisicao_modelo_obrigacao_status" '
+			+'INNER JOIN "VGT.USUARIO" tblUsuario '
+			+'ON tblUsuario."id_usuario" = tblRequisicaoModeloObrigacao."fk_usuario.id_usuario" '
+			+'INNER JOIN "VGT.EMPRESA" tblEmpresa '
+			+'ON tblEmpresa."id_empresa" = tblRequisicaoModeloObrigacao."fk_empresa.id_empresa" '
+			+'INNER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
+			+'ON tblModeloObrigacao."id_modelo" = tblRequisicaoModeloObrigacao."fk_modelo_obrigacao.id_modelo" ';
+			
+		var oWhere = [];
+		var aParams = [];
 
-		/*let sStatement = 'select * from "DUMMY"';
-
-		try {
-		model.execute({
-		statement: sStatement
-		}, (err, result) => {
-		if (err) {
-		next(err);
-		} else {
-		res.status(200).json({
-		result: result
-		});
+		if (req.params.idStatus) {
+			oWhere.push(' tblRequisicaoModeloObrigacao."fk_dominio_requisicao_modelo_obrigacao_status.id_dominio_requisicao_modelo_obrigacao_status" = ? ');
+			aParams.push(req.params.idStatus);
 		}
+		
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+		
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			stringtemporaria = "";
+			filtro = ' tblEmpresa."id_empresa" = ? ';
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				if(aEmpresas.length == 1){
+					oWhere.push(filtro);
+					aParams.push(aEmpresas[j]);								
+				}	 
+				else{
+					j == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : j == aEmpresas.length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
+					aParams.push(aEmpresas[j]);
+				}				
+			}
+		}	
+	
+
+		if (oWhere.length > 0) {
+			sStatement += "where ";
+
+			for (var i = 0; i < oWhere.length; i++) {
+				if (i !== 0) {
+					sStatement += " and ";
+				}
+				sStatement += oWhere[i];
+			}
+		}
+		
+		sStatement += ' Order By tblEmpresa."nome"';
+
+		model.execute({
+			statement: sStatement,
+			parameters: aParams
+		}, function (err, result) {
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
 		});
-		} catch (e) {
-		console.log(e);
-		let msg = 'Erro inesperado no método "controllerRequisicaoModeloObrigacao/deepQuery": ' + e.message;
-		const error = new Error(msg);
-		next(error);
-		}*/
 	}
 };
+/*
+	deepQuery: (req, res, next) => {
+
+
+	}*/
