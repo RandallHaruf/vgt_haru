@@ -103,22 +103,24 @@ module.exports = {
 					next(err);
 				} else {
 					if (result) {
-						if(req.body[model.colunas.fkDominioRequisicaoModeloObrigacaoStatus.nome]==2){
+						if(req.body["fkDominioRequisicaoModeloObrigacaoStatus"]==2){
 							//Aqui temos que criar a relacao modelo empresa com a empresa e o id do modelo obrigacao que estão presentes na requsicao que foi aceita além de colocar o status da modelo obrigacao como aceito para aparecer nas listagens da tela de empresa
-							let fkModeloObrigacao = req.body[model.colunas.fkModeloObrigacao.nome];
-							let fkEmpresa = req.body[model.colunas.fkEmpresa.nome];
+							let fkModeloObrigacao = req.body["fkModeloObrigacao"];
+							let fkEmpresa = req.body["fkEmpresa"];
 							
 							modelModeloObrigacao.atualizar({
 								coluna: modelModeloObrigacao.colunas.id,
 								valor: fkModeloObrigacao
 							},[{
-								coluna: modelModeloObrigacao.fkIdDominioObrigacaoStatus,
+								coluna: modelModeloObrigacao.colunas.fkIdDominioObrigacaoStatus,
 								valor: 2
 							}], (err2, result2) => {
 								if (err2) {
 									next(err2);
 								} else {
 									modelRelModeloEmpresa.inserir([{
+										coluna:modelRelModeloEmpresa.colunas.id
+									},{
 										coluna: modelRelModeloEmpresa.colunas.fkIdModeloObrigacao,
 										valor: fkModeloObrigacao
 									},{
@@ -189,7 +191,7 @@ module.exports = {
 	deepQuery: function (req, res) {
 		var sStatement = 
 			'select '
-			+'* '
+			+'* ,tblUsuario."nome" AS "nome_usuario"'
 			+'from '
 			+'"VGT.REQUISICAO_MODELO_OBRIGACAO" tblRequisicaoModeloObrigacao '
 			+'INNER JOIN "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS" tblDominioRequisicaoModeloObrigacaoStatus '
@@ -204,9 +206,9 @@ module.exports = {
 		var oWhere = [];
 		var aParams = [];
 
-		if (req.params.idStatus) {
+		if (req.query.idStatus) {
 			oWhere.push(' tblRequisicaoModeloObrigacao."fk_dominio_requisicao_modelo_obrigacao_status.id_dominio_requisicao_modelo_obrigacao_status" = ? ');
-			aParams.push(req.params.idStatus);
+			aParams.push(req.query.idStatus);
 		}
 		
 		const isFull = function () {
@@ -215,8 +217,8 @@ module.exports = {
 		
 		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
-			stringtemporaria = "";
-			filtro = ' tblEmpresa."id_empresa" = ? ';
+			var stringtemporaria = "";
+			var filtro = ' tblEmpresa."id_empresa" = ? ';
 			for(var j = 0; j < req.session.usuario.empresas.length;j++){
 				if(aEmpresas.length == 1){
 					oWhere.push(filtro);
@@ -250,6 +252,17 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				var idUsuario = req.session.usuario.id;
+				for (var i = 0; i < result.length; i++){
+					var oCorrente = result[i];
+					if (oCorrente.id_usuario == idUsuario) {
+						oCorrente.btnSalvarHabilitado = false;
+					}
+					else {
+						oCorrente.btnSalvarHabilitado = true;
+					}
+				}
+				
 				res.send(JSON.stringify(result));
 			}
 		});

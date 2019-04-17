@@ -120,7 +120,7 @@ sap.ui.define(
 				var that = this;
 				that.getModel().setProperty("/objetos", null);
 				//jQuery.ajax(Constants.urlBackend + "DeepQuery/ObrigacaoAcessoria", {
-				jQuery.ajax(Constants.urlBackend + "DeepQuery/ModeloObrigacao", {
+				jQuery.ajax(Constants.urlBackend + "DeepQuery/ModeloObrigacao?&idStatus=2", {
 					type: "GET",
 					xhrFields: {
 						withCredentials: true

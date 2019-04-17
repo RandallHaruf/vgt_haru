@@ -12,7 +12,7 @@
 					<Table
 						id="tabelaObrigacoes"
 						items="{
-							path: '/Obrigacao',
+							path: '/RequisicaoModeloObrigacao',
 							sorter: {
 								path: 'nome',
 								group: false
@@ -45,8 +45,8 @@
 								type="Navigation"
 								press="onDetalharObrigacao">
 								<cells>
-									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoObrigacao} ( #{id_obrigacao})"/>
-									<Text text="-"/>
+									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoObrigacao} ( #{id_requisicao_modelo_obrigacao})"/>
+									<Text text="{data_inicial}"/>
 									<Text text="{observacoes}"/>
 								</cells>
 							</ColumnListItem>

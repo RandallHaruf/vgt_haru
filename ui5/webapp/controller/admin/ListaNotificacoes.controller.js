@@ -63,7 +63,7 @@ sap.ui.define(
 					countTTC = 0,
 					countTAX = 0;
 
-				NodeAPI.listarRegistros("DeepQuery/Obrigacao?&idAprovacao=1", function (response) { // 1 Obrigacao
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1", function (response) { // 1 Obrigacao
 					if (response) {
 
 						for (var i = 0, length = response.length; i < length; i++) {
@@ -73,7 +73,8 @@ sap.ui.define(
 							modelcountObrig: countObrig
 
 						});
-						that.getModel().setProperty("/Obrigacao", response);
+						that.getModel().setProperty("/RequisicaoModeloObrigacao", response);/*
+						that.getModel().setProperty("/Obrigacao", response);*/
 					}
 
 				});
@@ -275,6 +276,30 @@ sap.ui.define(
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
+				
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewComplianceListagemObrigacoesNomeObrigacao}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.nome_obrigacao
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+				
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewEmpresasDataI}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.data_inicial
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+				
+				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewEmpresasDataF}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.data_final
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
 
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewComplianceListagemObrigacoesColunaPrazoEntrega}"
@@ -283,38 +308,46 @@ sap.ui.define(
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
-
+				
 				oFormElement = new sap.ui.layout.form.FormElement({
+					label: "{i18n>viewGeralAnoObrigacao}"
+				}).addField(new sap.m.Text({
+					text: oItemSelecionado.ano_obrigacao
+				}));
+
+				oFormContainer.addFormElement(oFormElement);
+				
+				/*oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewComplianceListagemObrigacoesColunaExtensao}"
 				}).addField(new sap.m.Text({
 					text: oItemSelecionado.extensao
 				}));
 
-				oFormContainer.addFormElement(oFormElement);
+				oFormContainer.addFormElement(oFormElement);*/
 
-				oFormElement = new sap.ui.layout.form.FormElement({
+				/*oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewComplianceListagemObrigacoesColunaAnoFiscal}"
 				}).addField(new sap.m.Text({
 					text: oItemSelecionado.ano_fiscal
 				}));
 
-				oFormContainer.addFormElement(oFormElement);
+				oFormContainer.addFormElement(oFormElement);*/
 
-				oFormElement = new sap.ui.layout.form.FormElement({
+				/*oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewComplianceListagemObrigacoesColunaPais}"
 				}).addField(new sap.m.Text({
 					text: oItemSelecionado.pais
 				}));
 
-				oFormContainer.addFormElement(oFormElement);
+				oFormContainer.addFormElement(oFormElement);*/
 
-				oFormElement = new sap.ui.layout.form.FormElement({
+				/*oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"
 				}).addField(new sap.m.Text({
 					text: oItemSelecionado.descricao
 				}));
 
-				oFormContainer.addFormElement(oFormElement);
+				oFormContainer.addFormElement(oFormElement);*/
 
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>formularioObrigacaoLabelObrigacaoIniciada}"
@@ -333,23 +366,23 @@ sap.ui.define(
 
 				oFormContainer.addFormElement(oFormElement);
 
-				oFormElement = new sap.ui.layout.form.FormElement({
+				/*oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"
 				}).addField(new sap.m.Text({
 					text: oItemSelecionado.suporte
 
 				}));
 
-				oFormContainer.addFormElement(oFormElement);
+				oFormContainer.addFormElement(oFormElement);*/
 
-				oFormElement = new sap.ui.layout.form.FormElement({
+				/*oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>formularioObrigacaoLabelObservacoes}"
 				}).addField(new sap.m.Text({
 					text: oItemSelecionado.observacoes
 
 				}));
 
-				oFormContainer.addFormElement(oFormElement);
+				oFormContainer.addFormElement(oFormElement);*/
 
 				/*var oComboBox = new sap.m.ComboBox("box_default", {
 					items: {
@@ -397,15 +430,19 @@ sap.ui.define(
 					obrigacao: {}
 				}));
 				var dialog = new sap.m.Dialog({
-					title: "{i18n>viewNotificacaolinhaRequisicaoObrigacao} (#" + oItemSelecionado.id_obrigacao + ")",
+					title: "{i18n>viewNotificacaolinhaRequisicaoObrigacao} (#" + oItemSelecionado.id_requisicao_modelo_obrigacao + ")",
 					content: oForm,
 					beginButton: new sap.m.Button({
 						text: "{i18n>viewGeralSalvar}",
 						press: function () {
 							//var objObrig = that.getModel().getProperty("/Obrigacao");
 							//objObrig.id_obrigacao = oItemSelecionado.id_obrigacao;
-							NodeAPI.atualizarRegistro("Obrigacao", oItemSelecionado.id_obrigacao, {
+							NodeAPI.atualizarRegistro("RequisicaoModeloObrigacao", oItemSelecionado.id_requisicao_modelo_obrigacao, {
+								nome_obrigacao: oItemSelecionado.nome_obrigacao,
+								data_inicial: oItemSelecionado.data_inicial,
+								data_final: oItemSelecionado.data_final,
 								prazo_entrega: oItemSelecionado.prazo_entrega,
+								ano_obrigacao: oItemSelecionado.ano_obrigacao,
 								extensao: oItemSelecionado.extensao,
 								obrigacao_inicial: oItemSelecionado.obrigacao_inicial,
 								suporte_contratado: oItemSelecionado.suporte_contratado,
@@ -417,7 +454,10 @@ sap.ui.define(
 								fkEmpresa: oItemSelecionado["fk_empresa.id_empresa"],
 								fkObrigacaoAcessoria: oItemSelecionado["fk_obrigacao_acessoria.id_obrigacao_acessoria"],
 								fkAnoFiscal: oItemSelecionado["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"],
-								fkDominioAprovacaoObrigacao: oSelect.getSelectedKey(),
+								fkDominioObrigacaoAcessoriaTipo: oItemSelecionado["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
+								fkDominioEncerramentoPeriodoStatus: oItemSelecionado["fk_dominio_requisicao_encerramento_periodo_status.id_dominio_requisicao_encerramento_periodo_status"],
+								//fkDominioAprovacaoObrigacao: oSelect.getSelectedKey(),
+								fkDominioRequisicaoModeloObrigacaoStatus: oSelect.getSelectedKey(),
 								motivoReprovacao: oTextArea.getValue()
 							}, function (response) {
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
@@ -426,8 +466,7 @@ sap.ui.define(
 								//that.getRouter().navTo("complianceListagemObrigacoes");
 							});
 						}.bind(this)
-					})/*.setEnabled(oItemSelecionado.btnSalvarHabilitado)*/
-					,
+					}).setEnabled(oItemSelecionado.btnSalvarHabilitado),
 					endButton: new sap.m.Button({
 						text: "{i18n>viewGeralSair}",
 						press: function () {
