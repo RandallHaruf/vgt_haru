@@ -1,4 +1,4 @@
-<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified"
 	xmlns:f="sap.f" xmlns="sap.m" class="viewComplianceListagemObrigacoes">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
@@ -34,6 +34,58 @@
 					<IconTabFilter icon="sap-icon://customer-history" iconColor="Critical" count="{/Contadores/modelEntregueForaPrazo}"
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}" key="7"/>
 				</items>
+				<content>
+					<VBox class="semContentPadding">
+						<PlanningCalendar
+							id="PC1"
+							class="myCalendar"
+							visible="{/isIFrame}"
+							startDate="{path: '/startDate'}"
+							showRowHeaders="false"
+							rows="{path: '/people'}"
+							appointmentsVisualization="Filled"
+							appointmentSelect="handleAppointmentSelect"
+							showEmptyIntervalHeaders="false"
+							stickyHeader="true"
+							showWeekNumbers="true"
+							appointmentsReducedHeight="false">
+							<toolbarContent>
+								<Title text="Calendario" titleStyle="H4"/>
+							</toolbarContent>
+							<rows>
+								<PlanningCalendarRow
+									icon="{pic}"
+									title="{name}"
+									text="{role}"
+									appointments="{path : 'appointments', templateShareable: 'true'}"
+									intervalHeaders="{path: 'headers', templateShareable: 'true'}">
+									<appointments>
+										<unified:CalendarAppointment
+											startDate="{start}"
+											endDate="{end}"
+											icon="{pic}"
+											title="{title}"
+											tooltip="{title}"
+											text="{info}"
+											color="{color}"
+											type="{type}"
+											tentative="{tentative}">
+										</unified:CalendarAppointment>
+									</appointments>
+									<intervalHeaders>
+										<unified:CalendarAppointment
+											startDate="{start}"
+											endDate="{end}"
+											icon="{pic}"
+											title="{title}"
+											type="{type}">
+										</unified:CalendarAppointment>
+									</intervalHeaders>
+								</PlanningCalendarRow>
+							</rows>
+						</PlanningCalendar>
+					</VBox>	
+				</content>				
 				<content>
 					<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
 						growingScrollToLoad="true" updateFinished="onTerminouAtualizar">

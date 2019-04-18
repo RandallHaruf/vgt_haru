@@ -6,9 +6,10 @@ sap.ui.define(
 		"sap/m/MessageToast",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils",
-		"ui5ns/ui5/lib/Arquivo"
+		"ui5ns/ui5/lib/Arquivo",
+		"sap/m/MessageBox"
 	],
-	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo) {
+	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo,MessageBox) {
 		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemObrigacoes", {
 
 			onInit: function (oEvent) {
@@ -22,6 +23,8 @@ sap.ui.define(
 					ValorFiltroNomeObrigacao: [],
 					ValorFiltroNomeArquivo: ""
 				}));
+				var hoje = new Date();
+				this.getModel().setProperty("/startDate",new Date(JSON.stringify(hoje.getFullYear()),"0","1"))
 				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 			},
 
@@ -31,8 +34,10 @@ sap.ui.define(
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this._parametroInception = "full=true";
+					that.getModel().setProperty("/isIFrame",true);
 				} else {
 					this._parametroInception = "full=false";
+					that.getModel().setProperty("/isIFrame",false);
 				}
 				
 				/*NodeAPI.pListarRegistros("DominioObrigacaoAcessoriaTipo")
@@ -378,7 +383,33 @@ sap.ui.define(
 			onNovaObrigacao: function (oEvent) {
 				this.getRouter().navTo("complianceFormularioNovaObrigacao");
 			},
-
+			
+			//CODIGO DO CALENDARIO START--------------------
+			//----------------------------------------------
+			handleAppointmentSelect: function (oEvent) {
+				var oAppointment = oEvent.getParameter("appointment"),
+					sSelected;
+				if (oAppointment) {
+					/*sSelected = oAppointment.getSelected() ? "selected" : "deselected";
+					MessageBox.show("'" + oAppointment.getTitle() + "' " + sSelected + ". \n Selected appointments: " + this.byId("PC1").getSelectedAppointments().length);*/
+					var split = oEvent.mParameters.appointment.sId.split("-");
+					var oParametros = {
+						Obrigacao: oEvent.getSource().mBindingInfos.rows.binding.oList[0].appointments[split[split.length-1]].codigo,
+						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					};		
+					this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {
+						parametros: JSON.stringify(oParametros)
+	
+					});					
+				} else {
+					var aAppointments = oEvent.getParameter("appointments");
+					var sValue = aAppointments.length + " Appointments selected";
+					MessageBox.show(sValue);
+				}
+			},
+			//----------------------------------------------
+			//CODIGO DO CALENDARIO END--------------------
+			
 			onDetalharObrigacao: function (oEvent) {
 				this.setBusy(this.byId("tabelaObrigacoes"), true);
 				var oParametros = {
@@ -507,7 +538,6 @@ sap.ui.define(
 									].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) : null;
 							}
 							that.getModel().setProperty("/Obrigacao", response);
-
 						}
 					});
 			},
@@ -589,7 +619,54 @@ sap.ui.define(
 								response[i]["descricao"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"], that);
 							}
 							that.getModel().setProperty("/Obrigacao", response);
-
+							//CODIGO DO CALENDARIO START--------------------
+							//----------------------------------------------
+							var aRegistro = that.getModel().getProperty("/Obrigacao");
+							var people = [];
+							var appointments = [];
+							var headers = [];
+							var cor;
+							for (var i = 0, length = aRegistro.length; i < length; i++) {
+								cor = "";
+								switch(aRegistro[i]["status_obrigacao_calculado"]){
+										case 1:
+											cor = "rgb(94, 105, 110)";
+											break;										
+										case 4:
+											cor = "rgb(66, 124, 172)";
+											break;
+										case 5:
+											cor = "rgb(187, 0, 0)";
+											break;	
+										case 6:
+											cor = "rgb(43, 124, 43)";
+											break;											
+										case 7:
+											cor = "rgb(231, 140, 7)";
+											break;											
+								}
+								if(cor){
+									appointments.push({
+										codigo:aRegistro[i],
+										start:Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]),
+										end:new Date(Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]).setHours(23,59,59)),
+										title:aRegistro[i]["nome"] + "\n" + aRegistro[i]["nome_obrigacao"],
+										type: "Type02",
+										color: cor,
+										tentative: false										
+									});										
+								}
+	
+							}
+							people.push({
+								pic: "sap-icon://add",
+								name: "John Miller",
+								role: "team member",
+								appointments: appointments
+							});
+							that.getModel().setProperty("/people", people);
+							//----------------------------------------------
+							//CODIGO DO CALENDARIO END -----------------------
 						}
 					});
 			},

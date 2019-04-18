@@ -152,6 +152,19 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 .myApp .viewTTCResumoTrimestre .tabelaPeriodoMinHeight {
 	min-height: 293px;
 }
+.myCalendar .sapUiCalendarApp {
+    height:3rem;
+    margin:0px;
+    padding:0px;
+}
+
+.myCalendar .sapUiCalendarAppTitle {
+    font-size:.5rem;
+    text-align:left;
+    margin:0rem;
+    padding-top: 0rem;
+    line-height: 2;
+}
 
 .myCustomButton {
 	border-bottom: 0px;
