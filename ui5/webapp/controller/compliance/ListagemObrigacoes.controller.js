@@ -376,7 +376,14 @@ sap.ui.define(
 			},
 
 			onNovaObrigacao: function (oEvent) {
-				this.getRouter().navTo("complianceFormularioNovaObrigacao");
+				var oParametros = {
+					empresa: this.getModel().getProperty("/Empresa"),
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+				};
+				
+				this.getRouter().navTo("complianceFormularioNovaObrigacao", {
+					parametros: JSON.stringify(oParametros)
+				});
 			},
 
 			onDetalharObrigacao: function (oEvent) {

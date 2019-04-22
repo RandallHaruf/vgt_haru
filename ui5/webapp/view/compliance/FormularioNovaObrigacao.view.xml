@@ -1,20 +1,13 @@
-<mvc:View 
-	controllerName="ui5ns.ui5.controller.compliance.FormularioNovaObrigacao" 
-	xmlns:mvc="sap.ui.core.mvc" 
-	xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" 
-	xmlns:f="sap.ui.layout.form" 
-	xmlns:f2="sap.f"
-	xmlns="sap.m" 
-	class="viewComplianceFormularioNovaObrigacao">
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.FormularioNovaObrigacao" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns="sap.m" class="viewComplianceFormularioNovaObrigacao">
 	<f2:DynamicPage title="{i18n>viewComplianceFormularioNovaObrigacaoTituloPagina}" showFooter="true">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" enabled="false" />
-						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
-						<Link text="{i18n>ViewFormularioNovaObrigacao}" enabled="false" />
+						<Link text="Home" press="navToHome"/>
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="onCancelar" />
+						<Link text="{i18n>ViewFormularioNovaObrigacao}" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
@@ -24,9 +17,7 @@
 		</f2:title>
 		<f2:content>
 			<VBox class="sapUiSmallMargin">
-				<f:Form 
-					id="formularioObrigacao" 
-					editable="true">
+				<f:Form id="formularioObrigacao" editable="true">
 					<f:title>
 						<core:Title text="{i18n>ViewFormularioNovaObrigacao}"/>
 					</f:title>
@@ -39,40 +30,48 @@
 							<f:formElements>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
 									<f:fields>
-										<Select id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}">
-											<core:Item text="{nome}" key="{id_empresa}" />
-										</Select>
+										<ComboBox id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}" required="true">
+											<core:Item text="{nome}" key="{id_empresa}"/>
+										</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
-										<ComboBox items="{/DominioPais}" selectedKey="{/Obrigacao/fkDominioPais}">
-											<core:Item text="{pais}" key="{id_dominio_pais}" />
+										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true">
+											<core:Item text="{labelPais}" key="{id}"/>
 										</ComboBox>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
+								<f:FormElement>
+									<f:label>
+										<Label text="{i18n>viewGeralNome}" labelFor="inputNome"/>
+									</f:label>
+									<f:fields>
+										<Input type="Text" id="inputNome" value="{/Obrigacao/nome}" required="true"/>
+									</f:fields>
+								</f:FormElement>
+								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
 									<f:fields>
 										<Select items="{/ObrigacaoAcessoria?tipo=2}" selectedKey="{/Obrigacao/fkObrigacaoAcessoria}">
 											<core:Item text="{nome}" key="{id_obrigacao_acessoria}" />
 										</Select>
 									</f:fields>
-								</f:FormElement>
+								</f:FormElement> 
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
 									<f:fields>
 										<Select items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
-											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}" />
+											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}"/>
 										</Select>
 									</f:fields>
-								</f:FormElement>
+								</f:FormElement> -->
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-										<Select items="{/DominioAnoFiscal}" selectedKey="{/Obrigacao/fkAnoFiscal}">
-											<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
-										</Select>
+										<ComboBox id="selectAnoFiscal" items="{/DominioAnoFiscal}" selectedKey="{/Obrigacao/fkAnoFiscal}" required="true">
+											<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}"/>
+										</ComboBox>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
+								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
 											value="{/Obrigacao/prazo_entrega}"
@@ -91,33 +90,101 @@
 											placeholder="{i18n>placeholderDatepicker}"
 											displayFormat="{i18n>displayFormatFull}"/>
 									</f:fields>
-								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+								</f:FormElement> -->
+								<f:FormElement>
+									<f:label>
+										<Label text="{i18n>ViewGeralDataInício} yyyy" labelFor="dataInicio"/>
+									</f:label>
 									<f:fields>
-										<CheckBox id="checkObrigacaoIniciada" selected="{/Obrigacao/obrigacao_inicial}" />
+										<DatePicker 
+										    id="dataInicio" 
+										    displayFormat="yyyy" 
+										    valueFormat="yyyy-MM-dd" 
+										    value="{/Obrigacao/dataInicio}" 
+										    required="true"
+											change="onValidarData"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement>
+									<f:label>
+										<Label text="{i18n>ViewGeralDataFim} yyyy" labelFor="dataFim"/>
+									</f:label>
+									<f:fields>
+										<DatePicker 
+										    id="dataFim" 
+										    displayFormat="yyyy" 
+										    valueFormat="yyyy-MM-dd" 
+										    value="{/Obrigacao/dataFim}" 
+										    required="true" 
+										    change="onValidarData"/>
+									</f:fields>
+								</f:FormElement>
+								
+								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelPeriodicidade}" class="sapMLabelRequired" />
+										</f:label>
+										<f:fields>
+											<Select id="selectPeriodicidade" items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
+											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}"/>
+										</Select>
+										</f:fields>
+									</f:FormElement>
+								
+								<f:FormElement>
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelPrazoEntrega} {/displayFormatSemAno}" labelFor="dataFim"/>
+										</f:label>
+										<f:fields>
+											<DatePicker 
+											id="selectPrazoEntrega" 
+											displayFormat="dd/MM" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/Obrigacao/selectPrazoEntrega}" 
+											required="true" 
+											change="onValidarData"
+											/>
+										</f:fields>
+									</f:FormElement>
+								
+								<f:FormElement>
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}" labelFor="dataFim"/>
+										</f:label>
+										<f:fields>
+											<Input 	
+											id="anoObrigacao"
+											type="Text"
+											value="{/Obrigacao/anoObrigacao}"
+											></Input>
+										</f:fields>
+									</f:FormElement>
+								
+								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
+									<f:fields>
+										<CheckBox id="checkObrigacaoIniciada" selected="{/Obrigacao/obrigacao_inicial}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewFormularioNovaObrigacaoSC}">
 									<f:fields>
-										<CheckBox id="checkSuporteContratado" selected="{/Obrigacao/suporte_contratado}" />
+										<CheckBox id="checkSuporteContratado" selected="{/Obrigacao/suporte_contratado}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
-										<TextArea 
-											value="{/Obrigacao/suporte}"
-											id="textAreaSuporte"
-											rows="5" 
-											enabled="{= ${/Obrigacao/suporte_contratado} ? true : false}"/>
+										<TextArea value="{/Obrigacao/suporte}" id="textAreaSuporte" rows="5" enabled="{= ${/Obrigacao/suporte_contratado} ? true : false}"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelObservacoes}">
 									<f:fields>
-										<TextArea 
-											value="{/Obrigacao/observacoes}"
-											id="textAreaObservacoes" 
-											rows="5"/>
+										<TextArea value="{/Obrigacao/observacoes}" id="textAreaObservacoes" rows="5"/>
 									</f:fields>
+								</f:FormElement> -->
+								
+								<f:FormElement label="{i18n>viewGeralJustificativa}">
+										<f:fields>
+											<TextArea value="{/Obrigacao/textAreaJustificativa}" id="textAreaJustificativa" rows="5" required="true" />
+										</f:fields>
 								</f:FormElement>
 							</f:formElements>
 						</f:FormContainer>
@@ -128,14 +195,8 @@
 		<f2:footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button 
-					text="{i18n>formularioObrigacaoBotaoSalvar}" 
-					type="Accept" 
-					press="onSalvar"/>
-				<Button 
-					text="{i18n>formularioObrigacaoBotaoCancelar}" 
-					type="Reject" 
-					press="onCancelar"/>
+				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar"/>
+				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar"/>
 			</Toolbar>
 		</f2:footer>
 	</f2:DynamicPage>

@@ -64,12 +64,12 @@
 								</Select>
 								<ToolbarSpacer/>
 								<Button text="{i18n>viewComplianceListagemObrigacoesProcurarArquivo}" type="Emphasized" icon="sap-icon://browse-folder" press="onProcurarArquivos" />
-								<!--<Button 
+								<Button 
 									id="botaoNovaObrigacao" 
 									icon="sap-icon://add" 
 									press="onNovaObrigacao" 
 									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}"
-									type="Emphasized"/>-->
+									type="Emphasized"/>
 							</Toolbar>
 						</headerToolbar>
 						<columns>
