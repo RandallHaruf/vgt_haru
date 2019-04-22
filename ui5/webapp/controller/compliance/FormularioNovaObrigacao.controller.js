@@ -175,6 +175,7 @@ sap.ui.define(
 						prazoEntrega: this.getModel().getProperty("/Obrigacao/selectPrazoEntrega"),
 						fkIdPais: this.getModel().getProperty("/Obrigacao/fkDominioPais"),
 						fkIdDominioPeriodicidade: this.getModel().getProperty("/Obrigacao/fkDominioPeriocidadeObrigacao"),
+						fkIdDominioObrigacaoAcessoriaTipo: 2,
 						anoObrigacao: this.getModel().getProperty("/Obrigacao/anoObrigacao")
 					})
 					.then((res) => {
