@@ -38,7 +38,7 @@ module.exports = {
 			
 			//Criar o modeloObrigacao
 			if(aParamModeloObrigacao.length && aParam.length){
-				modelModeloObrigacao.inserir(aParamModeloObrigacao, (err, result) => {
+				/*modelModeloObrigacao.inserir(aParamModeloObrigacao, (err, result) => {
 					if (err) {
 						next(err);
 					} else {
@@ -52,7 +52,16 @@ module.exports = {
 							}
 						});		
 					}
-				});				
+				});	*/	
+				model.inserir(aParam, (err2, result2) => {
+					if (err2) {
+						next(err2);
+					} else {
+						res.status(200).json({
+							result: result2[0]
+						});
+					}
+				});					
 			}else{
 				next(new Error('Parametros obrigatorios não foram enviados'))
 			}
