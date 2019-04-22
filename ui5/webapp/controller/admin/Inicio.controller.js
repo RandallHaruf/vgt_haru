@@ -97,7 +97,7 @@ sap.ui.define(
 				var countTTC = 0;
 				var countTAX = 0;
 
-				NodeAPI.listarRegistros("DeepQuery/Obrigacao?idAprovacao=1", function (response) { // 1 Obrigacao
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1", function (response) { // 1 Obrigacao
 					if (response) {
 
 						for (var i = 0, length = response.length; i < length; i++) {

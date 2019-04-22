@@ -1,4 +1,4 @@
-<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified"
 	xmlns:f="sap.f" xmlns="sap.m" class="viewComplianceListagemObrigacoes">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
@@ -13,7 +13,7 @@
 					<Title text="{i18n>viewComplianceListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:navigationActions>
-					<!--<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />-->
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 			</f:DynamicPageTitle>
@@ -35,13 +35,65 @@
 						text="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}" tooltip="{i18n>viewComplianceListagemObrigacoesTextoFiltro6}" key="7"/>
 				</items>
 				<content>
+					<VBox class="semContentPadding">
+						<PlanningCalendar
+							id="PC1"
+							class="myCalendar"
+							visible="{/isIFrame}"
+							startDate="{path: '/startDate'}"
+							showRowHeaders="false"
+							rows="{path: '/people'}"
+							appointmentsVisualization="Filled"
+							appointmentSelect="handleAppointmentSelect"
+							showEmptyIntervalHeaders="false"
+							stickyHeader="true"
+							showWeekNumbers="true"
+							appointmentsReducedHeight="false">
+							<toolbarContent>
+								<Title text="Calendario" titleStyle="H4"/>
+							</toolbarContent>
+							<rows>
+								<PlanningCalendarRow
+									icon="{pic}"
+									title="{name}"
+									text="{role}"
+									appointments="{path : 'appointments', templateShareable: 'true'}"
+									intervalHeaders="{path: 'headers', templateShareable: 'true'}">
+									<appointments>
+										<unified:CalendarAppointment
+											startDate="{start}"
+											endDate="{end}"
+											icon="{pic}"
+											title="{title}"
+											tooltip="{title}"
+											text="{info}"
+											color="{color}"
+											type="{type}"
+											tentative="{tentative}">
+										</unified:CalendarAppointment>
+									</appointments>
+									<intervalHeaders>
+										<unified:CalendarAppointment
+											startDate="{start}"
+											endDate="{end}"
+											icon="{pic}"
+											title="{title}"
+											type="{type}">
+										</unified:CalendarAppointment>
+									</intervalHeaders>
+								</PlanningCalendarRow>
+							</rows>
+						</PlanningCalendar>
+					</VBox>	
+				</content>				
+				<content>
 					<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
 						growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 						<headerToolbar>
 							<Toolbar>
-								<!--Title 
+								<Title 
 									id="cabecalhoTabelaObrigacoes" 
-									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
+									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}" />
 								<Label text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"></Label>
 								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}" id="selectEmpresa" items="{/Empresa}"
 									selectedKey="{/IdEmpresaSelecionado}" change="onTrocarEmpresa">
@@ -73,6 +125,9 @@
 							</Toolbar>
 						</headerToolbar>
 						<columns>
+							<Column hAlign="Center">	
+
+							</Column>
 							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 							</Column>
@@ -89,10 +144,10 @@
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPais}"/>
 							</Column>
 							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}"/>
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaPeriodicidade}" textAlign="Center"/>
 							</Column>
 							<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
-								<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}"/>
+								<Text text="{i18n>viewComplianceListagemObrigacoesColunaSuporteContratado}" textAlign="Center"/>
 							</Column>
 							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaStatus}"/>
@@ -101,6 +156,9 @@
 						<items>
 							<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 								<cells>
+									<Text>
+										
+									</Text>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
 									<Text
 										text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}"/>

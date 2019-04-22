@@ -190,13 +190,24 @@ module.exports = {
 		}
 		if (req.query.idStatus) {
 			oWhere.push(' tblDominioObrigacaoStatus."id_dominio_obrigacao_status" = ? ');
-			aParams.push(req.query.idRegistro);
+			aParams.push(req.query.idStatus);
 		}
 		if (req.query.idModeloObrigacao) {
 			oWhere.push('tblModeloObrigacao."id_modelo" = ? ');
 			aParams.push(req.query.idModeloObrigacao);
 		}
-
+		if (req.param.idRegistro) {
+			oWhere.push(' tblPais."id_pais" = ? ');
+			aParams.push(req.param.idRegistro);
+		}
+		if (req.param.idStatus) {
+			oWhere.push(' tblDominioObrigacaoStatus."id_dominio_obrigacao_status" = ? ');
+			aParams.push(req.param.idStatus);
+		}
+		if (req.param.idModeloObrigacao) {
+			oWhere.push('tblModeloObrigacao."id_modelo" = ? ');
+			aParams.push(req.param.idModeloObrigacao);
+		}
 		if (oWhere.length > 0) {
 			sStatement += "where ";
 
