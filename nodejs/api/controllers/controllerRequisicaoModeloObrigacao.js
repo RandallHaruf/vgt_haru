@@ -31,13 +31,21 @@ module.exports = {
 	criarRegistro: (req, res, next) => {
 		try {
 			let aParam = utils.getAvailableFields(model, req.body);
-			let aParamModeloObrigacao = utils.getAvailableFields(modelModeloObrigacao, req.body);
+			//let aParamModeloObrigacao = utils.getAvailableFields(modelModeloObrigacao, req.body);
 			
 			aParam = aParam.concat(utils.getIdentityFields(model));
-			aParamModeloObrigacao = aParamModeloObrigacao.concat(utils.getIdentityFields(modelModeloObrigacao));
+			//aParamModeloObrigacao = aParamModeloObrigacao.concat(utils.getIdentityFields(modelModeloObrigacao));
+			console.log(req.body.usarUsuarioSessao);
+			console.log(req.session.usuario.id);
+			if (req.body.usarUsuarioSessao) {
+				aParam.push({
+					coluna: model.colunas.fkUsuario,
+					valor: req.session.usuario.id
+				});
+			}
 			
 			//Criar o modeloObrigacao
-			if(aParamModeloObrigacao.length && aParam.length){
+			if(/*aParamModeloObrigacao.length &&*/ aParam.length){
 				/*modelModeloObrigacao.inserir(aParamModeloObrigacao, (err, result) => {
 					if (err) {
 						next(err);
