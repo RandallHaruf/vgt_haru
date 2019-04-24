@@ -12,9 +12,9 @@
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" enabled="false" />
-						<Link text="{i18n>ViewFormularioListagemObrigacoes}" enabled="false" />
-						<Link text="{i18n>viewFormularioBepsNovaObrigacao}" enabled="false" />
+						<Link text="Home" press="navToHome" />
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="onCancelar" />
+						<Link text="{i18n>ViewFormularioNovaObrigacao}" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
 				<f2:heading>
@@ -39,22 +39,27 @@
 							<f:formElements>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
 									<f:fields>
-										<Select id="selectEmpresas">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Empresa A" key="1"/>
-												<core:Item text="Empresa B" key="2"/>
-												<core:Item text="Empresa C" key="2"/>
-											</items>
-										</Select>
+										<ComboBox id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}" required="true">
+											<core:Item text="{nome}" key="{id_empresa}"/>
+										</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
-										<Input type="Text" value="{nomePais}" />
+										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true">
+											<core:Item text="{labelPais}" key="{id}"/>
+										</ComboBox>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
+								<f:FormElement>
+									<f:label>
+										<Label text="{i18n>viewGeralNome}" labelFor="inputNome"/>
+									</f:label>
+									<f:fields>
+										<Input type="Text" id="inputNome" value="{/Obrigacao/nome}" required="true"/>
+									</f:fields>
+								</f:FormElement>
+								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelTipo}">
 									<f:fields>
 										<Select id="selectTipo">
 											<items>
@@ -65,39 +70,66 @@
 											</items>
 										</Select>
 									</f:fields>
+								</f:FormElement> 
+								
+								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}" visible="false">
+									<f:fields>
+										<ComboBox id="selectAnoFiscal" items="{/DominioAnoFiscal}" selectedKey="{/Obrigacao/fkAnoFiscal}" required="true">
+											<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}"/>
+										</ComboBox>
+									</f:fields>
+								</f:FormElement> -->
+								
+								<f:FormElement>
+									<f:label>
+										<Label text="{i18n>ViewGeralDataInício} yyyy" labelFor="dataInicio"/>
+									</f:label>
+									<f:fields>
+										<DatePicker 
+										    id="dataInicio" 
+										    displayFormat="yyyy" 
+										    valueFormat="yyyy-MM-dd" 
+										    value="{/Obrigacao/dataInicio}" 
+										    required="true"
+											change="onValidarData"/>
+									</f:fields>
 								</f:FormElement>
+								<f:FormElement>
+									<f:label>
+										<Label text="{i18n>ViewGeralDataFim} yyyy" labelFor="dataFim"/>
+									</f:label>
+									<f:fields>
+										<DatePicker 
+										    id="dataFim" 
+										    displayFormat="yyyy" 
+										    valueFormat="yyyy-MM-dd" 
+										    value="{/Obrigacao/dataFim}" 
+										    required="true" 
+										    change="onValidarData"/>
+									</f:fields>
+								</f:FormElement>
+								
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
 									<f:fields>
-										<Select id="selectPeriodicidade">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="Periodicidade 1" key="1"/>
-												<core:Item text="Periodicidade 2" key="2"/>
-												<core:Item text="Periodicidade 3" key="2"/>
-											</items>
+										<Select id="selectPeriodicidade" items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
+											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}"/>
 										</Select>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
-									<f:fields>
-										<Select id="selectAnoFiscal">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="2018"/>
-												<core:Item text="2017"/>
-												<core:Item text="2016"/>
-											</items>
-										</Select>
-									</f:fields>
-								</f:FormElement>
+								
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
-											id="datepickerPrazoEntrega" 
-											placeholder="{i18n>placeholderDatepicker}"/>
+											id="selectPrazoEntrega" 
+											displayFormat="dd/MM" 
+											valueFormat="yyyy-MM-dd" 
+											value="{/Obrigacao/selectPrazoEntrega}" 
+											required="true" 
+											change="onValidarData"
+											/>
 									</f:fields>
 								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
+								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
 									<f:fields>
 										<DatePicker 
 											id="datepickerExtensao" 
@@ -113,7 +145,7 @@
 									<f:fields>
 										<CheckBox id="checkSuporteContratado"/>
 									</f:fields>
-								</f:FormElement>
+								</f:FormElement> 
 								<f:FormElement label="{i18n>formularioObrigacaoLabelSuporte}">
 									<f:fields>
 										<TextArea 
@@ -121,12 +153,24 @@
 											rows="5" 
 											enabled="false"/>
 									</f:fields>
-								</f:FormElement>
-								<f:FormElement label="{i18n>formularioObrigacaoLabelObservacoes}">
+								</f:FormElement> -->
+								
+								<f:FormElement>
+										<f:label>
+											<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}" />
+										</f:label>
+										<f:fields>
+											<Input 	
+											id="anoObrigacao"
+											type="Text"
+											value="{/Obrigacao/anoObrigacao}"
+											></Input>
+										</f:fields>
+									</f:FormElement>
+								
+								<f:FormElement label="{i18n>viewGeralJustificativa}">
 									<f:fields>
-										<TextArea 
-											id="textAreaObservacoes" 
-											rows="5"/>
+										<TextArea value="{/Obrigacao/textAreaJustificativa}" id="textAreaJustificativa" rows="5" required="true" />
 									</f:fields>
 								</f:FormElement>
 							</f:formElements>

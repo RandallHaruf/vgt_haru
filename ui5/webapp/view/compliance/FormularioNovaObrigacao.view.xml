@@ -38,7 +38,7 @@
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
 										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true">
-											<core:Item text="{labelPais}" key="{id}"/>
+											<core:Item text="{labelPais}" key="{id}" value="{/labelPais}"/>
 										</ComboBox>
 									</f:fields>
 								</f:FormElement>
@@ -63,7 +63,7 @@
 											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}"/>
 										</Select>
 									</f:fields>
-								</f:FormElement> -->
+								</f:FormElement> 
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
 										<ComboBox id="selectAnoFiscal" items="{/DominioAnoFiscal}" selectedKey="{/Obrigacao/fkAnoFiscal}" required="true">
@@ -71,7 +71,7 @@
 										</ComboBox>
 									</f:fields>
 								</f:FormElement>
-								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
+								 <f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
 										<DatePicker 
 											value="{/Obrigacao/prazo_entrega}"

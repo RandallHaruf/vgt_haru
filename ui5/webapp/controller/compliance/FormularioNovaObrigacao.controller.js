@@ -35,8 +35,12 @@ sap.ui.define(
 				this.getRouter().getRoute("complianceFormularioNovaObrigacao").attachPatternMatched(this._onRouteMatched, this);
 			},
 
-			onSalvar: function () {
+			onSalvar: function (oEvent) {
 				var that = this;
+				
+				oButton = oEvent.getSource();
+				that.setBusy(oButton, true);
+				
 				jQuery.sap.require("sap.m.MessageBox");
 				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar"), {
 					title: "Confirm",
@@ -44,8 +48,11 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							if (that._validarGeral()) {
 								that._inserirModeloObrigacao();
+								that.setBusy(oButton, false);
 							}
+							that.setBusy(oButton, false);
 						}
+						that.setBusy(oButton, false);
 					}
 				});
 				//sap.m.MessageToast.show("Cancelar inserção");
@@ -193,7 +200,10 @@ sap.ui.define(
 				NodeAPI.pCriarRegistro("RequisicaoModeloObrigacao", {
 						justificativa: justificativa,
 						fkEmpresa: fkempresa,
-						fkModeloObrigacao: fkModeloObrigacao
+						fkModeloObrigacao: fkModeloObrigacao,
+						usarUsuarioSessao: 1,
+						dataRequisicao: that._getDateCurrency(),
+						fkDominioRequisicaoModeloObrigacaoStatus: 1
 					})
 					.then((result) => {
 						console.log(result);
@@ -208,6 +218,7 @@ sap.ui.define(
 						});
 
 						that._limparModel();
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewComplianceBepsObrigacaoCadastrada", {duration:5000}));
 					})
 					.catch(function (error) {
 						that.showError(error);
@@ -226,7 +237,7 @@ sap.ui.define(
 					aDropdownObrigatorio: [
 						this.byId("selectEmpresas"),
 						this.byId("comboPais"),
-						this.byId("selectAnoFiscal"),
+						//this.byId("selectAnoFiscal"),
 						this.byId("selectPeriodicidade")
 					]
 				});
@@ -243,6 +254,14 @@ sap.ui.define(
 				return oValidacao.formularioValido;
 			},
 
+			
+			_getDateCurrency(){
+				var data = new Date();
+				var ano = data.getFullYear();
+				var mes = parseInt(data.getMonth() + parseInt(1));
+				var dia = data.getDate();
+				return ano + "-" + mes + "-" +  dia;
+			},
 			
 			 // cirado para personalizar o tratamento do ano
 			 _tratamentoAnoIniFim() {

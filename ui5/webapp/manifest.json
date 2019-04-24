@@ -297,7 +297,7 @@
 					]
 				},
 				{
-					"pattern": "bepsFormularioNovaObrigacao",
+					"pattern": "bepsFormularioNovaObrigacao/{parametros}",
 					"name": "bepsFormularioNovaObrigacao",
 					"target": [
 						"bepsFormularioNovaObrigacao"
