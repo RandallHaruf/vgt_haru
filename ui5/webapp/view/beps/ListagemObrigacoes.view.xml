@@ -1,5 +1,5 @@
-<mvc:View controllerName="ui5ns/ui5/controller/beps/ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:f="sap.f"
-	xmlns="sap.m" class="viewBepsListagemObrigacoes">
+<mvc:View controllerName="ui5ns.ui5.controller.beps.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified"
+	xmlns:f="sap.f" xmlns="sap.m" class="viewBepsListagemObrigacoes">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -13,7 +13,7 @@
 					<Title text="{i18n>viewBepsListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:navigationActions>
-					<!-- <Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" /> -->
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 			</f:DynamicPageTitle>
@@ -73,6 +73,9 @@
 							</Toolbar>
 						</headerToolbar>
 						<columns>
+							<Column>
+								
+							</Column>
 							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 							</Column>
@@ -101,6 +104,9 @@
 						<items>
 							<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 								<cells>
+									<Text>
+										
+									</Text>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
 									<Text
 										text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}"/>

@@ -1,4 +1,4 @@
-<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemRequisicoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+<mvc:View controllerName="ui5ns.ui5.controller.beps.ListagemRequisicoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns="sap.m">
 	<f:DynamicPage>
 		<f:title>
@@ -11,7 +11,7 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<Title text="{i18n>viewListagemRequisicoesTitulo}"/>
+					<Title text="{i18n>viewListagemRequisicoesTituloBeps}"/>
 				</f:heading>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>

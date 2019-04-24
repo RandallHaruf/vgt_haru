@@ -290,6 +290,13 @@
 					]
 				},
 				{
+					"pattern": "bepsListagemRequisicoes/{parametros}",
+					"name": "bepsListagemRequisicoes",
+					"target": [
+						"bepsListagemRequisicoes"
+					]
+				},
+				{
 					"pattern": "bepsRelatorio",
 					"name": "bepsRelatorio",
 					"target": [
@@ -495,6 +502,11 @@
 				"bepsListagemObrigacoes": {
 					"viewName": "beps/ListagemObrigacoes",
 					"viewId": "bepsListagemObrigacoes",
+					"viewLevel": 2
+				},
+				"bepsListagemRequisicoes": {
+					"viewName": "beps/ListagemRequisicoes",
+					"viewId": "bepsListagemRequisicoes",
 					"viewLevel": 2
 				},
 				"bepsRelatorio": {

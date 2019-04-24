@@ -24,7 +24,7 @@ sap.ui.define(
 					ValorFiltroNomeArquivo: ""
 				}));
 				var hoje = new Date();
-				this.getModel().setProperty("/startDate",new Date(JSON.stringify(hoje.getFullYear()),"0","1"))
+				this.getModel().setProperty("/startDate",new Date(JSON.stringify(hoje.getFullYear()),"0","1"));
 				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 			},
 
@@ -49,6 +49,7 @@ sap.ui.define(
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
+				this.getModel().setProperty("/IdEmpresaSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
 				this.getModel().setProperty("/AnoCalendarioSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario);
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
@@ -342,7 +343,7 @@ sap.ui.define(
 
 			navToListagemRequisicoes: function () {
 				var oParametros = {
-					empresa: this.getModel().getProperty("/Empresa"),
+					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
 					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 

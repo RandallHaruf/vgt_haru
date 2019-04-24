@@ -8,65 +8,13 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Utils"
 	],
 	function (BaseController,models,/* formatter,*/ MessageToast, NodeAPI, Utils) {
-		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemRequisicoes", {
-		//formatter: formatter,
-		
-			/*onInit: function () {
-				this.setModel(new sap.ui.model.json.JSONModel({
-					requisicoes: [
-						{
-							id: 1,
-							empresa: "Empresa A",
-							trimestre: "1º Trimestre",
-							dataRequisicao: "20/05/2018",
-							anoRequisicao: 2018,
-							usuario: "Usuario A",
-							justificativa: "Não consegui fazer a tempo",
-							status: {
-								icone: "sap-icon://accept",
-								cor: "green", 
-								tooltip: "Aprovado"
-							}
-						},
-						{
-							id: 2,
-							empresa: "Empresa A",
-							trimestre: "2º Trimestre",
-							dataRequisicao: "10/05/2018",
-							anoRequisicao: 2018,
-							usuario: "Usuario A",
-							justificativa: "Esqueci de preencher com o valor final",
-							resposta: "Deveria ter preenchido.",
-							status: {
-								icone: "sap-icon://decline",
-								cor: "red",
-								tooltip: "Rejeitado"
-							}
-						},
-						{
-							id: 3,
-							empresa: "Empresa A",
-							trimestre: "3º Trimestre",
-							dataRequisicao: "25/05/2018",
-							anoRequisicao: 2018,
-							usuario: "Usuario A",
-							justificativa: "Não consegui fazer a tempo",
-							status: {
-								icone: "sap-icon://lateness",
-								cor: "orange",
-								tooltip: "Em andamento"
-							}
-						}
-					]
-				}));
-				this.getRouter().getRoute("complianceListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
-			},*/
+		return BaseController.extend("ui5ns.ui5.controller.beps.ListagemRequisicoes", {
 			
 			onInit: function (oEvent) {
 			
-				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
+				this.setModel(models.createViewModelParaBepsListagemObrigacoes(), "viewModel");
 			    this.setModel(new sap.ui.model.json.JSONModel({})); 
-				this.getRouter().getRoute("complianceListagemRequisicoes").attachPatternMatched(this._onRouteMatched, this);	
+				this.getRouter().getRoute("bepsListagemRequisicoes").attachPatternMatched(this._onRouteMatched, this);	
 			},
 			
 			onTrocarStatus: function (oEvent) {
@@ -76,7 +24,7 @@ sap.ui.define(
 			},
 			
 			onDetalharObrigacao: function (oEvent) {
-				this.getRouter().navTo("complianceFormularioDetalhesObrigacao");
+				this.getRouter().navTo("bepsFormularioDetalhesObrigacao");
 			},
 			
 			onNovoObjeto: function (oEvent) {
@@ -88,7 +36,7 @@ sap.ui.define(
 			},
 			
 			navToPage2: function () {
-				this.getRouter().navTo("complianceListagemObrigacoes", {
+				this.getRouter().navTo("bepsListagemObrigacoes", {
 					parametros: JSON.stringify({
 						idEmpresaCalendario: this.getModel().getProperty("/IdEmpresaSelecionado"),
 						idAnoCalendario: this.getModel().getProperty("/IdAnoSelecionado")
@@ -120,16 +68,22 @@ sap.ui.define(
 				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
 				
 				
-				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?filtrarUsuario=true&TipoObrigacao=2", function (response) { // 2 COMPLIANCE
+				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?filtrarUsuario=true&TipoObrigacao=1", function (response) { // 1 BEPS
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
 							if (response[i]["id_dominio_requisicao_modelo_obrigacao_status"] == 1) {
+								
 							    response[i].oStatus = that.getResourceBundle().getText("viewTTCRequisicaoReaberturaPeriodoStatus1");
+							    
 							} else if (response[i]["id_dominio_requisicao_modelo_obrigacao_status"] == 2) {
+								
 								response[i].oStatus = that.getResourceBundle().getText("viewTTCRequisicaoReaberturaPeriodoStatus2");
+								
 							} else if (response[i]["id_dominio_requisicao_modelo_obrigacao_status"] == 3) {
+								
 							    response[i].oStatus = that.getResourceBundle().getText("viewTTCRequisicaoReaberturaPeriodoStatus3");
-							}
+						}
+						
 						
 						response[i]["nome_pais"] = Utils.traduzDominioPais(response[i]["fk_pais.id_pais"],that)
 						response[i]["nome_periodicidade"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],that)

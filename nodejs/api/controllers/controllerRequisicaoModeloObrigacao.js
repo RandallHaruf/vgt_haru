@@ -227,7 +227,18 @@ module.exports = {
 			oWhere.push(' tblRequisicaoModeloObrigacao."fk_dominio_requisicao_modelo_obrigacao_status.id_dominio_requisicao_modelo_obrigacao_status" = ? ');
 			aParams.push(req.query.idStatus);
 		}
+
+		if (req.query.filtrarUsuario){
+			oWhere.push(' tblRequisicaoModeloObrigacao."fk_usuario.id_usuario" = ? ');
+			var idUsuario = req.session.usuario.id;
+			aParams.push(idUsuario);
+		}
 		
+		if (req.query.TipoObrigacao){
+			oWhere.push(' tblModeloObrigacao."fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo" = ? ');
+			aParams.push(req.query.TipoObrigacao);
+		}
+
 		const isFull = function () {
 			return (req.query && req.query.full && req.query.full == "true");
 		};

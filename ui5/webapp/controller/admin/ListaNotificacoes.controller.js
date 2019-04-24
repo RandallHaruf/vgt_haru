@@ -13,7 +13,10 @@ sap.ui.define(
 
 				this.setModel(models.createViewModelParaComplianceListagemObrigacoes(), "viewModel");
 				this.setModel(new sap.ui.model.json.JSONModel({}));
-
+				
+				this.setModel(models.createViewModelParaBepsListagemObrigacoes(), "viewModel");
+				this.setModel(new sap.ui.model.json.JSONModel({}));
+				
 				var that = this;
 
 				this.byId("paginaListagem").addEventDelegate({
@@ -73,8 +76,8 @@ sap.ui.define(
 							modelcountObrig: countObrig
 
 						});
-						that.getModel().setProperty("/RequisicaoModeloObrigacao", response);/*
-						that.getModel().setProperty("/Obrigacao", response);*/
+						that.getModel().setProperty("/RequisicaoModeloObrigacao", response);
+						/*that.getModel().setProperty("/Obrigacao", response);*/
 					}
 
 				});
@@ -456,9 +459,10 @@ sap.ui.define(
 								fkAnoFiscal: oItemSelecionado["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"],
 								fkDominioObrigacaoAcessoriaTipo: oItemSelecionado["fk_id_dominio_obrigacao_acessoria_tipo.id_dominio_obrigacao_acessoria_tipo"],
 								fkDominioEncerramentoPeriodoStatus: oItemSelecionado["fk_dominio_requisicao_encerramento_periodo_status.id_dominio_requisicao_encerramento_periodo_status"],
+								fkModeloObrigacao: oItemSelecionado["fk_modelo_obrigacao.id_modelo"],
 								//fkDominioAprovacaoObrigacao: oSelect.getSelectedKey(),
 								fkDominioRequisicaoModeloObrigacaoStatus: oSelect.getSelectedKey(),
-								motivoReprovacao: oTextArea.getValue()
+								motivoReprovacao: oTextArea.getValue(),
 							}, function (response) {
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();

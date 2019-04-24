@@ -91,9 +91,9 @@
 						growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 						<headerToolbar>
 							<Toolbar>
-								<Title 
+								<!--<Title 
 									id="cabecalhoTabelaObrigacoes" 
-									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}" />
+									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}" />-->
 								<Label text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"></Label>
 								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}" id="selectEmpresa" items="{/Empresa}"
 									selectedKey="{/IdEmpresaSelecionado}" change="onTrocarEmpresa">
