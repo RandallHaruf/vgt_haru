@@ -219,7 +219,7 @@ sap.ui.define(
 				if (!oValidacao.formularioValido) {
 
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
-						title: oValidacao.mensagem
+						title: ""
 					})
 				}
 
