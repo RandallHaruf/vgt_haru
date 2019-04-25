@@ -7,7 +7,7 @@ sap.ui.define(
 	],
 	function (BaseController, NodeAPI, Validador, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.beps.FormularioNovaObrigacao", {
-			
+
 			onInit: function () {
 				var oModel = new sap.ui.model.json.JSONModel({
 					Obrigacao: {
@@ -35,17 +35,17 @@ sap.ui.define(
 
 				this.getRouter().getRoute("bepsFormularioNovaObrigacao").attachPatternMatched(this._onRouteMatched, this);
 			},
-			
+
 			onSalvar: function (oEvent) {
 				var that = this;
-				
+
 				oButton = oEvent.getSource();
 				that.setBusy(oButton, true);
-				
+
 				jQuery.sap.require("sap.m.MessageBox");
-				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar") , {
+				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar"), {
 					title: "Confirm",
-					onClose: function(oAction) { 
+					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							if (that._validarGeral()) {
 								that._inserirModeloObrigacao();
@@ -57,9 +57,9 @@ sap.ui.define(
 					}
 				});
 				//sap.m.MessageToast.show("Cancelar inserção");
-				
+
 			},
-			
+
 			_inserirModeloObrigacao: function () {
 				var that = this;
 
@@ -106,24 +106,25 @@ sap.ui.define(
 						});
 
 						that._limparModel();
-						sap.m.MessageToast.show(that.getResourceBundle().getText("viewComplianceBepsObrigacaoCadastrada", {duration:5000}));
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewComplianceBepsObrigacaoCadastrada", {
+							duration: 5000
+						}));
 					})
 					.catch(function (error) {
 						that.showError(error);
 						//console.log(error);
 					});
 			},
-			
-			
+
 			// função criada para pegar a data atual da requisição do modelo no formato yyyy-MM-dd
-			_getDateCurrency(){
+			_getDateCurrency() {
 				var data = new Date();
 				var ano = data.getFullYear();
 				var mes = parseInt(data.getMonth() + parseInt(1));
 				var dia = data.getDate();
-				return ano + "-" + mes + "-" +  dia;
+				return ano + "-" + mes + "-" + dia;
 			},
-			
+
 			_onRouteMatched: function (oEvent) {
 
 				var oParametros = oEvent.getParameter("arguments").parametros ? JSON.parse(oEvent.getParameter("arguments").parametros) : null;
@@ -137,7 +138,7 @@ sap.ui.define(
 				//this._carregarSelect("DominioAnoFiscal");
 				this._carregaComboPais();
 			},
-			
+
 			_carregarSelect: function (sEntidade) {
 				var that = this;
 
@@ -178,7 +179,7 @@ sap.ui.define(
 					}
 				});
 			},
-			
+
 			_limparModel: function () {
 				this.getModel().setProperty("/Obrigacao", {
 					fkEmpresa: null,
@@ -197,7 +198,7 @@ sap.ui.define(
 					motivoReprovacao: null
 				});
 			},
-			
+
 			_validarFormulario: function () {
 				var obj = this.getModel().getProperty("/Obrigacao");
 				var sIdFormulario = "#" + this.byId("formularioObrigacao").getDomRef().id;
@@ -217,7 +218,7 @@ sap.ui.define(
 				oValidacao.formularioValido = (oValidacao.formularioValido);
 
 				if (!oValidacao.formularioValido) {
-
+					oValidacao.mensagem = this.getResourceBundle().getText("viewValidacaoCamposObirgatorios") + "\n";
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
 						title: ""
 					})
@@ -226,9 +227,8 @@ sap.ui.define(
 				return oValidacao.formularioValido;
 			},
 
-			
-			 // cirado para personalizar o tratamento do ano
-			 _tratamentoAnoIniFim() {
+			// cirado para personalizar o tratamento do ano
+			_tratamentoAnoIniFim() {
 
 				var dataini = this.byId("dataInicio").getValue();
 				var datafin = this.byId("dataFim").getValue();
@@ -240,29 +240,29 @@ sap.ui.define(
 				var anofin = auxfin[0];
 
 				return parseInt(anoini) <= parseInt(anofin);
-			}, 
+			},
 
 			_validarGeral: function () {
-              
-              var validado = "true";
-              
-              if ( !this._validarFormulario() ){
-              	validado = false;
-              	return;
-              }
-              
-              if ( !this._tratamentoAnoIniFim() ){
-              	
-              	validado = "false";
-              	sap.m.MessageBox.warning(this.getResourceBundle().getText("viewComplianceFormularioObrigacoesAnoInvalido"), {
+
+				var validado = "true";
+
+				if (!this._validarFormulario()) {
+					validado = false;
+					return;
+				}
+
+				if (!this._tratamentoAnoIniFim()) {
+
+					validado = "false";
+					sap.m.MessageBox.warning(this.getResourceBundle().getText("viewComplianceFormularioObrigacoesAnoInvalido"), {
 						title: ""
 					})
 					return;
-              }
-              
-              return validado;
- 			},
-			
+				}
+
+				return validado;
+			},
+
 			_carregaComboPais: function () {
 				var that = this;
 
@@ -279,7 +279,7 @@ sap.ui.define(
 						that.showError(err);
 					});
 			},
-			
+
 			onCancelar: function () {
 				var that = this;
 				jQuery.sap.require("sap.m.MessageBox");
@@ -301,7 +301,7 @@ sap.ui.define(
 				});
 				//sap.m.MessageToast.show("Cancelar inserção");
 			},
-			
+
 			navToHome: function () {
 				var that = this;
 				$.sap.require("sap.m.MessageBox");
