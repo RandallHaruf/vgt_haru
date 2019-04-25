@@ -1,19 +1,12 @@
-<mvc:View 
-	controllerName="ui5ns.ui5.controller.beps.FormularioNovaObrigacao"
-	xmlns:mvc="sap.ui.core.mvc" 
-	xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" 
-	xmlns:f="sap.ui.layout.form" 
-	xmlns:f2="sap.f"
-	xmlns="sap.m" 
-	class="viewBepsFormularioNovaObrigacao">
+<mvc:View controllerName="ui5ns.ui5.controller.beps.FormularioNovaObrigacao" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns="sap.m" class="viewBepsFormularioNovaObrigacao">
 	<f2:DynamicPage title="Beps - {i18n>viewFormularioBepsNovaObrigacao}" showFooter="true">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome" />
-						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="onCancelar" />
+						<Link text="Home" press="navToHome"/>
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="onCancelar"/>
 						<Link text="{i18n>ViewFormularioNovaObrigacao}" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
@@ -24,9 +17,7 @@
 		</f2:title>
 		<f2:content>
 			<VBox class="sapUiSmallMargin">
-				<f:Form 
-					id="formularioObrigacao" 
-					editable="true">
+				<f:Form id="formularioObrigacao" editable="true">
 					<f:title>
 						<core:Title text="{i18n>ViewFormularioNovaObrigacao}"/>
 					</f:title>
@@ -39,14 +30,14 @@
 							<f:formElements>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
 									<f:fields>
-										<ComboBox id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}" required="true">
+										<ComboBox id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}" required="true" selectionChange="onTrocarEmpresa">
 											<core:Item text="{nome}" key="{id_empresa}"/>
 										</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
-										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true">
+										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true" enabled="false">
 											<core:Item text="{labelPais}" key="{id}"/>
 										</ComboBox>
 									</f:fields>
@@ -79,19 +70,12 @@
 										</ComboBox>
 									</f:fields>
 								</f:FormElement> -->
-								
 								<f:FormElement>
 									<f:label>
 										<Label text="{i18n>ViewGeralDataInício} yyyy" labelFor="dataInicio"/>
 									</f:label>
 									<f:fields>
-										<DatePicker 
-										    id="dataInicio" 
-										    displayFormat="yyyy" 
-										    valueFormat="yyyy-MM-dd" 
-										    value="{/Obrigacao/dataInicio}" 
-										    required="true"
-											change="onValidarData"/>
+										<DatePicker id="dataInicio" displayFormat="yyyy" valueFormat="yyyy-MM-dd" value="{/Obrigacao/dataInicio}" required="true"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement>
@@ -99,16 +83,9 @@
 										<Label text="{i18n>ViewGeralDataFim} yyyy" labelFor="dataFim"/>
 									</f:label>
 									<f:fields>
-										<DatePicker 
-										    id="dataFim" 
-										    displayFormat="yyyy" 
-										    valueFormat="yyyy-MM-dd" 
-										    value="{/Obrigacao/dataFim}" 
-										    required="true" 
-										    change="onValidarData"/>
+										<DatePicker id="dataFim" displayFormat="yyyy" valueFormat="yyyy-MM-dd" value="{/Obrigacao/dataFim}" required="true"/>
 									</f:fields>
 								</f:FormElement>
-								
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
 									<f:fields>
 										<Select id="selectPeriodicidade" items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
@@ -116,17 +93,10 @@
 										</Select>
 									</f:fields>
 								</f:FormElement>
-								
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPrazoEntrega}">
 									<f:fields>
-										<DatePicker 
-											id="selectPrazoEntrega" 
-											displayFormat="dd/MM" 
-											valueFormat="yyyy-MM-dd" 
-											value="{/Obrigacao/selectPrazoEntrega}" 
-											required="true" 
-											change="onValidarData"
-											/>
+										<DatePicker id="selectPrazoEntrega" displayFormat="dd/MM" valueFormat="yyyy-MM-dd" value="{/Obrigacao/selectPrazoEntrega}" required="true"
+											change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelExtensao}">
@@ -154,23 +124,17 @@
 											enabled="false"/>
 									</f:fields>
 								</f:FormElement> -->
-								
 								<f:FormElement>
-										<f:label>
-											<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}" />
-										</f:label>
-										<f:fields>
-											<Input 	
-											id="anoObrigacao"
-											type="Text"
-											value="{/Obrigacao/anoObrigacao}"
-											></Input>
-										</f:fields>
-									</f:FormElement>
-								
+									<f:label>
+										<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}"/>
+									</f:label>
+									<f:fields>
+										<Input id="anoObrigacao" type="Number" value="{/Obrigacao/anoObrigacao}"></Input>
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralJustificativa}">
 									<f:fields>
-										<TextArea value="{/Obrigacao/textAreaJustificativa}" id="textAreaJustificativa" rows="5" required="true" />
+										<TextArea value="{/Obrigacao/textAreaJustificativa}" id="textAreaJustificativa" rows="5" required="true"/>
 									</f:fields>
 								</f:FormElement>
 							</f:formElements>
@@ -182,14 +146,8 @@
 		<f2:footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button 
-					text="{i18n>formularioObrigacaoBotaoSalvar}" 
-					type="Accept" 
-					press="onSalvar"/>
-				<Button 
-					text="{i18n>formularioObrigacaoBotaoCancelar}" 
-					type="Reject" 
-					press="onCancelar"/>
+				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar"/>
+				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar"/>
 			</Toolbar>
 		</f2:footer>
 	</f2:DynamicPage>

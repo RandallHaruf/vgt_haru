@@ -87,7 +87,7 @@ sap.ui.define(
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
 
 				this._carregarSelect("Empresa");
-				this._carregarSelect("DominioPais");
+				//this._carregarSelect("DominioPais");
 				//this._carregarSelect("DeepQuery/Pais");
 				this._carregarSelect("ObrigacaoAcessoria?tipo=2");
 				this._carregarSelect("DomPeriodicidadeObrigacao");
@@ -104,6 +104,7 @@ sap.ui.define(
 						switch (sEntidade) {
 						case "Empresa":
 							filtro = Utils.orderByArrayParaBox(response, "nome");
+						
 							break;
 						case "DominioPais":
 							var aPais = response;
@@ -152,7 +153,17 @@ sap.ui.define(
 						that.showError(err);
 					});
 			},
-
+			
+			onTrocarEmpresa: function(oEvent) {
+				
+				var empresa = {};
+				var idEmpresaSelecionada = oEvent.getSource().getSelectedKey();
+				
+				var oModel = this.getModel().getProperty("/Empresa");
+				empresa = oModel.find(x=> x.id_empresa == idEmpresaSelecionada);
+				this.getModel().setProperty("/Obrigacao/fkDominioPais", empresa["fk_pais.id_pais"]);
+			},
+			
 			_limparModel: function () {
 				this.getModel().setProperty("/Obrigacao", {
 					fkEmpresa: null,
@@ -186,7 +197,6 @@ sap.ui.define(
 						anoObrigacao: this.getModel().getProperty("/Obrigacao/anoObrigacao")
 					})
 					.then((res) => {
-						console.log(res);
 						that._inserirRequisicaoModeloObrigacao(that.getModel().getProperty("/Obrigacao/textAreaJustificativa"),
 							that.getModel().getProperty("/Obrigacao/fkEmpresa"), JSON.stringify(JSON.parse(res)[0].generated_id));
 					})
@@ -206,8 +216,6 @@ sap.ui.define(
 						fkDominioRequisicaoModeloObrigacaoStatus: 1
 					})
 					.then((result) => {
-						console.log(result);
-
 						var oParametros = {
 							empresa: that.getModel().getProperty("/Empresa"),
 							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
@@ -245,9 +253,9 @@ sap.ui.define(
 				oValidacao.formularioValido = (oValidacao.formularioValido);
 
 				if (!oValidacao.formularioValido) {
-
+                    oValidacao.mensagem = this.getResourceBundle().getText("viewValidacaoCamposObirgatorios") + "\n";
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
-						title: oValidacao.mensagem
+						title: ""
 					})
 				}
 
@@ -313,7 +321,7 @@ sap.ui.define(
 					}
 
 				})
-			},
+			}
 		});
 	}
 );

@@ -6,7 +6,7 @@
 				<f2:breadcrumbs>
 					<Breadcrumbs>
 						<Link text="Home" press="navToHome"/>
-						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="onCancelar" />
+						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="onCancelar"/>
 						<Link text="{i18n>ViewFormularioNovaObrigacao}" enabled="false"/>
 					</Breadcrumbs>
 				</f2:breadcrumbs>
@@ -30,14 +30,14 @@
 							<f:formElements>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelEmpresa}">
 									<f:fields>
-										<ComboBox id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}" required="true">
+										<ComboBox id="selectEmpresas" items="{/Empresa}" selectedKey="{/Obrigacao/fkEmpresa}" required="true" selectionChange="onTrocarEmpresa">
 											<core:Item text="{nome}" key="{id_empresa}"/>
 										</ComboBox>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPais}">
 									<f:fields>
-										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true">
+										<ComboBox items="{/Pais}" selectedKey="{/Obrigacao/fkDominioPais}" id="comboPais" required="true" enabled="false">
 											<core:Item text="{labelPais}" key="{id}" value="{/labelPais}"/>
 										</ComboBox>
 									</f:fields>
@@ -96,13 +96,7 @@
 										<Label text="{i18n>ViewGeralDataInício} yyyy" labelFor="dataInicio"/>
 									</f:label>
 									<f:fields>
-										<DatePicker 
-										    id="dataInicio" 
-										    displayFormat="yyyy" 
-										    valueFormat="yyyy-MM-dd" 
-										    value="{/Obrigacao/dataInicio}" 
-										    required="true"
-											change="onValidarData"/>
+										<DatePicker id="dataInicio" displayFormat="yyyy" valueFormat="yyyy-MM-dd" value="{/Obrigacao/dataInicio}" required="true"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement>
@@ -110,56 +104,36 @@
 										<Label text="{i18n>ViewGeralDataFim} yyyy" labelFor="dataFim"/>
 									</f:label>
 									<f:fields>
-										<DatePicker 
-										    id="dataFim" 
-										    displayFormat="yyyy" 
-										    valueFormat="yyyy-MM-dd" 
-										    value="{/Obrigacao/dataFim}" 
-										    required="true" 
-										    change="onValidarData"/>
+										<DatePicker id="dataFim" displayFormat="yyyy" valueFormat="yyyy-MM-dd" value="{/Obrigacao/dataFim}" required="true"/>
 									</f:fields>
 								</f:FormElement>
-								
 								<f:FormElement label="{i18n>formularioObrigacaoLabelPeriodicidade}">
-										<f:label>
-											<Label text="{i18n>formularioObrigacaoLabelPeriodicidade}" class="sapMLabelRequired" />
-										</f:label>
-										<f:fields>
-											<Select id="selectPeriodicidade" items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
+									<f:label>
+										<Label text="{i18n>formularioObrigacaoLabelPeriodicidade}" class="sapMLabelRequired"/>
+									</f:label>
+									<f:fields>
+										<Select id="selectPeriodicidade" items="{/DomPeriodicidadeObrigacao}" selectedKey="{/Obrigacao/fkDominioPeriocidadeObrigacao}">
 											<core:Item text="{descricao}" key="{id_periodicidade_obrigacao}"/>
 										</Select>
-										</f:fields>
-									</f:FormElement>
-								
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement>
-										<f:label>
-											<Label text="{i18n>formularioObrigacaoLabelPrazoEntrega} {/displayFormatSemAno}" labelFor="dataFim"/>
-										</f:label>
-										<f:fields>
-											<DatePicker 
-											id="selectPrazoEntrega" 
-											displayFormat="dd/MM" 
-											valueFormat="yyyy-MM-dd" 
-											value="{/Obrigacao/selectPrazoEntrega}" 
-											required="true" 
-											change="onValidarData"
-											/>
-										</f:fields>
-									</f:FormElement>
-								
+									<f:label>
+										<Label text="{i18n>formularioObrigacaoLabelPrazoEntrega} {/displayFormatSemAno}" labelFor="dataFim"/>
+									</f:label>
+									<f:fields>
+										<DatePicker id="selectPrazoEntrega" displayFormat="dd/MM" valueFormat="yyyy-MM-dd" value="{/Obrigacao/selectPrazoEntrega}" required="true"
+											change="onValidarData"/>
+									</f:fields>
+								</f:FormElement>
 								<f:FormElement>
-										<f:label>
-											<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}" labelFor="dataFim"/>
-										</f:label>
-										<f:fields>
-											<Input 	
-											id="anoObrigacao"
-											type="Text"
-											value="{/Obrigacao/anoObrigacao}"
-											></Input>
-										</f:fields>
-									</f:FormElement>
-								
+									<f:label>
+										<Label text="{i18n>formularioObrigacaoLabelAnoObrigacao}" labelFor="dataFim"/>
+									</f:label>
+									<f:fields>
+										<Input id="anoObrigacao" type="Number" value="{/Obrigacao/anoObrigacao}"></Input>
+									</f:fields>
+								</f:FormElement>
 								<!-- <f:FormElement label="{i18n>formularioObrigacaoLabelObrigacaoIniciada}">
 									<f:fields>
 										<CheckBox id="checkObrigacaoIniciada" selected="{/Obrigacao/obrigacao_inicial}"/>
@@ -180,11 +154,10 @@
 										<TextArea value="{/Obrigacao/observacoes}" id="textAreaObservacoes" rows="5"/>
 									</f:fields>
 								</f:FormElement> -->
-								
 								<f:FormElement label="{i18n>viewGeralJustificativa}">
-										<f:fields>
-											<TextArea value="{/Obrigacao/textAreaJustificativa}" id="textAreaJustificativa" rows="5" required="true" />
-										</f:fields>
+									<f:fields>
+										<TextArea value="{/Obrigacao/textAreaJustificativa}" id="textAreaJustificativa" rows="5" required="true"/>
+									</f:fields>
 								</f:FormElement>
 							</f:formElements>
 						</f:FormContainer>
