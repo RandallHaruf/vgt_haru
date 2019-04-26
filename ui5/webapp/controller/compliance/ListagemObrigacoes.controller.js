@@ -383,7 +383,7 @@ sap.ui.define(
 
 			onNovaObrigacao: function (oEvent) {
 				var oParametros = {
-					empresa: this.getModel().getProperty("/Empresa"),
+					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
 					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 				
@@ -554,6 +554,7 @@ sap.ui.define(
 				var that = this;
 
 				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado") ? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
+				
 				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
 					"/AnoCalendarioSelecionado") : "";
 				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();

@@ -37,10 +37,10 @@ sap.ui.define(
 
 			onSalvar: function (oEvent) {
 				var that = this;
-				
+
 				oButton = oEvent.getSource();
 				that.setBusy(oButton, true);
-				
+
 				jQuery.sap.require("sap.m.MessageBox");
 				sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar"), {
 					title: "Confirm",
@@ -66,7 +66,7 @@ sap.ui.define(
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							var oParametros = {
-								empresa: that.getModel().getProperty("/Empresa"),
+								idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
 								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
 							};
 
@@ -83,12 +83,12 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 
 				var oParametros = oEvent.getParameter("arguments").parametros ? JSON.parse(oEvent.getParameter("arguments").parametros) : null;
-
+      
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
+				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
+				
 
 				this._carregarSelect("Empresa");
-				//this._carregarSelect("DominioPais");
-				//this._carregarSelect("DeepQuery/Pais");
 				this._carregarSelect("ObrigacaoAcessoria?tipo=2");
 				this._carregarSelect("DomPeriodicidadeObrigacao");
 				this._carregarSelect("DominioAnoFiscal");
@@ -104,7 +104,7 @@ sap.ui.define(
 						switch (sEntidade) {
 						case "Empresa":
 							filtro = Utils.orderByArrayParaBox(response, "nome");
-						
+
 							break;
 						case "DominioPais":
 							var aPais = response;
@@ -153,17 +153,17 @@ sap.ui.define(
 						that.showError(err);
 					});
 			},
-			
-			onTrocarEmpresa: function(oEvent) {
-				
+
+			onTrocarEmpresa: function (oEvent) {
+
 				var empresa = {};
 				var idEmpresaSelecionada = oEvent.getSource().getSelectedKey();
-				
+
 				var oModel = this.getModel().getProperty("/Empresa");
-				empresa = oModel.find(x=> x.id_empresa == idEmpresaSelecionada);
+				empresa = oModel.find(x => x.id_empresa == idEmpresaSelecionada);
 				this.getModel().setProperty("/Obrigacao/fkDominioPais", empresa["fk_pais.id_pais"]);
 			},
-			
+
 			_limparModel: function () {
 				this.getModel().setProperty("/Obrigacao", {
 					fkEmpresa: null,
@@ -217,7 +217,7 @@ sap.ui.define(
 					})
 					.then((result) => {
 						var oParametros = {
-							empresa: that.getModel().getProperty("/Empresa"),
+							idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
 							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
 						};
 
@@ -226,7 +226,9 @@ sap.ui.define(
 						});
 
 						that._limparModel();
-						sap.m.MessageToast.show(that.getResourceBundle().getText("viewComplianceBepsObrigacaoCadastrada", {duration:5000}));
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewComplianceBepsObrigacaoCadastrada", {
+							duration: 5000
+						}));
 					})
 					.catch(function (error) {
 						that.showError(error);
@@ -237,10 +239,10 @@ sap.ui.define(
 			_validarFormulario: function () {
 				var obj = this.getModel().getProperty("/Obrigacao");
 				var sIdFormulario = "#" + this.byId("formularioObrigacao").getDomRef().id;
-				var dataValidada = true;
 
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: $(sIdFormulario + " input[aria-required=true]"),
+					aTextAreaObrigatorio: $(sIdFormulario + " textarea[aria-required=true]"),
 
 					aDropdownObrigatorio: [
 						this.byId("selectEmpresas"),
@@ -253,7 +255,7 @@ sap.ui.define(
 				oValidacao.formularioValido = (oValidacao.formularioValido);
 
 				if (!oValidacao.formularioValido) {
-                    oValidacao.mensagem = this.getResourceBundle().getText("viewValidacaoCamposObirgatorios") + "\n";
+					oValidacao.mensagem = this.getResourceBundle().getText("viewValidacaoCamposObirgatorios") + "\n";
 					sap.m.MessageBox.warning(oValidacao.mensagem, {
 						title: ""
 					})
@@ -262,17 +264,16 @@ sap.ui.define(
 				return oValidacao.formularioValido;
 			},
 
-			
-			_getDateCurrency(){
+			_getDateCurrency() {
 				var data = new Date();
 				var ano = data.getFullYear();
 				var mes = parseInt(data.getMonth() + parseInt(1));
 				var dia = data.getDate();
-				return ano + "-" + mes + "-" +  dia;
+				return ano + "-" + mes + "-" + dia;
 			},
-			
-			 // cirado para personalizar o tratamento do ano
-			 _tratamentoAnoIniFim() {
+
+			// cirado para personalizar o tratamento do ano
+			_tratamentoAnoIniFim() {
 
 				var dataini = this.byId("dataInicio").getValue();
 				var datafin = this.byId("dataFim").getValue();
@@ -284,28 +285,28 @@ sap.ui.define(
 				var anofin = auxfin[0];
 
 				return parseInt(anoini) <= parseInt(anofin);
-			}, 
+			},
 
 			_validarGeral: function () {
-              
-              var validado = "true";
-              
-              if ( !this._validarFormulario() ){
-              	validado = false;
-              	return;
-              }
-              
-              if ( !this._tratamentoAnoIniFim() ){
-              	
-              	validado = "false";
-              	sap.m.MessageBox.warning(this.getResourceBundle().getText("viewComplianceFormularioObrigacoesAnoInvalido"), {
+
+				var validado = "true";
+
+				if (!this._validarFormulario()) {
+					validado = false;
+					return;
+				}
+
+				if (!this._tratamentoAnoIniFim()) {
+
+					validado = "false";
+					sap.m.MessageBox.warning(this.getResourceBundle().getText("viewComplianceFormularioObrigacoesAnoInvalido"), {
 						title: ""
 					})
 					return;
-              }
-              
-              return validado;
- 			},
+				}
+
+				return validado;
+			},
 
 			navToHome: function () {
 				var that = this;

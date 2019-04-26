@@ -342,7 +342,7 @@ sap.ui.define(
 			},
 			navToListagemRequisicoes: function () {
 				var oParametros = {
-					empresa: this.getModel().getProperty("/Empresa"),
+					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
 					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 
@@ -381,7 +381,7 @@ sap.ui.define(
 
 			onNovaObrigacao: function (oEvent) {
 				var oParametros = {
-					empresa: this.getModel().getProperty("/Empresa"),
+					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
 					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
 				

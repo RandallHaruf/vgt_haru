@@ -650,7 +650,7 @@ sap.ui.define(
 					that.setBusy(that.byId("formularioObjeto"), false);
 
 					var pais = that.getModel().getProperty("/objeto/fk_pais.id_pais");
-					NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais, function (res) {
+					NodeAPI.listarRegistros("DeepQuery/ModeloObrigacao?idRegistro=" + pais + "&idStatus=2", function (res) {
 						that.getModel().setProperty("/ModeloObrigacao", res);
 						NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa?idEmpresaNaQualMeRelaciono=" + iIdObjeto, function (r) {
 							that._resolverVinculoObrigacoes(r);

@@ -74,7 +74,6 @@ sap.ui.define(
 						anoObrigacao: this.getModel().getProperty("/Obrigacao/anoObrigacao")
 					})
 					.then((res) => {
-						console.log(res);
 						that._inserirRequisicaoModeloObrigacao(that.getModel().getProperty("/Obrigacao/textAreaJustificativa"),
 							that.getModel().getProperty("/Obrigacao/fkEmpresa"), JSON.stringify(JSON.parse(res)[0].generated_id));
 					})
@@ -94,10 +93,9 @@ sap.ui.define(
 						fkDominioRequisicaoModeloObrigacaoStatus: 1
 					})
 					.then((result) => {
-						console.log(result);
 
 						var oParametros = {
-							empresa: that.getModel().getProperty("/Empresa"),
+							idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
 							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
 						};
 
@@ -107,7 +105,7 @@ sap.ui.define(
 
 						that._limparModel();
 						sap.m.MessageToast.show(that.getResourceBundle().getText("viewComplianceBepsObrigacaoCadastrada", {
-							duration: 5000
+							duration: 100000
 						}));
 					})
 					.catch(function (error) {
@@ -130,12 +128,12 @@ sap.ui.define(
 				var oParametros = oEvent.getParameter("arguments").parametros ? JSON.parse(oEvent.getParameter("arguments").parametros) : null;
 
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
+				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
 
 				this._carregarSelect("Empresa");
 				this._carregarSelect("DominioPais");
 				this._carregarSelect("ObrigacaoAcessoria?tipo=1");
 				this._carregarSelect("DomPeriodicidadeObrigacao");
-				//this._carregarSelect("DominioAnoFiscal");
 				this._carregaComboPais();
 			},
 
@@ -179,6 +177,16 @@ sap.ui.define(
 					}
 				});
 			},
+			
+			onTrocarEmpresa: function (oEvent) {
+
+				var empresa = {};
+				var idEmpresaSelecionada = oEvent.getSource().getSelectedKey();
+
+				var oModel = this.getModel().getProperty("/Empresa");
+				empresa = oModel.find(x => x.id_empresa == idEmpresaSelecionada);
+				this.getModel().setProperty("/Obrigacao/fkDominioPais", empresa["fk_pais.id_pais"]);
+			},
 
 			_limparModel: function () {
 				this.getModel().setProperty("/Obrigacao", {
@@ -206,6 +214,7 @@ sap.ui.define(
 
 				var oValidacao = Validador.validarFormularioAdmin({
 					aInputObrigatorio: $(sIdFormulario + " input[aria-required=true]"),
+					aTextAreaObrigatorio: $(sIdFormulario + " textarea[aria-required=true]"),
 
 					aDropdownObrigatorio: [
 						this.byId("selectEmpresas"),
@@ -288,7 +297,7 @@ sap.ui.define(
 					onClose: function (oAction) {
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							var oParametros = {
-								empresa: that.getModel().getProperty("/Empresa"),
+								idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
 								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
 							};
 
