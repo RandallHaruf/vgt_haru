@@ -37,7 +37,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("ttcDetalheTrimestre", {
-					oParameters: JSON.stringify(oParams)
+					oParameters: this.toURIComponent(oParams)
 				});
 			},
 
@@ -472,7 +472,7 @@ sap.ui.define(
 					};
                     
 					that.getRouter().navTo("ttcVisualizacaoTrimestre", {
-						oParameters: JSON.stringify(oParams)
+						oParameters: that.toURIComponent(oParams)
 					});
 				});
 
@@ -497,7 +497,7 @@ sap.ui.define(
 
 			navToPage2: function () {
 				this.getRouter().navTo("ttcListagemEmpresas", {
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 					})
 				});
@@ -510,7 +510,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("ttcRequisicaoReabertura", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 
@@ -522,8 +522,8 @@ sap.ui.define(
 					this.byId("btnRequisicoes").setVisible(false);
 				}
 
-				var oEmpresa = JSON.parse(oEvent.getParameter("arguments").oEmpresa);
-				var idAnoCalendario = oEvent.getParameter("arguments").idAnoCalendario;
+				var oEmpresa = this.fromURIComponent(oEvent.getParameter("arguments").oEmpresa);
+				var idAnoCalendario = this.fromURIComponent(oEvent.getParameter("arguments").idAnoCalendario);
 
 				this.getModel().setProperty("/AnoCalendarioSelecionado", idAnoCalendario);
 				this.getModel().setProperty("/Empresa", oEmpresa);

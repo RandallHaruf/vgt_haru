@@ -1,6 +1,6 @@
 <mvc:View controllerName="ui5ns.ui5.controller.beps.FormularioNovaObrigacao" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns="sap.m" class="viewBepsFormularioNovaObrigacao">
-	<f2:DynamicPage title="Beps - {i18n>viewFormularioBepsNovaObrigacao}" showFooter="true">
+	<f2:DynamicPage showFooter="true">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>

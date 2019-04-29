@@ -345,7 +345,7 @@ sap.ui.define(
 				this._confirmarCancelamento(function () {
 					that._limparModel();
 					that.getRouter().navTo("ttcListagemEmpresas", {
-						parametros: JSON.stringify({
+						parametros: that.toURIComponent({
 							idAnoCalendario: that.getModel().getProperty("/AnoCalendario")["idAnoCalendario"]
 						})
 					});
@@ -389,7 +389,7 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
-				var oParameters = JSON.parse(oEvent.getParameter("arguments").oParameters);
+				var oParameters = this.fromURIComponent(oEvent.getParameter("arguments").oParameters);
 				Utils.displayFormat(this);
 				this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
@@ -530,8 +530,8 @@ sap.ui.define(
 				var sIdAnoCalendarioSelecionado = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
 
 				this.getRouter().navTo("ttcResumoTrimestre", {
-					oEmpresa: JSON.stringify(oEmpresaSelecionada),
-					idAnoCalendario: sIdAnoCalendarioSelecionado
+					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado)
 				});
 			},
 

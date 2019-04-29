@@ -55,7 +55,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 
@@ -67,7 +67,7 @@ sap.ui.define(
 				}
 
 				var that = this;
-				var parametro = JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario;
+				var parametro = this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario;
 
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
 					if (response) {

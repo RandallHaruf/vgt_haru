@@ -78,7 +78,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("taxPackageEdicaoTrimestre", {
-					parametros: JSON.stringify(oParams)
+					parametros: this.toURIComponent(oParams)
 				});
 			},
 
@@ -907,7 +907,7 @@ sap.ui.define(
 
 			navToPage2: function () {
 				this.getRouter().navTo("taxPackageListagemEmpresas", {
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 					})
 				});
@@ -922,7 +922,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("taxPackageRequisicaoReabertura", {
-					parametros: encodeURIComponent(JSON.stringify(oParametros))
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 
@@ -932,7 +932,7 @@ sap.ui.define(
 					this.byId("btnRequisicoes").setVisible(false);
 				}
 
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 
 				this.getModel().setProperty("/Empresa", oParametros.empresa);
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.idAnoCalendario);

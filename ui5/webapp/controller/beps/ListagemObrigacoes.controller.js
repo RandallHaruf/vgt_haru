@@ -9,7 +9,7 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Arquivo",
 		"sap/m/MessageBox"
 	],
-	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo,MessageBox) {
+	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo, MessageBox) {
 		return BaseController.extend("ui5ns.ui5.controller.beps.ListagemObrigacoes", {
 
 			onInit: function (oEvent) {
@@ -23,56 +23,56 @@ sap.ui.define(
 					ValorFiltroNomeObrigacao: [],
 					ValorFiltroNomeArquivo: ""
 				}));
-                var hoje = new Date();
-				this.getModel().setProperty("/startDate",new Date(JSON.stringify(hoje.getFullYear()),"0","1"));
+				var hoje = new Date();
+				this.getModel().setProperty("/startDate", new Date(JSON.stringify(hoje.getFullYear()), "0", "1"));
 				this.getRouter().getRoute("bepsListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
 			},
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-				
+
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this._parametroInception = "full=true";
-					that.getModel().setProperty("/isIFrame",true);
+					that.getModel().setProperty("/isIFrame", true);
 				} else {
 					this._parametroInception = "full=false";
-					that.getModel().setProperty("/isIFrame",false);
+					that.getModel().setProperty("/isIFrame", false);
 				}
-				
+
 				/*NodeAPI.pListarRegistros("DominioObrigacaoAcessoriaTipo")
 					.then(function (res) {
 						that.getModel().setProperty("/FiltroTipoObrigacao", res);
 					});*/
-				
+
 				this.getModel().setProperty("/RepositorioDocumento", []);
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
-				this.getModel().setProperty("/IdEmpresaSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
-				this.getModel().setProperty("/AnoCalendarioSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario);
+				this.getModel().setProperty("/IdEmpresaSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
+				this.getModel().setProperty("/AnoCalendarioSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario);
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
-				this.setBusy(this.byId("tabelaObrigacoes"), false);
+				//this.setBusy(this.byId("tabelaObrigacoes"), false);
 			},
-			
+
 			onProcurarArquivos: function (oEvent) {
 				var that = this;
-				
+
 				if (!this._dialogProcurarArquivos) {
 					var oVBox = new sap.m.VBox();
-					
+
 					var oToolbar = new sap.m.Toolbar();
-					
+
 					oToolbar.addContent(new sap.m.Input({
 						placeholder: "{i18n>viewComplianceListagemObrigacoesNomeArquivo}",
 						value: "{/ValorFiltroNomeArquivo}"
 					}).attachChange(function (event) {
-						that._listarArquivos();	
+						that._listarArquivos();
 					}));
-					
+
 					oToolbar.addContent(new sap.m.ToolbarSpacer());
-					
+
 					var oFilterButton = new sap.m.Button({
 						icon: "sap-icon://filter",
 						tooltip: "{i18n>viewGeralTooltipVisualizarOpcoesFiltro}",
@@ -80,30 +80,30 @@ sap.ui.define(
 					}).attachPress(function (event) {
 						that._onFiltrarArquivos(event);
 					});
-					
+
 					oToolbar.addContent(oFilterButton);
-					
+
 					var oScrollContainer = new sap.m.ScrollContainer({
 						width: "100%",
 						height: "500px",
 						vertical: true
 					});
-					
+
 					oVBox.addItem(oToolbar);
-					
+
 					var oTable = new sap.m.Table({
 						id: "tabelaProcurarArquivosBeps",
 						growing: true
 					});
-					
-					/* Colunas */ 
+
+					/* Colunas */
 					oTable.addColumn(new sap.m.Column({
 						hAlign: "Center",
 						vAlign: "Middle"
 					}).setHeader(new sap.m.Text({
 						text: "{i18n>viewComplianceListagemObrigacoesNomeArquivo}"
 					})));
-					
+
 					/*oTable.addColumn(new sap.m.Column({
 						vAlign: "Middle",
 						demandPopin: true,
@@ -111,7 +111,7 @@ sap.ui.define(
 					}).setHeader(new sap.m.Text({
 						text: "Tipo"
 					})));*/
-					
+
 					oTable.addColumn(new sap.m.Column({
 						hAlign: "Center",
 						vAlign: "Middle",
@@ -120,24 +120,24 @@ sap.ui.define(
 					}).setHeader(new sap.m.Text({
 						text: "{i18n>viewComplianceListagemObrigacoesNomeObrigacao}"
 					})));
-					
+
 					oTable.addColumn(new sap.m.Column({
 						width: "50px"
 					}));
-	
+
 					/* Template das células */
 					var oTextNome = new sap.m.Text({
 						text: "{nome_arquivo}"
 					});
-					
+
 					/*var oTextTipo = new sap.m.Text({
 						text: "{tipo}"
 					});*/
-					
+
 					var oTextObrigacao = new sap.m.Text({
 						text: "{nome_obrigacao}"
 					});
-				
+
 					var oButtonDownload = new sap.m.Button({
 						icon: "sap-icon://download-from-cloud",
 						type: "Accept",
@@ -145,11 +145,11 @@ sap.ui.define(
 					}).attachPress(function (event) {
 						that._onBaixarArquivo(event);
 					});
-	
+
 					var oTemplate = new sap.m.ColumnListItem({
 						cells: [oTextNome, /*oTextTipo,*/ oTextObrigacao, oButtonDownload]
 					});
-	
+
 					oTable.bindItems({
 						path: "/RepositorioDocumento",
 						template: oTemplate,
@@ -160,11 +160,11 @@ sap.ui.define(
 							new sap.ui.model.Sorter("nome_arquivo")
 						]
 					});
-					
+
 					oScrollContainer.addContent(oTable);
-					
+
 					oVBox.addItem(oScrollContainer);
-					
+
 					var dialog = new sap.m.Dialog({
 						title: "{i18n>viewComplianceListagemObrigacoesProcurarArquivo}",
 						showHeader: true,
@@ -178,35 +178,35 @@ sap.ui.define(
 						}),
 						afterClose: function () {
 							//dialog.destroy();
-							that.getModel().setProperty("/RepositorioDocumento", []);	
-							that.getModel().setProperty("/ValorFiltroEmpresa", []);	
-							that.getModel().setProperty("/ValorFiltroNomeObrigacao", []);	
-							that.getModel().setProperty("/ValorFiltroNomeArquivo", "");	
+							that.getModel().setProperty("/RepositorioDocumento", []);
+							that.getModel().setProperty("/ValorFiltroEmpresa", []);
+							that.getModel().setProperty("/ValorFiltroNomeObrigacao", []);
+							that.getModel().setProperty("/ValorFiltroNomeArquivo", "");
 							that.getView().removeDependent(that._oFilterDialog);
 							that._oFilterDialog = null;
 						}
 					}).addStyleClass("sapUiNoContentPadding");
-		
+
 					this.getView().addDependent(dialog);
-		
+
 					this._dialogProcurarArquivos = dialog;
 				}
-				
+
 				this._dialogProcurarArquivos.open();
-				
+
 				this._listarArquivos();
 			},
-			
+
 			_onFiltrarArquivos: function (oEvent) {
 				var that = this;
-				
+
 				if (!this._oFilterDialog) {
 					var oFilterDialog = new sap.m.ViewSettingsDialog();
-				
+
 					oFilterDialog.attachConfirm(function (event) {
 						that._onConfirmarFiltroArquivos(event);
 					});
-					
+
 					/*var oFilterItemTipo = new sap.m.ViewSettingsFilterItem({
 						text: "Tipo",
 						key: "filtroTipo",
@@ -219,38 +219,44 @@ sap.ui.define(
 					});
 					
 					oFilterDialog.addFilterItem(oFilterItemTipo);*/
-					
+
 					var oFilterItemEmpresa = new sap.m.ViewSettingsFilterItem({
 						text: that.getResourceBundle().getText("viewGeralEmpresa"),
 						key: "filtroEmpresa",
 						multiSelect: true
 					});
-					
+
 					oFilterItemEmpresa.bindItems({
 						path: "/FiltroEmpresa",
-						template: new sap.m.ViewSettingsItem({ text: "{nome}", key: "{id_empresa}" })
+						template: new sap.m.ViewSettingsItem({
+							text: "{nome}",
+							key: "{id_empresa}"
+						})
 					});
-					
+
 					oFilterDialog.addFilterItem(oFilterItemEmpresa);
-					
+
 					var oFilterItemNomeObrigacao = new sap.m.ViewSettingsFilterItem({
 						text: that.getResourceBundle().getText("viewComplianceListagemObrigacoesNomeObrigacao"),
 						key: "filtroNomeObrigacao",
 						multiSelect: true
 					});
-					
+
 					oFilterItemNomeObrigacao.bindItems({
 						path: "/FiltroNomeObrigacao",
-						template: new sap.m.ViewSettingsItem({ text: "{nome}", key: "{nome}" })
+						template: new sap.m.ViewSettingsItem({
+							text: "{nome}",
+							key: "{nome}"
+						})
 					});
-					
+
 					oFilterDialog.addFilterItem(oFilterItemNomeObrigacao);
-					
+
 					this.getView().addDependent(oFilterDialog);
-					
+
 					this._oFilterDialog = oFilterDialog;
 				}
-				
+
 				this._oFilterDialog.open();
 			},
 
@@ -258,31 +264,31 @@ sap.ui.define(
 				var aFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
 					//aFiltroTipo = [],
 					aFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao");
-					
+
 				// Reseta os valores de filtros anteriores
 				aFiltroEmpresa.length = 0;
 				aFiltroNomeObrigacao.length = 0;
-				
+
 				// Preenche os novos valores de filtro
 				if (oEvent.getParameter("filterItems") && oEvent.getParameter("filterItems").length) {
 					for (var i = 0, length = oEvent.getParameter("filterItems").length; i < length; i++) {
 						switch (oEvent.getParameter("filterItems")[i].getParent().getKey()) {
-							case "filtroEmpresa":
-								aFiltroEmpresa.push(oEvent.getParameter("filterItems")[i].getKey());
-								break;
+						case "filtroEmpresa":
+							aFiltroEmpresa.push(oEvent.getParameter("filterItems")[i].getKey());
+							break;
 							/*case "filtroTipo":
 								aFiltroTipo.push(oEvent.getParameter("filterItems")[i].getKey());
 								break;*/
-							case "filtroNomeObrigacao":
-								aFiltroNomeObrigacao.push(oEvent.getParameter("filterItems")[i].getKey());
-								break;
+						case "filtroNomeObrigacao":
+							aFiltroNomeObrigacao.push(oEvent.getParameter("filterItems")[i].getKey());
+							break;
 						}
 					}
 				}
-				
+
 				this._listarArquivos();
 			},
-			
+
 			_onBaixarArquivo: function (oEvent) {
 				var that = this,
 					oButton = oEvent.getSource(),
@@ -329,7 +335,7 @@ sap.ui.define(
 					"/AnoCalendarioSelecionado") : "";
 				var CampoAnoEstaPreenchido = (oAnoCalendario ? "&ListarAteAnoAtualMaisUm=1" : "");
 				this._atualizarDadosFiltrado();
-                /*if (!!CampoAnoEstaPreenchido) {
+				/*if (!!CampoAnoEstaPreenchido) {
 					this._atualizarDadosFiltrado();
 				}
 				else{
@@ -340,6 +346,7 @@ sap.ui.define(
 			navToHome: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},
+
 			navToListagemRequisicoes: function () {
 				var oParametros = {
 					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
@@ -347,9 +354,10 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("bepsListagemRequisicoes", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
+
 			onNavToReport: function () {
 				this.getRouter().navTo("bepsRelatorio");
 			},
@@ -384,12 +392,12 @@ sap.ui.define(
 					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
 					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 				};
-				
+
 				this.getRouter().navTo("bepsFormularioNovaObrigacao", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
-			
+
 			//CODIGO DO CALENDARIO START--------------------
 			//----------------------------------------------
 			handleAppointmentSelect: function (oEvent) {
@@ -400,13 +408,12 @@ sap.ui.define(
 					MessageBox.show("'" + oAppointment.getTitle() + "' " + sSelected + ". \n Selected appointments: " + this.byId("PC1").getSelectedAppointments().length);*/
 					var split = oEvent.mParameters.appointment.sId.split("-");
 					var oParametros = {
-						Obrigacao: oEvent.getSource().mBindingInfos.rows.binding.oList[0].appointments[split[split.length-1]].codigo,
+						Obrigacao: oEvent.getSource().mBindingInfos.rows.binding.oList[0].appointments[split[split.length - 1]].codigo,
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
-					};		
+					};
 					this.getRouter().navTo("bepsFormularioDetalhesObrigacao", {
-						parametros: JSON.stringify(oParametros)
-	
-					});					
+						parametros: this.toURIComponent(oParametros)
+					});
 				} else {
 					var aAppointments = oEvent.getParameter("appointments");
 					var sValue = aAppointments.length + " Appointments selected";
@@ -424,28 +431,33 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("bepsFormularioDetalhesObrigacao", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 
 			onNavBack: function () {
 				this.getRouter().navTo("selecaoModulo");
 			},
-			
+
 			_carregarFiltroNomeObrigacao: function () {
-				var aDoc = this.getModel().getProperty("/RepositorioDocumento");	
-				
+				var aDoc = this.getModel().getProperty("/RepositorioDocumento");
+
 				var distinctResult = aDoc.reduce(function (distinctObject, element) {
 					if (distinctObject.strings.indexOf(element.nome_obrigacao) === -1) {
 						distinctObject.strings.push(element.nome_obrigacao);
-						distinctObject.objects.push({ nome: element.nome_obrigacao });
+						distinctObject.objects.push({
+							nome: element.nome_obrigacao
+						});
 					}
 					return distinctObject;
-				}, { strings: [], objects: [] });
-				
+				}, {
+					strings: [],
+					objects: []
+				});
+
 				this.getModel().setProperty("/FiltroNomeObrigacao", distinctResult.objects);
 			},
-			
+
 			carregarFiltroEmpresa: function () {
 				var that = this;
 				NodeAPI.listarRegistros("Empresa?" + this._parametroInception, function (response) {
@@ -469,7 +481,7 @@ sap.ui.define(
 					that.getModel().setProperty("/DominioAnoCalendario", response);
 				});
 			},
-			
+
 			_atualizarDados: function () {
 				var that = this;
 
@@ -547,7 +559,7 @@ sap.ui.define(
 						}
 					});
 			},
-			
+
 			_atualizarDadosFiltrado: function () {
 				var that = this;
 
@@ -604,6 +616,8 @@ sap.ui.define(
 						}
 					});
 
+				this.setBusy(this.byId("tabelaObrigacoes"), true);
+
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
 					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
@@ -626,7 +640,7 @@ sap.ui.define(
 								response[i]["descricao"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"], that);
 							}
 							that.getModel().setProperty("/Obrigacao", response);
-                            //CODIGO DO CALENDARIO START--------------------
+							//CODIGO DO CALENDARIO START--------------------
 							//----------------------------------------------
 							var aRegistro = that.getModel().getProperty("/Obrigacao");
 							var people = [];
@@ -635,35 +649,35 @@ sap.ui.define(
 							var cor;
 							for (var i = 0, length = aRegistro.length; i < length; i++) {
 								cor = "";
-								switch(aRegistro[i]["status_obrigacao_calculado"]){
-										case 1:
-											cor = "rgb(94, 105, 110)";
-											break;										
-										case 4:
-											cor = "rgb(66, 124, 172)";
-											break;
-										case 5:
-											cor = "rgb(187, 0, 0)";
-											break;	
-										case 6:
-											cor = "rgb(43, 124, 43)";
-											break;											
-										case 7:
-											cor = "rgb(231, 140, 7)";
-											break;											
+								switch (aRegistro[i]["status_obrigacao_calculado"]) {
+								case 1:
+									cor = "rgb(94, 105, 110)";
+									break;
+								case 4:
+									cor = "rgb(66, 124, 172)";
+									break;
+								case 5:
+									cor = "rgb(187, 0, 0)";
+									break;
+								case 6:
+									cor = "rgb(43, 124, 43)";
+									break;
+								case 7:
+									cor = "rgb(231, 140, 7)";
+									break;
 								}
-								if(cor){
+								if (cor) {
 									appointments.push({
-										codigo:aRegistro[i],
-										start:Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]),
-										end:new Date(Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]).setHours(23,59,59)),
-										title:aRegistro[i]["nome"] + "\n" + aRegistro[i]["nome_obrigacao"],
+										codigo: aRegistro[i],
+										start: Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]),
+										end: new Date(Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]).setHours(23, 59, 59)),
+										title: aRegistro[i]["nome"] + "\n" + aRegistro[i]["nome_obrigacao"],
 										type: "Type02",
 										color: cor,
-										tentative: false										
-									});										
+										tentative: false
+									});
 								}
-	
+
 							}
 							people.push({
 								pic: "sap-icon://add",
@@ -676,46 +690,48 @@ sap.ui.define(
 							//CODIGO DO CALENDARIO END -----------------------
 
 						}
+						
+						that.setBusy(that.byId("tabelaObrigacoes"), false);
 					});
 			},
-			
+
 			_listarArquivos: function () {
-				var that = this, 
+				var that = this,
 					aValorFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
 					aValorFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao"),
 					sValorFiltroNomeArquivo = this.getModel().getProperty("/ValorFiltroNomeArquivo");
-				
+
 				this.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivosBeps"), true);
-				
+
 				var oQueryString = {};
-				
+
 				if (aValorFiltroEmpresa && aValorFiltroEmpresa.length) {
 					oQueryString.empresa = JSON.stringify(aValorFiltroEmpresa);
 				}
-				
+
 				//if (aTipo && aTipo.length) oQueryString.tipo = JSON.stringify(aTipo);
-				
+
 				if (aValorFiltroNomeObrigacao && aValorFiltroNomeObrigacao.length) {
 					oQueryString.nomeObrigacao = JSON.stringify(aValorFiltroNomeObrigacao);
 				}
-				
+
 				if (sValorFiltroNomeArquivo) {
 					oQueryString.nomeArquivo = sValorFiltroNomeArquivo;
 				}
-				
+
 				// Fixa a pesquisa por documentos relacionados a obrigações do tipo COMPLIANCE
 				oQueryString.tipo = JSON.stringify([1]);
 				oQueryString.full = this.isIFrame() ? true : false;
-				
+
 				NodeAPI.pListarRegistros("DeepQuery/Documento", oQueryString)
 					.then(function (res) {
-						that.getModel().setProperty("/RepositorioDocumento", res.result);	
+						that.getModel().setProperty("/RepositorioDocumento", res.result);
 						// Carrega o filtro de nome de obrigação apenas na listagem geral (evita que as opções desapareçam)
 						if (!sValorFiltroNomeArquivo && !aValorFiltroEmpresa.length && !aValorFiltroNomeObrigacao.length) {
 							that._carregarFiltroNomeObrigacao();
 						}
 						that.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivosBeps"), false);
-					});	
+					});
 			},
 
 			_parametroInception: "full=true"

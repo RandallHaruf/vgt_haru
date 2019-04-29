@@ -133,7 +133,7 @@ sap.ui.define(
 			
             onVoltarParaListagem: function () {
 				this.getRouter().navTo("bepsListagemObrigacoes", {
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")
 					})
 				});
@@ -510,7 +510,7 @@ sap.ui.define(
 					}
 
 				});
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
                 var idAnoCalendario = oParametros.idAnoCalendario;
 				this.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);

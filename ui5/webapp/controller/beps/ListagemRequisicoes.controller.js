@@ -37,7 +37,7 @@ sap.ui.define(
 			
 			navToPage2: function () {
 				this.getRouter().navTo("bepsListagemObrigacoes", {
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idEmpresaCalendario: this.getModel().getProperty("/IdEmpresaSelecionado"),
 						idAnoCalendario: this.getModel().getProperty("/IdAnoSelecionado")
 					})
@@ -63,10 +63,9 @@ sap.ui.define(
 			
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-				this.getModel().setProperty("/IdAnoSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).anoCalendario);
-				this.getModel().setProperty("/IdEmpresaSelecionado",JSON.parse(oEvent.getParameter("arguments").parametros).empresa);
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
-				
+				this.getModel().setProperty("/IdAnoSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).anoCalendario);
+				this.getModel().setProperty("/IdEmpresaSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).empresa);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 				
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?filtrarUsuario=true&TipoObrigacao=1", function (response) { // 1 BEPS
 					if (response) {

@@ -2884,7 +2884,7 @@ sap.ui.define(
 				var that = this;
 				this._confirmarCancelamento(function () {
 					that.getRouter().navTo("taxPackageListagemEmpresas", {
-						parametros: JSON.stringify({
+						parametros: that.toURIComponent({
 							idAnoCalendario: that.getModel().getProperty("/AnoCalendario").idAnoCalendario
 						})
 					});
@@ -2931,7 +2931,7 @@ sap.ui.define(
 			_onRouteMatched: function (oEvent) {
 				this._zerarModel();
 
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 
 				var sLabelDataInicio = oParametros.oEmpresa.fy_start_date,
 					sLabelDataFim = oParametros.oEmpresa.fy_end_date;
@@ -3518,7 +3518,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 

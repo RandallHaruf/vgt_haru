@@ -2639,8 +2639,8 @@ sap.ui.define(
 			navToPage2: function () {
 				var that = this;
 				//this._confirmarCancelamento(function () {
-					that.getRouter().navTo("taxPackageListagemEmpresas",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario})
+				that.getRouter().navTo("taxPackageListagemEmpresas",{
+					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario})
 				});
 				//});
 			},
@@ -3222,7 +3222,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 

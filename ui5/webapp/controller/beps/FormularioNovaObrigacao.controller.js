@@ -100,7 +100,7 @@ sap.ui.define(
 						};
 
 						that.getRouter().navTo("bepsListagemObrigacoes", {
-							parametros: JSON.stringify(oParametros)
+							parametros: that.toURIComponent(oParametros)
 						});
 
 						that._limparModel();
@@ -125,7 +125,7 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 
-				var oParametros = oEvent.getParameter("arguments").parametros ? JSON.parse(oEvent.getParameter("arguments").parametros) : null;
+				var oParametros = oEvent.getParameter("arguments").parametros ? this.fromURIComponent(oEvent.getParameter("arguments").parametros) : null;
 
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
 				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
@@ -302,7 +302,7 @@ sap.ui.define(
 							};
 
 							that.getRouter().navTo("bepsListagemObrigacoes", {
-								parametros: JSON.stringify(oParametros)
+								parametros: that.toURIComponent(oParametros)
 							});
 							that._limparModel();
 						}

@@ -133,7 +133,7 @@ sap.ui.define(
 
 			navToPage2: function () {
 				this.getRouter().navTo("ttcListagemEmpresas", {
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario
 					})
 				});
@@ -147,8 +147,8 @@ sap.ui.define(
 				var sIdAnoCalendarioSelecionado = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
 
 				this.getRouter().navTo("ttcResumoTrimestre", {
-					oEmpresa: JSON.stringify(oEmpresaSelecionada),
-					idAnoCalendario: sIdAnoCalendarioSelecionado
+					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado)
 				});
 
 				if (!this.byId("btnReabrir").getVisible())
@@ -163,7 +163,7 @@ sap.ui.define(
 					this.byId("btnReabrir").setVisible(false);
 				}
 
-				var oParameters = JSON.parse(oEvent.getParameter("arguments").oParameters);
+				var oParameters = this.fromURIComponent(oEvent.getParameter("arguments").oParameters);
 
 				if (!this.isIFrame()) {
 

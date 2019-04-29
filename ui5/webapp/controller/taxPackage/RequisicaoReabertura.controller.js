@@ -73,7 +73,7 @@ sap.ui.define(
 			
 			navToPage2: function () {
 				this.getRouter().navTo("taxPackageListagemEmpresas",{
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
 					})
 				});
@@ -90,14 +90,14 @@ sap.ui.define(
 				};
 			
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				}); 
 			},
 			
 			_onRouteMatched: function (oEvent) {
 				var that = this;
 				
-				var oParametros = JSON.parse(decodeURIComponent(oEvent.getParameter("arguments").parametros));
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);

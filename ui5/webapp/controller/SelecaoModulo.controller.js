@@ -465,25 +465,25 @@ sap.ui.define(
 
 			navToTTC: function (oEvent) {
 				this.getRouter().navTo("ttcListagemEmpresas",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
 				});
 			},
 
 			navToTaxPackage: function (oEvent) {
 				this.getRouter().navTo("taxPackageListagemEmpresas",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
 				});
 			},
 
 			navToCompliance: function (oEvent) {
 				this.getRouter().navTo("complianceListagemObrigacoes",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
 				});
 			},
 
 			navToBeps: function (oEvent) {
 				this.getRouter().navTo("bepsListagemObrigacoes",{
-					parametros: JSON.stringify({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
 				});
 			},
 

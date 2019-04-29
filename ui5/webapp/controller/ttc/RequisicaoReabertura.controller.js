@@ -76,7 +76,7 @@ sap.ui.define(
 			
 			navToPage2: function () {
 				this.getRouter().navTo("ttcListagemEmpresas", {
-					parametros: JSON.stringify({
+					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
 					})
 				});
@@ -94,15 +94,15 @@ sap.ui.define(
 				var sIdAnoCalendario = this.getModel().getProperty("/idAnoCalendario");
 			
 				this.getRouter().navTo("ttcResumoTrimestre", {
-					oEmpresa: JSON.stringify(oEmpresaSelecionada),
-					idAnoCalendario: sIdAnoCalendario
+					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendario)
 				}); 
 			},
 			
 			_onRouteMatched: function (oEvent) {
 				var that = this;
 				
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);

@@ -49,11 +49,11 @@ sap.ui.define(
 				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 				this.carregarFiltroEmpresa();
 				this.carregarFiltroAnoCalendario();
-				this.getModel().setProperty("/IdEmpresaSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
-				this.getModel().setProperty("/AnoCalendarioSelecionado", JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario);
+				this.getModel().setProperty("/IdEmpresaSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
+				this.getModel().setProperty("/AnoCalendarioSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario);
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
-				this.setBusy(this.byId("tabelaObrigacoes"), false);
+				//this.setBusy(this.byId("tabelaObrigacoes"), false);
 			},
 			
 			onProcurarArquivos: function (oEvent) {
@@ -348,7 +348,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("complianceListagemRequisicoes", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 
@@ -388,7 +388,7 @@ sap.ui.define(
 				};
 				
 				this.getRouter().navTo("complianceFormularioNovaObrigacao", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 			
@@ -406,7 +406,7 @@ sap.ui.define(
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
 					};		
 					this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {
-						parametros: JSON.stringify(oParametros)
+						parametros: this.toURIComponent(oParametros)
 	
 					});					
 				} else {
@@ -426,7 +426,7 @@ sap.ui.define(
 				};
 
 				this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 
 				});
 			},
@@ -605,6 +605,8 @@ sap.ui.define(
 							//that.getModel().setProperty("/Obrigacao", response);
 						}
 					});
+					
+				this.setBusy(this.byId("tabelaObrigacoes"), true);
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[2]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
@@ -677,6 +679,8 @@ sap.ui.define(
 							//----------------------------------------------
 							//CODIGO DO CALENDARIO END -----------------------
 						}
+						
+						that.setBusy(that.byId("tabelaObrigacoes"), false);
 					});
 			},
 			

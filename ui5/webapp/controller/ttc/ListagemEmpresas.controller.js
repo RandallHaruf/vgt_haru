@@ -29,8 +29,8 @@ sap.ui.define(
 				var sIdAnoCalendarioSelecionado = this.getModel().getProperty("/AnoCalendarioSelecionado");
 
 				this.getRouter().navTo("ttcResumoTrimestre", {
-					oEmpresa: JSON.stringify(oEmpresaSelecionada),
-					idAnoCalendario: sIdAnoCalendarioSelecionado
+					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado)
 				});
 			},
 
@@ -45,7 +45,7 @@ sap.ui.define(
 					this.mostrarAcessoRapidoInception();
 				}
 
-				var parametro = JSON.parse(oEvent.getParameter("arguments").parametros).idAnoCalendario;
+				var parametro = this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario;
 
 				that.getModel().setProperty("/AnoCalendarioSelecionado", parametro);
 

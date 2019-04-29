@@ -41,7 +41,7 @@ sap.ui.define(
 			},
 			
 			_onRouteMatched: function (oEvent) {
-				var oParametros = JSON.parse(oEvent.getParameter("arguments").parametros);
+				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 						var aResponse = oParametros;
 							aResponse["empresa"]["pais"] = Utils.traduzDominioPais(aResponse["empresa"]["fk_dominio_pais.id_dominio_pais"],this);
 							aResponse["empresa"]["status"] = Utils.traduzEmpresaStatusTipo(aResponse["empresa"]["id_dominio_empresa_status"],this);	

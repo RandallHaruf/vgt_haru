@@ -25,7 +25,7 @@ sap.ui.define(
 				};
 				
 				this.getRouter().navTo("detalheEmpresaVinculada", {
-					parametros: JSON.stringify(oParametros)
+					parametros: this.toURIComponent(oParametros)
 				});
 			},
 			
