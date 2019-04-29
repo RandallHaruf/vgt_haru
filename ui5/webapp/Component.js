@@ -1,9 +1,39 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
-	"ui5ns/ui5/model/models"
-], function (UIComponent, Device, models) {
+	"ui5ns/ui5/model/models",
+	"ui5ns/ui5/model/Constants"
+], function (UIComponent, Device, models, Constants) {
 	"use strict";
+
+	const setRegistroAcesso = function () {
+		window.onload = function () {
+			var s = document.createElement('script');
+			s.type = 'text/javascript';
+			var code = 
+				'const registrarAcesso = function (self) {'
+					+ 'setTimeout(function () {'
+						+ 'fetch("' + Constants.urlBackend + 'verifica-auth", {'
+								+ 'credentials: "include"'
+							+ '})'
+							+ '.then((res) => {'
+								+ 'self(self);'
+							+ '})'
+							+ '.catch((err) => {'
+								+ 'self(self);'
+							+ '});'
+					+ '}, 120000);' // 120s
+				+ '};'
+				+ 'registrarAcesso(registrarAcesso);';
+			try {
+				s.appendChild(document.createTextNode(code));
+				document.body.appendChild(s);
+			} catch (e) {
+				s.text = code;
+				document.body.appendChild(s);
+			}
+		};
+	};
 
 	return UIComponent.extend("ui5ns.ui5.Component", {
 
@@ -25,9 +55,11 @@ sap.ui.define([
 
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
-			
+
 			// Pre-load para ajudar na velocidade de abrir o calendário (datepicker) pela primeira vez
 			sap.ui.getCore().loadLibrary("sap.ui.unified");
+			
+			setRegistroAcesso();
 		}
 	});
 });
