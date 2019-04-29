@@ -1150,6 +1150,7 @@ sap.ui.define(
 						for (var i = 0, length = response.length; i < length; i++) {
 							var oPeriodo = response[i];
 
+							// Se estimativa
 							if (oPeriodo.numero_ordem <= 4) {
 								if (that.isIFrame()) {
 									that._popularToolbarEstimativaInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
@@ -1160,8 +1161,9 @@ sap.ui.define(
 										that._popularToolbarEstimativaFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 									}
 								}
-								// Se o período for anual OU for a ÚLTIMA retificadora
-							} else if (oPeriodo.numero_ordem === 5 || (oPeriodo.numero_ordem === 6 && i === length - 1)) {
+							} 
+							// Se anual
+							else if (oPeriodo.numero_ordem === 5) {
 								if (that.isIFrame()) {
 									that._popularToolbarAnualInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								} else {
@@ -1169,6 +1171,25 @@ sap.ui.define(
 										that._popularToolbarAnualCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 									} else {
 										that._popularToolbarAnualFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									}
+								}
+							}
+							// Se ÚLTIMA retificadora
+							else if ((oPeriodo.numero_ordem === 6 && i === length - 1)) {
+								// Flag que indica se existe ao menos 1 aprovação de envio para o ANUAL
+								var isExibirRetificadora = response.find(function (obj) {
+									return obj.numero_ordem === 5;
+								}).ind_exibir_retificadora;
+								
+								if (isExibirRetificadora) {
+									if (that.isIFrame()) {
+										that._popularToolbarAnualInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									} else {
+										if (oPeriodo.ind_ativo) {
+											that._popularToolbarAnualCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+										} else {
+											that._popularToolbarAnualFechada(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+										}
 									}
 								}
 							}
@@ -1351,6 +1372,12 @@ sap.ui.define(
 				/*oToolbar.addContent(new sap.m.Title({
 					text: that.getResourceBundle().getText("viewGeralFaltamXDias", [1]) // TROCAR PELO TEMPO QUE FALTA PARA O PERÍODO ACABAR                         
 				}));*/
+				
+				if (!this._isPeriodoCorrente(oPeriodo.numero_ordem) && oPeriodo.DiasRestantes && oPeriodo.ind_ativo == true) {
+					oToolbar.addContent(new sap.m.Title({
+						text: that.getResourceBundle().getText("viewGeralFaltamXDias", [oPeriodo.DiasRestantes])
+					}));	
+				}
 
 				oToolbar.addContent(new sap.m.ToolbarSpacer());
 
@@ -1424,8 +1451,8 @@ sap.ui.define(
 				// <Button icon="sap-icon://permission" text="{i18n>viewGeralBotaoReabertura}" press="onReabrirPeriodo"/>
 				if (oPeriodo.status_envio !== 5) { // aguardando aprovação
 					oButton = new sap.m.Button({
-						icon: "sap-icon://permission",
-						text: that.getResourceBundle().getText("viewGeralReabertura")
+						icon: oPeriodo.numero_ordem === 6 ? "sap-icon://create-form" : "sap-icon://permission",
+						text: oPeriodo.numero_ordem === 6 ? "Ativar" : that.getResourceBundle().getText("viewGeralReabertura")
 					}).attachPress(function (evento) {
 						that.onReabrirPeriodo(evento, oPeriodo);
 					});

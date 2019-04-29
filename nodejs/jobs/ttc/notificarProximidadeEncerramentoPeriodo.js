@@ -137,16 +137,6 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 module.exports = () => {
 	// https://crontab.guru/
 	
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 15));
-	// 05 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 5));
-	// 03 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 3));
-	// 02 dias para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 2));
-	// 01 dia para o Fechamento do 4 Trimestre
-	scheduler.scheduleJob('25 20 12 4 *', send_Not_Email.bind(null, 1, 1));
-	
 	// ====================
 	//   4 TRIMESTRE 
 	//   20 de Janeiro

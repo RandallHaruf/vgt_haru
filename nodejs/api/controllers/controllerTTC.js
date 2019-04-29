@@ -359,7 +359,9 @@ module.exports = {
 				var aParams = [false, Number(req.body.idEmpresa), Number(req.body.idPeriodo)],
 					sQuery =
 					'update "VGT.REL_EMPRESA_PERIODO" '
-					+ 'set "ind_ativo" = ? '
+					+ 'set "ind_ativo" = ?, '
+					+ '"ind_enviado" = true, '
+					+ '"data_enviado" = CURRENT_DATE '
 					+ 'where '
 					+ '"fk_empresa.id_empresa" = ? '
 					+ 'and "fk_periodo.id_periodo" = ? ';

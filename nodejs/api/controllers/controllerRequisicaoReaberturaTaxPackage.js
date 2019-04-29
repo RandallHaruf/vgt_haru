@@ -1,6 +1,8 @@
 "use strict";
 
+var db = require('../db');
 var model = require("../models/modelRequisicaoReaberturaTaxPackage");
+var modelRelTaxPackagePeriodo = require("../models/modelRelTaxPackagePeriodo");
 
 module.exports = {
 
@@ -128,15 +130,90 @@ module.exports = {
 				
 				// Atualiza o periodo caso tenha sido aprovação do admin
 				if (req.body.reabrirPeriodo && req.body.fkDominioRequisicaoReaberturaStatus && Number(req.body.fkDominioRequisicaoReaberturaStatus) === 2) { 
-					var sQuery = 'update "VGT.REL_TAX_PACKAGE_PERIODO" set "ind_ativo" = ?, "status_envio" = ? where "id_rel_tax_package_periodo" = ? '; 
-					var aParam = [true, 2, req.body.fkIdRelTaxPackagePeriodo];
-					
-					model.execute({
-						statement: sQuery,
-						parameters: aParam
-					}, function (err2) {
-						if (err2) {
-							console.log(err2);
+					var sComando = 
+						'select * '
+						+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" '
+						+ 'inner join "VGT.PERIODO" '
+						+ 'on "fk_periodo.id_periodo" = "id_periodo" '
+						+ 'inner join "VGT.TAX_PACKAGE" '
+						+ 'on "fk_tax_package.id_tax_package" = "id_tax_package" '
+						+ 'where "id_rel_tax_package_periodo" = ?';
+						
+					db.executeStatement({
+						statement: sComando,
+						parameters: [req.body.fkIdRelTaxPackagePeriodo]
+					}, (err3, result3) => {
+						if (err3) {
+							console.log(err3);
+						}
+						else {
+							const atualizacaoNormal = () => {
+								var sQuery = 'update "VGT.REL_TAX_PACKAGE_PERIODO" set "ind_ativo" = ?, "status_envio" = ? where "id_rel_tax_package_periodo" = ? '; 
+								var aParam = [true, 2, req.body.fkIdRelTaxPackagePeriodo];
+								
+								model.execute({
+									statement: sQuery,
+									parameters: aParam
+								}, function (err2) {
+									if (err2) {
+										console.log(err2);
+									}
+								});
+							};
+							
+							if (result3 && result3.length) {
+								if (result3[0].numero_ordem === 6) {
+									let fkTaxPackage = result3[0]["fk_tax_package.id_tax_package"],
+										fkPeriodo = result3[0]["fk_periodo.id_periodo"];
+									
+									modelRelTaxPackagePeriodo.isPrimeiraRetificadora(result3[0]["fk_empresa.id_empresa"], result3[0]["fk_dominio_ano_calendario.id_dominio_ano_calendario"])
+										.then((bIsPrimeiraRetificadora) => {
+											if (bIsPrimeiraRetificadora) {
+												atualizacaoNormal();
+											}
+											else {
+												modelRelTaxPackagePeriodo.inserir([{
+													coluna: modelRelTaxPackagePeriodo.colunas.id
+												}, {
+													coluna: modelRelTaxPackagePeriodo.colunas.fkTaxPackage,
+													valor: fkTaxPackage
+												}, {
+													coluna: modelRelTaxPackagePeriodo.colunas.fkPeriodo,
+													valor: fkPeriodo 
+												}, {
+													coluna: modelRelTaxPackagePeriodo.colunas.indAtivo,
+													valor: true
+												}, {
+													coluna: modelRelTaxPackagePeriodo.colunas.statusEnvio,
+													valor: 2 // not started
+												}], (err4, result4) => {
+													if (err4) {
+														console.log(err4);
+													}
+													else {
+														if (result4 && result4.length) {
+															model.atualizar(oCondition, [{
+																coluna: model.colunas.fkIdRelTaxPackagePeriodo,
+																valor: result4[0].generated_id
+															}], (err5, result5) => {
+																console.log(err5);
+															});
+														}
+													}
+												});
+											}
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}
+								else {
+									atualizacaoNormal();
+								}
+							}
+							else {
+								atualizacaoNormal();
+							}
 						}
 					});
 				}

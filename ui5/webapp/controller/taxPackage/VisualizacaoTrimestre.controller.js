@@ -2870,6 +2870,9 @@ sap.ui.define(
 								});
 							}
 						}
+						response = response.filter(function (obj) {
+							return obj.id_tax_reconciliation;
+						});
 						that.getModel().setProperty("/TaxReconciliation", that.getModel().getProperty("/TaxReconciliation").concat(response));
 						that.getModel().refresh();
 					}

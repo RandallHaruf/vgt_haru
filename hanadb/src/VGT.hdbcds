@@ -711,4 +711,10 @@ context VGT {
             fk_modelo_obrigacao                           : association[1, 0..1] to VGT.MODELO_OBRIGACAO { id_modelo };
             fk_dominio_requisicao_modelo_obrigacao_status : association[1, 0..1] to VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS { id_dominio_requisicao_modelo_obrigacao_status };
     };
+
+    /*@@layout{"layoutInfo":{"x":-2658.4453125,"y":-284}}*/
+    entity ACESSO {
+        fk_usuario      : association[1, 0..1] to VGT.USUARIO { id_usuario };
+        datahora_acesso : UTCDateTime;
+    }
 };

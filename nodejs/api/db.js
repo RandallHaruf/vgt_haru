@@ -7,7 +7,8 @@ function log (oConnection, sStatement, aParameter, idUsuario) {
 	try {
 		if (sStatement.toUpperCase().indexOf("DELETE") > -1
 			|| sStatement.toUpperCase().indexOf("INSERT") > -1
-			|| sStatement.toUpperCase().indexOf("UPDATE") > -1) {
+			|| sStatement.toUpperCase().indexOf("UPDATE") > -1
+			|| sStatement.toUpperCase().indexOf("UPSERT") > -1) {
 			var jsonInteracao = JSON.stringify({
 				statement: sStatement,
 				parameters: aParameter

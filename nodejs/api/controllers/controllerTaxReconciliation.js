@@ -239,8 +239,10 @@ module.exports = {
 		//res.send("TODO: DeepQuery da Entidade Obrigacao");
 
 		var sStatement =
-			  'Select TaxRec.*,RTP_Per.*,TaxPac.*,Perid.*,Moeda.* From "VGT.TAX_RECONCILIATION" TaxRec '
-			+ 'LEFT OUTER JOIN "VGT.REL_TAX_PACKAGE_PERIODO" RTP_Per '
+			  /*'Select TaxRec.*,RTP_Per.*,TaxPac.*,Perid.*,Moeda.* From "VGT.TAX_RECONCILIATION" TaxRec '
+			+ 'LEFT OUTER JOIN "VGT.REL_TAX_PACKAGE_PERIODO" RTP_Per '*/
+			'Select TaxRec.*,RTP_Per.*,TaxPac.*,Perid.*,Moeda.* From "VGT.REL_TAX_PACKAGE_PERIODO" RTP_Per  '
+			+ 'LEFT OUTER JOIN "VGT.TAX_RECONCILIATION" TaxRec '
 			+ 'On TaxRec."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = RTP_Per."id_rel_tax_package_periodo" '
 			+ 'LEFT OUTER JOIN "VGT.TAX_PACKAGE" TaxPac '
             + 'ON RTP_Per."fk_tax_package.id_tax_package" = TaxPac."id_tax_package" '
@@ -304,8 +306,8 @@ module.exports = {
 						for (var i = 0; i < result.length; i++) {
 							var oTaxRecon = result[i];
 							
-							// Remove todas as retificadoras que não a última
-							if (oTaxRecon.numero_ordem >= 6 && i < result.length - 1) {
+							// Remove todas as retificadoras que não a última ou se não teve tax reconciliation preenchido
+							if ((oTaxRecon.numero_ordem >= 6 && i < result.length - 1)) {
 								result.splice(i, 1);
 							}
 						}

@@ -3116,6 +3116,9 @@ sap.ui.define(
 								});
 							}
 						}
+						response = response.filter(function (obj) {
+							return obj.id_tax_reconciliation;
+						});
 						that.getModel().setProperty("/TaxReconciliation", that.getModel().getProperty("/TaxReconciliation").concat(response));
 						that.getModel().refresh();
 					}
@@ -3173,9 +3176,11 @@ sap.ui.define(
 						// Se é a primeira vez editando a retificadora, realiza a copia das informações da anual/retificadora
 						if (!aTaxRecon.find(function (obj) { return obj.ind_ativo; }).id_tax_reconciliation) {
 							this._copiarDados(5, 6);
+							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
 						}
-						
-						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
+						else {
+							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
+						}
 						break;
 				}
 				
@@ -3183,7 +3188,19 @@ sap.ui.define(
 			},
 			
 			_copiarDados: function (iNumeroOrdemOrigem, iNumeroOrdemDestino) {
-				alert('copiar dados de nº ordem ' + iNumeroOrdemOrigem + ' para nº ordem ' + iNumeroOrdemDestino);
+				//alert('copiar dados de nº ordem ' + iNumeroOrdemOrigem + ' para nº ordem ' + iNumeroOrdemDestino);
+				
+				// copiar respostas do item do report - anos + sim/nao + texto
+				
+				// copiar resultado contabil
+				
+				// copiar diferencas
+				
+				// copiar resultado fiscal - valores calculados + detalhes de taxas multiplas + utilizaçoes de perda/credito + antecipacoes TTC + detalhes de income tax
+				
+				// copiar loss schedule - antecipacoes + detalhes + comentários
+				
+				// copiar credit schedule - antecipacoes + detalhes + comentários
 			},	
 
 			_carregarAntecipacoes: function (sIdTaxReconciliation) {

@@ -56,13 +56,29 @@ const getEmpresas = function (sUserId) {
 	});
 };
 
+const registrarAcesso = function (idUsuario) {
+	db.executeStatement({
+		statement: 'upsert "VGT.ACESSO" ("fk_usuario.id_usuario", "datahora_acesso") '
+					+ 'values(?, CURRENT_TIMESTAMP) where "fk_usuario.id_usuario" = ? ', 
+		parameters: [idUsuario, idUsuario]
+	});
+};
+
 const login = function (req, res) {
 	if (req.body.usuario && req.body.senha) {
 		let conn = db.getConnection();
+		
 		conn.exec(
-			'select "id_usuario", "nome", "email", "contato", "user", "pass", "ind_ativo", "fk_dominio_tipo_acesso.id_tipo_acesso" from "VGT.USUARIO" WHERE "user" = ?', [
-				req.body.usuario
-			],
+			'select "id_usuario", '
+			+ '"nome", '
+			+ '"email", '
+			+ '"contato", '
+			+ '"user", '
+			+ '"pass", '
+			+ '"ind_ativo", '
+			+ '"fk_dominio_tipo_acesso.id_tipo_acesso" '
+			+ 'from "VGT.USUARIO" WHERE "user" = ?', 
+			[ req.body.usuario ],
 			function (err, result) {
 				if (err) {
 					req.session = {
@@ -70,7 +86,8 @@ const login = function (req, res) {
 					};
 
 					res.send(JSON.stringify(err));
-				} else if (result.length === 0 || !result[0].ind_ativo) {
+				} 
+				else if (result.length === 0 || !result[0].ind_ativo) {
 					req.session = {
 						autenticado: false
 					};
@@ -81,8 +98,10 @@ const login = function (req, res) {
 							msg: "Usuário ou senha incorretos."
 						}
 					});
-				} else {
+				} 
+				else {
 					let _passwordMatch = false;
+					
 					bcrypt.compare(req.body.senha, result[0].pass, function (err, resp) {
 						_passwordMatch = resp;
 
@@ -98,6 +117,8 @@ const login = function (req, res) {
 								contato: result[0].contato,
 								nivelAcesso: result[0]["fk_dominio_tipo_acesso.id_tipo_acesso"]
 							};
+
+							registrarAcesso(result[0].id_usuario);
 
 							// Carrega os modulos e as empresas que o usuario pode visualizar/acessar
 							getModulos(result[0].id_usuario)
@@ -160,12 +181,21 @@ const login = function (req, res) {
 };
 
 const deslogar = function (req, res) {
+	// Remove o registro de acesso do usuário
+	db.executeStatement({
+		statement: 'delete from "VGT.ACESSO" where "fk_usuario.id_usuario" = ?', 
+		parameters: [req.session.usuario.id]
+	});
+		
 	req.session = null;
+	
 	return res.send();
 };
 
 const verificaAuth = function (req, res) {
 	if (req.session.autenticado) {
+		registrarAcesso(req.session.usuario.id);
+		
 		res.send({
 			success: true,
 			msg: "Usuário já autenticado.",
@@ -256,6 +286,7 @@ const criarUsuario = function (req, res) {
 		});
 	}
 };
+
 function encrypt(sPassword) {
 	return new Promise(function (resolve, reject) {
 		bcrypt.hash(sPassword, 5, function (err, hash) {
@@ -265,8 +296,7 @@ function encrypt(sPassword) {
 			else{
 				resolve(hash);	
 			}
-
-			});
+		});
 	});
 }
 
