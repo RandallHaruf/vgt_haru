@@ -4,7 +4,10 @@ sap.ui.define(
 		"sap/m/Popover",
 		"ui5ns/ui5/lib/NodeAPI",		
 		"sap/m/Button",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/jszip",
+		"ui5ns/ui5/lib/XLSX",
+		"ui5ns/ui5/lib/FileSaver"		
 	],
 	function (Validador,Popover,NodeAPI,Button,Utils) {
 		return {
@@ -57,13 +60,64 @@ sap.ui.define(
 				var cabecalho;
 				var atributo;
 				var array = []
-				for (var k = 0, length = that.byId(nomeDoIdDaTabela).getColCount()-2; k < length; k++) {
-					cabecalho = that.byId(nomeDoIdDaTabela).getColumns()[k].mAggregations.header.mProperties.text //Nome do Cabeçalho 
-					atributo = that.byId(nomeDoIdDaTabela).mBindingInfos.items.template.mAggregations.cells[k].mBindingInfos.text.parts[0].path // nome do atributo
-					array.push({textoNomeDaColuna: cabecalho,propriedadeDoValorDaLinha: atributo});
+				for (var k = 0, length = that.byId(nomeDoIdDaTabela).getColumns().length/*that.byId(nomeDoIdDaTabela).getColCount()-2*/; k < length; k++) {
+						visibilidade = that.byId(nomeDoIdDaTabela).getColumns()[k].mAggregations.header.oParent.mProperties.visible? true : false;
+						cabecalho = that.byId(nomeDoIdDaTabela).getColumns()[k].mAggregations.header.mProperties.text //Nome do Cabeçalho 
+						atributo = that.byId(nomeDoIdDaTabela).mBindingInfos.items.template.mAggregations.cells[k].mBindingInfos.text.parts[0].path // nome do atributo
+						array.push({textoNomeDaColuna: cabecalho,propriedadeDoValorDaLinha: atributo, visible: visibilidade});		
 				}	
 				that.getModel().setProperty(propriedadeDaTabela,array);
-			},		
+			},	
+			dataExportReport: function(that,tipo,nomeAba,nomeReport){
+				var array = that.getModel().getProperty("/TabelaDaView");
+				var coluna = [];
+				var excel = [];
+				for (var k = 0, length = array.length; k < length; k++) {
+					if(array[k]["visible"]){
+						coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+						excel.push(array[k]["textoNomeDaColuna"]);					
+					}
+				}	
+				var valores = that.getModel().getProperty(tipo);
+					var wsAccountResultData = [];
+					wsAccountResultData.push(excel);	
+					for (var i = 0, length = valores.length; i < length; i++) {
+					excel = [];
+					    for (var j = 0, length2 = array.length; j < length2; j++) {
+	    					if(array[j]["visible"]){
+						    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
+	    					}
+					    }
+					wsAccountResultData.push(excel);
+					};		
+					
+					var wbTaxPackage  = XLSX.utils.book_new();
+					var wsAccountResultName = that.getResourceBundle().getText(nomeAba);
+					var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
+					XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
+					var wopts = {};
+					var formato = "";
+					if(tipo === "/XLSX"){
+						wopts = { bookType:'xlsx'/*, bookSST:false*/, type:'array' };
+						formato = ".xlsx";
+					}
+					else if (tipo === "/TXT"){
+						wopts = { bookType:'txt'/*, bookSST:false*/, type:'array' };
+						formato = ".txt";
+					}
+					else{
+						wopts = { bookType:'csv'/*, bookSST:false*/, type:'array' };
+						formato = ".csv";
+					}
+					var wbout = XLSX.write(wbTaxPackage,wopts);
+					saveAs(new Blob([wbout],{type:"application/octet-stream"}), 
+						this.dateNowParaArquivo()
+						+"_"
+						+that.getResourceBundle().getText("viewGeralRelatorio") 
+						+"_" 
+						+ that.getResourceBundle().getText(nomeReport)
+						+formato);					
+			},
 			ajustaRem: function (that,array,campoNumerico,nomeDoCabecalho,remInicial,remProporcional,remfixo){
 				//this = Para setar a Propriedade Desejada com nome /rem+campoNumerico
 				//array = Array com um numero que voce quer que o rem da coluna fique proporcional ao maior valor que ocorra dele

@@ -478,6 +478,7 @@ sap.ui.define([
 		},
 
 		onDataExport: sap.m.Table.prototype.exportData || function (tipo) {
+			Utils.dataExportReport(this,tipo,"viewEdiçãoTrimestreImpostoRenda","viewEdiçãoTrimestreImpostoRenda");  /*
 			var array = this.getModel().getProperty("/TabelaDaView");
 			var coluna = [];
 			var excel = [];
@@ -509,19 +510,19 @@ sap.ui.define([
 			var formato = "";
 			if (tipo === "/XLSX") {
 				wopts = {
-					bookType: 'xlsx' /*, bookSST:false*/ ,
+					bookType: 'xlsx'  ,
 					type: 'array'
 				};
 				formato = ".xlsx";
 			} else if (tipo === "/TXT") {
 				wopts = {
-					bookType: 'txt' /*, bookSST:false*/ ,
+					bookType: 'txt'  ,
 					type: 'array'
 				};
 				formato = ".txt";
 			} else {
 				wopts = {
-					bookType: 'csv' /*, bookSST:false*/ ,
+					bookType: 'csv'  ,
 					type: 'array'
 				};
 				formato = ".csv";
@@ -531,7 +532,7 @@ sap.ui.define([
 					type: "application/octet-stream"
 				}),
 				Utils.dateNowParaArquivo() + "_" + this.getResourceBundle().getText("viewGeralRelatorio") + "_" + this.getResourceBundle().getText(
-					"viewEdiçãoTrimestreImpostoRenda") + formato);
+					"viewEdiçãoTrimestreImpostoRenda") + formato);*/
 		},
 
 		_geraRelatorioTax: function (ifExport) {

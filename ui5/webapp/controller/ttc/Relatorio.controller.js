@@ -34,8 +34,11 @@ sap.ui.define([
 		_handleRouteMatched: function () {
 			if (this.isIFrame()) {
 				this.mostrarAcessoRapidoInception();
+				this.getModel().setProperty("/isIframe",true);
 			}
-			
+			else{
+				this.getModel().setProperty("/isIframe",false);
+			}
 			this.onExit();
 		},
 
@@ -721,12 +724,16 @@ sap.ui.define([
 			}
 		},
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
+			
+			Utils.dataExportReport(this,tipo,"viewAdminInicioMenuTTC","viewAdminInicioMenuTTC");     /*                
 			var array = this.getModel().getProperty("/TabelaDaView");
 			var coluna = [];
 			var excel = [];
 			for (var k = 0, length = array.length; k < length; k++) {
-				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
-				excel.push(array[k]["textoNomeDaColuna"]);
+				if(array[k]["visible"]){
+					coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
+					excel.push(array[k]["textoNomeDaColuna"]);					
+				}
 			}	
 			var valores = this.getModel().getProperty(tipo);
 				var wsAccountResultData = [];
@@ -734,7 +741,9 @@ sap.ui.define([
 				for (var i = 0, length = valores.length; i < length; i++) {
 				excel = [];
 				    for (var j = 0, length2 = array.length; j < length2; j++) {
-				    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
+    					if(array[j]["visible"]){
+					    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
+    					}
 				    }
 				wsAccountResultData.push(excel);
 				};		
@@ -746,15 +755,15 @@ sap.ui.define([
 				var wopts = {};
 				var formato = "";
 				if(tipo === "/XLSX"){
-					wopts = { bookType:'xlsx'/*, bookSST:false*/, type:'array' };
+					wopts = { bookType:'xlsx', type:'array' };
 					formato = ".xlsx";
 				}
 				else if (tipo === "/TXT"){
-					wopts = { bookType:'txt'/*, bookSST:false*/, type:'array' };
+					wopts = { bookType:'txt', type:'array' };
 					formato = ".txt";
 				}
 				else{
-					wopts = { bookType:'csv'/*, bookSST:false*/, type:'array' };
+					wopts = { bookType:'csv', type:'array' };
 					formato = ".csv";
 				}
 				var wbout = XLSX.write(wbTaxPackage,wopts);
@@ -764,7 +773,7 @@ sap.ui.define([
 					+this.getResourceBundle().getText("viewGeralRelatorio") 
 					+"_" 
 					+ this.getResourceBundle().getText("viewAdminInicioMenuTTC")
-					+formato);				
+					+formato);	*/			
 		}		
 /*
 		onDataExport: sap.m.Table.prototype.exportData || function (oEvent) {

@@ -830,50 +830,8 @@ sap.ui.define([
 		},		
 		*/
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
-			var array = this.getModel().getProperty("/TabelaDaView");
-			var coluna = [];
-			var excel = [];
-			for (var k = 0, length = array.length; k < length; k++) {
-				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
-				excel.push(array[k]["textoNomeDaColuna"]);
-			}	
-			var valores = this.getModel().getProperty(tipo);
-				var wsAccountResultData = [];
-				wsAccountResultData.push(excel);	
-				for (var i = 0, length = valores.length; i < length; i++) {
-				excel = [];
-				    for (var j = 0, length2 = array.length; j < length2; j++) {
-				    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
-				    }
-				wsAccountResultData.push(excel);
-				};		
-				
-				var wbTaxPackage  = XLSX.utils.book_new();
-				var wsAccountResultName = this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina");
-				var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
-				XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
-				var wopts = {};
-				var formato = "";
-				if(tipo === "/XLSX"){
-					wopts = { bookType:'xlsx'/*, bookSST:false*/, type:'array' };
-					formato = ".xlsx";
-				}
-				else if (tipo === "/TXT"){
-					wopts = { bookType:'txt'/*, bookSST:false*/, type:'array' };
-					formato = ".txt";
-				}
-				else{
-					wopts = { bookType:'csv'/*, bookSST:false*/, type:'array' };
-					formato = ".csv";
-				}
-				var wbout = XLSX.write(wbTaxPackage,wopts);
-				saveAs(new Blob([wbout],{type:"application/octet-stream"}), 
-					Utils.dateNowParaArquivo()
-					+"_"
-					+this.getResourceBundle().getText("viewGeralRelatorio") 
-					+"_" 
-					+ this.getResourceBundle().getText("viewComplianceListagemObrigacoesTituloPagina")
-					+formato);				
+			Utils.dataExportReport(this,tipo,"viewComplianceListagemObrigacoesTituloPagina","viewComplianceListagemObrigacoesTituloPagina");     
+			
 		},			
 		_geraRelatorio: function (ifExport) {
 

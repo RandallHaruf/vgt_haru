@@ -177,13 +177,13 @@
 							<Text text="{i18n>viewRelatorioCategoria}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewRelatorioT}" textAlign="Center"/>
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewRelatorioNomeT}" textAlign="Center"/>
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewRelatorioNomeDoOrgao}" textAlign="Center"/>
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewRelatorioJurisdicao}" textAlign="Center"/>
@@ -198,22 +198,22 @@
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center"/>
+						</Column>						
+						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewRelatorioAnoFiscal}"  textAlign="Center"/>
 						</Column>
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center"/>
+						</Column>	
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
+						</Column>						
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>ViewRelatorioCurrency}"  textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"  textAlign="Center"/>
-						</Column>
-						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
-						</Column>			
-						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center"/>
-						</Column>
-						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center"/>
@@ -230,10 +230,10 @@
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center"/>
 						</Column>
-						<Column width="10rem" hAlign="Center">
+						<Column width="10rem" hAlign="Center" visible="{/isIframe}">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue} BRL" textAlign="Center"/>
 						</Column>
-						<Column width="10rem" hAlign="Center">
+						<Column width="10rem" hAlign="Center" visible="{/isIframe}">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaValue} USD" textAlign="Center"/>
 						</Column>						
 						<Column width="10rem" hAlign="Center">
@@ -256,21 +256,21 @@
 								<Text text="{tblDominioPais.pais}"/>
 								<Text text="{tblPagamento.estado}"/>
 								<Text text="{tblPagamento.cidade}"/>
+								<Text text="{tblPagamento.projeto}"/>							
 								<Text text="{tblDominioAnoFiscal.ano_fiscal}" />
+								<Text text="{tblPagamento.descricao}"/>	
+								<Text text="{tblPagamento.data_pagamento}"/>								
 								<Text text="{tblDominioMoeda.acronimo}" />
 								<Text text="{tblDominioTipoTransacao.tipo_transacao}" />
-								<Text text="{tblPagamento.data_pagamento}"/>
-								<Text text="{tblPagamento.projeto}"/>
-								<Text text="{tblPagamento.descricao}"/>
 								<Text text="{tblPagamento.tipo_transacao_outros}"/>
 								<Text text="{tblPagamento.principal}"/>
 								<Text text="{tblPagamento.juros}"/>
 								<Text text="{tblPagamento.multa}" />
 								<Text text="{tblPagamento.total}" />
 								<Text text="{conversao_brl}" />
-								<Text text="{conversao_usd}" />								
+								<Text text="{conversao_usd}" />							
 								<Text text="{tblPagamento.numero_documento}" />
-								<Text text="{tblPagamento.entidade_beneficiaria}"/>							
+								<Text text="{tblPagamento.entidade_beneficiaria}"/>						
 							</cells>
 						</ColumnListItem>
 					</items>
