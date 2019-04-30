@@ -115,7 +115,8 @@ const login = function (req, res) {
 								nome: result[0].nome,
 								email: result[0].email,
 								contato: result[0].contato,
-								nivelAcesso: result[0]["fk_dominio_tipo_acesso.id_tipo_acesso"]
+								nivelAcesso: result[0]["fk_dominio_tipo_acesso.id_tipo_acesso"],
+								host: req.get('host')
 							};
 
 							registrarAcesso(result[0].id_usuario);
@@ -193,7 +194,7 @@ const deslogar = function (req, res) {
 };
 
 const verificaAuth = function (req, res) {
-	if (req.session.autenticado) {
+	if (req.session.autenticado && req.session.usuario.host === req.get('host')) {
 		registrarAcesso(req.session.usuario.id);
 		
 		res.send({
