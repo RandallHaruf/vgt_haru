@@ -17,6 +17,9 @@ let oModel = db.model('VGT.TAX', {
 		},
 		indExportavelTaxPackage: {
 			nome: "ind_exportavel_tax_package"
+		},
+		indRequerBeneficiaryCompany: {
+			nome: "ind_requer_beneficiary_company"
 		}
 	}
 });

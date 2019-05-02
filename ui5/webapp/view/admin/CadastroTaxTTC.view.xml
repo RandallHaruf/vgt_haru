@@ -80,7 +80,12 @@
 									</f:FormElement>
 									<f:FormElement>
 										<f:fields>
-											<CheckBox text="Flag Exportar para o Tax Package" selected="{/objeto/indExportavelTaxPackage}" />
+											<CheckBox text="{i18n>viewFlagExportarTaxPackage}" selected="{/objeto/indExportavelTaxPackage}" />
+										</f:fields>
+									</f:FormElement>
+									<f:FormElement>
+										<f:fields>
+											<CheckBox text="{i18n>viewFlagRequerBeneficiarioCompania}" selected="{/objeto/indRequerBeneficiaryCompany}" />
 										</f:fields>
 									</f:FormElement>
 								</f:formElements>

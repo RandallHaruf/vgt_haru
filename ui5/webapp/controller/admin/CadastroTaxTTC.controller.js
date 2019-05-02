@@ -205,7 +205,8 @@ sap.ui.define(
 							tax: oObjeto["tax"],
 							fkCategory: oObjeto["id_tax_category"],
 							fkClassification: oObjeto["id_dominio_tax_classification"],
-							indExportavelTaxPackage: oObjeto["ind_exportavel_tax_package"]
+							indExportavelTaxPackage: oObjeto["ind_exportavel_tax_package"],
+							indRequerBeneficiaryCompany: oObjeto["ind_requer_beneficiary_company"]
 						};
 						
 						that.getModel().setProperty("/objeto", obj);
@@ -241,7 +242,8 @@ sap.ui.define(
 					data: {
 						tax: obj.tax,
 						fkCategory: obj.fkCategory,
-						indExportavelTaxPackage: obj.indExportavelTaxPackage
+						indExportavelTaxPackage: obj.indExportavelTaxPackage,
+						indRequerBeneficiaryCompany: obj.indRequerBeneficiaryCompany
 					},
 					success: function (response) {
 						that.byId("btnCancelar").setEnabled(true);
@@ -272,7 +274,8 @@ sap.ui.define(
 					data: {
 						tax: obj.tax,
 						fkCategory: obj.fkCategory,
-						indExportavelTaxPackage: obj.indExportavelTaxPackage
+						indExportavelTaxPackage: obj.indExportavelTaxPackage,
+						indRequerBeneficiaryCompany: obj.indRequerBeneficiaryCompany
 					},
 					success: function (response) {
 						that.byId("btnCancelar").setEnabled(true);

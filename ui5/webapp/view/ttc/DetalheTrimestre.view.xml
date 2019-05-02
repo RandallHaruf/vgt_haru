@@ -216,12 +216,15 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{estado}"
 												change="onPreencherEstado"
-												valueState="{estadoValueState}" />
+												valueState="{estadoValueState}"
+												valueStateText="{i18n>viewTTCEntradaInvalida}"
+												/>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{cidade}" 
 												change="onPreencherCidade"
 												valueState="{cidadeValueState}"
+												valueStateText="{i18n>viewTTCEntradaInvalida}"
 												/>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
@@ -311,7 +314,8 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{entidade_beneficiaria}" 
 												valueState = "{entidadeValueState}"
-												/>
+												valueStateText="{i18n>viewTTCEntradaInvalida}"
+											/>
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -479,12 +483,16 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{estado}"
 												change="onPreencherEstado"
-												valueState="{estadoValueState}" />
+												valueState="{estadoValueState}" 
+												valueStateText="{i18n>viewTTCEntradaInvalida}"
+											/>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{cidade}" 
 												change="onPreencherCidade"
-												valueState="{cidadeValueState}" />
+												valueState="{cidadeValueState}"
+												valueStateText="{i18n>viewTTCEntradaInvalida}"
+											/>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{projeto}" />
@@ -595,7 +603,9 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{entidade_beneficiaria}"
 												change="onPreencherEntidade"
-												valueState = "{entidadeValueState}"/>
+												valueState = "{entidadeValueState}"
+												valueStateText="{i18n>viewTTCEntradaInvalida}"
+											/>
 										</cells>
 									</ColumnListItem>
 								</items>

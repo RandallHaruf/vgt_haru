@@ -108,7 +108,7 @@ sap.ui.define(
 				}
 
 			},
-			
+
 			onPreencherEstado: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 				var sTextoCampo = oEvent.getSource().getValue();
@@ -120,7 +120,7 @@ sap.ui.define(
 					}
 				}
 			},
-			
+
 			onPreencherCidade: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 				var sTextoCampo = oEvent.getSource().getValue();
@@ -160,7 +160,7 @@ sap.ui.define(
 
 				this.getModel().refresh();
 			},
-			
+
 			handleSuggest: function (oEvent) {
 				var oInput = oEvent.getSource();
 				if (!oInput.getSuggestionItems().length) {
@@ -172,7 +172,7 @@ sap.ui.define(
 					});
 				}
 			},
-			
+
 			handleSuggest2: function (oEvent) {
 				var oInput = oEvent.getSource();
 				if (!oInput.getSuggestionItems().length) {
@@ -251,7 +251,7 @@ sap.ui.define(
 					oPagamento["fk_dominio_pais.id_dominio_pais"] = null;
 				}
 			},
-			
+
 			onPreencherEntidade: function (oEvent) {
 				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				var sEntidade = oEvent.getSource().getValue();
@@ -271,7 +271,7 @@ sap.ui.define(
 				}
 
 			},
-			
+
 			onTrocarTax: function (oEvent) {
 				// Pega o objeto do tax para ser capaz de recuperar a fk de category
 				var sTaxPath = oEvent.getSource().getSelectedItem().getBindingContext().getPath(),
@@ -303,7 +303,6 @@ sap.ui.define(
 				// Caso o tax selecionado seja valido, recupera a lista de name of tax padrão relacionado ao país da empresa e este tax
 				if (oTax.id_tax) {
 					var idPais = this.getModel().getProperty("/Empresa")["fk_pais.id_pais"];
-
 					NodeAPI.listarRegistros("Pais/" + idPais + "/NameOfTax?default=true&tax=" + oTax.id_tax, function (response) {
 						if (response) {
 							response.unshift({});
@@ -311,6 +310,10 @@ sap.ui.define(
 							that.getModel().refresh();
 						}
 					});
+				}
+
+				if (oTax["ind_requer_beneficiary_company"]) {
+					oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
 				}
 
 			},
@@ -323,7 +326,7 @@ sap.ui.define(
 					oPagamento.juros = Math.abs(oPagamento.juros ? oPagamento.juros : 0) * -1;
 					oPagamento.multa = Math.abs(oPagamento.multa ? oPagamento.multa : 0) * -1;
 				}
-				
+
 				var fPrincipal = oPagamento.principal ? Number(oPagamento.principal) : 0,
 					fJuros = oPagamento.juros ? Number(oPagamento.juros) : 0,
 					fMulta = oPagamento.multa ? Number(oPagamento.multa) : 0;
@@ -683,23 +686,23 @@ sap.ui.define(
 				var continua = true;
 				var MoedaSelecionada;
 				var aDominioMoedas = this.getModel().getProperty("/DominioMoeda");
-				
+
 				var nameOfTaxSelecionado;
 				var aDominioNameOfTax;
 				for (var i = 0; i < aPagamentos.length; i++) {
 					//delete aPagamentos[i].opcoesNameOfTax;
-					aDominioNameOfTax= aPagamentos[i]["opcoesNameOfTax"];
+					aDominioNameOfTax = aPagamentos[i]["opcoesNameOfTax"];
 					MoedaSelecionada = aPagamentos[i]["AcroNome"];
-					
+
 					nameOfTaxSelecionado = aPagamentos[i]["name_of_tax"];
-					
+
 					var encontradaName = aDominioNameOfTax.find(function (x) {
 						return (x["name_of_tax"] === nameOfTaxSelecionado);
 					});
 					if (encontradaName) {
 						aPagamentos[i]["fk_name_of_tax.id_name_of_tax"] = encontradaName["id_name_of_tax"];
 					}
-					
+
 					var encontrada = aDominioMoedas.find(function (x) {
 						//return x["fk_obrigacao_acessoria.id_obrigacao_acessoria"] === oObrigacao["id_obrigacao_acessoria"];
 						//return x["fk_id_modelo_obrigacao.id_modelo"] === oObrigacao["tblModeloObrigacao.id_modelo"];
@@ -995,10 +998,10 @@ sap.ui.define(
 					} else if (oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 3) {
 						JurisdicaoTest = (!oPagamento.estado || !oPagamento.cidade);
 					}
-					
+
 					//verificar a necessidade de outros tipos de transacao
 					var OutrosTiposTest = false;
-					if(oPagamento["tipo_transacao_outros_value_state"] == sap.ui.core.ValueState.Error){
+					if (oPagamento["tipo_transacao_outros_value_state"] == sap.ui.core.ValueState.Error) {
 						OutrosTiposTest = true;
 					}
 
@@ -1009,7 +1012,8 @@ sap.ui.define(
 								boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria)) || !oPagamento[
 								"fk_dominio_pais.id_dominio_pais"] || !oPagamento.principal || !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
 							//|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
-							|| JurisdicaoTest || OutrosTiposTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento.principal))) || (!!
+							|| JurisdicaoTest || OutrosTiposTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento
+								.principal))) || (!!
 							!
 							oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento.name_of_tax))) {
 						bValido = false;
@@ -1070,8 +1074,7 @@ sap.ui.define(
 				if (!isOtherSpecify()) {
 					oPagamento.tipo_transacao_outros = "";
 					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.None;
-				}
-				else{
+				} else {
 					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.Error;
 				}
 
@@ -1079,12 +1082,11 @@ sap.ui.define(
 
 				this.getModel().refresh();
 			},
-			onTrocarTipoTransacaoOutros: function (oEvent){
+			onTrocarTipoTransacaoOutros: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
-				if(oPagamento["tipo_transacao_outros"]){
+				if (oPagamento["tipo_transacao_outros"]) {
 					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.None;
-				}
-				else{
+				} else {
 					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.Error;
 				}
 			}
