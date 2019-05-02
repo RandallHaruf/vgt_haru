@@ -207,18 +207,22 @@ module.exports = {
 
 	deepQuery: function (req, res) {
 		var sStatement = 
-			'select '
-			+'* ,tblUsuario."nome" AS "nome_usuario"'
-			+'from '
-			+'"VGT.REQUISICAO_MODELO_OBRIGACAO" tblRequisicaoModeloObrigacao '
-			+'INNER JOIN "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS" tblDominioRequisicaoModeloObrigacaoStatus '
-			+'ON tblDominioRequisicaoModeloObrigacaoStatus."id_dominio_requisicao_modelo_obrigacao_status" = tblRequisicaoModeloObrigacao."fk_dominio_requisicao_modelo_obrigacao_status.id_dominio_requisicao_modelo_obrigacao_status" '
-			+'INNER JOIN "VGT.USUARIO" tblUsuario '
-			+'ON tblUsuario."id_usuario" = tblRequisicaoModeloObrigacao."fk_usuario.id_usuario" '
-			+'INNER JOIN "VGT.EMPRESA" tblEmpresa '
-			+'ON tblEmpresa."id_empresa" = tblRequisicaoModeloObrigacao."fk_empresa.id_empresa" '
-			+'INNER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
-			+'ON tblModeloObrigacao."id_modelo" = tblRequisicaoModeloObrigacao."fk_modelo_obrigacao.id_modelo" ';
+			'select ' 
+		     + ' * ,tblUsuario."nome" AS "nome_usuario", tblDominioPais."id_dominio_pais" '
+			 + 'from ' 
+			 + '"VGT.REQUISICAO_MODELO_OBRIGACAO" tblRequisicaoModeloObrigacao '
+			 + 'INNER JOIN "VGT.DOMINIO_REQUISICAO_MODELO_OBRIGACAO_STATUS" tblDominioRequisicaoModeloObrigacaoStatus ' 
+			 + 'ON tblDominioRequisicaoModeloObrigacaoStatus."id_dominio_requisicao_modelo_obrigacao_status" = tblRequisicaoModeloObrigacao."fk_dominio_requisicao_modelo_obrigacao_status.id_dominio_requisicao_modelo_obrigacao_status" ' 
+			 + 'INNER JOIN "VGT.USUARIO" tblUsuario ' 
+			 + 'ON tblUsuario."id_usuario" = tblRequisicaoModeloObrigacao."fk_usuario.id_usuario" ' 
+			 + 'INNER JOIN "VGT.EMPRESA" tblEmpresa '
+			 + 'ON tblEmpresa."id_empresa" = tblRequisicaoModeloObrigacao."fk_empresa.id_empresa" ' 
+			 + 'INNER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao  '
+			 + 'ON tblModeloObrigacao."id_modelo" = tblRequisicaoModeloObrigacao."fk_modelo_obrigacao.id_modelo" '
+			 + 'inner join "VGT.PAIS" tblPais '
+			 + 'ON tblPais."id_pais" = tblModeloObrigacao."fk_id_pais.id_pais" '
+			 + 'inner join "VGT.DOMINIO_PAIS" tblDominioPais '
+			 + 'on tblDominioPais."id_dominio_pais" = tblPais."fk_dominio_pais.id_dominio_pais" ' ;
 			
 		var oWhere = [];
 		var aParams = [];

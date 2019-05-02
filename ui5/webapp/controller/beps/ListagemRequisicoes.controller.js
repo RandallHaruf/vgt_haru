@@ -84,7 +84,7 @@ sap.ui.define(
 						}
 						
 						
-						response[i]["nome_pais"] = Utils.traduzDominioPais(response[i]["fk_pais.id_pais"],that)
+						response[i]["nome_pais"] = Utils.traduzDominioPais(response[i]["id_dominio_pais"],that)
 						response[i]["nome_periodicidade"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"],that)
 						response[i].suporte_contratado = response[i].suporte_contratado ? "SIM" : "NÃO";
 						response[i].obrigacao_inicial = response[i].obrigacao_inicial ? "SIM" : "NÃO";
