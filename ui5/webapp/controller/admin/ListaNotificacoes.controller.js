@@ -68,18 +68,15 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1", function (response) { // 1 Obrigacao
 					if (response) {
-
 						for (var i = 0, length = response.length; i < length; i++) {
 							countObrig++;
 						}
 						that.getModel().setProperty("/ContadorObrig", {
 							modelcountObrig: countObrig
-
 						});
 						that.getModel().setProperty("/RequisicaoModeloObrigacao", response);
-						/*that.getModel().setProperty("/Obrigacao", response);*/
+						that.getModel().setProperty("/Obrigacao", response);
 					}
-
 				});
 
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoReabertura?&status=1", function (response) { // 1 TTC
@@ -451,6 +448,7 @@ sap.ui.define(
 								suporte_contratado: oItemSelecionado.suporte_contratado,
 								suporte: oItemSelecionado.suporte,
 								observacoes: oItemSelecionado.observacoes,
+								resposta: oTextArea.getValue(),
 								fkDominioStatusObrigacao: oItemSelecionado["fk_dominio_status_obrigacao.id_status_obrigacao"],
 								fkDominioPais: oItemSelecionado["fk_dominio_pais.id_dominio_pais"],
 								fkDominioPeriocidadeObrigacao: oItemSelecionado["fk_dominio_periodicidade_obrigacao.id_periodicidade_obrigacao"],
@@ -461,8 +459,7 @@ sap.ui.define(
 								fkDominioEncerramentoPeriodoStatus: oItemSelecionado["fk_dominio_requisicao_encerramento_periodo_status.id_dominio_requisicao_encerramento_periodo_status"],
 								fkModeloObrigacao: oItemSelecionado["fk_modelo_obrigacao.id_modelo"],
 								//fkDominioAprovacaoObrigacao: oSelect.getSelectedKey(),
-								fkDominioRequisicaoModeloObrigacaoStatus: oSelect.getSelectedKey(),
-								motivoReprovacao: oTextArea.getValue(),
+								fkDominioRequisicaoModeloObrigacaoStatus: oSelect.getSelectedKey()
 							}, function (response) {
 								sap.m.MessageToast.show("Solicitação salva com sucesso !");
 								dialog.close();

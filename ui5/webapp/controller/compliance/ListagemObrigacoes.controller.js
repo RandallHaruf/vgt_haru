@@ -177,7 +177,7 @@ sap.ui.define(
 							}
 						}),
 						afterClose: function () {
-							//dialog.destroy();
+							dialog.destroy();
 							that.getModel().setProperty("/RepositorioDocumento", []);	
 							that.getModel().setProperty("/ValorFiltroEmpresa", []);	
 							that.getModel().setProperty("/ValorFiltroNomeObrigacao", []);	

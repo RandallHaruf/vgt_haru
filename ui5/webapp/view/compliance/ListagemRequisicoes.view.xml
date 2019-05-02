@@ -16,9 +16,9 @@
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
-				<!--<f:expandedContent>
+				<f:expandedContent>
 					<ObjectIdentifier title="Vale"/>
-				</f:expandedContent>-->
+				</f:expandedContent>
 			</f:DynamicPageTitle>
 		</f:title>
 		<!--<f:header>
@@ -46,8 +46,35 @@
 			</f:DynamicPageHeader>
 		</f:header>-->
 		<f:content>
-			<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
-				growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
+			<Table id="tabelaObrigacoes" 
+				   items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" 
+				   growing="true" 
+				   enableBusyIndicator="true"
+				   growingScrollToLoad="true" 
+				   updateFinished="onTerminouAtualizar">
+				<headerToolbar>
+					<Toolbar>
+						<Title 
+							id="cabecalhoTabelaObjetos" 
+							text="{i18n>viewListagemRequisicaoAberturaTituloTabela}"/>
+						<ToolbarSpacer />
+						<!--<Button 
+							id="botaoNovoObjeto" 
+							icon="sap-icon://add" 
+							press="onNovoObjeto" 
+							text="novo"
+							type="Emphasized"/>-->
+						<Select
+							id="selectStatus"
+							tooltip="Status"
+							change="onTrocarStatus"
+							items="{/DominioRequisicaoModeloObrigacaoStatus}"
+							selectedKey="{/DominioRequisicaoModeloObrigacaoStatusSelecionado}">
+							<core:Item text="{status}" key="{id_dominio_requisicao_modelo_obrigacao_status}" />
+						</Select>
+					</Toolbar>
+				</headerToolbar>
+				
 				<columns>
 					<Column hAlign="Center">
 						<!--<Text text="{i18n>viewGeralEmpresa}" textAlign="Center"/>-->
@@ -61,7 +88,7 @@
 					<!--<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 						<Text text="{i18n>viewGeralAnoFiscal}" textAlign="Center"/>
 					</Column>-->
-					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+					<!--<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 						<Text text="{i18n>viewEmpresasDataI}" textAlign="Center"/>
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
@@ -75,14 +102,20 @@
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 						<Text text="{i18n>viewGeralAnoObrigacao}" textAlign="Center"/>
-					</Column>
+					</Column>-->
 					<!--<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 						<Text text="{i18n>formularioObrigacaoLabelObrigacaoIniciada}" textAlign="Center"/>
 					</Column>
 					<Column hAlign="Center">
 						<Text text="{i18n>formularioObrigacaoLabelSuporteContratado}" textAlign="Center"/>
 					</Column>-->
-					<Column hAlign="Center">
+					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<Text text="{i18n>viewGeralJustificativa}" textAlign="Center"/> 
+					</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<Text text="{i18n>viewGeralResposta}" textAlign="Center"/> 
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
 						<Text text="Status" />
 					</Column>
 					<!--<Column hAlign="Center">
@@ -90,19 +123,20 @@
 					</Column>-->
 				</columns>
 				<items>
-					<!--<ColumnListItem type="Navigation" press="onDetalharObrigacao">-->
-					<ColumnListItem>
+					<ColumnListItem type="Navigation" press="onDetalharRequisicao" tooltip="{i18n>viewGeralDetalhesRequisicao}">
 						<cells>
 							<Text />			
 							<ObjectIdentifier title="{nome_obrigacao}"/>
-							<Text text="{nome_pais}"/>
-							<Text text="{data_inicial}"/>
+							<Text text="{pais}"/>
+							<!--<Text text="{data_inicial}"/>
 							<Text text="{data_final}"/>
 							<Text text="{nome_periodicidade}"/>
 							<Text text="{prazo_entrega}"/>
-							<Text text="{ano_obrigacao}"/>
-							<Text text="{oStatus}"/>
-							<!--<Text text="{justificativa}" />-->
+							<Text text="{ano_obrigacao}"/>-->
+							<Text text="{justificativa}"/>
+							<Text text="{resposta}"/>
+							<!--<Text text="{oStatus}"/>-->
+							<core:Icon src="{oStatus/icone}" color="{oStatus/cor}" tooltip="{oStatus/tooltip}" size="2rem" />
 						</cells>
 					</ColumnListItem>
 				</items>
