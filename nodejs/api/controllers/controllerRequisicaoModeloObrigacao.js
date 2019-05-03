@@ -217,12 +217,12 @@ module.exports = {
 			 + 'ON tblUsuario."id_usuario" = tblRequisicaoModeloObrigacao."fk_usuario.id_usuario" ' 
 			 + 'INNER JOIN "VGT.EMPRESA" tblEmpresa '
 			 + 'ON tblEmpresa."id_empresa" = tblRequisicaoModeloObrigacao."fk_empresa.id_empresa" ' 
-			 + 'INNER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao  '
+			 + 'INNER JOIN "VGT.MODELO_OBRIGACAO" tblModeloObrigacao '
 			 + 'ON tblModeloObrigacao."id_modelo" = tblRequisicaoModeloObrigacao."fk_modelo_obrigacao.id_modelo" '
-			 + 'inner join "VGT.PAIS" tblPais '
+			 + 'INNER JOIN "VGT.PAIS" tblPais '
 			 + 'ON tblPais."id_pais" = tblModeloObrigacao."fk_id_pais.id_pais" '
-			 + 'inner join "VGT.DOMINIO_PAIS" tblDominioPais '
-			 + 'on tblDominioPais."id_dominio_pais" = tblPais."fk_dominio_pais.id_dominio_pais" ' ;
+			 + 'INNER JOIN "VGT.DOMINIO_PAIS" tblDominioPais '
+			 + 'ON tblDominioPais."id_dominio_pais" = tblPais."fk_dominio_pais.id_dominio_pais" ';
 			
 		var oWhere = [];
 		var aParams = [];

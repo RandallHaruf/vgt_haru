@@ -317,15 +317,18 @@ module.exports = {
 		
 		auth.encrypt(novaSenha)
 			.then((response) => {
+				console.log(novaSenha);
 				hash = response;
 				return pegarEmail(idUsuario);
 			})
 			.then((retorno) => {
+				console.log(222222);
 				email = retorno[0].email;
 				nome = retorno[0].nome;
 				return atualizarSenha(idUsuario, hash);
 			})
 			.then(() => {
+				console.log(33333);
 				return controllerEmailSend.comunicarSenha(email,nome,novaSenha);
 			})
 			.then(() => {

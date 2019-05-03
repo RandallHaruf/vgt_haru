@@ -368,7 +368,7 @@ sap.ui.define(
 							oFormElement = new sap.ui.layout.form.FormElement({
 								label: "{i18n>viewGeralPeriodo}"
 							}).addField(new sap.m.Text({
-								text: oPeriodo.periodo
+								text: oPeriodo.periodo_traduzido
 							}));
 
 							oFormContainer.addFormElement(oFormElement);
@@ -570,6 +570,7 @@ sap.ui.define(
 									that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								}
 							}
+							oPeriodo["periodo_traduzido"] = Utils.traduzTrimestreTTC(oPeriodo["numero_ordem"], that);
 						}
 					}
 				});

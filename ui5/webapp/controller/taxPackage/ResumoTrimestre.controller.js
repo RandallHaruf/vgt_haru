@@ -7,7 +7,7 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Arquivo",
 		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, NodeAPI, jQueryMask, Constants, Arquivo) {
+	function (BaseController, NodeAPI, jQueryMask, Constants, Arquivo, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.taxPackage.ResumoTrimestre", {
 			pressDialog: null,
 
@@ -88,7 +88,7 @@ sap.ui.define(
 				if (idModulo == 2) { //Taxpackage
 					switch (trimestre) {
 					case 1:
-						Periodo = new Date((new Date().getFullYear()) + "/04/31");
+						Periodo = new Date((new Date().getFullYear()) + "/04/30");
 						break;
 					case 2:
 						Periodo = new Date((new Date().getFullYear()) + "/07/31");
@@ -319,7 +319,7 @@ sap.ui.define(
 				oFormElement = new sap.ui.layout.form.FormElement({
 					label: "{i18n>viewGeralPeriodo}"
 				}).addField(new sap.m.Text({
-					text: oPeriodo.periodo
+					text: oPeriodo.periodo_traduzido
 				}));
 
 				oFormContainer.addFormElement(oFormElement);
@@ -1193,6 +1193,7 @@ sap.ui.define(
 									}
 								}
 							}
+							oPeriodo["periodo_traduzido"] = Utils.traduzTrimestreTaxPackage(oPeriodo["numero_ordem"], that);
 						}
 					}
 					that._setToolbarBusy(aIdToolbar, false);
@@ -1210,7 +1211,7 @@ sap.ui.define(
 				switch (iNumeroOrdem) {
 				case 1:
 					dataInicio = new Date(iCurrentYear + "/02/1");
-					dataFim = new Date(iCurrentYear + "/04/31");
+					dataFim = new Date(iCurrentYear + "/04/30");
 					return now >= dataInicio && now <= dataFim;
 				case 2:
 					dataInicio = new Date(iCurrentYear + "/05/1");
