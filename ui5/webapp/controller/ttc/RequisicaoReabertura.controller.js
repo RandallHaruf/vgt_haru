@@ -152,6 +152,7 @@ sap.ui.define(
 							      tooltip: "Reprovado"
 							    };
 							}
+							response[i]["periodo"] = Utils.traduzTrimestreTTC(response[i]["numero_ordem"],that);
 						}
 						that.getModel().setProperty("/requisicoes", response);
 					}

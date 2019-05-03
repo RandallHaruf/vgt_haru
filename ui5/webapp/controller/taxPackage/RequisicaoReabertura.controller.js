@@ -146,8 +146,7 @@ sap.ui.define(
 							      tooltip: "Reprovado"
 							    };
 							}
-								response[i]["periodo"] = Utils.traduzTrimestre(response[i]["numero_ordem"],that);
-							
+							response[i]["periodo"] = Utils.traduzTrimestreTaxPackage(response[i]["numero_ordem"],that);
 						}
 						that.getModel().setProperty("/requisicoes", response);
 					}
