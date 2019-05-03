@@ -271,7 +271,7 @@ function pegarPeriodoEdicaoCorrente(sTipo) {
 		//dia = sTipo === 1 ? "31" : "20", // Se tax package, 31. Se ttc, 20
 		oDataCorrente = new Date();
 	
-	if (oDataCorrente >= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/02/1" : "/01/21")) && oDataCorrente <= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/04/31" : "/04/20"))) {
+	if (oDataCorrente >= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/02/1" : "/01/21")) && oDataCorrente <= new Date(oDataCorrente.getFullYear() + (sTipo === 1 ? "/04/30" : "/04/20"))) {
 		periodo = {
 			numeroOrdem: 1,
 			ano: oDataCorrente.getFullYear()

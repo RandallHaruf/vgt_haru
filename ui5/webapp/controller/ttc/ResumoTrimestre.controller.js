@@ -47,7 +47,7 @@ sap.ui.define(
 				if (idModulo == 2) { //Taxpackage
 					switch (trimestre) {
 					case 1:
-						Periodo = new Date((new Date().getFullYear()) + "/04/31");
+						Periodo = new Date((new Date().getFullYear()) + "/04/30");
 						break;
 					case 2:
 						Periodo = new Date((new Date().getFullYear()) + "/07/31");
