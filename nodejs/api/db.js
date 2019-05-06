@@ -404,7 +404,7 @@ module.exports = {
 					if (oParam.isIdLog) {
 						idLog = oParam.valor;
 					}
-					if (oParam.isConnection) {
+					else if (oParam.isConnection) {
 						connection = oParam.connection;
 					}
 					else {
