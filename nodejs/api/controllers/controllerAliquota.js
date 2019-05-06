@@ -333,7 +333,7 @@ module.exports = {
 				};
 				
 				if (req.body.registrosRelacionados) {
-					adicionarRegistrosRelacionados(idAliquota, req.body.registrosRelacionados) 
+					adicionarRegistrosRelacionados(req, idAliquota, req.body.registrosRelacionados) 
 						.then(function (res) {
 							finalizarAtualizacao();
 						})	
@@ -420,7 +420,7 @@ module.exports = {
 				};
 				
 				if (req.body.registrosRelacionados) {
-					adicionarRegistrosRelacionados(idAliquota, req.body.registrosRelacionados, req.body.tipoParaDesvincular) 
+					adicionarRegistrosRelacionados(req, idAliquota, req.body.registrosRelacionados, req.body.tipoParaDesvincular) 
 						.then(function (res) {
 							finalizarAtualizacao();
 						})	

@@ -396,12 +396,16 @@ module.exports = {
 				var sValues = " values(";
 				var aValues = [];
 				var idLog;
+				var connection;
 				
 				for (var i = 0; i < aParams.length; i++) {
 					var oParam = aParams[i];
 					
 					if (oParam.isIdLog) {
 						idLog = oParam.valor;
+					}
+					if (oParam.isConnection) {
+						connection = oParam.connection;
 					}
 					else {
 						sStatement += (sStatement.endsWith("(") ? "" : ",") + "\"" + oParam.coluna.nome + "\"";
@@ -435,11 +439,12 @@ module.exports = {
 							callback(err, result);
 						}
 					}, {
-						idUsuario: idLog
+						idUsuario: idLog,
+						connection: connection
 					});
 				}
 				else {
-					var result1 = that.executeStatementSync(sStatement, aValues, { idUsuario: idLog });
+					var result1 = that.executeStatementSync(sStatement, aValues, { idUsuario: idLog, connection: connection });
 					
 					if (JSON.stringify(result1) === "1") {
 						that.executeStatement({
@@ -449,7 +454,8 @@ module.exports = {
 								callback(err, result);
 							}
 						}, {
-							idUsuario: idLog
+							idUsuario: idLog,
+							connection: connection
 						});
 					}
 					else {
@@ -504,6 +510,40 @@ module.exports = {
 					}
 				}, {
 					idUsuario: idLog
+				});
+			},
+			
+			gerarId: function () {
+				return new Promise((resolve, reject) => {
+					var colunaIdentity = Object.keys(oSketch.colunas).reduce(function (result, currentKey) {
+						if (oSketch.colunas[currentKey].identity) {
+							result = oSketch.colunas[currentKey];
+						}
+						return result;
+					}, {});
+					
+					if (colunaIdentity) {
+						var sSequence =  '"identity_' + sTabela + '_' + colunaIdentity.nome + '"'
+						
+						that.executeStatement({
+							statement: 'select ' + sSequence + '.nextval "generated_id" from "DUMMY" '
+						}, (err, result) => {
+							if (err) {
+								reject(err);
+							}
+							else {
+								if (result && result.length) {
+									resolve(result[0].generated_id);
+								}
+								else {
+									reject(new Error('Erro inesperado. Não foi possível gerar um id'));	
+								}
+							}
+						});
+					}
+					else {
+						reject(new Error('O modelo requisitado não possui coluna identity'));	
+					}
 				});
 			}
 		};

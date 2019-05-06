@@ -189,5 +189,17 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});
-	}
+	},
+	
+	copiarDadosPeriodoAnterior: function (req, res) {
+		model.copiarDadosPeriodoAnterior(req.params.idRegistro)
+			.then(() => {
+				res.status(200).json({
+					result: 'Cópia realizada com sucesso'
+				});
+			})
+			.catch((err) => {
+				next(err);
+			});
+	};
 };

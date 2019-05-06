@@ -232,10 +232,10 @@ module.exports = () => {
 	scheduler.scheduleJob('0 0 31 1 *', encerrarPeriodoAnteriorAbrirPeriodoCorrente.bind(null, 4, 1));
 	
 	/**
-	 * https://crontab.guru/#0_0_31_4_*
-	 * Encerramento do primeiro período do ano corrente e abertura do segundo período do ano corrente em 31/04/xx às 00h00
+	 * https://crontab.guru/#0_0_30_4_*
+	 * Encerramento do primeiro período do ano corrente e abertura do segundo período do ano corrente em 30/04/xx às 00h00
 	 **/
-	scheduler.scheduleJob('0 0 31 4 *', encerrarPeriodoAnteriorAbrirPeriodoCorrente.bind(null, 1, 2));
+	scheduler.scheduleJob('0 0 30 4 *', encerrarPeriodoAnteriorAbrirPeriodoCorrente.bind(null, 1, 2));
 	
 	/**
 	 * https://crontab.guru/#0_0_31_7_*
