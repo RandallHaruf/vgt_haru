@@ -999,7 +999,7 @@ sap.ui.define(
 								that.getModel().setProperty("/anual", [oTaxReconciliation]);
 								that.getModel().setProperty("/MoedaAnual", oTaxReconciliation.acronimo);
 								break;
-							case oTaxReconciliation.numero_ordem >= 6:
+							case oTaxReconciliation.numero_ordem === 6 && i === length - 1:
 								// PEGAR A ULTIMA RETIFICADORA APENAS
 								that.getModel().setProperty("/retificadora", [oTaxReconciliation]);
 								that.getModel().setProperty("/MoedaRetificadora", oTaxReconciliation.acronimo);

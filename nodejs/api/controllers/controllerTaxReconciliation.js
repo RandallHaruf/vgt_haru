@@ -293,7 +293,7 @@ module.exports = {
 				}
 			}
 			
-			sStatement += ' order by Perid."numero_ordem" ';
+			sStatement += ' order by Perid."numero_ordem", RTP_Per."id_rel_tax_package_periodo" ';
 			
 			model.execute({
 				statement: sStatement,

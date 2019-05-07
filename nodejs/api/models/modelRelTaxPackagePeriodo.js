@@ -74,6 +74,124 @@ oModel.copiarDadosPeriodoAnterior = (idRelTaxPackagePeriodo) => {
 	});
 };
 
+oModel.limparDados = (idRelTaxPackagePeriodoDestino) => {
+	return new Promise((resolve, reject) => {
+		
+		let connection = db.getConnection();
+			connection.setAutoCommit(false);
+			
+		const execute = (statement, parameters) => {
+			return new Promise((resolve, reject) => {
+				db.executeStatement({
+					statement: statement,
+					parameters: parameters
+				}, (err, result) => {
+					if (err) {
+						reject(err);
+					}	
+					else {
+						resolve();
+					}
+				}, {
+					connection: connection
+				});
+			});
+		};
+	
+		let sComandoLimparMoeda = 
+			'update "VGT.REL_TAX_PACKAGE_PERIODO" set '
+			 + '"fk_dominio_moeda_rel.id_dominio_moeda" = NULL '
+			 + 'where '
+			 + '"id_rel_tax_package_periodo" = ? ';
+			
+		let sComandoLimparDiferenca =
+			'delete from "VGT.REL_TAX_RECONCILIATION_DIFERENCA" '
+			 + 'where '
+			 + '"fk_tax_reconciliation.id_tax_reconciliation" in ( '
+			 + 'select "id_tax_reconciliation" '
+			 + 'from "VGT.TAX_RECONCILIATION" '
+			 + 'where '
+			 + '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? '
+			 + '); ';
+	
+		let sComandoLimparTaxReconciliation =
+			'delete from "VGT.TAX_RECONCILIATION" where "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? ';
+			
+		let sComandoLimparSchedule = 
+			'delete from "VGT.SCHEDULE" where "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?';
+			
+		let sComandoLimparScheduleValueUtilized =
+			'delete from "VGT.SCHEDULE_VALUE_UTILIZED" '
+			 + 'where '
+			 + '"id_schedule_value_utilized" in ( '
+			 + 'select "id_schedule_value_utilized" '
+			 + 'from "VGT.SCHEDULE_VALUE_UTILIZED" '
+			 + 'inner join "VGT.TAX_RECONCILIATION" '
+			 + 'on "fk_tax_reconciliation.id_tax_reconciliation" = "id_tax_reconciliation" '
+			 + 'where '
+			 + '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?) ';
+		
+		let sComandoLimparAntecipacao = 
+			'delete from "VGT.ANTECIPACAO" '
+			 + 'where '
+			 + '"id_antecipacao" in ( '
+			 + 'select "id_antecipacao" '
+			 + 'from "VGT.ANTECIPACAO" '
+			 + 'inner join "VGT.TAX_RECONCILIATION" '
+			 + 'on "fk_tax_reconciliation.id_tax_reconciliation" = "id_tax_reconciliation" '
+			 + 'where '
+			 + '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? '
+			 + '); ';
+			 
+		let sComandoLimparTaxaMultipla = 
+			'delete from "VGT.TAXA_MULTIPLA" '
+			 + 'where '
+			 + '"id_taxa_multipla" in ( '
+			 + 'select "id_taxa_multipla" '
+			 + 'from "VGT.TAXA_MULTIPLA" '
+			 + 'inner join "VGT.TAX_RECONCILIATION" '
+			 + 'on "fk_tax_reconciliation.id_tax_reconciliation" = "id_tax_reconciliation" '
+			 + 'where '
+			 + '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? '
+			 + '); '
+
+		let sComandoLimparRelRespostaItemToReportAnoFiscal =
+			'delete from "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" '
+			 + 'where '
+			 + '"fk_resposta_item_to_report.id_resposta_item_to_report" in ( '
+			 + 'select "id_resposta_item_to_report" '
+			 + 'from "VGT.RESPOSTA_ITEM_TO_REPORT" '
+			 + 'where '
+			 + '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? '
+			 + ') ';
+	
+		let ComandoLimparRespostaItemToReport = 
+			'delete from "VGT.RESPOSTA_ITEM_TO_REPORT" where "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?';
+			
+		let aParam = [idRelTaxPackagePeriodoDestino];
+		
+		execute(sComandoLimparMoeda, aParam)
+			.then(res =>  execute(sComandoLimparDiferenca, aParam))
+			.then(res =>  execute(sComandoLimparTaxReconciliation, aParam))
+			.then(res =>  execute(sComandoLimparSchedule, aParam))
+			.then(res =>  execute(sComandoLimparScheduleValueUtilized, aParam))
+			.then(res =>  execute(sComandoLimparAntecipacao, aParam))
+			.then(res =>  execute(sComandoLimparTaxaMultipla, aParam))
+			.then(res =>  execute(sComandoLimparRelRespostaItemToReportAnoFiscal, aParam))
+			.then(res =>  execute(ComandoLimparRespostaItemToReport, aParam))
+			.then(() => {
+				connection.commit();
+				connection.close();
+				resolve();
+			})
+			.catch((err) => {
+				connection.rollback();
+				connection.close();
+				reject(err);	
+			});	
+	});
+};
+
 oModel.copiarDados = (idRelTaxPackagePeriodoOrigem, idRelTaxPackagePeriodoDestino) => {
 	return new Promise((resolve, reject) => {
 		console.log(`Copiar dados de ${idRelTaxPackagePeriodoOrigem} para ${idRelTaxPackagePeriodoDestino}`);
@@ -540,6 +658,35 @@ oModel.copiarDados = (idRelTaxPackagePeriodoOrigem, idRelTaxPackagePeriodoDestin
 			});
 		};
 		
+		const copiarMoeda = () => {
+			var sComando = 
+				'update "VGT.REL_TAX_PACKAGE_PERIODO" set '
+				 + '"fk_dominio_moeda_rel.id_dominio_moeda" = ( '
+				 + 'select "fk_dominio_moeda_rel.id_dominio_moeda" '
+				 + 'from  "VGT.REL_TAX_PACKAGE_PERIODO" '
+				 + 'where '
+				 + '"id_rel_tax_package_periodo" = ? '
+				 + ') '
+				 + 'where '
+				 + '"id_rel_tax_package_periodo" = ? ';
+
+			return new Promise((resolve, reject) => {
+				db.executeStatement({
+					statement: sComando,
+					parameters: [idRelTaxPackagePeriodoOrigem, idRelTaxPackagePeriodoDestino]
+				}, (err, result) => {
+					if (err) {
+						reject(err);
+					}	
+					else {
+						resolve();
+					}
+				}, {
+					connection: connection
+				});
+			});
+		};
+		
 		let idTaxReconciliation;
 		
 		Promise.all([
@@ -578,6 +725,9 @@ oModel.copiarDados = (idRelTaxPackagePeriodoOrigem, idRelTaxPackagePeriodoDestin
 			})
 			.then(() => {
 				return copiarRespostaItemToReport();
+			})
+			.then(() => {
+				return copiarMoeda();
 			})
 			.then(() => {
 				connection.commit();

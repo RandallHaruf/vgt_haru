@@ -90,14 +90,14 @@ module.exports = {
 						+ 'periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = ? '
 						+ 'and periodo."numero_ordem" <= ? '
 						+ 'and taxPackage."fk_empresa.id_empresa" = ? '
-						+ 'order by periodo."numero_ordem"';
+						+ 'order by periodo."numero_ordem", relTaxPackagePeriodo."id_rel_tax_package_periodo" ';
 						
 					aParams = [resultRel[0]["fk_dominio_ano_calendario.id_dominio_ano_calendario"], resultRel[0].numero_ordem, resultRel[0]["fk_empresa.id_empresa"]];
 					
 					resultDiferenca = db.executeStatementSync(sQuery, aParams);
 					
 					for (var i = 0; i < resultDiferenca.length; i++) {
-						if (resultDiferenca[i].numero_ordem >= 6 && i < resultDiferenca - 1) {
+						if (resultDiferenca[i].numero_ordem === 6 && i < resultDiferenca - 1) {
 							resultDiferenca.splice(i, 1);
 						}
 					}
@@ -126,7 +126,7 @@ module.exports = {
 								case oDiferenca.numero_ordem === 5:
 									oDiferencaEncontrada.valor5 = oDiferenca.valor;
 									break;
-								case oDiferenca.numero_ordem >= 6:
+								case oDiferenca.numero_ordem === 6:
 									oDiferencaEncontrada.valor6 = oDiferenca.valor;
 									break;
 							}
@@ -148,7 +148,7 @@ module.exports = {
 								case oDiferenca.numero_ordem === 5:
 									oDiferenca.valor5 = oDiferenca.valor;
 									break;
-								case oDiferenca.numero_ordem >= 6:
+								case oDiferenca.numero_ordem === 6:
 									oDiferenca.valor6 = oDiferenca.valor;
 									break;
 							}
@@ -1424,7 +1424,7 @@ function pegarChaveValorDiferenca (iNumeroOrdemPeriodo) {
 			return "valor4";
 		case iNumeroOrdemPeriodo === 5:
 			return "valor5";
-		case iNumeroOrdemPeriodo >= 6:
+		case iNumeroOrdemPeriodo === 6:
 			return "valor6";
 	}
 }

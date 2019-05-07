@@ -2118,10 +2118,17 @@ sap.ui.define(
 			onCancelar: function (oEvent) {
 				var that = this;
 				this._confirmarCancelamento(function () {
-					that._navToResumoTrimestre();
+					if (that.getModel().getProperty('/CopiaRealizada')) {
+						that._limparCopia(function () {
+							that._navToResumoTrimestre();	
+						});
+					}
+					else {
+						that._navToResumoTrimestre();
+					}
 				});
 			},
-
+			
 			_initItemsToReport: function (sIdRelTaxPackagePeriodo) {
 				var that = this;
 
@@ -2282,9 +2289,9 @@ sap.ui.define(
 				NodeAPI.pListarRegistros(sEntidade)
 					.then(function (response) {
 						if (response) {
-							response.sort(function (a, b) {
+							/*response.sort(function (a, b) {
 								return (a.numero_ordem > b.numero_ordem) ? 1 : ((b.numero_ordem > a.numero_ordem) ? -1 : 0);
-							});
+							});*/
 
 							for (var i = 0, length = response.length; i < length; i++) {
 								var oRespostaItemToReport = response[i];
@@ -2996,7 +3003,83 @@ sap.ui.define(
 					}
 				});
 
-				this._atualizarDados();
+				this.setBusy(this.byId("paginaEdicaoTrimestreTP"), true);
+
+				NodeAPI.pListarRegistros('RelacionamentoTaxPackagePeriodo/' + oParametros.oPeriodo.id_rel_tax_package_periodo + '/IsPrimeiraEdicao')
+					.then(function (res) {
+						that.setBusy(that.byId("paginaEdicaoTrimestreTP"), false);
+						
+						if (res.result.isPrimeiraEdicao) {
+							if (res.result.indIndagarMoeda) {
+								jQuery.sap.require("sap.m.MessageBox");
+	
+								sap.m.MessageBox.confirm(that.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoManterMoeda"), {
+									title: that.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+									onClose: function (oAction) {
+										if (oAction === sap.m.MessageBox.Action.OK) {
+											//alert('Copiar dados do período anterior');
+											that._copiarDadosPeriodoAnterior(oParametros.oPeriodo.id_rel_tax_package_periodo);
+										}
+										else {
+											//alert('Primeira Edicao. _atualizarDados()');
+											that._atualizarDados();	
+										}
+									}
+								});
+							}
+							else if (oParametros.oPeriodo.numero_ordem === 6) {
+								//alert('Copiar dados do período anterior');
+								that._copiarDadosPeriodoAnterior(oParametros.oPeriodo.id_rel_tax_package_periodo);
+							}
+							else {
+								//alert('Primeira Edicao. _atualizarDados()');
+								that._atualizarDados();	
+							}
+						}
+						else {
+							//alert('Já foi editado. _atualizarDados()');
+							that._atualizarDados();	
+						}
+					})
+					.catch(function (err) {
+						console.log(err);
+					});
+			},
+
+			_copiarDadosPeriodoAnterior: function (idRelTaxPackagePeriodo) {
+				var that = this;
+				
+				this.setBusy(this.byId("paginaEdicaoTrimestreTP"), true);
+				
+				NodeAPI.pListarRegistros('RelacionamentoTaxPackagePeriodo/' + idRelTaxPackagePeriodo + '/CopiarDadosPeriodoAnterior')
+					.then(function (res) {
+						that.setBusy(that.byId("paginaEdicaoTrimestreTP"), false);
+						that.getModel().setProperty('/CopiaRealizada', true);
+						that._atualizarDados();
+					})
+					.catch(function (err) {
+						console.log(err);
+					});
+			},
+			
+			_limparCopia: function (callback) {
+				var that = this;
+				
+				this.setBusy(this.byId("paginaEdicaoTrimestreTP"), true);
+				
+				NodeAPI.pListarRegistros('RelacionamentoTaxPackagePeriodo/' + this.getModel().getProperty('/Periodo').id_rel_tax_package_periodo + '/LimparDados')
+					.then(function (res) {
+						that.setBusy(that.byId("paginaEdicaoTrimestreTP"), false);
+						if (callback) {
+							callback();
+						}
+					})
+					.catch(function (err) {
+						console.log(err);
+						if (callback) {
+							callback();
+						}
+					});
 			},
 
 			_atualizarDados: function () {
@@ -3152,57 +3235,16 @@ sap.ui.define(
 						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaEstimativa);
 						break;
 					case 5:
-						if (oMoeda.sIdMoedaEstimativa && !oMoeda.sIdMoedaAnual) {
-							jQuery.sap.require("sap.m.MessageBox");
-	
-							sap.m.MessageBox.confirm(this.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoManterMoeda"), {
-								title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
-								onClose: function (oAction) {
-									if (oAction === sap.m.MessageBox.Action.OK) {
-										that.getModel().setProperty('/Moeda', oMoeda.sIdMoedaEstimativa);
-										that._copiarDados(4, 5);
-									}
-									else {
-										that.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
-									}
-								}
-							});
-						}
-						else {
-							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
-						}
+						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
 						break;
 					case 6:
-						// Se é a primeira vez editando a retificadora, realiza a copia das informações da anual/retificadora
-						if (!aTaxRecon.find(function (obj) { return obj.ind_ativo; }).id_tax_reconciliation) {
-							this._copiarDados(5, 6);
-							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaAnual);
-						}
-						else {
-							this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
-						}
+						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
 						break;
 				}
 				
 				this.getModel().setProperty('/MoedaAnterior', this.getModel().getProperty('/Moeda'));
 			},
 			
-			_copiarDados: function (iNumeroOrdemOrigem, iNumeroOrdemDestino) {
-				//alert('copiar dados de nº ordem ' + iNumeroOrdemOrigem + ' para nº ordem ' + iNumeroOrdemDestino);
-				
-				// copiar respostas do item do report - anos + sim/nao + texto
-				
-				// copiar resultado contabil
-				
-				// copiar diferencas
-				
-				// copiar resultado fiscal - valores calculados + detalhes de taxas multiplas + utilizaçoes de perda/credito + antecipacoes TTC + detalhes de income tax
-				
-				// copiar loss schedule - antecipacoes + detalhes + comentários
-				
-				// copiar credit schedule - antecipacoes + detalhes + comentários
-			},	
-
 			_carregarAntecipacoes: function (sIdTaxReconciliation) {
 				var that = this;
 				NodeAPI.listarRegistros("Antecipacao?taxReconciliation=" + sIdTaxReconciliation, function (response) {
@@ -3524,6 +3566,7 @@ sap.ui.define(
 
 			_zerarModel: function () {
 				this.getModel().setData({
+					CopiaRealizada: false,
 					PagamentosTTC: [],
 					OutrasAntecipacoes: [],
 					OtherTaxes: [],

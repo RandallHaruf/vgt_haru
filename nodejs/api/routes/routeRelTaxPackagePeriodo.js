@@ -10,7 +10,9 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().get("/RelacionamentoTaxPackagePeriodo/:idRegistro", controller.lerRegistro));
 	aRoutes.push(express.Router().put("/RelacionamentoTaxPackagePeriodo/:idRegistro", controller.atualizarRegistro));
 	aRoutes.push(express.Router().delete("/RelacionamentoTaxPackagePeriodo/:idRegistro", controller.excluirRegistro));
+	aRoutes.push(express.Router().get("/RelacionamentoTaxPackagePeriodo/:idRegistro/LimparDados", controller.limparDados));
 	aRoutes.push(express.Router().get("/RelacionamentoTaxPackagePeriodo/:idRegistro/CopiarDadosPeriodoAnterior", controller.copiarDadosPeriodoAnterior));
+	aRoutes.push(express.Router().get("/RelacionamentoTaxPackagePeriodo/:idRegistro/IsPrimeiraEdicao", controller.isPrimeiraEdicao));
 
 	aRoutes.push(express.Router().get("/DeepQuery/RelacionamentoTaxPackagePeriodo", controller.deepQuery));
 };

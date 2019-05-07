@@ -1,6 +1,7 @@
 "use strict";
 
 var model = require("../models/modelRelTaxPackagePeriodo");
+const db = require("../db");
 
 module.exports = {
 
@@ -177,7 +178,7 @@ module.exports = {
 			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) and (tblRequisicaoEncerramento.\"rownumber_req_encerramento\" = 1 or tblRequisicaoEncerramento.\"rownumber_req_encerramento\" is null)"
 		}
 
-		sStatement += ' order by periodo."numero_ordem" ';
+		sStatement += ' order by periodo."numero_ordem", rel."id_rel_tax_package_periodo" ';
 
 		model.execute({
 			statement: sStatement,
@@ -191,15 +192,112 @@ module.exports = {
 		});
 	},
 	
-	copiarDadosPeriodoAnterior: function (req, res) {
-		model.copiarDadosPeriodoAnterior(req.params.idRegistro)
-			.then(() => {
-				res.status(200).json({
-					result: 'Cópia realizada com sucesso'
-				});
-			})
-			.catch((err) => {
-				next(err);
+	limparDados: function (req, res) {
+		const successHandler = () => {
+			res.status(200).json({
+				result: 'Limpeza realizada com sucesso'
 			});
+		};
+		
+		const errorHandler = (err) => {
+			next(err);
+		};
+		
+		model.limparDados(req.params.idRegistro)
+			.then(successHandler)
+			.catch(errorHandler);
+	},
+	
+	copiarDadosPeriodoAnterior: function (req, res) {
+		const successHandler = () => {
+			res.status(200).json({
+				result: 'Cópia realizada com sucesso'
+			});
+		};
+		
+		const errorHandler = (err) => {
+			next(err);
+		};
+		
+		if (req.query.overwrite) {
+			model.limparDados(req.params.idRegistro)
+				.then(res => model.copiarDadosPeriodoAnterior(req.params.idRegistro))
+				.then(successHandler)
+				.catch(errorHandler);
+		}
+		else {
+			model.copiarDadosPeriodoAnterior(req.params.idRegistro)
+				.then(successHandler)
+				.catch(errorHandler);
+		}
+	},
+	
+	isPrimeiraEdicao: function (req, res, next) {
+		const isPrimeiraEdicao = () => {
+			return new Promise((resolve, reject) => {
+				db.executeStatement({
+					statement: 
+						'select * '
+						+ 'from "VGT.TAX_RECONCILIATION" '
+						+ 'where '
+						+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ? ',
+					parameters: [req.params.idRegistro]
+				}, (err, result) => {
+					if (err) {
+						console.log(err);
+						reject(err);
+					}
+					else {
+						resolve(!(result && result.length));
+					}
+				});
+			});
+		};
+		
+		const indIndagarMoeda = () => {
+			return new Promise((resolve, reject) => {
+				model.getIdRelTaxPackagePeriodoAnterior(req.params.idRegistro)
+					.then((idAnterior) => {
+						db.executeStatement({
+							statement: 
+								'select * '
+								+ 'from "VGT.REL_TAX_PACKAGE_PERIODO" '
+								+ 'inner join "VGT.PERIODO" '
+								+ 'on "fk_periodo.id_periodo" = "id_periodo" '
+								+ 'inner join "VGT.TAX_RECONCILIATION" '
+								+ 'on "fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = "id_rel_tax_package_periodo" '
+								+ 'where '
+								+ '"id_rel_tax_package_periodo" = ? ',
+							parameters: [idAnterior]
+						}, (err, result) => {
+							if (err) {
+								console.log(err);
+								reject(err);
+							}
+							else {
+								resolve(result && result.length && result[0].numero_ordem === 4);
+							}
+						});
+					})
+					.catch((err) => {
+						console.log(err);
+						reject(err);
+					});
+			});
+		};
+		
+		Promise.all([
+			isPrimeiraEdicao(),
+			indIndagarMoeda()
+		]).then((result) => {
+			res.status(200).json({
+				result: {
+					isPrimeiraEdicao: result[0],
+					indIndagarMoeda: result[1]
+				}
+			});
+		}).catch((err) => {
+			next(err);
+		});
 	}
 };

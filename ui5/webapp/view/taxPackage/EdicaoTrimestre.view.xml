@@ -1,6 +1,6 @@
 <mvc:View controllerName="ui5ns.ui5.controller.taxPackage.EdicaoTrimestre" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
 	xmlns:f="sap.ui.layout.form" xmlns:f2="sap.f" xmlns:l="sap.ui.layout" xmlns:uni="sap.ui.unified" xmlns="sap.m" xmlns:t="sap.ui.table">
-	<f2:DynamicPage showFooter="true" class="semContentPadding">
+	<f2:DynamicPage showFooter="true" class="semContentPadding" id="paginaEdicaoTrimestreTP">
 		<f2:title>
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>

@@ -156,6 +156,8 @@ module.exports = {
 				sStatement += aWhere[i];
 			}
 		}
+		
+		sStatement += ' order by periodo."numero_ordem" ';
 
 		model.execute({
 			statement: sStatement,
