@@ -20,6 +20,9 @@ var oSketch = {
 		fkUsuario: {
 			nome: "fk_usuario.id_usuario"
 		}, 
+		indDefault: {
+			nome: "ind_default"
+		}, 		
 		isIFrame: {
 			nome: "ind_isIFrame"
 		}

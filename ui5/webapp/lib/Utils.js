@@ -4,12 +4,15 @@ sap.ui.define(
 		"sap/m/Popover",
 		"ui5ns/ui5/lib/NodeAPI",
 		"sap/m/Button",
+		"sap/m/Input",
+		"sap/m/Label",
+		"sap/m/CheckBox",
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/lib/jszip",
 		"ui5ns/ui5/lib/XLSX",
 		"ui5ns/ui5/lib/FileSaver"
 	],
-	function (Validador, Popover, NodeAPI, Button, Utils) {
+	function (Validador, Popover, NodeAPI, Button, Input, Label, CheckBox, Utils) {
 		return {
 			limparMascaraDecimal: function (sValor, that) {
 				if (that && !that.isPTBR()) {
@@ -585,7 +588,7 @@ sap.ui.define(
 				return traducao;
 			},
 
-			traduzTrimestreTaxPackage: function (id, that) {
+			traduzTrimestre: function (id, that) {
 
 				var traducao = "";
 				switch (id) {
@@ -611,6 +614,32 @@ sap.ui.define(
 				}
 				return traducao;
 			},
+			traduzTrimestreTaxPackage: function (id, that) {
+
+				var traducao = "";
+				switch (id) {
+
+				case 1:
+					traducao = that.getResourceBundle().getText("viewGeralPeriodo1");
+					break;
+				case 2:
+					traducao = that.getResourceBundle().getText("viewGeralPeriodo2");
+					break;
+				case 3:
+					traducao = that.getResourceBundle().getText("viewGeralPeriodo3");
+					break;
+				case 4:
+					traducao = that.getResourceBundle().getText("viewGeralPeriodo4");
+					break;
+				case 5:
+					traducao = that.getResourceBundle().getText("viewGeralPeriodo5");
+					break;
+				case 6:
+					traducao = that.getResourceBundle().getText("viewGeralPeriodo6");
+					break;
+				}
+				return traducao;
+			},			
 			traduzTrimestreTTC: function (id, that) {
 
 				var traducao = "";
@@ -1271,250 +1300,431 @@ sap.ui.define(
 			},
 
 			_reportAdicionar: function (sProperty, that) {
+				if (that.getModel().getProperty(sProperty) ? false : true) {
+					that.getModel().setProperty(sProperty, []);
+				}
 				that.getModel().getProperty(sProperty).unshift({
 					descricao: null,
 					descricaoValueState: sap.ui.core.ValueState.Error,
 					parametros: JSON.stringify(that.getModel().getProperty("/Preselecionado"))
 				});
-				that.getModel().refresh();
+				//that.getModel().refresh();
+			},
+
+			_dialogSalvar: function (sProperty, that, id) {
+				var self = this;
+				self._reportAdicionar(sProperty, that);
+				var lista = that.getModel().getProperty(sProperty);
+				var dialog = new sap.m.Dialog({
+					title: that.getResourceBundle().getText("viewGeralGravarVisao"),
+					contentWidth: "250px",
+					showHeader: true,
+					content: [
+						new Label({
+							required: true,
+							text: that.getResourceBundle().getText("viewGeralVisao")
+						}),
+						new Input({
+							value: "{descricao}",
+							valueState: "{descricaoValueState}",
+							valueStateText: "{i18n>viewGeralCampoNaoPodeSerVazio}"
+						}).attachChange(function (oEvent) {
+							var obj = oEvent.getSource().mProperties;
+							var nomeIgual = lista.find(function (oLista) {		
+								return (oLista["descricao"] == obj.value);
+							});	
+							if (nomeIgual){
+								obj.repetido = true;
+							}						
+							else{
+								obj.descricaoValueState = obj.value ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
+								obj.descricao = obj.value;
+								obj.repetido = false;
+							}							
+
+						}),
+						new CheckBox({
+							text: that.getResourceBundle().getText("viewGeralDeterminalComoPadrao")
+						})
+					],
+					escapeHandler: function(oPromise){
+						oPromise.reject();
+					},					
+					endButton: new sap.m.Button({
+						text: that.getResourceBundle().getText("viewGeralSalvar"),
+						press: function () {
+							that.setBusy(dialog.getEndButton(),true);
+							that.setBusy(dialog.getBeginButton(),true);							
+							var aTaxa = that.getModel().getProperty(sProperty),
+								bValido = true;
+							aTaxa[0].descricao = this.getParent().mAggregations.content[1].mProperties.descricao;
+							aTaxa[0].descricaoValueState = this.getParent().mAggregations.content[1].mProperties.descricaoValueState;
+							aTaxa[0].ind_default = this.getParent().mAggregations.content[2].mProperties.selected;
+							aTaxa[0].repetido = this.getParent().mAggregations.content[1].mProperties.repetido;
+							
+							if (aTaxa && aTaxa.length) {
+								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+									return !obj.descricao;
+								});
+
+								if (aTaxaSemDescricao.length) {
+									bValido = false;
+								}
+							}
+							if(aTaxa[0].repetido == true){
+								bValido = false;
+								var errorMsg = that.getResourceBundle().getText("viewGeralErrMsg")
+							}
+
+
+							if (bValido) {
+								//that.onAplicarRegras();
+								var aPromise = [];
+								var nome;
+								//that.setBusy(that._dialogFiltro, true);
+								for (var i = 0, length = aTaxa.length; i < length; i++) {
+									if (aTaxa[i]["descricaoValueState"] === "None" && !aTaxa[i][id]) {
+										nome = aTaxa[i]["descricao"];
+										
+										aPromise.push(NodeAPI.pCriarRegistro("TemplateReport", {
+											tela: that.oView.mProperties.viewName,
+											parametros: aTaxa[i]["parametros"],
+											isIFrame: that.isIFrame() ? "true" : "false",
+											descricao: aTaxa[i]["descricao"],
+											indDefault: aTaxa[i]["ind_default"],
+											usarSession: 1
+										}).catch(
+											function (err) {
+												return err;
+											}
+										));
+									} else if (aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]) {
+										aPromise.push(NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id], {
+											tela: that.oView.mProperties.viewName,
+											parametros: aTaxa[i]["parametros"],
+											isIFrame: that.isIFrame() ? "true" : "false",
+											descricao: aTaxa[i]["descricao"],
+											indDefault: aTaxa[i]["ind_default"],
+											usarSession: 1
+										}).catch(
+											function (err) {
+												return err;
+											}
+										));
+									}
+								}
+
+								Promise.all(aPromise)
+									.then(function (res) {
+										console.log(res);
+										//that.setBusy(that._dialogFiltro, false);
+										that.getModel().setProperty("/NomeReport",nome);
+										dialog.close();
+									})
+									.catch(function (err){
+										console.log(err);
+									});
+							} else {
+								jQuery.sap.require("sap.m.MessageBox");
+								if(errorMsg){
+									sap.m.MessageBox.show(errorMsg, {
+										title: that.getResourceBundle().getText("viewGeralAviso")
+									});									
+								}else{
+									sap.m.MessageBox.show(that.getResourceBundle().getText(
+										"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+										title: that.getResourceBundle().getText("viewGeralAviso")
+									});									
+								}
+								that.setBusy(dialog.getEndButton(),false);
+								that.setBusy(dialog.getBeginButton(),false);								
+							}
+						}
+					}),
+					beginButton: new sap.m.Button({
+						text: that.getResourceBundle().getText("viewGeralCancelar"),
+						press: function () {
+							that.setBusy(dialog.getEndButton(),true);
+							that.setBusy(dialog.getBeginButton(),true);	
+							dialog.close();	
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				}).addStyleClass("sapUiContentPadding");
+				dialog.open();
+
+			},
+
+			_dialogAdministrar: function (sProperty, that, id, excluirProperty) {
+				var self = this;
+
+				var oTable = new sap.m.Table({
+					inset: false
+				});
+
+				oTable.addColumn(new sap.m.Column({
+					width: "250px"
+				}).setHeader(new sap.m.Text({
+					text: "{i18n>viewGeralVisao}"
+				})));
+				oTable.addColumn(new sap.m.Column({
+					vAlign: "Middle",
+					width: "90px"
+				}).setHeader(new sap.m.Text({
+					text: "{i18n>viewGeralPadrao}"
+				})));
+				oTable.addColumn(new sap.m.Column({
+					width: "50px"
+				}));
+
+				var oInputDescricao = new sap.m.Input({
+					value: "{descricao}",
+					valueState: "{descricaoValueState}",
+					valueStateText: "{i18n>viewGeralCampoNaoPodeSerVazio}"
+				}).attachChange(function (oEvent) {
+					var obj = oEvent.getSource().getBindingContext().getObject();
+					obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
+				});
+
+				var oDefault = new sap.m.RadioButton({
+					selected: "{ind_default}"
+				}).attachSelect(function(oEvent4){
+					var obj = oEvent4.getSource().getBindingContext().getObject();
+					obj.selectionBoxChanged = true;
+				});
+
+				var oBtnExcluir = new sap.m.Button({
+					icon: "sap-icon://sys-cancel",
+					type: "Transparent",
+					tooltip: "{i18n>viewGeralExcluirLinha}"
+				}).attachPress(oTable, function (oEvent2) {
+					self._reportExcluir(oEvent2, sProperty, excluirProperty, that, id);
+				}, that);
+
+				var oTemplate = new sap.m.ColumnListItem({
+					//cells: [oBtnExcluir, oInputDescricao, oBtnSelecionar]
+					cells: [oInputDescricao, oDefault, oBtnExcluir]
+				});
+
+				oTable.bindItems({
+					path: sProperty,
+					template: oTemplate
+				});
+
+				var dialog = new sap.m.Dialog({
+					title: "{i18n>viewGeralAdministrarVisoes}",
+					contentWidth: "600px",
+					showHeader: true,
+					content: [
+						oTable
+					],
+					escapeHandler: function(oPromise){
+						oPromise.reject();
+					},
+					endButton: new sap.m.Button({
+						text: "OK",
+						press: function () {
+								that.setBusy(dialog.getEndButton(),true);
+								that.setBusy(dialog.getBeginButton(),true);
+								var aTaxa = that.getModel().getProperty(sProperty),
+									bValido = true;
+	
+								if (aTaxa && aTaxa.length) {
+									var aTaxaSemDescricao = aTaxa.filter(function (obj) {
+										return !obj.descricao;
+									});
+	
+									if (aTaxaSemDescricao.length) {
+										bValido = false;
+									}
+								}
+							
+								if (bValido) {
+									
+									//that.onAplicarRegras();
+									var excluir = that.getModel().getProperty("/Excluir");
+									var aPromise = [];
+									//that.setBusy(that._dialogFiltro, true);
+									for (var i = 0, length = excluir.length; i < length; i++) {
+										aPromise.push(
+											NodeAPI.pExcluirRegistro("TemplateReport", excluir[i]).catch(
+												function(err){
+													return err;
+												}
+											)
+										);						
+									}
+									for (var i = 0, length = aTaxa.length; i < length; i++) {
+										if (aTaxa[i]["descricaoValueState"] === "None" && !aTaxa[i][id]) {
+											aPromise.push(NodeAPI.pCriarRegistro("TemplateReport", {
+													tela: that.oView.mProperties.viewName,
+													parametros: aTaxa[i]["parametros"],
+													isIFrame: that.isIFrame() ? "true" : "false",
+													descricao: aTaxa[i]["descricao"],
+													indDefault: aTaxa[i]["in_default"],
+													usarSession: 1
+												}).catch(
+												function(err){
+													return err;
+												}
+											)
+											);
+										}
+										else if((aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]) || aTaxa[i]["selectionBoxChanged"]){
+											aPromise.push(NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id],{
+													tela: that.oView.mProperties.viewName,
+													parametros: aTaxa[i]["parametros"],
+													isIFrame: that.isIFrame() ? "true" : "false",
+													descricao: aTaxa[i]["descricao"],
+													indDefault: aTaxa[i]["ind_default"],
+													usarSession: 1
+												}).catch(
+												function(err){
+													return err;
+												}
+											)
+											);							
+										}
+									}
+									
+									Promise.all(aPromise)
+										.then(function (res) {
+											console.log(res);
+											//that.setBusy(that._dialogFiltro, false);
+											dialog.close();
+										})
+										.catch(function (err){
+											console.log(err);
+										});
+								} else {
+									jQuery.sap.require("sap.m.MessageBox");
+									sap.m.MessageBox.show(that.getResourceBundle().getText(
+										"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
+										title: that.getResourceBundle().getText("viewGeralAviso")
+									});
+									that.setBusy(dialog.getEndButton(),false);
+									that.setBusy(dialog.getBeginButton(),false);
+								}
+							}
+						}),							
+
+					beginButton: new sap.m.Button({
+						text: "{i18n>viewGeralCancelar}",
+						press: function () {
+							that.setBusy(dialog.getEndButton(),true);
+							that.setBusy(dialog.getBeginButton(),true);
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				}).addStyleClass("sapUiContentPadding");
+				that.getView().addDependent(dialog);
+
+				dialog.open();
 			},
 
 			_reportExcluir: function (oEvent, sProperty, excluirProperty, that, id) {
 				var array = that.getModel().getProperty(sProperty);
 				var oExcluir = oEvent.getSource().getBindingContext().getObject();
-				var oWhere = that.getModel().getProperty(excluirProperty);
-				for (var i = 0, length = array.length; i < length; i++) {
-					if (array[i] === oExcluir) {
-						if (array[i][id]) {
-							oWhere.push(array[i][id]);
+				if(oExcluir.ind_default==false){
+					var oWhere = that.getModel().getProperty(excluirProperty);
+					for (var i = 0, length = array.length; i < length; i++) {
+						if (array[i] === oExcluir) {
+							if (array[i][id]) {
+								oWhere.push(array[i][id]);
+							}
+							array.splice(i, 1);
 						}
-						array.splice(i, 1);
 					}
+					that.getModel().refresh();					
+				}else{
+					jQuery.sap.require("sap.m.MessageBox");
+					sap.m.MessageBox.show(that.getResourceBundle().getText(
+						"viewGeralNaoPodeExcluirPadrao"), {
+						title: that.getResourceBundle().getText("viewGeralAviso")
+					});					
 				}
-				that.getModel().refresh();
+
 			},
+
 			_reportSelecionar: function (oEvent, sProperty, that) {
+
 				var aTaxaMultipla = that.getModel().getProperty(sProperty);
 				var oSelecionado = oEvent.getSource().getBindingContext().getObject();
 				that.getModel().setProperty("/Preselecionado", JSON.parse(oSelecionado["parametros"]));
+				that.getModel().setProperty("/NomeReport",oSelecionado["descricao"]);
 				that.onTemplateGet();
-				that._dialogFiltro.close();
+
 			},
-			_dialogReport: function (sTitulo, sProperty, excluirProperty, that, id) {
+
+			_dialogReport: function (sTitulo, sProperty, excluirProperty, that, id, oEvent) {
 				var self = this;
 				that.getModel().setProperty("/Excluir", []);
 				if (!that._dialogFiltro) {
-					var oScrollContainer = new sap.m.ScrollContainer({
-						horizontal: true,
-						vertical: true,
-						height: "330px"
-					}).addStyleClass("sapUiNoContentPadding");
 
-					/* Criação da tabela de inserção */
-					var oTable = new sap.m.Table();
-
-					/* Toolbar com título da tabela e botão de nova taxa */
-					var oToolbar = new sap.m.Toolbar();
-
-					oToolbar.addContent(new sap.m.ObjectIdentifier({
-						title: sTitulo
-					}));
-
-					oToolbar.addContent(new sap.m.ToolbarSpacer());
-
-					oToolbar.addContent(new sap.m.Button({
-						text: that.getResourceBundle().getText("viewGeralSelecaoAtual"),
-						icon: "sap-icon://add",
-						type: "Emphasized"
-					}).attachPress(oTable, function () {
-						self._reportAdicionar(sProperty, that);
-					}, that));
-
-					oTable.setHeaderToolbar(oToolbar);
-
-					/* Colunas da tabela */
-					oTable.addColumn(new sap.m.Column({
-						width: "50px"
-					}));
-
+					var oTable = new sap.m.Table({
+						inset: false
+					});
 					oTable.addColumn(new sap.m.Column({
 						vAlign: "Middle"
-					}).setHeader(new sap.m.Text({
-						text: "Templates"
-					})));
-					oTable.addColumn(new sap.m.Column({
-						vAlign: "Middle",
-						width: "90px"
-					}).setHeader(new sap.m.Text({
-						text: "Selecionar"
-					})));
-
-					/* Template das células */
-					var oBtnExcluir = new sap.m.Button({
-						icon: "sap-icon://delete",
-						type: "Reject",
-						tooltip: "{i18n>viewGeralExcluirLinha}"
-					}).attachPress(oTable, function (oEvent2) {
-						self._reportExcluir(oEvent2, sProperty, excluirProperty, that, id);
-					}, that);
-
-					var oInputDescricao = new sap.m.Input({
-						value: "{descricao}",
-						valueState: "{descricaoValueState}",
-						valueStateText: "{i18n>viewGeralCampoNaoPodeSerVazio}"
-					}).attachChange(function (oEvent) {
-						var obj = oEvent.getSource().getBindingContext().getObject();
-						obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
+					}));
+					var oVisao = new sap.m.Text({
+						text: "{descricao}"
 					});
-					/* Template das células */
-					var oBtnSelecionar = new sap.m.Button({
-						icon: "sap-icon://provision",
-						type: "Accept",
-						tooltip: "Selecionar"
+
+					var oTemplate = new sap.m.ColumnListItem({
+						type: "Active",
+						cells: [oVisao]
 					}).attachPress(oTable, function (oEvent3) {
 						self._reportSelecionar(oEvent3, sProperty, that);
 					}, that);
-
-					var oTemplate = new sap.m.ColumnListItem({
-						cells: [oBtnExcluir, oInputDescricao, oBtnSelecionar]
-					});
 
 					oTable.bindItems({
 						path: sProperty,
 						template: oTemplate
 					});
 
-					oScrollContainer.addContent(oTable);
-
-					//var that = this;
-
-					/* Criação do diálogo com base na tabela */
-					var dialog = new sap.m.Dialog({
-						contentWidth: "500px",
-						showHeader: false,
-						type: "Message",
-						content: oScrollContainer,
-						endButton: new sap.m.Button({
-							text: "{i18n>viewGeralSalvar}",
-							press: function () {
-								var aTaxa = that.getModel().getProperty(sProperty),
-									bValido = true;
-
-								if (aTaxa && aTaxa.length) {
-									var aTaxaSemDescricao = aTaxa.filter(function (obj) {
-										return !obj.descricao;
-									});
-
-									if (aTaxaSemDescricao.length) {
-										bValido = false;
-									}
-								}
-
-								if (bValido) {
-
-									//that.onAplicarRegras();
-									var excluir = that.getModel().getProperty("/Excluir");
-									var aPromise = [];
-									that.setBusy(that._dialogFiltro, true);
-									for (var i = 0, length = excluir.length; i < length; i++) {
-										aPromise.push(
-											NodeAPI.pExcluirRegistro("TemplateReport", excluir[i]).catch(
-												function (err) {
-													return err;
-												}
-											)
-										);
-									}
-									for (var i = 0, length = aTaxa.length; i < length; i++) {
-										if (aTaxa[i]["descricaoValueState"] === "None" && !aTaxa[i][id]) {
-											aPromise.push(NodeAPI.pCriarRegistro("TemplateReport", {
-												tela: that.oView.mProperties.viewName,
-												parametros: aTaxa[i]["parametros"],
-												isIFrame: that.isIFrame() ? "true" : "false",
-												descricao: aTaxa[i]["descricao"],
-												usarSession: 1
-											}).catch(
-												function (err) {
-													return err;
-												}
-											));
-										} else if (aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]) {
-											aPromise.push(NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id], {
-												tela: that.oView.mProperties.viewName,
-												parametros: aTaxa[i]["parametros"],
-												isIFrame: that.isIFrame() ? "true" : "false",
-												descricao: aTaxa[i]["descricao"],
-												usarSession: 1
-											}).catch(
-												function (err) {
-													return err;
-												}
-											));
-										}
-									}
-
-									Promise.all(aPromise)
-										.then(function (res) {
-											console.log(res);
-											that.setBusy(that._dialogFiltro, false);
-											dialog.close();
-										});
-									/*
-																			.catch(function (err) {
-																				//alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-																				console.log(err);
-																			});*/
-								} else {
-									jQuery.sap.require("sap.m.MessageBox");
-									sap.m.MessageBox.show(that.getResourceBundle().getText(
-										"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
-										title: that.getResourceBundle().getText("viewGeralAviso")
-									});
-								}
-							}
-						}),
-						beginButton: new sap.m.Button({
-							text: "{i18n>viewGeralCancelar}",
-							press: function () {
-								var aTaxa = that.getModel().getProperty(sProperty),
-									bValido = true;
-
-								if (aTaxa && aTaxa.length) {
-									var aTaxaSemDescricao = aTaxa.filter(function (obj) {
-										return !obj.descricao;
-									});
-
-									if (aTaxaSemDescricao.length) {
-										bValido = false;
-									}
-								}
-
-								if (bValido) {
-									dialog.close();
-								} else {
-									jQuery.sap.require("sap.m.MessageBox");
-									sap.m.MessageBox.show(that.getResourceBundle().getText(
-										"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
-										title: that.getResourceBundle().getText("viewGeralAviso")
-									});
-								}
-							}
-						}),
-						afterClose: function () {
-							//dialog.destroy();
-						}
+					var popover = new Popover({
+						title: "{i18n>viewGeralMinhasVisoes}",
+						placement: sap.m.PlacementType.Bottom,
+						contentHeight: "380px",
+						contentWidth: "400px",
+						content: [
+							oTable
+						]
 					});
 
-					that.getView().addDependent(dialog);
-					that._dialogFiltro = dialog;
+					that.getView().addDependent(popover);
+
+					var oToolbar = new sap.m.Toolbar();
+					oToolbar.addContent(new sap.m.ToolbarSpacer());
+					oToolbar.addContent(new sap.m.Button({
+						text: "{i18n>viewGeralGravarComo}"
+					}).attachPress(oTable, function () {
+						self._dialogSalvar(sProperty, that, id);
+					}, that));
+
+					oToolbar.addContent(new sap.m.Button({
+						text: "{i18n>viewGeralAdministrar}"
+					}).attachPress(oTable, function () {
+						self._dialogAdministrar(sProperty, that, id, excluirProperty);
+					}, that));
+
+					popover.setFooter(oToolbar);
+					popover.setVerticalScrolling(true);
+					that._dialogFiltro = popover;
 				}
-				that._dialogFiltro.open();
+				that._dialogFiltro.openBy(oEvent.getSource());
 			},
 
 			dateNowParaArquivo: function () {
 				var Data = new Date();
-				var fDataNoPadrao = Data.getDate().toString().padStart(2, "0") + "_" + (Data.getMonth() + 1).toString().padStart(2, "0") + "_" + Data
-					.getFullYear().toString();
+				var fDataNoPadrao = Data.getDate().toString().padStart(2, "0") + "_" + (Data.getMonth() + 1).toString().padStart(2, "0") + "_" +
+					Data.getFullYear().toString();
 				return fDataNoPadrao;
 			}
 		};

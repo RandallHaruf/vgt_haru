@@ -12,8 +12,16 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<!--<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" save="onSaveView"></vm:VariantManagement>-->
-					<Title text="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" />
+					<vm:VariantManagement id="myVariantManagement" visible = "false" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralItemsTR}" save="onSaveView" manage="onManageView" select ="onSelectView"></vm:VariantManagement>
+					<HBox justifyContent="Center" alignItems="Center">
+						<Title text="{/NomeReport}" />		
+						<Button
+						id="TemplateSet"
+						icon = "sap-icon://slim-arrow-down"
+						class="sapUiSmallMarginEnd"
+						type="Transparent"
+						press="onDialogOpen"/>							
+					</HBox>	
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -47,25 +55,25 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar showFilterConfiguration="false" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar id="filterbar" showFilterConfiguration="true" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' ,templateShareable:true}" selectedKeys="{/IdEmpresasSelecionadas}">
 										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
-									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' ,templateShareable:true}" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
 										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
-									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
+									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' ,templateShareable:true}" selectedKeys="{/IdPeriodoSelecionadas}">
 										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/><!--text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>-->
 									</MultiComboBox>
 								</fb:control>
@@ -79,35 +87,35 @@
 							</fb:FilterItem>-->
 							<fb:FilterItem name="E" label="{i18n>viewGeralFlagSN}">
 								<fb:control>
-									<MultiComboBox id="selectFlagSN" selectionFinish="onSelectChange" items="{ path: '/FlagSN' }" selectedKeys="{/FlagSNSelecionado}">
+									<MultiComboBox id="selectFlagSN" selectionFinish="onSelectChange" items="{ path: '/FlagSN' ,templateShareable:true}" selectedKeys="{/FlagSNSelecionado}">
 										<core:Item key="{tblItemToReport.flag_sim_nao}" text="{tblItemToReport.flag_sim_nao}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>	
 							<fb:FilterItem name="F" label="{i18n>viewGeralFlagAno}">
 								<fb:control>
-									<MultiComboBox id="selectFlagAno" selectionFinish="onSelectChange" items="{ path: '/FlagAno' }" selectedKeys="{/FlagAnoSelecionado}">
+									<MultiComboBox id="selectFlagAno" selectionFinish="onSelectChange" items="{ path: '/FlagAno' ,templateShareable:true}" selectedKeys="{/FlagAnoSelecionado}">
 										<core:Item key="{tblItemToReport.flag_ano}" text="{tblItemToReport.flag_ano}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>	
 							<fb:FilterItem name="G" label="{i18n>viewGeralQUestion}">
 								<fb:control>
-									<MultiComboBox id="selectPergunta" selectionFinish="onSelectChange" items="{ path: '/Pergunta' }" selectedKeys="{/PerguntaSelecionada}">
+									<MultiComboBox id="selectPergunta" selectionFinish="onSelectChange" items="{ path: '/Pergunta' ,templateShareable:true}" selectedKeys="{/PerguntaSelecionada}">
 										<core:Item key="{tblItemToReport.pergunta}" text="{tblItemToReport.pergunta}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>	
 							<fb:FilterItem name="H" label="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?">
 								<fb:control>
-									<MultiComboBox id="selectRespondeuSim" selectionFinish="onSelectChange" items="{ path: '/RespondeuSim' }" selectedKeys="{/RespondeuSimSelecionado}">
+									<MultiComboBox id="selectRespondeuSim" selectionFinish="onSelectChange" items="{ path: '/RespondeuSim' ,templateShareable:true}" selectedKeys="{/RespondeuSimSelecionado}">
 										<core:Item key="{tblRespostaItemToReport.ind_se_aplica}" text="{tblRespostaItemToReport.ind_se_aplica}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>		
 							<fb:FilterItem name="I" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange" items="{ path: '/AnoFiscal' }" selectedKeys="{/AnoFiscalSelecionado}">
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange" items="{ path: '/AnoFiscal' ,templateShareable:true}" selectedKeys="{/AnoFiscalSelecionado}">
 										<core:Item key="{Ano_Fiscal_Filtro}" text="{Ano_Fiscal_Agregado}"/>
 									</MultiComboBox>
 								</fb:control>
@@ -115,12 +123,6 @@
 						</fb:filterItems>
 					</fb:FilterBar>
 						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-								<Button
-								id="TemplateSet"
-								text="Layout"
-								class="sapUiSmallMarginEnd"
-								type="Transparent"
-								press="onDialogOpen"/>
 								<Button
 								id="GerarRelatorio"
 								text="{i18n>viewGeralBtnRelatorioTaxP}"

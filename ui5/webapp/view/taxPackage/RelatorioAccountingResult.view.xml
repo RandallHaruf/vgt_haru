@@ -12,8 +12,16 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<!--<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreResultadoContabil}" save="onSaveView"></vm:VariantManagement>-->
-					<Title text="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreResultadoContabil}" />					
+					<vm:VariantManagement id="myVariantManagement" visible = "false" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewEdiçãoTrimestreResultadoContabil}" save="onSaveView" manage="onManageView" select ="onSelectView"></vm:VariantManagement>
+					<HBox justifyContent="Center" alignItems="Center">
+						<Title text="{/NomeReport}" />		
+						<Button
+						id="TemplateSet"
+						icon = "sap-icon://slim-arrow-down"
+						class="sapUiSmallMarginEnd"
+						type="Transparent"
+						press="onDialogOpen"/>							
+					</HBox>	
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -47,32 +55,32 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar showFilterConfiguration="false" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar id="filterbar" showFilterConfiguration="true" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' ,templateShareable:true}" selectedKeys="{/IdEmpresasSelecionadas}">
 										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' }" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' ,templateShareable:true}" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
 										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
-									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' }" selectedKeys="{/IdPeriodoSelecionadas}">
+									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' ,templateShareable:true}" selectedKeys="{/IdPeriodoSelecionadas}">
 										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
 								<fb:control>
-									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' ,templateShareable:true}" selectedKeys="{/IdMoedaSelecionadas}">
 										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
 									</MultiComboBox>
 								</fb:control>
@@ -80,12 +88,6 @@
 						</fb:filterItems>
 					</fb:FilterBar>
 						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-								<Button
-								id="TemplateSet"
-								text="Layout"
-								class="sapUiSmallMarginEnd"
-								type="Transparent"
-								press="onDialogOpen"/>
 								<Button
 								id="GerarRelatorio"
 								text="{i18n>viewGeralBtnRelatorioTaxP}"

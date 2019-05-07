@@ -12,8 +12,16 @@
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<!--<vm:VariantManagement id="myVariantManagement" standardItemText="{i18n>viewGeralRelatorio} TTC" save="onSaveView"></vm:VariantManagement>-->
-					<Title text="{i18n>viewGeralRelatorio} TTC" />					
+					<vm:VariantManagement id="myVariantManagement" visible = "false" standardItemText="{i18n>viewGeralRelatorio} TTC" save="onSaveView" manage="onManageView" select ="onSelectView"></vm:VariantManagement>
+					<HBox justifyContent="Center" alignItems="Center">
+						<Title text="{/NomeReport}" />		
+						<Button
+						id="TemplateSet"
+						icon = "sap-icon://slim-arrow-down"
+						class="sapUiSmallMarginEnd"
+						type="Transparent"
+						press="onDialogOpen"/>							
+					</HBox>		
 				</f:heading>
 				<f:actions>
 					<Text 
@@ -55,60 +63,60 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="false">
 				<f:content>
-					<fb:FilterBar showFilterConfiguration="false" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar id="filterbar" showFilterConfiguration="true" reset="onReset" search="onSearch" cancel="onCancel" useToolbar="false" showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' }" selectedKeys="{/IdEmpresasSelecionadas}">
-										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>									
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' ,templateShareable:true}" selectedKeys="{/IdEmpresasSelecionadas}">
+										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}" />									
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewRelatorioClassificacao}">
 								<fb:control>
-									<MultiComboBox id="selectClassification" selectionFinish="onSelectChange"  items="{ path: '/DominioTaxClassification' }" selectedKeys="{/IdDominioTaxClassificationSelecionadas}">
-										<core:Item key="{tblDominioTaxClassification.id_dominio_tax_classification}" text="{tblDominioTaxClassification.classification}"/>										
+									<MultiComboBox id="selectClassification" selectionFinish="onSelectChange"  items="{ path: '/DominioTaxClassification' ,templateShareable:true }" selectedKeys="{/IdDominioTaxClassificationSelecionadas}">
+										<core:Item key="{tblDominioTaxClassification.id_dominio_tax_classification}" text="{tblDominioTaxClassification.classification}" />										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewRelatorioCategoria}">
 								<fb:control>
-									<MultiComboBox id="selectCategory" selectionFinish="onSelectChange"  items="{ path: '/TaxCategory' }" selectedKeys="{/IdTaxCategorySelecionadas}">
+									<MultiComboBox id="selectCategory" selectionFinish="onSelectChange"  items="{ path: '/TaxCategory' ,templateShareable:true }" selectedKeys="{/IdTaxCategorySelecionadas}">
 										<core:Item key="{tblTaxCategory.id_tax_category}" text="{tblTaxCategory.category}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewRelatorioT}">
 								<fb:control>
-									<MultiComboBox id="selectTax" selectionFinish="onSelectChange"  items="{ path: '/Tax' }" selectedKeys="{/IdTaxSelecionadas}" >
+									<MultiComboBox id="selectTax" selectionFinish="onSelectChange"  items="{ path: '/Tax' ,templateShareable:true }" selectedKeys="{/IdTaxSelecionadas}" >
 										<core:Item key="{tblTax.id_tax}" text="{tblTax.tax}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="{i18n>viewRelatorioNomeT}">
 								<fb:control>
-									<MultiComboBox id="selectNameOfTax" selectionFinish="onSelectChange"  items="{ path: '/NameOfTax' }" selectedKeys="{/IdNameOfTaxSelecionadas}" >
+									<MultiComboBox id="selectNameOfTax" selectionFinish="onSelectChange"  items="{ path: '/NameOfTax' ,templateShareable:true }" selectedKeys="{/IdNameOfTaxSelecionadas}" >
 										<core:Item key="{tblNameOfTax.id_name_of_tax}" text="{tblNameOfTax.name_of_tax}"/>										
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewRelatorioJurisdicao}">
 								<fb:control>
-									<MultiComboBox id="selectJurisdicao" selectionFinish="onSelectChange"  items="{ path: '/DominioJurisdicao' }" selectedKeys="{/IdDominioJurisdicaoSelecionadas}" >
+									<MultiComboBox id="selectJurisdicao" selectionFinish="onSelectChange"  items="{ path: '/DominioJurisdicao' ,templateShareable:true }" selectedKeys="{/IdDominioJurisdicaoSelecionadas}" >
 										<core:Item key="{tblDominioJurisdicao.id_dominio_jurisdicao}" text="{tblDominioJurisdicao.jurisdicao}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="G" label="{i18n>viewRelatorioPais}">
 								<fb:control>
-									<MultiComboBox id="selectPais" selectionFinish="onSelectChange"  items="{ path: '/DominioPais' }" selectedKeys="{/IdDominioPaisSelecionadas}" >
+									<MultiComboBox id="selectPais" selectionFinish="onSelectChange"  items="{ path: '/DominioPais' ,templateShareable:true }" selectedKeys="{/IdDominioPaisSelecionadas}" >
 										<core:Item key="{tblDominioPais.id_dominio_pais}" text="{tblDominioPais.pais}"/>											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="H" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal' }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal' ,templateShareable:true }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
 										<core:Item key="{tblDominioAnoFiscal.id_dominio_ano_fiscal}" text="{tblDominioAnoFiscal.ano_fiscal}"/>																				
 									</MultiComboBox>
 								</fb:control>
@@ -129,14 +137,14 @@
 							</fb:FilterItem>								
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
 								<fb:control>
-									<MultiComboBox id="selectCurrency" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
+									<MultiComboBox id="selectCurrency" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' ,templateShareable:true }" selectedKeys="{/IdDominioMoedaSelecionadas}" >
 										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}" />											
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="L" label="{i18n>ViewRelatorioTipoDeTransacao}">
 								<fb:control>
-									<MultiComboBox id="selectTypeOfTransaction" selectionFinish="onSelectChange"  items="{ path: '/DominioTipoTransacao' }" selectedKeys="{/IdDominioTipoTransacaoSelecionadas}" >
+									<MultiComboBox id="selectTypeOfTransaction" selectionFinish="onSelectChange"  items="{ path: '/DominioTipoTransacao' ,templateShareable:true }" selectedKeys="{/IdDominioTipoTransacaoSelecionadas}" >
 										<core:Item key="{tblDominioTipoTransacao.id_dominio_tipo_transacao}" text="{tblDominioTipoTransacao.tipo_transacao}"/>																				
 									</MultiComboBox>
 								</fb:control>
@@ -146,12 +154,6 @@
 				
 					</fb:FilterBar>
 						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-								<Button
-								id="TemplateSet"
-								text="Layout"
-								class="sapUiSmallMarginEnd"
-								type="Transparent"
-								press="onDialogOpen"/>
 								<Button
 								id="GerarRelatorio"
 								text="{i18n>viewGeralBtnRelatorioTaxP}"

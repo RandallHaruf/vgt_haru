@@ -11,7 +11,7 @@ sap.ui.define([
 	"sap/ui/core/util/ExportTypeCSV",
 	"sap/m/TablePersoController",
 	"sap/m/MessageBox",
-	"ui5ns/ui5/lib/Validador",	
+	"ui5ns/ui5/lib/Validador",
 	"ui5ns/ui5/lib/jszip",
 	"ui5ns/ui5/lib/XLSX",
 	"ui5ns/ui5/lib/FileSaver"
@@ -26,9 +26,32 @@ sap.ui.define([
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
-			/*
-			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);*/
+			//-----------------ALTERAR NAS OUTRAS TELAS
+			var that = this;
+			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " TTC");
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					indDefault: true,
+					usarSession: 1
+				})
+				.then(function (res) {
+					if(res.result.length){
+						that.getModel().setProperty("/Preselecionado", JSON.parse(res.result[0].parametros));
+						that.getModel().setProperty("/NomeReport", res.result[0].descricao);
+						that.onTemplateGet();						
+					}
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				});			
+			
+			
+			
+			
+			
+			
+			
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
 		},
 		_handleRouteMatched: function () {
@@ -76,7 +99,17 @@ sap.ui.define([
 
 		onSaveView: function (oEvent) {
 			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
+			
 		},
+		
+		onSelectView: function (oEvent) {
+			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
+			
+		},
+		onManageView: function (oEvent) {
+			sap.m.MessageToast.show(JSON.stringify(oEvent.getParameters()));
+			
+		},		
 
 		onExit: function () {
 			this._onClearSelecoes();
@@ -185,7 +218,7 @@ sap.ui.define([
 		onDialogOpen: function (oEvent) {
 			var that = this;
 			this.onTemplateSet();
-			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report");
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report",oEvent);
 			that.setBusy(that._dialogFiltro, true);
 			NodeAPI.pListarRegistros("TemplateReport", {
 					tela: that.oView.mProperties.viewName,
@@ -193,7 +226,7 @@ sap.ui.define([
 					usarSession: 1
 				})
 				.then(function (res) {
-					that.getModel().setProperty("/TemplateReport", res.result);
+					that.getModel().setProperty("/TemplateReport", Utils.orderByArrayParaBox(res.result,"descricao"));
 					that.setBusy(that._dialogFiltro, false);
 				})
 				.catch(function (err) {
@@ -237,6 +270,21 @@ sap.ui.define([
 						"/DataPagamentoFim").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate()
 					.toString().padStart(2, '0')) : null : null;
 			var oWhere = [];
+			//-----------------ALTERAR NAS OUTRAS TELAS
+			var oFiltrosVisiveis = [];
+			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
+				oFiltrosVisiveis.push(
+					{
+						name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name ,
+						visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
+					}
+				);
+			}
+			
+			
+			
+			
+			
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);
 			oWhere.push(oTaxCategory);
@@ -249,9 +297,9 @@ sap.ui.define([
 			oWhere.push(oDominioTipoTransacao);
 			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
+			oWhere.push(oFiltrosVisiveis);
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
-		
 		onTemplateGet: function (oEvent) {
 			this._onClearSelecoes();
 			this._atualizarDados();
@@ -267,7 +315,34 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioMoedaSelecionadas", forcaSelecao[8]);
 			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", forcaSelecao[9]);
 			this.getModel().setProperty("/DataPagamentoInicio", forcaSelecao[10]?Utils.bancoParaJsDate(forcaSelecao[10][0]): null);
-			this.getModel().setProperty("/DataPagamentoFim", forcaSelecao[11]?Utils.bancoParaJsDate(forcaSelecao[11][0]): null);			
+			this.getModel().setProperty("/DataPagamentoFim", forcaSelecao[11]?Utils.bancoParaJsDate(forcaSelecao[11][0]): null);	
+			//-----------------ALTERAR NAS OUTRAS TELAS
+			if(forcaSelecao.length >= 13){
+				for (var i = 0, length = forcaSelecao[12].length; i < length; i++) {
+					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
+						if(forcaSelecao[12][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[12][i].visible;
+							break;
+						}
+					}
+				}					
+			}
+			var dialog = this.byId("filterbar");
+			dialog._setConsiderFilterChanges(false);
+			dialog._recreateBasicAreaContainer(true);
+			dialog._retrieveVisibleAdvancedItems();
+			dialog._setConsiderFilterChanges(true);	
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			
+
 		},
 
 		_atualizarDados: function () {

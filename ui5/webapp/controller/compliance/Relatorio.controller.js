@@ -38,9 +38,26 @@ sap.ui.define([
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
 			this._atualizarDados();
+			var that = this;
+			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " Compliance/Beps");
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					indDefault: true,
+					usarSession: 1
+				})
+				.then(function (res) {
+					if(res.result.length){
+						that.getModel().setProperty("/Preselecionado", JSON.parse(res.result[0].parametros));
+						that.getModel().setProperty("/NomeReport", res.result[0].descricao);
+						that.onTemplateGet();						
+					}
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				});		
 			
-			/*this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);*/		
+	
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._handleRouteMatched, this);			
 		},
 
@@ -210,7 +227,7 @@ sap.ui.define([
 		onDialogOpen: function (oEvent) {
 			var that = this;
 			this.onTemplateSet();
-			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report");
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report",oEvent);
 			that.setBusy(that._dialogFiltro, true);
 			NodeAPI.pListarRegistros("TemplateReport", {
 					tela: that.oView.mProperties.viewName,
@@ -218,7 +235,7 @@ sap.ui.define([
 					usarSession: 1
 				})
 				.then(function (res) {
-					that.getModel().setProperty("/TemplateReport", res.result);
+					that.getModel().setProperty("/TemplateReport", Utils.orderByArrayParaBox(res.result,"descricao"));
 					that.setBusy(that._dialogFiltro, false);
 				})
 				.catch(function (err) {
@@ -256,6 +273,15 @@ sap.ui.define([
 			var oDataUploadFim = this.getModel().getProperty("/DataUploadFim")? this.getModel().getProperty("/DataUploadFim")[0] !== null ? vetorFimExtensao[0] = (this.getModel().getProperty("/DataUploadFim").getFullYear().toString() + "-" +(this.getModel().getProperty("/DataUploadFim").getMonth() +1).toString().padStart(2,'0') + "-" + this.getModel().getProperty("/DataUploadFim").getDate().toString().padStart(2,'0')) : null : null;			
 			
 			var oWhere = [];
+			var oFiltrosVisiveis = [];
+			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
+				oFiltrosVisiveis.push(
+					{
+						name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name ,
+						visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
+					}
+				);
+			}			
 			oWhere.push(oDominioObrigacaoAcessoriaTipo);
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioPais);
@@ -274,7 +300,7 @@ sap.ui.define([
 			oWhere.push(oDataConclusaoFim === null? null : vetorFimConclusao);			
 			oWhere.push(oDataUploadInicio === null? null : vetorInicioUpload);
 			oWhere.push(oDataUploadFim === null? null : vetorFimUpload);	
-			
+			oWhere.push(oFiltrosVisiveis);
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
 		
@@ -299,7 +325,22 @@ sap.ui.define([
 			this.getModel().setProperty("/DataConclusaoInicio", forcaSelecao[14]?Utils.bancoParaJsDate(forcaSelecao[14][0]): null);
 			this.getModel().setProperty("/DataConclusaoFim", forcaSelecao[15]?Utils.bancoParaJsDate(forcaSelecao[15][0]): null);
 			this.getModel().setProperty("/DataUploadInicio", forcaSelecao[16]?Utils.bancoParaJsDate(forcaSelecao[16][0]): null);	
-			this.getModel().setProperty("/DataUploadFim", forcaSelecao[17]?Utils.bancoParaJsDate(forcaSelecao[17][0]): null);				
+			this.getModel().setProperty("/DataUploadFim", forcaSelecao[17]?Utils.bancoParaJsDate(forcaSelecao[17][0]): null);	
+			if(forcaSelecao.length >= 19){
+				for (var i = 0, length = forcaSelecao[18].length; i < length; i++) {
+					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
+						if(forcaSelecao[18][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[18][i].visible;
+							break;
+						}
+					}
+				}					
+			}
+			var dialog = this.byId("filterbar");
+			dialog._setConsiderFilterChanges(false);
+			dialog._recreateBasicAreaContainer(true);
+			dialog._retrieveVisibleAdvancedItems();
+			dialog._setConsiderFilterChanges(true);				
 		},
 
 		_atualizarDados: function () {

@@ -2,7 +2,7 @@
 
 const utils = require('./utils');
 const model = require("../models/modelTemplateReport");
-
+const db = require("../db");
 module.exports = {
 
 	listarRegistros: (req, res, next) => {
@@ -46,9 +46,37 @@ module.exports = {
 				if (err) {
 					next(err);
 				} else {
-					res.status(200).json({
-						result: result[0]
-					});
+					if(req.body["indDefault"]=="true"){
+						var aParams = [
+							result[0].generated_id,
+							req.body["tela"],
+							req.session.usuario.id,
+							req.body["isIFrame"]
+						];
+						var sStatement = 
+						'update "VGT.TEMPLATE_REPORT" as A '
+						+'set A."ind_default" = false '
+						+'where A."id_template_report" not in (?) and A."tela" = ? and A."fk_usuario.id_usuario" = ? and A."ind_isIFrame" = ?';
+						
+	
+						db.executeStatement({
+							statement: sStatement,
+							parameters: aParams
+						}, function (err2, result2) {
+							if (err2) {
+								next(err2);
+							} else {
+								res.status(200).json({
+									result: result2[0]
+								});							
+							}
+						});						
+					}
+					else{
+						res.status(200).json({
+							result: result[0]
+						});						
+					}
 				}
 			});
 		} catch (e) {
@@ -91,19 +119,47 @@ module.exports = {
 			let oCondition = utils.getKeyFieldsInParams(model, req.params);
 
 			let aParam = utils.getAvailableFields(model, req.body);
-
 			model.atualizar(oCondition, aParam, (err, result) => {
 				if (err) {
 					next(err);
 				} else {
-					if (result) {
-						res.status(200).json({
-							result: result
-						});
-					} else {
-						const error = new Error('Registro não encontrado');
-						error.status = 404;
-						next(error);
+
+					if(req.body["indDefault"]==true){
+						var aParams = [
+							oCondition.valor,
+							req.body["tela"],
+							req.session.usuario.id,
+							req.body["isIFrame"]
+						];
+						var sStatement = 
+						'update "VGT.TEMPLATE_REPORT" as A '
+						+'set A."ind_default" = false '
+						+'where A."id_template_report" not in (?) and A."tela" = ? and A."fk_usuario.id_usuario" = ? and A."ind_isIFrame" = ?';
+						
+	
+						db.executeStatement({
+							statement: sStatement,
+							parameters: aParams
+						}, function (err2, result2) {
+							if (err2) {
+								next(err2);
+							} else {
+								res.status(200).json({
+									result: result2[0]
+								});							
+							}
+						});						
+					}
+					else{
+						if (result) {
+							res.status(200).json({
+								result: result
+							});
+						} else {
+							const error = new Error('Registro não encontrado');
+							error.status = 404;
+							next(error);
+						}						
 					}
 				}
 			});

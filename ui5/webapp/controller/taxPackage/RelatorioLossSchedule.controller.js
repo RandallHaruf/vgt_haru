@@ -28,10 +28,24 @@ sap.ui.define([
 			this.getView().setModel(oModel);
 			this._atualizarDados();
 			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
-			var array = this.getModel().getProperty("/TabelaDaView");
-			for (var k = 0, length = array.length; k < length; k++) {
-				Utils.ajustaRem(this,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35,8)
-			}	
+			var that = this;
+			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " " + this.getResourceBundle().getText("viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE"));
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					indDefault: true,
+					usarSession: 1
+				})
+				.then(function (res) {
+					if(res.result.length){
+						that.getModel().setProperty("/Preselecionado", JSON.parse(res.result[0].parametros));
+						that.getModel().setProperty("/NomeReport", res.result[0].descricao);
+						that.onTemplateGet();						
+					}
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				});		
 			this.getRouter().getRoute("taxPackageRelatorioLossSchedule").attachPatternMatched(this._handleRouteMatched, this);				
 		},
 
@@ -93,11 +107,10 @@ sap.ui.define([
 			this._geraRelatorioTax("/TXT"); 
 		},
 
-
 		onDialogOpen: function (oEvent) {
 			var that = this;
 			this.onTemplateSet();
-			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report");
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report",oEvent);
 			that.setBusy(that._dialogFiltro, true);
 			NodeAPI.pListarRegistros("TemplateReport", {
 					tela: that.oView.mProperties.viewName,
@@ -105,7 +118,7 @@ sap.ui.define([
 					usarSession: 1
 				})
 				.then(function (res) {
-					that.getModel().setProperty("/TemplateReport", res.result);
+					that.getModel().setProperty("/TemplateReport", Utils.orderByArrayParaBox(res.result,"descricao"));
 					that.setBusy(that._dialogFiltro, false);
 				})
 				.catch(function (err) {
@@ -121,11 +134,21 @@ sap.ui.define([
 			var oFYSelecionadas = this.getModel().getProperty("/FYSelecionadas")? this.getModel().getProperty("/FYSelecionadas")[0] !== undefined ? this.getModel().getProperty("/FYSelecionadas") : null : null;
 			
 			var oWhere = [];
+			var oFiltrosVisiveis = [];
+			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
+				oFiltrosVisiveis.push(
+					{
+						name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name ,
+						visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
+					}
+				);
+			}			
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(oFYSelecionadas);
+			oWhere.push(oFiltrosVisiveis);				
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
 		
@@ -138,6 +161,21 @@ sap.ui.define([
 			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao[2]);
 			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao[3]);
 			this.getModel().setProperty("/FYSelecionadas", forcaSelecao[4]);
+			if(forcaSelecao.length >= 6){
+				for (var i = 0, length = forcaSelecao[5].length; i < length; i++) {
+					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
+						if(forcaSelecao[5][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[5][i].visible;
+							break;
+						}
+					}
+				}					
+			}
+			var dialog = this.byId("filterbar");
+			dialog._setConsiderFilterChanges(false);
+			dialog._recreateBasicAreaContainer(true);
+			dialog._retrieveVisibleAdvancedItems();
+			dialog._setConsiderFilterChanges(true);					
 		},
 
 		_atualizarDados: function () {
