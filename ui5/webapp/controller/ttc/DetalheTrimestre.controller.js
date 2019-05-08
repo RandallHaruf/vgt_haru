@@ -254,8 +254,8 @@ sap.ui.define(
 
 			onPreencherEntidade: function (oEvent) {
 				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
-				var sEntidade = oEvent.getSource().getValue();
-				var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));
+				//var sEntidade = oEvent.getSource().getValue();
+				/*var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));
 				for (var j = 0; j < aAllTaxas.length; j++) {
 					if (aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"]) {
 						if (aAllTaxas[j]["tax"] !== null && aAllTaxas[j]["tax"] != undefined && aAllTaxas[j]["tax"] != "") {
@@ -268,8 +268,17 @@ sap.ui.define(
 							}
 						}
 					}
+				}*/
+				if (oPagamento["ind_requer_beneficiary_company"]) {
+					if (oPagamento.entidade_beneficiaria == "" || oPagamento.entidade_beneficiaria == null) {
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;;	
+					}else{
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+					}
+				} 
+				else{
+					oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
 				}
-
 			},
 
 			onTrocarTax: function (oEvent) {
@@ -313,9 +322,13 @@ sap.ui.define(
 				}
 
 				if (oTax["ind_requer_beneficiary_company"]) {
-					oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
-				}
-
+					if (oPagamento.entidade_beneficiaria == "" ||
+						oPagamento.entidade_beneficiaria === null ||
+						oPagamento["entidade_beneficiaria"] === undefined) {
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+					}
+				} else
+					oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
 			},
 
 			onCalcularTotal: function (oEvent) {
@@ -574,6 +587,7 @@ sap.ui.define(
 							} else {
 								response1[0][i]["AcroNome"] = "";
 							}
+							
 
 							/*response1[0][i].principal = response1[0][i].principal ? Number(response1[0][i].principal).toFixed(2) : 0;
 							response1[0][i].juros = response1[0][i].juros ? Number(response1[0][i].juros).toFixed(2) : 0;
@@ -611,7 +625,7 @@ sap.ui.define(
 							} else {
 								response2[0][j]["AcroNome"] = "";
 							}
-
+						
 							/*response1[0][j].principal = response1[0][j].principal ? Number(response1[0][j].principal).toFixed(2) : 0;
 							response1[0][j].juros = response1[0][j].juros ? Number(response1[0][j].juros).toFixed(2) : 0;
 							response1[0][j].multa = response1[0][j].multa ? Number(response1[0][j].multa).toFixed(2) : 0;
@@ -975,17 +989,14 @@ sap.ui.define(
 
 				for (var i = 0, length = aPagamentos.length; i < length && bValido; i++) {
 					var oPagamento = aPagamentos[i];
-
+					
 					//Verifica a necessidade de Entidade
 					var boolEntidadeBeneficiaria = false;
 					var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));
 					for (var j = 0; j < aAllTaxas.length; j++) {
-						if (aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"]) {
-							if (aAllTaxas[j]["tax"] !== null && aAllTaxas[j]["tax"] != undefined && aAllTaxas[j]["tax"] != "") {
-								if (aAllTaxas[j]["tax"].toLowerCase() == "Tax Withheld on payments to overseas group companies".toLowerCase()) {
-									boolEntidadeBeneficiaria = true;
-								}
-							}
+						if (aAllTaxas[j]["id_tax"] == oPagamento["fk_tax.id_tax"] && aAllTaxas[j]["tax"] && aAllTaxas[j]["ind_requer_beneficiary_company"]) {
+							boolEntidadeBeneficiaria = true;
+							break;
 						}
 					}
 
@@ -1006,13 +1017,15 @@ sap.ui.define(
 					}
 
 					//var achouValor = aAllTaxas.find()
-					if ((!!!oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] ||
+					if ((!!!oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento[
+								"fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] ||
 							/*!oPagamento["fk_dominio_moeda.id_dominio_moeda"] ||*/
 							!oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] || ((
 								boolEntidadeBeneficiaria == false) ? (false) : (!oPagamento.entidade_beneficiaria)) || !oPagamento[
 								"fk_dominio_pais.id_dominio_pais"] || !oPagamento.principal || !oPagamento["fk_jurisdicao.id_dominio_jurisdicao"]
 							//|| ((oPagamento["fk_jurisdicao.id_dominio_jurisdicao"] == 1) ? (false) : (!oPagamento.estado || !oPagamento.cidade))
-							|| JurisdicaoTest || OutrosTiposTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(oPagamento
+							|| JurisdicaoTest || OutrosTiposTest || !oPagamento.data_pagamento || !oPagamento.name_of_tax || !Validador.isNumber(
+								oPagamento
 								.principal))) || (!!
 							!
 							oPagamento.ind_nao_aplicavel && (!oPagamento["fk_tax.id_tax"] || !oPagamento.name_of_tax))) {
