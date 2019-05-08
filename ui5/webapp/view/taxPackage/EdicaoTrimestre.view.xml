@@ -220,16 +220,16 @@
 											<Text text="{i18n>viewGeralOutro}" />
 										</Column>
 										<Column width="12rem" hAlign="Center">
-											<Text text="1º {i18n>viewGeralTrimestre}" />
+											<Text text="{i18n>viewGeralPeriodo1}" />
 										</Column>
 										<Column width="12rem" hAlign="Center">
-											<Text text="2º {i18n>viewGeralTrimestre}" />
+											<Text text="{i18n>viewGeralPeriodo2}" />
 										</Column>
 										<Column width="12rem" hAlign="Center">
-											<Text text="3º {i18n>viewGeralTrimestre}" />
+											<Text text="{i18n>viewGeralPeriodo3}" />
 										</Column>
 										<Column width="12rem" hAlign="Center">
-											<Text text="4º {i18n>viewGeralTrimestre}"  />
+											<Text text="{i18n>viewGeralPeriodo4}"  />
 										</Column>
 										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewGeralAnual}" />

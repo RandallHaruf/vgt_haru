@@ -951,6 +951,12 @@ sap.ui.define([
 						aRegistro[i]["tblRespostaObrigacao.data_extensao"] = aRegistro[i]["tblRespostaObrigacao.data_extensao"] 
 						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblRespostaObrigacao.data_extensao"]) 
 						: null;
+						aRegistro[i]["tblRespostaObrigacao.data_conclusao"] = aRegistro[i]["tblRespostaObrigacao.data_conclusao"] 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblRespostaObrigacao.data_conclusao"]) 
+						: null;
+						aRegistro[i]["tblDocumentoObrigacao.data_upload"] = aRegistro[i]["tblDocumentoObrigacao.data_upload"] 
+						? Utils.stringDataDoBancoParaStringDDMMYYYY(aRegistro[i]["tblDocumentoObrigacao.data_upload"]) 
+						: null;
 						//TRADUZIR DESCRICAO DA OBRIGACAO STATUS
 						aRegistro[i]["tblRespostaObrigacao.suporte_contratado"] = !!aRegistro[i]["tblRespostaObrigacao.suporte_contratado"] === true 
 						? that.getResourceBundle().getText("viewGeralSim") 

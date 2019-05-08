@@ -14,8 +14,7 @@
 						items="{
 							path: '/RequisicaoModeloObrigacao',
 							sorter: {
-								path: 'nome',
-								group: false
+								path: 'id_requisicao_modelo_obrigacao'
 							}
 						}"
 						growing="true"
