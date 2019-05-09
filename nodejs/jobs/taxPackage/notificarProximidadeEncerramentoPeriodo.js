@@ -2,7 +2,8 @@
 
 const db = require('../../api/db.js');
 const scheduler = require('node-schedule');
-const disparaEmail = require("../../utils/sendEmails");
+const Email = require("../../utils/sendEmails");
+const disparaEmail = new Email();
 
 const send_Not_Email = (numOrdem, qtdDia) => {
 	// PROD
@@ -116,7 +117,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 				
 				(function (delay, to, cc, subject, html) {
 					setTimeout(function () {
-						disparaEmail.sendEmail({
+						disparaEmail.send({
 							to: to,
 							cc: cc,
 							subject: subject,

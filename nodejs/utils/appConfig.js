@@ -30,6 +30,7 @@ appConfig.get([
 module.exports = {
 	EMAIL_QUE_ENVIA: "emailQueEnvia",
 	SENHA_EMAIL_QUE_ENVIA: "senhaEmailQueEnvia",
+	EMAIL_QUE_RECEBE: "emailQueRecebe",
 	get: (keys) => {
 		return new Promise((resolve, reject) => {
 			if (keys instanceof Array) {
@@ -63,7 +64,7 @@ module.exports = {
 							else {
 								let retorno = {};
 								
-								for (let i = 0, length = result.length; i < result; i++) {
+								for (let i = 0, length = result.length; i < length; i++) {
 									retorno[result[i].chave] = result[i].valor;
 								}
 								

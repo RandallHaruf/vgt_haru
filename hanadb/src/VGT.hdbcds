@@ -719,4 +719,10 @@ context VGT {
         fk_usuario      : association[1, 0..1] to VGT.USUARIO { id_usuario };
         datahora_acesso : UTCDateTime;
     }
+
+    /*@@layout{"layoutInfo":{"x":-1811,"y":-195.5}}*/
+    entity APP_CONFIG {
+        key chave : String(5000) not null;
+            valor : String(5000) not null;
+    };
 };

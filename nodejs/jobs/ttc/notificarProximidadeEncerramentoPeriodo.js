@@ -2,7 +2,8 @@
 
 const db = require('../../api/db.js');
 const scheduler = require('node-schedule');
-const disparaEmail = require("../../utils/sendEmails");
+const Email = require("../../utils/sendEmails.js");
+const disparaEmail = new Email;
 
 const send_Not_Email = (numOrdem, qtdDia) => {
 	// PROD
@@ -116,7 +117,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 				
 				(function (delay, to, cc, subject, html) {
 					setTimeout(function () {
-						disparaEmail.sendEmail({
+						disparaEmail.send({
 							to: to,
 							cc: cc,
 							subject: subject,
@@ -153,6 +154,7 @@ module.exports = () => {
 	// 01 dia para o Fechamento do 4 Trimestre
 	scheduler.scheduleJob('0 0 19 1 *', send_Not_Email.bind(null, 4, 1));
 
+
 	// ====================
 	//   1 TRIMESTRE
 	//   20 de Abril
@@ -184,6 +186,7 @@ module.exports = () => {
 	scheduler.scheduleJob('0 0 18 7 *', send_Not_Email.bind(null, 2, 2));
 	// 01 dia para o Fechamento do 2 Trimestre
 	scheduler.scheduleJob('0 0 19 7 *', send_Not_Email.bind(null, 2, 1));
+	
 
 	// ====================
 	//   3 TRIMESTRE
