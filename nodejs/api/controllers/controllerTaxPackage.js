@@ -1127,8 +1127,8 @@ module.exports = {
 		
 		const inserirDados = (worksheet, aDado, sColuna1, sColuna2) => {
 			for (var i = 0; i < aDado.length; i++) {
-	        	worksheet.getCell(sColuna1 + i).value = aDado[i].nome;
-	        	worksheet.getCell(sColuna2 + i).value = aDado[i].id_diferenca_opcao;
+	        	worksheet.getCell(sColuna1 + (i + 1)).value = aDado[i].nome;
+	        	worksheet.getCell(sColuna2 + (i + 1)).value = aDado[i].id_diferenca_opcao;
 	        }
 		};
 		

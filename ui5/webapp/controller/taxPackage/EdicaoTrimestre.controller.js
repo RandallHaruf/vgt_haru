@@ -253,7 +253,9 @@ sap.ui.define(
 						
 						checarOpcoes(oOpcoesNaPlanilha.aTemporaria, "/DiferencaOpcao/Temporaria");
 						checarOpcoes(oOpcoesNaPlanilha.aPermanente, "/DiferencaOpcao/Permanente");
-							
+                    
+                        that._validarDiferencasDuplicadas(workbook,that);	
+
 						return workbook;	
 					}
 					else {
@@ -262,10 +264,41 @@ sap.ui.define(
 				}
 				catch (e) {
 					console.log("Planilha fora do padrão: " + e.message)
-					throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao"));
+					throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao") + ": \n" + e.message);
 				}
 			},
-			
+
+			_validarDiferencasDuplicadas: function (workbook,that) {
+				var verificarAbaDiferenca = function (nomeAba, sCaminhoDiferencas, sCaminhoOpcaoDiferenca){
+					var aba = workbook.Sheets[nomeAba];
+					var linhasAba = XLSX.utils.sheet_to_row_object_array(aba);
+					var aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca);	
+					var tiposJaIterados = [];
+					for(let i = 0, length = linhasAba.length; i < length; i++ ){
+						let linha = linhasAba[i];
+						if(linha["KEY"] && linha["Type"]){
+							var oDiferencaComTipoJaInserido = false;
+							for(let j =0; j < tiposJaIterados.length; j++){
+								if(tiposJaIterados[j] == linha["KEY"]){
+									oDiferencaComTipoJaInserido = true;
+								}
+							}
+							tiposJaIterados.push(Number(linha["KEY"]));
+							if (oDiferencaComTipoJaInserido) {
+								var oOpcaoDiferenca = aOpcaoDiferenca.find(function (obj) {
+									return Number(linha["KEY"]) === obj.id_diferenca_opcao;
+								});
+								if(oOpcaoDiferenca["ind_duplicavel"] == false){
+									throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaComTipoDuplicadoComIndDuplicadoFalso"));
+								}
+							}
+						}
+					}
+				}
+				verificarAbaDiferenca("Temporary Differences", "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria");
+				verificarAbaDiferenca("Permanent Differences", "/DiferencasPermanentes", "/DiferencaOpcao/Permanente");
+			},
+            
 			_exibirErroImportacao: function (sErro) {
 				var dialog = new sap.m.Dialog({
 					title: this.getResourceBundle().getText("viewGeralMensagemErroImport"),
