@@ -1874,10 +1874,10 @@ sap.ui.define(
 
 			_initItemsToReport: function (sIdRelTaxPackagePeriodo) {
 				var that = this;
-
+				
 				this.byId("containerItemsToReport2").removeAllContent();
 				this.setBusy(this.byId("containerItemsToReport2"), true);
-
+				
 				var oModel = [];
 
 				NodeAPI.listarRegistros("ItemToReport", function (response) {
@@ -2684,9 +2684,14 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				this._zerarModel();
+				this.getModel().setProperty("/ocultarItemToReport", true);
 
 				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
-
+				
+				if (oParametros.oPeriodo.numero_ordem === 6) {
+					this.getModel().setProperty("/ocultarItemToReport", false);
+				}
+				
 				var sLabelDataInicio = oParametros.oEmpresa.fy_start_date,
 					sLabelDataFim = oParametros.oEmpresa.fy_end_date;
 
