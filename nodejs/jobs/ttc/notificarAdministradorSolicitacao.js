@@ -52,7 +52,8 @@ const verificaAtrasosEMandaEmail = () => {
 			var aRequisicoesAtrasadas = results[0];
 			if(aRequisicoesAtrasadas.length){
 				var sAssunto = "You have a pending TTC reopening request";
-				var sCorpo = "<p>"
+				var sCorpo = "<style>p{font-family:arial!important}</style>"
+							 +"<p>"
 							 +"One or more TTC reopening requests have been pending for more than 3 days."	
 				             +"</p>"
 				             +"<p>"

@@ -43,7 +43,7 @@ module.exports = {
 								subject: req.body._assunto,
 								body: {
 									isHtml: true,
-									content: corpoAux
+									content: "<style>p{font-family:arial!impor}</style>" + corpoAux
 								}
 							}, function (sucesso) {
 								res.send(JSON.stringify(sucesso));
@@ -78,7 +78,8 @@ module.exports = {
 		if(EmailUsuario != "" && NomeUsuario != "" && Password != ""){
 			var emailDestino = EmailUsuario;
 			var emailAssunto = "Profile information";
-			var corpoEmail = "<p>Dear " + NomeUsuario + ",</p>"
+			var corpoEmail = "<style>p{font-family:arial!important}</style>"
+			+"<p>Dear " + NomeUsuario + ",</p>"
 			+"<p>Your password is: " + Password + "</p>";
 			
 			return new Promise(function (resolve, reject) {

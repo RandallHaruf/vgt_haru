@@ -57,7 +57,8 @@ const verificaAtrasosEMandaEmail = () => {
 			if(aRequisicoesAtrasadasReabertura.length){
 				
 				var sAssunto = "You have a pending TaxPackage reopening request";
-				var sCorpo = "<p>"
+				var sCorpo = "<style>p{font-family:arial!important}</style>"
+						     +"<p>"
 							 +"One or more TaxPackage reopening requests have been pending for more than 3 days."	
 				             +"</p>"
 				             +"<p>"
@@ -69,7 +70,8 @@ const verificaAtrasosEMandaEmail = () => {
 			if(aRequisicoesAtrasadasEncerramento.length){
 				
 				var sAssunto = "You have a pending TaxPackage closing request";
-				var sCorpo = "<p>"
+				var sCorpo = "<style>p{font-family:arial!important}</style>"
+							 +"<p>"
 							 +"One or more TaxPackage closing requests have been pending for more than 3 days."	
 				             +"</p>"
 				             +"<p>"

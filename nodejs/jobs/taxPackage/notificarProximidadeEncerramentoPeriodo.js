@@ -76,7 +76,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 				switch (qtdDia) {
 					case 15:
 						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
-						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
+						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							',<br><br>Please access the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>' +
 							nome + '<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
@@ -84,7 +84,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 						break;
 					case 5:
 						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
-						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
+						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							',<br><br>Please access the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>' +
 							nome + '<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
@@ -92,7 +92,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 						break;
 					case 3:
 						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
-						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
+						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							'/Country Manager<br><br>This is a reminder regarding the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
 							'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
@@ -100,7 +100,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 						break;
 					case 2:
 						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
-						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
+						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							'/Country Manager<br><br>This is a reminder regarding the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
 							'<br><br><strong><span style="text-decoration: underline;">Your deadline is due in ' + qtdDia +
@@ -108,7 +108,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 						break;
 					case 1:
 						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
-						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial, Helvetica; font-size:12px">Dear ' + lbc_nome +
+						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							'/Country Manager<br><br><strong><span style="text-decoration: underline;">Today is the LAST day</span></strong> to complete the Tax Package module at <a href="' +
 							caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
 							'<br><br>Please enter the system WITHOUT FURTHER DELAY and complete the information of the previous quarter.<br>Notice that after this date, the previous quarter will be locked. Any change will have to be justified and will require authorization. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
@@ -185,6 +185,7 @@ module.exports = () => {
 	scheduler.scheduleJob('0 0 29 7 *', send_Not_Email.bind(null, 2, 2));
 	// 01 dia para o Fechamento do 2 Trimestre
 	scheduler.scheduleJob('0 0 30 7 *', send_Not_Email.bind(null, 2, 1));
+	
 
 	// ====================
 	//   3 TRIMESTRE
