@@ -685,7 +685,9 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_STATUS" tblDominioObrigacaoStatus ON tblDominioObrigacaoStatus."id_dominio_obrigacao_status" = t3."tblDominioObrigacaoStatus.id_dominio_obrigacao_status" '
 			+')t4 '
 			+'LEFT OUTER JOIN "VGT.DOMINIO_MOEDA" tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = t4."tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda" '
-			+'LEFT OUTER JOIN "VGT.DOCUMENTO_OBRIGACAO" tblDocumentoObrigacao ON tblDocumentoObrigacao."fk_id_resposta_obrigacao.id_resposta_obrigacao" = t4."tblRespostaObrigacao.id_resposta_obrigacao" ';
+			+'LEFT OUTER JOIN "VGT.DOCUMENTO_OBRIGACAO" tblDocumentoObrigacao '
+			+ 'ON tblDocumentoObrigacao."fk_id_resposta_obrigacao.id_resposta_obrigacao" = t4."tblRespostaObrigacao.id_resposta_obrigacao" '
+			+ 'and tblDocumentoObrigacao."ind_conclusao" = true ';
 
 
 

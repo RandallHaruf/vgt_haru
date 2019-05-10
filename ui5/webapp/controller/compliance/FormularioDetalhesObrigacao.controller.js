@@ -517,10 +517,12 @@ sap.ui.define(
 				var idAnoCalendario = oParametros.idAnoCalendario;
 				this.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
 				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
-				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
-					"status_obrigacao_calculado"] != 4 ? true : false;
-				this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
-					"status_obrigacao_calculado"] == 4 ? true : false));
+				/*oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
+					"status_obrigacao_calculado"] != 4 ? true : false;*/
+				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao.ind_iniciada ? true : false;
+				/*this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
+					"status_obrigacao_calculado"] == 4 ? true : false));*/
+				this.getModel().setProperty("/JaEstavaIniciada", (!oParametros.Obrigacao.ind_iniciada ? true : false));
 				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
