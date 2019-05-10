@@ -5,9 +5,10 @@ sap.ui.define(
 		"sap/ui/model/Filter",
 		"sap/m/MessageToast",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"ui5ns/ui5/lib/Utils"	
 	],
-	function (BaseController, models, Filter, MessageToast, Constants, NodeAPI) {
+	function (BaseController, models, Filter, MessageToast, Constants, NodeAPI, Utils) {
 		return BaseController.extend("ui5ns.ui5.controller.ListaNotificacoes", {
 			onInit: function () {
 
@@ -84,6 +85,7 @@ sap.ui.define(
 
 						for (var i = 0, length = response.length; i < length; i++) {
 							countTTC++;
+							response[i]["periodo"] = Utils.traduzTrimestreTTC(response[i]["numero_ordem"],that);
 						}
 						that.getModel().setProperty("/ContadorTTC", {
 							modelcountTTC: countTTC
@@ -102,6 +104,7 @@ sap.ui.define(
 
 						for (var i = 0, length = response.length; i < length; i++) {
 							countTAX++;
+							response[i]["periodo"] = Utils.traduzTrimestreTaxPackage(response[i]["numero_ordem"],that);
 						}
 						that.getModel().setProperty("/ContadorTax", {
 							modelcountTAX: countTAX
@@ -123,7 +126,11 @@ sap.ui.define(
 					})
 					.then(function (response) {
 						if (response) {
-							var json = JSON.parse(response);
+							response = JSON.parse(response);
+							for (var i = 0, length = response.length; i < length; i++) {
+								response[i]["periodo"] = Utils.traduzTrimestreTaxPackage(response[i]["numero_ordem"],that);
+							}
+							var json = response;
 							that.getModel().setProperty("/ContadorTax2", json.length);
 							that.getModel().setProperty("/RequisicaoEncerramentoPeriodoTaxPackage", json);
 						}

@@ -2134,7 +2134,7 @@ sap.ui.define(
 
 				this.byId("containerItemsToReport2").removeAllContent();
 				this.setBusy(this.byId("containerItemsToReport2"), true);
-
+				
 				var oModel = [];
 
 				NodeAPI.listarRegistros("ItemToReport", function (response) {
@@ -2937,9 +2937,14 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				this._zerarModel();
+				this.getModel().setProperty("/ocultarItemToReport", true);
 
 				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
-
+				
+				if (oParametros.oPeriodo.numero_ordem === 6) {
+					this.getModel().setProperty("/ocultarItemToReport", false);
+				}
+				
 				var sLabelDataInicio = oParametros.oEmpresa.fy_start_date,
 					sLabelDataFim = oParametros.oEmpresa.fy_end_date;
 
@@ -3380,6 +3385,7 @@ sap.ui.define(
 
 				return bValido;
 			},
+			
 			_validarMoeda: function () {
 				var bMoedaPreechida = this.getModel().getProperty("/Moeda");
 				return {
@@ -3387,6 +3393,7 @@ sap.ui.define(
 					mensagem: this.getResourceBundle().getText("viewTAXEdicaoTrimestreMensagemValidacaoMoeda") // alterar texto
 				};
 			},
+			
 			_validarJustificativa: function () {
 				var aLossSchedule = this.getModel().getProperty("/LossSchedule"),
 					aCreditSchedule = this.getModel().getProperty("/CreditSchedule"),

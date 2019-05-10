@@ -933,7 +933,7 @@ sap.ui.define(
 				}
 
 				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
-
+				
 				this.getModel().setProperty("/Empresa", oParametros.empresa);
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.idAnoCalendario);
 
@@ -1453,7 +1453,7 @@ sap.ui.define(
 				if (oPeriodo.status_envio !== 5) { // aguardando aprovação
 					oButton = new sap.m.Button({
 						icon: oPeriodo.numero_ordem === 6 ? "sap-icon://create-form" : "sap-icon://permission",
-						text: oPeriodo.numero_ordem === 6 ? "Ativar" : that.getResourceBundle().getText("viewGeralReabertura")
+						text: oPeriodo.numero_ordem === 6 ? that.getResourceBundle().getText("viewGeralAtivar") : that.getResourceBundle().getText("viewGeralReabertura")
 					}).attachPress(function (evento) {
 						that.onReabrirPeriodo(evento, oPeriodo);
 					});
