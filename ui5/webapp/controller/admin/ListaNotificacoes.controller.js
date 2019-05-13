@@ -131,14 +131,13 @@ sap.ui.define(
 								response[i]["periodo"] = Utils.traduzTrimestreTaxPackage(response[i]["numero_ordem"],that);
 							}
 							var json = response;
-							that.getModel().setProperty("/ContadorTax2", json.length);
+							that.getModel().setProperty("/ContadorTaxPackageEncerramentoPeriodo", json.length);
 							that.getModel().setProperty("/RequisicaoEncerramentoPeriodoTaxPackage", json);
 						}
 					})
 					.catch(function (err) {
 						alert(err.statusText);
 					});
-
 			},
 
 			onDetalharEncerramentoTaxPackage: function (oEvent) {

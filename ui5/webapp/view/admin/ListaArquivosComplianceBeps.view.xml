@@ -56,6 +56,9 @@
 							<Column minScreenWidth="XLarge" demandPopin="true" hAlign="Center">
 								<ObjectIdentifier title="{i18n>viewArquivosAdminDownload}" />
 							</Column>
+							<Column minScreenWidth="XLarge" demandPopin="true" hAlign="Center">
+								<ObjectIdentifier title="{i18n>viewFormularioComplianceBepsDataUp}" />
+							</Column>
 							<Column width="50px"></Column>
 						</columns>
 						<items>
@@ -66,6 +69,7 @@
 									<Text text="{nome_obrigacao}"/>
 									<Text text="{ano_fiscal_calculado}"/>
 									<Text text="{= ${ind_conclusao} ? ${data_conclusao} : ''}"/>
+									<Text text="{data_upload}"/>
 									<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>ViewGeralBaixarArq}" press="onBaixarArquivo" enabled="{btnDownloadEnabled}" />
 								</cells>
 							</ColumnListItem>

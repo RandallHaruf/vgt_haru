@@ -97,6 +97,12 @@ sap.ui.define(
 								obj.iconeStatusTerceiroPeriodo = that._resolverIcone(obj.status_terceiro_periodo);
 								obj.iconeStatusQuartoPeriodo = that._resolverIcone(obj.status_quarto_periodo);
 								obj.iconeStatusAnual = that._resolverIcone(obj.status_anual);
+								
+								/*obj.iconeStatusPrimeiroPeriodo = that._resolverTooltip(obj.status_primeiro_periodo);
+								obj.iconeStatusSegundoPeriodo = that._resolverTooltip(obj.status_segundo_periodo);
+								obj.iconeStatusTerceiroPeriodo = that._resolverTooltip(obj.status_terceiro_periodo);
+								obj.iconeStatusQuartoPeriodo = that._resolverTooltip(obj.status_quarto_periodo);
+								obj.iconeStatusAnual = that._resolverTooltip(obj.status_anual);*/
 							}
 							that.getModel().setProperty("/Empresa", response.result);
 						}
@@ -129,5 +135,30 @@ sap.ui.define(
 				return sIcone;
 			}
 		});
+		
+		/*_resolverTooltip: function (iStatus) {
+				var sTooltip;
+
+				switch (iStatus) {
+				case 1: // fechado não enviado
+					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones1");
+					break;
+				case 2: // não iniciado
+					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones2");
+					break;
+				case 3: // em andamento
+					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones3");
+					break;
+				case 4: // enviado
+					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones4");
+					break;
+				case 5: // Aguardando aprovação
+					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones5");
+					break;
+				}
+
+				return sTooltip;
+			}
+		});*/
 	}
 );

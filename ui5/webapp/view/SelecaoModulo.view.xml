@@ -147,6 +147,10 @@
 						<l:BlockLayoutCell>
 							<FlexBox
 								justifyContent="Center">
+							<Image src="files/vale-logo-2.png" height="180px" />
+							</FlexBox>
+							<FlexBox
+								justifyContent="Center">
 								<Title text="Vale Global Tax" class="custom-title-vgt" />
 							</FlexBox>
 						</l:BlockLayoutCell>

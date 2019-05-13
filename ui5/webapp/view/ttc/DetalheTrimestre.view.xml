@@ -75,9 +75,9 @@
 								</headerToolbar>
 								<columns>
 									<Column width="7.5rem" />
-									<Column width="4rem" hAlign="Center" >
+									<!--<Column width="4rem" hAlign="Center" >
 										<Text text="N/A" textAlign="Center" />
-									</Column>
+									</Column>-->
 									<Column width="15rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
 									</Column>
@@ -149,7 +149,7 @@
 												<Button icon="sap-icon://duplicate" type="Accept" tooltip="{i18n>viewGeralDuplicarLinha}" class="sapUiSmallMarginEnd" press="onDuplicarLinha" />
 												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirLinha" />
 											</HBox>
-											<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />
+											<!--<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />-->
 											<Select
 												items="{
 													path: '/Borne/TaxCategory',
@@ -342,9 +342,9 @@
 								</headerToolbar>
 								<columns>
 									<Column width="7.5rem" />
-									<Column width="4rem" hAlign="Center">
+									<!--<Column width="4rem" hAlign="Center">
 										<Text text="N/A" textAlign="Center" />
-									</Column>
+									</Column>-->
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
 									</Column>
@@ -416,7 +416,7 @@
 												<Button icon="sap-icon://duplicate" type="Accept" tooltip="{i18n>viewGeralDuplicarLinha}" class="sapUiSmallMarginEnd" press="onDuplicarLinha" />
 												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirLinha" />
 											</HBox>
-											<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />
+											<!--<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />-->
 											<Select
 												items="{
 													path: '/Collected/TaxCategory',

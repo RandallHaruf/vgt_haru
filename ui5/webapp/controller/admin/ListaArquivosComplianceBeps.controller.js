@@ -128,7 +128,7 @@ sap.ui.define(
 			_listarArquivos: function () {
 				var that = this, 
 					aValorFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
-					aValorFiltroTipoObrigacao = this.getModel().getProperty("/ValorFiltroTipoObrigacao")
+					aValorFiltroTipoObrigacao = this.getModel().getProperty("/ValorFiltroTipoObrigacao"),
 					aValorFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao"),
 					aValorFiltroAnoFiscal = this.getModel().getProperty("/ValorFiltroAnoFiscal"),
 					sValorFiltroNomeArquivo = this.getModel().getProperty("/ValorFiltroNomeArquivo");
