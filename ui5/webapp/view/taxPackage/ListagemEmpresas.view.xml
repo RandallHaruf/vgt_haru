@@ -93,35 +93,45 @@
 										'iconeStatusPrimeiroPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}" />
+								}"
+								tooltip="{tooltipPrimeiroPeriodo}"
+								useIconTooltip="false"/>
 							<core:Icon src="{iconeStatusSegundoPeriodo}" 
 								color="{
 									parts: [
 										'iconeStatusSegundoPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"/>
+								}"
+								tooltip="{tooltipSegundoPeriodo}"
+								useIconTooltip="false"/>
 							<core:Icon src="{iconeStatusTerceiroPeriodo}" 
 								color="{
 									parts: [
 										'iconeStatusTerceiroPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"/>
+								}"
+								tooltip="{tooltipTerceiroPeriodo}"
+								useIconTooltip="false"/>
 							<core:Icon src="{iconeStatusQuartoPeriodo}" 
 								color="{
 									parts: [
 										'iconeStatusQuartoPeriodo'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"/>
+								}"
+								tooltip="{tooltipQuartoPeriodo}"
+								useIconTooltip="false"/>
 							<core:Icon src="{iconeStatusAnual}" 
 								color="{
 									parts: [
 										'iconeStatusAnual'
 									],
 									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"/>
+								}"
+								tooltip="{tooltipAnualPeriodo}"
+								useIconTooltip="false"/>
 							
 							<ObjectNumber
 								number="{qte_retificadoras}"/>

@@ -93,16 +93,19 @@ sap.ui.define(
 							for (var i = 0, length = response.result.length; i < length; i++) {
 								var obj = response.result[i];
 								obj.iconeStatusPrimeiroPeriodo = that._resolverIcone(obj.status_primeiro_periodo);
-								obj.iconeStatusSegundoPeriodo = that._resolverIcone(obj.status_segundo_periodo);
-								obj.iconeStatusTerceiroPeriodo = that._resolverIcone(obj.status_terceiro_periodo);
-								obj.iconeStatusQuartoPeriodo = that._resolverIcone(obj.status_quarto_periodo);
-								obj.iconeStatusAnual = that._resolverIcone(obj.status_anual);
+								obj.tooltipPrimeiroPeriodo = that._resolverTooltip(obj.status_primeiro_periodo);
 								
-								/*obj.iconeStatusPrimeiroPeriodo = that._resolverTooltip(obj.status_primeiro_periodo);
-								obj.iconeStatusSegundoPeriodo = that._resolverTooltip(obj.status_segundo_periodo);
-								obj.iconeStatusTerceiroPeriodo = that._resolverTooltip(obj.status_terceiro_periodo);
-								obj.iconeStatusQuartoPeriodo = that._resolverTooltip(obj.status_quarto_periodo);
-								obj.iconeStatusAnual = that._resolverTooltip(obj.status_anual);*/
+								obj.iconeStatusSegundoPeriodo = that._resolverIcone(obj.status_segundo_periodo);
+								obj.tooltipSegundoPeriodo = that._resolverTooltip(obj.status_segundo_periodo);
+								
+								obj.iconeStatusTerceiroPeriodo = that._resolverIcone(obj.status_terceiro_periodo);
+								obj.tooltipTerceiroPeriodo = that._resolverTooltip(obj.status_terceiro_periodo);
+								
+								obj.iconeStatusQuartoPeriodo = that._resolverIcone(obj.status_quarto_periodo);
+								obj.tooltipQuartoPeriodo = that._resolverTooltip(obj.status_quarto_periodo);
+								
+								obj.iconeStatusAnual = that._resolverIcone(obj.status_anual);
+								obj.tooltipAnualPeriodo = that._resolverTooltip(obj.status_anual);
 							}
 							that.getModel().setProperty("/Empresa", response.result);
 						}
@@ -115,16 +118,16 @@ sap.ui.define(
 				var sIcone;
 
 				switch (iStatus) {
-				case 1: // fechado não enviado
+				case 1: // Fechado e não enviado
 					sIcone = "sap-icon://decline";
 					break;
-				case 2: // não iniciado
+				case 2: // Não iniciado
 					sIcone = "sap-icon://begin";
 					break;
-				case 3: // em andamento
+				case 3: // Em andamento
 					sIcone = "sap-icon://process";
 					break;
-				case 4: // enviado
+				case 4: // Enviado
 					sIcone = "sap-icon://approvals";
 					break;
 				case 5: // Aguardando aprovação
@@ -133,32 +136,31 @@ sap.ui.define(
 				}
 
 				return sIcone;
-			}
-		});
+		},
 		
-		/*_resolverTooltip: function (iStatus) {
+		_resolverTooltip: function (iStatus) {
 				var sTooltip;
 
 				switch (iStatus) {
-				case 1: // fechado não enviado
-					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones1");
+				case 1: // Fechado e não enviado
+					sTooltip = this.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones1");
 					break;
-				case 2: // não iniciado
-					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones2");
+				case 2: // Não iniciado
+					sTooltip = this.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones2");
 					break;
-				case 3: // em andamento
-					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones3");
+				case 3: // Em andamento
+					sTooltip = this.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones3");
 					break;
-				case 4: // enviado
-					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones4");
+				case 4: // Enviado
+					sTooltip = this.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones4");
 					break;
 				case 5: // Aguardando aprovação
-					sTooltip = tooltip: that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones5");
+					sTooltip = this.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones5");
 					break;
 				}
 
 				return sTooltip;
 			}
-		});*/
+		});
 	}
 );
