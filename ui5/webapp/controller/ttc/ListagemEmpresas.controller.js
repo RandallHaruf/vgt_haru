@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/jQueryMask"
+		"ui5ns/ui5/lib/jQueryMask",
+		"ui5ns/ui5/model/Constants"
 	],
-	function (BaseController, JSONModel, NodeAPI, JQueryMask) {
+	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ListagemEmpresas", {
@@ -18,6 +19,10 @@ sap.ui.define(
 				this.getRouter().getRoute("ttcListagemEmpresas").attachPatternMatched(this._onRouteMatched, this);
 			},
 
+            onBaixarModeloImport: function (oEvent) {
+				window.location = Constants.urlBackend + "TTC/DownloadModeloImport";
+			},
+            
 			onTrocarAnoCalendario: function (oEvent) {
 				this._atualizarDados();
 			},

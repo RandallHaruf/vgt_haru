@@ -8,4 +8,5 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().get("/ResumoTrimestreTTC", controller.listarResumoTrimeste));
 	aRoutes.push(express.Router().get("/ResumoEmpresaTTC", controller.listarResumoEmpresa));
 	aRoutes.push(express.Router().get("/VerificarImpostoNaoDeclarado", controller.verificarImpostosNaoDeclarados));
+	aRoutes.push(express.Router().get("/TTC/DownloadModeloImport", controller.downloadModeloImport));
 };

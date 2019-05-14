@@ -1,6 +1,10 @@
 "use strict";
 
 var db = require("../db");
+const Excel = require('exceljs');
+const modelTaxaTTC = require('../models/modelTax');
+const modelDominioPais = require('../models/modelDomPais');
+const modelDominioAnoFiscal = require('../models/modelDomAnoFiscal');
 
 function isNumber (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -520,5 +524,216 @@ module.exports = {
 				});
 			}
 		});
+	},
+	downloadModeloImport: function (req, res, next) {
+		const configurarPastaDiferenca = (workbook, sNomePasta, sColunaPasta, sColunaDados, qteRegistros) => {
+			var worksheet = workbook.getWorksheet(sNomePasta);
+					
+			for (var i = 2; i <= 1000; i++) {
+	        	worksheet.getCell(sColunaPasta + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + sColunaDados + "$1:$" + sColunaDados + "$" + qteRegistros],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+	        }
+	        
+	        worksheet.getColumn('AB').hidden = true;
+		};
+		
+		const configurarPastasComPadroes = () => {
+			var worksheet = workbook.getWorksheet('Borne');
+					
+			for (var i = 2; i <= 1000; i++) {
+	        	worksheet.getCell('A' + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + 'A' + "$1:$" + 'A' + "$" + 2],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+				worksheet.getCell('D' + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + 'E' + "$1:$" + 'E' + "$" + 3],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+				worksheet.getCell('M' + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + 'K' + "$1:$" + 'K' + "$" + 5],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+	        }
+	        worksheet.getColumn('AI').hidden = true;
+	        worksheet.getColumn('AJ').hidden = true;
+	        worksheet.getColumn('AK').hidden = true;
+	        
+	        worksheet = workbook.getWorksheet('Collected');
+	        
+	        for (var i = 2; i <= 1000; i++) {
+	        	worksheet.getCell('A' + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + 'A' + "$1:$" + 'A' + "$" + 2],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+				worksheet.getCell('D' + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + 'E' + "$1:$" + 'E' + "$" + 3],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+				worksheet.getCell('M' + i).dataValidation = {
+				    type: 'list',
+				    allowBlank: true,
+				    formulae: ["Dados!$" + 'K' + "$1:$" + 'K' + "$" + 5],
+				    showErrorMessage: true,
+				    errorStyle: 'error'
+				};
+	        }
+	        worksheet.getColumn('AI').hidden = true;
+	        worksheet.getColumn('AJ').hidden = true;
+	        worksheet.getColumn('AK').hidden = true;
+	        
+	        
+		};
+		
+		const inserirTaxas = (worksheet, aDado, sColuna1, sColuna2) => {
+			for (var i = 0; i < aDado.length; i++) {
+	        	worksheet.getCell(sColuna1 + (i + 1)).value = aDado[i].tax;
+	        	worksheet.getCell(sColuna2 + (i + 1)).value = aDado[i].id_tax;
+	        }
+		};
+		
+		const inserirPaises = (worksheet, aDado, sColuna1, sColuna2) => {
+			for (var i = 0; i < aDado.length; i++) {
+	        	worksheet.getCell(sColuna1 + (i + 1)).value = aDado[i].pais;
+	        	worksheet.getCell(sColuna2 + (i + 1)).value = aDado[i].id_dominio_pais;
+	        }
+		};
+		
+		const inserirAnosFiscais = (worksheet, aDado, sColuna1, sColuna2) => {
+			for (var i = 0; i < aDado.length; i++) {
+	        	worksheet.getCell(sColuna1 + (i + 1)).value = aDado[i].ano_fiscal;
+	        	worksheet.getCell(sColuna2 + (i + 1)).value = aDado[i].id_dominio_ano_fiscal;
+	        }
+		};
+		
+		var folder = "download/",
+			sheet = "ModeloImportTTC.xlsx",
+			tmpSheet = `tmp_${(new Date()).getTime()}_${sheet}`;
+			
+		try {
+			var workbook = new Excel.Workbook();
+			const modelPais = require('../models/modelPais');
+			const modelDominioAnoFiscal = require('../models/modelDomAnoFiscal');
+			Promise.all([
+					retornarDominioPais(),
+					retornarDominioAnoFiscal(),
+					retornarTaxasTTC(1),
+					retornarTaxasTTC(2),
+					workbook.xlsx.readFile(folder + sheet)
+				])
+				.then(function (res) {
+					var resTaxasBorne = res[2], 
+						resTaxasCollected = res[3],
+						resDominioPais = res[0],
+						resDominioAnoFiscal = res[1];
+						
+					configurarPastaDiferenca(workbook, 'Borne', 'B', 'C', resTaxasBorne.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'B', 'M', resTaxasCollected.length);
+					configurarPastaDiferenca(workbook, 'Borne', 'E', 'G', resDominioPais.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'E', 'G', resDominioPais.length);
+					configurarPastaDiferenca(workbook, 'Borne', 'I', 'I', resDominioAnoFiscal.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'I', 'I', resDominioAnoFiscal.length);
+			        configurarPastasComPadroes();
+			        
+			        var worksheet = workbook.getWorksheet('Dados');
+			        
+			        inserirTaxas(worksheet, resTaxasBorne, 'C', 'D');
+			        inserirTaxas(worksheet, resTaxasCollected, 'M', 'N');
+			        inserirPaises(worksheet, resDominioPais, 'G', 'H');
+			        inserirAnosFiscais(worksheet, resDominioAnoFiscal, 'I', 'J');
+			        
+			        worksheet.state = 'veryHidden';
+			        
+			        return workbook.xlsx.writeFile(folder + tmpSheet);
+				})
+				.then(function () {
+					res.download(folder + tmpSheet, sheet);
+				})
+				.catch((err) => {
+					console.log(err);
+			    	const error = new Error("Erro ao baixar arquivo: " + err.message);
+					next(error);
+			    });
+		}
+		catch (e) {
+			console.log(e);
+			const error = new Error("Erro ao baixar arquivo: " + e.message);
+			next(error);
+		}
 	}
 };
+function retornarTaxasTTC(tipoTaxa){
+	var sStatement = 
+		'select tblTax.* from "VGT.TAX" tblTax '
+		+'INNER JOIN "VGT.TAX_CATEGORY" tblTaxCategory '
+		+	'ON tblTax."fk_category.id_tax_category" = tblTaxCategory."id_tax_category" '
+		+'where tblTaxCategory."fk_dominio_tax_classification.id_dominio_tax_classification" = ' + tipoTaxa + ' '
+		+'order by tblTax."tax" desc';
+	return new Promise(function (resolve,reject){
+		db.executeStatement({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}	
+			else {
+				resolve(result);
+			}
+		});
+	});
+};
+function retornarDominioPais(){
+	var sStatement = 
+		'Select * from "VGT.DOMINIO_PAIS" tblPais '
+		+'order by tblPais."pais" asc ';
+	return new Promise(function (resolve,reject){
+		db.executeStatement({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}	
+			else {
+				resolve(result);
+			}
+		});
+	});
+};
+function retornarDominioAnoFiscal(){
+	var sStatement = 
+		'Select * from "VGT.DOMINIO_ANO_FISCAL" tblAnoFiscal '
+		+'where year(to_date(tblAnoFiscal."ano_fiscal")) <= year(CURRENT_DATE) '
+		+'order by tblAnoFiscal."ano_fiscal" asc';
+	return new Promise(function (resolve,reject){
+		db.executeStatement({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}	
+			else {
+				console.log(result);
+				resolve(result);
+			}
+		});
+	});
+}
