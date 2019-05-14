@@ -159,7 +159,10 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-
+				
+				var countBorne = 0,
+					countCollected = 0;
+					
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this.byId("btnReabrir").setVisible(false);
@@ -202,8 +205,9 @@ sap.ui.define(
 						if (response) {
 							for (var i = 0; i < response.length; i++) {
 								response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
+								countBorne++;
 							}
-
+							that.getModel().setProperty("/ContadorBorne", countBorne);
 							that.getModel().setProperty("/Pagamentos/Borne", response);
 						}
 
@@ -215,12 +219,13 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
 					"&tax_classification=2",
-					function (response) { // tax_classification = BORNE
+					function (response) { // tax_classification = COLLECTED
 						if (response) {
 							for (var i = 0; i < response.length; i++) {
 								response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
+								countCollected++;
 							}
-
+							that.getModel().setProperty("/ContadorCollected", countCollected);
 							that.getModel().setProperty("/Pagamentos/Collected", response);
 						}
 

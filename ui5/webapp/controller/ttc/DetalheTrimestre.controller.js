@@ -78,12 +78,14 @@ sap.ui.define(
 				this._dadosPagamentosBorne.unshift(this._novoPagamento());
 
 				this.getModel().refresh();
+				this.getModel().setProperty("/ContadorBorne", this._dadosPagamentosBorne.length);
 			},
 
 			onNovoPagamentoCollected: function (oEvent) {
 				this._dadosPagamentosCollected.unshift(this._novoPagamento());
 
 				this.getModel().refresh();
+				this.getModel().setProperty("/ContadorCollected", this._dadosPagamentosCollected.length);
 			},
 
 			onTrocarJurisdicao: function (oEvent) {
@@ -159,6 +161,7 @@ sap.ui.define(
 				aDadosPagamentos.splice(index, 0, oObject);
 
 				this.getModel().refresh();
+				this.getModel().setProperty(sPath.toUpperCase().indexOf("BORNE") > -1 ? "/ContadorBorne" : "/ContadorCollected", aDadosPagamentos.length);
 			},
 
 			handleSuggest: function (oEvent) {
@@ -187,7 +190,7 @@ sap.ui.define(
 
 			onExcluirLinha: function (oEvent) {
 				var that = this;
-
+				var sPath = oEvent.getSource().getBindingContext().getPath();
 				var oExcluir = oEvent.getSource().getBindingContext().getObject();
 				var aDadosPagamentos = this._getDadosPagamentos(oEvent.getSource().getBindingContext().getPath());
 
@@ -210,6 +213,7 @@ sap.ui.define(
 							}
 
 							dialog.close();
+							that.getModel().setProperty(sPath.toUpperCase().indexOf("BORNE") > -1 ? "/ContadorBorne" : "/ContadorCollected", aDadosPagamentos.length);
 						}
 					}),
 					endButton: new sap.m.Button({
@@ -562,6 +566,9 @@ sap.ui.define(
 				var sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
 				var sIdPeriodo = this.getModel().getProperty("/Periodo").id_periodo;
 				var sIdPais = this.getModel().getProperty("/Empresa")["fk_pais.id_pais"];
+				
+				var countBorne = 0,
+					countCollected = 0;
 
 				var that = this;
 
@@ -608,7 +615,9 @@ sap.ui.define(
 									}
 								});
 							})(i);
+							countBorne++;
 						}
+						that.getModel().setProperty("/ContadorBorne", that._dadosPagamentosBorne.length);
 					}
 
 					if (response2) {
@@ -645,10 +654,12 @@ sap.ui.define(
 									}
 								});
 							})(j);
+							countCollected++;
 						}
 					}
-
+					/*that.getModel().setProperty("/ContadorCollected", countCollected);*/
 					that.getModel().refresh();
+					that.getModel().setProperty("/ContadorCollected", that._dadosPagamentosCollected.length);
 					that.byId("dynamicPage").setBusy(false);
 				});
 			},

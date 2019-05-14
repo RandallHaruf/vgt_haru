@@ -60,7 +60,7 @@
 			<IconTabBar id="idIconTabBarInlineMode" upperCase="true" expandable="false" stretchContentHeight="true"
 				class="sapUiNoContentPadding">
 				<items>
-					<IconTabFilter text="{i18n>viewGeralBorne}">
+					<IconTabFilter text="{i18n>viewGeralBorne} ({/ContadorBorne})">
 						<ScrollContainer
 							horizontal="true"
 							vertical="true"
@@ -187,7 +187,7 @@
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon=""/>
-					<IconTabFilter text="{i18n>viewGeralCollected}">
+					<IconTabFilter text="{i18n>viewGeralCollected} ({/ContadorCollected})">
 						<ScrollContainer
 							horizontal="true"
 							vertical="true"

@@ -25,6 +25,9 @@
 							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
+							<Column hAlign="Center">
+								<Text text="{i18n>viewEmpresasAssociadas}" />
+							</Column>
 							<Column
 								minScreenWidth="Tablet"
 								demandPopin="true"
@@ -45,6 +48,7 @@
 								press="onDetalharObrigacao">
 								<cells>
 									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoObrigacao} ( #{id_requisicao_modelo_obrigacao})"/>
+									<Text text="{nome}"/>
 									<Text text="{data_inicial}"/>
 									<Text text="{observacoes}"/>
 								</cells>
@@ -68,6 +72,9 @@
 							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
+							<Column hAlign="Center">
+								<Text text="{i18n>viewEmpresasAssociadas}" />
+							</Column>
 							<Column
 								minScreenWidth="Tablet"
 								demandPopin="true"
@@ -88,6 +95,7 @@
 								press="onDetalharTTC">
 								<cells>
 									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTTC}  ( #{id_requisicao_reabertura})"/>
+									<Text text="{nome}"/>
 									<Text text="{data_requisicao}"/>
 									<Text text="{comentarios}"/>
 								</cells>
@@ -111,6 +119,9 @@
 							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
 							</Column>
+							<Column hAlign="Center">
+								<Text text="{i18n>viewEmpresasAssociadas}" />
+							</Column>
 							<Column
 								minScreenWidth="Tablet"
 								demandPopin="true"
@@ -131,6 +142,7 @@
 								press="onDetalharTaxPackage">
 								<cells>
 									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoTaxPackage} ( #{id_requisicao_reabertura_tax_tackage})"/>
+									<Text text="{nome}"/>
 									<Text text="{data_requisicao}"/>
 									<Text text="{justificativa}"/>
 								</cells>
@@ -138,7 +150,7 @@
 						</items>
 					</Table>
 				</Panel>
-				<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTituloTaxPackageRequisicaoEncerramento} ({/ContadorTax2})" width="auto" class="sapUiResponsiveMargin">
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewNotificacaoTituloTaxPackageRequisicaoEncerramento} ({/ContadorTaxPackageEncerramentoPeriodo})" width="auto" class="sapUiResponsiveMargin">
 					<Table
 						items="{
 							path: '/RequisicaoEncerramentoPeriodoTaxPackage',
@@ -152,6 +164,9 @@
 						<columns>
 							<Column hAlign="Center">
 								<Text text="{i18n>viewNotificacaoColunaNotificacao}" />
+							</Column>
+							<Column hAlign="Center">
+								<Text text="{i18n>viewEmpresasAssociadas}" />
 							</Column>
 							<Column
 								minScreenWidth="Tablet"
@@ -167,6 +182,7 @@
 								press="onDetalharEncerramentoTaxPackage">
 								<cells>
 									<ObjectIdentifier title="{i18n>viewNotificacaolinhaRequisicaoEncerramentoPeriodoTaxPackage} (#{id_requisicao_encerramento_periodo_tax_package})"/>
+									<Text text="{nome_empresa}"/>
 									<Text text="{data_requisicao}"/>
 								</cells>
 							</ColumnListItem>
