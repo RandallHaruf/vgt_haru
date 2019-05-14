@@ -16,6 +16,9 @@
 				<f:heading>
 					<Title text="{i18n>viewTTCListagemEmpresaTituloPagina}"/>
 				</f:heading>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f:expandedContent>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>

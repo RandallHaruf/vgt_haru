@@ -434,6 +434,7 @@ sap.ui.define(
 										this.getModel().setProperty("/ShowCompliance", response.modulos && response.modulos.includes(3) ? true : false);
 										this.getModel().setProperty("/ShowBeps", response.modulos && response.modulos.includes(4) ? true : false);
 										this.getModel().setProperty("/ShowAdmin", response.modulos && response.modulos.includes(5) ? true : false);
+										this.getModel().setProperty("/NomeUsuario", response.nome);
 									} else {
 										MessageToast.show(response.error.msg);
 										this.getRouter().navTo("Login");
@@ -465,7 +466,10 @@ sap.ui.define(
 
 			navToTTC: function (oEvent) {
 				this.getRouter().navTo("ttcListagemEmpresas",{
-					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({
+						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+					})
 				});
 			},
 

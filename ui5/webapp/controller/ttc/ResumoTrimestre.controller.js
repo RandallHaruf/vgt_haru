@@ -24,13 +24,14 @@ sap.ui.define(
 				this._atualizarDados();
 			},
 
-			onEditarPeriodo: function (oPeriodo) {
+			onEditarPeriodo: function (oPeriodo, usuario) {
 				var that = this;
 
 				var oParams = {};
 
 				oParams.oPeriodo = oPeriodo;
 				oParams.oEmpresa = that.getModel().getProperty("/Empresa");
+				oParams.nomeUsuario = usuario;
 				oParams.oAnoCalendario = {
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
 					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
@@ -466,6 +467,7 @@ sap.ui.define(
                     oParams.oPeriodo = oPeriodo;
 					oParams.oEmpresa = that.getModel().getProperty("/Empresa");
 					oParams.isPendente =  isPendente;
+					oParams.nomeUsuario = that.getModel().getProperty("/NomeUsuario");
 					oParams.oAnoCalendario = {
 						idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
 						anoCalendario: that.byId("selectAnoCalendario").getSelectedItem().getText()
@@ -498,7 +500,8 @@ sap.ui.define(
 			navToPage2: function () {
 				this.getRouter().navTo("ttcListagemEmpresas", {
 					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 					})
 				});
 			},
@@ -506,7 +509,8 @@ sap.ui.define(
 			navToRequisicoes: function () {
 				var oParametros = {
 					empresa: this.getModel().getProperty("/Empresa"),
-					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 
 				this.getRouter().navTo("ttcRequisicaoReabertura", {
@@ -524,9 +528,11 @@ sap.ui.define(
 
 				var oEmpresa = this.fromURIComponent(oEvent.getParameter("arguments").oEmpresa);
 				var idAnoCalendario = this.fromURIComponent(oEvent.getParameter("arguments").idAnoCalendario);
+				var nomeUsuario = this.fromURIComponent(oEvent.getParameter("arguments").nomeUsuario);
 
 				this.getModel().setProperty("/AnoCalendarioSelecionado", idAnoCalendario);
 				this.getModel().setProperty("/Empresa", oEmpresa);
+				this.getModel().setProperty("/NomeUsuario", nomeUsuario);
 
 				NodeAPI.listarRegistros("/DominioAnoCalendario", function (response) {
 					if (response) {
@@ -542,6 +548,7 @@ sap.ui.define(
 
 				var sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
 				var sIdAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado");
+				var usuario = this.getModel().getProperty("/NomeUsuario");
 
 				var sEntidade = "DeepQuery/RelacionamentoEmpresaPeriodo?empresa=" + sIdEmpresa + "&anoCalendario=" + sIdAnoCalendario + "&modulo=1"; // TTC
 
@@ -565,7 +572,7 @@ sap.ui.define(
 								that._popularToolbarInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 							} else {
 								if (oPeriodo.ind_ativo) {
-									that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo, usuario);
 								} else {
 									that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
 								}
@@ -694,7 +701,7 @@ sap.ui.define(
 				return false;
 			},
 
-			_popularToolbarPeriodoCorrente: function (sIdToolbar, oPeriodo) {
+			_popularToolbarPeriodoCorrente: function (sIdToolbar, oPeriodo, usuario) {
 				var that = this;
 
 				var oToolbar = this.byId(sIdToolbar);
@@ -719,7 +726,7 @@ sap.ui.define(
 					text: that.getResourceBundle().getText("viewGeralEditar"),
 					type: "Accept"
 				}).attachPress(function () {
-					that.onEditarPeriodo(oPeriodo);
+					that.onEditarPeriodo(oPeriodo, usuario);
 				});
 
 				oToolbar.addContent(oButton);

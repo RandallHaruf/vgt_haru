@@ -178,7 +178,7 @@
 					]
 				},
 				{
-					"pattern": "ttcResumoTrimestre/{oEmpresa},{idAnoCalendario}",
+					"pattern": "ttcResumoTrimestre/{oEmpresa},{idAnoCalendario},{nomeUsuario}",
 					"name": "ttcResumoTrimestre",
 					"target": [
 						"ttcResumoTrimestre"

@@ -27,10 +27,12 @@ sap.ui.define(
 
 				var oEmpresaSelecionada = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
 				var sIdAnoCalendarioSelecionado = this.getModel().getProperty("/AnoCalendarioSelecionado");
+				var nomeUsuario = this.getModel().getProperty("/NomeUsuario");
 
 				this.getRouter().navTo("ttcResumoTrimestre", {
 					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
-					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado)
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado),
+					nomeUsuario: this.toURIComponent(nomeUsuario)
 				});
 			},
 
@@ -46,8 +48,10 @@ sap.ui.define(
 				}
 
 				var parametro = this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario;
+				var usuario = this.fromURIComponent(oEvent.getParameter("arguments").parametros).nomeUsuario;
 
 				that.getModel().setProperty("/AnoCalendarioSelecionado", parametro);
+				that.getModel().setProperty("/NomeUsuario", usuario);
 
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
 					if (response) {

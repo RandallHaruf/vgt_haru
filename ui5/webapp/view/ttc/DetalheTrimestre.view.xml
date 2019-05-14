@@ -21,6 +21,9 @@
 				<f2:heading>
 					<Title text="{i18n>viewTTCDetalheTrimestreTituloPagina}"/>
 				</f2:heading>
+				<f2:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f2:expandedContent>
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/nome}" />
 				</f2:snappedContent>
@@ -114,15 +117,21 @@
 									<Column width="12rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center" >
+									<!-- pegar aki  -->
+								<!--	<Column width="15rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
+									</Column> -->
 									<Column width="15rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
 									</Column>
+									<!-- colocar aki  -->
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
+									</Column>
+									
 									<Column width="10rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
@@ -259,13 +268,15 @@
 												selectedKey="{fk_dominio_moeda.id_dominio_moeda}">
 												<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
 											</ComboBox> -->
-											<Input 
+											
+											<!-- pegar aki  -->
+											<!-- <Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
 												showSuggestion="true"
 												suggest="handleSuggest2"
 												value="{AcroNome}"
 											>
-											</Input> 
+											</Input> --> 
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -276,6 +287,7 @@
 												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
+											
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false)}"
 												type="Text" 
@@ -283,6 +295,16 @@
 												valueState="{tipo_transacao_outros_value_state}"
 												change="onTrocarTipoTransacaoOutros"/>
 											<!--<Input textAlign="End" value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  editable="{ind_ativo}" change="onAplicarRegras" />-->
+											
+											<!-- colocar aki -->
+											<Input 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
+												showSuggestion="true"
+												suggest="handleSuggest2"
+												value="{AcroNome}"
+											>
+											</Input>
+											
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
@@ -382,13 +404,13 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
@@ -526,12 +548,6 @@
 												selectedKey="{fk_dominio_moeda.id_dominio_moeda}">
 												<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
 											</ComboBox>  -->
-											<Input 
-											enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
-											showSuggestion="true"
-											suggest="handleSuggest2"
-											value="{AcroNome}">
-											</Input> 
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -572,6 +588,13 @@
 												type="Number" 
 												value="{total}" 
 												editable="false" />-->
+												
+											<Input 
+											enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
+											showSuggestion="true"
+											suggest="handleSuggest2"
+											value="{AcroNome}">
+											</Input>	
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"

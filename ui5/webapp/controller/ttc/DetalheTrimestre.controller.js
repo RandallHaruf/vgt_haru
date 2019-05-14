@@ -362,7 +362,8 @@ sap.ui.define(
 					that._limparModel();
 					that.getRouter().navTo("ttcListagemEmpresas", {
 						parametros: that.toURIComponent({
-							idAnoCalendario: that.getModel().getProperty("/AnoCalendario")["idAnoCalendario"]
+							idAnoCalendario: that.getModel().getProperty("/AnoCalendario")["idAnoCalendario"],
+							nomeUsuario: that.getModel().getProperty("/NomeUsuario")
 						})
 					});
 				});
@@ -411,6 +412,7 @@ sap.ui.define(
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
 				this.getModel().setProperty("/LabelPeriodo", this._pegarLabelPeriodoDetalheTrimestre(oParameters.oPeriodo.numero_ordem));
+				this.getModel().setProperty("/NomeUsuario", oParameters.nomeUsuario);
 
 				this._resolverMinMaxDate(oParameters.oPeriodo);
 
@@ -544,10 +546,12 @@ sap.ui.define(
 
 				var oEmpresaSelecionada = this.getModel().getProperty("/Empresa");
 				var sIdAnoCalendarioSelecionado = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
+				var nomeUsuario = this.getModel().getProperty("/NomeUsuario");
 
 				this.getRouter().navTo("ttcResumoTrimestre", {
 					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
-					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado)
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado),
+					nomeUsuario: this.toURIComponent(nomeUsuario)
 				});
 			},
 

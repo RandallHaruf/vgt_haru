@@ -23,6 +23,9 @@
 					<Title text="{i18n>viewTTCResumoTrimestreTituloPagina}"/>
 				</f:heading>
 				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f:expandedContent>
+				<f:expandedContent>
 					<ObjectIdentifier title="{/Empresa/nome}" />
 				</f:expandedContent>
 				<f:navigationActions>

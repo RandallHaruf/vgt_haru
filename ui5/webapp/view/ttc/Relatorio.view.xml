@@ -212,13 +212,13 @@
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
 						</Column>						
 						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>ViewRelatorioCurrency}"  textAlign="Center"/>
-						</Column>
-						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>ViewRelatorioTipoDeTransacao}"  textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center"/>
+						</Column>
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>ViewRelatorioCurrency}"  textAlign="Center"/>
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" textAlign="Center"/>
@@ -262,9 +262,9 @@
 								<Text text="{tblDominioAnoFiscal.ano_fiscal}" />
 								<Text text="{tblPagamento.descricao}"/>	
 								<Text text="{tblPagamento.data_pagamento}"/>								
-								<Text text="{tblDominioMoeda.acronimo}" />
 								<Text text="{tblDominioTipoTransacao.tipo_transacao}" />
 								<Text text="{tblPagamento.tipo_transacao_outros}"/>
+								<Text text="{tblDominioMoeda.acronimo}" />
 								<Text text="{tblPagamento.principal}"/>
 								<Text text="{tblPagamento.juros}"/>
 								<Text text="{tblPagamento.multa}" />

@@ -77,7 +77,8 @@ sap.ui.define(
 			navToPage2: function () {
 				this.getRouter().navTo("ttcListagemEmpresas", {
 					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
+						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 					})
 				});
 			},
@@ -95,7 +96,8 @@ sap.ui.define(
 			
 				this.getRouter().navTo("ttcResumoTrimestre", {
 					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
-					idAnoCalendario: this.toURIComponent(sIdAnoCalendario)
+					idAnoCalendario: this.toURIComponent(sIdAnoCalendario),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				}); 
 			},
 			
@@ -106,6 +108,7 @@ sap.ui.define(
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);
+				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 				
 				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
 					if (response) {

@@ -19,6 +19,9 @@
 				<f:heading>
 					<Title text="{i18n>viewTTCVisualizacaoTrimestreTituloPagina}"/>
 				</f:heading>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f:expandedContent>
 				<f:navigationActions>
 					<Button id="btnReabrir" icon="sap-icon://permission" text="{i18n>viewGeralReabertura}" press="onReabrirPeriodo"/>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
@@ -112,14 +115,14 @@
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
-									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" />
@@ -160,9 +163,9 @@
 											<Text text="{ano_fiscal}" />
 											<Text text="{descricao}" />
 											<Text text="{data_pagamento}" />
-											<Text text="{acronimo}" />
 											<Text text="{tipo_transacao}" />
 											<Text text="{tipo_transacao_outros}" />
+											<Text text="{acronimo}" />
 											<Text 
 												textAlign="End"
 												text="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
@@ -239,14 +242,14 @@
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
-									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" />
 									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" />
@@ -283,9 +286,9 @@
 											<Text text="{ano_fiscal}" />
 											<Text text="{descricao}" />
 											<Text text="{data_pagamento}" />
-											<Text text="{acronimo}" />
 											<Text text="{tipo_transacao}" />
 											<Text text="{tipo_transacao_outros}" />
+											<Text text="{acronimo}" />
 											<Text 
 												textAlign="End"
 												text="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
