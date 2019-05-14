@@ -475,7 +475,10 @@ sap.ui.define(
 
 			navToTaxPackage: function (oEvent) {
 				this.getRouter().navTo("taxPackageListagemEmpresas",{
-					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({
+						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+					})
 				});
 			},
 

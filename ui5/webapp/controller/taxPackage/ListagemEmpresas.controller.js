@@ -51,7 +51,8 @@ sap.ui.define(
 
 				var oParametros = {
 					empresa: oEmpresa,
-					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
@@ -67,12 +68,14 @@ sap.ui.define(
 				}
 
 				var that = this;
-				var parametro = this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario;
+				var anoCalendario = this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario;
+				var nomeUsuario = this.fromURIComponent(oEvent.getParameter("arguments").parametros).nomeUsuario;
 
 				NodeAPI.listarRegistros("DominioAnoCalendario", function (response) {
 					if (response) {
 						that.getModel().setProperty("/DominioAnoCalendario", response);
-						that.getModel().setProperty("/AnoCalendarioSelecionado", parametro);
+						that.getModel().setProperty("/AnoCalendarioSelecionado", anoCalendario);
+						that.getModel().setProperty("/NomeUsuario", nomeUsuario);
 						that._atualizarDados();
 					}
 				});

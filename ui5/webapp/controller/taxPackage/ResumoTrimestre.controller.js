@@ -72,6 +72,8 @@ sap.ui.define(
 				var oParams = {};
 				oParams.oPeriodo = oPeriodo;
 				oParams.oEmpresa = this.getModel().getProperty("/Empresa");
+				oParams.nomeUsuario = this.getModel().getProperty("/NomeUsuario");
+				
 				oParams.oAnoCalendario = {
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
 					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
@@ -136,6 +138,8 @@ sap.ui.define(
 				var oParams = {};
 				oParams.oPeriodo = oPeriodo;
 				oParams.oEmpresa = this.getModel().getProperty("/Empresa");
+				oParams.nomeUsuario = this.getModel().getProperty("/NomeUsuario");
+			
 				oParams.oAnoCalendario = {
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
 					anoCalendario: this.byId("selectAnoCalendario").getSelectedItem().getText()
@@ -908,7 +912,8 @@ sap.ui.define(
 			navToPage2: function () {
 				this.getRouter().navTo("taxPackageListagemEmpresas", {
 					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 					})
 				});
 			},
@@ -918,7 +923,8 @@ sap.ui.define(
 
 				var oParametros = {
 					empresa: this.getModel().getProperty("/Empresa"),
-					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 
 				this.getRouter().navTo("taxPackageRequisicaoReabertura", {
@@ -936,6 +942,7 @@ sap.ui.define(
 				
 				this.getModel().setProperty("/Empresa", oParametros.empresa);
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.idAnoCalendario);
+				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 
 				var that = this;
 

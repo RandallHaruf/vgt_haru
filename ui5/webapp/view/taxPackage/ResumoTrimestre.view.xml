@@ -22,6 +22,9 @@
 					<Title text="{i18n>viewTAXResumoTrimestreTituloPagina}"/>
 				</f:heading>
 				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f:expandedContent>
+				<f:expandedContent>
 					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f:expandedContent>
 				<f:navigationActions>

@@ -74,7 +74,8 @@ sap.ui.define(
 			navToPage2: function () {
 				this.getRouter().navTo("taxPackageListagemEmpresas",{
 					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
+						idAnoCalendario: this.getModel().getProperty("/idAnoCalendario"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 					})
 				});
 			},
@@ -86,7 +87,8 @@ sap.ui.define(
 			_navToResumoTrimestre: function () {
 				var oParametros = {
 					empresa: this.getModel().getProperty("/empresa"),
-					idAnoCalendario: this.getModel().getProperty("/idAnoCalendario")
+					idAnoCalendario: this.getModel().getProperty("/idAnoCalendario"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 			
 				this.getRouter().navTo("taxPackageResumoTrimestre", {
@@ -101,6 +103,7 @@ sap.ui.define(
 				
 				this.getModel().setProperty("/empresa", oParametros.empresa);
 				this.getModel().setProperty("/idAnoCalendario", oParametros.anoCalendario);
+				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 				
 				NodeAPI.listarRegistros("RequisicaoReaberturaStatus", function (response) {
 					if (response) {

@@ -2925,7 +2925,8 @@ sap.ui.define(
 				this._confirmarCancelamento(function () {
 					that.getRouter().navTo("taxPackageListagemEmpresas", {
 						parametros: that.toURIComponent({
-							idAnoCalendario: that.getModel().getProperty("/AnoCalendario").idAnoCalendario
+							idAnoCalendario: that.getModel().getProperty("/AnoCalendario").idAnoCalendario,
+							nomeUsuario: that.getModel().getProperty("/NomeUsuario")
 						})
 					});
 				});
@@ -3004,6 +3005,8 @@ sap.ui.define(
 				this.getModel().setProperty("/TaxReconciliation/0/labelPeriodo", this._pegarLabelPeriodoTaxReconciliation(this.getModel().getProperty(
 					"/Periodo") ? this.getModel().getProperty("/Periodo").numero_ordem : ""));
 
+                this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
+                
 				var that = this;
 
 				NodeAPI.listarRegistros("DominioMoeda", function (response) {
@@ -3596,7 +3599,8 @@ sap.ui.define(
 
 				var oParametros = {
 					empresa: this.getModel().getProperty("/Empresa"),
-					idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 
 				this.getRouter().navTo("taxPackageResumoTrimestre", {

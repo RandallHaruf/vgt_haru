@@ -14,6 +14,9 @@
 				<f2:heading>
 					<Title text="Tax Package - {i18n>viewTAXMenu5}"/>
 				</f2:heading>
+				<f2:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f2:expandedContent>
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/empresa}" />
 				</f2:snappedContent>

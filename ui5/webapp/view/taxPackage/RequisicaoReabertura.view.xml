@@ -19,12 +19,15 @@
 				<f:heading>
 					<Title text="{i18n>viewTPRequisicaoReaberturaTituloPagina}"/>
 				</f:heading>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f:expandedContent>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/empresa/empresa}" />
+				</f:expandedContent>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>
-				<f:expandedContent>
-					<ObjectIdentifier title="Vale" />
-				</f:expandedContent>
 			</f:DynamicPageTitle>
 		</f:title>
 		<!--<f:header>
