@@ -34,6 +34,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataEnvio,
 			valor: req.body.dataEnvio ? req.body.dataEnvio : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -59,7 +62,6 @@ module.exports = {
 	},
 
 	atualizarRegistro: function (req, res) {
-
 		var oCondition = {
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
@@ -80,6 +82,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataEnvio,
 			valor: req.body.dataEnvio ? req.body.dataEnvio : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -95,6 +100,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -173,9 +181,9 @@ module.exports = {
 				}
 				sStatement += oWhere[i];
 			}
-			sStatement += " and (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) and (tblRequisicaoEncerramento.\"rownumber_req_encerramento\" = 1 or tblRequisicaoEncerramento.\"rownumber_req_encerramento\" is null)"
+			sStatement += " and (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) and (tblRequisicaoEncerramento.\"rownumber_req_encerramento\" = 1 or tblRequisicaoEncerramento.\"rownumber_req_encerramento\" is null)";
 		}else{
-			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) and (tblRequisicaoEncerramento.\"rownumber_req_encerramento\" = 1 or tblRequisicaoEncerramento.\"rownumber_req_encerramento\" is null)"
+			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null) and (tblRequisicaoEncerramento.\"rownumber_req_encerramento\" = 1 or tblRequisicaoEncerramento.\"rownumber_req_encerramento\" is null)";
 		}
 
 		sStatement += ' order by periodo."numero_ordem", rel."id_rel_tax_package_periodo" ';
@@ -189,6 +197,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	

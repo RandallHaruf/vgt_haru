@@ -22,6 +22,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.tipo,
 			valor: req.body.tipo ? req.body.tipo : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -59,6 +62,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.tipo,
 			valor: req.body.tipo ? req.body.tipo : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -74,6 +80,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -92,7 +101,10 @@ module.exports = {
 			+'FROM "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" as tipoObrigacao ';
 			
 		var oWhere = [];
-		var aParams = [];
+		var aParams = [{
+				isIdLog: true,
+				valor: req
+			}];
 
 		if (req.query.idRegistro) {
 			oWhere.push(' tipoObrigacao."id_dominio_obrigacao_acessoria_tipo" = ? ');
@@ -121,6 +133,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

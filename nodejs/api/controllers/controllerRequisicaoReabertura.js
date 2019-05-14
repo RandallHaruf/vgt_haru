@@ -6,7 +6,7 @@ var Email = require("../../utils/sendEmails");
 var disparaEmail = new Email();
 
 function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa,
-	sIdPeriodo, sNomeEmpresa) {
+	sIdPeriodo, sNomeEmpresa, req) {
 	// Inclui a requisição nova
 	var aParams = [sDataRequisicao, sIdUsuario, sNomeUsuario, sJustificativa, sResposta, sStatus, sIdEmpresa, sIdPeriodo, ''],
 		sQuery = ' INSERT INTO ' + ' "VGT.REQUISICAO_REABERTURA" ' +
@@ -19,7 +19,7 @@ function inserirRequisicao(oConnection, sDataRequisicao, sIdUsuario, sNomeUsuari
 	/*
 	// EMAIL DE AVISO PARA SOLICITACAO DE REABERTURA DE TRIMESTRE TTC
 	let vSubj = 'TTC - Period Reopening – ' + sNomeEmpresa + ' - Quarter';
-	let vHtml =	'<!DOCTYPE html><html><body><p style="font-family:arial!important;">Dear Administrator,<br><br>A user is requesting to reopen a closed period in the TTC module at <a href='" + document.domain + "'>Vale Global Tax (VGT)</a> Your approval is required<br><br>Thank you in advance.<br><br>Global Tax Team</p></body></html>';
+    let vHtml =	'<!DOCTYPE html><html><body><p style="font-family:arial!important;">Dear Administrator,<br><br>A user is requesting to reopen a closed period in the TTC module at <a href='" + document.domain + "'>Vale Global Tax (VGT)</a> Your approval is required<br><br>Thank you in advance.<br><br>Global Tax Team</p></body></html>';
 	disparaEmail.sendEmail({
 		to: "fms.catarino@gmail.com",
 		subject: vSubj,
@@ -140,6 +140,9 @@ module.exports = {
 			}, {
 				coluna: model.colunas.dataResposta,
 				valor: req.body.dataResposta ? req.body.dataResposta : null
+			}, {
+				isIdLog: true,
+				valor: req
 			}];
 
 			model.inserir(aParams, function (err, result) {
@@ -199,6 +202,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataResposta,
 			valor: req.body.dataResposta ? req.body.dataResposta : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -220,6 +226,8 @@ module.exports = {
 						if (err2) {
 							console.log(err2);
 						}
+					}, {
+						idUsuario: req
 					});
 				}
 
@@ -232,6 +240,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -296,6 +307,8 @@ module.exports = {
 
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

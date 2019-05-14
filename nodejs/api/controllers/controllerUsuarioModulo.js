@@ -22,6 +22,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.modulo,
 			valor: req.body.modulo ? Number(req.body.modulo) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -59,6 +62,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.modulo,
 			valor: req.body.modulo ? Number(req.body.modulo) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -74,6 +80,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -89,7 +98,7 @@ module.exports = {
 
 		var oWhere = [];
 		var aParams = [];
-		
+
 		if (req.query.idUsuario) {
 			oWhere.push(' tblRelUsuarioModulo."fk_usuario.id_usuario" = ? ');
 			aParams.push(req.query.idUsuario);
@@ -97,7 +106,7 @@ module.exports = {
 
 		if (oWhere.length > 0) {
 			sStatement += "where ";
-			
+
 			for (var i = 0; i < oWhere.length; i++) {
 				if (i !== 0) {
 					sStatement += " and ";
@@ -107,15 +116,16 @@ module.exports = {
 		}
 
 		model.execute({
-		statement: sStatement,
-		parameters: aParams
+			statement: sStatement,
+			parameters: aParams
 		}, function (err, result) {
-		if (err) {
-		res.send(JSON.stringify(err));
-		}
-		else {
-		res.send(JSON.stringify(result));
-		}
+			if (err) {
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(result));
+			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

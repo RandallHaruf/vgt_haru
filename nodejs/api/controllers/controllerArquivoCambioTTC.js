@@ -61,8 +61,7 @@ module.exports = {
 					}
 
 					closeConnection(conn);
-				}
-			);
+				});
 		} else {
 			res.send(JSON.stringify({
 				success: false,
@@ -98,7 +97,7 @@ module.exports = {
 				parameters: [
 						req.body.idMes,
 						req.body.idAnoCalendario
-					]
+				]
 			}, function (err, result) {
 				if (err) {
 					next(JSON.stringify(err));
@@ -110,8 +109,10 @@ module.exports = {
 						statement: 'delete from "VGT.ARQUIVO_CAMBIO_TTC" where "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_mes.id_dominio_mes" = ? and "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ?',
 						parameters: [
 								req.body.idMes,
-								req.body.idAnoCalendario
-							]
+								req.body.idAnoCalendario, {
+								isIdLog: true,
+								valor: req
+							}]
 					}, function (err, result) {
 						if (err) {
 							next(err);
@@ -127,8 +128,10 @@ module.exports = {
 								req.file.size,
 								req.file.originalname,
 								req.body.idMes,
-								req.body.idAnoCalendario
-							];
+								req.body.idAnoCalendario, {
+								isIdLog: true,
+								valor: req
+							}];
 							oConnection.exec(sQueryArquivo, aParamArquivo, function (err, result) {
 								if (err) {
 									console.log(err);
@@ -138,8 +141,10 @@ module.exports = {
 										statement: 'select "VGT.ARQUIVO_CAMBIO_TTC"."id_arquivo_cambio_ttc" from "VGT.ARQUIVO_CAMBIO_TTC" where "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_mes.id_dominio_mes" = ? and "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ?',
 										parameters: [
 												req.body.idMes,
-												req.body.idAnoCalendario
-											]
+												req.body.idAnoCalendario, {
+												isIdLog: true,
+												valor: req
+											}]
 									}, function (err, result) {
 										if (err) {
 											next(JSON.stringify(err));
@@ -179,6 +184,8 @@ module.exports = {
 						}
 					});
 				}
+			}, {
+				idUsuario: req
 			});
 		}
 		
@@ -324,7 +331,6 @@ module.exports = {
 						result: result
 					}));
 				}
-
 				closeConnection(conn);
 			});
 		} else {
@@ -492,7 +498,7 @@ module.exports = {
 
 	return Promise.all(aPromise);
 }*/
-function inserirCambio(oCambio, oConnection, idArquivo){
+function inserirCambio(oCambio, oConnection, idArquivo, req){
 	var idMoeda = pegarIdMoeda(oCambio["Moeda"], oConnection);
 	var sTblName = '"VGT.CAMBIO_TTC"';
 	var sStatement = "insert into ";
@@ -508,28 +514,25 @@ function inserirCambio(oCambio, oConnection, idArquivo){
 		],
 		{
 			connection: oConnection
-		}
-	);
+		});
 }
 
-function pegarIdMoeda(Acronimo, oConnection){
+function pegarIdMoeda(Acronimo, oConnection, req){
 	var result = db.executeStatementSync(
 		'Select "VGT.DOMINIO_MOEDA"."id_dominio_moeda" from "VGT.DOMINIO_MOEDA" where "VGT.DOMINIO_MOEDA"."acronimo" =  ?',
 		[Acronimo], {
 			connection: oConnection
-		}
-	);
+		});
 	
 	if (result && result.length) {
 		return result[0]["id_dominio_moeda"];
 	}
 }
 
-function deletarCambios(idArquivoVelho, oConnection){
+function deletarCambios(idArquivoVelho, oConnection, req){
 	db.executeStatementSync(
 		'delete from "VGT.CAMBIO_TTC" where "VGT.CAMBIO_TTC"."fk_arquivo_cambio_ttc.id_arquivo_cambio_ttc" = ?',
 		[idArquivoVelho ? idArquivoVelho : 0], {
-				connection: oConnection
-		}
-	);
+			connection: oConnection
+		});
 }

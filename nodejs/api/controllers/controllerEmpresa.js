@@ -88,6 +88,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkPais,
 			valor: req.body.fkPais ? Number(req.body.fkPais) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -182,6 +185,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkPais,
 			valor: req.body.fkPais ? Number(req.body.fkPais) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -206,6 +212,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -262,6 +271,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(auth.filtrarEmpresas(req,result, "id_empresa")));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };
@@ -334,12 +345,12 @@ function pegarPeriodoEdicaoCorrente(sTipo) {
 	return iNumeroOrdemPeriodoCorrente;
 }*/
 
-function vincularPeriodos(sIdEmpresa) {
+function vincularPeriodos(sIdEmpresa ,req) {
 	// Pega o ano corrente e o numero de ordem do período corrente
 	var iAnoCorrente = (new Date()).getFullYear();
 	//var iNumeroOrdemPeriodoCorrente = pegarNumeroOrdemPeriodoCorrente(iAnoCorrente);
-	
-	var sQuery, aParams, result;
+	var aParams = [];
+	var sQuery, result;
 	
 	// Vincular períodos do TTC ---------------------------------------
 	
@@ -473,7 +484,7 @@ function vincularPeriodos(sIdEmpresa) {
 	}
 }
 
-function vincularObrigacoes(sIdEmpresa, oObrigacoes) {
+function vincularObrigacoes(sIdEmpresa, oObrigacoes, req) {
 	if (oObrigacoes) {
 		if (oObrigacoes.inserir && oObrigacoes.inserir.length > 0) {
 			for (let i = 0; i < oObrigacoes.inserir.length; i++) {

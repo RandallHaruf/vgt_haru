@@ -66,6 +66,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataResposta,
 			valor: req.body.dataResposta ? req.body.dataResposta : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -121,6 +124,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.dataResposta,
 			valor: req.body.dataResposta ? req.body.dataResposta : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -158,6 +164,8 @@ module.exports = {
 									if (err2) {
 										console.log(err2);
 									}
+								}, {
+									idUsuario: req
 								});
 							};
 							
@@ -227,6 +235,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -298,6 +309,8 @@ module.exports = {
 				
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

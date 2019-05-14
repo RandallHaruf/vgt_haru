@@ -12,7 +12,7 @@ function excelDateToString (date) {
 		("00" + oDate.getUTCDate()).slice(-2);
 }
 
-function processarWorkbook (workbook) {		
+function processarWorkbook (workbook, req) {		
 	var worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
 	var aColunas = ["A", "B", "C", "D"];

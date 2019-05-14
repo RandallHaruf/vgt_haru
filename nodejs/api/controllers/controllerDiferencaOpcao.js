@@ -36,6 +36,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkDominioDiferencaTipo,
 			valor: req.body.fkDominioDiferencaTipo ? Number(req.body.fkDominioDiferencaTipo) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -76,6 +79,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkDominioDiferencaTipo,
 			valor: req.body.fkDominioDiferencaTipo ? Number(req.body.fkDominioDiferencaTipo) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -100,15 +106,15 @@ module.exports = {
 		});
 	},*/
 	excluirRegistro: function (req, res, next) {
-	model.delete(req.params.idRegistro)
-		.then((result) => {
-			res.status(200).json({
-				result: result
+		model.delete(req.params.idRegistro, req)
+			.then((result) => {
+				res.status(200).json({
+					result: result
+				});
+			})
+			.catch(function (err) {
+				next(err);
 			});
-		})
-		.catch(function (err) {
-			next(err);
-		});
 	},
 	deepQuery: function (req, res) {
 		var sStatement =
@@ -125,6 +131,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

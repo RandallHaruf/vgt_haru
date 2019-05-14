@@ -37,6 +37,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkRelTaxPackagePeriodo,
 			valor: req.body.fkRelTaxPackagePeriodo ? Number(req.body.fkRelTaxPackagePeriodo) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -86,6 +89,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkRelTaxPackagePeriodo,
 			valor: req.body.fkRelTaxPackagePeriodo ? Number(req.body.fkRelTaxPackagePeriodo) : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -134,6 +140,8 @@ module.exports = {
 											result: result3
 										}));
 									}
+								}, {
+									idUsuario: req
 								});	
 							}
 							else {
@@ -153,6 +161,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -225,6 +236,8 @@ module.exports = {
                 
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

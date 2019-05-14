@@ -29,6 +29,11 @@ module.exports = {
 	criarRegistro: (req, res, next) => {
 		try {
 			let aParam = utils.getAvailableFields(model, req.body);
+			
+			aParam.push({
+				isIdLog: true,
+				 valor: req
+			});
 
 			aParam = aParam.concat(utils.getIdentityFields(model));
 
@@ -81,6 +86,11 @@ module.exports = {
 			let oCondition = utils.getKeyFieldsInParams(model, req.params);
 
 			let aParam = utils.getAvailableFields(model, req.body);
+			
+			aParam.push({
+				isIdLog: true,
+				 valor: req
+			});
 
 			model.atualizar(oCondition, aParam, (err, result) => {
 				if (err) {
@@ -108,6 +118,11 @@ module.exports = {
 	excluirRegistro: (req, res, next) => {
 		try {
 			let aParam = utils.getKeyFieldsInParams(model, req.params);
+			
+			aParam.push({
+				isIdLog: true,
+				 valor: req
+			});
 
 			model.excluir(aParam, (err, result) => {
 				if (err) {

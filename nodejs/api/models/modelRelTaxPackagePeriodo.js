@@ -31,7 +31,7 @@ let oModel = db.model('VGT.REL_TAX_PACKAGE_PERIODO', {
 });
 
 oModel.exists = (idRelTaxPackagePeriodo) => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject, req) => {
 		oModel.listar([{
 			coluna: oModel.colunas.id,
 			valor: idRelTaxPackagePeriodo

@@ -263,6 +263,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	
@@ -565,6 +567,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	deepQueryLOSSSCHEDULE: function (req, res) {
@@ -723,6 +727,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	
@@ -912,6 +918,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	deepQueryDistinctCREDITSCHEDULE: function (req, res) {
@@ -1101,6 +1109,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	deepQueryDistinctAccountingResult: function (req, res) {
@@ -1280,6 +1290,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	deepQueryDistinctFiscalResult: function (req, res) {
@@ -1464,6 +1476,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	deepQueryDistinctIncomeTax: function (req, res) {
@@ -1643,6 +1657,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	deepQueryDistinctTemporaryAndPermanentDifferences: function (req, res) {
@@ -1856,6 +1872,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}	
 };

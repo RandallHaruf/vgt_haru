@@ -66,11 +66,11 @@ function adicionarAliquotas(req, iIdImposto, aValorAliquota, callback) {
 	const inserirValorAliquota = function (aParam) {
 		aParam.push({
 			coluna: modelValorAliquota.colunas.id
-		});
-		aParam.push({
+		}, {
 			isIdLog: true,
 			valor: req
 		});
+		
 		return new Promise(function (resolve, reject) {
 			modelValorAliquota.inserir(aParam, function (err, result) {
 				if (err) {
@@ -468,6 +468,8 @@ module.exports = {
 			else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

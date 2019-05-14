@@ -27,6 +27,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.flagAno,
 			valor: req.body.flagAno ? req.body.flagAno : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -67,6 +70,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.flagAno,
 			valor: req.body.flagAno ? req.body.flagAno : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -89,7 +95,7 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});*/
-		model.delete(req.params.idRegistro)
+		model.delete(req.params.idRegistro, req)
 			.then((result) => {
 				res.status(200).json({
 					result: result

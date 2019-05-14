@@ -21,6 +21,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.status,
 			valor: req.body.status ? req.body.status : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -55,6 +58,9 @@ module.exports = {
 		var aParams = [{
 			coluna: model.colunas.status,
 			valor: req.body.status ? req.body.status : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -70,6 +76,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));

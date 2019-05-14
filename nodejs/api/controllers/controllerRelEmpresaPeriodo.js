@@ -15,7 +15,6 @@ module.exports = {
 	},
 
 	criarRegistro: function (req, res) {
-
 		var aParams = [{
 			coluna: model.colunas.fkEmpresa,
 			valor: req.body.fkEmpresa ? req.body.fkEmpresa : null
@@ -25,6 +24,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.indicadorAtivo,
 			valor: req.body.indicadorAtivo ? req.body.indicadorAtivo : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -50,7 +52,6 @@ module.exports = {
 	},
 
 	atualizarRegistro: function (req, res) {
-
 		var oCondition = {
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
@@ -65,6 +66,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.indicadorAtivo,
 			valor: req.body.indicadorAtivo ? req.body.indicadorAtivo : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -80,6 +84,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -118,7 +125,7 @@ module.exports = {
 				+ 'from "VGT.REQUISICAO_REABERTURA" '
 			+ ') tblRequisicao '
 				+ 'on tblRequisicao."fk_empresa.id_empresa" = rel."fk_empresa.id_empresa" '
-				+ 'and tblRequisicao."fk_periodo.id_periodo" = rel."fk_periodo.id_periodo" '
+				+ 'and tblRequisicao."fk_periodo.id_periodo" = rel."fk_periodo.id_periodo" ';
 			
 		var oWhere = [];
 		var aParams = [];
@@ -152,9 +159,9 @@ module.exports = {
 				}
 				sStatement += oWhere[i];
 			}
-			sStatement += " and (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null)"
-		}else{
-			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null)"
+			sStatement += " and (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null)";
+		} else{
+			sStatement += " where (tblRequisicao.ROWNUMBER = 1 or tblRequisicao.ROWNUMBER is null)";
 		}
 		
 		sStatement += ' order by periodo."numero_ordem" ';
@@ -168,6 +175,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

@@ -19,7 +19,7 @@ module.exports = {
 		var conn = db.getConnection();
 		
 		conn.exec(
-			'select "id_arquivo", "mimetype", "tamanho", "data_upload", "nome_arquivo" from "VGT.ARQUIVO"', [],
+			'select "id_arquivo", "mimetype", "tamanho", "data_upload", "nome_arquivo" from "VGT.ARQUIVO"',
 			function (err, result) {
 				if (err) {
 					console.log(err);
@@ -57,8 +57,7 @@ module.exports = {
 					}
 					
 					closeConnection(conn);
-				}
-			);
+				});
 		}
 		else {
 			res.send(JSON.stringify({

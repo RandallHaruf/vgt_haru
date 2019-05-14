@@ -45,6 +45,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.anoObrigacao,
 			valor: req.body.anoObrigacao ? req.body.anoObrigacao : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -103,6 +106,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.anoObrigacao,
 			valor: req.body.anoObrigacao ? req.body.anoObrigacao : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -127,7 +133,7 @@ module.exports = {
 		});
 	},*/
 	excluirRegistro: function (req, res, next) {
-	model.delete(req.params.idRegistro)
+	model.delete(req.params.idRegistro, req)
 		.then((result) => {
 			res.status(200).json({
 				result: result
@@ -230,6 +236,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

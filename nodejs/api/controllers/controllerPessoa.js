@@ -30,6 +30,9 @@ module.exports = {
 		}, {
 			coluna: pessoa.colunas.altura,
 			valor: Number(iAltura)
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 		
 		pessoa.inserir(aParams, function (err, result) {
@@ -43,12 +46,10 @@ module.exports = {
 	},
 	
 	lerPessoa: function (req, res) {
-		pessoa.listar([
-			{
+		pessoa.listar([{
 				coluna: pessoa.colunas.id,
 				valor: req.params.idPessoa
-			}
-		], function (err, result) {
+			}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			}
@@ -81,6 +82,9 @@ module.exports = {
 		}, {
 			coluna: pessoa.colunas.altura,
 			valor: Number(iAltura)
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 		
 		pessoa.atualizar(oCondition, aParams, function (err, result) {
@@ -94,12 +98,13 @@ module.exports = {
 	},
 	
 	excluirPessoa: function (req, res) {
-		pessoa.excluir([
-			{
+		pessoa.excluir([{
 				coluna: pessoa.colunas.id,
 				valor: req.params.idPessoa
-			}	
-		], function (err, result) {
+			}, {
+				isIdLog: true,
+				valor: req
+		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			}

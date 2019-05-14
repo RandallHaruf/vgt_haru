@@ -56,11 +56,15 @@ const getEmpresas = function (sUserId) {
 	});
 };
 
-const registrarAcesso = function (idUsuario) {
+const registrarAcesso = function (idUsuario, res, req) {
 	db.executeStatement({
 		statement: 'upsert "VGT.ACESSO" ("fk_usuario.id_usuario", "datahora_acesso") '
 					+ 'values(?, CURRENT_TIMESTAMP) where "fk_usuario.id_usuario" = ? ', 
 		parameters: [idUsuario, idUsuario]
+	}, function (err, result) {
+		
+	}, {
+		idUsuario: req
 	});
 };
 

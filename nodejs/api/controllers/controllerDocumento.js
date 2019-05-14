@@ -41,7 +41,6 @@ module.exports = {
 					result: result
 				}));
 			}
-
 			closeConnection(conn);
 		});
 	},
@@ -64,8 +63,7 @@ module.exports = {
 					}
 
 					closeConnection(conn);
-				}
-			);
+				});
 		} else {
 			res.send(JSON.stringify({
 				success: false,
@@ -163,7 +161,6 @@ module.exports = {
 						result: result
 					}));
 				}
-
 				closeConnection(conn);
 			});
 		} else {
@@ -255,7 +252,6 @@ module.exports = {
 			oWhere.push(' tblModeloObrigacao."id_modelo" in (' + Interrogacoes2 + ') ');
 		}
 		
-		
 		if (oWhere.length > 0) {
 			sStatement += "where ";
 			
@@ -322,7 +318,8 @@ module.exports = {
 				+ 't."id_ano_fiscal_calculado", '
 				+ 't."ano_fiscal_calculado", '
 				+ 't."ind_conclusao", '
-				+ 't."data_conclusao" '
+				+ 't."data_conclusao", '
+				+ 't."data_upload" '
 				+ 'from ('
 				+ modelRespostaObrigacao.pegarQueryRespostaObrigacaoCalculada()
 				+ 'inner join "VGT.DOCUMENTO_OBRIGACAO" doc '
@@ -360,6 +357,8 @@ module.exports = {
 						result: auth.filtrarEmpresas(req, result, "id_empresa")
 					});
 				}
+			}, {
+				idUsuario: req
 			});
 		}
 		catch (e) {

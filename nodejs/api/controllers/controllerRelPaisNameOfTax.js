@@ -31,6 +31,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkNameOfTax,
 			valor: req.body.fkNameOfTax ? req.body.fkNameOfTax : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.inserir(aParams, function (err, result) {
@@ -80,7 +83,10 @@ module.exports = {
 	},*/
 
 	excluirRegistro: function (req, res) {
-		var aParams = [];
+		var aParams = [{
+			isIdLog: true,
+			valor: req
+		}];
 		
 		if (req.params.fkPais && req.params.fkPais != "-1") {
 			aParams.push({

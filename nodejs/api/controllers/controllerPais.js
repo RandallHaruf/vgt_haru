@@ -79,6 +79,9 @@ module.exports = {
 		}, {
 			coluna: pais.colunas.fkDomPaisRegiao,
 			valor: iFkDomPaisRegiao
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 		
 		pais.inserir(aParams, function (err, result) {
@@ -216,6 +219,9 @@ module.exports = {
 		}, {
 			coluna: pais.colunas.fkDomPaisRegiao,
 			valor: iFkDomPaisRegiao
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 		
 		pais.atualizar(oCondition, aParams, function (err, result) {
@@ -232,6 +238,9 @@ module.exports = {
 		pais.excluir([{
 			coluna: pais.colunas.id,
 			valor: req.params.idPais
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -309,6 +318,8 @@ module.exports = {
 			else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	
@@ -334,6 +345,8 @@ module.exports = {
 				else {
 					res.send(JSON.stringify(result));
 				}
+			}, {
+				idUsuario: req
 			});
 		}
 		else{
@@ -350,6 +363,8 @@ module.exports = {
 				else {
 					res.send(JSON.stringify(result));
 				}
+			}, {
+				idUsuario: req
 			});
 		}
 	}

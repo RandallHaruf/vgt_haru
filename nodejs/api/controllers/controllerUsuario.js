@@ -138,6 +138,9 @@ module.exports = {
 			}, {
 				coluna: model.colunas.emailGestor,
 				valor: req.body.emailGestor ? req.body.emailGestor : null
+			}, {
+				isIdLog: true,
+				valor: req
 			}];
 		
 			model.inserir(aParams, function (err, result) {
@@ -148,10 +151,10 @@ module.exports = {
 					var idUsuario = result[0].generated_id;
 		
 					Promise.all([
-						deleteRelUsuarios('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
-						inserirRelUsuario('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
-						deleteRelUsuarios('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas),
-						inserirRelUsuario('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas)
+						deleteRelUsuarios('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos, req),
+						inserirRelUsuario('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos, req),
+						deleteRelUsuarios('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas, req),
+						inserirRelUsuario('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas, req)
 						])
 						.then (function (aResponse) {
 							controllerEmailSend.comunicarSenha(req.body.email,req.body.nome,novaSenha);
@@ -226,6 +229,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.emailGestor,
 			valor: req.body.emailGestor ? req.body.emailGestor : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -235,10 +241,10 @@ module.exports = {
 				var idUsuario = req.params.idRegistro;
 
 				Promise.all([
-					deleteRelUsuarios('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
-					inserirRelUsuario('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos),
-					deleteRelUsuarios('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas),
-					inserirRelUsuario('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas)
+					deleteRelUsuarios('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos, req),
+					inserirRelUsuario('"VGT.REL_USUARIO_MODULO"', idUsuario, req.body.modulos, req),
+					deleteRelUsuarios('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas, req),
+					inserirRelUsuario('"VGT.REL_USUARIO_EMPRESA"', idUsuario, req.body.empresas, req)
 					])
 					.then (function (aResponse) {
 						res.send(JSON.stringify(result));
@@ -257,6 +263,9 @@ module.exports = {
 		model.excluir([{
 			coluna: model.colunas.id,
 			valor: req.params.idRegistro
+		}, {
+			isIdLog: true,
+			valor: req
 		}], function (err, result) {
 			if (err) {
 				res.send(JSON.stringify(err));
@@ -305,6 +314,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	},
 	
@@ -317,15 +328,18 @@ module.exports = {
 		
 		auth.encrypt(novaSenha)
 			.then((response) => {
+				console.log(novaSenha);
 				hash = response;
 				return pegarEmail(idUsuario);
 			})
 			.then((retorno) => {
+				console.log(222222);
 				email = retorno[0].email;
 				nome = retorno[0].nome;
 				return atualizarSenha(idUsuario, hash);
 			})
 			.then(() => {
+				console.log(33333);
 				return controllerEmailSend.comunicarSenha(email,nome,novaSenha);
 			})
 			.then(() => {
@@ -368,7 +382,7 @@ function pegarEmail(idUsuario) {
 	});
 }
 
-function atualizarSenha(idUsuario,sHash) {
+function atualizarSenha(idUsuario,sHash, req) {
 	var sStatement = 'UPDATE "VGT.USUARIO" SET "VGT.USUARIO"."pass" = \'' + sHash + '\' WHERE "VGT.USUARIO"."id_usuario" = ' + idUsuario;
 	return new Promise(function (resolve, reject) {
 		model.execute({
@@ -379,11 +393,13 @@ function atualizarSenha(idUsuario,sHash) {
 			} else {
 				resolve();
 			}
+		}, {
+			idUsuario: req
 		});
 	});
 }
 
-function deleteRelUsuarios(sTblName, iIdUsuario, aIdRels) {
+function deleteRelUsuarios(sTblName, iIdUsuario, aIdRels, req) {
 	var sStatement = "delete from " + sTblName + " ";
 	var sIdRels = "";
 	if (sTblName == '"VGT.REL_USUARIO_MODULO"') {
@@ -419,11 +435,13 @@ function deleteRelUsuarios(sTblName, iIdUsuario, aIdRels) {
 			} else {
 				resolve();
 			}
+		}, {
+			idUsuario: req
 		});
 	});
 }
 
-function inserirRelUsuario(sTblName, iIdUsuario, aIdRels) {
+function inserirRelUsuario(sTblName, iIdUsuario, aIdRels, req) {
 	
 	const inserir = function (idRel) {
 		var sStatement = "upsert ";
@@ -445,6 +463,8 @@ function inserirRelUsuario(sTblName, iIdUsuario, aIdRels) {
 				} else {
 					resolve();
 				}
+			}, {
+				idUsuario: req
 			});
 		});
 	};

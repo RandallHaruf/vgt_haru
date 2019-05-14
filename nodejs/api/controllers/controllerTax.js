@@ -40,8 +40,10 @@ module.exports = {
 		}, {
 			coluna: model.colunas.indRequerBeneficiaryCompany,
 			valor: req.body.indRequerBeneficiaryCompany ? req.body.indRequerBeneficiaryCompany : null
-		   }
-		];
+		 }, {
+			isIdLog: true,
+			valor: req
+		}];
 
 		model.inserir(aParams, function (err, result) {
 			if (err) {
@@ -107,6 +109,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.indRequerBeneficiaryCompany,
 			valor: req.body.indRequerBeneficiaryCompany ? req.body.indRequerBeneficiaryCompany : null
+		}, {
+			isIdLog: true,
+			valor: req
 		}];
 
 		model.atualizar(oCondition, aParams, function (err, result) {
@@ -129,7 +134,7 @@ module.exports = {
 				res.send(JSON.stringify(result));
 			}
 		});*/
-		model.delete(req.params.idRegistro)
+		model.delete(req.params.idRegistro, req)
 			.then((result) => {
 				res.status(200).json({
 					result: result
@@ -180,6 +185,8 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
+		}, {
+			idUsuario: req
 		});
 	}
 };

@@ -54,7 +54,7 @@ oModel.canDelete = function (entryId) {
 	});
 };
 
-oModel.delete = function (entryId) {
+oModel.delete = function (entryId, req) {
 	return new Promise((resolve, reject) => {
 		this.canDelete(entryId)
 			.then((bCanDelete) => {
@@ -62,6 +62,9 @@ oModel.delete = function (entryId) {
 					this.excluir([{
 						coluna: this.colunas.id,
 						valor: entryId
+					},{
+						isIdLog: true,
+						valor: req
 					}], (err, result) => {
 						if (err) {
 							reject(new Error('Erro no método "delete" do model "Name of Tax".\n' + err.message));

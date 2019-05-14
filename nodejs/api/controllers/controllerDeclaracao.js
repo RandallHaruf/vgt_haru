@@ -195,8 +195,7 @@ module.exports = {
 					}
 					
 					closeConnection(conn);
-				}
-			);
+				});
 		}
 		else {
 			res.send(JSON.stringify({
