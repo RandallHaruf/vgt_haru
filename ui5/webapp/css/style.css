@@ -225,7 +225,15 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 	text-overflow: ellipsis;
 }
 .sap-dennisseah-iconnumindicator-val {
-	left: 1.5px; 
+	left: 9%;; 
+	position: absolute; 
+	top: -11.58px; 
+	font-weight: bold;
+	font-family: arial;
+}
+
+.sap-dennisseah-iconnumindicator-val-pequeno {
+	left: 29%; 
 	position: absolute; 
 	top: -11.58px; 
 	font-weight: bold;

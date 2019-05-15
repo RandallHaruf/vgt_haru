@@ -26,7 +26,12 @@ sap.ui.define(
 
 			onAfterRendering: function () {
 				var val = this.getValue();
-				if (val !== 0) {
+				if (0 < val && val < 10) {
+					var num = $('<div class="sap-dennisseah-iconnumindicator-num"></div>');
+					num.attr('title', val);
+					num.html("<span class='sap-dennisseah-iconnumindicator-val-pequeno'>" + val + "</span>");
+					this.$().append(num);
+				} else if (val >= 10) {
 					var num = $('<div class="sap-dennisseah-iconnumindicator-num"></div>');
 					num.attr('title', val);
 					num.html("<span class='sap-dennisseah-iconnumindicator-val'>" + val + "</span>");
