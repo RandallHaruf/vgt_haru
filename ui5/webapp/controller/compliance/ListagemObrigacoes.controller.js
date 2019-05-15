@@ -51,6 +51,7 @@ sap.ui.define(
 				this.carregarFiltroAnoCalendario();
 				this.getModel().setProperty("/IdEmpresaSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
 				this.getModel().setProperty("/AnoCalendarioSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario);
+				this.getModel().setProperty("/NomeUsuario", this.fromURIComponent(oEvent.getParameter("arguments").parametros).nomeUsuario);
 				//this._atualizarDados();
 				this._atualizarDadosFiltrado();
 				//this.setBusy(this.byId("tabelaObrigacoes"), false);
@@ -344,7 +345,8 @@ sap.ui.define(
 			navToListagemRequisicoes: function () {
 				var oParametros = {
 					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
-					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 
 				this.getRouter().navTo("complianceListagemRequisicoes", {
@@ -384,7 +386,8 @@ sap.ui.define(
 			onNovaObrigacao: function (oEvent) {
 				var oParametros = {
 					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
-					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					anoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 				
 				this.getRouter().navTo("complianceFormularioNovaObrigacao", {
@@ -422,7 +425,8 @@ sap.ui.define(
 				this.setBusy(this.byId("tabelaObrigacoes"), true);
 				var oParametros = {
 					Obrigacao: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()),
-					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
+					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
 
 				this.getRouter().navTo("complianceFormularioDetalhesObrigacao", {

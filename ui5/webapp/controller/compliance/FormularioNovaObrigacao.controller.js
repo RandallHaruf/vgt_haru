@@ -67,7 +67,8 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							var oParametros = {
 								idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
-								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
+								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
+								nomeUsuario: that.getModel().getProperty("/NomeUsuario")
 							};
 
 							that.getRouter().navTo("complianceListagemObrigacoes", {
@@ -86,7 +87,7 @@ sap.ui.define(
       
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
 				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
-				
+				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 
 				this._carregarSelect("Empresa");
 				this._carregarSelect("ObrigacaoAcessoria?tipo=2");
@@ -218,7 +219,8 @@ sap.ui.define(
 					.then((result) => {
 						var oParametros = {
 							idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
-							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
+							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
+							nomeUsuario: that.getModel().getProperty("/NomeUsuario")
 						};
 
 						that.getRouter().navTo("complianceListagemObrigacoes", {

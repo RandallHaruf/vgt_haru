@@ -14,6 +14,9 @@
 				<f2:heading>
 					<Title text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}"/>
 				</f2:heading>
+				<f2:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f2:expandedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
 		<f2:header>

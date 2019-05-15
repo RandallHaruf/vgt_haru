@@ -484,7 +484,10 @@ sap.ui.define(
 
 			navToCompliance: function (oEvent) {
 				this.getRouter().navTo("complianceListagemObrigacoes",{
-					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({
+						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+					})
 				});
 			},
 
