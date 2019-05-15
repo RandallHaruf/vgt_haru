@@ -51,6 +51,7 @@ sap.ui.define(
 
 			onAtualizaInfo: function () {
 				this._atualizarDados();
+				$(".btnListaNotificacoes").click();
 			},
 
 			_onRouteMatched: function (oEvent) {
@@ -66,7 +67,7 @@ sap.ui.define(
 				var countObrig = 0,
 					countTTC = 0,
 					countTAX = 0;
-
+				
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1", function (response) { // 1 Obrigacao
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
@@ -938,6 +939,7 @@ sap.ui.define(
 			_carregarObjetos: function () {
 				sap.m.MessageToast.show("Carregar objetos");
 			},
+			
 			_retornaNovaDataFormatoBanco: function () {
 		        var year, month, day;
 		        var dataAgora = new Date();

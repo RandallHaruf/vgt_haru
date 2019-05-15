@@ -1,5 +1,5 @@
 <core:View height="100%" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:tnt="sap.tnt"
-	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:control="ui5ns.ui5.control"
 	controllerName="ui5ns.ui5.controller.admin.Inicio">
 	<tnt:ToolPage id="toolPage">
 		<tnt:header>
@@ -14,11 +14,14 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px"/>
 					</layoutData>
 				</ToolbarSpacer>
-				<Button icon="sap-icon://ui-notifications" tooltip="{i18n>viewAdminInicioNotificacoesTooltip}" type="Transparent" press="handleNotificationsPress">
+				<!--<Button icon="sap-icon://ui-notifications" tooltip="{i18n>viewAdminInicioNotificacoesTooltip}" type="Transparent" press="handleNotificationsPress">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>
 					</layoutData>
-				</Button>
+				</Button>-->
+				<!--<Text text="({/ContadorSoma/modelcountSoma})" />-->	
+				<control:NumericIcon src="sap-icon://ui-notifications" class="btnListaNotificacoes" value="{/ContadorSoma/modelcountSoma}" press="onAtualizarNotificacoes" />
+				<control:NumericIcon src="sap-icon://ui-notifications" press="handleNotificationsPress" tooltip="{i18n>viewAdminInicioNotificacoesTooltip}" value="{/ContadorSoma/modelcountSoma}" />
 				<Button text="{/NomeUsuario}" type="Transparent" press="handleUserNamePress">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>

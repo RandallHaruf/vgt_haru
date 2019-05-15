@@ -1,49 +1,37 @@
 sap.ui.define(
 	[
-		"sap/ui/core/Control"
+		"sap/ui/core/Icon"
 	],
-	function (Control) {
+	function (Icon) {
 		"use strict";
 
-		return Control.extend("ui5ns.ui5.control.NumericIcon", {
+		return Icon.extend("ui5ns.ui5.control.NumericIcon", {
 			metadata: {
 				properties: {
-					number: "int"
-				},
-				aggregations: {
-					icon: {
-						type: "sap.ui.core.Icon",
-						multiple: false
+					value: {
+						type: "int",
+						defaultValue: 0
 					}
 				}
 			},
 
-			renderer: function (oRm, oControl) {
-				oRm.write("<div");
-				oRm.writeControlData(oControl);
-				oRm.addClass("sapMFlexBox");
-				oRm.addClass("sapMFlexBoxAlignContentStretch");
-				oRm.addClass("sapMFlexBoxAlignItemsStretch");
-				oRm.addClass("sapMFlexBoxJustifyStart");
-				oRm.addClass("sapMFlexBoxWrapNoWrap");
-				oRm.addClass("sapMHBox");
-				oRm.writeClasses();
-				oRm.write(">");
+			init: function () {
+				this.addStyleClass('sap-dennisseah-iconnumindicator-icon');
+			},
 
-				var icon = oControl.getIcon();
-				if (icon) {
-					icon.setSize("1.2rem");
-					var color = icon.getColor() || "#000";
-					oRm.write("<div>");
-					oRm.renderControl(icon);
-					oRm.write("</div>");
-					oRm.write('<div class="hdbflowgraph-numeric-icon-text" style="color:' + color + '">');
-					var number = oControl.getNumber();
-					number = number ? number.toString() : "";
-					oRm.writeEscaped(number);
-					oRm.write("</div>");
+			renderer: function (oRm, oControl) {
+				oControl.setSize('25px');
+				sap.ui.core.IconRenderer.render.apply(this, arguments);
+			},
+
+			onAfterRendering: function () {
+				var val = this.getValue();
+				if (val !== 0) {
+					var num = $('<div class="sap-dennisseah-iconnumindicator-num"></div>');
+					num.attr('title', val);
+					num.html("<span class='sap-dennisseah-iconnumindicator-val'>" + val + "</span>");
+					this.$().append(num);
 				}
-				oRm.write("</div>");
 			}
 		});
 	}

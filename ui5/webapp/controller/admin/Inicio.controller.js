@@ -92,7 +92,9 @@ sap.ui.define(
 
 			handleNotificationsPress: function (oEvent) {
 				var that = this;
-
+				
+				this._carregarValoresNotificacoes();
+				
 				var countObrig = 0;
 				var countTTC = 0;
 				var countTAX = 0;
@@ -237,7 +239,8 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
-
+				this._carregarValoresNotificacoes();
+				
 				fetch(Constants.urlBackend + "verifica-auth", {
 						credentials: "include"
 					})
@@ -351,7 +354,55 @@ sap.ui.define(
 						key: "iframe"
 					}]
 				});
-			}
+			},
+			
+			_carregarValoresNotificacoes: function(){
+				var that = this;
+				
+				var countSoma = 0
+				Promise.all([
+					this.retornarPromessaViaCallback("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1"),
+					this.retornarPromessaViaCallback("DeepQuery/RequisicaoReabertura?&status=1"),
+					this.retornarPromessaViaCallback("DeepQuery/RequisicaoReaberturaTaxPackage?&status=1"),
+					NodeAPI.get("DeepQuery/RequisicaoEncerramentoPeriodoTaxPackage", {
+						queryString: {
+							status: 1
+						}
+					})
+					])
+					.then(function(response){
+						var rsp1 = response[0];
+						var rsp2 = response[1];
+						var rsp3 = response[2];
+						var rsp4 = JSON.parse(response[3]);
+						
+						var countSoma = rsp1.length + rsp2.length + rsp3.length + rsp4.length;
+						that.getModel().setProperty("/ContadorSoma", {
+							modelcountSoma: countSoma
+						});
+					})
+					.catch(function(err){
+						
+					});
+			},
+			
+			onAtualizarNotificacoes: function (oEvent)
+			{
+				this._carregarValoresNotificacoes();
+			},
+			
+			retornarPromessaViaCallback: function(sRoute){
+				return new Promise(function(resolve,reject){
+					NodeAPI.listarRegistros(sRoute, function (response) {
+						if (response) {
+							resolve(response);
+						}
+						else{
+							reject();
+						}
+					});	
+				});
+			},
 		});
 	}
 );

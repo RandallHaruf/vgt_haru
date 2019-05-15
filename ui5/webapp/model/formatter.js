@@ -18,7 +18,7 @@ sap.ui.define(
 					case "sap-icon://approvals": // enviado
 						return "green";
 					case "sap-icon://process": // em andamento
-						return "yellow";
+						return "#4285f4";
 					case "sap-icon://lateness": // aguardando aprovação de envio
 						return "orange";
 					case "sap-icon://decline": // fechado não enviado
