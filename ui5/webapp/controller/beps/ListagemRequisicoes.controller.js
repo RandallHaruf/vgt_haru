@@ -42,7 +42,8 @@ sap.ui.define(
 				this.getRouter().navTo("bepsListagemObrigacoes", {
 					parametros: this.toURIComponent({
 						idEmpresaCalendario: this.getModel().getProperty("/IdEmpresaSelecionado"),
-						idAnoCalendario: this.getModel().getProperty("/IdAnoSelecionado")
+						idAnoCalendario: this.getModel().getProperty("/IdAnoSelecionado"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 					})
 				});
 			},
@@ -169,6 +170,8 @@ sap.ui.define(
 				var that = this;
 				this.getModel().setProperty("/IdAnoSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).anoCalendario);
 				this.getModel().setProperty("/IdEmpresaSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).empresa);
+				this.getModel().setProperty("/NomeUsuario", this.fromURIComponent(oEvent.getParameter("arguments").parametros).nomeUsuario);
+				
 				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
 				
 				NodeAPI.listarRegistros("DominioRequisicaoModeloObrigacaoStatus", function (response) {

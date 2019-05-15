@@ -96,7 +96,8 @@ sap.ui.define(
 
 						var oParametros = {
 							idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
-							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
+							idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
+							nomeUsuario: that.getModel().getProperty("/NomeUsuario")
 						};
 
 						that.getRouter().navTo("bepsListagemObrigacoes", {
@@ -129,6 +130,7 @@ sap.ui.define(
 
 				this.getModel().setProperty("/AnoCalendarioSelecionado", oParametros.anoCalendario);
 				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
+				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 
 				this._carregarSelect("Empresa");
 				this._carregarSelect("DominioPais");
@@ -298,7 +300,8 @@ sap.ui.define(
 						if (sap.m.MessageBox.Action.OK === oAction) {
 							var oParametros = {
 								idEmpresaCalendario: that.getModel().getProperty("/IdEmpresaSelecionado"),
-								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado")
+								idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
+								nomeUsuario: that.getModel().getProperty("/NomeUsuario")
 							};
 
 							that.getRouter().navTo("bepsListagemObrigacoes", {

@@ -134,7 +134,8 @@ sap.ui.define(
             onVoltarParaListagem: function () {
 				this.getRouter().navTo("bepsListagemObrigacoes", {
 					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente")
+						idAnoCalendario: this.getModel().getProperty("/AnoSelecionadoAnteriormente"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 					})
 				});
 			},
@@ -525,6 +526,7 @@ sap.ui.define(
 				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));				
                 this.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
+                this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 				
 				if (!idObrigacao) {
 					NodeAPI.pCriarRegistro('RespostaObrigacao', {

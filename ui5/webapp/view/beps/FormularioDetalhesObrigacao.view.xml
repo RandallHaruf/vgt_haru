@@ -13,7 +13,10 @@
 				</f2:breadcrumbs>
 				<f2:heading>
 					<Title text="Beps - {i18n>viewFormularioComplianceBepsFormularioDetalheObrigacao}"/>
-				</f2:heading>				
+				</f2:heading>
+				<f2:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f2:expandedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
 		<f2:header>

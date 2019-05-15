@@ -493,7 +493,10 @@ sap.ui.define(
 
 			navToBeps: function (oEvent) {
 				this.getRouter().navTo("bepsListagemObrigacoes",{
-					parametros: this.toURIComponent({idAnoCalendario: this.getModel().getProperty("/idAnoAtual")})
+					parametros: this.toURIComponent({
+						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+					})
 				});
 			},
 

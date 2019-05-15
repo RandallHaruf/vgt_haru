@@ -12,6 +12,9 @@
 				<f:heading>
 					<Title text="{i18n>viewBepsListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}" />
+				</f:expandedContent>
 				<f:navigationActions>
 					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
