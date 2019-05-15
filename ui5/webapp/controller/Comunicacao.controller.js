@@ -12,7 +12,10 @@ sap.ui.define(
 					corpo: null,
 					bEmailButton: true
 				}));
+				
+				this.getRouter().getRoute("comunicacao").attachPatternMatched(this._onRouteMatched, this);
 			},
+		
 			onEnviarMensagem: function (oEvent) {
 				//sap.m.MessageToast.show(this.getResourceBundle().getText("viewEnviarMensagem"));
 				var assunto = "Comunication - " + this.getModel().getProperty("/assunto");
@@ -57,6 +60,23 @@ sap.ui.define(
 						}
 					}
 				});*/
+			},
+
+			_onRouteMatched: function (oEvent) {
+				fetch(Constants.urlBackend + "verifica-auth", {
+						credentials: "include"
+					})
+					.then((res) => {
+						res.json()
+							.then((response) => {
+								if (response.success) {
+									this.getModel().setProperty("/NomeUsuario", response.nome);
+								} else {
+									MessageToast.show(response.error.msg);
+									this.getRouter().navTo("Login");
+								}
+							})
+					})
 			},
 
 			navToHome: function () {

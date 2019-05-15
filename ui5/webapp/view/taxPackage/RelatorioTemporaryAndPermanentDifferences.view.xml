@@ -1,53 +1,43 @@
-<mvc:View controllerName="ui5ns.ui5.controller.taxPackage.RelatorioTemporaryAndPermanentDifferences" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
+<mvc:View controllerName="ui5ns.ui5.controller.taxPackage.RelatorioTemporaryAndPermanentDifferences" height="100%"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f"
+	xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
 	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
 		<!-- DynamicPage Title -->
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome" />
+						<Link text="Home" press="navToHome"/>
 						<!--<Link text="Tax Package" press="navToPage2" />-->
-						<Link text="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" enabled="false"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" visible = "false" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" save="onSaveView" manage="onManageView" select ="onSelectView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" visible="false"
+						standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" save="onSaveView" manage="onManageView" select="onSelectView"></vm:VariantManagement>
 					<HBox justifyContent="Center" alignItems="Center">
-						<Title text="{/NomeReport}" />		
-						<Button
-						id="TemplateSet"
-						icon = "sap-icon://slim-arrow-down"
-						class="sapUiSmallMarginEnd"
-						type="Transparent"
-						press="onDialogOpen"/>							
-					</HBox>				
+						<Title text="{/NomeReport}"/>
+						<Button id="TemplateSet" icon="sap-icon://slim-arrow-down" class="sapUiSmallMarginEnd" type="Transparent" press="onDialogOpen"/>
+					</HBox>
 				</f:heading>
 				<f:actions>
-					<Text 
-						text="{i18n>viewRelatorioExportar}"	/>
+					<Text text="{i18n>viewRelatorioExportar}"/>
 					<!--<Button
 						text="{i18n>viewRelatorioImprimir}"
 						type="Transparent"
 						icon="sap-icon://print" />-->
-					<Button
-						text="CSV"
-						type="Transparent"
-						press="onGerarCsv"/>
-					<Button
-						text="TXT"
-						type="Transparent"
-						press="onGerarTxt"/>
-					<Button
-						text="XLS"
-						type="Transparent"
-						press="onGerarXlsx"/>
+					<Button text="CSV" type="Transparent" press="onGerarCsv"/>
+					<Button text="TXT" type="Transparent" press="onGerarTxt"/>
+					<Button text="XLS" type="Transparent" press="onGerarXlsx"/>
 					<!--<Button
 						text="{i18n>viewRelatorioExportar} PDF"
 						type="Transparent"/>-->
 				</f:actions>
+				<f:expandedContent>
+					<ObjectIdentifier title="{/NomeUsuario}"></ObjectIdentifier>
+				</f:expandedContent>
 				<f:navigationActions>
-					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
+					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 			</f:DynamicPageTitle>
 		</f:title>
@@ -55,60 +45,62 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar id="filterbar" showFilterConfiguration="true" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="false">
+					<fb:FilterBar id="filterbar" showFilterConfiguration="true" tooltip="teste" reset="onReset" search="onSearch" useToolbar="false"
+						showGoOnFB="false">
 						<fb:filterItems>
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
-									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' ,templateShareable:true}" selectedKeys="{/IdEmpresasSelecionadas}">
+									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' ,templateShareable:true}"
+										selectedKeys="{/IdEmpresasSelecionadas}">
 										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
-									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' ,templateShareable:true}" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
+									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' ,templateShareable:true}"
+										selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
 										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
-									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' ,templateShareable:true}" selectedKeys="{/IdPeriodoSelecionadas}">
+									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' ,templateShareable:true}"
+										selectedKeys="{/IdPeriodoSelecionadas}">
 										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
 								<fb:control>
-									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' ,templateShareable:true}" selectedKeys="{/IdMoedaSelecionadas}">
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' ,templateShareable:true}"
+										selectedKeys="{/IdMoedaSelecionadas}">
 										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="{i18n>viewGeralTipo}">
 								<fb:control>
-									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/TipoDiferenca' ,templateShareable:true}" selectedKeys="{/IdTipoDiferencaSelecionadas}">
+									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/TipoDiferenca' ,templateShareable:true}"
+										selectedKeys="{/IdTipoDiferencaSelecionadas}">
 										<core:Item key="{tblDiferencaOpcao.id_diferenca_opcao}" text="{tblDiferencaOpcao.nome}"/>
 									</MultiComboBox>
 								</fb:control>
-							</fb:FilterItem>							
+							</fb:FilterItem>
 							<fb:FilterItem name="F" label="{i18n>viewGeralDiferencas}">
 								<fb:control>
-									<MultiComboBox id="selectDiferencas" selectionFinish="onSelectChange" items="{ path: '/DominioTipoDiferenca' ,templateShareable:true}" selectedKeys="{/IdDominioTipoDiferencaSelecionadas}">
+									<MultiComboBox id="selectDiferencas" selectionFinish="onSelectChange" items="{ path: '/DominioTipoDiferenca' ,templateShareable:true}"
+										selectedKeys="{/IdDominioTipoDiferencaSelecionadas}">
 										<core:Item key="{tblDominioDiferencaTipo.id_dominio_diferenca_tipo}" text="{tblDominioDiferencaTipo.tipo}"/>
 									</MultiComboBox>
 								</fb:control>
-							</fb:FilterItem>							
+							</fb:FilterItem>
 						</fb:filterItems>
 					</fb:FilterBar>
-						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
-								<Button
-								id="GerarRelatorio"
-								text="{i18n>viewGeralBtnRelatorioTaxP}"
-								class="sapUiSmallMarginEnd"
-								type="Emphasized"
-								press="onGerarRelatorio"/>
-						</HBox>		
+					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
+						<Button id="GerarRelatorio" text="{i18n>viewGeralBtnRelatorioTaxP}" class="sapUiSmallMarginEnd" type="Emphasized" press="onGerarRelatorio"/>
+					</HBox>
 				</f:content>
 			</f:DynamicPageHeader>
 		</f:header>
@@ -140,7 +132,7 @@
 						</Column>
 						<Column width="{/remtblDominioDiferencaTipo.tipo}" hAlign="Center">
 							<Text text="{i18n>viewGeralDiferencas}" textAlign="Center"/>
-						</Column>			
+						</Column>
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -151,15 +143,8 @@
 								<Text text="{tblDominioMoeda.acronimo}"/>
 								<Text text="{tblDiferencaOpcao.nome}"/>
 								<Text text="{tblDiferenca.outro}"/>
-								<Text
-								text="{
-								  path: 'tblRelTaxReconciliationDiferenca.valor',
-								  type: 'sap.ui.model.type.Float',
-								  formatOptions: {
-					                 maxFractionDigits: 2
-								  }
-								}" />
-								<Text text="{tblDominioDiferencaTipo.tipo}"/>							
+								<Text text="{ path: 'tblRelTaxReconciliationDiferenca.valor', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 } }"/>
+								<Text text="{tblDominioDiferencaTipo.tipo}"/>
 							</cells>
 						</ColumnListItem>
 					</items>

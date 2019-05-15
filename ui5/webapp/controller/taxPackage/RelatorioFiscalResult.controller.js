@@ -54,6 +54,21 @@ sap.ui.define([
 				this.mostrarAcessoRapidoInception();
 			}
 			
+			fetch(Constants.urlBackend + "verifica-auth", {
+					credentials: "include"
+				})
+				.then((res) => {
+					res.json()
+						.then((response) => {
+							if (response.success) {
+								this.getModel().setProperty("/NomeUsuario", response.nome);
+							} else {
+								MessageToast.show(response.error.msg);
+								this.getRouter().navTo("Login");
+							}
+						})
+				})
+			
 			this.onExit();
 		},	
 		

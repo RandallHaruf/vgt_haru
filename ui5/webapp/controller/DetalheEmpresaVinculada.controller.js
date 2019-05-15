@@ -48,6 +48,7 @@ sap.ui.define(
 							aResponse["empresa"]["tipo_societario"] = Utils.traduzEmpresaTipoSocietario(aResponse["empresa"]["id_dominio_empresa_tipo_societario"],this);								
 			
 				this.getModel().setProperty("/empresa", oParametros.empresa);
+				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 			}
 		});
 	}

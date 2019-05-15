@@ -45,13 +45,7 @@ sap.ui.define([
 				.catch(function (err) {
 					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
 				});			
-			
-			
-			
-			
-			
-			
-			
+				
 			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
 		},
 		_handleRouteMatched: function () {
@@ -63,6 +57,21 @@ sap.ui.define([
 				this.getModel().setProperty("/isIframe",false);
 			}
 			this.onExit();
+			
+			fetch(Constants.urlBackend + "verifica-auth", {
+						credentials: "include"
+					})
+					.then((res) => {
+						res.json()
+							.then((response) => {
+								if (response.success) {
+									this.getModel().setProperty("/NomeUsuario", response.nome);
+								} else {
+									MessageToast.show(response.error.msg);
+									this.getRouter().navTo("Login");
+								}
+							})
+					})
 		},
 
 		navToHome: function () {
