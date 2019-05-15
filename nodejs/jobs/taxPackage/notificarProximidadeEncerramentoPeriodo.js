@@ -7,9 +7,9 @@ const disparaEmail = new Email();
 
 const send_Not_Email = (numOrdem, qtdDia) => {
 	// PROD
-	var caminho = "https://tenti-tecnologia-e-engenharia-ltda---epp-prod-ui5.cfapps.eu10.hana.ondemand.com/ui5/index.html";
+	//var caminho = "https://tenti-tecnologia-e-engenharia-ltda---epp-prod-ui5.cfapps.eu10.hana.ondemand.com/ui5/index.html";
 	// DEV
-	//var caminho = "https://tenti-tecnologia-e-engenharia-ltda---epp-dev-ui5.cfapps.eu10.hana.ondemand.com/ui5/index.html";
+	var caminho = "https://tenti-tecnologia-e-engenharia-ltda---epp-dev-ui5.cfapps.eu10.hana.ondemand.com/ui5/index.html";
 
 	let anoCal = (numOrdem === 4) ? (new Date()).getFullYear() - 1 : (new Date()).getFullYear();
 

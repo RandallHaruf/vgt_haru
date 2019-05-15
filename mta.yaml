@@ -1,6 +1,6 @@
 ID: app
 _schema-version: '3.1'
-version: 0.1.11
+version: 1.0
 modules:
   - name: nodejs
     type: nodejs
@@ -14,7 +14,7 @@ modules:
       - name: hdi_hanadb
       - name: uaa_app
     parameters:
-      memory: 256M
+      memory: 512M
   - name: hanadb
     type: hdb
     path: hanadb
@@ -27,7 +27,7 @@ modules:
     path: ui5
     parameters:
       disk-quota: 512M
-      memory: 512M
+      memory: 256M
     build-parameters:
       builder: grunt
     requires:
