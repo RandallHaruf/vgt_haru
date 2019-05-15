@@ -224,6 +224,22 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.sap-dennisseah-iconnumindicator-num-grande {
+	position: absolute;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    width: 17px;
+    height: 17px;
+    top: 2px;
+    left: 24px;
+    border-radius: 100%;
+    border: 1px solid red;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .sap-dennisseah-iconnumindicator-val {
 	left: 9%;; 
 	position: absolute; 
@@ -238,6 +254,14 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 	top: -11.58px; 
 	font-weight: bold;
 	font-family: arial;
+}
+
+.sap-dennisseah-iconnumindicator-val-grande {
+	left: -1%;
+    position: absolute;
+    top: -9.58px;
+    font-weight: bold;
+    font-family: arial;
 }
 
 .btnListaNotificacoes {

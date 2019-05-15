@@ -31,10 +31,15 @@ sap.ui.define(
 					num.attr('title', val);
 					num.html("<span class='sap-dennisseah-iconnumindicator-val-pequeno'>" + val + "</span>");
 					this.$().append(num);
-				} else if (val >= 10) {
+				} else if (val >= 10 && val <= 99) {
 					var num = $('<div class="sap-dennisseah-iconnumindicator-num"></div>');
 					num.attr('title', val);
 					num.html("<span class='sap-dennisseah-iconnumindicator-val'>" + val + "</span>");
+					this.$().append(num);
+				} else if (val >= 100) {
+					var num = $('<div class="sap-dennisseah-iconnumindicator-num-grande"></div>');
+					num.attr('title', val);
+					num.html("<span class='sap-dennisseah-iconnumindicator-val-grande'>" + val + "</span>");
 					this.$().append(num);
 				}
 			}
