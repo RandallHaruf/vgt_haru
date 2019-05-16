@@ -148,6 +148,31 @@ sap.ui.define(
 				sap.m.MessageBox.error(msg, {
 					title: "Error"
 				});
+			},
+			
+			setUpRouteMatched: function (sRouteName) {
+				if (this._onRouteMatched) {
+					this.getRouter().getRoute(sRouteName).attachPatternMatched(this._routeMatched, this);	
+				}
+				else {
+					console.log("No _onRouteMatched method defined");
+				}
+			},
+			
+			navTo: function (sRouteName, oParam) {
+				if (oParam) {
+					this.getRouter().navTo(sRouteName, {
+						parametros: this.toURIComponent(oParam)
+					});
+				}
+				else {
+					this.getRouter().navTo(sRouteName);
+				}
+			},
+			
+			_routeMatched: function (oEvent) {
+				var parametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
+				this._onRouteMatched(parametros);
 			}
 		});
 	}
