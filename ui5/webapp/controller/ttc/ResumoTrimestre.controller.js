@@ -458,21 +458,21 @@ sap.ui.define(
 					empresa: oPeriodo["fk_empresa.id_empresa"],
 					periodo: oPeriodo.id_periodo
 				}).then(function (res) {
-					
+
 					var isPendente = false;
-					
+
 					if (res.length > 0)
 						isPendente = true;
-                    
-                    oParams.oPeriodo = oPeriodo;
+
+					oParams.oPeriodo = oPeriodo;
 					oParams.oEmpresa = that.getModel().getProperty("/Empresa");
-					oParams.isPendente =  isPendente;
+					oParams.isPendente = isPendente;
 					oParams.nomeUsuario = that.getModel().getProperty("/NomeUsuario");
 					oParams.oAnoCalendario = {
 						idAnoCalendario: that.getModel().getProperty("/AnoCalendarioSelecionado"),
 						anoCalendario: that.byId("selectAnoCalendario").getSelectedItem().getText()
 					};
-                    
+
 					that.getRouter().navTo("ttcVisualizacaoTrimestre", {
 						oParameters: that.toURIComponent(oParams)
 					});
@@ -558,61 +558,121 @@ sap.ui.define(
 				aIdToolbar[3] = "toolbarTerceiroPeriodo";
 				aIdToolbar[4] = "toolbarQuartoPeriodo";
 
-				NodeAPI.listarRegistros(sEntidade, function (response) {
-					that.byId(aIdToolbar[1]).removeAllContent();
-					that.byId(aIdToolbar[2]).removeAllContent();
-					that.byId(aIdToolbar[3]).removeAllContent();
-					that.byId(aIdToolbar[4]).removeAllContent();
-
-					if (response) {
-						for (var i = 0; i < response.length; i++) {
-							var oPeriodo = response[i];
-
-							if (that.isIFrame()) {
-								that._popularToolbarInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
-							} else {
-								if (oPeriodo.ind_ativo) {
-									that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo, usuario);
-								} else {
-									that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
-								}
-							}
-							oPeriodo["periodo_traduzido"] = Utils.traduzTrimestreTTC(oPeriodo["numero_ordem"], that);
-						}
-					}
-				});
-
-				this._setBusy(true);
-
 				var oAnoCalendario = this.getModel().getProperty("/DominioAnoCalendario").find(function (obj) {
 					return obj.id_dominio_ano_calendario === Number(sIdAnoCalendario);
 				});
 
-				NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + JSON.stringify(oAnoCalendario),
-					function (response) {
-						if (response) {
-							var aKeys = Object.keys(response);
-							for (var i = 0, length = aKeys.length; i < length; i++) {
-								var sKey = aKeys[i];
+				const listarRelacionamento = function () {
+					return new Promise(function (resolve, reject) {
+						NodeAPI.listarRegistros(sEntidade, function (response) {
+							that.byId(aIdToolbar[1]).removeAllContent();
+							that.byId(aIdToolbar[2]).removeAllContent();
+							that.byId(aIdToolbar[3]).removeAllContent();
+							that.byId(aIdToolbar[4]).removeAllContent();
 
-								var aPagamento = response[sKey];
+							if (response) {
+								for (var i = 0; i < response.length; i++) {
+									var oPeriodo = response[i];
 
-								for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
-									var oPagamento = aPagamento[j];
-
-									oPagamento.categoria = Utils.traduzCategoriaPagamento(oPagamento.categoria, that);
-
-									oPagamento.primeiroValor = (oPagamento.primeiroValor ? parseInt(oPagamento.primeiroValor, 10) : 0);
-									oPagamento.segundoValor = (oPagamento.segundoValor ? parseInt(oPagamento.segundoValor, 10) : 0);
-									oPagamento.terceiroValor = (oPagamento.terceiroValor ? parseInt(oPagamento.terceiroValor, 10) : 0);
-									oPagamento.total = (oPagamento.total ? parseInt(oPagamento.total, 10) : 0);
+									if (that.isIFrame()) {
+										that._popularToolbarInception(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+									} else {
+										if (oPeriodo.ind_ativo) {
+											that._popularToolbarPeriodoCorrente(aIdToolbar[oPeriodo.numero_ordem], oPeriodo, usuario);
+										} else {
+											that._popularToolbarPeriodoFechado(aIdToolbar[oPeriodo.numero_ordem], oPeriodo);
+										}
+									}
+									oPeriodo["periodo_traduzido"] = Utils.traduzTrimestreTTC(oPeriodo["numero_ordem"], that);
 								}
 							}
-							that.getModel().setProperty("/Resumo", response);
-						}
 
-						that._setBusy(false);
+							resolve(response);
+						});
 					});
+				};
+
+				const listarResumo = function () {
+					return new Promise(function (resolve, reject) {
+						that._setBusy(true);
+
+						NodeAPI.listarRegistros("ResumoTrimestreTTC?empresa=" + sIdEmpresa + "&anoCalendario=" + JSON.stringify(oAnoCalendario),
+							function (response) {
+								if (response) {
+
+									var aKeys = Object.keys(response);
+									var oPagamento = {};
+
+									for (var i = 0, length = aKeys.length; i < length; i++) {
+										var sKey = aKeys[i];
+
+										var aPagamento = response[sKey];
+
+										for (var j = 0, length2 = aPagamento.length; j < length2; j++) {
+											oPagamento = aPagamento[j];
+
+											oPagamento.categoria = Utils.traduzCategoriaPagamento(oPagamento.categoria, that);
+
+											oPagamento.primeiroValor = (oPagamento.primeiroValor ? parseInt(oPagamento.primeiroValor, 10) : 0);
+											oPagamento.segundoValor = (oPagamento.segundoValor ? parseInt(oPagamento.segundoValor, 10) : 0);
+											oPagamento.terceiroValor = (oPagamento.terceiroValor ? parseInt(oPagamento.terceiroValor, 10) : 0);
+											oPagamento.total = (oPagamento.total ? parseInt(oPagamento.total, 10) : 0);
+										}
+										//}
+									}
+									that.getModel().setProperty("/Resumo", response);
+								}
+
+								that._setBusy(false);
+								resolve(response);
+							});
+					});
+				};
+
+				Promise.all([
+					listarRelacionamento(),
+					listarResumo()
+				]).then(function (result) {
+					if (result) {
+						var relacionamentos = result[0];
+						var resumo = result[1];
+						let oPagamento = {
+							categoria: "-",
+							primeiroValor: 0,
+							segundoValor: 0,
+							terceiroValor: 0,
+							total: 0,
+							id_classe: 0,
+							id_moeda: 0,
+							moeda: "N/A"
+						};
+						var sChaveResumo;
+
+						for (var i = 0; i < relacionamentos.length; i++) {
+							switch (relacionamentos[i].numero_ordem) {
+								case 1:
+									sChaveResumo = "PrimeiroPeriodo";
+									break;
+								case 1:
+									sChaveResumo = "SegundoPeriodo";
+									break;
+								case 1:
+									sChaveResumo = "TerceiroPeriodo";
+									break;
+								case 1:
+									sChaveResumo = "QuartoPeriodo";
+									break;
+							}
+							
+							if (!resumo[sChaveResumo].length && relacionamentos[i].data_enviado != null) {
+								resumo[sChaveResumo].push(oPagamento);
+							}
+						}
+						that.getModel().refresh();
+					}
+				}).catch(function (error) {
+					console.log(error);
+				});
 			},
 
 			_popularToolbarInception: function (sIdToolbar, oPeriodo) {

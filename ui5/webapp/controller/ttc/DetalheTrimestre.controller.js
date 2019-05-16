@@ -50,7 +50,7 @@ sap.ui.define(
 					} else {
 						sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreErro") + response.error.message);
 					}
-				});
+				}, true);
 			},
 
 			onSalvar: function (oEvent) {
@@ -63,7 +63,7 @@ sap.ui.define(
 					} else {
 						sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreErro") + response.error.message);
 					}
-				});
+				}, false);
 			},
 
 			onCancelar: function (oEvent) {
@@ -213,7 +213,8 @@ sap.ui.define(
 							}
 
 							dialog.close();
-							that.getModel().setProperty(sPath.toUpperCase().indexOf("BORNE") > -1 ? "/ContadorBorne" : "/ContadorCollected", aDadosPagamentos.length);
+							that.getModel().setProperty(sPath.toUpperCase().indexOf("BORNE") > -1 ? "/ContadorBorne" : "/ContadorCollected",
+								aDadosPagamentos.length);
 						}
 					}),
 					endButton: new sap.m.Button({
@@ -275,12 +276,11 @@ sap.ui.define(
 				}*/
 				if (oPagamento["ind_requer_beneficiary_company"]) {
 					if (oPagamento.entidade_beneficiaria == "" || oPagamento.entidade_beneficiaria == null) {
-						oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;;	
-					}else{
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;;
+					} else {
 						oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
 					}
-				} 
-				else{
+				} else {
 					oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
 				}
 			},
@@ -566,7 +566,7 @@ sap.ui.define(
 				var sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
 				var sIdPeriodo = this.getModel().getProperty("/Periodo").id_periodo;
 				var sIdPais = this.getModel().getProperty("/Empresa")["fk_pais.id_pais"];
-				
+
 				var countBorne = 0,
 					countCollected = 0;
 
@@ -598,7 +598,6 @@ sap.ui.define(
 							} else {
 								response1[0][i]["AcroNome"] = "";
 							}
-							
 
 							/*response1[0][i].principal = response1[0][i].principal ? Number(response1[0][i].principal).toFixed(2) : 0;
 							response1[0][i].juros = response1[0][i].juros ? Number(response1[0][i].juros).toFixed(2) : 0;
@@ -638,7 +637,7 @@ sap.ui.define(
 							} else {
 								response2[0][j]["AcroNome"] = "";
 							}
-						
+
 							/*response1[0][j].principal = response1[0][j].principal ? Number(response1[0][j].principal).toFixed(2) : 0;
 							response1[0][j].juros = response1[0][j].juros ? Number(response1[0][j].juros).toFixed(2) : 0;
 							response1[0][j].multa = response1[0][j].multa ? Number(response1[0][j].multa).toFixed(2) : 0;
@@ -827,7 +826,7 @@ sap.ui.define(
 				this.getModel().refresh();
 			},
 
-			_salvar: function (oEvent, callback) {
+			_salvar: function (oEvent, callback, exibirmsg) {
 				var that = this,
 					oButton = oEvent.getSource(),
 					dialog = null;
@@ -903,11 +902,12 @@ sap.ui.define(
 								callback(json);
 							}
 						}, oButton);
-					});
+					}, exibirmsg);
 				}
 			},
 
-			_checarTaxDeclarados: function (callback) {
+			_checarTaxDeclarados: function (callback, exibirmsg) {
+				var that = this;
 				var aPagamento = this._dadosPagamentosBorne.concat(this._dadosPagamentosCollected);
 
 				var aTax = this.getModel().getProperty("/Borne/Tax").concat(this.getModel().getProperty("/Collected/Tax")).filter(function (obj) {
@@ -970,27 +970,42 @@ sap.ui.define(
 
 					criarPainelTax(msgCollected, this.getResourceBundle().getText("viewGeralCollected"));
 
-					var dialog = new sap.m.Dialog({
-						contentHeight: "150px",
-						title: this.getResourceBundle().getText("viewGeralAviso"),
-						type: "Message",
-						content: oVBox,
-						endButton: new sap.m.Button({
-							text: this.getResourceBundle().getText("viewGeralContinuar"),
-							press: function () {
-								dialog.close();
-							}
-						}),
-						afterClose: function () {
-							dialog.destroy();
+					if (exibirmsg) {
 
-							if (callback) {
-								callback();
+						var dialog = new sap.m.Dialog({
+							contentHeight: "150px",
+							title: this.getResourceBundle().getText("viewGeralAviso"),
+							type: "Message",
+							content: oVBox,
+							beginButton: new sap.m.Button({
+								text: this.getResourceBundle().getText("viewGeralCancelar"),
+								press: function () {
+									dialog.close();
+								}
+							}),
+							endButton: new sap.m.Button({
+								text: this.getResourceBundle().getText("viewGeralContinuar"),
+								press: function () {
+									if (callback) {
+										callback();
+										sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreSalvoSucesso"));
+									}
+									dialog.close();
+								}
+							}),
+							afterClose: function () {
+								dialog.destroy();
 							}
+						}).addStyleClass("sapUiNoContentPadding");
+
+						dialog.open();
+					}
+
+					if (!exibirmsg) {
+						if (callback) {
+							callback();
 						}
-					}).addStyleClass("sapUiNoContentPadding");
-
-					dialog.open();
+					}
 				} else {
 					if (callback) {
 						callback();
@@ -1004,7 +1019,7 @@ sap.ui.define(
 
 				for (var i = 0, length = aPagamentos.length; i < length && bValido; i++) {
 					var oPagamento = aPagamentos[i];
-					
+
 					//Verifica a necessidade de Entidade
 					var boolEntidadeBeneficiaria = false;
 					var aAllTaxas = this.getModel().getProperty("/Collected/Tax").concat(this.getModel().getProperty("/Borne/Tax"));

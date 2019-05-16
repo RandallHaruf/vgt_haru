@@ -132,10 +132,13 @@ sap.ui.define(
 			},
 
 			navToPage2: function () {
+				
+				var usuario = this.getModel().getProperty("/NomeUsuario");
+				
 				this.getRouter().navTo("ttcListagemEmpresas", {
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+						nomeUsuario: this.toURIComponent(usuario)
 					})
 				});
 
@@ -150,7 +153,7 @@ sap.ui.define(
 				this.getRouter().navTo("ttcResumoTrimestre", {
 					oEmpresa: this.toURIComponent(oEmpresaSelecionada),
 					idAnoCalendario: this.toURIComponent(sIdAnoCalendarioSelecionado),
-					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+					nomeUsuario: this.toURIComponent(this.getModel().getProperty("/NomeUsuario"))
 				});
 
 				if (!this.byId("btnReabrir").getVisible())
