@@ -3,7 +3,9 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/jszip",
+		"ui5ns/ui5/lib/XLSX"
 	],
 	function (BaseController, NodeAPI, Validador, Utils) {
 		"use strict";
@@ -51,7 +53,443 @@ sap.ui.define(
 						sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreErro") + response.error.message);
 					}
 				}, true);
+            },
+			
+			onEnviarXml: function (oEvent) {
+				var oItem = oEvent.getParameter("item");
+				
+				if (oItem === this.byId("enviarSubstituir")) {
+					this.getModel().setProperty("/substituirDados", true);
+					this.byId("btnImportarExcel").oFileUpload.click();
+				}
+				else if (oItem === this.byId("enviarAdicionar")) {
+					this.getModel().setProperty("/substituirDados", false);
+					this.byId("btnImportarExcel").oFileUpload.click();
+				}
 			},
+			
+			onImportarDadosSubstituir: function(oEvent){
+				this.getModel().setProperty("/substituirDados", true);
+				this.onImportarDados(oEvent);
+			},
+			
+			onImportarDadosAdicionar: function(oEvent){
+				this.getModel().setProperty("/substituirDados", false);
+				this.onImportarDados(oEvent);
+			},
+			
+			onImportarDados: function (oEvent){
+				var that = this,
+					eventSource = oEvent.getSource();
+				try {
+					if (eventSource.getValue()) {
+						var file = eventSource.oFileUpload.files[0];
+		
+						var reader = new FileReader();
+		
+						reader.onload = function (e) {
+							try {
+								var data = e.target.result;
+			
+								var workbook = that._lerPlanilha(data);
+								var bSubstituirDados = that.getModel().getProperty("/substituirDados");
+								that._importarValores(bSubstituirDados, workbook,that);
+								
+								eventSource.setValue("");
+							}
+							catch (err) {
+								eventSource.setValue("");
+								that._exibirErroImportacao(err.message);
+							}
+						};
+		
+						reader.onerror = function (ex) {
+							eventSource.setValue("");
+							that._exibirErroImportacao(ex.message);
+						};
+		
+						reader.readAsBinaryString(file);
+					}
+				}
+				catch (e) {
+					eventSource.setValue("");
+					this._exibirErroImportacao(e.message);
+				}
+			},
+			
+			_lerPlanilha: function (data) {
+				var that = this;
+				
+				var workbook = XLSX.read(data, {
+					type: 'binary'
+				});	
+				
+				try {
+					if (workbook.Sheets["Borne"]["A1"].v === "Tax"
+						&& workbook.Sheets["Borne"]["B1"].v === "Goverment administration/body (payee name)"
+						&& workbook.Sheets["Borne"]["C1"].v === "Jurisdiction"
+						&& workbook.Sheets["Borne"]["D1"].v === "Country"
+						&& workbook.Sheets["Borne"]["E1"].v === "State"
+						&& workbook.Sheets["Borne"]["F1"].v === "City"
+						&& workbook.Sheets["Borne"]["G1"].v === "Project"
+						&& workbook.Sheets["Borne"]["H1"].v === "Fiscal Year"
+						&& workbook.Sheets["Borne"]["I1"].v === "Description"
+						&& workbook.Sheets["Borne"]["J1"].v === "Date of Payment (MM/DD/YYYY)"
+						&& workbook.Sheets["Borne"]["K1"].v === "Currency"
+						&& workbook.Sheets["Borne"]["L1"].v === "Type of Transaction"
+						&& workbook.Sheets["Borne"]["M1"].v === "Other Type of Transactions"
+						&& workbook.Sheets["Borne"]["N1"].v === "Value"
+						&& workbook.Sheets["Borne"]["O1"].v === "Interest"
+						&& workbook.Sheets["Borne"]["P1"].v === "Fine"
+						&& workbook.Sheets["Borne"]["Q1"].v === "Total Value"
+						&& workbook.Sheets["Borne"]["R1"].v === "Document ID"
+						&& workbook.Sheets["Borne"]["S1"].v === "Beneficiary entity"
+						&& workbook.Sheets["Collected"]["A1"].v === "Tax"
+						&& workbook.Sheets["Collected"]["B1"].v === "Goverment administration/body (payee name)"
+						&& workbook.Sheets["Collected"]["C1"].v === "Jurisdiction"
+						&& workbook.Sheets["Collected"]["D1"].v === "Country"
+						&& workbook.Sheets["Collected"]["E1"].v === "State"
+						&& workbook.Sheets["Collected"]["F1"].v === "City"
+						&& workbook.Sheets["Collected"]["G1"].v === "Project"
+						&& workbook.Sheets["Collected"]["H1"].v === "Fiscal Year"
+						&& workbook.Sheets["Collected"]["I1"].v === "Description"
+						&& workbook.Sheets["Collected"]["J1"].v === "Date of Payment (MM/DD/YYYY)"
+						&& workbook.Sheets["Collected"]["K1"].v === "Currency"
+						&& workbook.Sheets["Collected"]["L1"].v === "Type of Transaction"
+						&& workbook.Sheets["Collected"]["M1"].v === "Other Type of Transactions"
+						&& workbook.Sheets["Collected"]["N1"].v === "Value"
+						&& workbook.Sheets["Collected"]["O1"].v === "Interest"
+						&& workbook.Sheets["Collected"]["P1"].v === "Fine"
+						&& workbook.Sheets["Collected"]["Q1"].v === "Total Value"
+						&& workbook.Sheets["Collected"]["R1"].v === "Document ID"
+						&& workbook.Sheets["Collected"]["S1"].v === "Beneficiary entity"
+						&& workbook.Sheets["Dados"]) {
+						var ws = workbook.Sheets["Dados"];
+						return workbook;	
+					}
+					else {
+						throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao"));
+					}
+				}
+				catch (e) {
+					console.log("Planilha fora do padrão: " + e.message)
+					throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao") + ": \n" + e.message);
+				}
+			},
+			
+			
+			_exibirErroImportacao: function (sErro) {
+				var conteudo;
+				if(typeof sErro == "object"){
+					if(Array.isArray(sErro)){
+						var oVBox = new sap.m.VBox();
+	
+						var oHBox = new sap.m.HBox({
+							justifyContent: "Center"
+						}).addItem(new sap.m.Text({
+							
+						}).addStyleClass("sapUiSmallMarginTop sapUiSmallMarginBottom"));
+	
+						oVBox.addItem(oHBox);
+	
+						var criarPainelTax = function (oMsgErro) {
+							if (oMsgErro.erros.length) {
+								var erros = "";
+								for(let i = 0; i< oMsgErro.erros.length; i++){
+									erros += (erros.length != 0 ? "\n-" + oMsgErro.erros[i] : "-" + oMsgErro.erros[i]);
+								}
+								var oPanel = new sap.m.Panel({
+									expandable: true,
+									expanded: false,
+									headerText: oMsgErro.title
+								});
+	
+								var oHBoxInterno = new sap.m.VBox();
+	
+								var oText = new sap.m.Text({
+									text: erros
+								});
+
+								oHBoxInterno.addItem(oText);
+								oPanel.addContent(oHBoxInterno);
+								oVBox.addItem(oPanel);
+							}
+						};
+						for(let i = 0; i < sErro.length; i++){
+							criarPainelTax(sErro[i]);
+						}
+						conteudo = oVBox;
+					}
+				}
+				else{
+					conteudo = new sap.m.Text({
+							text: sErro
+						});
+				}
+				var scrolContainer = new sap.m.ScrollContainer({
+					width:"450px",
+					height:"450px",
+					vertical:true
+					});
+					scrolContainer.addContent(conteudo);
+				var dialog = new sap.m.Dialog({
+					title: this.getResourceBundle().getText("viewGeralMensagemErroImport"),
+					type: "Message",
+					content: scrolContainer,
+					width:"300px",
+					height:"450px",
+					endButton: new sap.m.Button({
+						text: "OK",
+						press: function () {
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+				dialog.open();
+			},
+			
+			_importarValores: function (bSubstituir,planilha,that){
+				if(bSubstituir)	{
+					that.getModel().setProperty("/Borne/Pagamentos",[]);
+					that.getModel().setProperty("/Collected/Pagamentos",[]);
+					that._dadosPagamentosBorne = [];
+					that._dadosPagamentosCollected = [];
+				}
+				var borne = XLSX.utils.sheet_to_row_object_array(planilha.Sheets["Borne"], {'date_format':'dd/mm/yyyy'});
+				var collected = XLSX.utils.sheet_to_row_object_array(planilha.Sheets["Collected"], {'date_format':'dd/mm/yyyy'});
+				var aPagamentosBorne = that.getModel().getProperty("/Borne/Pagamentos");
+				var aPagamentosBorneAux = [];
+				var aPagamentosCollected = that.getModel().getProperty("/Collected/Pagamentos");
+				var aPagamentosCollectedAux = [];
+				var pagamento;
+				var aErrosTotais = [];
+				var fkEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
+				var fkPeriodo = this.getModel().getProperty("/Periodo").id_periodo;
+				for(let i = 0; i < borne.length; i++){
+					let tipoTransacao;
+					var valoresCorretos = true;
+					let outrosValueState = sap.ui.core.ValueState.None;
+					switch(borne[i]["Type of Transaction"]){
+						case "Cash Installment/Settlement":
+							tipoTransacao = 1;
+							break;
+						case "Cash refund/reimbursement (negative value)":
+							tipoTransacao = 2;
+							if(Math.sign(borne[i]["Value"]) != -1 || Math.sign(borne[i]["Interest"]) != -1 || Math.sign(borne[i]["Fine"]) != -1){
+								valoresCorretos = false;
+							}
+							break;
+						case "Other (specify)":
+							tipoTransacao = 5;
+							outrosValueState = sap.ui.core.ValueState.Error;
+							break;
+						case "Payment with income tax credits":
+							tipoTransacao = 3;
+							break;
+						case "Payment with other tax credits":
+							tipoTransacao = 4;
+							break;
+					}
+					
+					if(this.checarLinhaPreenchida(borne[i])){
+						if(borne[i]["Tax KEY"] && borne[i]["Country KEY"] && borne[i]["Fiscal Year KEY"] && borne[i]["Currency KEY"] && valoresCorretos) {
+							pagamento = {};
+							let jurisdicao;
+							
+							switch(borne[i]["Jurisdiction"]){
+								case "City":
+									jurisdicao = 3;
+									break;
+								case "Federal":
+									jurisdicao = 1;
+									break;
+								case "State":
+									jurisdicao = 2;
+									break;
+							}
+							pagamento["id_pagamento"] = -1;
+							pagamento["ind_nao_aplicavel"] = false;
+							pagamento["fk_tax.id_tax"] = Number(borne[i]["Tax KEY"]);
+							pagamento.administracao_governamental = borne[i]["Goverment administration/body (payee name)"] ? borne[i]["Goverment administration/body (payee name)"] : "";
+							pagamento["fk_jurisdicao.id_dominio_jurisdicao"] = jurisdicao;
+							pagamento["fk_dominio_pais.id_dominio_pais"] = Number(borne[i]["Country KEY"]);
+							pagamento["estado"] = borne[i]["State"] ? borne[i]["State"] : "";
+							pagamento["cidade"] = borne[i]["City"] ? borne[i]["City"] : "";
+							pagamento["projeto"] = borne[i]["Project"] ? borne[i]["Project"] : "";
+							pagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] = Number(borne[i]["Fiscal Year KEY"]);
+							pagamento["descricao"] = borne[i]["Description"] ? borne[i]["Description"] : "";
+							pagamento["data_pagamento"] = borne[i]["Date of Payment (MM/DD/YYYY)"] ? convertExcelNumberToData(borne[i]["Date of Payment (MM/DD/YYYY)"]) : "";
+							pagamento["AcroNome"] = borne[i]["Currency"] ? borne[i]["Currency"] : "";
+							pagamento["fk_dominio_moeda.id_dominio_moeda"] = Number(borne[i]["Currency KEY"]);
+							pagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] = tipoTransacao;
+							pagamento["tipo_transacao_outros"] = borne[i]["Other Type of Transactions"] ? borne[i]["Other Type of Transactions"] : "";
+							pagamento["principal"] = borne[i]["Value"] ? borne[i]["Value"] : "0";
+							pagamento["juros"] = borne[i]["Interest"] ? borne[i]["Interest"] : "0";
+							pagamento["multa"] = borne[i]["Fine"] ? Number(borne[i]["Fine"]) : "0";
+							//pagamento["total"] = Number(borne[i]["Total Value"]);
+							pagamento["numero_documento"] = borne[i]["Document ID"] ? borne[i]["Document ID"] : null;
+							pagamento["entidade_beneficiaria"] = borne[i]["Beneficiary entity"] ? borne[i]["Beneficiary entity"] : null;
+							pagamento["fk_empresa.id_empresa"] = fkEmpresa;
+					        pagamento["fk_periodo.id_periodo"] = fkPeriodo;
+					        pagamento["tipo_transacao_outros_value_state"] = outrosValueState;
+							this.onTrocarJurisdicaoImport(pagamento);
+							this.onTrocarTaxImport(pagamento,"Borne");
+							this.onCalcularTotalImport(pagamento);
+							aPagamentosBorneAux.push(pagamento);
+						}
+						else{
+							var oErro = {};
+							oErro.erros = [];
+							if(!borne[i]["Tax KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCTaxaObrigatoria"));
+							}
+							if(!borne[i]["Country KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCPaisObrigatorio"));
+							}
+							if(!borne[i]["Fiscal Year KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCAnoFiscalObrigatorio"));
+							}
+							if(!borne[i]["Currency KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCMoedaObrigatorio"));
+							}
+							if(!valoresCorretos){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCSinalValor"));
+							}
+							oErro.title = that.getResourceBundle().getText("viewTTCErroLinha") + " " + (i + 2) + " " + that.getResourceBundle().getText("viewTTCAbaBorne");
+							aErrosTotais.push(oErro);
+						}
+					}
+				}	
+					
+					
+				for(let i = 0; i < collected.length; i++){
+					let tipoTransacao;
+					var valoresCorretos = true;
+					let outrosValueState = sap.ui.core.ValueState.None;
+					switch(collected[i]["Type of Transaction"]){
+						case "Cash Installment/Settlement":
+							tipoTransacao = 1;
+							break;
+						case "Cash refund/reimbursement (negative value)":
+							tipoTransacao = 2;
+							if(Math.sign(borne[i]["Value"]) != -1 || Math.sign(borne[i]["Interest"]) != -1 || Math.sign(borne[i]["Fine"]) != -1){
+								valoresCorretos = false;
+							}
+							break;
+						case "Other (specify)":
+							tipoTransacao = 5;
+							outrosValueState = sap.ui.core.ValueState.Error;
+							break;
+						case "Payment with income tax credits":
+							tipoTransacao = 3;
+							break;
+						case "Payment with other tax credits":
+							tipoTransacao = 4;
+							break;
+					}
+					
+					if(this.checarLinhaPreenchida(collected[i])){
+						if(collected[i]["Tax KEY"] && collected[i]["Country KEY"] && collected[i]["Fiscal Year KEY"] && collected[i]["Currency KEY"] && valoresCorretos) {
+							pagamento = {};
+							let jurisdicao;
+							
+							switch(collected[i]["Jurisdiction"]){
+								case "City":
+									jurisdicao = 3;
+									break;
+								case "Federal":
+									jurisdicao = 1;
+									break;
+								case "State":
+									jurisdicao = 2;
+									break;
+							}
+							pagamento["id_pagamento"] = -1;
+							pagamento["ind_nao_aplicavel"] = false;
+							pagamento["fk_tax.id_tax"] = Number(collected[i]["Tax KEY"]);
+							pagamento.administracao_governamental = collected[i]["Goverment administration/body (payee name)"] ? collected[i]["Goverment administration/body (payee name)"] : "";
+							pagamento["fk_jurisdicao.id_dominio_jurisdicao"] = jurisdicao;
+							pagamento["fk_dominio_pais.id_dominio_pais"] = Number(collected[i]["Country KEY"]);
+							pagamento["estado"] = collected[i]["State"] ? collected[i]["State"] : "";
+							pagamento["cidade"] = collected[i]["City"] ? collected[i]["City"] : "";
+							pagamento["projeto"] = collected[i]["Project"] ? collected[i]["Project"] : "";
+							pagamento["fk_dominio_ano_fiscal.id_dominio_ano_fiscal"] = Number(collected[i]["Fiscal Year KEY"]);
+							pagamento["descricao"] = collected[i]["Description"] ? collected[i]["Description"] : "";
+							pagamento["data_pagamento"] = collected[i]["Date of Payment (MM/DD/YYYY)"] ? convertExcelNumberToData(collected[i]["Date of Payment (MM/DD/YYYY)"]) : "";
+							pagamento["AcroNome"] = collected[i]["Currency"] ? collected[i]["Currency"] : "";
+							pagamento["fk_dominio_moeda.id_dominio_moeda"] = Number(collected[i]["Currency KEY"]);
+							pagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] = tipoTransacao;
+							pagamento["tipo_transacao_outros"] = collected[i]["Other Type of Transactions"] ? collected[i]["Other Type of Transactions"] : "";
+							pagamento["principal"] = collected[i]["Value"] ? collected[i]["Value"] : "0";
+							pagamento["juros"] = collected[i]["Interest"] ? collected[i]["Interest"] : "0";
+							pagamento["multa"] = collected[i]["Fine"] ? collected[i]["Fine"] : "0";
+							//pagamento["total"] = Number(collected[i]["Total Value"]);
+							pagamento["numero_documento"] = collected[i]["Document ID"] ? collected[i]["Document ID"] : null;
+							pagamento["entidade_beneficiaria"] = collected[i]["Beneficiary entity"] ? collected[i]["Beneficiary entity"] : null;
+							pagamento["fk_empresa.id_empresa"] = fkEmpresa;
+					        pagamento["fk_periodo.id_periodo"] = fkPeriodo;
+					        pagamento["tipo_transacao_outros_value_state"] = outrosValueState;
+							this.onTrocarJurisdicaoImport(pagamento);
+							this.onTrocarTaxImport(pagamento,"Collected");
+							this.onCalcularTotalImport(pagamento);
+							aPagamentosCollectedAux.push(pagamento);
+						}
+						else{
+							var oErro = {};
+							oErro.erros = [];
+							if(!collected[i]["Tax KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCTaxaObrigatoria"));
+							}
+							if(!collected[i]["Country KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCPaisObrigatorio"));
+							}
+							if(!collected[i]["Fiscal Year KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCAnoFiscalObrigatorio"));
+							}
+							if(!collected[i]["Currency KEY"]){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCMoedaObrigatorio"));
+							}
+							if(!valoresCorretos){
+								oErro.erros.push(that.getResourceBundle().getText("viewTTCSinalValor"));
+							}
+							oErro.title = that.getResourceBundle().getText("viewTTCErroLinha") + " " + (i + 2) + " " + that.getResourceBundle().getText("viewTTCAbaCollected");
+							aErrosTotais.push(oErro);
+						}
+					}
+				}
+				if(aErrosTotais.length){
+					that._exibirErroImportacao(aErrosTotais);
+				}
+				else{
+					var aPagamentosB = aPagamentosBorne.concat(aPagamentosBorneAux);
+					var aPagamentosC = aPagamentosCollected.concat(aPagamentosCollectedAux);
+					that._dadosPagamentosBorne = aPagamentosB;
+					that._dadosPagamentosCollected = aPagamentosC;
+					that.getModel().setProperty("/Borne/Pagamentos", aPagamentosB);
+					that.getModel().setProperty("/Collected/Pagamentos", aPagamentosC);
+				}
+				that.getModel().setProperty("/ContadorBorne", that._dadosPagamentosBorne.length);
+				that.getModel().setProperty("/ContadorCollected", that._dadosPagamentosCollected.length);
+				
+				function convertExcelNumberToData(ExcelData){
+					var data = new Date((ExcelData - (25567 + 1))*86400*1000);
+					return data.getFullYear() + "-" + data.getMonth() + "-" + data.getDate();
+				}
+			},
+			
+			checarLinhaPreenchida: function (linha){
+				var retorno = false;
+				if(linha["Tax KEY"] || linha["Goverment administration/body (payee name)"] || linha["Jurisdiction"] || linha["Country KEY"]
+				|| linha["State"] || linha["City"] || linha["Project"] || linha["Fiscal Year KEY"] || linha["Description"] || linha["Date of Payment (MM/DD/YYYY)"] 
+				|| linha["Currency"] || linha["Currency KEY"] || linha["Type of Transaction"] || linha["Other Type of Transactions"] || linha["Value"] 
+				|| linha["Interest"] || linha["Fine"] || linha["Document ID"] || linha["Beneficiary entity"]){
+					retorno = true;	
+				}
+				return retorno;
+			},			
 
 			onSalvar: function (oEvent) {
 				var that = this;
@@ -92,6 +530,27 @@ sap.ui.define(
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 
 				var sIdJurisdicao = oEvent.getSource().getSelectedKey();
+				if (sIdJurisdicao == "1") { //Federal
+					oPagamento.estadoValueState = sap.ui.core.ValueState.None;
+					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
+				} else if (sIdJurisdicao == "2") { //Estadual
+					if (oPagamento.estado == "" || oPagamento.estado === null) {
+						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
+					}
+					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
+				} else if (sIdJurisdicao == "3") { //Municipal
+					if (oPagamento.estado == "" || oPagamento.estado === null) {
+						oPagamento.estadoValueState = sap.ui.core.ValueState.Error;
+					}
+					if (oPagamento.cidade == "" || oPagamento.cidade === null) {
+						oPagamento.cidadeValueState = sap.ui.core.ValueState.Error;
+					}
+				}
+
+			},
+
+			onTrocarJurisdicaoImport: function (oPagamento) {
+				var sIdJurisdicao = oPagamento["fk_jurisdicao.id_dominio_jurisdicao"];
 				if (sIdJurisdicao == "1") { //Federal
 					oPagamento.estadoValueState = sap.ui.core.ValueState.None;
 					oPagamento.cidadeValueState = sap.ui.core.ValueState.None;
@@ -335,9 +794,77 @@ sap.ui.define(
 					oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
 			},
 
+			onTrocarTaxImport: function (oPagamento,grupoPagamento) {
+				var aTax = this.getModel().getProperty("/" + grupoPagamento + "/Tax");
+				var	oTax;
+				for(let i = 0; i < aTax.length; i++){
+					if(aTax[i]["id_tax"] == oPagamento["fk_tax.id_tax"]){
+						oTax = aTax[i];
+					}
+				}
+
+				// Pega o objeto do pagamento e seta sua category como a category do tax selecionado
+				oPagamento["fk_category.id_tax_category"] = oTax["fk_category.id_tax_category"];
+
+				//Verifica se o campo de entidade deve ser marcado como obrigatorio ou nao...
+				if ((oTax.tax) != undefined && (oTax.tax) !== null) {
+					if ((oTax.tax).toLowerCase() === "Tax Withheld on payments to overseas group companies".toLowerCase()) {
+						if (oPagamento["entidade_beneficiaria"] == "" || oPagamento["entidade_beneficiaria"] === null || oPagamento[
+								"entidade_beneficiaria"] === undefined) {
+							oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+						}
+					} else {
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+					}
+				}
+
+				var that = this;
+
+				// Limpa as opções de name of tax..
+				oPagamento.opcoesNameOfTax = [];
+				oPagamento.name_of_tax = "";
+				oPagamento["fk_name_of_tax.id_name_of_tax"] = "";
+
+				// Caso o tax selecionado seja valido, recupera a lista de name of tax padrão relacionado ao país da empresa e este tax
+				if (oTax.id_tax) {
+					var idPais = this.getModel().getProperty("/Empresa")["fk_pais.id_pais"];
+					NodeAPI.listarRegistros("Pais/" + idPais + "/NameOfTax?default=true&tax=" + oTax.id_tax, function (response) {
+						if (response) {
+							response.unshift({});
+							oPagamento.opcoesNameOfTax = response;
+							that.getModel().refresh();
+						}
+					});
+				}
+
+				if (oTax["ind_requer_beneficiary_company"]) {
+					if (oPagamento.entidade_beneficiaria == "" ||
+						oPagamento.entidade_beneficiaria === null ||
+						oPagamento["entidade_beneficiaria"] === undefined) {
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+					}
+				} else
+					oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+			},
+
 			onCalcularTotal: function (oEvent) {
 				var oPagamento = oEvent.getSource().getBindingContext().getObject();
 
+				if (oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 2) {
+					oPagamento.principal = Math.abs(oPagamento.principal ? oPagamento.principal : 0) * -1;
+					oPagamento.juros = Math.abs(oPagamento.juros ? oPagamento.juros : 0) * -1;
+					oPagamento.multa = Math.abs(oPagamento.multa ? oPagamento.multa : 0) * -1;
+				}
+
+				var fPrincipal = oPagamento.principal ? Number(oPagamento.principal) : 0,
+					fJuros = oPagamento.juros ? Number(oPagamento.juros) : 0,
+					fMulta = oPagamento.multa ? Number(oPagamento.multa) : 0;
+
+				oPagamento.total = (fPrincipal + fJuros + fMulta).toFixed(2);
+				this.getModel().refresh();
+			},
+
+			onCalcularTotalImport: function (oPagamento) {
 				if (oPagamento["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"] == 2) {
 					oPagamento.principal = Math.abs(oPagamento.principal ? oPagamento.principal : 0) * -1;
 					oPagamento.juros = Math.abs(oPagamento.juros ? oPagamento.juros : 0) * -1;

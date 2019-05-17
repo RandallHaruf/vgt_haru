@@ -546,21 +546,21 @@ module.exports = {
 			var worksheet = workbook.getWorksheet('Borne');
 					
 			for (var i = 2; i <= 1000; i++) {
-	        	worksheet.getCell('A' + i).dataValidation = {
+	        	/*worksheet.getCell('A' + i).dataValidation = {
 				    type: 'list',
 				    allowBlank: true,
 				    formulae: ["Dados!$" + 'A' + "$1:$" + 'A' + "$" + 2],
 				    showErrorMessage: true,
 				    errorStyle: 'error'
-				};
-				worksheet.getCell('D' + i).dataValidation = {
+				};*/
+				worksheet.getCell('C' + i).dataValidation = {
 				    type: 'list',
 				    allowBlank: true,
 				    formulae: ["Dados!$" + 'E' + "$1:$" + 'E' + "$" + 3],
 				    showErrorMessage: true,
 				    errorStyle: 'error'
 				};
-				worksheet.getCell('M' + i).dataValidation = {
+				worksheet.getCell('L' + i).dataValidation = {
 				    type: 'list',
 				    allowBlank: true,
 				    formulae: ["Dados!$" + 'K' + "$1:$" + 'K' + "$" + 5],
@@ -568,6 +568,7 @@ module.exports = {
 				    errorStyle: 'error'
 				};
 	        }
+	        worksheet.getColumn('AH').hidden = true;
 	        worksheet.getColumn('AI').hidden = true;
 	        worksheet.getColumn('AJ').hidden = true;
 	        worksheet.getColumn('AK').hidden = true;
@@ -575,21 +576,21 @@ module.exports = {
 	        worksheet = workbook.getWorksheet('Collected');
 	        
 	        for (var i = 2; i <= 1000; i++) {
-	        	worksheet.getCell('A' + i).dataValidation = {
+	        	/*worksheet.getCell('A' + i).dataValidation = {
 				    type: 'list',
 				    allowBlank: true,
 				    formulae: ["Dados!$" + 'A' + "$1:$" + 'A' + "$" + 2],
 				    showErrorMessage: true,
 				    errorStyle: 'error'
-				};
-				worksheet.getCell('D' + i).dataValidation = {
+				};*/
+				worksheet.getCell('C' + i).dataValidation = {
 				    type: 'list',
 				    allowBlank: true,
 				    formulae: ["Dados!$" + 'E' + "$1:$" + 'E' + "$" + 3],
 				    showErrorMessage: true,
 				    errorStyle: 'error'
 				};
-				worksheet.getCell('M' + i).dataValidation = {
+				worksheet.getCell('L' + i).dataValidation = {
 				    type: 'list',
 				    allowBlank: true,
 				    formulae: ["Dados!$" + 'K' + "$1:$" + 'K' + "$" + 5],
@@ -597,10 +598,10 @@ module.exports = {
 				    errorStyle: 'error'
 				};
 	        }
+	        worksheet.getColumn('AH').hidden = true;
 	        worksheet.getColumn('AI').hidden = true;
 	        worksheet.getColumn('AJ').hidden = true;
 	        worksheet.getColumn('AK').hidden = true;
-	        
 	        
 		};
 		
@@ -625,8 +626,15 @@ module.exports = {
 	        }
 		};
 		
+		const inserirMoedas = (worksheet, aDado, sColuna1, sColuna2) => {
+			for (var i = 0; i < aDado.length; i++) {
+	        	worksheet.getCell(sColuna1 + (i + 1)).value = aDado[i].acronimo + " - " + aDado[i].nome;
+	        	worksheet.getCell(sColuna2 + (i + 1)).value = aDado[i].id_dominio_moeda;
+	        }
+		};
+		
 		var folder = "download/",
-			sheet = "ModeloImportTTC.xlsx",
+			sheet = "ModelImportTTC.xlsx",
 			tmpSheet = `tmp_${(new Date()).getTime()}_${sheet}`;
 			
 		try {
@@ -638,20 +646,24 @@ module.exports = {
 					retornarDominioAnoFiscal(),
 					retornarTaxasTTC(1),
 					retornarTaxasTTC(2),
+					retornarDominioMoeda(),
 					workbook.xlsx.readFile(folder + sheet)
 				])
 				.then(function (res) {
 					var resTaxasBorne = res[2], 
 						resTaxasCollected = res[3],
 						resDominioPais = res[0],
-						resDominioAnoFiscal = res[1];
+						resDominioAnoFiscal = res[1],
+						resDominioMoeda = res[4];
 						
-					configurarPastaDiferenca(workbook, 'Borne', 'B', 'C', resTaxasBorne.length);
-					configurarPastaDiferenca(workbook, 'Collected', 'B', 'M', resTaxasCollected.length);
-					configurarPastaDiferenca(workbook, 'Borne', 'E', 'G', resDominioPais.length);
-					configurarPastaDiferenca(workbook, 'Collected', 'E', 'G', resDominioPais.length);
-					configurarPastaDiferenca(workbook, 'Borne', 'I', 'I', resDominioAnoFiscal.length);
-					configurarPastaDiferenca(workbook, 'Collected', 'I', 'I', resDominioAnoFiscal.length);
+					configurarPastaDiferenca(workbook, 'Borne', 'A', 'C', resTaxasBorne.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'A', 'M', resTaxasCollected.length);
+					configurarPastaDiferenca(workbook, 'Borne', 'D', 'G', resDominioPais.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'D', 'G', resDominioPais.length);
+					configurarPastaDiferenca(workbook, 'Borne', 'H', 'I', resDominioAnoFiscal.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'H', 'I', resDominioAnoFiscal.length);
+					configurarPastaDiferenca(workbook, 'Borne', 'K', 'O', resDominioMoeda.length);
+					configurarPastaDiferenca(workbook, 'Collected', 'K', 'O', resDominioMoeda.length);
 			        configurarPastasComPadroes();
 			        
 			        var worksheet = workbook.getWorksheet('Dados');
@@ -660,6 +672,7 @@ module.exports = {
 			        inserirTaxas(worksheet, resTaxasCollected, 'M', 'N');
 			        inserirPaises(worksheet, resDominioPais, 'G', 'H');
 			        inserirAnosFiscais(worksheet, resDominioAnoFiscal, 'I', 'J');
+			        inserirMoedas(worksheet, resDominioMoeda, 'O', 'P');
 			        
 			        worksheet.state = 'veryHidden';
 			        
@@ -731,7 +744,23 @@ function retornarDominioAnoFiscal(){
 				reject(err);
 			}	
 			else {
-				console.log(result);
+				resolve(result);
+			}
+		});
+	});
+}
+function retornarDominioMoeda(){
+	var sStatement = 
+		'Select * from "VGT.DOMINIO_MOEDA" tblMoeda '
+		+'order by tblMoeda."acronimo" asc';
+	return new Promise(function (resolve,reject){
+		db.executeStatement({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			}	
+			else {
 				resolve(result);
 			}
 		});

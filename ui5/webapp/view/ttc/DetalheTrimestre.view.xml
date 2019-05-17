@@ -4,6 +4,7 @@
 	xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout"
 	xmlns:f2="sap.f"
+	xmlns:uni="sap.ui.unified"
 	xmlns="sap.m">
 	<f2:DynamicPage 
 		id="dynamicPage"
@@ -27,6 +28,12 @@
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/nome}" />
 				</f2:snappedContent>
+				<f2:navigationActions>
+					<l:HorizontalLayout>
+						<uni:FileUploader buttonOnly="true" buttonText="{i18n>viewTTTCSubstituir}" icon="sap-icon://excel-attachment" change="onImportarDadosSubstituir" fileType="xlsx" />
+						<uni:FileUploader buttonOnly="true" buttonText="{i18n>viewTTCAdicionar}" icon="sap-icon://excel-attachment" change="onImportarDadosAdicionar" fileType="xlsx" />
+					</l:HorizontalLayout>
+				</f2:navigationActions>
 			</f2:DynamicPageTitle>
 		</f2:title>
 		<f2:header>
