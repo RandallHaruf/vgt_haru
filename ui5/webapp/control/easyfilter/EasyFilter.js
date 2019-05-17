@@ -78,7 +78,7 @@ sap.ui.define([
 			filteredItemsCount = parentBinding.iLength;
 		}
 		
-		return filteredItemsCount
+		return filteredItemsCount;
 	};
 	
 	var triggerFilter = function (filterSelection, suppress) {
@@ -88,7 +88,7 @@ sap.ui.define([
 			filterSelection: filterSelection
 		};
 		
-		if (filteredItemsCount != -1) {
+		if (filteredItemsCount !== -1) {
 			oParameter.filteredItemsCount = filteredItemsCount;
 		}
 		
@@ -96,6 +96,13 @@ sap.ui.define([
 		if (!suppress) {
 			thisControl.fireEvent('filter', oParameter);
 		}
+	};
+	
+	var carregarMapaItens = function () {
+		if (!thisControl._mapaItens.carregado) {
+			thisControl._mapaItens.itens = thisControl.getItems();
+			thisControl._mapaItens.carregado = true;
+		}	
 	};
 	
 	return Control.extend("ui5ns.ui5.control.easyfilter.EasyFilter", {
@@ -122,6 +129,11 @@ sap.ui.define([
 			thisControl = this;
 			
 			this._filterSelection = {};
+			
+			this._mapaItens = {
+				carregado: false,
+				itens: []
+			};
 			
 			this.setAggregation('_filterButton', new Button({
 				tooltip: this.getTooltip(),
@@ -155,7 +167,9 @@ sap.ui.define([
 		loadFrom: function () {
 			var aPromise = [];
 			
-			$.each(thisControl.getItems(), function (indexFilterByControl, filterByControl) {
+			carregarMapaItens();
+			
+			$.each(thisControl._mapaItens.itens, function (indexFilterByControl, filterByControl) {
 				aPromise.push(NodeAPI.pListarRegistros(filterByControl.getLoadFrom()));
 			});
 			
@@ -194,17 +208,12 @@ sap.ui.define([
 		/*
 		*	rendering
 		*/
-		
 		renderer: function (oRm, oControl) {
 			oRm.write("<div");
 			oRm.writeControlData(oControl);
 			oRm.write(">");
 			oRm.renderControl(oControl.getAggregation("_filterButton"));
 			oRm.write("</div>");
-		},
-		
-		onAfterRendering: function () {
-			/**/
 		},
 		
 		/*
@@ -218,7 +227,9 @@ sap.ui.define([
 					triggerFilter(getFilterSelection(event));
 				});
 				
-				$.each(thisControl.getItems(), function (indexFilterByControl, filterByControl) {
+			carregarMapaItens();
+				
+			$.each(thisControl._mapaItens.itens, function (indexFilterByControl, filterByControl) {
 					oFilterDialog.addFilterItem(filterByControl);
 				});
 				
