@@ -6,104 +6,14 @@ sap.ui.define([
 	'sap/m/ViewSettingsDialog',
 	'ui5ns/ui5/lib/NodeAPI'
 ], function (Control, Button, Filter, FilterOperator, ViewSettingsDialog, NodeAPI) {
-	var thisControl;
+	//var this;
 	
-	var getFilterSelection = function (event) {
-		var filterSelection = {};
-					
-		var filterItems = event.getParameter("filterItems");
-		
-		if (filterItems && filterItems.length) {
-			for (var i = 0, length = filterItems.length; i < length; i++) {
-				var filterItem = filterItems[i],
-					parentKey = filterItem.getParent().getApplyTo() ? filterItem.getParent().getApplyTo() : filterItem.getParent().getKey();
-				
-				if (parentKey) {
-					if (filterSelection[parentKey] && filterSelection[parentKey].length) {
-						filterSelection[parentKey].push(filterItem.getKey());
-					}
-					else {
-						filterSelection[parentKey] = [filterItem.getKey()];
-					}
-				}
-			}
-		}
-		
-		return filterSelection;
-	};
-	
-	var getParent = function () {
-		var bEncontrouParent = false, 
-			oParent = thisControl.getParent(),
-			sApplyTo = thisControl.getApplyTo();
-		
-		while (!bEncontrouParent && oParent) {
-			if (oParent.getId().indexOf(sApplyTo) > -1) {
-				bEncontrouParent = true;
-			}
-			else {
-				oParent = oParent.getParent();
-			}
-		}
-		
-		return oParent;
-	};
-	
-	var applyFilter = function (filterSelection) {
-		var oParent = getParent(),
-			filteredItemsCount = -1;
-		
-		if (oParent) {
-			var filterKeys = Object.keys(filterSelection);
-			
-			var parentBinding = oParent.getBinding("items");
-			var filters = [];
-			
-			for (var i = 0, length = filterKeys.length; i < length; i++) {
-				var column = filterKeys[i];
-				var values = filterSelection[column];
-				var aux = [];
-				
-				for (var j = 0, length2 = values.length; j < length2; j++) {
-					aux.push(new Filter(column, FilterOperator.EQ, values[j]));
-				}
-				
-				if (aux.length) {
-					filters.push(new Filter(aux, false));
-				}
-			}
-			
-			parentBinding.filter(filters.length ? filters : [], false);
-			
-			filteredItemsCount = parentBinding.iLength;
-		}
-		
-		return filteredItemsCount;
-	};
-	
-	var triggerFilter = function (filterSelection, suppress) {
-		var filteredItemsCount = applyFilter(filterSelection); 
-		
-		var oParameter = {
-			filterSelection: filterSelection
-		};
-		
-		if (filteredItemsCount !== -1) {
-			oParameter.filteredItemsCount = filteredItemsCount;
-		}
-		
-		thisControl._filterSelection = filterSelection;
-		if (!suppress) {
-			thisControl.fireEvent('filter', oParameter);
-		}
-	};
-	
-	var carregarMapaItens = function () {
-		if (!thisControl._mapaItens.carregado) {
-			thisControl._mapaItens.itens = thisControl.getItems();
-			thisControl._mapaItens.carregado = true;
+	/*var setFilterByMap = function () {
+		if (!this._filterByMap[this.getId()].stored) {
+			this._filterByMap[this.getId()].items = this.getItems();
+			this._filterByMap[this.getId()].stored = true;
 		}	
-	};
+	};*/
 	
 	return Control.extend("ui5ns.ui5.control.easyfilter.EasyFilter", {
 		/*
@@ -126,14 +36,15 @@ sap.ui.define([
 		},
 		
 		init: function () {
-			thisControl = this;
-			
 			this._filterSelection = {};
 			
-			this._mapaItens = {
-				carregado: false,
-				itens: []
+			/*this._filterByMap = {};
+			this._filterByMap[this.getId()] = {
+				stored: false,
+				items: []
 			};
+			
+			this._filterItemMap = {};*/
 			
 			this.setAggregation('_filterButton', new Button({
 				tooltip: this.getTooltip(),
@@ -149,7 +60,7 @@ sap.ui.define([
 		trigger: function (sEvent) {
 			switch (sEvent) {
 				case 'filter':
-					triggerFilter(thisControl._filterSelection);
+					this._triggerFilter(this._filterSelection);
 					break;
 				default:
 					console.log('Invalid event: ' + sEvent);
@@ -158,18 +69,18 @@ sap.ui.define([
 		},
 		
 		clear: function () {
-			triggerFilter({}, true);
-			if (thisControl._filterDialog) {
-				thisControl._filterDialog._resetButton.firePress();
+			this._triggerFilter({}, true);
+			if (this._filterDialog) {
+				this._filterDialog._resetButton.firePress();
 			}
 		},
 		
 		loadFrom: function () {
 			var aPromise = [];
 			
-			carregarMapaItens();
+			//setFilterByMap();
 			
-			$.each(thisControl._mapaItens.itens, function (indexFilterByControl, filterByControl) {
+			$.each(this.getItems()/*this._filterByMap[this.getId()].items*/, function (indexFilterByControl, filterByControl) {
 				aPromise.push(NodeAPI.pListarRegistros(filterByControl.getLoadFrom()));
 			});
 			
@@ -220,23 +131,117 @@ sap.ui.define([
 		*	private methods
 		*/
 		_onFilter: function (oEvent) {
-			var oFilterDialog = new ViewSettingsDialog();
-				
 			if (!this._filterDialog) {
+				var that = this;
+			
+				var oFilterDialog = new ViewSettingsDialog();
+			
 				oFilterDialog.attachConfirm(function (event) {
-					triggerFilter(getFilterSelection(event));
+					that._triggerFilter(that._getFilterSelection(event));
 				});
 				
-			carregarMapaItens();
+				//setFilterByMap();
 				
-			$.each(thisControl._mapaItens.itens, function (indexFilterByControl, filterByControl) {
+				$.each(this.getItems()/*this._filterByMap[this.getId()].items*/, function (indexFilterByControl, filterByControl) {
 					oFilterDialog.addFilterItem(filterByControl);
 				});
 				
 				this._filterDialog = oFilterDialog;
 			}
 			
+			// reset da tela inicial = this._filterDialog._header.mAggregations.contentRight[0].mProperties.text
+			
 			this._filterDialog.open();
+		},
+		
+		_getFilterSelection: function (event) {
+			var filterSelection = {};
+						
+			var filterItems = event.getParameter("filterItems");
+			
+			if (filterItems && filterItems.length) {
+				for (var i = 0, length = filterItems.length; i < length; i++) {
+					var filterItem = filterItems[i],
+						parentKey = filterItem.getParent().getApplyTo() ? filterItem.getParent().getApplyTo() : filterItem.getParent().getKey();
+					
+					if (parentKey) {
+						if (filterSelection[parentKey] && filterSelection[parentKey].length) {
+							filterSelection[parentKey].push(filterItem.getKey());
+						}
+						else {
+							filterSelection[parentKey] = [filterItem.getKey()];
+						}
+					}
+				}
+			}
+			
+			return filterSelection;
+		},
+		
+		_findParent: function () {
+			var bEncontrouParent = false, 
+				oParent = this.getParent(),
+				sApplyTo = this.getApplyTo();
+			
+			while (!bEncontrouParent && oParent) {
+				if (oParent.getId().indexOf(sApplyTo) > -1) {
+					bEncontrouParent = true;
+				}
+				else {
+					oParent = oParent.getParent();
+				}
+			}
+			
+			return oParent;
+		},
+		
+		_applyFilter: function (filterSelection) {
+			var oParent = this._findParent(),
+				filteredItemsCount = -1;
+			
+			if (oParent) {
+				var filterKeys = Object.keys(filterSelection);
+				
+				var parentBinding = oParent.getBinding("items");
+				var filters = [];
+				
+				for (var i = 0, length = filterKeys.length; i < length; i++) {
+					var column = filterKeys[i];
+					var values = filterSelection[column];
+					var aux = [];
+					
+					for (var j = 0, length2 = values.length; j < length2; j++) {
+						aux.push(new Filter(column, FilterOperator.EQ, values[j]));
+					}
+					
+					if (aux.length) {
+						filters.push(new Filter(aux, false));
+					}
+				}
+				
+				parentBinding.filter(filters.length ? filters : [], false);
+				
+				filteredItemsCount = parentBinding.iLength;
+			}
+			
+			return filteredItemsCount;
+		},
+		
+		_triggerFilter: function (filterSelection, suppress) {
+			var filteredItemsCount = this._applyFilter(filterSelection); 
+			
+			var oParameter = {
+				filterSelection: filterSelection
+			};
+			
+			if (filteredItemsCount !== -1) {
+				oParameter.filteredItemsCount = filteredItemsCount;
+			}
+			
+			this._filterSelection = filterSelection;
+			if (!suppress) {
+				this.fireEvent('filter', oParameter);
+			}
 		}
 	});
 });
