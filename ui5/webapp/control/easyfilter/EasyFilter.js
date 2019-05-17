@@ -45,6 +45,7 @@ sap.ui.define([
 			};
 			
 			this._filterItemMap = {};*/
+			this._filterRoutes = [];
 			
 			this.setAggregation('_filterButton', new Button({
 				tooltip: this.getTooltip(),
@@ -76,13 +77,18 @@ sap.ui.define([
 		},
 		
 		loadFrom: function () {
-			var aPromise = [];
+			var that = this,
+				aPromise = [];
 			
-			//setFilterByMap();
+			if (!this._filterRoutes.length) {
+				$.each(this.getItems(), function (indexFilterByControl, filterByControl) {
+					that._filterRoutes.push(filterByControl.getLoadFrom());
+				});
+			}
 			
-			$.each(this.getItems()/*this._filterByMap[this.getId()].items*/, function (indexFilterByControl, filterByControl) {
-				aPromise.push(NodeAPI.pListarRegistros(filterByControl.getLoadFrom()));
-			});
+			for (var i = 0, length = this._filterRoutes.length; i < length; i++) {
+				aPromise.push(NodeAPI.pListarRegistros(this._filterRoutes[i]));
+			}
 			
 			return Promise.all(aPromise);
 		},
