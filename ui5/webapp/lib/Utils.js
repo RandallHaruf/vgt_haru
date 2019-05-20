@@ -1726,6 +1726,97 @@ sap.ui.define(
 				var fDataNoPadrao = Data.getDate().toString().padStart(2, "0") + "_" + (Data.getMonth() + 1).toString().padStart(2, "0") + "_" +
 					Data.getFullYear().toString();
 				return fDataNoPadrao;
+			},
+			
+			criarDialogFiltro: function (sIdTabela, filtrarPor, that, confirmCallback) {
+				
+				that.byId(sIdTabela).getBinding("items").filter([], false);                         
+				
+				var oFilterDialog = new sap.m.ViewSettingsDialog();
+			
+				oFilterDialog.attachConfirm(function (event) {
+					var filterSelection = {};
+					var filterItems = event.getParameter("filterItems");
+			
+					if (filterItems && filterItems.length) {
+						for (var i = 0, length = filterItems.length; i < length; i++) {
+							var filterItem = filterItems[i],
+								parentKey = filterItem.getParent().getKey();
+							
+							if (parentKey) {
+								if (filterSelection[parentKey] && filterSelection[parentKey].length) {
+									filterSelection[parentKey].push(filterItem.getKey());
+								}
+								else {
+									filterSelection[parentKey] = [filterItem.getKey()];
+								}
+							}
+						}
+					}
+					
+					var	oParent = that.byId(sIdTabela),
+						filteredItemsCount = -1;
+					
+					if (oParent) {
+						var filterKeys = Object.keys(filterSelection);
+						
+						var parentBinding = oParent.getBinding("items");
+						var filters = [];
+						
+						for (var i = 0, length = filterKeys.length; i < length; i++) {
+							var column = filterKeys[i];
+							var values = filterSelection[column];
+							var aux = [];
+							
+							for (var j = 0, length2 = values.length; j < length2; j++) {
+								aux.push(new sap.ui.model.Filter(column, sap.ui.model.FilterOperator.EQ, values[j]));
+							}
+							
+							if (aux.length) {
+								filters.push(new sap.ui.model.Filter(aux, false));
+							}
+						}
+						
+						parentBinding.filter(filters.length ? filters : [], false);
+						
+						filteredItemsCount = parentBinding.iLength;
+					}
+					
+					if (confirmCallback) {
+						confirmCallback({
+							filterSelection: filterSelection,
+							filteredItemsCount: filteredItemsCount
+						});
+					}
+				});
+				
+				var aPromise = [];
+				
+				for (var i = 0, length = filtrarPor.length; i < length; i++) {
+					var item = filtrarPor[i];
+					
+					var oFilterItemEmpresa = new sap.m.ViewSettingsFilterItem({
+						text: item.text,
+						key: item.applyTo,
+						multiSelect: true
+					});
+					
+					oFilterItemEmpresa.bindItems({
+						path: item.items.path,
+						template: new sap.m.ViewSettingsItem({ text: '{' + item.items.text + '}', key: '{' + item.items.key + '}' })
+					});
+					
+					oFilterDialog.addFilterItem(oFilterItemEmpresa);
+					
+					aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
+				}
+				
+				that.getView().addDependent(oFilterDialog);
+				
+				that._filterDialog = oFilterDialog;
+				that._loadFrom = Promise.all(aPromise);
+				
+				return oFilterDialog;
 			}
 		};
 	}
