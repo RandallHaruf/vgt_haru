@@ -552,7 +552,8 @@ sap.ui.define(
 
 				/* Template das células */
 				var oCheckBox = new sap.m.CheckBox({
-					selected: "{selecionado}"
+					selected: "{selecionado}",
+					enabled: "{habilitado}"
 				});
 
 				var oTextNameOfTax = new sap.m.Text({
@@ -3145,6 +3146,7 @@ sap.ui.define(
 							that._carregarTaxasMultiplas(oTaxReconAtivo.id_tax_reconciliation);
 							that._carregarValuesUtilized(oTaxReconAtivo.id_tax_reconciliation);
 							sIdTaxReconciliation = oTaxReconAtivo.id_tax_reconciliation;
+							that.getModel().setProperty("/sIdTaxReconciliation");
 						}
 						that.getModel().setProperty("/DiferencasPermanentes", response.diferencaPermanente);
 						that.getModel().setProperty("/DiferencasTemporarias", response.diferencaTemporaria);
@@ -3153,7 +3155,6 @@ sap.ui.define(
 						that.onAplicarRegras();
 					}
 
-					that._carregarPagamentosTTC(sIdTaxReconciliation);
 					that._carregarHistorico();
 					that._carregarTaxRate();
 
@@ -3247,6 +3248,7 @@ sap.ui.define(
 						that.getModel().refresh();
 					}
 					that._definirMoeda();
+					that._carregarPagamentosTTC(that.getModel().getProperty("/sIdTaxReconciliation"));
 				});
 			},
 
@@ -3282,7 +3284,6 @@ sap.ui.define(
 						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
 						break;
 				}
-				
 				this.getModel().setProperty('/MoedaAnterior', this.getModel().getProperty('/Moeda'));
 			},
 			
@@ -3314,11 +3315,12 @@ sap.ui.define(
 				var that = this,
 					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa,
 					idAnoCalendario = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
-
-				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&taxIsExportavelTaxPackage=true&anoFiscal=" + idAnoCalendario, function (response) {
+				
+				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&taxIsExportavelTaxPackage=true&anoFiscal=" + idAnoCalendario + "&filtrarPrincipalPositivo=true", function (response) {
 					if (response) {
+						var taxReconciliation = that.getModel().getProperty("/TaxReconciliation");
 						that.getModel().setProperty("/PagamentosTTC", response);
-
+						that.resolverHabilitacao();
 						if (sIdTaxReconciliation) {
 							that._carregarAntecipacoes(sIdTaxReconciliation);
 						}
@@ -3967,16 +3969,30 @@ sap.ui.define(
 					oTaxReconCorrente = this.getModel().getProperty('/TaxReconciliation').find(function (obj) {
 						return obj.ind_ativo;	
 					});
+				var moedaAtual = that.getModel().getProperty('/Moeda');
+				var aAntecipacao = this.getModel().getProperty("/PagamentosTTC");
+				var restoDaMensagemDeAviso = "";
+				var fTotalAntecipacao = 0;
+				if (aAntecipacao) {
+					for (var i = 0, length = aAntecipacao.length; i < length; i++) {
+						fTotalAntecipacao += ((aAntecipacao[i].selecionado && aAntecipacao[i]["fk_dominio_moeda.id_dominio_moeda"] != moedaAtual) ? 1 : 0);
+					}
+				}
+				if(fTotalAntecipacao > 0){
+					restoDaMensagemDeAviso = this.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoValoresTTC");
+				}
 				
 				jQuery.sap.require("sap.m.MessageBox");
 	
 				// Para estimativas pede confirmação ao usuário se deseja mesmo trocar moeda
 				if (oTaxReconCorrente.numero_ordem >= 1 && oTaxReconCorrente.numero_ordem <= 4 && oTaxReconCorrente["fk_dominio_moeda_rel.id_dominio_moeda"]) {
-					sap.m.MessageBox.confirm(this.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoTrocaMoeda"), {
+					sap.m.MessageBox.confirm(this.getResourceBundle().getText("viewEdicaoTrimestreConfirmacaoTrocaMoeda") + "\n" + restoDaMensagemDeAviso, {
 						title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 						onClose: function (oAction) {
 							if (oAction === sap.m.MessageBox.Action.OK) {
 								that.getModel().setProperty('/MoedaAnterior', eventSource.getSelectedKey());
+								that.limparVinculosTTC();
+								that.resolverHabilitacao();
 							}
 							else {
 								that.getModel().setProperty('/Moeda', that.getModel().getProperty('/MoedaAnterior'));
@@ -3984,6 +4000,29 @@ sap.ui.define(
 						}
 					});
 				}
+			},
+			limparVinculosTTC: function(){
+				var aAntecipacao = this.getModel().getProperty("/PagamentosTTC");
+				if (aAntecipacao) {
+					for (var i = 0, length = aAntecipacao.length; i < length; i++) {
+						aAntecipacao[i].selecionado = false;
+					}
+				}
+				this.onAplicarRegras();
+				this.getModel().refresh();
+			},
+			resolverHabilitacao: function(){
+				var aAntecipacao = this.getModel().getProperty("/PagamentosTTC");
+				var Moeda = this.getModel().getProperty("/Moeda");
+				for(let i =0; i < aAntecipacao.length; i++){
+					if(aAntecipacao[i]["fk_dominio_moeda.id_dominio_moeda"] != Moeda){
+						aAntecipacao[i].habilitado = false;
+					}
+					else{
+						aAntecipacao[i].habilitado = true;
+					}
+				}
+				this.getModel().refresh();
 			}
 		});
 	}

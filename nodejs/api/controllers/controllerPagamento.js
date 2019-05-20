@@ -487,6 +487,11 @@ module.exports = {
 			aParams.push(req.query.anoFiscal);
 		}
 		
+		if(req.query.filtrarPrincipalPositivo){
+			oWhere.push(' pagamento."principal" > ?');
+			aParams.push(0);
+		}
+		
 		if (oWhere.length > 0) {
 			sStatement += "where ";
 			
