@@ -23,10 +23,21 @@ sap.ui.define(
 
 				this.getRouter().getRoute("taxPackageEdicaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
 			},
-
+			
+			onImportarDadosSubstituir: function(oEvent){
+				this.getModel().setProperty("/substituirDados", true);
+				this.onImportarDados(oEvent);
+			},
+			
+			onImportarDadosAdicionar: function(oEvent){
+				this.getModel().setProperty("/substituirDados", false);
+				this.onImportarDados(oEvent);
+			},
+			
 			onImportarDados: function (oEvent) {
 				var that = this,
-					eventSource = oEvent.getSource();
+					eventSource = oEvent.getSource(),
+					substituirDados = this.getModel().getProperty("/substituirDados");
 							
 				try {
 					if (eventSource.getValue()) {
@@ -44,7 +55,7 @@ sap.ui.define(
 									return obj.ind_ativo;
 								});
 								
-								var processarDiferenca = function (XL_row_object, sCaminhoDiferencas, sCaminhoOpcaoDiferenca) {
+								var processarDiferenca = function (XL_row_object, sCaminhoDiferencas, sCaminhoOpcaoDiferenca, substituirDados) {
 									var sChaveProcurar = "",
 										iNumeroOrdemPeriodo = that.getModel().getProperty("/Periodo").numero_ordem;
 			
@@ -70,7 +81,8 @@ sap.ui.define(
 									}
 			
 									var aDiferenca = that.getModel().getProperty(sCaminhoDiferencas),
-										aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca);
+										aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca),
+										eParaApagar = true;
 			
 									for (var i = 0; i < XL_row_object.length; i++) {
 										var objXlsx = XL_row_object[i];
@@ -78,6 +90,11 @@ sap.ui.define(
 										var keys = Object.keys(objXlsx);
 			
 										if (keys.indexOf('Type') > -1 && objXlsx.KEY) {
+											if(substituirDados && eParaApagar){
+												that.getModel().setProperty(sCaminhoDiferencas,[]);
+												aDiferenca = that.getModel().getProperty(sCaminhoDiferencas);
+												eParaApagar = false;
+											}
 											var oDiferencaComOpcaoJaInserida = aDiferenca.find(function (obj) {
 												return Number(objXlsx.KEY) === Number(obj["fk_diferenca_opcao.id_diferenca_opcao"]);
 											});
@@ -117,13 +134,18 @@ sap.ui.define(
 									}
 								};
 			
-								var processarTaxaMultipla = function (XL_row_object, sCaminhoTaxaMultipla, iIdTipoTaxaMultipla) {
+								var processarTaxaMultipla = function (XL_row_object, sCaminhoTaxaMultipla, iIdTipoTaxaMultipla, substituirDados) {
 									var aOtherTax = that.getModel().getProperty(sCaminhoTaxaMultipla);
-										
+									var eParaApagar = true;	
 									for (var i = 0; i < XL_row_object.length; i++) {
 										var objXlsx = XL_row_object[i];
-										
+									
 										if (objXlsx.Description) {
+											if(substituirDados && eParaApagar){
+												that.getModel().setProperty(sCaminhoTaxaMultipla,[]);
+												aOtherTax = that.getModel().getProperty(sCaminhoTaxaMultipla);
+												eParaApagar = false;
+											}
 											aOtherTax.push({
 												descricao: objXlsx.Description,
 												valor: Validador.isNumber(objXlsx.Value) ? objXlsx.Value : 0,
@@ -137,43 +159,48 @@ sap.ui.define(
 									// Here is your object
 									var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
 			
-									if (sheetName === "Accounting Result" && XL_row_object[0]) {
+									if (sheetName === "Accounting Result" && XL_row_object[0] && substituirDados) {
 										
 										oTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax =
 											Validador.isNumber(XL_row_object[0]["Statutory GAAP Profit / (loss) before tax"]) ? XL_row_object[0][
 												"Statutory GAAP Profit / (loss) before tax"
-											] : 0;
+											] : oTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax;
 										oTaxReconciliation.rc_current_income_tax_current_year =
 											Validador.isNumber(XL_row_object[0]["Current income tax – Current year"]) ? XL_row_object[0][
 												"Current income tax – Current year"
-											] : 0;
+											] : oTaxReconciliation.rc_current_income_tax_current_year;
 										oTaxReconciliation.rc_current_income_tax_previous_year =
 											Validador.isNumber(XL_row_object[0]["Current income tax – Previous Year"]) ? XL_row_object[0][
 												"Current income tax – Previous Year"
-											] : 0;
+											] : oTaxReconciliation.rc_current_income_tax_previous_year;
 										oTaxReconciliation.rc_deferred_income_tax =
-											Validador.isNumber(XL_row_object[0]["Deferred Income Tax"]) ? XL_row_object[0]["Deferred Income Tax"] : 0;
+											Validador.isNumber(XL_row_object[0]["Deferred Income Tax"]) ? XL_row_object[0]["Deferred Income Tax"] : oTaxReconciliation.rc_deferred_income_tax;
 										oTaxReconciliation.rc_non_recoverable_wht =
-											Validador.isNumber(XL_row_object[0]["Non- Recoverable WHT"]) ? XL_row_object[0]["Non- Recoverable WHT"] : 0;
+											Validador.isNumber(XL_row_object[0]["Non- Recoverable WHT"]) ? XL_row_object[0]["Non- Recoverable WHT"] : oTaxReconciliation.rc_non_recoverable_wht;
 											
 									} 
 									else if (sheetName === "Permanent Differences") {
-										processarDiferenca(XL_row_object, "/DiferencasPermanentes", "/DiferencaOpcao/Permanente");
+										processarDiferenca(XL_row_object, "/DiferencasPermanentes", "/DiferencaOpcao/Permanente", substituirDados);
 									}
 									else if (sheetName === "Temporary Differences") {
-										processarDiferenca(XL_row_object, "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria");
+										processarDiferenca(XL_row_object, "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria", substituirDados);
 									}
 									else if (sheetName === "Other Taxes") {
-										processarTaxaMultipla(XL_row_object, "/OtherTaxes", 1);
+										processarTaxaMultipla(XL_row_object, "/OtherTaxes", 1, substituirDados);
 									}
 									else if (sheetName === "Tax Incentives") {
-										processarTaxaMultipla(XL_row_object, "/IncentivosFiscais", 2);
+										processarTaxaMultipla(XL_row_object, "/IncentivosFiscais", 2, substituirDados);
 									}
 									else if (sheetName === "WHT") {
-										processarTaxaMultipla(XL_row_object, "/WHT", 3);
+										processarTaxaMultipla(XL_row_object, "/WHT", 3, substituirDados);
 									}
 								});
-			
+								
+								var oFiscalResult = XLSX.utils.sheet_to_row_object_array(workbook.Sheets["Fiscal Result"]);
+								if(oFiscalResult[0]["Taxable income deductions"] && substituirDados){
+									oTaxReconciliation["rf_taxable_income_deductions"] = Number(oFiscalResult[0]["Taxable income deductions"]);
+								}
+								
 								that.onAplicarRegras();
 								eventSource.setValue("");
 							}
@@ -224,6 +251,7 @@ sap.ui.define(
 						&& workbook.Sheets["Tax Incentives"]["B1"].v === "Value"
 						&& workbook.Sheets["WHT"]["A1"].v === "Description"
 						&& workbook.Sheets["WHT"]["B1"].v === "Value"
+						&& workbook.Sheets["Fiscal Result"]["A1"].v === "Taxable income deductions"
 						&& workbook.Sheets["Dados"]) {
 						var ws = workbook.Sheets["Dados"];
 						
@@ -253,7 +281,8 @@ sap.ui.define(
 						
 						checarOpcoes(oOpcoesNaPlanilha.aTemporaria, "/DiferencaOpcao/Temporaria");
 						checarOpcoes(oOpcoesNaPlanilha.aPermanente, "/DiferencaOpcao/Permanente");
-                    
+                        that.verificarValoresNegativosNaoPermitidos(workbook,that);
+                        
                         that._validarDiferencasDuplicadas(workbook,that);	
 
 						return workbook;	
@@ -270,26 +299,35 @@ sap.ui.define(
 
 			_validarDiferencasDuplicadas: function (workbook,that) {
 				var verificarAbaDiferenca = function (nomeAba, sCaminhoDiferencas, sCaminhoOpcaoDiferenca){
+					var substituirDados = that.getModel().getProperty("/substituirDados");
 					var aba = workbook.Sheets[nomeAba];
 					var linhasAba = XLSX.utils.sheet_to_row_object_array(aba);
 					var aOpcaoDiferenca = that.getModel().getProperty(sCaminhoOpcaoDiferenca);	
-					var tiposJaIterados = [];
+					var tiposJaIteradosOuJaInseridos;
+					if(substituirDados){
+						tiposJaIteradosOuJaInseridos = [];
+					}
+					else{
+						tiposJaIteradosOuJaInseridos = [].concat(that.getModel().getProperty(sCaminhoDiferencas));
+					}
+					
 					for(let i = 0, length = linhasAba.length; i < length; i++ ){
 						let linha = linhasAba[i];
 						if(linha["KEY"] && linha["Type"]){
 							var oDiferencaComTipoJaInserido = false;
-							for(let j =0; j < tiposJaIterados.length; j++){
-								if(tiposJaIterados[j] == linha["KEY"]){
+							for(let j =0; j < tiposJaIteradosOuJaInseridos.length; j++){
+								if(tiposJaIteradosOuJaInseridos[j]["id_diferenca"] == linha["KEY"]){
 									oDiferencaComTipoJaInserido = true;
 								}
 							}
-							tiposJaIterados.push(Number(linha["KEY"]));
 							if (oDiferencaComTipoJaInserido) {
 								var oOpcaoDiferenca = aOpcaoDiferenca.find(function (obj) {
 									return Number(linha["KEY"]) === obj.id_diferenca_opcao;
 								});
 								if(oOpcaoDiferenca["ind_duplicavel"] == false){
 									throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaComTipoDuplicadoComIndDuplicadoFalso"));
+								}else{
+									tiposJaIteradosOuJaInseridos.push({id_diferenca:Number(linha["KEY"])});
 								}
 							}
 						}
@@ -297,6 +335,22 @@ sap.ui.define(
 				}
 				verificarAbaDiferenca("Temporary Differences", "/DiferencasTemporarias", "/DiferencaOpcao/Temporaria");
 				verificarAbaDiferenca("Permanent Differences", "/DiferencasPermanentes", "/DiferencaOpcao/Permanente");
+			},
+			
+			verificarValoresNegativosNaoPermitidos(workbook){
+				var verificarAba = function(nomeAba,nomeColunaValidacao){
+					var aba = workbook.Sheets[nomeAba];
+					var linhasAba = XLSX.utils.sheet_to_row_object_array(aba);
+					for(let i = 0; i< linhasAba.length; i++){
+						if(linhasAba[i][nomeColunaValidacao]){
+							if(Math.sign(Number(linhasAba[i][nomeColunaValidacao])) != -1){
+								throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaComValorPositivo") + nomeAba);
+							}
+						}
+					}
+				}
+				verificarAba("WHT","Value");
+				verificarAba("Tax Incentives","Value");
 			},
             
 			_exibirErroImportacao: function (sErro) {
@@ -3001,6 +3055,12 @@ sap.ui.define(
 				this.getModel().setProperty("/Periodo", oParametros.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParametros.oAnoCalendario);
 
+				if (oParametros.oPeriodo["fk_dominio_moeda_rel.id_dominio_moeda"]) {
+	            	this.getModel().setProperty("/TaxReconciliation/0/fk_dominio_moeda_rel.id_dominio_moeda", oParametros.oPeriodo["fk_dominio_moeda_rel.id_dominio_moeda"]);
+                }
+                this.getModel().setProperty("/TaxReconciliation/0/numero_ordem", this.getModel().getProperty("/Periodo").numero_ordem);
+
+
 				this.getModel().setProperty("/TaxReconciliation/0/periodo", this._pegarLabelPeriodoTaxReconciliation(this.getModel().getProperty(
 					"/Periodo") ? this.getModel().getProperty("/Periodo").numero_ordem : ""));
 				this.getModel().setProperty("/TaxReconciliation/0/labelPeriodo", this._pegarLabelPeriodoTaxReconciliation(this.getModel().getProperty(
@@ -3337,7 +3397,7 @@ sap.ui.define(
 					});
 
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para o país da empresa
-				NodeAPI.pListarRegistros("ValorAliquota", {
+				/*NodeAPI.pListarRegistros("ValorAliquota", {
 						fkAliquota: oEmpresa["fk_imposto_pais"] ? oEmpresa["fk_imposto_pais"] : 0,
 						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
 					})
@@ -3350,7 +3410,7 @@ sap.ui.define(
 							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
 						}
 					});
-
+					
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para a empresa
 				NodeAPI.pListarRegistros("ValorAliquota", {
 						fkAliquota: oEmpresa["fk_imposto_empresa"] ? oEmpresa["fk_imposto_empresa"] : 0,
@@ -3364,7 +3424,35 @@ sap.ui.define(
 						if (err.status) { // erro de http (400 ou 500)
 							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
 						}
-					});
+					});*/
+					
+				var pValorAliquotaPais = NodeAPI.pListarRegistros("ValorAliquota", {
+					fkAliquota: oEmpresa["fk_imposto_pais"] ? oEmpresa["fk_imposto_pais"] : 0,
+					fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
+				});
+				
+				var pValorAliquotaEmpresa = NodeAPI.pListarRegistros("ValorAliquota", {
+					fkAliquota: oEmpresa["fk_imposto_empresa"] ? oEmpresa["fk_imposto_empresa"] : 0,
+					fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
+				});
+				
+				Promise.all([
+					pValorAliquotaPais,
+					pValorAliquotaEmpresa
+				])
+				.then(function (res){
+					var resAliquotaPais = res[0].result[0],
+						resAliquotaEmpresa = res[1].result[0];
+					oTaxReconAtivo.it_jurisdiction_tax_rate_average = (resAliquotaPais && resAliquotaPais.valor) ? Number(resAliquotaPais.valor) : 0;
+					oTaxReconAtivo.it_statutory_tax_rate_average = (resAliquotaEmpresa && resAliquotaEmpresa.valor) ? Number(resAliquotaEmpresa.valor) : oTaxReconAtivo.it_jurisdiction_tax_rate_average;
+				})
+				.catch(function (err){
+					oTaxReconAtivo.it_jurisdiction_tax_rate_average = 0;
+					oTaxReconAtivo.it_statutory_tax_rate_average = 0;
+						if (err.status) { // erro de http (400 ou 500)
+							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
+						}
+				})
 			},
 
 			_salvar: function (oEvent, callback) {
@@ -3661,6 +3749,7 @@ sap.ui.define(
 						rc_statutory_provision_for_income_tax: 0,
 						rc_statutory_gaap_profit_loss_after_tax: 0,
 						rf_taxable_income_loss_before_losses_and_tax_credits: 0,
+						rf_taxable_income_deductions:0,
 						rf_total_losses_utilized: 0,
 						rf_taxable_income_loss_after_losses: 0,
 						rf_income_tax_before_other_taxes_and_credits: 0,
@@ -3999,6 +4088,25 @@ sap.ui.define(
 							}
 						}
 					});
+				}
+				else if(oTaxReconCorrente["fk_dominio_moeda_rel.id_dominio_moeda"] && restoDaMensagemDeAviso != ""){
+					sap.m.MessageBox.confirm(restoDaMensagemDeAviso, {
+						title: this.getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
+						onClose: function (oAction) {
+							if (oAction === sap.m.MessageBox.Action.OK) {
+								that.getModel().setProperty('/MoedaAnterior', eventSource.getSelectedKey());
+								that.limparVinculosTTC();
+								that.resolverHabilitacao();
+							}
+							else {
+								that.getModel().setProperty('/Moeda', that.getModel().getProperty('/MoedaAnterior'));
+							}
+						}
+					});
+				}
+				else{
+					that.limparVinculosTTC();
+					that.resolverHabilitacao();
 				}
 			},
 			limparVinculosTTC: function(){

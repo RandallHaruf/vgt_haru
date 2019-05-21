@@ -121,6 +121,9 @@
 						<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}" hAlign="Center">
 							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center"/>
 						</Column>
+						<Column width="{/remtblTaxReconciliation.rf_taxable_income_deductions}" hAlign="Center">
+							<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncomeReductions}" textAlign="Center"/>
+						</Column>
 						<Column width="{/remtblTaxReconciliation.rf_total_losses_utilized}" hAlign="Center">
 							<Text text="{i18n>viewGeralTotalLossesUtilized}" textAlign="Center"/>
 						</Column>
@@ -153,7 +156,7 @@
 						</Column>
 						<Column width="{/remtblTaxReconciliation.rf_tax_due_overpaid}" hAlign="Center">
 							<Text text="{i18n>viewGeralTaxDueoverpaid}" textAlign="Center"/>
-						</Column>							
+						</Column>	
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -165,6 +168,14 @@
 								<Text
 								text="{
 								  path: 'tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits',
+								  type: 'sap.ui.model.type.Float',
+								  formatOptions: {
+					                 maxFractionDigits: 2
+								  }
+								}" />
+								<Text
+								text="{
+								  path: 'tblTaxReconciliation.rf_taxable_income_deductions',
 								  type: 'sap.ui.model.type.Float',
 								  formatOptions: {
 					                 maxFractionDigits: 2
@@ -257,7 +268,7 @@
 								  formatOptions: {
 					                 maxFractionDigits: 2
 								  }
-								}" />									
+								}" />	
 							</cells>
 						</ColumnListItem>
 					</items>

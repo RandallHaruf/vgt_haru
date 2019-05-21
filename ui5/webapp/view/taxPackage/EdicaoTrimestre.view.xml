@@ -18,7 +18,9 @@
 					<ObjectIdentifier title="{/NomeUsuario}" />
 				</f2:expandedContent>
 				<f2:navigationActions>
-					<uni:FileUploader buttonOnly="true" buttonText="Importar" icon="sap-icon://excel-attachment" change="onImportarDados" fileType="xlsx" />
+					<!--<uni:FileUploader buttonOnly="true" buttonText="Importar" icon="sap-icon://excel-attachment" change="onImportarDados" fileType="xlsx" />-->
+					<uni:FileUploader buttonOnly="true" buttonText="{i18n>viewTTTCSubstituir}" icon="sap-icon://excel-attachment" change="onImportarDadosSubstituir" fileType="xlsx" />
+					<uni:FileUploader buttonOnly="true" buttonText="{i18n>viewTTCAdicionar}" icon="sap-icon://excel-attachment" change="onImportarDadosAdicionar" fileType="xlsx" />
 				</f2:navigationActions>
 				<f2:snappedContent>
 					<ObjectIdentifier title="{/Empresa/empresa}" />
@@ -391,6 +393,9 @@
 										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center" />
 										</Column>
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncomeReductions}" textAlign="Center" />
+										</Column>
 										<Column width="16rem" hAlign="Center">
 											<Text text="{i18n>viewGeralTotalLossesUtilized}" textAlign="Center" />
 										</Column>
@@ -430,6 +435,7 @@
 											<cells>
 												<ObjectIdentifier title="{labelPeriodo}" />
 												<Input textAlign="End" value="{path: 'rf_taxable_income_loss_before_losses_and_tax_credits', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'rf_taxable_income_deductions', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="{ind_ativo}" />
 												<HBox>
 													<Input textAlign="End" value="{path: 'rf_total_losses_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
 													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarTotalLossesUtilized" />

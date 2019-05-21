@@ -2953,7 +2953,7 @@ sap.ui.define(
 					sIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa,
 					idAnoCalendario = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
 
-				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&taxIsExportavelTaxPackage=true&anoFiscal=" + idAnoCalendario, function (response) {
+				NodeAPI.listarRegistros("DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&taxIsExportavelTaxPackage=true&anoFiscal=" + idAnoCalendario + "&filtrarPrincipalPositivo=true", function (response) {
 					if (response) {
 						that.getModel().setProperty("/PagamentosTTC", response);
 
@@ -2973,7 +2973,7 @@ sap.ui.define(
 					});
 					
 				// Carrega a alíquota vigente para o período de edição do tax package do imposto em vigor para o país da empresa
-				NodeAPI.pListarRegistros("ValorAliquota", {
+				/*NodeAPI.pListarRegistros("ValorAliquota", {
 						fkAliquota: oEmpresa["fk_imposto_pais"] ? oEmpresa["fk_imposto_pais"] : 0,
 						fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
 					})
@@ -3000,7 +3000,34 @@ sap.ui.define(
 						if (err.status) { // erro de http (400 ou 500)
 							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
 						}
-					});
+					});*/
+				var pValorAliquotaPais = NodeAPI.pListarRegistros("ValorAliquota", {
+					fkAliquota: oEmpresa["fk_imposto_pais"] ? oEmpresa["fk_imposto_pais"] : 0,
+					fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
+				});
+				
+				var pValorAliquotaEmpresa = NodeAPI.pListarRegistros("ValorAliquota", {
+					fkAliquota: oEmpresa["fk_imposto_empresa"] ? oEmpresa["fk_imposto_empresa"] : 0,
+					fkDominioAnoFiscal: oAnoCalendario.idAnoCalendario
+				});
+				
+				Promise.all([
+					pValorAliquotaPais,
+					pValorAliquotaEmpresa
+				])
+				.then(function (res){
+					var resAliquotaPais = res[0].result[0],
+						resAliquotaEmpresa = res[1].result[0];
+					oTaxReconAtivo.it_jurisdiction_tax_rate_average = (resAliquotaPais && resAliquotaPais.valor) ? Number(resAliquotaPais.valor) : 0;
+					oTaxReconAtivo.it_statutory_tax_rate_average = (resAliquotaEmpresa && resAliquotaEmpresa.valor) ? Number(resAliquotaEmpresa.valor) : oTaxReconAtivo.it_jurisdiction_tax_rate_average;
+				})
+				.catch(function (err){
+					oTaxReconAtivo.it_jurisdiction_tax_rate_average = 0;
+					oTaxReconAtivo.it_statutory_tax_rate_average = 0;
+						if (err.status) { // erro de http (400 ou 500)
+							alert(err.status + ": " + err.statusText + "\n" + "Error: " + err.responseJSON.error.message);
+						}
+				})
 			},
 
 			_salvar: function (oEvent, callback) {

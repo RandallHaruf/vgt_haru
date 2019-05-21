@@ -398,6 +398,9 @@
 										<Column width="12rem" hAlign="Center">
 											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center"/>
 										</Column>
+										<Column width="12rem" hAlign="Center">
+											<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncomeReductions}" textAlign="Center" />
+										</Column>
 										<Column width="16rem" hAlign="Center">
 											<Text text="{i18n>viewGeralTotalLossesUtilized}" textAlign="Center"/>
 										</Column>
@@ -461,6 +464,7 @@
 												</HBox>
 												<Input type="Number" value="{rf_tax_due_overpaid}" editable="false" />-->
 												<Input textAlign="End" value="{path: 'rf_taxable_income_loss_before_losses_and_tax_credits', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
+												<Input textAlign="End" value="{path: 'rf_taxable_income_deductions', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
 												<HBox>
 													<Input textAlign="End" value="{path: 'rf_total_losses_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
 													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarTotalLossesUtilized" />

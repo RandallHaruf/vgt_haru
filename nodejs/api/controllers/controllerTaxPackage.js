@@ -1133,7 +1133,7 @@ module.exports = {
 		};
 		
 		var folder = "download/",
-			sheet = "ModeloImportTaxPackage.xlsx",
+			sheet = "ModelImportTaxPackage.xlsx",
 			tmpSheet = `tmp_${(new Date()).getTime()}_${sheet}`;
 			
 		try {
@@ -1277,6 +1277,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 				+ '"rc_statutory_provision_for_income_tax" = ?, '
 				+ '"rc_statutory_gaap_profit_loss_after_tax" = ?, '
 				+ '"rf_taxable_income_loss_before_losses_and_tax_credits" = ?, '
+				+ '"rf_taxable_income_deductions" = ?, '
 				+ '"rf_total_losses_utilized" = ?,  '
 				+ '"rf_taxable_income_loss_after_losses" = ?, '
 				+ '"rf_income_tax_before_other_taxes_and_credits" = ?, '
@@ -1306,6 +1307,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 			oTaxReconciliation.rc_statutory_provision_for_income_tax ,
 			oTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax ,
 			oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits ,
+			oTaxReconciliation.rf_taxable_income_deductions ,
 			oTaxReconciliation.rf_total_losses_utilized ,
 			oTaxReconciliation.rf_taxable_income_loss_after_losses ,
 			oTaxReconciliation.rf_income_tax_before_other_taxes_and_credits ,
@@ -1344,6 +1346,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 				+ '"rc_statutory_provision_for_income_tax", '
 				+ '"rc_statutory_gaap_profit_loss_after_tax", '
 				+ '"rf_taxable_income_loss_before_losses_and_tax_credits", '
+				+ '"rf_taxable_income_deductions", '
 				+ '"rf_total_losses_utilized", '
 				+ '"rf_taxable_income_loss_after_losses", '
 				+ '"rf_income_tax_before_other_taxes_and_credits", '
@@ -1365,7 +1368,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 				+ '"fk_rel_tax_package_periodo.id_rel_tax_package_periodo") '
 			+ 'values ('
 				+ '"identity_VGT.TAX_RECONCILIATION_id_tax_reconciliation".nextval, '
-				+ '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+				+ '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 				
 		aParams = [
 			oTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax ,
@@ -1376,6 +1379,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 			oTaxReconciliation.rc_statutory_provision_for_income_tax ,
 			oTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax ,
 			oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits ,
+			oTaxReconciliation.rf_taxable_income_deductions ,
 			oTaxReconciliation.rf_total_losses_utilized ,
 			oTaxReconciliation.rf_taxable_income_loss_after_losses ,
 			oTaxReconciliation.rf_income_tax_before_other_taxes_and_credits ,
