@@ -53,6 +53,16 @@ sap.ui.define([
 				type: this.getType(),
 				press: this._onFilter.bind(this)
 			}));
+			
+			sap.ui.getCore().attachLocalizationChanged(function(oEvent){
+			    var oChanges = oEvent.getParameter("changes");    
+			    if (oChanges && oChanges.language){
+			    	if ( this._filterDialog) {
+			        this._filterDialog._bundle = sap.ui.getCore().getLibraryResourceBundle("sap.m", oChanges.language);
+			        this._filterDialog.rerender();
+			    	}
+			    }
+			}.bind(this));
 		},
 		
 		/*
@@ -138,18 +148,19 @@ sap.ui.define([
 		*/
 		_onFilter: function (oEvent) {
 			if (!this._filterDialog) {
+				
 				var that = this;
 			
-				var oFilterDialog = new ViewSettingsDialog();
+				var oFilterDialog = new ViewSettingsDialog({
+					title: "{i18n>viewGeralEmpresa}"
+				});
 			
 				oFilterDialog.attachConfirm(function (event) {
 					that._triggerFilter(that._getFilterSelection(event));
 				});
 				
-				//setFilterByMap();
-				
 				$.each(this.getItems()/*this._filterByMap[this.getId()].items*/, function (indexFilterByControl, filterByControl) {
-					oFilterDialog.addFilterItem(filterByControl);
+					oFilterDialog.addFilterItem(filterByControl.clone());
 				});
 				
 				this._filterDialog = oFilterDialog;

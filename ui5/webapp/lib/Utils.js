@@ -1728,7 +1728,7 @@ sap.ui.define(
 				return fDataNoPadrao;
 			},
 			
-			criarDialogFiltro: function (sIdTabela, filtrarPor, that, confirmCallback) {
+			criarDialogFiltro: function (sIdTabela, filtrarPor, that, confirmCallback, nomePropriedadeDialog) {
 				
 				that.byId(sIdTabela).getBinding("items").filter([], false);                         
 				
@@ -1808,13 +1808,21 @@ sap.ui.define(
 					
 					oFilterDialog.addFilterItem(oFilterItemEmpresa);
 					
-					aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
+					if (item.items.loadFrom) {
+						aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
+					}
 				}
 				
 				that.getView().addDependent(oFilterDialog);
 				
-				that._filterDialog = oFilterDialog;
-				that._loadFrom = Promise.all(aPromise);
+				if (nomePropriedadeDialog) {
+					that[nomePropriedadeDialog] = oFilterDialog;	
+					that["_loadFrom_" + nomePropriedadeDialog] = Promise.all(aPromise);
+				}
+				else {
+					that._filterDialog = oFilterDialog;
+					that._loadFrom = Promise.all(aPromise);
+				}
 				
 				return oFilterDialog;
 			}
