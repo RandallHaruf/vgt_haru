@@ -12,64 +12,137 @@
 			id="paginaListagem"
 			showHeader="false"
 			visible="true">
-			<Table
-				id="tabelaObjetos"
-				items="{
-					path: '/objetos',
-					sorter: [{
-						path: 'tblTipoObrigacao.tipo',
-						group: true
-					}, {
-						path: 'tblDominioPais.pais'
-					}, {
-						path: 'tblModeloObrigacao.nome_obrigacao'
-					}]
-				}"
-				growing="true"
-				enableBusyIndicator="true"
-				growingScrollToLoad="true"
-				updateFinished="onTerminouAtualizar">
-		
-				<headerToolbar>
-					<Toolbar>
-						<Title 
-							id="cabecalhoTabelaObjetos" 
-							text="{i18n>formularioObrigacaoTituloObrigacao}"/>
-						<ToolbarSpacer />
-						<Button 
-							id="botaoNovoObjeto" 
-							icon="sap-icon://add" 
-							press="onNovoObjeto" 
-							text="{i18n>viewGeralNovo}"
-							type="Emphasized"/>
-					</Toolbar>
-				</headerToolbar>
-		
-				<columns>
-					<Column vAlign="Middle" hAlign="Center">
-						<Text text="{i18n>viewGeralNome}" />
-					</Column>
-					<Column vAlign="Middle" hAlign="Center">
-						<Text text="{i18n>viewGeralPais}" />
-					</Column>					
-					<Column width="100px"></Column>
-				</columns>
-		
+			<IconTabBar
+				id="idIconTabBarInlineMode"
+				headerMode="Inline"
+				upperCase="true"
+				class="sapUiNoContentPadding"
+				stretchContentHeight="true"
+				expandable="false">
 				<items>
-					<ColumnListItem
-						type="Navigation"
-						press="onAbrirObjeto">
-						<cells>
-							<ObjectIdentifier text="{tblModeloObrigacao.nome_obrigacao}"/>
-							<ObjectIdentifier text="{tblDominioPais.pais}"/>							
-							<HBox>
-								<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
-								<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="true" />
-							</HBox>
-						</cells>
-					</ColumnListItem>
+					<IconTabFilter
+						text="Compliance"
+						count="{/QuantidadeRegistrosCompliance}">
+						<ScrollContainer
+							height="100%"
+							width="100%"
+							horizontal="false"
+							vertical="true">
+							<Table
+								id="tabelaCompliance"
+								items="{
+									path: '/objetosCompliance',
+									sorter: [{
+										path: 'tblDominioPais.pais'
+									}, {
+										path: 'tblModeloObrigacao.nome_obrigacao'
+									}]
+								}"
+								growing="true"
+								sticky="HeaderToolbar,ColumnHeaders">
+								<headerToolbar>
+									<Toolbar>
+										<Title 
+											text="{i18n>formularioObrigacaoTituloObrigacao}"/>
+										<ToolbarSpacer />
+										<Button icon="sap-icon://filter" press="onFiltrarCompliance" />
+										<Button 
+											icon="sap-icon://add" 
+											press="onNovoObjeto" 
+											text="{i18n>viewGeralNovo}"
+											type="Emphasized"/>
+									</Toolbar>
+								</headerToolbar>
+						
+								<columns>
+									<Column vAlign="Middle" hAlign="Center">
+										<ObjectIdentifier title="{i18n>viewGeralNome}" />
+									</Column>
+									<Column vAlign="Middle" hAlign="Center">
+										<ObjectIdentifier title="{i18n>viewGeralPais}" />
+									</Column>					
+									<Column width="100px"></Column>
+								</columns>
+						
+								<items>
+									<ColumnListItem
+										type="Navigation"
+										press="onAbrirObjeto">
+										<cells>
+											<ObjectIdentifier text="{tblModeloObrigacao.nome_obrigacao}"/>
+											<ObjectIdentifier text="{tblDominioPais.pais}"/>							
+											<HBox>
+												<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
+												<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="true" />
+											</HBox>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</ScrollContainer>
+					</IconTabFilter>
+					<IconTabSeparator icon=""/>
+					<IconTabFilter
+						text="Beps"
+						count="{/QuantidadeRegistrosBeps}">
+						<ScrollContainer
+							height="100%"
+							width="100%"
+							horizontal="false"
+							vertical="true">
+							<Table
+								id="tabelaBeps"
+								items="{
+									path: '/objetosBeps',
+									sorter: [{
+										path: 'tblDominioPais.pais'
+									}, {
+										path: 'tblModeloObrigacao.nome_obrigacao'
+									}]
+								}"
+								growing="true"
+								sticky="HeaderToolbar,ColumnHeaders">
+								<headerToolbar>
+									<Toolbar>
+										<Title 
+											text="{i18n>formularioObrigacaoTituloObrigacao}"/>
+										<ToolbarSpacer />
+										<Button icon="sap-icon://filter" press="onFiltrarBeps" />
+										<Button 
+											icon="sap-icon://add" 
+											press="onNovoObjeto" 
+											text="{i18n>viewGeralNovo}"
+											type="Emphasized"/>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column vAlign="Middle" hAlign="Center">
+										<ObjectIdentifier title="{i18n>viewGeralNome}" />
+									</Column>
+									<Column vAlign="Middle" hAlign="Center">
+										<ObjectIdentifier title="{i18n>viewGeralPais}" />
+									</Column>					
+									<Column width="100px"></Column>
+								</columns>
+								<items>
+									<ColumnListItem
+										type="Navigation"
+										press="onAbrirObjeto">
+										<cells>
+											<ObjectIdentifier text="{tblModeloObrigacao.nome_obrigacao}"/>
+											<ObjectIdentifier text="{tblDominioPais.pais}"/>							
+											<HBox>
+												<!--<Button icon="sap-icon://status-inactive" type="Ghost" tooltip="Desabilitar" class="sapUiSmallMarginEnd" press="onDesabilitar" />-->
+												<Button icon="sap-icon://delete" type="Reject" tooltip="Excluir" press="onExcluir" enabled="true" />
+											</HBox>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</ScrollContainer>
+					</IconTabFilter>
 				</items>
-			</Table>
+			</IconTabBar>
 		</Page>
 		<Page
 			id="paginaObjeto"

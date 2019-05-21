@@ -23,7 +23,8 @@
 				growing="true"
 				enableBusyIndicator="true"
 				growingScrollToLoad="true"
-				updateFinished="onTerminouAtualizar">
+				updateFinished="onTerminouAtualizar"
+				sticky="HeaderToolbar">
 		
 				<headerToolbar>
 					<Toolbar>
