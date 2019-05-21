@@ -545,15 +545,94 @@ sap.ui.define(
 				var that = this;
 				that.setBusy(that.byId("tabelaObjetos"), true);
 				that.getModel().setProperty("/objetos", null);
+
+				/*this.byId("easyFilter").loadFrom()
+					.then(function (res) {	
+						that.getModel().setProperty("/EasyFilterEmpresa", Utils.orderByArrayParaBox(res[0], "nome"));
+						
+						for (var i = 0, length = res[1].length; i < length; i++) {
+							res[1][i]["pais"] = Utils.traduzDominioPais(res[1][i]["id_dominio_pais"], that);
+						}
+						that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[1], "pais"));
+						
+						for (var i = 0, length = res[2].length; i < length; i++) {
+							res[2][i]["status"] = Utils.traduzEmpresaStatusTipo(res[2][i]["id_dominio_empresa_status"], that);
+						}
+						that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[2], "status"));
+					})
+					.catch(function (err) {
+						console.log(err);
+					});*/
+
+				/*if (true) {*/ // Condicao para reconstruir, normalmente ao vir da view de seleção de módulo
+				/* { Exemplo
+					text: this.getResourceBundle().getText(""),
+					applyTo: '',
+					items: {
+						loadFrom: '',
+						path: '',
+						text: '',
+						key: ''
+					}
+				}*//*}*/
+				Utils.criarDialogFiltro("tabelaObjetos", [{
+					text: this.getResourceBundle().getText("viewGeralEmpresa"),
+					applyTo: 'id_empresa',
+					items: {
+						loadFrom: 'Empresa?full=true',
+						path: '/EasyFilterEmpresa',
+						text: 'nome',
+						key: 'id_empresa'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralPais"),
+					applyTo: 'fk_dominio_pais.id_dominio_pais',
+					items: {
+						loadFrom: 'DominioPais',
+						path: '/EasyFilterPais',
+						text: 'pais',
+						key: 'id_dominio_pais'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralStatus"),
+					applyTo: 'fk_dominio_empresa_status.id_dominio_empresa_status',
+					items: {
+						loadFrom: 'DominioEmpresaStatus',
+						path: '/EasyFilterStatus',
+						text: 'status',
+						key: 'id_dominio_empresa_status'
+					}
+				}], this, function (params) {
+					console.log(params);
+				});
+
+				this._loadFrom.then((function (res) {
+					that.getModel().setProperty("/EasyFilterEmpresa", Utils.orderByArrayParaBox(res[0], "nome"));
+				}));
+				this._loadFrom.then((function (res) {
+					for (var i = 0, length = res[1].length; i < length; i++) {
+						res[1][i]["pais"] = Utils.traduzDominioPais(res[1][i]["id_dominio_pais"], that);
+					}
+					that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[1], "pais"));
+				}));
+				this._loadFrom.then((function (res) {
+					for (var i = 0, length = res[2].length; i < length; i++) {
+						res[2][i]["status"] = Utils.traduzEmpresaStatusTipo(res[2][i]["id_dominio_empresa_status"], that);
+					}
+					that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[2], "status"));
+				}));
+				
+
 				NodeAPI.listarRegistros("DeepQuery/Empresa?full=true", function (response) {
 
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["status"] = Utils.traduzEmpresaStatusTipo(aResponse[i]["id_dominio_empresa_status"], that);
+						aResponse[i]["pais"] = Utils.traduzDominioPais(aResponse[i]["fk_dominio_pais.id_dominio_pais"], that);
 					}
 					that.getModel().setProperty("/objetos", aResponse);
-
 					that.setBusy(that.byId("tabelaObjetos"), false);
+					//that.byId("easyFilter").clear();
 				});
 
 				NodeAPI.listarRegistros("DominioAnoCalendario?full=true", function (response) {
@@ -830,7 +909,7 @@ sap.ui.define(
 									}, function (res) {});
 								}
 							}
-							
+
 							that._resolverHistoricoAliquota(function () {
 								that.byId("btnCancelar").setEnabled(true);
 								that.byId("btnSalvar").setEnabled(true);
@@ -1094,6 +1173,10 @@ sap.ui.define(
 
 			_navToPaginaListagem: function () {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
+			},
+
+			onFiltrarEmpresas: function () {
+				this._filterDialog.open();
 			},
 
 			/* Métodos fixos */

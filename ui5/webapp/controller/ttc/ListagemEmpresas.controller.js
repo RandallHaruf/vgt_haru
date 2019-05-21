@@ -4,9 +4,10 @@ sap.ui.define(
 		"sap/ui/model/json/JSONModel",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/jQueryMask",
-		"ui5ns/ui5/model/Constants"
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/Utils"
 	],
-	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants) {
+	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants, Utils) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ListagemEmpresas", {
@@ -69,6 +70,26 @@ sap.ui.define(
 
 			_atualizarDados: function () {
 				var that = this;
+				
+				if (true) { // Condicao para reconstruir, normalmente ao vir da view de seleção de módulo
+                    Utils.criarDialogFiltro("tabelaEmpresas", [{
+						text: this.getResourceBundle().getText("viewGeralEmpresa"),
+						applyTo: 'id_empresa',
+						items: {
+							loadFrom: 'Empresa',
+							path: '/EasyFilterEmpresa',
+							text: 'nome',
+							key: 'id_empresa'
+						}
+                    }], this, function (params) {
+                    	console.log(params);
+                    });
+                   
+                    this._loadFrom.then((function (res) {
+                        that.getModel().setProperty("/EasyFilterEmpresa", Utils.orderByArrayParaBox(res[0], "nome"));
+                    }));
+                }
+
 
 				var sIdAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado");
 
@@ -88,7 +109,11 @@ sap.ui.define(
 
 						that.byId("tabelaEmpresas").setBusy(false);
 					});
-			}
+			},
+			
+			onFiltrarListagemEmpresas : function () {
+               this._filterDialog.open();             
+            }
 		});
 	}
 );

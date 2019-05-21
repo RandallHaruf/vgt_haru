@@ -30,8 +30,9 @@ sap.ui.define(
 					aDropdownObrigatorio: [
 						this.byId("comboboxtPais"),
 						this.byId("selectRegiao"),
-						this.byId("selectStatus")/*,
-						this.byId("selectAliquotaVigente")*/
+						this.byId("selectStatus")
+						/*,
+												this.byId("selectAliquotaVigente")*/
 					]
 				});
 
@@ -101,17 +102,89 @@ sap.ui.define(
 				var that = this;
 				this.setBusy(this.byId("tabelaObjetos"), true);
 				that.getModel().setProperty("/objetos", null);
+
+				/*this.byId("easyFilter").loadFrom()
+					.then(function (res) {
+						for (var i = 0, length = res[0].length; i < length; i++) {
+							res[0][i]["nomePais"] = Utils.traduzDominioPais(res[0][i]["fkDominioPais"], that);
+						}
+						that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[0], "nomePais"));
+						
+						for (var i = 0, length = res[1].length; i < length; i++) {
+							res[1][i]["status"] = Utils.traduzStatusTiposPais(res[1][i]["id_dominio_pais_status"], that);
+						}
+						that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[1], "status"));
+						
+						that.getModel().setProperty("/EasyFilterNameTax", Utils.orderByArrayParaBox(res[2], "nome"));
+					})
+					.catch(function (err) {
+						console.log(err);
+					});*/
+					
+				Utils.criarDialogFiltro("tabelaObjetos", [{
+					text: this.getResourceBundle().getText("viewGeralPais"),
+					applyTo: 'id',
+					items: {
+						loadFrom: 'DeepQuery/Pais',
+						path: '/EasyFilterPais',
+						text: 'nomePais',
+						key: 'id'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralStatus"),
+					applyTo: 'fkDominioPaisStatus',
+					items: {
+						loadFrom: 'DominioPaisStatus',
+						path: '/EasyFilterStatus',
+						text: 'status',
+						key: 'id_dominio_pais_status'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralNomeT"),
+					applyTo: 'fkAliquota',
+					items: {
+						loadFrom: 'Aliquota',
+						path: '/EasyFilterNameTax',
+						text: 'nome',
+						key: 'id_aliquota'
+					}
+				}], this, function (params) {
+					console.log(params);
+				});
+
+				this._loadFrom.then((function (res) {
+					for (var i = 0, length = res[0].length; i < length; i++) {
+						res[0][i]["nomePais"] = Utils.traduzDominioPais(res[0][i]["fkDominioPais"], that);
+					}
+					that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[0], "nomePais"));
+				}));
+				this._loadFrom.then((function (res) {
+					for (var i = 0, length = res[1].length; i < length; i++) {
+						res[1][i]["status"] = Utils.traduzStatusTiposPais(res[1][i]["id_dominio_pais_status"], that);
+					}
+					that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[1], "status"));
+				}));
+				this._loadFrom.then((function (res) {
+					that.getModel().setProperty("/EasyFilterNameTax", Utils.orderByArrayParaBox(res[2], "nome"));
+				}));
+
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					var aResponse = response;
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["descricaoStatus"] = Utils.traduzStatusTiposPais(aResponse[i]["fkDominioPaisStatus"], that);
-						aResponse[i]["nomePais"] = Utils.traduzDominioPais(aResponse[i]["fkDominioPais"],that);
-						aResponse[i]["valorAliquota"] = aResponse[i]["valorAliquota"] ? Number(aResponse[i]["valorAliquota"]).toFixed(2) + "%" : that.getResourceBundle().getText("viewPaisAdminNenhumaAliquotaVigente");
+						aResponse[i]["nomePais"] = Utils.traduzDominioPais(aResponse[i]["fkDominioPais"], that);
+						aResponse[i]["valorAliquota"] = aResponse[i]["valorAliquota"] ? Number(aResponse[i]["valorAliquota"]).toFixed(2) + "%" : that.getResourceBundle()
+							.getText("viewPaisAdminNenhumaAliquotaVigente");
 					}
 					that.getModel().setProperty("/objetos", aResponse);
 					that.setBusy(that.byId("tabelaObjetos"), false);
+					/*that.byId("easyFilter").clear();*/
 				});
 			},
+			
+			onFiltrarPaises: function () {
+               this._filterDialog.open();             
+           },
 
 			_carregarCamposFormulario: function () {
 				var that = this;
@@ -123,9 +196,9 @@ sap.ui.define(
 					});
 					var aPais = response;
 					for (var i = 0, length = aPais.length; i < length; i++) {
-						aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"],that);
-					}					
-					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aPais,"pais"));
+						aPais[i]["pais"] = Utils.traduzDominioPais(aPais[i]["id_dominio_pais"], that);
+					}
+					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aPais, "pais"));
 				});
 
 				NodeAPI.listarRegistros("DominioPaisStatus", function (response) {
@@ -135,7 +208,7 @@ sap.ui.define(
 					for (var i = 0, length = aResponse.length; i < length; i++) {
 						aResponse[i]["status"] = Utils.traduzStatusTiposPais(aResponse[i]["id_dominio_pais_status"], that);
 					}
-					that.getModel().setProperty("/DominioPaisStatus", Utils.orderByArrayParaBox(aResponse,"status"));
+					that.getModel().setProperty("/DominioPaisStatus", Utils.orderByArrayParaBox(aResponse, "status"));
 					//that.getModel().setProperty("/DominioPaisStatus", response);
 				});
 
@@ -148,7 +221,7 @@ sap.ui.define(
 					for (var i = 0, length = aResponseRegiao.length; i < length; i++) {
 						aResponseRegiao[i]["regiao"] = Utils.traduzPaisRegiao(aResponseRegiao[i]["id_dominio_pais_regiao"], that);
 					}
-					that.getModel().setProperty("/DominioPaisRegiao", Utils.orderByArrayParaBox(aResponseRegiao,"regiao"));
+					that.getModel().setProperty("/DominioPaisRegiao", Utils.orderByArrayParaBox(aResponseRegiao, "regiao"));
 				});
 
 				NodeAPI.listarRegistros("Aliquota?tipo=pais", function (response) {

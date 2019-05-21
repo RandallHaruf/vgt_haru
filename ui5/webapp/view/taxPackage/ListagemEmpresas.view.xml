@@ -41,6 +41,7 @@
 						<content>
 							<!--<Title text="Empresas" level="H2"/>-->
 							<ToolbarSpacer />
+							<Button icon="sap-icon://filter" press="onFiltrarListagemEmpresas" />
 							<Select
 								id="selectAnoCalendario"
 								tooltip="{i18n>viewGeralAnoCalendario}"

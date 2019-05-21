@@ -6,7 +6,8 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:dnd="sap.ui.core.dnd"
 	xmlns:table="sap.ui.table"
-	xmlns="sap.m">
+	xmlns="sap.m"
+	xmlns:ef="ui5ns.ui5.control.easyfilter">
 	<NavContainer id="myNav" class="fixNavContainer">
 		<Page
 			id="paginaListagem"
@@ -34,6 +35,18 @@
 							id="cabecalhoTabelaObjetos" 
 							text="{i18n>viewGeralPaises}"/>
 						<ToolbarSpacer />
+						<Button icon="sap-icon://filter" press="onFiltrarPaises" />
+						<!--<ef:EasyFilter id="easyFilter" tooltip="{i18n>viewGeralTooltipVisualizarOpcoesFiltro}" filter="onFiltrarObrigacoes" applyTo="tabelaObjetos">
+							<ef:EasyFilterBy text="{i18n>viewGeralPais}" items="{/EasyFilterPais}" applyTo="id" loadFrom="DeepQuery/Pais">
+								<ef:EasyFilterItem text="{nomePais}" key="{id}" />
+							</ef:EasyFilterBy>
+							<ef:EasyFilterBy text="{i18n>viewGeralStatus}" items="{/EasyFilterStatus}" applyTo="fkDominioPaisStatus" loadFrom="DominioPaisStatus">
+								<ef:EasyFilterItem text="{status}" key="{id_dominio_pais_status}" />
+							</ef:EasyFilterBy>
+							<ef:EasyFilterBy text="{i18n>viewGeralNomeT}" items="{/EasyFilterNameTax}" applyTo="fkAliquota" loadFrom="Aliquota">
+								<ef:EasyFilterItem text="{nome}" key="{id_aliquota}" />
+							</ef:EasyFilterBy>
+                    	</ef:EasyFilter>-->
 						<Button 
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 

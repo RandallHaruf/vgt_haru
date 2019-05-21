@@ -1,5 +1,5 @@
 <core:View controllerName="ui5ns.ui5.controller.admin.Empresa" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
-	xmlns:f="sap.ui.layout.form" xmlns:dnd="sap.ui.core.dnd" xmlns:table="sap.ui.table" xmlns="sap.m">
+	xmlns:f="sap.ui.layout.form" xmlns:dnd="sap.ui.core.dnd" xmlns:table="sap.ui.table" xmlns="sap.m" xmlns:ef="ui5ns.ui5.control.easyfilter">
 	<NavContainer id="myNav" class="fixNavContainer">
 		<Page id="paginaListagem" showHeader="false" visible="true">
 			<Table id="tabelaObjetos" items="{ path: '/objetos', sorter: [{ path: 'pais', group: true }, { path: 'nome' }, { path: 'status' }] }"
@@ -8,6 +8,18 @@
 					<Toolbar>
 						<Title id="cabecalhoTabelaObjetos" text="{i18n>viewGeralEmpresas}"/>
 						<ToolbarSpacer/>
+						<!--<ef:EasyFilter id="easyFilter" tooltip="{i18n>viewGeralTooltipVisualizarOpcoesFiltro}" filter="onFiltrarEmpresas" applyTo="tabelaObjetos">
+							<ef:EasyFilterBy text="{i18n>viewGeralEmpresas}" items="{/EasyFilterEmpresa}" applyTo="id_empresa" loadFrom="Empresa?full=true">
+								<ef:EasyFilterItem text="{nome}" key="{id_empresa}"/>
+							</ef:EasyFilterBy>
+							<ef:EasyFilterBy text="{i18n>viewGeralPais}" items="{/EasyFilterPais}" applyTo="fk_dominio_pais.id_dominio_pais" loadFrom="DominioPais">
+								<ef:EasyFilterItem text="{pais}" key="{id_dominio_pais}"/>
+							</ef:EasyFilterBy>
+							<ef:EasyFilterBy text="{i18n>viewGeralStatus}" items="{/EasyFilterStatus}" applyTo="fk_dominio_empresa_status.id_dominio_empresa_status" loadFrom="DominioEmpresaStatus">
+								<ef:EasyFilterItem text="{status}" key="{id_dominio_empresa_status}"/>
+							</ef:EasyFilterBy>
+						</ef:EasyFilter>-->
+						<Button icon="sap-icon://filter" press="onFiltrarEmpresas" />
 						<Button id="botaoNovoObjeto" icon="sap-icon://add" press="onNovoObjeto" text="{i18n>viewGeralNovo}" type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>
@@ -235,7 +247,8 @@
 											</table:Column>
 											<table:Column width="8.7rem">
 												<table:template>
-													<Button text="{i18n>viewEmpresaAlterarVigencia}" press="onAlterarVigencia" /> <!-- enabled="{= !!${selecionada} === true ? true : false }" -->
+													<Button text="{i18n>viewEmpresaAlterarVigencia}" press="onAlterarVigencia"/>
+													<!-- enabled="{= !!${selecionada} === true ? true : false }" -->
 												</table:template>
 											</table:Column>
 										</table:columns>

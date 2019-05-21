@@ -38,6 +38,7 @@
 							id="cabecalhoTabelaObjetos" 
 							text="{i18n>viewGeralNomeT}"/>
 						<ToolbarSpacer />
+						<Button icon="sap-icon://filter" press="onFiltrarNameOfTaxTTC" />
 						<Button 
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
