@@ -1790,7 +1790,8 @@ sap.ui.define(
 					}
 				});
 				
-				var aPromise = [];
+				//var aPromise = [];
+				var routes = [];
 				
 				for (var i = 0, length = filtrarPor.length; i < length; i++) {
 					var item = filtrarPor[i];
@@ -1809,7 +1810,8 @@ sap.ui.define(
 					oFilterDialog.addFilterItem(oFilterItemEmpresa);
 					
 					if (item.items.loadFrom) {
-						aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
+						//aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
+						routes.push(item.items.loadFrom);
 					}
 				}
 				
@@ -1817,11 +1819,25 @@ sap.ui.define(
 				
 				if (nomePropriedadeDialog) {
 					that[nomePropriedadeDialog] = oFilterDialog;	
-					that["_loadFrom_" + nomePropriedadeDialog] = Promise.all(aPromise);
+					//that["_loadFrom_" + nomePropriedadeDialog] = Promise.all(aPromise);
+					that["_loadFrom_" + nomePropriedadeDialog] = function () {
+						var aPromise = [];
+						for (var i = 0, length = routes.length; i < length; i++) {
+							aPromise.push(NodeAPI.pListarRegistros(routes[i]));
+						}
+						return Promise.all(aPromise);
+					};
 				}
 				else {
 					that._filterDialog = oFilterDialog;
-					that._loadFrom = Promise.all(aPromise);
+					//that._loadFrom = Promise.all(aPromise);
+					that._loadFrom = function () {
+						var aPromise = [];
+						for (var i = 0, length = routes.length; i < length; i++) {
+							aPromise.push(NodeAPI.pListarRegistros(routes[i]));
+						}
+						return Promise.all(aPromise);
+					};
 				}
 				
 				return oFilterDialog;

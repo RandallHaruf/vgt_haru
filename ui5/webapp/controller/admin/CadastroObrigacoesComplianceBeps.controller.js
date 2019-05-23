@@ -110,52 +110,54 @@ sap.ui.define(
 					"tblModeloObrigacao.nome_obrigacao"));
 			},
 
-			_montarFiltro: function () {
+			_montarFiltro: function (bManterFiltro) {
 				var that = this;
+				
+				if (!bManterFiltro) {
+					Utils.criarDialogFiltro("tabelaCompliance", [{
+						text: this.getResourceBundle().getText("viewGeralPais"),
+						applyTo: 'tblDominioPais.id_dominio_pais',
+						items: {
+							loadFrom: 'DominioPais',
+							path: '/EasyFilterDominioPais',
+							text: 'pais',
+							key: 'id_dominio_pais'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralNome"),
+						applyTo: 'tblModeloObrigacao.nome_obrigacao',
+						items: {
+							loadFrom: "DeepQuery/ModeloObrigacao?&idStatus=2",
+							path: '/EasyFilterModeloObrigacaoCompliance',
+							text: 'tblModeloObrigacao.nome_obrigacao',
+							key: 'tblModeloObrigacao.nome_obrigacao'
+						}
+					}], this, function (params) {
+						that.getModel().setProperty("/QuantidadeRegistrosCompliance", params.filteredItemsCount);
+					}, "filterDialogCompliance");
+	
+					Utils.criarDialogFiltro("tabelaBeps", [{
+						text: this.getResourceBundle().getText("viewGeralPais"),
+						applyTo: 'tblDominioPais.id_dominio_pais',
+						items: {
+							path: '/EasyFilterDominioPais',
+							text: 'pais',
+							key: 'id_dominio_pais'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralNome"),
+						applyTo: 'tblModeloObrigacao.nome_obrigacao',
+						items: {
+							path: '/EasyFilterModeloObrigacaoBeps',
+							text: 'tblModeloObrigacao.nome_obrigacao',
+							key: 'tblModeloObrigacao.nome_obrigacao'
+						}
+					}], this, function (params) {
+						that.getModel().setProperty("/QuantidadeRegistrosBeps", params.filteredItemsCount);
+					}, "filterDialogBeps");
+				}
 
-				Utils.criarDialogFiltro("tabelaCompliance", [{
-					text: this.getResourceBundle().getText("viewGeralPais"),
-					applyTo: 'tblDominioPais.id_dominio_pais',
-					items: {
-						loadFrom: 'DominioPais',
-						path: '/EasyFilterDominioPais',
-						text: 'pais',
-						key: 'id_dominio_pais'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralNome"),
-					applyTo: 'tblModeloObrigacao.nome_obrigacao',
-					items: {
-						loadFrom: "DeepQuery/ModeloObrigacao?&idStatus=2",
-						path: '/EasyFilterModeloObrigacaoCompliance',
-						text: 'tblModeloObrigacao.nome_obrigacao',
-						key: 'tblModeloObrigacao.nome_obrigacao'
-					}
-				}], this, function (params) {
-					that.getModel().setProperty("/QuantidadeRegistrosCompliance", params.filteredItemsCount);
-				}, "filterDialogCompliance");
-
-				Utils.criarDialogFiltro("tabelaBeps", [{
-					text: this.getResourceBundle().getText("viewGeralPais"),
-					applyTo: 'tblDominioPais.id_dominio_pais',
-					items: {
-						path: '/EasyFilterDominioPais',
-						text: 'pais',
-						key: 'id_dominio_pais'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralNome"),
-					applyTo: 'tblModeloObrigacao.nome_obrigacao',
-					items: {
-						path: '/EasyFilterModeloObrigacaoBeps',
-						text: 'tblModeloObrigacao.nome_obrigacao',
-						key: 'tblModeloObrigacao.nome_obrigacao'
-					}
-				}], this, function (params) {
-					that.getModel().setProperty("/QuantidadeRegistrosBeps", params.filteredItemsCount);
-				}, "filterDialogBeps");
-
-				this._loadFrom_filterDialogCompliance.then((function (res) {
+				this._loadFrom_filterDialogCompliance().then((function (res) {
 					// Filtro Dominio Pais
 					for (var i = 0, length = res[0].length; i < length; i++) {
 						res[0][i]["pais"] = Utils.traduzDominioPais(res[0][i]["id_dominio_pais"], that);
@@ -170,10 +172,8 @@ sap.ui.define(
 
 			_carregarObjetos: function (oParam) {
 				var that = this;
-
-				if (!oParam.manterFiltro) {
-					this._montarFiltro();
-				}
+				
+				this._montarFiltro(oParam.manterFiltro);
 
 				that.getModel().setProperty("/objetosCompliance", []);
 				that.getModel().setProperty("/objetosBeps", []);
