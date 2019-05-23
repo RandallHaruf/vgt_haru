@@ -7,4 +7,5 @@ upsert "VGT.APP_CONFIG"("chave", "valor") values('senhaEmailQueEnvia', '{"conten
 * DEV: flavia.rezende.portugal@vale.com
 * PRD: vale.global.tax@vale.com
 */
+/* OBS: PARA APLICAÇÃO TESTE NA WEBIDE UTILIZAR EMAIL PESSOAL */
 upsert "VGT.APP_CONFIG"("chave", "valor") values('emailQueRecebe', 'substituir.email.ambiente.correto@email.com') where "chave" = 'emailQueRecebe';
