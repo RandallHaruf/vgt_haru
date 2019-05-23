@@ -468,7 +468,7 @@ sap.ui.define(
 				this.getRouter().navTo("ttcListagemEmpresas",{
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : ""
 					})
 				});
 			},
@@ -477,7 +477,7 @@ sap.ui.define(
 				this.getRouter().navTo("taxPackageListagemEmpresas",{
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : ""
 					})
 				});
 			},
@@ -486,7 +486,7 @@ sap.ui.define(
 				this.getRouter().navTo("complianceListagemObrigacoes",{
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : ""
 					})
 				});
 			},
@@ -495,7 +495,7 @@ sap.ui.define(
 				this.getRouter().navTo("bepsListagemObrigacoes",{
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : ""
 					})
 				});
 			},
