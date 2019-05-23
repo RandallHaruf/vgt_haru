@@ -55,7 +55,9 @@ sap.ui.define(
 							});*/
 							NodeAPI.pExcluirRegistro("NameOfTax", idExcluir)
 								.then(function (res) {
-									that._carregarObjetos();
+									that._carregarObjetos({
+										manterFiltro: true
+									});
 								})
 								.catch(function (err) {
 									that.showError(err);
@@ -110,7 +112,7 @@ sap.ui.define(
 				return oValidacao.formularioValido;
 			},
 			
-			_carregarObjetos: function () {
+			_carregarObjetos: function (oParams) {
 				/*this.getModel().setProperty("/objetos", [{
 					id: "1",
 					classification: "Tax Borne",
@@ -148,61 +150,7 @@ sap.ui.define(
 				var that = this;
 				that.getModel().setProperty("/objetos", null);
 				
-				Utils.criarDialogFiltro("tabelaObjetos", [{
-					text: this.getResourceBundle().getText("viewGeralClassificacao"),
-					applyTo: 'id_dominio_tax_classification',
-					items: {
-						loadFrom: 'DominioTaxClassification',
-						path: '/EasyFilterClaissificacao',
-						text: 'classification',
-						key: 'id_dominio_tax_classification'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralCategoria"),
-					applyTo: 'id_tax_category',
-					items: {
-						loadFrom: 'TaxCategory',
-						path: '/EasyFilterCategoria',
-						text: 'category',
-						key: 'id_tax_category'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralTaxa"),
-					applyTo: 'id_tax',
-					items: {
-						loadFrom: 'TAX',
-						path: '/EasyFilterTaxa',
-						text: 'tax',
-						key: 'id_tax'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralNomeT"),
-					applyTo: 'id_name_of_tax',
-					items: {
-						loadFrom: 'DeepQuery/NameOfTax?indDefault=true',
-						path: '/EasyFilterNomeDaTaxa',
-						text: 'name_of_tax',
-						key: 'id_name_of_tax'
-					}
-				}], this, function (params) {
-					console.log(params);
-				});
-				
-				this._loadFrom.then((function (res) {
-					for (var i = 0, length = res[0].length; i < length; i++) {
-						res[0][i]["classification"] = Utils.traduzDominioTaxClassification(res[0][i]["id_dominio_tax_classification"], that);
-					}
-					that.getModel().setProperty("/EasyFilterClaissificacao", Utils.orderByArrayParaBox(res[0], "classification"));
-				}));
-				this._loadFrom.then((function (res) {
-					that.getModel().setProperty("/EasyFilterCategoria", Utils.orderByArrayParaBox(res[1], "category"));
-				}));
-				this._loadFrom.then((function (res) {
-					that.getModel().setProperty("/EasyFilterTaxa", Utils.orderByArrayParaBox(res[2], "tax"));
-				}));
-				this._loadFrom.then((function (res) {
-					that.getModel().setProperty("/EasyFilterNomeDaTaxa", Utils.orderByArrayParaBox(res[3], "name_of_tax"));
-				}));
+				that._montarFiltro(oParams.manterFiltro);
 				
 				that.setBusy(that.byId("paginaListagem"), true);				
 				NodeAPI.listarRegistros("DeepQuery/NameOfTax?indDefault=true", function (response) {
@@ -224,6 +172,63 @@ sap.ui.define(
 						}
 					that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(responsePais,"pais")); 
 				});*/
+			},
+			
+			_montarFiltro: function(manterFiltro){
+				var that = this;
+				if(!manterFiltro){
+					Utils.criarDialogFiltro("tabelaObjetos", [{
+						text: this.getResourceBundle().getText("viewGeralClassificacao"),
+						applyTo: 'id_dominio_tax_classification',
+						items: {
+							loadFrom: 'DominioTaxClassification',
+							path: '/EasyFilterClaissificacao',
+							text: 'classification',
+							key: 'id_dominio_tax_classification'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralCategoria"),
+						applyTo: 'id_tax_category',
+						items: {
+							loadFrom: 'TaxCategory',
+							path: '/EasyFilterCategoria',
+							text: 'category',
+							key: 'id_tax_category'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralTaxa"),
+						applyTo: 'id_tax',
+						items: {
+							loadFrom: 'TAX',
+							path: '/EasyFilterTaxa',
+							text: 'tax',
+							key: 'id_tax'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralNomeT"),
+						applyTo: 'id_name_of_tax',
+						items: {
+							loadFrom: 'DeepQuery/NameOfTax?indDefault=true',
+							path: '/EasyFilterNomeDaTaxa',
+							text: 'name_of_tax',
+							key: 'id_name_of_tax'
+						}
+					}], this, function (params) {
+						console.log(params);
+					});
+				}
+				this._loadFrom().then((function (res) {
+					for (var i = 0, length = res[0].length; i < length; i++) {
+						res[0][i]["classification"] = Utils.traduzDominioTaxClassification(res[0][i]["id_dominio_tax_classification"], that);
+					}
+					that.getModel().setProperty("/EasyFilterClaissificacao", Utils.orderByArrayParaBox(res[0], "classification"));
+					
+					that.getModel().setProperty("/EasyFilterCategoria", Utils.orderByArrayParaBox(res[1], "category"));
+					
+					that.getModel().setProperty("/EasyFilterTaxa", Utils.orderByArrayParaBox(res[2], "tax"));
+					
+					that.getModel().setProperty("/EasyFilterNomeDaTaxa", Utils.orderByArrayParaBox(res[3], "name_of_tax"));
+				}));
 			},
 			
 			_carregarCamposFormulario: function (oEvent) {
@@ -446,7 +451,9 @@ sap.ui.define(
 			},
 			
 			_navToPaginaListagem: function () {
-				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
+				this.byId("myNav").to(this.byId("paginaListagem"), "flip", {
+					manterFiltro: true
+				});
 			},
 			
 			/* Métodos fixos */
@@ -462,7 +469,7 @@ sap.ui.define(
 				
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarObjetos();
+						that._carregarObjetos(oEvent && oEvent.data ? oEvent.data : {});
 					}	
 				});
 				

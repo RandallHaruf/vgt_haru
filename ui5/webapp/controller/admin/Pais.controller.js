@@ -98,7 +98,7 @@ sap.ui.define(
 				}*/
 			},
 
-			_carregarObjetos: function () {
+			_carregarObjetos: function (oParam) {
 				var that = this;
 				this.setBusy(this.byId("tabelaObjetos"), true);
 				that.getModel().setProperty("/objetos", null);
@@ -121,52 +121,7 @@ sap.ui.define(
 						console.log(err);
 					});*/
 					
-				Utils.criarDialogFiltro("tabelaObjetos", [{
-					text: this.getResourceBundle().getText("viewGeralPais"),
-					applyTo: 'id',
-					items: {
-						loadFrom: 'DeepQuery/Pais',
-						path: '/EasyFilterPais',
-						text: 'nomePais',
-						key: 'id'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralStatus"),
-					applyTo: 'fkDominioPaisStatus',
-					items: {
-						loadFrom: 'DominioPaisStatus',
-						path: '/EasyFilterStatus',
-						text: 'status',
-						key: 'id_dominio_pais_status'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralNomeT"),
-					applyTo: 'fkAliquota',
-					items: {
-						loadFrom: 'Aliquota',
-						path: '/EasyFilterNameTax',
-						text: 'nome',
-						key: 'id_aliquota'
-					}
-				}], this, function (params) {
-					console.log(params);
-				});
-
-				this._loadFrom.then((function (res) {
-					for (var i = 0, length = res[0].length; i < length; i++) {
-						res[0][i]["nomePais"] = Utils.traduzDominioPais(res[0][i]["fkDominioPais"], that);
-					}
-					that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[0], "nomePais"));
-				}));
-				this._loadFrom.then((function (res) {
-					for (var i = 0, length = res[1].length; i < length; i++) {
-						res[1][i]["status"] = Utils.traduzStatusTiposPais(res[1][i]["id_dominio_pais_status"], that);
-					}
-					that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[1], "status"));
-				}));
-				this._loadFrom.then((function (res) {
-					that.getModel().setProperty("/EasyFilterNameTax", Utils.orderByArrayParaBox(res[2], "nome"));
-				}));
+				this._montarFiltro(oParam.manterFiltro);
 
 				NodeAPI.listarRegistros("DeepQuery/Pais", function (response) {
 					var aResponse = response;
@@ -180,6 +135,55 @@ sap.ui.define(
 					that.setBusy(that.byId("tabelaObjetos"), false);
 					/*that.byId("easyFilter").clear();*/
 				});
+			},
+			
+			_montarFiltro: function (bManterFiltro){
+				var that = this;
+				if (!bManterFiltro) {
+					Utils.criarDialogFiltro("tabelaObjetos", [{
+						text: this.getResourceBundle().getText("viewGeralPais"),
+						applyTo: 'id',
+						items: {
+							loadFrom: 'DeepQuery/Pais',
+							path: '/EasyFilterPais',
+							text: 'nomePais',
+							key: 'id'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralStatus"),
+						applyTo: 'fkDominioPaisStatus',
+						items: {
+							loadFrom: 'DominioPaisStatus',
+							path: '/EasyFilterStatus',
+							text: 'status',
+							key: 'id_dominio_pais_status'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralNomeT"),
+						applyTo: 'fkAliquota',
+						items: {
+							loadFrom: 'Aliquota',
+							path: '/EasyFilterNameTax',
+							text: 'nome',
+							key: 'id_aliquota'
+						}
+					}], this, function (params) {
+						console.log(params);
+					});
+				}
+					this._loadFrom().then((function (res) {
+						for (var i = 0, length = res[0].length; i < length; i++) {
+							res[0][i]["nomePais"] = Utils.traduzDominioPais(res[0][i]["fkDominioPais"], that);
+						}
+						that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[0], "nomePais"));
+						
+						for (var i = 0, length = res[1].length; i < length; i++) {
+							res[1][i]["status"] = Utils.traduzStatusTiposPais(res[1][i]["id_dominio_pais_status"], that);
+						}
+						that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[1], "status"));
+						
+						that.getModel().setProperty("/EasyFilterNameTax", Utils.orderByArrayParaBox(res[2], "nome"));
+					}));
 			},
 			
 			onFiltrarPaises: function () {
@@ -359,7 +363,9 @@ sap.ui.define(
 			},
 
 			_navToPaginaListagem: function () {
-				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
+				this.byId("myNav").to(this.byId("paginaListagem"), "flip", {
+					manterFiltro: true
+				});
 			},
 
 			/* Métodos fixos */
@@ -385,7 +391,7 @@ sap.ui.define(
 
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarObjetos();
+						that._carregarObjetos(oEvent && oEvent.data ? oEvent.data : {});
 					}
 				});
 

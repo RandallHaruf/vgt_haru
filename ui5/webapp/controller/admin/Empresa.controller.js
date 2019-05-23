@@ -530,7 +530,7 @@ sap.ui.define(
 				}
 			},
 
-			_carregarObjetos: function () {
+			_carregarObjetos: function (oParam) {
 				/*this.getModel().setProperty("/objetos", [
 					{
 						id: 1,
@@ -575,54 +575,9 @@ sap.ui.define(
 						key: ''
 					}
 				}*//*}*/
-				Utils.criarDialogFiltro("tabelaObjetos", [{
-					text: this.getResourceBundle().getText("viewGeralEmpresa"),
-					applyTo: 'id_empresa',
-					items: {
-						loadFrom: 'Empresa?full=true',
-						path: '/EasyFilterEmpresa',
-						text: 'nome',
-						key: 'id_empresa'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralPais"),
-					applyTo: 'fk_dominio_pais.id_dominio_pais',
-					items: {
-						loadFrom: 'DominioPais',
-						path: '/EasyFilterPais',
-						text: 'pais',
-						key: 'id_dominio_pais'
-					}
-				}, {
-					text: this.getResourceBundle().getText("viewGeralStatus"),
-					applyTo: 'fk_dominio_empresa_status.id_dominio_empresa_status',
-					items: {
-						loadFrom: 'DominioEmpresaStatus',
-						path: '/EasyFilterStatus',
-						text: 'status',
-						key: 'id_dominio_empresa_status'
-					}
-				}], this, function (params) {
-					console.log(params);
-				});
-
-				this._loadFrom.then((function (res) {
-					that.getModel().setProperty("/EasyFilterEmpresa", Utils.orderByArrayParaBox(res[0], "nome"));
-				}));
-				this._loadFrom.then((function (res) {
-					for (var i = 0, length = res[1].length; i < length; i++) {
-						res[1][i]["pais"] = Utils.traduzDominioPais(res[1][i]["id_dominio_pais"], that);
-					}
-					that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[1], "pais"));
-				}));
-				this._loadFrom.then((function (res) {
-					for (var i = 0, length = res[2].length; i < length; i++) {
-						res[2][i]["status"] = Utils.traduzEmpresaStatusTipo(res[2][i]["id_dominio_empresa_status"], that);
-					}
-					that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[2], "status"));
-				}));
 				
-
+				this._montarFiltro(oParam.manterFiltro);
+				
 				NodeAPI.listarRegistros("DeepQuery/Empresa?full=true", function (response) {
 
 					var aResponse = response;
@@ -643,6 +598,55 @@ sap.ui.define(
 				NodeAPI.listarRegistros("DeepQuery/RelModeloEmpresa", function (response) {
 					that.getModel().setProperty("/RelModeloEmpresa", response);
 				});
+			},
+
+			_montarFiltro: function (bManterFiltro){
+				var that = this;
+				if (!bManterFiltro) {
+					Utils.criarDialogFiltro("tabelaObjetos", [{
+						text: this.getResourceBundle().getText("viewGeralEmpresa"),
+						applyTo: 'id_empresa',
+						items: {
+							loadFrom: 'Empresa?full=true',
+							path: '/EasyFilterEmpresa',
+							text: 'nome',
+							key: 'id_empresa'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralPais"),
+						applyTo: 'fk_dominio_pais.id_dominio_pais',
+						items: {
+							loadFrom: 'DominioPais',
+							path: '/EasyFilterPais',
+							text: 'pais',
+							key: 'id_dominio_pais'
+						}
+					}, {
+						text: this.getResourceBundle().getText("viewGeralStatus"),
+						applyTo: 'fk_dominio_empresa_status.id_dominio_empresa_status',
+						items: {
+							loadFrom: 'DominioEmpresaStatus',
+							path: '/EasyFilterStatus',
+							text: 'status',
+							key: 'id_dominio_empresa_status'
+						}
+					}], this, function (params) {
+						console.log(params);
+					});
+				}
+				this._loadFrom().then((function (res) {
+					that.getModel().setProperty("/EasyFilterEmpresa", Utils.orderByArrayParaBox(res[0], "nome"));
+					
+					for (var i = 0, length = res[1].length; i < length; i++) {
+						res[1][i]["pais"] = Utils.traduzDominioPais(res[1][i]["id_dominio_pais"], that);
+					}
+					that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[1], "pais"));
+					
+					for (var i = 0, length = res[2].length; i < length; i++) {
+						res[2][i]["status"] = Utils.traduzEmpresaStatusTipo(res[2][i]["id_dominio_empresa_status"], that);
+					}
+					that.getModel().setProperty("/EasyFilterStatus", Utils.orderByArrayParaBox(res[2], "status"));
+				}));
 			},
 
 			onSelectChange: function () {
@@ -1172,7 +1176,9 @@ sap.ui.define(
 			},
 
 			_navToPaginaListagem: function () {
-				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
+				this.byId("myNav").to(this.byId("paginaListagem"), "flip", {
+					manterFiltro: true
+				});
 			},
 
 			onFiltrarEmpresas: function () {
@@ -1193,7 +1199,7 @@ sap.ui.define(
 
 				this.byId("paginaListagem").addEventDelegate({
 					onAfterShow: function (oEvent) {
-						that._carregarObjetos(); //CARREGA OS OBJETOS DE EMPRESA E MODELOOBRIGACAO
+						that._carregarObjetos(oEvent && oEvent.data ? oEvent.data : {});
 					}
 				});
 
