@@ -38,8 +38,9 @@ const retornaPeriodosReabertosUltrapassados = () => {
 };
 
 const fechaPeriodosUltrapassados = (oPeriodo) => {
+	// Fecha o período com status de "fechado e não enviado" (1)
 	let sQuery =
-		'update "VGT.REL_TAX_PACKAGE_PERIODO" set "ind_ativo" = ? where "id_rel_tax_package_periodo" = ?';
+		'update "VGT.REL_TAX_PACKAGE_PERIODO" set "ind_ativo" = ?, "status_envio" = 1 where "id_rel_tax_package_periodo" = ?';
 
 	let aParametros = [
 			false,
