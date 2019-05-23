@@ -435,7 +435,7 @@
 											<cells>
 												<ObjectIdentifier title="{labelPeriodo}" />
 												<Input textAlign="End" value="{path: 'rf_taxable_income_loss_before_losses_and_tax_credits', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" />
-												<Input textAlign="End" value="{path: 'rf_taxable_income_deductions', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="{ind_ativo}" />
+												<Input textAlign="End" value="{path: 'rf_taxable_income_deductions', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="{ind_ativo}" change="onAplicarRegras" />
 												<HBox>
 													<Input textAlign="End" value="{path: 'rf_total_losses_utilized', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" editable="false" change="onAplicarRegras" />
 													<Button text="{i18n>viewGeralDetalhes}" enabled="{ind_ativo}" press="onEditarTotalLossesUtilized" />
