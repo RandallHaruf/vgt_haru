@@ -101,10 +101,7 @@ module.exports = {
 			+'FROM "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" as tipoObrigacao ';
 			
 		var oWhere = [];
-		var aParams = [{
-				isIdLog: true,
-				valor: req
-			}];
+		var aParams = [];
 
 		if (req.query.idRegistro) {
 			oWhere.push(' tipoObrigacao."id_dominio_obrigacao_acessoria_tipo" = ? ');
@@ -133,8 +130,6 @@ module.exports = {
 			} else {
 				res.send(JSON.stringify(result));
 			}
-		}, {
-			idUsuario: req
 		});
 	}
 };

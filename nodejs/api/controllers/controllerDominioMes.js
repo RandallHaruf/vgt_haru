@@ -30,12 +30,12 @@ module.exports = {
 		try {
 			let aParam = utils.getAvailableFields(model, req.body);
 			
+			aParam = aParam.concat(utils.getIdentityFields(model));
+			
 			aParam.push({
 				isIdLog: true,
 				 valor: req
 			});
-			
-			aParam = aParam.concat(utils.getIdentityFields(model));
 
 			model.inserir(aParam, (err, result) => {
 				if (err) {

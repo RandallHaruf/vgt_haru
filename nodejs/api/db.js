@@ -476,7 +476,7 @@ module.exports = {
 					that.executeStatementSync(sStatement, aValues, oSettings);
 				}
 				else {
-					var result1 = that.executeStatementSync(sStatement, aValues);
+					var result1 = that.executeStatementSync(sStatement, aValues, oSettings);
 					
 					if (JSON.stringify(result1) === "1") {
 						that.executeStatementSync(sGeneratedIdStm, [], oSettings);

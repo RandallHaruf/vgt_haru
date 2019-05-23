@@ -7,7 +7,7 @@ function isNumber (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriodo) {
+function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriodo, req) {
 	// Exclui todos os name of tax NÃO DEFAULT associados aos pagamentos
 	var aParams = [sIdEmpresa, sIdPeriodo],
 		sQuery = 'delete from "VGT.NAME_OF_TAX"  '
@@ -16,12 +16,12 @@ function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriod
 				+ '(select "fk_name_of_tax.id_name_of_tax" from "VGT.PAGAMENTO" where "fk_empresa.id_empresa" = ? and "fk_periodo.id_periodo" = ?) ' 
 				+ 'and "ind_default" = false';
 
-	model.executeSync(sQuery, aParams, { connection: oConnection });
+	model.executeSync(sQuery, aParams, { connection: oConnection, idUsuario: req });
 
 	// Exclui todos os pagamentos dessa empresa neste periodo
 	sQuery = 'delete from "VGT.PAGAMENTO" where "fk_empresa.id_empresa" = ? and "fk_periodo.id_periodo" = ?';
 
-	model.executeSync(sQuery, aParams, { connection: oConnection });
+	model.executeSync(sQuery, aParams, { connection: oConnection, idUsuario: req });
 
 	// Percorre cada pagamento enviado
 	for (var i = 0; i < aPagamentos.length; i++) {
@@ -36,7 +36,7 @@ function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriod
 			var sStm = 'select * from "VGT.NAME_OF_TAX" where "id_name_of_tax" = ?',
 				aParameters = [oPagamento[model.colunas.fkNameOfTax.nome]];
 				
-			var result1 = model.executeSync(sStm, aParameters, { connection: oConnection });
+			var result1 = model.executeSync(sStm, aParameters, { connection: oConnection, idUsuario: req });
 			
 			// Caso este ID exista..
 			if (result1 && result1.length > 0) {
@@ -60,14 +60,14 @@ function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriod
 						+ 'values("identity_VGT.NAME_OF_TAX_id_name_of_tax".nextval, ?, ?, false)',
 				aParameters2 = [oPagamento.name_of_tax, oPagamento["fk_tax.id_tax"]];
 			
-			var result2 = model.executeSync(sStm2, aParameters2, { connection: oConnection });
+			var result2 = model.executeSync(sStm2, aParameters2, { connection: oConnection, idUsuario: req });
 				
 			// Se a inserção ocorreu com sucesso
 			if (isNumber(result2) && Number(result2) === 1) {
 				// Recupera qual foi o ultimo id gerado
 				var sGeneratedId = 'select MAX("id_name_of_tax") "generated_id" from "VGT.NAME_OF_TAX"';
 				
-				var result3 = model.executeSync(sGeneratedId, [], { connection: oConnection });
+				var result3 = model.executeSync(sGeneratedId, [], { connection: oConnection, idUsuario: req });
 				if (result3) {
 					// Este ID será usado como id de name_of_Tax do pagamento corrente
 					idNameOfTax = result3[0].generated_id;		
@@ -156,7 +156,7 @@ function inserirLoteDePagamento (oConnection, aPagamentos, sIdEmpresa, sIdPeriod
 		}, {
 			coluna: model.colunas.fkPeriodo,
 			valor: oPagamento[model.colunas.fkPeriodo.nome] ? oPagamento[model.colunas.fkPeriodo.nome] : null
-		}], { connection: oConnection });
+		}], { connection: oConnection, idUsuario: req });
 	}
 }
 
@@ -204,7 +204,7 @@ module.exports = {
 				oConnection = db.getConnection();
 				oConnection.setAutoCommit(false);
 				
-				inserirLoteDePagamento(oConnection, aPagamentos, sIdEmpresa, sIdPeriodo);
+				inserirLoteDePagamento(oConnection, aPagamentos, sIdEmpresa, sIdPeriodo, req);
 			
 				oConnection.commit();
 			} catch (e) {
@@ -515,8 +515,6 @@ module.exports = {
 				}
 				res.send(JSON.stringify(result));
 			}
-		}, {
-			idUsuario: req
 		});
 	}
 };

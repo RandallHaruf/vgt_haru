@@ -56,14 +56,12 @@ const getEmpresas = function (sUserId) {
 	});
 };
 
-const registrarAcesso = function (idUsuario, res, req) {
+const registrarAcesso = function (idUsuario, req) {
 	db.executeStatement({
 		statement: 'upsert "VGT.ACESSO" ("fk_usuario.id_usuario", "datahora_acesso") '
 					+ 'values(?, CURRENT_TIMESTAMP) where "fk_usuario.id_usuario" = ? ', 
 		parameters: [idUsuario, idUsuario]
-	}, function (err, result) {
-		
-	}, {
+	}, function (err, result) { }, {
 		idUsuario: req
 	});
 };
@@ -123,7 +121,7 @@ const login = function (req, res) {
 								host: req.get('host')
 							};
 
-							registrarAcesso(result[0].id_usuario);
+							registrarAcesso(result[0].id_usuario, req);
 
 							// Carrega os modulos e as empresas que o usuario pode visualizar/acessar
 							getModulos(result[0].id_usuario)
@@ -190,16 +188,22 @@ const deslogar = function (req, res) {
 	db.executeStatement({
 		statement: 'delete from "VGT.ACESSO" where "fk_usuario.id_usuario" = ?', 
 		parameters: [req.session.usuario.id]
-	});
+	}, function (err, result) { 
+		if (err) {
+			console.log(err);
+		}
 		
-	req.session = null;
-	
-	return res.send();
+		req.session = null;
+		
+		res.send();
+	}, {
+		idUsuario: req
+	});
 };
 
 const verificaAuth = function (req, res) {
 	if (req.session.autenticado && req.session.usuario.host === req.get('host')) {
-		registrarAcesso(req.session.usuario.id);
+		registrarAcesso(req.session.usuario.id, req);
 		
 		res.send({
 			success: true,

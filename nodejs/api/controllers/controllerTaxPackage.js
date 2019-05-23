@@ -20,7 +20,7 @@ module.exports = {
 				+ 'where taxRecon."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = ?';
 			var aParams = [sIdRelTaxPackagePeriodo];
 			
-			var resultTaxRecon = db.executeStatementSync(sQuery, aParams);
+			var resultTaxRecon = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			/*for (var i = 0, length = resultTaxRecon.length; i < length; i++) {
 				resultTaxRecon[i].ind_ativo = (resultTaxRecon[i].ind_ativo === 1);
@@ -43,7 +43,7 @@ module.exports = {
 					+ 'rel."id_rel_tax_package_periodo" = ?';
 				aParams = [sIdRelTaxPackagePeriodo];
 				
-				var resultMoeda = db.executeStatementSync(sQuery, aParams);
+				var resultMoeda = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 				
 				// Carrega as diferencas
 				sQuery =
@@ -57,7 +57,7 @@ module.exports = {
 					+ 'rel."id_rel_tax_package_periodo" = ? ';
 				aParams = [sIdRelTaxPackagePeriodo];
 				
-				var resultRel = db.executeStatementSync(sQuery, aParams);
+				var resultRel = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 				
 				var resultDiferenca = [];
 				var aDiferenca = [];
@@ -94,7 +94,7 @@ module.exports = {
 						
 					aParams = [resultRel[0]["fk_dominio_ano_calendario.id_dominio_ano_calendario"], resultRel[0].numero_ordem, resultRel[0]["fk_empresa.id_empresa"]];
 					
-					resultDiferenca = db.executeStatementSync(sQuery, aParams);
+					resultDiferenca = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 					
 					for (var i = 0; i < resultDiferenca.length; i++) {
 						if (resultDiferenca[i].numero_ordem === 6 && i < resultDiferenca - 1) {
@@ -242,29 +242,29 @@ module.exports = {
 				aAntecipacao = oTaxPackage.antecipacoes,
 				aOutrasAntecipacoes = oTaxPackage.outrasAntecipacoes;
 			
-			atualizarMoeda(oTaxPackage.periodo, sIdMoeda);
+			atualizarMoeda(oTaxPackage.periodo, sIdMoeda, req);
 			//atualizarMoeda(sIdTaxPackage, sIdMoeda);
-			atualizarStatus(sIdRelTaxPackagePeriodo);
+			atualizarStatus(sIdRelTaxPackagePeriodo, req);
 			
-			var sIdTaxReconciliation = inserirTaxReconciliation(sIdRelTaxPackagePeriodo, oTaxReconciliation, sIncomeTaxDetails);
+			var sIdTaxReconciliation = inserirTaxReconciliation(sIdRelTaxPackagePeriodo, oTaxReconciliation, sIncomeTaxDetails, req);
 			
 			var sChaveValorDiferenca = pegarChaveValorDiferenca(iNumeroOrdemPeriodo);
 			
-			inserirDiferenca(sIdTaxReconciliation, aDiferencaPermanente, sChaveValorDiferenca);
-			inserirDiferenca(sIdTaxReconciliation, aDiferencaTemporaria, sChaveValorDiferenca);
+			inserirDiferenca(sIdTaxReconciliation, aDiferencaPermanente, sChaveValorDiferenca, req);
+			inserirDiferenca(sIdTaxReconciliation, aDiferencaTemporaria, sChaveValorDiferenca, req);
 			
-			excluirDiferenca(aDiferencaPermanenteExcluida.concat(aDiferencaTemporariaExcluida));
+			excluirDiferenca(aDiferencaPermanenteExcluida.concat(aDiferencaTemporariaExcluida), req);
 			
-			inserirRespostaItemToReport(sIdRelTaxPackagePeriodo, aRespostaItemToReport);
+			inserirRespostaItemToReport(sIdRelTaxPackagePeriodo, aRespostaItemToReport, req);
 			
-			inserirSchedule(aLossSchedule);
-			inserirSchedule(aCreditSchedule);
+			inserirSchedule(aLossSchedule, req);
+			inserirSchedule(aCreditSchedule, req);
 			
-			inserirScheduleValueUtilized(sIdTaxReconciliation, aTotalLossesUtilized, aOverpaymentFromPriorYearAppliedToCurrentYear);
+			inserirScheduleValueUtilized(sIdTaxReconciliation, aTotalLossesUtilized, aOverpaymentFromPriorYearAppliedToCurrentYear, req);
 			
-			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes);
+			inserirTaxasMultiplas(sIdTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes, req);
 			
-			inserirAntecipacoes(sIdTaxReconciliation, aAntecipacao);
+			inserirAntecipacoes(sIdTaxReconciliation, aAntecipacao, req);
 			
 			res.send(JSON.stringify({
 				success: true
@@ -298,19 +298,19 @@ module.exports = {
 			sQuery = 'select * from "VGT.DOMINIO_ANO_FISCAL" where "ano_fiscal" <= ?';
 			aParams = [oAnoCalendario.anoCalendario];
 			
-			var aAnoFiscal = db.executeStatementSync(sQuery, aParams);
+			var aAnoFiscal = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			// pegar o id do ano calendario anterior ao ano calendario corrente
 			sQuery = 'select * from "VGT.DOMINIO_ANO_CALENDARIO" where "ano_calendario" = ?';
 			aParams = [oAnoCalendario.anoCalendario - 1];
 			
-			var resultAnoCalendarioAnterior = db.executeStatementSync(sQuery, aParams);
+			var resultAnoCalendarioAnterior = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			// pegar a prescrição cadastrada para o pais vinculado a empresa
 			sQuery = 'select * from "VGT.PAIS" where "id_pais" = ?';
 			aParams = [oEmpresa["fk_pais.id_pais"]];
 			
-			var resultPais = db.executeStatementSync(sQuery, aParams),
+			var resultPais = db.executeStatementSync(sQuery, aParams, { idUsuario: req }),
 				prescricao = 0;
 			
 			if (resultPais) {
@@ -360,7 +360,7 @@ module.exports = {
 				
 				aParams = [sIdTipoSchedule, iIdAnoCalendarioAnterior, oEmpresa.id_empresa, sIdTipoSchedule, iIdAnoCalendarioAnterior, oEmpresa.id_empresa];
 				
-				var resultRetratoScheduleAnoAnterior = db.executeStatementSync(sQuery, aParams);
+				var resultRetratoScheduleAnoAnterior = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 				
 				if (resultRetratoScheduleAnoAnterior && resultRetratoScheduleAnoAnterior.length > 0) {
 					// para cada ano fiscal
@@ -574,7 +574,7 @@ module.exports = {
 			sQuery = 'select * from "VGT.DOMINIO_ANO_CALENDARIO" where "ano_calendario" <= ?';
 			aParams = [oAnoCalendario.anoCalendario - 1];
 			
-			result = db.executeStatementSync(sQuery, aParams);
+			result = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			if (result && result.length > 0) {
 				for (var i = 0, length = result.length; i < length; i++) {
@@ -612,7 +612,7 @@ module.exports = {
 					
 					aParams = [sIdTipoSchedule, idAnoCalendario, oEmpresa.id_empresa, sIdTipoSchedule, idAnoCalendario, oEmpresa.id_empresa];
 					
-					var result2 = db.executeStatementSync(sQuery, aParams);
+					var result2 = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 					
 					if (result2 && result2.length > 0) {
 						aSchedule.push(result2[0]);
@@ -1029,6 +1029,8 @@ module.exports = {
 									result: result2
 								}));
 							}
+						}, {
+							idUsuario: req
 						});
 					}
 					else {
@@ -1053,9 +1055,13 @@ module.exports = {
 									result: result2
 								}));
 							}
+						}, {
+							idUsuario: req
 						});	
 					}
 				}
+			}, {
+				idUsuario: req
 			});
 			/*} 
 			else {
@@ -1194,7 +1200,7 @@ function jsDateObjectToSqlDateString (oDate) {
 	return result === 1;
 }*/
 
-function atualizarMoeda (oPeriodo, idMoeda) {
+function atualizarMoeda (oPeriodo, idMoeda, req) {
 	switch (oPeriodo.numero_ordem) {
 		case 1:
 		case 2:
@@ -1216,7 +1222,7 @@ function atualizarMoeda (oPeriodo, idMoeda) {
 				+ ') ',
 				aParam = [idMoeda, oPeriodo["fk_tax_package.id_tax_package"]];
 				
-			db.executeStatementSync(sQuery, aParam);
+			db.executeStatementSync(sQuery, aParam, { idUsuario: req });
 			break;
 		case 5:
 		case 6:
@@ -1248,21 +1254,21 @@ function atualizarMoeda (oPeriodo, idMoeda) {
 				+ ')', 
 				aParam = [idMoeda, oPeriodo["fk_tax_package.id_tax_package"], oPeriodo["fk_tax_package.id_tax_package"]];
 				
-			db.executeStatementSync(sQuery, aParam);
+			db.executeStatementSync(sQuery, aParam, { idUsuario: req });
 			break;
 	}
 }
 
-function atualizarStatus (sIdRelTaxPackagePeriodo) {
+function atualizarStatus (sIdRelTaxPackagePeriodo, req) {
 	var sQuery = 'update "VGT.REL_TAX_PACKAGE_PERIODO" set "status_envio" = ? where "id_rel_tax_package_periodo" = ?',
 		aParam = [3, sIdRelTaxPackagePeriodo]; // em andamento
 	
-	var result = db.executeStatementSync(sQuery, aParam);
+	var result = db.executeStatementSync(sQuery, aParam, { idUsuario: req });
 	
 	return result === 1;
 }
 
-function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, sIncomeTaxDetails) {
+function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, sIncomeTaxDetails, req) {
 	var sQuery, aParams, result, sIdTaxReconciliation;	
 	
 	if (oTaxReconciliation.id_tax_reconciliation) {
@@ -1277,7 +1283,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 				+ '"rc_statutory_provision_for_income_tax" = ?, '
 				+ '"rc_statutory_gaap_profit_loss_after_tax" = ?, '
 				+ '"rf_taxable_income_loss_before_losses_and_tax_credits" = ?, '
-				+ '"rf_taxable_income_deductions" = ?, '
+				+ '"rf_taxable_income_deductions" = ?, '		
 				+ '"rf_total_losses_utilized" = ?,  '
 				+ '"rf_taxable_income_loss_after_losses" = ?, '
 				+ '"rf_income_tax_before_other_taxes_and_credits" = ?, '
@@ -1307,7 +1313,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 			oTaxReconciliation.rc_statutory_provision_for_income_tax ,
 			oTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax ,
 			oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits ,
-			oTaxReconciliation.rf_taxable_income_deductions ,
+			oTaxReconciliation.rf_taxable_income_deductions ,				
 			oTaxReconciliation.rf_total_losses_utilized ,
 			oTaxReconciliation.rf_taxable_income_loss_after_losses ,
 			oTaxReconciliation.rf_income_tax_before_other_taxes_and_credits ,
@@ -1329,7 +1335,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 			oTaxReconciliation.id_tax_reconciliation
 		];
 		
-		db.executeStatementSync(sQuery, aParams);
+		db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		
 		sIdTaxReconciliation = oTaxReconciliation.id_tax_reconciliation;
 	}
@@ -1346,7 +1352,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 				+ '"rc_statutory_provision_for_income_tax", '
 				+ '"rc_statutory_gaap_profit_loss_after_tax", '
 				+ '"rf_taxable_income_loss_before_losses_and_tax_credits", '
-				+ '"rf_taxable_income_deductions", '
+				+ '"rf_taxable_income_deductions", '					
 				+ '"rf_total_losses_utilized", '
 				+ '"rf_taxable_income_loss_after_losses", '
 				+ '"rf_income_tax_before_other_taxes_and_credits", '
@@ -1379,7 +1385,7 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 			oTaxReconciliation.rc_statutory_provision_for_income_tax ,
 			oTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax ,
 			oTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits ,
-			oTaxReconciliation.rf_taxable_income_deductions ,
+			oTaxReconciliation.rf_taxable_income_deductions ,		
 			oTaxReconciliation.rf_total_losses_utilized ,
 			oTaxReconciliation.rf_taxable_income_loss_after_losses ,
 			oTaxReconciliation.rf_income_tax_before_other_taxes_and_credits ,
@@ -1402,12 +1408,12 @@ function inserirTaxReconciliation (sFkRelTaxPackagePeriodo, oTaxReconciliation, 
 		];
 					
 					
-		result = db.executeStatementSync(sQuery, aParams);
+		result = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		
 		if (result === 1) {
 			sQuery = 'select MAX("id_tax_reconciliation") "generated_id" from "VGT.TAX_RECONCILIATION"';
 			
-			result = db.executeStatementSync(sQuery, []);
+			result = db.executeStatementSync(sQuery, [], { idUsuario: req });
 			
 			sIdTaxReconciliation = result[0].generated_id;
 		}		
@@ -1433,7 +1439,7 @@ function pegarChaveValorDiferenca (iNumeroOrdemPeriodo) {
 	}
 }
 
-function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenca) {
+function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenca, req) {
 	var sQuery, aParams;
 	
 	for (var i = 0, length = aDiferenca.length; i < length; i++) {
@@ -1448,59 +1454,59 @@ function inserirDiferenca (sFkTaxReconciliation, aDiferenca, sChaveValorDiferenc
 				+ 'and rel."fk_tax_reconciliation.id_tax_reconciliation" = ?';
 			aParams = [oDiferenca.id_diferenca, sFkTaxReconciliation];
 			
-			var result = db.executeStatementSync(sQuery, aParams);
+			var result = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			// Caso o relacionamento com o tax reconciliation corrente ja existe, atualiza ele
 			if (result && result.length > 0) {
 				sQuery = 'update "VGT.REL_TAX_RECONCILIATION_DIFERENCA" set "valor" = ? where "fk_tax_reconciliation.id_tax_reconciliation" = ? and "fk_diferenca.id_diferenca" = ?';
 				aParams = [oDiferenca[sChaveValorDiferenca], sFkTaxReconciliation, oDiferenca.id_diferenca];
-				db.executeStatementSync(sQuery, aParams);
+				db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			}
 			// Se nao, insere o relacionamento
 			else {
 				sQuery = 'insert into "VGT.REL_TAX_RECONCILIATION_DIFERENCA"("fk_tax_reconciliation.id_tax_reconciliation", "fk_diferenca.id_diferenca", "valor") values(?, ?, ?)';
 				aParams = [sFkTaxReconciliation, oDiferenca.id_diferenca, oDiferenca[sChaveValorDiferenca]];
-				db.executeStatementSync(sQuery, aParams);
+				db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			}
 			
 			// Atualiza outro e fk_tipo
 			sQuery = 'update "VGT.DIFERENCA" set "outro" = ?, "fk_diferenca_opcao.id_diferenca_opcao" = ? where "id_diferenca" = ?';
 			aParams = [oDiferenca.outro, oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] ? oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] : null, oDiferenca.id_diferenca];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 		else {
 			// cria a diferenca e o relacioanemtno
 			sQuery = 'insert into "VGT.DIFERENCA"("id_diferenca", "outro", "fk_diferenca_opcao.id_diferenca_opcao") values ("identity_VGT.DIFERENCA_id_diferenca".nextval, ?, ?)';
 			aParams = [oDiferenca.outro, oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] ? oDiferenca["fk_diferenca_opcao.id_diferenca_opcao"] : null];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			sQuery = 'select MAX("id_diferenca") "id_diferenca_criada" from "VGT.DIFERENCA"';
 			
-			var result = db.executeStatementSync(sQuery);
+			var result = db.executeStatementSync(sQuery, [], { idUsuario: req });
 			
 			sQuery = 'insert into "VGT.REL_TAX_RECONCILIATION_DIFERENCA"("fk_tax_reconciliation.id_tax_reconciliation", "fk_diferenca.id_diferenca", "valor") values(?, ?, ?)';
 				
 			aParams = [sFkTaxReconciliation, result[0].id_diferenca_criada, oDiferenca[sChaveValorDiferenca]];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 	}
 }
 
-function excluirDiferenca(aDiferencaExcluida) {
+function excluirDiferenca(aDiferencaExcluida, req) {
 	for (var i = 0, length = aDiferencaExcluida.length; i < length; i++) {
 		var idDiferencaExcluida = aDiferencaExcluida[i];
 		
 		db.executeStatementSync(
-			'delete from "VGT.REL_TAX_RECONCILIATION_DIFERENCA" where "fk_diferenca.id_diferenca" = ?', [idDiferencaExcluida]);
+			'delete from "VGT.REL_TAX_RECONCILIATION_DIFERENCA" where "fk_diferenca.id_diferenca" = ?', [idDiferencaExcluida], { idUsuario: req });
 		db.executeStatementSync(
-			'delete from "VGT.DIFERENCA" where "id_diferenca" = ?', [idDiferencaExcluida]);
+			'delete from "VGT.DIFERENCA" where "id_diferenca" = ?', [idDiferencaExcluida], { idUsuario: req });
 	}
 }
 
-function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToReport) {
+function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToReport, req) {
 	var sQuery, aParams, result;
 	
 	for (var i = 0, length = aRespostaItemToReport.length; i < length; i++) {
@@ -1521,7 +1527,7 @@ function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToRe
 			
 			aParams = [sFkRelTaxPackagePeriodo, oRespostaItemToReport.fkItemToReport, bSeAplica, oRespostaItemToReport.resposta, oRespostaItemToReport.id_resposta_item_to_report];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			sIdRespostaItemToReport = oRespostaItemToReport.id_resposta_item_to_report;
 		}
@@ -1541,28 +1547,28 @@ function inserirRespostaItemToReport (sFkRelTaxPackagePeriodo, aRespostaItemToRe
 			
 			aParams = [sFkRelTaxPackagePeriodo, oRespostaItemToReport.fkItemToReport, bSeAplica, oRespostaItemToReport.resposta];
 			
-			result = db.executeStatementSync(sQuery, aParams);
+			result = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			if (result === 1) {
 				sQuery = 'select MAX("id_resposta_item_to_report") "generated_id" from "VGT.RESPOSTA_ITEM_TO_REPORT"';
 				
-				result = db.executeStatementSync(sQuery, []);
+				result = db.executeStatementSync(sQuery, [], { idUsuario: req });
 				
 				sIdRespostaItemToReport = result[0].generated_id;
 			}	
 		}
 		
-		inserirAnoFiscalRespostaItemToReport(sIdRespostaItemToReport, oRespostaItemToReport.relAnoFiscal ? oRespostaItemToReport.relAnoFiscal : []);
+		inserirAnoFiscalRespostaItemToReport(sIdRespostaItemToReport, oRespostaItemToReport.relAnoFiscal ? oRespostaItemToReport.relAnoFiscal : [], req);
 	}
 }
 
-function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFiscal) {
+function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFiscal, req) {
 	var sQuery, aParams, result;
 	
 	sQuery = 'select * from "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" where "fk_resposta_item_to_report.id_resposta_item_to_report" = ? ';
 	aParams = [sFkRespostaItemToReport];
 	
-	result = db.executeStatementSync(sQuery, aParams);
+	result = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 	
 	for (var i = 0, length = aAnoFiscal.length; i < length; i++) {
 		var sIdAnoFiscalEnviado = aAnoFiscal[i];
@@ -1575,7 +1581,7 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 			sQuery = 'insert into "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL"("fk_resposta_item_to_report.id_resposta_item_to_report", "fk_dominio_ano_fiscal.id_dominio_ano_fiscal") values (?, ?)';
 			aParams = [sFkRespostaItemToReport, sIdAnoFiscalEnviado];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 	}
 	
@@ -1590,12 +1596,12 @@ function inserirAnoFiscalRespostaItemToReport (sFkRespostaItemToReport, aAnoFisc
 			sQuery = 'delete from "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" where "fk_resposta_item_to_report.id_resposta_item_to_report" = ? and "fk_dominio_ano_fiscal.id_dominio_ano_fiscal" = ?';
 			aParams = [sFkRespostaItemToReport, sIdAnoFiscalPersistido];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 	}
 }
 
-function inserirSchedule(aSchedule) {
+function inserirSchedule(aSchedule, req) {
 	var sQuery, aParams;
 	
 	if (aSchedule && aSchedule.length > 0) {
@@ -1673,12 +1679,12 @@ function inserirSchedule(aSchedule) {
 				];
 			}
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 	}
 }
 
-function inserirScheduleValueUtilized(sFkTaxReconciliation, aTotalLossesUtilized, aOverpaymentFromPriorYearApplierToCurrentYear) {
+function inserirScheduleValueUtilized(sFkTaxReconciliation, aTotalLossesUtilized, aOverpaymentFromPriorYearApplierToCurrentYear, req) {
 	var aValuesUtilized = aTotalLossesUtilized.concat(aOverpaymentFromPriorYearApplierToCurrentYear);
 	
 	var sQuery, aParams;
@@ -1686,7 +1692,7 @@ function inserirScheduleValueUtilized(sFkTaxReconciliation, aTotalLossesUtilized
 	sQuery = 'select * from "VGT.SCHEDULE_VALUE_UTILIZED" where "fk_tax_reconciliation.id_tax_reconciliation" = ? ';
 	aParams = [sFkTaxReconciliation];
 	
-	var result = db.executeStatementSync(sQuery, aParams),
+	var result = db.executeStatementSync(sQuery, aParams, { idUsuario: req }),
 		aValuesUtilizedPersistido = [];
 	
 	if (result && result.length > 0) {
@@ -1704,7 +1710,7 @@ function inserirScheduleValueUtilized(sFkTaxReconciliation, aTotalLossesUtilized
 			sQuery = 'delete from "VGT.SCHEDULE_VALUE_UTILIZED" where "id_schedule_value_utilized" = ?';
 			aParams = [oValueUtilizedPersistido.id_schedule_value_utilized];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 	}
 	
@@ -1738,11 +1744,11 @@ function inserirScheduleValueUtilized(sFkTaxReconciliation, aTotalLossesUtilized
 			aParams = [oValueUtilized.schedule_fy, oValueUtilized.valor, oValueUtilized.obs, oValueUtilized["fk_dominio_schedule_value_utilized_tipo.id_dominio_schedule_value_utilized_tipo"], sFkTaxReconciliation];
 		}
 		
-		db.executeStatementSync(sQuery, aParams);
+		db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 	}
 }
 
-function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes) {
+function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFiscal, aWHT, aOutrasAntecipacoes, req) {
 	var aTaxaMultipla = aOtherTax.concat(aIncentivoFiscal);
 	aTaxaMultipla = aTaxaMultipla.concat(aWHT);
 	aTaxaMultipla = aTaxaMultipla.concat(aOutrasAntecipacoes);
@@ -1752,7 +1758,7 @@ function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFisca
 	sQuery = 'select * from "VGT.TAXA_MULTIPLA" where "fk_tax_reconciliation.id_tax_reconciliation" = ? ';
 	aParams = [sFkTaxReconciliation];
 	
-	var result = db.executeStatementSync(sQuery, aParams),
+	var result = db.executeStatementSync(sQuery, aParams, { idUsuario: req }),
 		aTaxaMultiplaPersistida = [];
 	
 	if (result && result.length > 0) {
@@ -1770,7 +1776,7 @@ function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFisca
 			sQuery = 'delete from "VGT.TAXA_MULTIPLA" where "id_taxa_multipla" = ?';
 			aParams = [oTaxaMultiplaPersistida.id_taxa_multipla];
 			
-			db.executeStatementSync(sQuery, aParams);
+			db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 		}
 	}
 	
@@ -1802,11 +1808,11 @@ function inserirTaxasMultiplas (sFkTaxReconciliation, aOtherTax, aIncentivoFisca
 			aParams = [oTaxaMultipla.descricao, oTaxaMultipla.valor, oTaxaMultipla["fk_dominio_tipo_taxa_multipla.id_dominio_tipo_taxa_multipla"], sFkTaxReconciliation];
 		}
 		
-		db.executeStatementSync(sQuery, aParams);
+		db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 	}
 }
 
-function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
+function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao, req) {
 	var sQuery, aParams;
 	
 	for (var i = 0, length = aAntecipacao.length; i < length; i++) {
@@ -1821,10 +1827,10 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 				+ '"identity_VGT.ANTECIPACAO_id_antecipacao".nextval, ?, ?)';
 			aParams = [oAntecipacao.id_pagamento, sFkTaxReconciliation];
 			
-			var res = db.executeStatementSync(sQuery, aParams);
+			var res = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			
 			if (res) {
-				var resGeneratedId = db.executeStatementSync('select MAX("id_antecipacao") "generated_id" from "VGT.ANTECIPACAO"');
+				var resGeneratedId = db.executeStatementSync('select MAX("id_antecipacao") "generated_id" from "VGT.ANTECIPACAO"', [], { idUsuario: req });
 				
 				oAntecipacao.id_antecipacao = resGeneratedId[0].generated_id;
 			}
@@ -1834,7 +1840,7 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 	sQuery = 'select * from "VGT.ANTECIPACAO" where "fk_tax_reconciliation.id_tax_reconciliation" = ?';
 	aParams = [sFkTaxReconciliation];
 	
-	var result = db.executeStatementSync(sQuery, aParams);
+	var result = db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 	
 	if (result) {
 		for (var i = 0, length = result.length; i < length; i++) {
@@ -1850,7 +1856,7 @@ function inserirAntecipacoes (sFkTaxReconciliation, aAntecipacao) {
 				sQuery = 'delete from "VGT.ANTECIPACAO" where "id_antecipacao" = ?';
 				aParams = [oAntecipacaoPersistida.id_antecipacao];
 				
-				db.executeStatementSync(sQuery, aParams);
+				db.executeStatementSync(sQuery, aParams, { idUsuario: req });
 			}
 		}
 	}

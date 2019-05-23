@@ -109,10 +109,8 @@ module.exports = {
 						statement: 'delete from "VGT.ARQUIVO_CAMBIO_TTC" where "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_mes.id_dominio_mes" = ? and "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ?',
 						parameters: [
 								req.body.idMes,
-								req.body.idAnoCalendario, {
-								isIdLog: true,
-								valor: req
-							}]
+								req.body.idAnoCalendario
+							]
 					}, function (err, result) {
 						if (err) {
 							next(err);
@@ -128,10 +126,8 @@ module.exports = {
 								req.file.size,
 								req.file.originalname,
 								req.body.idMes,
-								req.body.idAnoCalendario, {
-								isIdLog: true,
-								valor: req
-							}];
+								req.body.idAnoCalendario
+							];
 							oConnection.exec(sQueryArquivo, aParamArquivo, function (err, result) {
 								if (err) {
 									console.log(err);
@@ -141,10 +137,8 @@ module.exports = {
 										statement: 'select "VGT.ARQUIVO_CAMBIO_TTC"."id_arquivo_cambio_ttc" from "VGT.ARQUIVO_CAMBIO_TTC" where "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_mes.id_dominio_mes" = ? and "VGT.ARQUIVO_CAMBIO_TTC"."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" = ?',
 										parameters: [
 												req.body.idMes,
-												req.body.idAnoCalendario, {
-												isIdLog: true,
-												valor: req
-											}]
+												req.body.idAnoCalendario
+											]
 									}, function (err, result) {
 										if (err) {
 											next(JSON.stringify(err));
@@ -184,8 +178,6 @@ module.exports = {
 						}
 					});
 				}
-			}, {
-				idUsuario: req
 			});
 		}
 		
