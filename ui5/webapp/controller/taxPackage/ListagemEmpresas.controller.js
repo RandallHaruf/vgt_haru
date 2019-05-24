@@ -101,7 +101,7 @@ sap.ui.define(
                     	console.log(params);
                     });
                    
-                    this._loadFrom.then((function (res) {
+                    this._loadFrom().then((function (res) {
                         that.getModel().setProperty("/EasyFilterEmpresa", Utils.orderByArrayParaBox(res[0], "nome"));
                     }));
                 }
