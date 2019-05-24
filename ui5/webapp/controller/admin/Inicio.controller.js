@@ -148,9 +148,18 @@ sap.ui.define(
 			},
 			
 			_montarBotaoLogoff: function () {
+				var that = this;
+				
 				return new Button({
-					text: this.getResourceBundle().getText("viewAdminInicioLabelBotaoSair"),
+					text: "Logout",
 					type: sap.m.ButtonType.Transparent
+				}).attachPress(function (event) {
+					fetch(Constants.urlBackend + "deslogar", {
+						credentials: 'include'
+					})
+					.then(() => {
+						that.getRouter().navTo("login");
+					});
 				});
 			},
 
