@@ -1,11 +1,11 @@
 <mvc:View controllerName="ui5ns.ui5.controller.compliance.Relatorio" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
 	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
-	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="true">
 		<!-- DynamicPage Title -->
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
-					<Breadcrumbs>
+					<Breadcrumbs visible="{/IsAreaUsuario}">
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Listagem Obrigações" press="navToPage2" />-->
 						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
@@ -52,14 +52,7 @@
 				</f:expandedContent>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
-				</f:navigationActions>				
-				<!--<f:navigationActions>
-					<Button
-						text="Voltar"
-						icon="sap-icon://nav-back"
-						type="Emphasized" 
-						press="onNavBack"/>
-				</f:navigationActions>-->
+				</f:navigationActions>	
 			</f:DynamicPageTitle>
 		</f:title>
 		<!-- DynamicPage Header -->

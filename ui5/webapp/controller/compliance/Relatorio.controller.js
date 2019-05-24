@@ -61,9 +61,10 @@ sap.ui.define([
 			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._handleRouteMatched, this);			
 		},
 
-		_handleRouteMatched: function () {
+		_handleRouteMatched: function (oEvent) {
 			if (this.isIFrame()) {
 				this.mostrarAcessoRapidoInception();
+				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 			}
 			
 			fetch(Constants.urlBackend + "verifica-auth", {

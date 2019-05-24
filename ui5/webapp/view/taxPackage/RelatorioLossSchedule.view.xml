@@ -5,7 +5,7 @@
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
-					<Breadcrumbs>
+					<Breadcrumbs visible="{/IsAreaUsuario}">
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Tax Package" press="navToPage2" />-->
 						<Link text="{i18n>viewGeralRelatorio} {i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}" enabled="false" />

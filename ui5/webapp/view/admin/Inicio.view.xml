@@ -14,12 +14,6 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px"/>
 					</layoutData>
 				</ToolbarSpacer>
-				<!--<Button icon="sap-icon://ui-notifications" tooltip="{i18n>viewAdminInicioNotificacoesTooltip}" type="Transparent" press="handleNotificationsPress">
-					<layoutData>
-						<OverflowToolbarLayoutData priority="NeverOverflow"/>
-					</layoutData>
-				</Button>-->
-				<!--<Text text="({/ContadorSoma/modelcountSoma})" />-->	
 				<control:NumericIcon src="sap-icon://ui-notifications" class="btnListaNotificacoes" value="{/ContadorSoma/modelcountSoma}" press="onAtualizarNotificacoes" />
 				<control:NumericIcon src="sap-icon://ui-notifications" press="handleNotificationsPress" tooltip="{i18n>viewAdminInicioNotificacoesTooltip}" value="{/ContadorSoma/modelcountSoma}" />
 				<Button text="{/NomeUsuario}" type="Transparent" press="handleUserNamePress">
@@ -46,6 +40,7 @@
 		<tnt:mainContents>
 			<NavContainer id="pageContainer">
 				<pages>
+					<!-- ITEM MENU GERAL -->
 					<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroUsuario" id="usuarioXMLView" />
 					</ScrollContainer>
@@ -58,6 +53,8 @@
 					<ScrollContainer id="empresa" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Empresa" id="empresaXMLView" />
 					</ScrollContainer>
+					
+					<!-- ITEM MENU TTC -->
 					<ScrollContainer id="ttcCambio" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CambioTTC" id="ttcCambioXMLView" />
 					</ScrollContainer>
@@ -70,36 +67,38 @@
 					<ScrollContainer id="ttcCadastroTributos" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroNameOfTaxTTC" id="ttcCadastroTributosXMLView" />
 					</ScrollContainer>
-					<!--<ScrollContainer id="taxPackageModulo" horizontal="false" vertical="true" height="100%">
-						<Text text="Redirecionar para visualização do Tax Package"></Text>
-					</ScrollContainer>-->
+					
+					<!-- ITEM MENU TAX PACKAGE -->
 					<ScrollContainer id="taxPackageCadastroItemsToReport" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage" id="taxPackageCadastroItemsToReportXMLView" />
 					</ScrollContainer>
 					<ScrollContainer id="taxPackageCadastroAdicoesExclusoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroDiferencasTaxPackage" id="taxPackageCadastroAdicoesExclusoesXMLView" />
 					</ScrollContainer>
-					<!--<ScrollContainer id="complianceModulo" horizontal="false" vertical="true" height="100%">
-						<Text text="Redirecionar para visualização do Compliace"></Text>
-					</ScrollContainer>
-					<ScrollContainer id="bepsModulo" horizontal="false" vertical="true" height="100%">
-						<Text text="Redirecionar para visualização do Beps"></Text>
-					</ScrollContainer>-->
-					<ScrollContainer id="cadastroTipoObrigacoes" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroTipoObrigacoesComplianceBeps" id="cadastroTipoObrigacoesXMLView" />
-					</ScrollContainer>
+					
+					<!-- ITEM MENU COMPLIANCE/BEPS -->
 					<ScrollContainer id="cadastroObrigacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps" id="cadastroObrigacoesXMLView" />
 					</ScrollContainer>
 					<ScrollContainer id="listaArquivos" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaArquivosComplianceBeps" id="listaArquivosXMLView" />
 					</ScrollContainer>
+					
+					<!-- BOTÃO NOTIFICAÇÕES -->
 					<ScrollContainer id="listaNotificacoes" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaNotificacoes" id="listaNotificacoesXMLView" />
 					</ScrollContainer>
-					<ScrollContainer id="iframe" horizontal="false" vertical="true" height="100%" class="meu-iframe">
-						<core:HTML content="&lt;iframe src=&quot;index.html&quot; height=&quot;100%&quot; width=&quot;100%&quot; &gt;&lt;/iframe&gt;"></core:HTML>
-					</ScrollContainer>
+					
+					<!-- BOTÃO NOME USUÁRIO -->
+					<mvc:XMLView viewName="ui5ns.ui5.view.ttc.Relatorio" id="relatorioTTCXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioItemsToReport" id="relatorioTaxPackageItemsToReportXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioAccountingResult" id="relatorioTaxPackageAccountingResultXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences" id="relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioFiscalResult" id="relatorioTaxPackageFiscalResultXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioIncomeTax" id="relatorioTaxPackageIncomeTaxXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioLossSchedule" id="relatorioTaxPackageLossScheduleXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule" id="relatorioTaxPackageCreditScheduleXMLView" />
+					<mvc:XMLView viewName="ui5ns.ui5.view.compliance.Relatorio" id="relatorioComplianceBepsXMLView" />
 				</pages>
 			</NavContainer>
 		</tnt:mainContents>

@@ -3,7 +3,8 @@
 	xmlns="sap.m">
 	<MenuButton 
 		text="Menu" 
-		useDefaultActionOnly="true">
+		useDefaultActionOnly="true"
+		id="menuAcessoRapido">
 		<!--menuPosition="BeginBottom"-->
 		<menu>
 			<Menu itemSelected="onAcessoRapido">

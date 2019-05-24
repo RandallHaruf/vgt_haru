@@ -54,6 +54,7 @@ sap.ui.define([
 		_handleRouteMatched: function () {
 			if (this.isIFrame()) {
 				this.mostrarAcessoRapidoInception();
+				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 			}
 
 			fetch(Constants.urlBackend + "verifica-auth", {

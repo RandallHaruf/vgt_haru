@@ -66,26 +66,122 @@ sap.ui.define(
 				}
 			},
 
+			_onItemRelatorioSelecionado: function (oEvent) {
+				var oItem = oEvent.getParameter("item"),
+					oView = this.byId(oItem.getId() + "XMLView");
+				
+				if (oView) {
+					// Navega para a view destino
+					this.byId("pageContainer").to(oView);
+					
+					// Sobescreve o acesso rapido para que ele não seja exibido na área admin
+					oView.getController().mostrarAcessoRapidoInception = function () {
+						this.getView().byId("menuAcessoRapido").setVisible(false);
+					};
+					
+					// Sobescreve o isFrame para sempre indicar que está sim na área admin
+					oView.getController().isIFrame = function () {
+						return true;
+					};
+					
+					// Dispara o método que executa ações no carregamento da página
+					if (oView.getController()._onRouteMatched) {
+						oView.getController()._onRouteMatched();
+					}
+					else if (oView.getController()._handleRouteMatched) {
+						oView.getController()._handleRouteMatched();
+					}
+				}
+			},
+
+			_adicionarSubItemMenu: function (oParent, sId, sLabel) {
+				var oItem = new sap.m.MenuItem({
+					id: sId,
+					text: sLabel
+				});
+				
+				oParent.addItem(oItem);
+			},
+
+			_montarMenuRelatorio: function () {
+				var oMenuRelatorio = new sap.m.MenuButton({
+					text: "{i18n>viewGeralRelatorio}",
+					type: sap.m.ButtonType.Transparent
+				});
+				
+				var oMenu = new sap.m.Menu().attachItemSelected(this._onItemRelatorioSelecionado.bind(this));
+				
+				// TTC
+				this._adicionarSubItemMenu(oMenu, "relatorioTTC", "{i18n>viewAdminInicioMenuTTC}");
+				
+				// Tax Package
+				var oItemRelatorioTaxPackage = new sap.m.MenuItem({
+					id: "relatorioTaxPackage",
+					text: "{i18n>viewAdminInicioMenuTaxPackage}"
+				});
+				
+				oMenu.addItem(oItemRelatorioTaxPackage);
+				
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageItemsToReport", "{i18n>viewEdiçãoTrimestreItensParaReportar}");
+				
+				var oItemRelatorioTaxPackageReconciliacaoFiscal = new sap.m.MenuItem({
+					id: "relatorioTaxPackageReconciliacaoFiscal",
+					text: "{i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}"
+				});
+				
+				oItemRelatorioTaxPackage.addItem(oItemRelatorioTaxPackageReconciliacaoFiscal);
+				
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageAccountingResult", "{i18n>viewEdiçãoTrimestreResultadoContabil}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageTemporaryAndPermanentDifferences", "{i18n>viewGeralAdicoesEExclusoes}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageFiscalResult", "{i18n>viewEdiçãoTrimestreResultadoFiscal}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageIncomeTax", "{i18n>viewEdiçãoTrimestreImpostoRenda}");
+				
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageLossSchedule", "{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageCreditSchedule", "{i18n>viewTaxpackageEdiçãoTrimestreCreditSchedule}");
+				
+				// Compliance
+				this._adicionarSubItemMenu(oMenu, "relatorioComplianceBeps", "{i18n>viewAdminInicioMenuComplianceBeps}");
+				
+				oMenuRelatorio.setMenu(oMenu);
+				
+				return oMenuRelatorio;
+			},
+			
+			_montarBotaoLogoff: function () {
+				return new Button({
+					text: this.getResourceBundle().getText("viewAdminInicioLabelBotaoSair"),
+					type: sap.m.ButtonType.Transparent
+				});
+			},
+
 			handleUserNamePress: function (oEvent) {
 				var that = this;
 
 				var oHomeButton = new sap.m.Button({
-					text: "Home"
+					text: "Home",
+					type: sap.m.ButtonType.Transparent
 				}).attachPress(function () {
 					that.getRouter().navTo("selecaoModulo");
 				});
+				
+				var oMenuRelatorio = this._montarMenuRelatorio();
+				
+				var oLogoffButton = this._montarBotaoLogoff();
 
 				var popover = new Popover({
 					showHeader: false,
 					placement: sap.m.PlacementType.Bottom,
 					content: [
-						oHomeButton/*,
-						new Button({
-							text: that.getResourceBundle().getText("viewAdminInicioLabelBotaoSair"),
-							type: sap.m.ButtonType.Transparent
-						})*/
-					]
+						oHomeButton,
+						oMenuRelatorio,
+						oLogoffButton
+					],
+					afterClose: function () {
+						popover.destroy();
+					}
 				}).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
+				
+				this.getView().addDependent(popover);
 
 				popover.openBy(oEvent.getSource());
 			},
@@ -348,11 +444,11 @@ sap.ui.define(
 								key: "cadastroObrigacoes"
 							}*/
 						]
-					}, {
+					}/*, {
 						title: that.getResourceBundle().getText("viewGeralVisualizarM"),
 						icon: "sap-icon://detail-view",
 						key: "iframe"
-					}]
+					}*/]
 				});
 			},
 			

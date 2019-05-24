@@ -52,6 +52,7 @@ sap.ui.define([
 			if (this.isIFrame()) {
 				this.mostrarAcessoRapidoInception();
 				this.getModel().setProperty("/isIframe",true);
+				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 			}
 			else{
 				this.getModel().setProperty("/isIframe",false);
