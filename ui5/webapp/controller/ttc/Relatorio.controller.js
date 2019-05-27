@@ -25,7 +25,7 @@ sap.ui.define([
 			var oModel = new sap.ui.model.json.JSONModel({});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
-			this._atualizarDados();
+			//this._atualizarDados();
 			//-----------------ALTERAR NAS OUTRAS TELAS
 			var that = this;
 			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " TTC");

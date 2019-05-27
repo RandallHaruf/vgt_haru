@@ -22,6 +22,7 @@ sap.ui.define(
 			
 			getResourceBundle : function () {
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+				//return this.getModel("i18n").getResourceBundle();
 			},
 			
 			isIFrame: function () {

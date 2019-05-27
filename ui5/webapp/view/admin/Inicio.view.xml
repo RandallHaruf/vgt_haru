@@ -44,61 +44,61 @@
 					<ScrollContainer id="usuario" horizontal="false" vertical="true" height="100%">
 						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroUsuario" id="usuarioXMLView" />
 					</ScrollContainer>
-					<ScrollContainer id="taxPackageCadastroAliquotas" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroAliquotasTaxPackage" id="taxPackageCadastroAliquotasXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="pais" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Pais" id="paisXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="empresa" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.Empresa" id="empresaXMLView" />
-					</ScrollContainer>
+					<!--<ScrollContainer id="taxPackageCadastroAliquotas" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroAliquotasTaxPackage" id="taxPackageCadastroAliquotasXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="pais" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.Pais" id="paisXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="empresa" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.Empresa" id="empresaXMLView" />-->
+					<!--</ScrollContainer>-->
 					
 					<!-- ITEM MENU TTC -->
-					<ScrollContainer id="ttcCambio" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CambioTTC" id="ttcCambioXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="ttcCadastroCategory" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroCategoryTTC" id="ttcCadastroCategoryXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="ttcCadastroTax" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroTaxTTC" id="ttcCadastroTaxXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="ttcCadastroTributos" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroNameOfTaxTTC" id="ttcCadastroTributosXMLView" />
-					</ScrollContainer>
+					<!--<ScrollContainer id="ttcCambio" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CambioTTC" id="ttcCambioXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="ttcCadastroCategory" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroCategoryTTC" id="ttcCadastroCategoryXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="ttcCadastroTax" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroTaxTTC" id="ttcCadastroTaxXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="ttcCadastroTributos" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroNameOfTaxTTC" id="ttcCadastroTributosXMLView" />-->
+					<!--</ScrollContainer>-->
 					
 					<!-- ITEM MENU TAX PACKAGE -->
-					<ScrollContainer id="taxPackageCadastroItemsToReport" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage" id="taxPackageCadastroItemsToReportXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="taxPackageCadastroAdicoesExclusoes" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroDiferencasTaxPackage" id="taxPackageCadastroAdicoesExclusoesXMLView" />
-					</ScrollContainer>
+					<!--<ScrollContainer id="taxPackageCadastroItemsToReport" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage" id="taxPackageCadastroItemsToReportXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="taxPackageCadastroAdicoesExclusoes" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroDiferencasTaxPackage" id="taxPackageCadastroAdicoesExclusoesXMLView" />-->
+					<!--</ScrollContainer>-->
 					
 					<!-- ITEM MENU COMPLIANCE/BEPS -->
-					<ScrollContainer id="cadastroObrigacoes" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps" id="cadastroObrigacoesXMLView" />
-					</ScrollContainer>
-					<ScrollContainer id="listaArquivos" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaArquivosComplianceBeps" id="listaArquivosXMLView" />
-					</ScrollContainer>
+					<!--<ScrollContainer id="cadastroObrigacoes" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps" id="cadastroObrigacoesXMLView" />-->
+					<!--</ScrollContainer>-->
+					<!--<ScrollContainer id="listaArquivos" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaArquivosComplianceBeps" id="listaArquivosXMLView" />-->
+					<!--</ScrollContainer>-->
 					
 					<!-- BOTÃO NOTIFICAÇÕES -->
-					<ScrollContainer id="listaNotificacoes" horizontal="false" vertical="true" height="100%">
-						<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaNotificacoes" id="listaNotificacoesXMLView" />
-					</ScrollContainer>
+					<!--<ScrollContainer id="listaNotificacoes" horizontal="false" vertical="true" height="100%">-->
+					<!--	<mvc:XMLView viewName="ui5ns.ui5.view.admin.ListaNotificacoes" id="listaNotificacoesXMLView" />-->
+					<!--</ScrollContainer>-->
 					
 					<!-- BOTÃO NOME USUÁRIO -->
-					<mvc:XMLView viewName="ui5ns.ui5.view.ttc.Relatorio" id="relatorioTTCXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioItemsToReport" id="relatorioTaxPackageItemsToReportXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioAccountingResult" id="relatorioTaxPackageAccountingResultXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences" id="relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioFiscalResult" id="relatorioTaxPackageFiscalResultXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioIncomeTax" id="relatorioTaxPackageIncomeTaxXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioLossSchedule" id="relatorioTaxPackageLossScheduleXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule" id="relatorioTaxPackageCreditScheduleXMLView" />
-					<mvc:XMLView viewName="ui5ns.ui5.view.compliance.Relatorio" id="relatorioComplianceBepsXMLView" />
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.ttc.Relatorio" id="relatorioTTCXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioItemsToReport" id="relatorioTaxPackageItemsToReportXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioAccountingResult" id="relatorioTaxPackageAccountingResultXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences" id="relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioFiscalResult" id="relatorioTaxPackageFiscalResultXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioIncomeTax" id="relatorioTaxPackageIncomeTaxXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioLossSchedule" id="relatorioTaxPackageLossScheduleXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule" id="relatorioTaxPackageCreditScheduleXMLView" />-->
+					<!--<mvc:XMLView viewName="ui5ns.ui5.view.compliance.Relatorio" id="relatorioComplianceBepsXMLView" />-->
 				</pages>
 			</NavContainer>
 		</tnt:mainContents>

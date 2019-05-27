@@ -26,7 +26,7 @@ sap.ui.define([
 			});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
-			this._atualizarDados();
+			//this._atualizarDados();
 			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
 			var that = this;
 			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " " + this.getResourceBundle().getText("viewEdiçãoTrimestreResultadoFiscal"));

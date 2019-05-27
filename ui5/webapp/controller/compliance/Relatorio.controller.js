@@ -37,7 +37,7 @@ sap.ui.define([
 			});		
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
-			this._atualizarDados();
+			//this._atualizarDados();
 			var that = this;
 			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " Compliance/Beps");
 			NodeAPI.pListarRegistros("TemplateReport", {

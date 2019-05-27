@@ -8,87 +8,140 @@ sap.ui.define(
 		"sap/ui/model/Filter",
 		"sap/m/MessageToast",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/NodeAPI"
+		"ui5ns/ui5/lib/NodeAPI",
+		"sap/ui/core/mvc/XMLView"
 	],
-	function (BaseController, jQuery, Popover, Button, models, Filter, MessageToast, Constants, NodeAPI) {
+	function (BaseController, jQuery, Popover, Button, models, Filter, MessageToast, Constants, NodeAPI, XMLView) {
 
 		return BaseController.extend("ui5ns.ui5.controller.admin.Inicio", {
 
 			onInit: function () {
-
 				this.setModel(new sap.ui.model.json.JSONModel({}));
 
 				var oModel = new sap.ui.model.json.JSONModel({
 					menu: {}
 				});
 
+				this._views = [];
 				this.setModel(oModel, "viewModel");
 
 				this._setToggleButtonTooltip(!sap.ui.Device.system.desktop);
 
 				this.getRouter().getRoute("adminInicio").attachPatternMatched(this._onRouteMatched, this);
+
+				var that = this;
+				
+				this._carregarViewRelatorio("relatorioTTCXMLView", "ui5ns.ui5.view.ttc.Relatorio");
+				this._carregarViewRelatorio("relatorioTaxPackageItemsToReportXMLView", "ui5ns.ui5.view.taxPackage.RelatorioItemsToReport");
+				this._carregarViewRelatorio("relatorioTaxPackageAccountingResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioAccountingResult");
+				this._carregarViewRelatorio("relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView", "ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences");
+				this._carregarViewRelatorio("relatorioTaxPackageFiscalResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioFiscalResult");
+				this._carregarViewRelatorio("relatorioTaxPackageIncomeTaxXMLView", "ui5ns.ui5.view.taxPackage.RelatorioIncomeTax");
+				this._carregarViewRelatorio("relatorioTaxPackageLossScheduleXMLView", "ui5ns.ui5.view.taxPackage.RelatorioLossSchedule");
+				this._carregarViewRelatorio("relatorioTaxPackageCreditScheduleXMLView", "ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule");
+				this._carregarViewRelatorio("relatorioComplianceBepsXMLView", "ui5ns.ui5.view.compliance.Relatorio");
 			},
 
 			onItemSelect: function (oEvent) {
+				var that = this;
 				var item = oEvent.getParameter("item");
-				//var viewId = this.getView().getId();
+				var viewPath = oEvent.getParameter("item").getBindingContext("viewModel").getObject().viewPath;
+				var containerId = item.getKey();
+				
+				var oPage = this.byId("pageContainer").getPage(containerId);
 
-				if (item.getKey() === "ttcModulo") {
-					this.getRouter().navTo("ttcListagemEmpresas");
-				} else if (item.getKey() === "taxPackageModulo") {
-					this.getRouter().navTo("taxPackageListagemEmpresas");
-				} else if (item.getKey() === "complianceModulo") {
-					this.getRouter().navTo("complianceListagemObrigacoes");
-				} else if (item.getKey() === "bepsModulo") {
-					this.getRouter().navTo("bepsListagemObrigacoes");
+				if (oPage) {
+					this.byId("pageContainer").to(oPage);
+
+					this._dispararOnAfterShow(viewPath);
 				} else {
-					//sap.ui.getCore().byId(viewId + "--pageContainer").to(viewId + "--" + item.getKey());
-					this.byId("pageContainer").to(this.byId(item.getKey()));
+					this._carregarViewItemMenu(viewPath, containerId)
+						.then(function (oPage) {
+							that.byId("pageContainer").to(oPage);
+						});
+				}
+			},
 
-					// @pedsf 15/10/18 
-					// A primeira vez que a XMLView é construída dispara o evento onAfterShow da pagina de listagem de objetos.
-					// Após a primeira vez, o disparo apenas ocorre quando há navegação interna na XMLView (ir de página de listagem para
-					// a de objeto, ou de objeto para a de listagem). Foi preciso forçar o disparo desse evento ao trocar de item de menu,
-					// se não os objetos de um menu não seriam recarregados em visualizações posteriores a primeira.
-					// Procurar melhor solução, mas por enquanto é o que tem.
-					var oXMLView = this.byId(item.getKey() + "XMLView");
-					if (oXMLView && oXMLView.byId("paginaListagem") && oXMLView.byId("paginaListagem").aDelegates) {
-						var aDelegates = oXMLView.byId("paginaListagem").aDelegates;
-						for (var i = 0; i < aDelegates.length; i++) {
-							var oItem = aDelegates[i];
+			_dispararOnAfterShow: function (sViewPath) {
+				var oXMLView = this._views[sViewPath];
+				if (oXMLView && oXMLView.byId("paginaListagem") && oXMLView.byId("paginaListagem").aDelegates) {
+					var aDelegates = oXMLView.byId("paginaListagem").aDelegates;
+					for (var i = 0; i < aDelegates.length; i++) {
+						var oItem = aDelegates[i];
 
-							if (oItem.oDelegate && oItem.oDelegate.onAfterShow) {
-								oItem.oDelegate.onAfterShow();
-								break;
-							}
+						if (oItem.oDelegate && oItem.oDelegate.onAfterShow) {
+							oItem.oDelegate.onAfterShow();
+							break;
 						}
 					}
 				}
 			},
 
+			_carregarViewItemMenu: function (sViewPath, sIdContainer) {
+				var that = this;
+
+				return new Promise(function (resolve, reject) {
+					XMLView.create({
+						id: sIdContainer + "XMLView",
+						viewName: sViewPath
+					}).then(function (oView) {
+						oView.getController().getOwnerComponent = function () {
+							return that.getOwnerComponent();
+						};
+
+						that._views[sViewPath] = oView;
+
+						var oScrollContainer = new sap.m.ScrollContainer({
+							id: sIdContainer,
+							horizontal: false,
+							vertical: true,
+							height: "100%"
+						}).addContent(oView);
+
+						that.byId("pageContainer").addPage(oScrollContainer);
+
+						resolve(oScrollContainer);
+					});
+				});
+			},
+			
+			_carregarViewRelatorio: function (sViewId, sViewName, callback) {
+				var that = this;
+				XMLView.create({
+					id: sViewId,
+					viewName: sViewName
+				}).then(function (oView) {
+					that.byId("pageContainer").addPage(oView);
+					
+					if (callback)
+						callback();		
+				});
+			},
+
 			_onItemRelatorioSelecionado: function (oEvent) {
 				var oItem = oEvent.getParameter("item"),
-					oView = this.byId(oItem.getId() + "XMLView");
-				
+					oView = this.byId("pageContainer").getPage(oItem.getId() + "XMLView");
+					
+				var that = this;
+
 				if (oView) {
 					// Navega para a view destino
 					this.byId("pageContainer").to(oView);
-					
+
 					// Sobescreve o acesso rapido para que ele não seja exibido na área admin
 					oView.getController().mostrarAcessoRapidoInception = function () {
 						this.getView().byId("menuAcessoRapido").setVisible(false);
 					};
-					
+
 					// Sobescreve o isFrame para sempre indicar que está sim na área admin
 					oView.getController().isIFrame = function () {
 						return true;
 					};
-					
+
 					// Dispara o método que executa ações no carregamento da página
 					if (oView.getController()._onRouteMatched) {
 						oView.getController()._onRouteMatched();
-					}
-					else if (oView.getController()._handleRouteMatched) {
+					} else if (oView.getController()._handleRouteMatched) {
 						oView.getController()._handleRouteMatched();
 					}
 				}
@@ -99,7 +152,7 @@ sap.ui.define(
 					id: sId,
 					text: sLabel
 				});
-				
+
 				oParent.addItem(oItem);
 			},
 
@@ -108,58 +161,82 @@ sap.ui.define(
 					text: "{i18n>viewGeralRelatorio}",
 					type: sap.m.ButtonType.Transparent
 				});
-				
+
 				var oMenu = new sap.m.Menu().attachItemSelected(this._onItemRelatorioSelecionado.bind(this));
-				
+
 				// TTC
+				//this._adicionarSubItemMenu(oMenu, "ui5ns.ui5.view.ttc.Relatorio", "{i18n>viewAdminInicioMenuTTC}");
 				this._adicionarSubItemMenu(oMenu, "relatorioTTC", "{i18n>viewAdminInicioMenuTTC}");
-				
+
 				// Tax Package
 				var oItemRelatorioTaxPackage = new sap.m.MenuItem({
 					id: "relatorioTaxPackage",
 					text: "{i18n>viewAdminInicioMenuTaxPackage}"
 				});
-				
+
 				oMenu.addItem(oItemRelatorioTaxPackage);
-				
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageItemsToReport", "{i18n>viewEdiçãoTrimestreItensParaReportar}");
-				
+
+				/*this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "ui5ns.ui5.view.taxPackage.RelatorioItemsToReport",
+					"{i18n>viewEdiçãoTrimestreItensParaReportar}");*/
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageItemsToReport",
+					"{i18n>viewEdiçãoTrimestreItensParaReportar}");
+
 				var oItemRelatorioTaxPackageReconciliacaoFiscal = new sap.m.MenuItem({
 					id: "relatorioTaxPackageReconciliacaoFiscal",
 					text: "{i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}"
 				});
-				
+
 				oItemRelatorioTaxPackage.addItem(oItemRelatorioTaxPackageReconciliacaoFiscal);
-				
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageAccountingResult", "{i18n>viewEdiçãoTrimestreResultadoContabil}");
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageTemporaryAndPermanentDifferences", "{i18n>viewGeralAdicoesEExclusoes}");
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageFiscalResult", "{i18n>viewEdiçãoTrimestreResultadoFiscal}");
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageIncomeTax", "{i18n>viewEdiçãoTrimestreImpostoRenda}");
-				
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageLossSchedule", "{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}");
-				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageCreditSchedule", "{i18n>viewTaxpackageEdiçãoTrimestreCreditSchedule}");
-				
+
+				/*this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "ui5ns.ui5.view.taxPackage.RelatorioAccountingResult",
+					"{i18n>viewEdiçãoTrimestreResultadoContabil}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences",
+					"{i18n>viewGeralAdicoesEExclusoes}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "ui5ns.ui5.view.taxPackage.RelatorioFiscalResult",
+					"{i18n>viewEdiçãoTrimestreResultadoFiscal}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "ui5ns.ui5.view.taxPackage.RelatorioIncomeTax",
+					"{i18n>viewEdiçãoTrimestreImpostoRenda}");
+
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "ui5ns.ui5.view.taxPackage.RelatorioLossSchedule",
+					"{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule",
+					"{i18n>viewTaxpackageEdiçãoTrimestreCreditSchedule}");*/
+					
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageAccountingResult",
+					"{i18n>viewEdiçãoTrimestreResultadoContabil}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageTemporaryAndPermanentDifferences",
+					"{i18n>viewGeralAdicoesEExclusoes}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageFiscalResult",
+					"{i18n>viewEdiçãoTrimestreResultadoFiscal}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageIncomeTax",
+					"{i18n>viewEdiçãoTrimestreImpostoRenda}");
+
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageLossSchedule",
+					"{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}");
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "relatorioTaxPackageCreditSchedule",
+					"{i18n>viewTaxpackageEdiçãoTrimestreCreditSchedule}");
+
 				// Compliance
 				this._adicionarSubItemMenu(oMenu, "relatorioComplianceBeps", "{i18n>viewAdminInicioMenuComplianceBeps}");
-				
+
 				oMenuRelatorio.setMenu(oMenu);
-				
+
 				return oMenuRelatorio;
 			},
-			
+
 			_montarBotaoLogoff: function () {
 				var that = this;
-				
+
 				return new Button({
 					text: "Logout",
 					type: sap.m.ButtonType.Transparent
 				}).attachPress(function (event) {
 					fetch(Constants.urlBackend + "deslogar", {
-						credentials: 'include'
-					})
-					.then(() => {
-						that.getRouter().navTo("login");
-					});
+							credentials: 'include'
+						})
+						.then(() => {
+							that.getRouter().navTo("login");
+						});
 				});
 			},
 
@@ -172,9 +249,9 @@ sap.ui.define(
 				}).attachPress(function () {
 					that.getRouter().navTo("selecaoModulo");
 				});
-				
+
 				var oMenuRelatorio = this._montarMenuRelatorio();
-				
+
 				var oLogoffButton = this._montarBotaoLogoff();
 
 				var popover = new Popover({
@@ -189,7 +266,7 @@ sap.ui.define(
 						popover.destroy();
 					}
 				}).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
-				
+
 				this.getView().addDependent(popover);
 
 				popover.openBy(oEvent.getSource());
@@ -197,9 +274,9 @@ sap.ui.define(
 
 			handleNotificationsPress: function (oEvent) {
 				var that = this;
-				
+
 				this._carregarValoresNotificacoes();
-				
+
 				var countObrig = 0;
 				var countTTC = 0;
 				var countTAX = 0;
@@ -232,7 +309,7 @@ sap.ui.define(
 					that.getModel().setProperty("/RequisicaoReabertura", response);
 
 				});
-				
+
 				NodeAPI.listarRegistros("DeepQuery/RequisicaoReaberturaTaxPackage?status=1", function (response) { // 1 TAX Packege
 					if (response) {
 						for (var i = 0, length = response.length; i < length; i++) {
@@ -303,19 +380,17 @@ sap.ui.define(
 				oToolbar.addContent(new sap.m.Button({
 					text: that.getResourceBundle().getText("viewAdminInicioBotaoTodasNotificacoes")
 				}).attachPress(function () {
-					sap.ui.getCore().byId(viewId + "--pageContainer").to(viewId + "--listaNotificacoes");
+					var oPage = that.byId("pageContainer").getPage("listaNotificacoes");
 
-					var oXMLView = that.byId("listaNotificacoesXMLView");
-					if (oXMLView && oXMLView.byId("paginaListagem") && oXMLView.byId("paginaListagem").aDelegates) {
-						var aDelegates = oXMLView.byId("paginaListagem").aDelegates;
-						for (var i = 0; i < aDelegates.length; i++) {
-							var oItem = aDelegates[i];
+					if (oPage) {
+						that.byId("pageContainer").to(oPage);
 
-							if (oItem.oDelegate && oItem.oDelegate.onAfterShow) {
-								oItem.oDelegate.onAfterShow();
-								break;
-							}
-						}
+						that._dispararOnAfterShow("ui5ns.ui5.view.admin.ListaNotificacoes");
+					} else {
+						that._carregarViewItemMenu("ui5ns.ui5.view.admin.ListaNotificacoes", "listaNotificacoes")
+							.then(function (oPage) {
+								that.byId("pageContainer").to(oPage);
+							});
 					}
 				}));
 
@@ -323,7 +398,7 @@ sap.ui.define(
 
 				popover.openBy(oEvent.getSource());
 			},
-
+			
 			onSideNavButtonPress: function () {
 				var viewId = this.getView().getId();
 				var toolPage = sap.ui.getCore().byId(viewId + "--toolPage");
@@ -345,7 +420,7 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				this._carregarValoresNotificacoes();
-				
+
 				fetch(Constants.urlBackend + "verifica-auth", {
 						credentials: "include"
 					})
@@ -370,142 +445,122 @@ sap.ui.define(
 					});
 
 				var that = this;
-				
+
 				this.getModel("viewModel").setProperty("/menu", {
 					navigation: [{
 						title: that.getResourceBundle().getText("viewAdminInicioMenuUsuario"),
 						icon: "sap-icon://account",
-						key: "usuario"
+						key: "usuario",
+						viewPath: "ui5ns.ui5.view.admin.CadastroUsuario"
 					}, {
 						title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackageCadastroAliquotas"),
 						icon: "sap-icon://waiver",
-						key: "taxPackageCadastroAliquotas"
+						key: "taxPackageCadastroAliquotas",
+						viewPath: "ui5ns.ui5.view.admin.CadastroAliquotasTaxPackage"
 					}, {
 						title: that.getResourceBundle().getText("viewAdminInicioMenuPais"),
 						icon: "sap-icon://choropleth-chart",
-						key: "pais"
+						key: "pais",
+						viewPath: "ui5ns.ui5.view.admin.Pais"
 					}, {
 						title: that.getResourceBundle().getText("viewAdminInicioMenuEmpresa"),
 						icon: "sap-icon://building",
-						key: "empresa"
+						key: "empresa",
+						viewPath: "ui5ns.ui5.view.admin.Empresa"
 					}, {
 						title: that.getResourceBundle().getText("viewAdminInicioMenuTTC"),
 						icon: "sap-icon://batch-payments",
 						expanded: false,
-						items: [
-							/*{
-								title: "Visualizar Módulo",
-								key: "ttcModulo",
-								route: "ttcListagemEmpresas"
-							},*/
-							{
-								title: that.getResourceBundle().getText("viewGeralCambio"),
-								key: "ttcCambio"
-							}, {
-								title: that.getResourceBundle().getText("viewGeralCategoria"),
-								key: "ttcCadastroCategory"
-							}, {
-								title: that.getResourceBundle().getText("viewGeralTaxa"),
-								key: "ttcCadastroTax"
-							}, {
-								title: that.getResourceBundle().getText("viewGeralNomeT"),
-								key: "ttcCadastroTributos"
-							}
-						]
+						items: [{
+							title: that.getResourceBundle().getText("viewGeralCambio"),
+							key: "ttcCambio",
+							viewPath: "ui5ns.ui5.view.admin.CambioTTC"
+						}, {
+							title: that.getResourceBundle().getText("viewGeralCategoria"),
+							key: "ttcCadastroCategory",
+							viewPath: "ui5ns.ui5.view.admin.CadastroCategoryTTC"
+						}, {
+							title: that.getResourceBundle().getText("viewGeralTaxa"),
+							key: "ttcCadastroTax",
+							viewPath: "ui5ns.ui5.view.admin.CadastroTaxTTC"
+						}, {
+							title: that.getResourceBundle().getText("viewGeralNomeT"),
+							key: "ttcCadastroTributos",
+							viewPath: "ui5ns.ui5.view.admin.CadastroNameOfTaxTTC"
+						}]
 					}, {
 						title: that.getResourceBundle().getText("viewAdminInicioMenuTaxPackage"),
 						icon: "sap-icon://product",
 						expanded: false,
-						items: [
-							/*{
-								title: that.getResourceBundle().getText("viewGeralVisualizarM"),
-								key: "taxPackageModulo"
-							},*/
-							{
-								title: that.getResourceBundle().getText("viewGeralItemsTR"),
-								key: "taxPackageCadastroItemsToReport"
-							}, {
-								title: that.getResourceBundle().getText("viewGeralAdicoesEExclusoes"),
-								key: "taxPackageCadastroAdicoesExclusoes"
-							}
-						]
+						items: [{
+							title: that.getResourceBundle().getText("viewGeralItemsTR"),
+							key: "taxPackageCadastroItemsToReport",
+							viewPath: "ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage"
+						}, {
+							title: that.getResourceBundle().getText("viewGeralAdicoesEExclusoes"),
+							key: "taxPackageCadastroAdicoesExclusoes",
+							viewPath: "ui5ns.ui5.view.admin.CadastroDiferencasTaxPackage"
+						}]
 					}, {
 						title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBeps"),
 						icon: "sap-icon://activities",
 						expanded: false,
-						items: [
-							/*{
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarCompliance"),
-								key: "complianceModulo"
-							}, {
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsVisualizarBeps"),
-								key: "bepsModulo"
-							},*/
-							{
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
-								key: "cadastroObrigacoes"
-							}, {
-								title: that.getResourceBundle().getText("viewArquivosAdminMenu"),
-								key: "listaArquivos"
-							}
-							/*, {
-								title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroObrigacoes"),
-								key: "cadastroObrigacoes"
-							}*/
-						]
-					}/*, {
-						title: that.getResourceBundle().getText("viewGeralVisualizarM"),
-						icon: "sap-icon://detail-view",
-						key: "iframe"
-					}*/]
+						items: [{
+							title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
+							key: "cadastroObrigacoes",
+							viewPath: "ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps"
+						}, {
+							title: that.getResourceBundle().getText("viewArquivosAdminMenu"),
+							key: "listaArquivos",
+							viewPath: "ui5ns.ui5.view.admin.ListaArquivosComplianceBeps"
+						}]
+					}]
 				});
 			},
-			
-			_carregarValoresNotificacoes: function(){
+
+			_carregarValoresNotificacoes: function () {
 				var that = this;
-				
+
 				var countSoma = 0
 				Promise.all([
-					this.retornarPromessaViaCallback("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1"),
-					this.retornarPromessaViaCallback("DeepQuery/RequisicaoReabertura?&status=1"),
-					this.retornarPromessaViaCallback("DeepQuery/RequisicaoReaberturaTaxPackage?&status=1"),
-					NodeAPI.get("DeepQuery/RequisicaoEncerramentoPeriodoTaxPackage", {
-						queryString: {
-							status: 1
-						}
-					})
+						this.retornarPromessaViaCallback("DeepQuery/RequisicaoModeloObrigacao?&idStatus=1"),
+						this.retornarPromessaViaCallback("DeepQuery/RequisicaoReabertura?&status=1"),
+						this.retornarPromessaViaCallback("DeepQuery/RequisicaoReaberturaTaxPackage?&status=1"),
+						NodeAPI.get("DeepQuery/RequisicaoEncerramentoPeriodoTaxPackage", {
+							queryString: {
+								status: 1
+							}
+						})
 					])
-					.then(function(response){
+					.then(function (response) {
 						var rsp1 = response[0];
 						var rsp2 = response[1];
 						var rsp3 = response[2];
 						var rsp4 = JSON.parse(response[3]);
-						
+
 						var countSoma = rsp1.length + rsp2.length + rsp3.length + rsp4.length;
 						that.getModel().setProperty("/ContadorSoma", {
 							modelcountSoma: countSoma
 						});
 					})
-					.catch(function(err){
-						
+					.catch(function (err) {
+
 					});
 			},
-			
-			onAtualizarNotificacoes: function (oEvent)
-			{
+
+			onAtualizarNotificacoes: function (oEvent) {
 				this._carregarValoresNotificacoes();
 			},
-			
-			retornarPromessaViaCallback: function(sRoute){
-				return new Promise(function(resolve,reject){
+
+			retornarPromessaViaCallback: function (sRoute) {
+				return new Promise(function (resolve, reject) {
 					NodeAPI.listarRegistros(sRoute, function (response) {
 						if (response) {
 							resolve(response);
-						}
-						else{
+						} else {
 							reject();
 						}
-					});	
+					});
 				});
 			},
 		});

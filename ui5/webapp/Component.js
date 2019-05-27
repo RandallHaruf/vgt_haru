@@ -2,7 +2,12 @@ sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
 	"ui5ns/ui5/model/models",
-	"ui5ns/ui5/model/Constants"
+	"ui5ns/ui5/model/Constants",
+	"ui5ns/ui5/lib/jszip",
+	"ui5ns/ui5/lib/XLSX",
+	"ui5ns/ui5/lib/FileSaver",
+	"ui5ns/ui5/lib/Utils",
+	"ui5ns/ui5/lib/Validador"
 ], function (UIComponent, Device, models, Constants) {
 	"use strict";
 
