@@ -130,6 +130,50 @@ sap.ui.define(
 
 				that.setBusy(that.byId("paginaListagem"), true);
 				
+				Utils.criarDialogFiltro("tabelaObjetos", [{
+					text: this.getResourceBundle().getText("viewGeralClassificacao"),
+					applyTo: 'id_dominio_tax_classification',
+					items: {
+						loadFrom: 'DominioTaxClassification',
+						path: '/EasyFilterClaissificacao',
+						text: 'classification',
+						key: 'id_dominio_tax_classification'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralCategoria"),
+					applyTo: 'id_tax_category',
+					items: {
+						loadFrom: 'TaxCategory',
+						path: '/EasyFilterCategoria',
+						text: 'category',
+						key: 'id_tax_category'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralTaxa"),
+					applyTo: 'id_tax',
+					items: {
+						loadFrom: 'TAX',
+						path: '/EasyFilterTaxa',
+						text: 'tax',
+						key: 'id_tax'
+					}
+				}], this, function (params) {
+					console.log(params);
+				});
+				
+				this._loadFrom().then((function (res) {
+					for (var i = 0, length = res[0].length; i < length; i++) {
+						res[0][i]["classification"] = Utils.traduzDominioTaxClassification(res[0][i]["id_dominio_tax_classification"], that);
+					}
+					that.getModel().setProperty("/EasyFilterClaissificacao", Utils.orderByArrayParaBox(res[0], "classification"));
+				}));
+				this._loadFrom().then((function (res) {
+					that.getModel().setProperty("/EasyFilterCategoria", Utils.orderByArrayParaBox(res[1], "category"));
+				}));
+				this._loadFrom().then((function (res) {
+					that.getModel().setProperty("/EasyFilterTaxa", Utils.orderByArrayParaBox(res[2], "tax"));
+				}));
+				
 				that.getModel().setProperty("/objetos", null);	
 				jQuery.ajax(Constants.urlBackend + "DeepQuery/Tax", {
 					type: "GET",
@@ -354,7 +398,12 @@ sap.ui.define(
 			
 			onCancelar: function (oEvent) {
 				this.byId("myNav").to(this.byId("paginaListagem"), "flip");
-			}
+			},
+			
+			onFiltrarTaxTTC: function () {
+                this._filterDialog.open();             
+            }
+            
 		});
 	}
 );

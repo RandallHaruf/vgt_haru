@@ -334,6 +334,25 @@ sap.ui.define(
 				var that = this;
 				that.setBusy(that.byId("tabelaObjetos"), true);
 				that.getModel().setProperty("/DominioDiferencaTipo", null);
+				
+				Utils.criarDialogFiltro("tabelaObjetos", [{
+					text: this.getResourceBundle().getText("viewGeralAdicoesEExclusoes"),
+					applyTo: 'id_diferenca_opcao',
+					items: {
+						loadFrom: 'DiferencaOpcao',
+						path: '/EasyFilterDiferencas',
+						text: 'nome',
+						key: 'id_diferenca_opcao'
+					}
+				}], this, function (params) {
+					console.log(params);
+				});
+				
+				this._loadFrom().then((function (res) {
+					that.getModel().setProperty("/EasyFilterDiferencas", Utils.orderByArrayParaBox(res[0], "nome"));
+				}));
+
+				
 				jQuery.ajax(Constants.urlBackend + "DominioDiferencaTipo", {
 					type: "GET",
 					xhrFields: {
@@ -370,7 +389,12 @@ sap.ui.define(
 						//that.getModel().setProperty("/objetos", response);
 					}
 				});
+			},
+			
+			onFiltrarDiferencas: function () {
+				this._filterDialog.open();             
 			}
+
 		});
 	}
 );

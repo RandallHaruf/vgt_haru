@@ -104,13 +104,7 @@
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
@@ -142,6 +136,12 @@
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
 									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									</Column>
 								</columns>
 								<items>
 									<ColumnListItem>
@@ -159,9 +159,7 @@
 											<Text text="{pais}" />
 											<Text text="{estado}" />
 											<Text text="{cidade}" />
-											<Text text="{projeto}" />
 											<Text text="{ano_fiscal}" />
-											<Text text="{descricao}" />
 											<Text text="{data_pagamento}" />
 											<Text text="{tipo_transacao}" />
 											<Text text="{tipo_transacao_outros}" />
@@ -180,6 +178,8 @@
 												text="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 											<Text text="{numero_documento}" />
 											<Text text="{entidade_beneficiaria}" />
+											<Text text="{descricao}" />
+											<Text text="{projeto}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -230,14 +230,9 @@
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
 									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
-									</Column>
+									
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
 									</Column>
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
@@ -269,6 +264,12 @@
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
 									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
+									</Column>
+									<Column width="10rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
+									</Column>
 								</columns>
 								<items>
 									<ColumnListItem>
@@ -282,9 +283,7 @@
 											<Text text="{pais}" />
 											<Text text="{estado}" />
 											<Text text="{cidade}" />
-											<Text text="{projeto}" />
 											<Text text="{ano_fiscal}" />
-											<Text text="{descricao}" />
 											<Text text="{data_pagamento}" />
 											<Text text="{tipo_transacao}" />
 											<Text text="{tipo_transacao_outros}" />
@@ -303,6 +302,8 @@
 												text="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
 											<Text text="{numero_documento}" />
 											<Text text="{entidade_beneficiaria}" />
+											<Text text="{descricao}" />
+											<Text text="{projeto}" />
 										</cells>
 									</ColumnListItem>
 								</items>

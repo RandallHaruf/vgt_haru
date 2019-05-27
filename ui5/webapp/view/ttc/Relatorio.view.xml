@@ -119,7 +119,7 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="H" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal' ,templateShareable:true }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal', sorter: {path: 'tblDominioAnoFiscal.ano_fiscal', descending: true}, templateShareable:true }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
 										<core:Item key="{tblDominioAnoFiscal.id_dominio_ano_fiscal}" text="{tblDominioAnoFiscal.ano_fiscal}"/>																				
 									</MultiComboBox>
 								</fb:control>
@@ -201,16 +201,10 @@
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center"/>
-						</Column>
-						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center"/>
-						</Column>						
+						</Column>	
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewRelatorioAnoFiscal}"  textAlign="Center"/>
 						</Column>
-						<Column width="10rem" hAlign="Center">
-							<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center"/>
-						</Column>	
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
 						</Column>						
@@ -246,7 +240,13 @@
 						</Column>
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
-						</Column>			
+						</Column>
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center"/>
+						</Column>
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center"/>
+						</Column>
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -261,9 +261,7 @@
 								<Text text="{tblDominioPais.pais}"/>
 								<Text text="{tblPagamento.estado}"/>
 								<Text text="{tblPagamento.cidade}"/>
-								<Text text="{tblPagamento.projeto}"/>							
 								<Text text="{tblDominioAnoFiscal.ano_fiscal}" />
-								<Text text="{tblPagamento.descricao}"/>	
 								<Text text="{tblPagamento.data_pagamento}"/>								
 								<Text text="{tblDominioTipoTransacao.tipo_transacao}" />
 								<Text text="{tblPagamento.tipo_transacao_outros}"/>
@@ -275,7 +273,9 @@
 								<Text text="{conversao_brl}" />
 								<Text text="{conversao_usd}" />							
 								<Text text="{tblPagamento.numero_documento}" />
-								<Text text="{tblPagamento.entidade_beneficiaria}"/>						
+								<Text text="{tblPagamento.entidade_beneficiaria}"/>	
+								<Text text="{tblPagamento.descricao}"/>	
+								<Text text="{tblPagamento.projeto}"/>
 							</cells>
 						</ColumnListItem>
 					</items>

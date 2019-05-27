@@ -9,6 +9,7 @@
 					<Toolbar>
 						<Title id="cabecalhoTabelaObjetos" text="{i18n>viewGeralTaxa}"/>
 						<ToolbarSpacer/>
+						<Button icon="sap-icon://filter" press="onFiltrarTaxTTC" />
 						<Button id="botaoNovoObjeto" icon="sap-icon://add" press="onNovoObjeto" text="{i18n>viewGeralNovo}" type="Emphasized"/>
 					</Toolbar>
 				</headerToolbar>

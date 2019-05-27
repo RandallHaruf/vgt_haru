@@ -35,6 +35,9 @@
 							text="{i18n>viewGeralDiferencas}"/>
 						<ToolbarSpacer />
 						<Button 
+							icon="sap-icon://filter" 
+							press="onFiltrarDiferencas" />
+						<Button 
 							id="botaoNovoObjeto" 
 							icon="sap-icon://add" 
 							press="onNovoObjeto" 

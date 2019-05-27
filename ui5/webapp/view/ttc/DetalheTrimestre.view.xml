@@ -31,7 +31,7 @@
 				<f2:navigationActions>
 					<l:HorizontalLayout>
 						<uni:FileUploader buttonOnly="true" buttonText="{i18n>viewTTTCSubstituir}" icon="sap-icon://excel-attachment" change="onImportarDadosSubstituir" fileType="xlsx" />
-						<uni:FileUploader buttonOnly="true" buttonText="{i18n>viewTTCAdicionar}" icon="sap-icon://excel-attachment" change="onImportarDadosAdicionar" fileType="xlsx" />
+						<uni:FileUploader class="customButton" buttonOnly="true" buttonText="{i18n>viewTTCAdicionar}" icon="sap-icon://excel-attachment" change="onImportarDadosAdicionar" fileType="xlsx" />
 					</l:HorizontalLayout>
 				</f2:navigationActions>
 			</f2:DynamicPageTitle>
@@ -65,7 +65,7 @@
 			<IconTabBar  upperCase="true" expandable="false" stretchContentHeight="true"
 				class="sapUiNoContentPadding">
 				<items>
-					<IconTabFilter  text="{i18n>viewGeralBorne} ({/ContadorBorne})">
+					<IconTabFilter id="backgroundBorne" text="{i18n>viewGeralBorne} ({/ContadorBorne})">
 						<ScrollContainer
 							
 							horizontal="true"
@@ -112,14 +112,8 @@
 									<Column width="15rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
-									</Column>
 									<Column width="7rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
 									</Column>
 									<Column width="12rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
@@ -156,6 +150,12 @@
 									</Column>
 									<Column width="15rem" hAlign="Center" >
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
+									</Column>
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
+									</Column>
+									<Column width="15rem" hAlign="Center" >
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -242,9 +242,6 @@
 												valueState="{cidadeValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}"
 												/>
-											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												value="{projeto}" />
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -254,9 +251,6 @@
 												selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}">
 												<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
 											</Select>
-											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												value="{descricao}" />
 											<DatePicker 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{data_pagamento}" 
@@ -343,8 +337,13 @@
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{entidade_beneficiaria}" 
 												valueState = "{entidadeValueState}"
-												valueStateText="{i18n>viewTTCEntradaInvalida}"
-											/>
+												valueStateText="{i18n>viewTTCEntradaInvalida}" />
+											<Input 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												value="{descricao}" />
+											<Input 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												value="{projeto}" />
 										</cells>
 									</ColumnListItem>
 								</items>
@@ -352,7 +351,7 @@
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon=""/>
-					<IconTabFilter text="{i18n>viewGeralCollected} ({/ContadorCollected})">
+					<IconTabFilter id="backgroundCollected" text="{i18n>viewGeralCollected} ({/ContadorCollected})">
 						<ScrollContainer
 							horizontal="true"
 							vertical="true"
@@ -398,14 +397,8 @@
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
 									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
-									</Column>
 									<Column width="7rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
 									</Column>
 									<Column width="12rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
@@ -436,6 +429,12 @@
 									</Column>
 									<Column width="15rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
+									</Column>
+									<Column width="15rem" hAlign="Center">
+										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
 									</Column>
 								</columns>
 								<items>
@@ -522,9 +521,6 @@
 												valueState="{cidadeValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}"
 											/>
-											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												value="{projeto}" />
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -534,9 +530,6 @@
 												selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}">
 												<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
 											</Select>
-											<Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												value="{descricao}" />
 											<DatePicker 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{data_pagamento}" 
@@ -634,8 +627,13 @@
 												value="{entidade_beneficiaria}"
 												change="onPreencherEntidade"
 												valueState = "{entidadeValueState}"
-												valueStateText="{i18n>viewTTCEntradaInvalida}"
-											/>
+												valueStateText="{i18n>viewTTCEntradaInvalida}" />
+											<Input 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												value="{descricao}" />
+											<Input 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
+												value="{projeto}" />
 										</cells>
 									</ColumnListItem>
 								</items>
