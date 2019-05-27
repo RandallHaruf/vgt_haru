@@ -1728,9 +1728,14 @@ sap.ui.define(
 				return fDataNoPadrao;
 			},
 			
+			criarDialogFiltroManual: function (filtrarPor, that, confirmCallback, nomePropriedadeDialog) {
+				return this.criarDialogFiltro(null, filtrarPor, that, confirmCallback, nomePropriedadeDialog);
+			},
+			
 			criarDialogFiltro: function (sIdTabela, filtrarPor, that, confirmCallback, nomePropriedadeDialog) {
-				
-				that.byId(sIdTabela).getBinding("items").filter([], false);                         
+				if (sIdTabela) {
+					that.byId(sIdTabela).getBinding("items").filter([], false);                         	
+				}
 				
 				var oFilterDialog = new sap.m.ViewSettingsDialog();
 			
@@ -1754,39 +1759,47 @@ sap.ui.define(
 						}
 					}
 					
-					var	oParent = that.byId(sIdTabela),
-						filteredItemsCount = -1;
+					var filteredItemsCount = -1;
 					
-					if (oParent) {
-						var filterKeys = Object.keys(filterSelection);
+					if (sIdTabela) {
+						var	oParent = that.byId(sIdTabela);
 						
-						var parentBinding = oParent.getBinding("items");
-						var filters = [];
-						
-						for (var i = 0, length = filterKeys.length; i < length; i++) {
-							var column = filterKeys[i];
-							var values = filterSelection[column];
-							var aux = [];
+						if (oParent) {
+							var filterKeys = Object.keys(filterSelection);
 							
-							for (var j = 0, length2 = values.length; j < length2; j++) {
-								aux.push(new sap.ui.model.Filter(column, sap.ui.model.FilterOperator.EQ, values[j]));
+							var parentBinding = oParent.getBinding("items");
+							var filters = [];
+							
+							for (var i = 0, length = filterKeys.length; i < length; i++) {
+								var column = filterKeys[i];
+								var values = filterSelection[column];
+								var aux = [];
+								
+								for (var j = 0, length2 = values.length; j < length2; j++) {
+									aux.push(new sap.ui.model.Filter(column, sap.ui.model.FilterOperator.EQ, values[j]));
+								}
+								
+								if (aux.length) {
+									filters.push(new sap.ui.model.Filter(aux, false));
+								}
 							}
 							
-							if (aux.length) {
-								filters.push(new sap.ui.model.Filter(aux, false));
-							}
+							parentBinding.filter(filters.length ? filters : [], false);
+							
+							filteredItemsCount = parentBinding.iLength;
 						}
-						
-						parentBinding.filter(filters.length ? filters : [], false);
-						
-						filteredItemsCount = parentBinding.iLength;
 					}
 					
 					if (confirmCallback) {
-						confirmCallback({
-							filterSelection: filterSelection,
-							filteredItemsCount: filteredItemsCount
-						});
+						var result = {
+							filterSelection: filterSelection
+						};
+						
+						if (filteredItemsCount !== -1) {
+							result.filteredItemsCount = filteredItemsCount;
+						}
+						
+						confirmCallback(result);
 					}
 				});
 				
@@ -1798,7 +1811,7 @@ sap.ui.define(
 					
 					var oFilterItemEmpresa = new sap.m.ViewSettingsFilterItem({
 						text: item.text,
-						key: item.applyTo,
+						key: sIdTabela ? item.applyTo : item.key,
 						multiSelect: true
 					});
 					
