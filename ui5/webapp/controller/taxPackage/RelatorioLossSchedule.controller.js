@@ -26,27 +26,7 @@ sap.ui.define([
 			});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
-			//this._atualizarDados();
 			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
-			var that = this;
-			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " " + this.getResourceBundle().getText("viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE"));
-			NodeAPI.pListarRegistros("TemplateReport", {
-					tela: that.oView.mProperties.viewName,
-					isIFrame: that.isIFrame() ? "true" : "false",
-					indDefault: true,
-					usarSession: 1
-				})
-				.then(function (res) {
-					if(res.result.length){
-						that.getModel().setProperty("/Preselecionado", JSON.parse(res.result[0].parametros));
-						that.getModel().setProperty("/NomeReport", res.result[0].descricao);
-						that.onTemplateGet();						
-					}
-				})
-				.catch(function (err) {
-					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-				});		
-				
 			if (this.isVisualizacaoUsuario()) {
 				this.getRouter().getRoute("taxPackageRelatorioLossSchedule").attachPatternMatched(this._handleRouteMatched, this);				
 			}
@@ -90,7 +70,29 @@ sap.ui.define([
 
 		onExit: function () {
 			this._onClearSelecoes();
-			this._atualizarDados();				
+			this._atualizarDados();	
+			var that = this;
+			that.setBusy(that.byId("idNomeReport"), true);
+			that.getModel().setProperty("/NomeReport",that.getResourceBundle().getText("viewGeralRelatorio") + " " + that.getResourceBundle().getText("viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE"));
+			NodeAPI.pListarRegistros("TemplateReport", {
+					tela: that.oView.mProperties.viewName,
+					isIFrame: that.isIFrame() ? "true" : "false",
+					indDefault: true,
+					usarSession: 1
+				})
+				.then(function (res) {
+					if(res.result.length){
+						that.getModel().setProperty("/Preselecionado", JSON.parse(res.result[0].parametros));
+						that.getModel().setProperty("/NomeReport", res.result[0].descricao);
+						that.onTemplateGet();						
+					}
+				})
+				.catch(function (err) {
+					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
+				})
+				.finally(function(){
+					that.setBusy(that.byId("idNomeReport"), false);
+				});				
 			this.aKeys = [];
 			this.aFilters = [];
 			this.oModel = null;

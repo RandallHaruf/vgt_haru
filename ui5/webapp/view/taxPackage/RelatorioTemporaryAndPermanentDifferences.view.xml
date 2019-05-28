@@ -16,7 +16,7 @@
 					<vm:VariantManagement id="myVariantManagement" visible="false"
 						standardItemText="{i18n>viewGeralRelatorio} {i18n>viewGeralAdicoesEExclusoes}" save="onSaveView" manage="onManageView" select="onSelectView"></vm:VariantManagement>
 					<HBox justifyContent="Center" alignItems="Center">
-						<Title text="{/NomeReport}"/>
+						<Title id= "idNomeReport" text="{/NomeReport}"/>
 						<Button id="TemplateSet" icon="sap-icon://slim-arrow-down" class="sapUiSmallMarginEnd" type="Transparent" press="onDialogOpen"/>
 					</HBox>
 				</f:heading>
