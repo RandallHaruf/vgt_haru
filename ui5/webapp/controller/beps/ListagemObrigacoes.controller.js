@@ -464,7 +464,7 @@ sap.ui.define(
 
 			carregarFiltroEmpresa: function () {
 				var that = this;
-				NodeAPI.listarRegistros("Empresa?" + this._parametroInception, function (response) {
+				NodeAPI.listarRegistros("Empresa?" + this._parametroInception + "&moduloAtual=beps", function (response) {
 					response = Utils.orderByArrayParaBox(response, "nome");
 					that.getModel().setProperty("/FiltroEmpresa", response.concat());
 					response.unshift({

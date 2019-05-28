@@ -132,7 +132,7 @@ sap.ui.define(
 				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
 				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 
-				this._carregarSelect("Empresa");
+				this._carregarSelect("DeepQuery/Empresa?moduloAtual=beps");
 				this._carregarSelect("DominioPais");
 				this._carregarSelect("ObrigacaoAcessoria?tipo=1");
 				this._carregarSelect("DomPeriodicidadeObrigacao");
@@ -146,7 +146,8 @@ sap.ui.define(
 					if (response) {
 						var filtro;
 						switch (sEntidade) {
-						case "Empresa":
+						case "DeepQuery/Empresa?moduloAtual=beps":
+							sEntidade = "Empresa";
 							filtro = Utils.orderByArrayParaBox(response, "nome");
 							break;
 						case "DominioPais":

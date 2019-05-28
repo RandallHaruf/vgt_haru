@@ -92,7 +92,7 @@ sap.ui.define(
 						text: this.getResourceBundle().getText("viewGeralEmpresa"),
 						applyTo: 'id_empresa',
 						items: {
-							loadFrom: 'Empresa',
+							loadFrom: 'DeepQuery/Empresa?moduloAtual=taxpackage',
 							path: '/EasyFilterEmpresa',
 							text: 'nome',
 							key: 'id_empresa'

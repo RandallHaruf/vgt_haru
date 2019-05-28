@@ -89,7 +89,7 @@ sap.ui.define(
 				this.getModel().setProperty("/IdEmpresaSelecionado", oParametros.empresa);
 				this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 
-				this._carregarSelect("Empresa");
+				this._carregarSelect("DeepQuery/Empresa?moduloAtual=compliance");
 				this._carregarSelect("ObrigacaoAcessoria?tipo=2");
 				this._carregarSelect("DomPeriodicidadeObrigacao");
 				this._carregarSelect("DominioAnoFiscal");
@@ -103,9 +103,9 @@ sap.ui.define(
 					if (response) {
 						var filtro;
 						switch (sEntidade) {
-						case "Empresa":
+						case "DeepQuery/Empresa?moduloAtual=compliance":
+							sEntidade = "Empresa";
 							filtro = Utils.orderByArrayParaBox(response, "nome");
-
 							break;
 						case "DominioPais":
 							var aPais = response;
