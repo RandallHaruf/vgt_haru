@@ -1,0 +1,17 @@
+"use strict";
+var db = require("../db");
+
+var oSketch = {
+	colunas: {
+		fkEmpresa: {
+            nome: "fk_empresa.id_empresa",
+            number: true
+        },
+        fkModulo:{
+        	nome: "fk_dominio_modulo.id_dominio_modulo",
+        	number: true
+        }
+	}
+};
+
+module.exports = db.model("VGT.REL_EMPRESA_MODULO", oSketch);

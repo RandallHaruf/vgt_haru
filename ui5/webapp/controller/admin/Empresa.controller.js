@@ -696,20 +696,29 @@ sap.ui.define(
 				});
 
 				NodeAPI.listarRegistros("DominioEmpresaStatus", function (response) {
-					response.unshift({});
-					var aDominioEmpresaStatus = response;
-					for (var i = 1; i < aDominioEmpresaStatus.length; i++) {
-						aDominioEmpresaStatus[i]["status"] =
-							Utils.traduzEmpresaStatusTipo(aDominioEmpresaStatus[i]["id_dominio_empresa_status"], that);
+					if(response){
+						response.unshift({});
+						var aDominioEmpresaStatus = response;
+						for (var i = 1; i < aDominioEmpresaStatus.length; i++) {
+							aDominioEmpresaStatus[i]["status"] =
+								Utils.traduzEmpresaStatusTipo(aDominioEmpresaStatus[i]["id_dominio_empresa_status"], that);
+						}
+						that.getModel().setProperty("/DominioEmpresaStatus", Utils.orderByArrayParaBox(aDominioEmpresaStatus, "status"));
 					}
-					that.getModel().setProperty("/DominioEmpresaStatus", Utils.orderByArrayParaBox(aDominioEmpresaStatus, "status"));
-					//that.onPreencherStatus();
-
 				});
 
 				NodeAPI.listarRegistros("Aliquota?tipo=empresa", function (response) {
 					response.unshift({});
 					that.getModel().setProperty("/Aliquota", response);
+				});
+				NodeAPI.pListarRegistros("DominioModulo")
+				.then(function (res) {
+					Utils.orderByArrayParaBox(res, "modulo");
+					res.shift();
+					that.getModel().setProperty("/DominioModulo", res);
+				})	
+				.catch(function (err) {
+					console.log(err);
 				});
 			},
 
@@ -743,7 +752,7 @@ sap.ui.define(
 					// Carrega o histórico de alíquotas dessa empresa
 					NodeAPI.listarRegistros("DeepQuery/HistoricoEmpresaAliquota/" + iIdObjeto + "&-1", function (resp) {
 						if (resp && resp.length > 0) {
-							that.getModel().setProperty("/objeto/historicoAliquotas", resp);
+							that.getModel().setProperty("/objeto/historicoAliquotas?fkEmpresa=" + iIdObjeto, resp);
 
 							// Se existe um registro de histórico para essa empresa que não possua data fim ele é o registro da alíquota vigente
 							//var obj = resp.find(x => x.data_fim_rel === null);
@@ -753,6 +762,23 @@ sap.ui.define(
 							that.getModel().setProperty("/HistoricoAtual", obj);
 						}
 					});
+					NodeAPI.pListarRegistros("RelEmpresaModulo?fkEmpresa=" + iIdObjeto)
+					.then(function (res){
+						var aModulosEmpresa = res.result;
+						var aModulos = that.getModel().getProperty("/DominioModulo");
+						
+						for(var i = 0; i < aModulos.length; i++){
+							for(var j = 0; j < aModulosEmpresa.length; j++) {
+								if (aModulos[i].id_dominio_modulo == aModulosEmpresa[j]["fk_dominio_modulo.id_dominio_modulo"]) {
+									aModulos[i].selecionado = true;
+								}
+							}
+						}
+					})
+					.catch(function (err){
+						console.log(err);
+					})
+					
 				});
 
 				//NodeAPI.listarRegistros("RelacionamentoEmpresaObrigacaoAcessoria?fkEmpresa=" + iIdObjeto + "&indicadorHistorico=false", function (response) {
@@ -797,6 +823,14 @@ sap.ui.define(
 				that.byId("btnCancelar").setEnabled(false);
 				that.byId("btnSalvar").setEnabled(false);
 				that.setBusy(that.byId("btnSalvar"), true);
+				
+				var aModulos = that.getModel().getProperty("/DominioModulo");
+				var aModulosSelecionados = [];
+				for(var i = 0; i < aModulos.length; i++){
+					if (aModulos[i].selecionado == true) {
+						aModulosSelecionados.push(aModulos[i]);
+					}
+				}
 
 				var obj = this.getModel().getProperty("/objeto");
 				NodeAPI.listarRegistros("DeepQuery/Pais/" + obj["fk_pais.id_pais"], function (resposta) {
@@ -819,7 +853,8 @@ sap.ui.define(
 						fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
 						fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
 						fkAliquota: obj["fk_aliquota.id_aliquota"],
-						fkPais: obj["fk_pais.id_pais"]
+						fkPais: obj["fk_pais.id_pais"],
+						modulos:aModulosSelecionados
 							/*,
 													obrigacoes: JSON.stringify(this._getSelecaoObrigacoes())*/
 					}, function (response) {
@@ -932,6 +967,14 @@ sap.ui.define(
 				that.setBusy(that.byId("btnSalvar"), true);
 				var obj = this.getModel().getProperty("/objeto");
 
+				var aModulos = that.getModel().getProperty("/DominioModulo");
+				var aModulosSelecionados = [];
+				for(var i = 0; i < aModulos.length; i++){
+					if (aModulos[i].selecionado == true) {
+						aModulosSelecionados.push(aModulos[i]);
+					}
+				}
+
 				NodeAPI.listarRegistros("DeepQuery/Pais/" + obj["fk_pais.id_pais"], function (resposta) {
 					//response.unshift({ });
 					that.getModel().setProperty("/DmenosXAnos", resposta);
@@ -952,7 +995,8 @@ sap.ui.define(
 						fkTipoSocietario: obj["fk_dominio_empresa_tipo_societario.id_dominio_empresa_tipo_societario"],
 						fkStatus: obj["fk_dominio_empresa_status.id_dominio_empresa_status"],
 						fkAliquota: obj["fk_aliquota.id_aliquota"],
-						fkPais: obj["fk_pais.id_pais"]
+						fkPais: obj["fk_pais.id_pais"],
+						modulos: aModulosSelecionados
 							/*,
 													obrigacoes: JSON.stringify(that._getSelecaoObrigacoes())9*/
 					}, function (response) {

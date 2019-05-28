@@ -96,7 +96,7 @@ sap.ui.define(
 				this.byId("tabelaEmpresas").setBusyIndicatorDelay(100);
 				this.byId("tabelaEmpresas").setBusy(true);
 
-				NodeAPI.listarRegistros("ResumoEmpresaTTC?anoCalendario=" + sIdAnoCalendario + "&full=" + (this.isIFrame() ? "true" : "false"),
+				NodeAPI.listarRegistros("ResumoEmpresaTTC?anoCalendario=" + sIdAnoCalendario + "&full=" + (this.isIFrame() ? "true" : "false") + "&moduloAtual=ttc",
 					function (response) {
 						if (response) {
 							for (var i = 0; i < response.length; i++) {

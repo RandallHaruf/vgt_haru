@@ -334,7 +334,7 @@ context VGT {
             rc_statutory_provision_for_income_tax                  : Decimal(19, 4);
             rc_statutory_gaap_profit_loss_after_tax                : Decimal(19, 4);
             rf_taxable_income_loss_before_losses_and_tax_credits   : Decimal(19, 4);
-            rf_taxable_income_deductions						   : Decimal(19, 4);
+            rf_taxable_income_deductions                           : Decimal(19, 4);
             rf_total_losses_utilized                               : Decimal(19, 4);
             rf_taxable_income_loss_after_losses                    : Decimal(19, 4);
             rf_income_tax_before_other_taxes_and_credits           : Decimal(19, 4);
@@ -725,5 +725,11 @@ context VGT {
     entity APP_CONFIG {
         key chave : String(5000) not null;
             valor : String(5000) not null;
+    };
+
+    /*@@layout{"layoutInfo":{"x":158,"y":109.5}}*/
+    entity REL_EMPRESA_MODULO {
+        fk_empresa        : association[*, 0..1] to VGT.EMPRESA { id_empresa };
+        fk_dominio_modulo : association[*, 0..1] to VGT.DOMINIO_MODULO { id_dominio_modulo };
     };
 };

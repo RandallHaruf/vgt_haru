@@ -354,6 +354,9 @@ module.exports = function (app) {
 					return aEmpresa;
 				}
 				else{
+					if(req.query.moduloAtual){
+						aEmpresa = filtrarEmpresasPorModulo(req.query.moduloAtual, aEmpresa);
+					}
 					return aEmpresa.filter(function (obj) {
 						return req.session.usuario.empresas.includes(obj[sNomeCampoIdEmpresa]);
 					});
@@ -369,3 +372,35 @@ module.exports = function (app) {
 		}
 	};
 };
+function filtrarEmpresasPorModulo(moduloAtual, aEmpresa){
+	var aEmpresaFiltrado = [];
+	moduloAtual.toLowerCase();
+	var idFiltro = 0;
+	switch(moduloAtual){
+		case "ttc"://1
+			idFiltro = 1;
+			break;
+		case "compliance"://3
+			idFiltro = 3;
+			break;
+		case "taxpackage"://2
+			idFiltro = 2;
+			break;
+		case "beps"://4
+			idFiltro = 4;
+			break;
+	}
+	var sQuerySelect = 'Select * from "VGT.REL_EMPRESA_MODULO" '
+						+'where "fk_dominio_modulo.id_dominio_modulo" = ? ';
+	var aParam = [];
+	aParam.push(idFiltro);
+	var aEmpresasModulo = db.executeStatementSync(sQuerySelect, aParam);
+	for(let i = 0; i < aEmpresa.length; i++){
+		for(let j = 0; j < aEmpresasModulo.length; j++){
+			if(aEmpresa[i]["id_empresa"] == aEmpresasModulo[j]["fk_empresa.id_empresa"]){
+				aEmpresaFiltrado.push(aEmpresa[i]);
+			}
+		}
+	}
+	return aEmpresaFiltrado;
+}

@@ -490,7 +490,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[2]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true&moduloAtual=compliance",
 					function (response) { // 2 COMPLIANCE
 						if (response) {
 							var Todos = 0,
@@ -534,7 +534,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[2]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true&moduloAtual=compliance",
 					function (response) { // 2 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
@@ -569,7 +569,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[2]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1&moduloAtual=compliance" + campoAnoEstaVazio,
 					function (response) { // 2 COMPLIANCE
 						if (response) {
 							var Todos = 0,
@@ -614,7 +614,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[2]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1&moduloAtual=compliance" + campoAnoEstaVazio,
 					function (response) { // 1 COMPLIANCE
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
