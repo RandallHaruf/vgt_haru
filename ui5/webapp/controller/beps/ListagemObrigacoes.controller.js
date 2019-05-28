@@ -464,7 +464,7 @@ sap.ui.define(
 
 			carregarFiltroEmpresa: function () {
 				var that = this;
-				NodeAPI.listarRegistros("Empresa?" + this._parametroInception, function (response) {
+				NodeAPI.listarRegistros("Empresa?" + this._parametroInception + "&moduloAtual=beps", function (response) {
 					response = Utils.orderByArrayParaBox(response, "nome");
 					that.getModel().setProperty("/FiltroEmpresa", response.concat());
 					response.unshift({
@@ -499,7 +499,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true&moduloAtual=beps",
 					function (response) { // 1 BEPS
 						if (response) {
 							var Todos = 0,
@@ -543,7 +543,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true",
+					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true&moduloAtual=beps",
 					function (response) { // 1 BEPS
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {
@@ -578,7 +578,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1&moduloAtual=beps" + campoAnoEstaVazio,
 					function (response) { // 1 Beps
 						if (response) {
 							var Todos = 0,
@@ -624,7 +624,7 @@ sap.ui.define(
 
 				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
 					"]&" + this._parametroInception +
-					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1" + campoAnoEstaVazio,
+					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1&moduloAtual=beps" + campoAnoEstaVazio,
 					function (response) { // 1 BEPS
 						if (response) {
 							for (var i = 0, length = response.length; i < length; i++) {

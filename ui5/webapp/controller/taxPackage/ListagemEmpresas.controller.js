@@ -92,7 +92,7 @@ sap.ui.define(
 						text: this.getResourceBundle().getText("viewGeralEmpresa"),
 						applyTo: 'id_empresa',
 						items: {
-							loadFrom: 'Empresa',
+							loadFrom: 'DeepQuery/Empresa?moduloAtual=taxpackage',
 							path: '/EasyFilterEmpresa',
 							text: 'nome',
 							key: 'id_empresa'
@@ -110,7 +110,7 @@ sap.ui.define(
 				this.byId("tabelaEmpresas").setBusy(true);
 
 				NodeAPI.listarRegistros(
-					"TaxPackageListagemEmpresas?anoCalendario=" + sIdAnoCalendario + "&full=" + (this.isIFrame() ? "true" : "false"),
+					"TaxPackageListagemEmpresas?anoCalendario=" + sIdAnoCalendario + "&full=" + (this.isIFrame() ? "true" : "false") + "&moduloAtual=taxpackage",
 					function (response) {
 						if (response && response.success) {
 							for (var i = 0, length = response.result.length; i < length; i++) {

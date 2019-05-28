@@ -257,6 +257,38 @@
 							</f:FormContainer>
 						</f:formContainers>
 					</f:Form>
+					<f:Form>
+						<f:title>
+							<core:Title text="{i18n>viewUsuarioAdminModulos}"/>
+						</f:title>
+						<f:layout>
+							<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+								emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="true"/>
+						</f:layout>
+						<f:formContainers>
+							<f:FormContainer>
+								<f:formElements>
+									<f:FormElement>
+										<table:Table rows="{/DominioModulo}" id="tableModulos" selectionMode="None" enableColumnReordering="true">
+											<table:columns>
+												<table:Column width="45px" hAlign="Center">
+													<table:template>
+														<CheckBox selected="{selecionado}" enabled="{habilitado}"/>
+													</table:template>
+												</table:Column>
+												<table:Column>
+													<Label text="{i18n>viewUsuarioAdminModulos}" textAlign="Center" width="100%"/>
+													<table:template>
+														<Text text="{modulo}"/>
+													</table:template>
+												</table:Column>
+											</table:columns>
+										</table:Table>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+						</f:formContainers>
+					</f:Form>
 					<Panel headerText="{i18n>viewEmpresasHistoricoObrigacoes}" expandable="true" class="sapUiNoContentPadding" visible="false">
 						<content>
 							<f:Form editable="true" visible="false">

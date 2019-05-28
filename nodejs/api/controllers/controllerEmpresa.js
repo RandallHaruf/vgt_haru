@@ -23,7 +23,7 @@ module.exports = {
 			});
 		}
 		
-		model.listar(aParam, function (err, result) {
+		model.listar(aParam, function (err, result, next) {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
@@ -108,8 +108,24 @@ module.exports = {
 
 					vincularObrigacoes(idEmpresa, oObrigacoes);
 				}
-
-				res.send(JSON.stringify(result));
+				
+				if(req.body.modulos){
+					Promise.all([
+						deleteRelEmpresa('"VGT.REL_EMPRESA_MODULO"', idEmpresa, req.body.modulos, req),
+						inserirRelEmpresa('"VGT.REL_EMPRESA_MODULO"', idEmpresa, req.body.modulos, req),
+					])
+					.then (function (aResponse) {
+						res.send(JSON.stringify(result));
+					})
+					.catch(function (err) {
+						console.log(err);
+						let msg = 'Erro inesperado no método "controllerEmpresa/atualizarRegistro": ' + err.message;
+						const error = new Error(msg);
+						next(error);
+					});
+				}else{
+					res.send(JSON.stringify(result));	
+				}
 			}
 		});
 	},
@@ -127,7 +143,7 @@ module.exports = {
 		});
 	},
 
-	atualizarRegistro: function (req, res) {
+	atualizarRegistro: function (req, res, next) {
 
 		var oCondition = {
 			coluna: model.colunas.id,
@@ -194,16 +210,32 @@ module.exports = {
 			if (err) {
 				res.send(JSON.stringify(err));
 			} else {
+				var idEmpresa = req.params.idRegistro;
 				// Se foi enviado junto a request de inserir uma empresa uma lista de ids de obrigações,
 				//  é preciso inserir registros na tabela de vínculo entre empresa e obrigação acessória
 				if (req.body.obrigacoes) {
-					var idEmpresa = req.params.idRegistro;
 					var oObrigacoes = JSON.parse(req.body.obrigacoes);
 
 					vincularObrigacoes(idEmpresa, oObrigacoes);
 				}
-
-				res.send(JSON.stringify(result));
+				
+				if(req.body.modulos){
+					Promise.all([
+						deleteRelEmpresa('"VGT.REL_EMPRESA_MODULO"', idEmpresa, req.body.modulos, req),
+						inserirRelEmpresa('"VGT.REL_EMPRESA_MODULO"', idEmpresa, req.body.modulos, req),
+					])
+					.then (function (aResponse) {
+						res.send(JSON.stringify(result));
+					})
+					.catch(function (err) {
+						console.log(err);
+						let msg = 'Erro inesperado no método "controllerEmpresa/atualizarRegistro": ' + err.message;
+						const error = new Error(msg);
+						next(error);
+					});
+				}else{
+					res.send(JSON.stringify(result));	
+				}
 			}
 		});
 	},
@@ -544,4 +576,75 @@ function vincularObrigacoes(sIdEmpresa, oObrigacoes, req) {
 			}
 		}
 	}
+}
+function deleteRelEmpresa(sTblName, iIdEmpresa, aIdRels, req) {
+	var sStatement = "delete from " + sTblName + " ";
+	var sIdRels = "";
+	if (sTblName == '"VGT.REL_EMPRESA_MODULO"') {
+		if(aIdRels){
+			for (var i = 0; i < aIdRels.length; i++) {
+				sIdRels += (sIdRels != "" ? ",'" : "'") + aIdRels[i]["id_dominio_modulo"] + "'";
+			}	
+			sStatement += " where " + sTblName + ".\"fk_dominio_modulo.id_dominio_modulo\" NOT IN (" + sIdRels + ") ";
+		}
+	} 
+	
+	if(aIdRels){
+		sStatement += "and " + sTblName + ".\"fk_empresa.id_empresa\" = " + iIdEmpresa;
+	}
+	else{
+		sStatement += "where " + sTblName + ".\"fk_empresa.id_empresa\" = " + iIdEmpresa;
+	}
+	
+
+	return new Promise(function (resolve, reject) {
+		model.execute({
+			statement: sStatement
+		}, function (err, result) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		}, {
+			idUsuario: req
+		});
+	});
+}
+function inserirRelEmpresa(sTblName, iIdEmpresa, aIdRels, req) {
+	
+	const inserir = function (idRel) {
+		var sStatement = "upsert ";
+		if (sTblName == '"VGT.REL_EMPRESA_MODULO"') {
+			sStatement += sTblName + " values (" + iIdEmpresa + ", " + idRel + ") where " + sTblName + ".\"fk_dominio_modulo.id_dominio_modulo\" = " + idRel + " ";
+		} 
+		
+		sStatement += "and " + sTblName + ".\"fk_empresa.id_empresa\" = " + iIdEmpresa;	
+		
+		
+		return new Promise(function (resolve, reject) {
+			model.execute({
+				statement: sStatement
+			}, function (err, result) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			}, {
+				idUsuario: req
+			});
+		});
+	};
+	
+	var aPromise = [];
+	
+	if(aIdRels){
+		for (let i = 0, length = aIdRels.length; i < length; i++) {
+			aPromise.push(inserir(aIdRels[i].id_dominio_modulo));
+		}
+	}
+	
+	
+	return Promise.all(aPromise);
 }

@@ -26,7 +26,10 @@ sap.ui.define([
 			/*
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.attachRouteMatched(this._handleRouteMatched, this);	*/		
-			this.getRouter().getRoute("taxPackageRelatorio").attachPatternMatched(this._handleRouteMatched, this);				
+			
+			if (this.isVisualizacaoUsuario()) {
+				this.getRouter().getRoute("taxPackageRelatorio").attachPatternMatched(this._handleRouteMatched, this);				
+			}
 		},
 
 		_handleRouteMatched: function () {
