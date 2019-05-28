@@ -76,9 +76,9 @@
 									}]
 								}">
 								<columns>
-									<Column width="7rem" hAlign="Center">
+									<!--<Column width="7rem" hAlign="Center">
 										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" textAlign="Center"/>
-									</Column>
+									</Column>-->
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
 									</Column>
@@ -150,7 +150,7 @@
 												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 										-->
 										<cells>
-											<core:Icon src="{icone_aplicavel}" />
+											<!--<core:Icon src="{icone_aplicavel}" />-->
 											<Text text="{category}" />
 											<Text text="{tax}" />
 											<Text text="{name_of_tax}" />

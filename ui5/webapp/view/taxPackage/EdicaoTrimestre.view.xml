@@ -64,7 +64,7 @@
 			<IconTabBar id="idIconTabBarInlineMode" upperCase="true" expandable="false" stretchContentHeight="true"
 				class="sapUiNoContentPadding">
 				<items>
-					<IconTabFilter text="{i18n>viewEdiçãoTrimestreItensParaReportar}">
+					<IconTabFilter text="{i18n>viewEdiçãoTrimestreItensParaReportar}" visible="{/ocultarItemToReport}">
 						<ScrollContainer id="containerItemsToReport2" horizontal="true" vertical="true" height="100%" class="sapUiResponsiveContentPadding">
 							<!--<VBox id="containerItemsToReport">
 								<HBox alignItems="Center">
@@ -84,7 +84,7 @@
 							</VBox>-->
 						</ScrollContainer>
 					</IconTabFilter>
-					<IconTabSeparator icon="" />
+					<IconTabSeparator icon="" visible="{/ocultarItemToReport}" />
 					<IconTabFilter text="{i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}">
 						<ScrollContainer 
 							id="containerTaxReconciliation"
