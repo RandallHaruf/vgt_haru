@@ -46,7 +46,9 @@ sap.ui.define([
 					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
 				});			
 				
-			this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
+			if (this.isVisualizacaoUsuario()) {
+				this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
+			}
 		},
 		_handleRouteMatched: function () {
 			if (this.isIFrame()) {

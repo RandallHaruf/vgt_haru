@@ -29,6 +29,18 @@ sap.ui.define(
 				return self !== top;		
 			},
 			
+			/* 28/05/19 - Todas as views externas instanciadas manualmente dentro do ambiente admin
+			recebem um id terminado em "XMLView". Está é a referencia utilizada para indicar ao controller em que contexto
+			ele se encontra. Essa solução foi necessaria para se ter um indicativo de contexto durante o "onInit",
+			assim sendo possível evitar que o route matched seja declarado para views que não utilizam esse mecanismo de navegação entre views. */ 
+			isVisualizacaoUsuario: function () {
+				return this.oView.getId().toLowerCase().indexOf('xmlview') === -1;
+			},
+			
+			isVisualizacaoAdmin: function () {
+				return this.oView.getId().toLowerCase().indexOf('xmlview') > -1;
+			},
+			
 			isPTBR: function () {
 				return (sap.ui.getCore().getConfiguration().getLanguage().toUpperCase() === "PT-BR");
 			},

@@ -57,8 +57,9 @@ sap.ui.define([
 					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
 				});		
 			
-	
-			this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._handleRouteMatched, this);			
+			if (this.isVisualizacaoUsuario()) {
+				this.getRouter().getRoute("complianceRelatorio").attachPatternMatched(this._handleRouteMatched, this);			
+			}
 		},
 
 		_handleRouteMatched: function (oEvent) {
