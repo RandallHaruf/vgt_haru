@@ -1870,6 +1870,15 @@ sap.ui.define(
 				//var aPromise = [];
 				var routes = [];
 				
+				for (var i = 0, length = filtrarPor.length; i < length; i++) {
+					var item = filtrarPor[i];
+					
+					if (item.items.loadFrom) {
+						//aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
+						routes.push(item.items.loadFrom);
+					}
+				}
+				
 				this.orderByArrayParaBox(filtrarPor, 'text');
 				
 				for (var i = 0, length = filtrarPor.length; i < length; i++) {
@@ -1887,11 +1896,6 @@ sap.ui.define(
 					});
 					
 					oFilterDialog.addFilterItem(oFilterItemEmpresa);
-					
-					if (item.items.loadFrom) {
-						//aPromise.push(NodeAPI.pListarRegistros(item.items.loadFrom));
-						routes.push(item.items.loadFrom);
-					}
 				}
 				
 				that.getView().addDependent(oFilterDialog);
