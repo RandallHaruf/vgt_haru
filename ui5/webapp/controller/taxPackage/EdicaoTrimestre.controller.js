@@ -196,11 +196,15 @@ sap.ui.define(
 									}
 								});
 								
-								var oFiscalResult = XLSX.utils.sheet_to_row_object_array(workbook.Sheets["Fiscal Result"]);
-								if(oFiscalResult[0]["Taxable income deductions"] && substituirDados){
-									oTaxReconciliation["rf_taxable_income_deductions"] = Number(oFiscalResult[0]["Taxable income deductions"]);
+								var aFiscalResult = XLSX.utils.sheet_to_row_object_array(workbook.Sheets["Fiscal Result"]);
+								if(substituirDados){
+									if(aFiscalResult.length && aFiscalResult[0]["Taxable income deductions"]){
+										oTaxReconciliation["rf_taxable_income_deductions"] = Number(aFiscalResult[0]["Taxable income deductions"]);
+									}
+									else{
+										throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaSubstituirTaxableIncomeDeductionsFalso"));
+									}
 								}
-								
 								that.onAplicarRegras();
 								eventSource.setValue("");
 							}
@@ -316,7 +320,7 @@ sap.ui.define(
 						if(linha["KEY"] && linha["Type"]){
 							var oDiferencaComTipoJaInserido = false;
 							for(let j =0; j < tiposJaIteradosOuJaInseridos.length; j++){
-								if(tiposJaIteradosOuJaInseridos[j]["id_diferenca"] == linha["KEY"]){
+								if(tiposJaIteradosOuJaInseridos[j]["fk_diferenca_opcao.id_diferenca_opcao"] == linha["KEY"]){
 									oDiferencaComTipoJaInserido = true;
 								}
 							}
@@ -327,8 +331,11 @@ sap.ui.define(
 								if(oOpcaoDiferenca["ind_duplicavel"] == false){
 									throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaComTipoDuplicadoComIndDuplicadoFalso"));
 								}else{
-									tiposJaIteradosOuJaInseridos.push({id_diferenca:Number(linha["KEY"])});
+									tiposJaIteradosOuJaInseridos.push({"fk_diferenca_opcao.id_diferenca_opcao":Number(linha["KEY"])});
 								}
+							}
+							else{
+								tiposJaIteradosOuJaInseridos.push({"fk_diferenca_opcao.id_diferenca_opcao":Number(linha["KEY"])});
 							}
 						}
 					}
