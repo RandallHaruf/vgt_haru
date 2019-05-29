@@ -189,7 +189,7 @@ context VGT {
     /*@@layout{"layoutInfo":{"x":-2334,"y":1028.5}}*/
     entity ITEM_TO_REPORT {
         key id_item_to_report : Integer not null;
-            pergunta          : String(4000);
+            pergunta          : String(5000);
             flag_sim_nao      : Boolean;
             flag_ano          : Boolean;
     };
