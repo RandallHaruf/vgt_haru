@@ -1870,6 +1870,8 @@ sap.ui.define(
 				//var aPromise = [];
 				var routes = [];
 				
+				this.orderByArrayParaBox(filtrarPor, 'text');
+				
 				for (var i = 0, length = filtrarPor.length; i < length; i++) {
 					var item = filtrarPor[i];
 					

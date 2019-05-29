@@ -2,6 +2,25 @@
 
 var model = require("../models/modelDomAnoCalendario");
 
+const ordenarAnoDesc = function (array) {
+	/*function sortNumber(a, b) {
+	  return a - b;
+	}
+	
+	var numArray = [140000, 104, 99];
+	numArray.sort(sortNumber);
+	
+	console.log(numArray);*/
+	
+	var aux = array.slice(); // copia array
+	
+	aux.sort(function (a, b) {
+		return b.ano_calendario - a.ano_calendario;
+	});
+	
+	return aux;
+};
+
 module.exports = {
 
 	listarRegistros: function (req, res) {
@@ -14,9 +33,9 @@ module.exports = {
 				}
 				else {
 					var iAnoCorrente = (new Date()).getFullYear();
-					res.send(JSON.stringify(result.filter(function(obj) {
+					res.send(JSON.stringify(ordenarAnoDesc(result.filter(function(obj) {
 						return obj.ano_calendario <= iAnoCorrente;
-					})));
+					}))));
 				}
 			}
 		});
