@@ -661,6 +661,20 @@ sap.ui.define(
 				}
 				return traducao;
 			},
+			
+			traduzStatusEnvioTrimestreTTC: function (status, that) {
+				var traducao = "";
+				switch (status) {
+					case 1:
+						traducao = that.getResourceBundle().getText("viewGeralEnviadoTTC");
+						break;
+					case 0:
+						traducao = that.getResourceBundle().getText("viewGeralNaoEnviadoTTC");
+						break;
+				}
+				return traducao;
+			},
+			
 			traduzDominioDiferencaTipo: function (id, that) {
 
 				var traducao = "";
