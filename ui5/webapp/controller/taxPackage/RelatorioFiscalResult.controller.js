@@ -227,7 +227,7 @@ sap.ui.define([
 			oWhere.push(null);
 			if(oEmpresa === null){
 				oWhere[6] = ["tblEmpresa.nome"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -245,7 +245,7 @@ sap.ui.define([
 
 			if(oDominioAnoCalendario === null){
 				oWhere[6] = ["tblDominioAnoCalendario.ano_calendario"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -263,7 +263,7 @@ sap.ui.define([
 	
 			if(oPeriodoSelecionadas === null){
 				oWhere[6] = ["tblPeriodo.id_periodo"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -284,7 +284,7 @@ sap.ui.define([
 
 			if(oMoedaSelecionadas === null){
 				oWhere[6] = ["tblDominioMoeda.acronimo"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -301,7 +301,7 @@ sap.ui.define([
 			}	
 			if (oStatusSelecionado === null) {
 				oWhere[6] = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -347,7 +347,7 @@ sap.ui.define([
 			var that = this;
 			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
 			that.byId("GerarRelatorio").setEnabled(false);				
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true

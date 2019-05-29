@@ -422,7 +422,7 @@ sap.ui.define([
 			var posicaoDoArrayParaDistinct = 19;
 			if(oDominioObrigacaoAcessoriaTipo === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioObrigacaoAcessoriaTipo.tipo"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -439,7 +439,7 @@ sap.ui.define([
 			}
 			if(oEmpresa === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblEmpresa.nome"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -456,7 +456,7 @@ sap.ui.define([
 			}
 			if(oDominioPais === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioPais.pais"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -476,7 +476,7 @@ sap.ui.define([
 			}
 			if(oObrigacaoAcessoria === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblModeloObrigacao.nome_obrigacao"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -496,7 +496,7 @@ sap.ui.define([
 			}
 			if(oDomPeriodicidadeObrigacao === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioPeriodicidadeObrigacao.descricao"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -516,7 +516,7 @@ sap.ui.define([
 			}
 			if(oDominioAnoFiscal === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioAnoFiscal.ano_fiscal"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -536,7 +536,7 @@ sap.ui.define([
 			}
 			if(oDominioStatusObrigacao === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -556,7 +556,7 @@ sap.ui.define([
 			}
 			if(oDataPrazoEntregaInicio === null && oDataPrazoEntregaFim === null ){
 				oWhere[posicaoDoArrayParaDistinct] = ["prazo_de_entrega_calculado"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -578,7 +578,7 @@ sap.ui.define([
 			}
 			if(oDataExtensaoInicio === null && oDataExtensaoFim === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblRespostaObrigacao.data_extensao"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -601,7 +601,7 @@ sap.ui.define([
 	
 			if(oDominioAnoCalendario === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioAnoCalendario.ano_calendario"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -622,7 +622,7 @@ sap.ui.define([
 			
 			if(oDominioMoeda === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioMoeda.nome"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -639,7 +639,7 @@ sap.ui.define([
 			}			
 			if(oDataConclusaoInicio === null && oDataConclusaoFim === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblRespostaObrigacao.data_conclusao"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -661,7 +661,7 @@ sap.ui.define([
 			}	
 			if(oDataUploadInicio === null && oDataUploadFim === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDocumentoObrigacao.data_upload"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -952,7 +952,7 @@ sap.ui.define([
 			that.setBusy(that.byId("relatorioCompliance"),true);	
 			that.byId("GerarRelatorio").setEnabled(false);	
 			
-			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true
@@ -1026,7 +1026,7 @@ sap.ui.define([
 			that.setBusy(that.byId("relatorioCompliance"),true);	
 			that.byId("GerarRelatorio").setEnabled(false);	
 			
-			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false"), {
+			jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
 				type: "POST",
 				xhrFields: {
 					withCredentials: true

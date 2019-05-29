@@ -23,6 +23,7 @@
 											<MenuItem text="{i18n>viewGeralAdicoesEExclusoes}" id="acessoRapidoRelatorioTemporaryAndPermanentDifferences"/>
 											<MenuItem text="{i18n>viewEdiçãoTrimestreResultadoFiscal}" id="acessoRapidoRelatorioFiscalResult" />											
 											<MenuItem text="{i18n>viewEdiçãoTrimestreImpostoRenda}" id="acessoRapidoRelatorioIncomeTax" />
+											<!--<MenuItem text="Teste" id="acessoRapidoRelatorioTaxPackage"/>-->
 										</items>
 									</MenuItem>
 									<MenuItem text="{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}" id="acessoRapidoRelatorioLossSchedule" />

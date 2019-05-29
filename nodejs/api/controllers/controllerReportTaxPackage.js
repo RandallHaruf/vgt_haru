@@ -6,7 +6,31 @@ function padLeft(nr, n, str){
 module.exports = {
 
 	deepQuery: function (req, res) {
+		
+		var oWhere = [];
+		var aParams = [];
+		var stringtemporaria = "";
+		var stringInnerJoinModulo = "";
+		var filtro = "";
+		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}
+		
 		var sStatement =
 			'SELECT * FROM ('
 			+'SELECT '
@@ -133,27 +157,12 @@ module.exports = {
 			+'ON tblItemToReport."id_item_to_report" = tblRespostaItemToReport."fk_item_to_report.id_item_to_report" '
 			+'LEFT OUTER JOIN "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" AS tblRelRespostaItemToReportAnoFiscal '
 			+'ON tblRelRespostaItemToReportAnoFiscal."fk_resposta_item_to_report.id_resposta_item_to_report" = tblRespostaItemToReport."id_resposta_item_to_report" '
+			+stringInnerJoinModulo			
 			+'LEFT OUTER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal  '
 			+'ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblRelRespostaItemToReportAnoFiscal."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" ';	
 
 
-		var oWhere = [];
-		var aParams = [];
-		var stringtemporaria = "";
-		var filtro = "";
-		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
-
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length; i++) {
 			filtro = "";			
@@ -286,6 +295,7 @@ module.exports = {
 		var stringtemporaria = "";
 		var stringDistinct = "";
 		var stringDistinctFilter = "";
+		var stringInnerJoinModulo = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		
@@ -327,6 +337,22 @@ module.exports = {
 			case "tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio":
 				stringDistinct = 'Select distinct "tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio" , "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio" from (';
 				break;					
+		}
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
 		}
 		
 		var sStatement = 
@@ -455,20 +481,11 @@ module.exports = {
 			+'ON tblItemToReport."id_item_to_report" = tblRespostaItemToReport."fk_item_to_report.id_item_to_report" '
 			+'LEFT OUTER JOIN "VGT.REL_RESPOSTA_ITEM_TO_REPORT_ANO_FISCAL" AS tblRelRespostaItemToReportAnoFiscal '
 			+'ON tblRelRespostaItemToReportAnoFiscal."fk_resposta_item_to_report.id_resposta_item_to_report" = tblRespostaItemToReport."id_resposta_item_to_report" '
+			+stringInnerJoinModulo			
 			+'LEFT OUTER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal  '
 			+'ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblRelRespostaItemToReportAnoFiscal."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" ';	
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
@@ -600,6 +617,22 @@ module.exports = {
 	},
 	deepQueryLOSSSCHEDULE: function (req, res) {
 //USO DESCONTINUADO
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				var stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}
 		var sStatement =
 			  'SELECT '
 			  +'tblEmpresa."id_empresa" AS "tblEmpresa.id_empresa", '
@@ -662,6 +695,7 @@ module.exports = {
 			  +'INNER JOIN "VGT.PERIODO" AS tblPeriodo ON tblRelTaxPackagePeriodo."fk_periodo.id_periodo" = tblPeriodo."id_periodo" '
 			  +'INNER JOIN "VGT.DOMINIO_ANO_CALENDARIO" AS tblDominioAnoCalendario ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
 			  +'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+			+stringInnerJoinModulo			  
 			  +'INNER JOIN "VGT.SCHEDULE" AS tblSchedule ON tblSchedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" '
 			  +'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblSchedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal"';
 
@@ -672,17 +706,7 @@ module.exports = {
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length; i++) {
 			filtro = "";			
@@ -764,6 +788,7 @@ module.exports = {
 		var aParams = [];
 		var stringtemporaria = "";
 		var stringDistinct = "";
+		var stringInnerJoinModulo = "";
 		var stringDistinctFilter = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
@@ -794,6 +819,23 @@ module.exports = {
 				case "tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio":
 					stringDistinct = 'Select distinct "tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio" , "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio" from (';
 					break;					
+			}			
+		}
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
 			}			
 		}
 		
@@ -864,20 +906,11 @@ module.exports = {
 				+'ON tblRelTaxPackagePeriodo."status_envio" = tblDominioRelTaxPackagePeriodoStatusEnvio."id_dominio_rel_tax_package_periodo_status_envio" '					
 				+'INNER JOIN "VGT.DOMINIO_ANO_CALENDARIO" AS tblDominioAnoCalendario ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
 				+'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+			+stringInnerJoinModulo				
 				+'INNER JOIN "VGT.SCHEDULE" AS tblSchedule ON tblSchedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" '
 				+'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblSchedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal"';
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
@@ -964,6 +997,7 @@ module.exports = {
 		var aParams = [];
 		var stringtemporaria = "";
 		var stringDistinct = "";
+		var stringInnerJoinModulo = "";
 		var stringDistinctFilter = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
@@ -997,6 +1031,22 @@ module.exports = {
 			}			
 		}
 
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}
 		
 		var sStatement = 
 			stringDistinct
@@ -1065,20 +1115,11 @@ module.exports = {
 			  +'INNER JOIN "VGT.PERIODO" AS tblPeriodo ON tblRelTaxPackagePeriodo."fk_periodo.id_periodo" = tblPeriodo."id_periodo" '
 			  +'INNER JOIN "VGT.DOMINIO_ANO_CALENDARIO" AS tblDominioAnoCalendario ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
 			  +'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+				+stringInnerJoinModulo			  
 			  +'INNER JOIN "VGT.SCHEDULE" AS tblSchedule ON tblSchedule."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" '
 			  +'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblSchedule."fk_dominio_ano_fiscal.id_dominio_ano_fiscal"';
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
@@ -1165,6 +1206,7 @@ module.exports = {
 		var aParams = [];
 		var stringtemporaria = "";
 		var stringDistinct = "";
+		var stringInnerJoinModulo = "";
 		var stringDistinctFilter = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
@@ -1194,6 +1236,23 @@ module.exports = {
 			}			
 		}
 
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}		
 		
 		var sStatement = 
 			stringDistinct 
@@ -1259,21 +1318,12 @@ module.exports = {
 			+'ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
 			+'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo '
 			+'ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+			+stringInnerJoinModulo
 			+'INNER JOIN "VGT.TAX_RECONCILIATION" AS tblTaxReconciliation '
 			+'ON tblTaxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" ';
 
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
@@ -1356,6 +1406,7 @@ module.exports = {
 		var aParams = [];
 		var stringtemporaria = "";
 		var stringDistinct = "";
+		var stringInnerJoinModulo = "";
 		var stringDistinctFilter = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
@@ -1384,7 +1435,22 @@ module.exports = {
 					break;						
 			}			
 		}
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
 
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}
 		
 		var sStatement = 
 			stringDistinct 
@@ -1456,21 +1522,12 @@ module.exports = {
 			+'ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
 			+'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo '
 			+'ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+			+stringInnerJoinModulo			
 			+'INNER JOIN "VGT.TAX_RECONCILIATION" AS tblTaxReconciliation '
 			+'ON tblTaxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" ';
 
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
@@ -1554,6 +1611,7 @@ module.exports = {
 		var stringtemporaria = "";
 		var stringDistinct = "";
 		var stringDistinctFilter = "";
+		var stringInnerJoinModulo = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		
@@ -1582,6 +1640,23 @@ module.exports = {
 			}			
 		}
 
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}
 		
 		var sStatement = 
 			stringDistinct 
@@ -1647,21 +1722,10 @@ module.exports = {
 			+'ON tblPeriodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = tblDominioAnoCalendario."id_dominio_ano_calendario" '
 			+'INNER JOIN "VGT.DOMINIO_MODULO" AS tblDominioModulo '
 			+'ON tblPeriodo."fk_dominio_modulo.id_dominio_modulo" = tblDominioModulo."id_dominio_modulo" '
+			+stringInnerJoinModulo
 			+'INNER JOIN "VGT.TAX_RECONCILIATION" AS tblTaxReconciliation '
 			+'ON tblTaxReconciliation."fk_rel_tax_package_periodo.id_rel_tax_package_periodo" = tblRelTaxPackagePeriodo."id_rel_tax_package_periodo" ';
 
-
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
-
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";
@@ -1744,6 +1808,7 @@ module.exports = {
 		var aParams = [];
 		var stringtemporaria = "";
 		var stringDistinct = "";
+		var stringInnerJoinModulo = "";
 		var stringDistinctFilter = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
@@ -1778,7 +1843,22 @@ module.exports = {
 					break;						
 			}			
 		}
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
 
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			aEntrada[4] = [];
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 2 ';
+			}			
+		}
 		
 		var sStatement = 
 			stringDistinct 
@@ -1868,20 +1948,11 @@ module.exports = {
 	        +'INNER JOIN "VGT.REL_TAX_RECONCILIATION_DIFERENCA" AS tblRelTaxReconciliationDiferenca ON tblRelTaxReconciliationDiferenca."fk_tax_reconciliation.id_tax_reconciliation" = tblTaxReconciliation."id_tax_reconciliation" '
 	        +'INNER JOIN "VGT.DIFERENCA" AS tblDiferenca ON tblDiferenca."id_diferenca" = tblRelTaxReconciliationDiferenca."fk_diferenca.id_diferenca" '
 	        +'INNER JOIN "VGT.DIFERENCA_OPCAO" AS tblDiferencaOpcao ON tblDiferencaOpcao."id_diferenca_opcao" = tblDiferenca."fk_diferenca_opcao.id_diferenca_opcao" '
+			+stringInnerJoinModulo	        
 	        +'INNER JOIN "VGT.DOMINIO_DIFERENCA_TIPO" AS tblDominioDiferencaTipo ON tblDominioDiferencaTipo."id_dominio_diferenca_tipo" = tblDiferencaOpcao."fk_dominio_diferenca_tipo.id_dominio_diferenca_tipo"	';
 
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			aEntrada[4] = [];
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[4].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";

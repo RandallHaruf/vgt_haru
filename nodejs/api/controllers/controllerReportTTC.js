@@ -179,7 +179,31 @@ module.exports = {
 	},
 	
 	deepQuery: function (req, res) { 
-		
+		var oWhere = [];
+		var aParams = [];
+		var stringtemporaria = "";
+		var stringInnerJoinModulo = "";
+		var filtro = "";
+		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+			var aEmpresas = req.session.usuario.empresas;
+			if (aEntrada[12] === null){
+				aEntrada[12] = [];
+			}
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 1 ';
+			}					
+		}		
 		var sStatement = 
 			'SELECT '
 			+'tblEmpresa."id_empresa" "tblEmpresa.id_empresa", '
@@ -258,27 +282,10 @@ module.exports = {
 			+'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblPagamento."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" '
 			+'INNER JOIN "VGT.DOMINIO_MOEDA" AS tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda" '
 			+'INNER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"'
+			+stringInnerJoinModulo			
 			+'LEFT OUTER JOIN "VGT.CAMBIO_TTC" AS tblCambioTTC ON tblCambioTTC."data" = tblPagamento."data_pagamento" and tblCambioTTC."fk_dominio_moeda.id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda"';
 	
-		var oWhere = [];
-		var aParams = [];
-		var stringtemporaria = "";
-		var filtro = "";
-		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
-
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
-			var aEmpresas = req.session.usuario.empresas;
-			if (aEntrada[12] === null){
-				aEntrada[12] = [];
-			}
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
-			}
-		}
 
 		for (var i = 0; i < aEntrada.length; i++) {
 			filtro = "";			
@@ -367,9 +374,29 @@ module.exports = {
 		var oWhere = [];
 		var aParams = [];
 		var stringtemporaria = "";
+		var stringInnerJoinModulo = "";
 		var stringDistinct = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
+
+		const isFull = function () {
+			return (req.query && req.query.full && req.query.full == "true");
+		};
+		
+		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/req.session.usuario.empresas.length > 0) {
+			var aEmpresas = req.session.usuario.empresas;
+			if (aEntrada[12] === null){
+				aEntrada[12] = [];
+			}
+			for(var j = 0; j < req.session.usuario.empresas.length;j++){
+				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
+			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 1 ';
+			}				
+		}	
 
 		switch(aEntrada[13][0]){
 			case "tblEmpresa.nome":
@@ -483,21 +510,10 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.DOMINIO_PAIS" AS tblDominioPais ON tblDominioPais."id_dominio_pais" = tblPagamento."fk_dominio_pais.id_dominio_pais" '
 			+'INNER JOIN "VGT.DOMINIO_ANO_FISCAL" AS tblDominioAnoFiscal ON tblDominioAnoFiscal."id_dominio_ano_fiscal" = tblPagamento."fk_dominio_ano_fiscal.id_dominio_ano_fiscal" '
 			+'INNER JOIN "VGT.DOMINIO_MOEDA" AS tblDominioMoeda ON tblDominioMoeda."id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda" '
+			+stringInnerJoinModulo
 			+'INNER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"';
 
-		const isFull = function () {
-			return (req.query && req.query.full && req.query.full == "true");
-		};
 		
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/req.session.usuario.empresas.length > 0) {
-			var aEmpresas = req.session.usuario.empresas;
-			if (aEntrada[12] === null){
-				aEntrada[12] = [];
-			}
-			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[12].push(JSON.stringify(aEmpresas[j]));
-			}
-		}			
 		
 		for (var i = 0; i < aEntrada.length - 1; i++) {
 			filtro = "";			

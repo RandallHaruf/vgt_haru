@@ -534,6 +534,7 @@ module.exports = {
 		var stringtemporaria = "";
 		var stringDistinct = "";
 		var stringDistinctFilter = "";
+		var stringInnerJoinModulo = "";
 		var filtro = "";
 		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 		var PrazoGEque = null;
@@ -558,6 +559,11 @@ module.exports = {
 			for(var j = 0; j < req.session.usuario.empresas.length;j++){
 				aEntrada[13].push(JSON.stringify(aEmpresas[j]));
 			}
+			if(req.query.moduloAtual){
+				stringInnerJoinModulo = 
+				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
+				+'ON t3."tblEmpresa.id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" in (3,4) ';
+			}				
 		}
 		var posicaoDoArrayParaDistinct = 19;
 		if(aEntrada[posicaoDoArrayParaDistinct] == null || aEntrada[posicaoDoArrayParaDistinct] == undefined){
@@ -679,6 +685,7 @@ module.exports = {
 			+' from ('
 			+model.pegarQueryRespostaObrigacaoCalculada()
 			+'))t3 '
+			+stringInnerJoinModulo
 			+'LEFT OUTER JOIN "VGT.DOMINIO_OBRIGACAO_ACESSORIA_TIPO" tblDominioObrigacaoAcessoriaTipo ON tblDominioObrigacaoAcessoriaTipo."id_dominio_obrigacao_acessoria_tipo" = t3."tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo" '
 			+'LEFT OUTER JOIN "VGT.DOMINIO_PAIS" tblDominioPais ON tblDominioPais."id_dominio_pais" = t3."tblDominioPais.id_dominio_pais" '
 			+'LEFT OUTER JOIN "VGT.DOMINIO_PERIODICIDADE_OBRIGACAO" tblDominioPeriodicidadeObrigacao ON tblDominioPeriodicidadeObrigacao."id_periodicidade_obrigacao" = t3."tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao" '
