@@ -8,7 +8,7 @@
 					<Breadcrumbs visible="{/IsAreaUsuario}">
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Listagem Obrigações" press="navToPage2" />-->
-						<Link text="{i18n>viewGeralRelatorio}" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio} Compliance/Beps" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>

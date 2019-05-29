@@ -39,7 +39,9 @@ sap.ui.define([
 				this.mostrarAcessoRapidoInception();
 				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 			}
-			
+			else{
+				this.getModel().setProperty('/IsAreaUsuario', true);
+			}			
 			fetch(Constants.urlBackend + "verifica-auth", {
 					credentials: "include"
 				})
@@ -105,6 +107,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
 			this.getModel().setProperty("/IdPeriodoSelecionadas", undefined);
 			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
+			this.getModel().setProperty("/StatusSelecionado", undefined);				
 			this.getModel().setProperty("/TemplateReport", undefined);
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
 		},
@@ -118,240 +121,6 @@ sap.ui.define([
 			//this._geraRelatorio(); 			
 		},
 
-		_reportAdicionar: function (sProperty,that) {
-			that.getModel().getProperty(sProperty).unshift({
-				descricao: null,
-				descricaoValueState: sap.ui.core.ValueState.Error,
-				parametros: JSON.stringify(that.getModel().getProperty("/Preselecionado"))
-			});
-			that.getModel().refresh();
-		},
-
-		_reportExcluir: function (oEvent, sProperty,excluirProperty,that,id) {
-			var array = that.getModel().getProperty(sProperty);
-			var oExcluir = oEvent.getSource().getBindingContext().getObject();
-			var oWhere = that.getModel().getProperty(excluirProperty);
-			for (var i = 0, length = array.length; i < length; i++) {
-				if (array[i] === oExcluir) {
-					if(array[i][id]){
-						oWhere.push(array[i][id]);
-					}
-					array.splice(i, 1);
-				}
-			}
-			that.getModel().refresh();
-		},
-		
-		_reportSelecionar: function (oEvent, sProperty,that) {
-			var aTaxaMultipla = that.getModel().getProperty(sProperty);
-			var oSelecionado = oEvent.getSource().getBindingContext().getObject();
-			that.getModel().setProperty("/Preselecionado", JSON.parse(oSelecionado["parametros"]));
-			that.onTemplateGet();
-			that._dialogFiltro.close();
-		},
-		
-		_dialogReport: function (sTitulo, sProperty,excluirProperty,that,id) {
-			that.getModel().setProperty("/Excluir",[]);
-			if (!that._dialogFiltro) {
-				var oScrollContainer = new sap.m.ScrollContainer({
-					horizontal: true,
-					vertical: true,
-					height: "330px"
-				}).addStyleClass("sapUiNoContentPadding");
-
-				/* Criação da tabela de inserção */
-				var oTable = new sap.m.Table();
-
-				/* Toolbar com título da tabela e botão de nova taxa */
-				var oToolbar = new sap.m.Toolbar();
-
-				oToolbar.addContent(new sap.m.ObjectIdentifier({
-					title: sTitulo
-				}));
-
-				oToolbar.addContent(new sap.m.ToolbarSpacer());
-
-				oToolbar.addContent(new sap.m.Button({
-					text: that.getResourceBundle().getText("viewGeralNova"),
-					icon: "sap-icon://add",
-					type: "Emphasized"
-				}).attachPress(oTable, function () {
-					that._reportAdicionar(sProperty,that);
-				}, that));
-
-				oTable.setHeaderToolbar(oToolbar);
-
-				/* Colunas da tabela */
-				oTable.addColumn(new sap.m.Column({
-					width: "50px"
-				}));
-
-				oTable.addColumn(new sap.m.Column({
-					vAlign: "Middle"
-				}).setHeader(new sap.m.Text({
-					text: "Templates"
-				})));
-				oTable.addColumn(new sap.m.Column({
-					vAlign: "Middle",
-					width: "90px"
-				}).setHeader(new sap.m.Text({
-					text: "Selecionar"
-				})));
-
-				/* Template das células */
-				var oBtnExcluir = new sap.m.Button({
-					icon: "sap-icon://delete",
-					type: "Reject",
-					tooltip: "{i18n>viewGeralExcluirLinha}"
-				}).attachPress(oTable, function (oEvent2) {
-					that._reportExcluir(oEvent2, sProperty,excluirProperty,that,id);
-				}, that);
-
-				var oInputDescricao = new sap.m.Input({
-					value: "{descricao}",
-					valueState: "{descricaoValueState}",
-					valueStateText: "{i18n>viewGeralCampoNaoPodeSerVazio}"
-				}).attachChange(function (oEvent) {
-					var obj = oEvent.getSource().getBindingContext().getObject();
-						obj.descricaoValueState = obj.descricao ? sap.ui.core.ValueState.None : sap.ui.core.ValueState.Error;
-				});
-				/* Template das células */
-				var oBtnSelecionar = new sap.m.Button({
-					icon: "sap-icon://provision",
-					type: "Accept",
-					tooltip: "Selecionar"
-				}).attachPress(oTable, function (oEvent3) {
-					that._reportSelecionar(oEvent3, sProperty,that);
-				}, that);
-
-				var oTemplate = new sap.m.ColumnListItem({
-					cells: [oBtnExcluir, oInputDescricao, oBtnSelecionar]
-				});
-
-				oTable.bindItems({
-					path: sProperty,
-					template: oTemplate
-				});
-
-				oScrollContainer.addContent(oTable);
-
-				//var that = this;
-
-				/* Criação do diálogo com base na tabela */
-				var dialog = new sap.m.Dialog({
-					contentWidth: "500px",
-					showHeader: false,
-					type: "Message",
-					content: oScrollContainer,
-					endButton: new sap.m.Button({
-						text: "Salvar",
-						press: function () {
-							var aTaxa = that.getModel().getProperty(sProperty),
-								bValido = true;
-
-							if (aTaxa && aTaxa.length) {
-								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
-									return !obj.descricao;
-								});
-
-								if (aTaxaSemDescricao.length) {
-									bValido = false;
-								}
-							}
-
-							if (bValido) {
-								
-								//that.onAplicarRegras();
-								var excluir = that.getModel().getProperty("/Excluir");
-								for (var i = 0, length = excluir.length; i < length; i++) {
-									NodeAPI.pExcluirRegistro("TemplateReport", excluir[i])
-										.then(function (res) {
-
-										})
-										.catch(function (err) {
-											alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-										});										
-								}
-								for (var i = 0, length = aTaxa.length; i < length; i++) {
-									if (aTaxa[i]["descricaoValueState"] === "None" && !aTaxa[i][id]) {
-										NodeAPI.pCriarRegistro("TemplateReport", {
-												tela: that.oView.mProperties.viewName,
-												parametros: aTaxa[i]["parametros"],
-												isIFrame: that.isIFrame() ? "true" : "false",
-												descricao: aTaxa[i]["descricao"],
-												usarSession: 1
-											})
-											.then(function (res) {
-
-											})
-											.catch(function (err) {
-												alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-											});
-									}
-									else if(aTaxa[i]["descricaoValueState"] === "None" && aTaxa[i][id]){
-										NodeAPI.pAtualizarRegistro("TemplateReport", aTaxa[i][id],{
-												tela: that.oView.mProperties.viewName,
-												parametros: aTaxa[i]["parametros"],
-												isIFrame: that.isIFrame() ? "true" : "false",
-												descricao: aTaxa[i]["descricao"],
-												usarSession: 1
-											})
-											.then(function (res) {
-												//var aRegistro = JSON.parse(res.result);
-											})
-											.catch(function (err) {
-												alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-											});										
-									}
-								}
-								dialog.close();
-							} else {
-								jQuery.sap.require("sap.m.MessageBox");
-								sap.m.MessageBox.show(that.getResourceBundle().getText(
-									"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
-									title: that.getResourceBundle().getText("viewGeralAviso")
-								});
-							}
-						}
-					}),
-					beginButton: new sap.m.Button({
-						text: "Cancelar",
-						press: function () {
-							var aTaxa = that.getModel().getProperty(sProperty),
-								bValido = true;
-
-							if (aTaxa && aTaxa.length) {
-								var aTaxaSemDescricao = aTaxa.filter(function (obj) {
-									return !obj.descricao;
-								});
-
-								if (aTaxaSemDescricao.length) {
-									bValido = false;
-								}
-							}
-
-							if (bValido) {
-								dialog.close();
-							} else {
-								jQuery.sap.require("sap.m.MessageBox");
-								sap.m.MessageBox.show(that.getResourceBundle().getText(
-									"ViewDetalheTrimestreJSTextsTodososcamposmarcadossãodepreenchimentoobrigatório"), {
-									title: that.getResourceBundle().getText("viewGeralAviso")
-								});
-							}
-						}
-					}),					
-					afterClose: function () {
-						//dialog.destroy();
-					}
-				});
-
-				that.getView().addDependent(dialog);
-				that._dialogFiltro = dialog;
-			}
-
-			that._dialogFiltro.open();
-		},
 
 		onDialogOpen: function (oEvent) {
 			var that = this;
@@ -382,6 +151,8 @@ sap.ui.define([
 				"/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas") ? this.getModel().getProperty("/IdMoedaSelecionadas")[
 				0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
+			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
+				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;				
 			var oWhere = [];
 			var oFiltrosVisiveis = [];
 			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
@@ -396,6 +167,7 @@ sap.ui.define([
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
+			oWhere.push(oStatusSelecionado);			
 			oWhere.push(oFiltrosVisiveis);			
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
@@ -408,11 +180,12 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
 			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao[2]);
 			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao[3]);
-			if(forcaSelecao.length >= 5){
-				for (var i = 0, length = forcaSelecao[4].length; i < length; i++) {
+			this.getModel().setProperty("/StatusSelecionado", forcaSelecao[4]);			
+			if(forcaSelecao.length >= 6){
+				for (var i = 0, length = forcaSelecao[5].length; i < length; i++) {
 					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
-						if(forcaSelecao[4][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
-							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[4][i].visible;
+						if(forcaSelecao[5][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[5][i].visible;
 							break;
 						}
 					}
@@ -448,17 +221,20 @@ sap.ui.define([
 				"/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas") ? this.getModel().getProperty("/IdMoedaSelecionadas")[
 				0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-
+			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
+				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;
+				
 			var oWhere = [];
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(oStatusSelecionado);			
 			oWhere.push(null);
 
 			if (oEmpresa === null) {
-				oWhere[5] = ["tblEmpresa.nome"];
+				oWhere[6] = ["tblEmpresa.nome"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
 					"false"), {
 					type: "POST",
@@ -477,7 +253,7 @@ sap.ui.define([
 			}
 
 			if (oDominioAnoCalendario === null) {
-				oWhere[5] = ["tblDominioAnoCalendario.ano_calendario"];
+				oWhere[6] = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
 					"false"), {
 					type: "POST",
@@ -496,7 +272,7 @@ sap.ui.define([
 			}
 
 			if (oPeriodoSelecionadas === null) {
-				oWhere[5] = ["tblPeriodo.id_periodo"];
+				oWhere[6] = ["tblPeriodo.id_periodo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
 					"false"), {
 					type: "POST",
@@ -518,7 +294,7 @@ sap.ui.define([
 			}
 
 			if (oMoedaSelecionadas === null) {
-				oWhere[5] = ["tblDominioMoeda.acronimo"];
+				oWhere[6] = ["tblDominioMoeda.acronimo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
 					"false"), {
 					type: "POST",
@@ -535,64 +311,30 @@ sap.ui.define([
 					}
 				});
 			}
+			if (oStatusSelecionado === null) {
+				oWhere[6] = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);
+						}	
+						that.getModel().setProperty("/Status", Utils.orderByArrayParaBox(aRegistro, "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"));
+					}
+				});
+			}			
 		},
 
 		onDataExport: sap.m.Table.prototype.exportData || function (tipo) {
-			Utils.dataExportReport(this,tipo,"viewEdiçãoTrimestreImpostoRenda","viewEdiçãoTrimestreImpostoRenda");  /*
-			var array = this.getModel().getProperty("/TabelaDaView");
-			var coluna = [];
-			var excel = [];
-			for (var k = 0, length = array.length; k < length; k++) {
-				coluna.push({
-					name: array[k]["textoNomeDaColuna"],
-					template: {
-						content: "{" + array[k]["propriedadeDoValorDaLinha"] + "}"
-					}
-				})
-				excel.push(array[k]["textoNomeDaColuna"]);
-			}
-			var valores = this.getModel().getProperty(tipo);
-			var wsAccountResultData = [];
-			wsAccountResultData.push(excel);
-			for (var i = 0, length = valores.length; i < length; i++) {
-				excel = [];
-				for (var j = 0, length2 = array.length; j < length2; j++) {
-					excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
-				}
-				wsAccountResultData.push(excel);
-			};
-
-			var wbTaxPackage = XLSX.utils.book_new();
-			var wsAccountResultName = this.getResourceBundle().getText("viewEdiçãoTrimestreImpostoRenda");
-			var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
-			XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
-			var wopts = {};
-			var formato = "";
-			if (tipo === "/XLSX") {
-				wopts = {
-					bookType: 'xlsx'  ,
-					type: 'array'
-				};
-				formato = ".xlsx";
-			} else if (tipo === "/TXT") {
-				wopts = {
-					bookType: 'txt'  ,
-					type: 'array'
-				};
-				formato = ".txt";
-			} else {
-				wopts = {
-					bookType: 'csv'  ,
-					type: 'array'
-				};
-				formato = ".csv";
-			}
-			var wbout = XLSX.write(wbTaxPackage, wopts);
-			saveAs(new Blob([wbout], {
-					type: "application/octet-stream"
-				}),
-				Utils.dateNowParaArquivo() + "_" + this.getResourceBundle().getText("viewGeralRelatorio") + "_" + this.getResourceBundle().getText(
-					"viewEdiçãoTrimestreImpostoRenda") + formato);*/
+			Utils.dataExportReport(this,tipo,"viewEdiçãoTrimestreImpostoRenda","viewEdiçãoTrimestreImpostoRenda");  
 		},
 
 		_geraRelatorioTax: function (ifExport) {
@@ -606,13 +348,16 @@ sap.ui.define([
 				"/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
 			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas") ? this.getModel().getProperty("/IdMoedaSelecionadas")[
 				0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-
+			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
+				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;
+				
 			var oWhere = [];
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
 			oWhere.push(oPeriodoSelecionadas);
 			oWhere.push(oMoedaSelecionadas);
 			oWhere.push(null);
+			oWhere.push(oStatusSelecionado);			
 			oWhere.push(null);
 
 			var that = this;
@@ -631,6 +376,7 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"], that);
+						aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);						
 					}
 					Utils.conteudoView("relatorioDoTaxPackage", that, "/TabelaDaView");
 					var array = that.getModel().getProperty("/TabelaDaView");

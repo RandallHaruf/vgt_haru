@@ -37,7 +37,9 @@ sap.ui.define([
 				this.mostrarAcessoRapidoInception();
 				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 			}
-
+			else{
+				this.getModel().setProperty('/IsAreaUsuario', true);
+			}
 			fetch(Constants.urlBackend + "verifica-auth", {
 					credentials: "include"
 				})
@@ -108,6 +110,7 @@ sap.ui.define([
 			this.getModel().setProperty("/PerguntaSelecionada", undefined);
 			this.getModel().setProperty("/RespondeuSimSelecionado", undefined);
 			this.getModel().setProperty("/AnoFiscalSelecionado", undefined);
+			this.getModel().setProperty("/StatusSelecionado", undefined);					
 			this.getModel().setProperty("/TemplateReport", undefined);
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
 		},
@@ -172,7 +175,9 @@ sap.ui.define([
 				"/RespondeuSimSelecionado")[0] !== undefined ? this.getModel().getProperty("/RespondeuSimSelecionado") : null : null;
 			var oAnoFiscalSelecionado = this.getModel().getProperty("/AnoFiscalSelecionado") ? this.getModel().getProperty(
 				"/AnoFiscalSelecionado")[0] !== undefined ? this.getModel().getProperty("/AnoFiscalSelecionado") : null : null;
-
+			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
+				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;
+				
 			var oWhere = [];
 			var oFiltrosVisiveis = [];
 			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
@@ -181,16 +186,17 @@ sap.ui.define([
 					visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
 				});
 			}
-			oWhere.push(oEmpresa); //
-			oWhere.push(oDominioAnoCalendario); //
-			oWhere.push(oPeriodoSelecionadas); //
-			oWhere.push(oMoedaSelecionadas); //
-			oWhere.push(oFlagSNSelecionado); //
-			oWhere.push(oFlagAnoSelecionado); //
-			oWhere.push(oPerguntaSelecionada); //
-			oWhere.push(oRespondeuSimSelecionado);
-			oWhere.push(oAnoFiscalSelecionado);
-			oWhere.push(oFiltrosVisiveis);
+			oWhere.push(oEmpresa); //0
+			oWhere.push(oDominioAnoCalendario); //1
+			oWhere.push(oPeriodoSelecionadas); //2
+			oWhere.push(oMoedaSelecionadas); //3
+			oWhere.push(oFlagSNSelecionado); //4
+			oWhere.push(oFlagAnoSelecionado); //5
+			oWhere.push(oPerguntaSelecionada); //6
+			oWhere.push(oRespondeuSimSelecionado);//7
+			oWhere.push(oAnoFiscalSelecionado);//8
+			oWhere.push(oStatusSelecionado);//NOVO 9
+			oWhere.push(oFiltrosVisiveis);//10
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
 
@@ -207,11 +213,12 @@ sap.ui.define([
 			this.getModel().setProperty("/PerguntaSelecionada", forcaSelecao[6]);
 			this.getModel().setProperty("/RespondeuSimSelecionado", forcaSelecao[7]);
 			this.getModel().setProperty("/AnoFiscalSelecionado", forcaSelecao[8]);
-			if (forcaSelecao.length >= 10) {
-				for (var i = 0, length = forcaSelecao[9].length; i < length; i++) {
+			this.getModel().setProperty("/StatusSelecionado", forcaSelecao[9]);
+			if (forcaSelecao.length >= 11) {
+				for (var i = 0, length = forcaSelecao[10].length; i < length; i++) {
 					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
-						if (forcaSelecao[9][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name) {
-							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[9][i].visible;
+						if (forcaSelecao[10][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name) {
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[10][i].visible;
 							break;
 						}
 					}
@@ -245,21 +252,24 @@ sap.ui.define([
 				"/RespondeuSimSelecionado")[0] !== undefined ? this.getModel().getProperty("/RespondeuSimSelecionado") : null : null;
 			var oAnoFiscalSelecionado = this.getModel().getProperty("/AnoFiscalSelecionado") ? this.getModel().getProperty(
 				"/AnoFiscalSelecionado")[0] !== undefined ? this.getModel().getProperty("/AnoFiscalSelecionado") : null : null;
-
+			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
+				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;
+				
 			var oWhere = [];
-			oWhere.push(oEmpresa); //
-			oWhere.push(oDominioAnoCalendario); //
-			oWhere.push(oPeriodoSelecionadas); //
-			oWhere.push(oMoedaSelecionadas); //
-			oWhere.push(null);
-			oWhere.push(oFlagSNSelecionado); //
-			oWhere.push(oFlagAnoSelecionado); //
-			oWhere.push(oPerguntaSelecionada); //
-			oWhere.push(oRespondeuSimSelecionado);
-			oWhere.push(oAnoFiscalSelecionado);
+			oWhere.push(oEmpresa); //0
+			oWhere.push(oDominioAnoCalendario); //1
+			oWhere.push(oPeriodoSelecionadas); //2
+			oWhere.push(oMoedaSelecionadas); //3
+			oWhere.push(null);//4
+			oWhere.push(oFlagSNSelecionado); //5
+			oWhere.push(oFlagAnoSelecionado); //6
+			oWhere.push(oPerguntaSelecionada); //7
+			oWhere.push(oRespondeuSimSelecionado);//8
+			oWhere.push(oAnoFiscalSelecionado);//9
+			oWhere.push(oStatusSelecionado);//10
 			oWhere.push(null);
 			if (oEmpresa === null) {
-				oWhere[10] = ["tblEmpresa.nome"];
+				oWhere[11] = ["tblEmpresa.nome"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -276,7 +286,7 @@ sap.ui.define([
 				});
 			}
 			if (oDominioAnoCalendario === null) {
-				oWhere[10] = ["tblDominioAnoCalendario.ano_calendario"];
+				oWhere[11] = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -296,7 +306,7 @@ sap.ui.define([
 				});
 			}
 			if (oPeriodoSelecionadas === null) {
-				oWhere[10] = ["tblPeriodo.id_periodo"];
+				oWhere[11] = ["tblPeriodo.id_periodo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -316,7 +326,7 @@ sap.ui.define([
 				});
 			}
 			if (oMoedaSelecionadas === null) {
-				oWhere[10] = ["tblDominioMoeda.acronimo"];
+				oWhere[11] = ["tblDominioMoeda.acronimo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -333,7 +343,7 @@ sap.ui.define([
 				});
 			}
 			if (oPerguntaSelecionada === null) {
-				oWhere[10] = ["tblItemToReport.pergunta"];
+				oWhere[11] = ["tblItemToReport.pergunta"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -350,7 +360,7 @@ sap.ui.define([
 				});
 			}
 			if (oFlagAnoSelecionado === null) {
-				oWhere[10] = ["tblItemToReport.flag_ano"];
+				oWhere[11] = ["tblItemToReport.flag_ano"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -368,7 +378,7 @@ sap.ui.define([
 			}
 
 			if (oFlagSNSelecionado === null) {
-				oWhere[10] = ["tblItemToReport.flag_sim_nao"];
+				oWhere[11] = ["tblItemToReport.flag_sim_nao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -385,7 +395,7 @@ sap.ui.define([
 				});
 			}
 			if (oRespondeuSimSelecionado === null) {
-				oWhere[10] = ["tblRespostaItemToReport.ind_se_aplica"];
+				oWhere[11] = ["tblRespostaItemToReport.ind_se_aplica"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -402,7 +412,7 @@ sap.ui.define([
 				});
 			}
 			if (oAnoFiscalSelecionado === null) {
-				oWhere[10] = ["tblDominioAnoFiscal.ano_fiscal"];
+				oWhere[11] = ["tblDominioAnoFiscal.ano_fiscal"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
 					type: "POST",
 					xhrFields: {
@@ -445,7 +455,26 @@ sap.ui.define([
 					}
 				});
 			}
-
+			if (oStatusSelecionado === null) {
+				oWhere[11] = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false"), {
+					type: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {
+						parametros: JSON.stringify(oWhere)
+					},
+					success: function (response) {
+						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);
+						}	
+						that.getModel().setProperty("/Status", Utils.orderByArrayParaBox(aRegistro, "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"));
+					}
+				});
+			}
 		},
 		/*
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
@@ -589,6 +618,9 @@ sap.ui.define([
 				"/RespondeuSimSelecionado")[0] !== undefined ? this.getModel().getProperty("/RespondeuSimSelecionado") : null : null;
 			var oAnoFiscalSelecionado = this.getModel().getProperty("/AnoFiscalSelecionado") ? this.getModel().getProperty(
 				"/AnoFiscalSelecionado")[0] !== undefined ? this.getModel().getProperty("/AnoFiscalSelecionado") : null : null;
+			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
+				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;				
+				
 			var oWhere = [];
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioAnoCalendario);
@@ -600,6 +632,7 @@ sap.ui.define([
 			oWhere.push(oPerguntaSelecionada);
 			oWhere.push(oRespondeuSimSelecionado);
 			oWhere.push(oAnoFiscalSelecionado);
+			oWhere.push(oStatusSelecionado);
 			oWhere.push(null);
 
 			var that = this;
@@ -618,6 +651,10 @@ sap.ui.define([
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"], that);
+						aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);
+						aRegistro[i]["tblItemToReport.flag_sim_nao"] = Utils.traduzBooleano(aRegistro[i]["tblItemToReport.flag_sim_nao"], that);
+						aRegistro[i]["tblRespostaItemToReport.ind_se_aplica"] = Utils.traduzBooleano(aRegistro[i]["tblRespostaItemToReport.ind_se_aplica"], that);
+						aRegistro[i]["tblItemToReport.flag_ano"] = Utils.traduzBooleano(aRegistro[i]["tblItemToReport.flag_ano"], that);
 					}
 					Utils.conteudoView("relatorioDoTaxPackage", that, "/TabelaDaView");
 					var array = that.getModel().getProperty("/TabelaDaView");

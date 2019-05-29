@@ -88,10 +88,17 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="E" label="{i18n>viewEdiçãoTrimestreFY}">
+							<fb:FilterItem name="E" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
 									<MultiComboBox id="selectFY" selectionFinish="onSelectChange" items="{ path: '/FY' ,templateShareable:true}" selectedKeys="{/FYSelecionadas}">
 										<core:Item key="{tblSchedule.fy}" text="{tblSchedule.fy}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="F" label="{i18n>viewGeral}" visible="{= !${/IsAreaUsuario}}">
+								<fb:control>
+									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/Status' ,templateShareable:true}" selectedKeys="{/StatusSelecionado}" >
+										<core:Item key="{tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio}" text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>							
@@ -155,6 +162,9 @@
 						<Column width="{/remtblSchedule.obs}" hAlign="Center">
 							<Text text="{i18n>viewEdiçãoTrimestreOBS}" textAlign="Center"/>
 						</Column>
+						<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+							<Text text="{i18n>viewGeral}" textAlign="Center"/>
+						</Column>							
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -221,7 +231,8 @@
 								  formatOptions: {
 					                 maxFractionDigits: 2
 								  }
-								}" />								
+								}" />
+								<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>										
 							</cells>
 						</ColumnListItem>
 					</items>

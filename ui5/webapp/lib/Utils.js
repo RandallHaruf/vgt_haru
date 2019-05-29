@@ -146,6 +146,10 @@ sap.ui.define(
 				var numero = (Math.abs(Number(ordenadorAdjustments[0][campoNumerico]) ? Number(ordenadorAdjustments[0][campoNumerico]) : 10 ** (
 					Number(ordenadorAdjustments[0][campoNumerico] ? ordenadorAdjustments[0][campoNumerico].length : 0) / 5)) + 1).toExponential(0).split(
 					"+");
+				if (numero[0] === "Infinity"){
+					numero[0]="1e";
+					numero[1]="80";
+				}
 				var texto = 5 + (nomeDoCabecalho.length / 10);
 				remfixo
 					? that.getModel().setProperty("/rem" + campoNumerico, remfixo + "rem") : that.getModel().setProperty("/rem" + campoNumerico, JSON.stringify(
@@ -662,6 +666,44 @@ sap.ui.define(
 				return traducao;
 			},
 			
+			traduzBooleano: function (id, that) {
+				var traducao = "";
+				switch(true) {
+					case id === true:
+						traducao = that.getResourceBundle().getText("viewGeralVerdadeiro");
+						break;						
+					case id === false:
+						traducao = that.getResourceBundle().getText("viewGeralFalso");
+						break;						
+					default: 
+						break;					
+				}
+				return traducao;
+			},	
+			
+			
+			traduzRelTaxPackagePeriodoStatusEnvio: function (id, that) {
+
+				var traducao = "";
+				switch (id) {
+				case 1:
+					traducao = that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones1");
+					break;
+				case 2:
+					traducao = that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones2");
+					break;
+				case 3:
+					traducao = that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones3");
+					break;
+				case 4:
+					traducao = that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones4");
+					break;
+				case 5:
+					traducao = that.getResourceBundle().getText("viewTAXListagemEmpresaTooltipIcones5");
+					break;
+				}
+				return traducao;
+			},						
 			traduzStatusEnvioTrimestreTTC: function (status, that) {
 				var traducao = "";
 				switch (status) {
@@ -1358,7 +1400,9 @@ sap.ui.define(
 
 						}),
 						new CheckBox({
-							text: that.getResourceBundle().getText("viewGeralDeterminalComoPadrao")
+							text: that.getResourceBundle().getText("viewGeralDeterminalComoPadrao"),
+							selected: lista.length > 1? false : true,
+							editable: lista.length > 1? true : false
 						})
 					],
 					escapeHandler: function(oPromise){

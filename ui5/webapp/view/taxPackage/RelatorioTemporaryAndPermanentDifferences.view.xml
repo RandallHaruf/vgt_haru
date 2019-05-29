@@ -96,6 +96,13 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="G" label="{i18n>viewGeral}" visible="{= !${/IsAreaUsuario}}">
+								<fb:control>
+									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/Status' ,templateShareable:true}" selectedKeys="{/StatusSelecionado}" >
+										<core:Item key="{tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio}" text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>								
 						</fb:filterItems>
 					</fb:FilterBar>
 					<HBox justifyContent="End" class="sapUiSmallMarginEnd">
@@ -133,6 +140,9 @@
 						<Column width="{/remtblDominioDiferencaTipo.tipo}" hAlign="Center">
 							<Text text="{i18n>viewGeralDiferencas}" textAlign="Center"/>
 						</Column>
+						<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+							<Text text="{i18n>viewGeral}" textAlign="Center"/>
+						</Column>							
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -145,6 +155,7 @@
 								<Text text="{tblDiferenca.outro}"/>
 								<Text text="{ path: 'tblRelTaxReconciliationDiferenca.valor', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 } }"/>
 								<Text text="{tblDominioDiferencaTipo.tipo}"/>
+								<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>										
 							</cells>
 						</ColumnListItem>
 					</items>

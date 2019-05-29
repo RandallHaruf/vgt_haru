@@ -122,6 +122,13 @@
 										<core:Item key="{Ano_Fiscal_Filtro}" text="{Ano_Fiscal_Agregado}"/>
 									</MultiComboBox>
 								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="J" label="{i18n>viewGeral}" visible="{= !${/IsAreaUsuario}}">
+								<fb:control>
+									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/Status' ,templateShareable:true}" selectedKeys="{/StatusSelecionado}" >
+										<core:Item key="{tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio}" text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>
+									</MultiComboBox>
+								</fb:control>
 							</fb:FilterItem>							
 						</fb:filterItems>
 					</fb:FilterBar>
@@ -160,7 +167,7 @@
 							<Text text="{i18n>viewRelatorioAnoFiscal}" textAlign="Center"/>
 						</Column>	
 						<Column width="{/remtblRespostaItemToReport.ind_se_aplica}" hAlign="Center">
-							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?"/>
+							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?" textAlign="Center"/>
 						</Column>						
 						<Column width="{/remtblItemToReport.pergunta}" hAlign="Center">							
 							<Text text="{i18n>viewGeralQUestion}" textAlign="Center"/>
@@ -168,6 +175,9 @@
 						<Column width="{/remtblRespostaItemToReport.resposta}" hAlign="Center">
 							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}" textAlign="Center"/>
 						</Column>	
+						<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+							<Text text="{i18n>viewGeral}" textAlign="Center"/>
+						</Column>							
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -180,7 +190,8 @@
 								<Text text="{Ano_Fiscal_Agregado}"/>	
 								<Text text="{tblRespostaItemToReport.ind_se_aplica}"/>								
 								<Text text="{tblItemToReport.pergunta}"/>
-								<Text text="{tblRespostaItemToReport.resposta}"/>		
+								<Text text="{tblRespostaItemToReport.resposta}"/>
+								<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>								
 							</cells>
 						</ColumnListItem>
 					</items>
