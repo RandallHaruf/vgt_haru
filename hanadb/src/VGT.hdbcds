@@ -352,7 +352,7 @@ context VGT {
             it_statutory_tax_rate_average                          : Decimal(19, 4);
             it_effective_tax_rate_as_per_the_statutory_financials  : Decimal(19, 4);
             it_effective_tax_rate_as_per_the_tax_return            : Decimal(19, 4);
-            it_details_if_tax_returns_income_differs_from_fs       : String(2000);
+            it_details_if_tax_returns_income_differs_from_fs       : String(5000);
             fk_rel_tax_package_periodo                             : association[*, 0..1] to VGT.REL_TAX_PACKAGE_PERIODO { id_rel_tax_package_periodo };
     };
 
