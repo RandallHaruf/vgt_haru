@@ -1733,8 +1733,14 @@ sap.ui.define(
 			},
 			
 			criarDialogFiltro: function (sIdTabela, filtrarPor, that, confirmCallback, nomePropriedadeDialog) {
+				var binding = '';
+				
 				if (sIdTabela) {
-					that.byId(sIdTabela).getBinding("items").filter([], false);                         	
+					if (that.byId(sIdTabela) instanceof sap.m.Table) {
+						binding = 'items';
+					}
+					
+					that.byId(sIdTabela).getBinding(binding).filter([], false);                         	
 				}
 				
 				var oFilterDialog = new sap.m.ViewSettingsDialog();
@@ -1767,7 +1773,7 @@ sap.ui.define(
 						if (oParent) {
 							var filterKeys = Object.keys(filterSelection);
 							
-							var parentBinding = oParent.getBinding("items");
+							var parentBinding = oParent.getBinding(binding);
 							var filters = [];
 							
 							for (var i = 0, length = filterKeys.length; i < length; i++) {
