@@ -19,7 +19,9 @@ sap.ui.define(
 
 				}));
 
-				this.getRouter().getRoute("ttcVisualizacaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+				if (this.isVisualizacaoUsuario()) {
+					this.getRouter().getRoute("ttcVisualizacaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+				}
 			},
 
 			_formatDate: function (date) {
@@ -133,17 +135,23 @@ sap.ui.define(
 
 			navToPage2: function () {
 				
-				var usuario = this.getModel().getProperty("/NomeUsuario");
-				
-				this.getRouter().navTo("ttcListagemEmpresas", {
-					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
-						nomeUsuario: this.toURIComponent(usuario)
-					})
-				});
+				if (this.isVisualizacaoUsuario()) {
+					var usuario = this.getModel().getProperty("/NomeUsuario");
+					
+					this.getRouter().navTo("ttcListagemEmpresas", {
+						parametros: this.toURIComponent({
+							idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
+							nomeUsuario: usuario
+						})
+					});
 
-				if (!this.byId("btnReabrir").getVisible())
-					this.byId("btnReabrir").setVisible(true);
+					if (!this.byId("btnReabrir").getVisible())
+						this.byId("btnReabrir").setVisible(true);
+				}
+				else {
+					this._inceptionParams._targetInceptionParams.params.idAnoCalendarioCorrente = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
+					this._inceptionParams._targetInceptionParams.router.navToListagem(this._inceptionParams._targetInceptionParams);
+				}
 			},
 
 			navToPage3: function () {
@@ -166,12 +174,17 @@ sap.ui.define(
 				var countBorne = 0,
 					countCollected = 0;
 					
+				var oParameters;
+					
 				if (this.isIFrame()) {
 					this.mostrarAcessoRapidoInception();
 					this.byId("btnReabrir").setVisible(false);
+					this._inceptionParams = oEvent;
+					oParameters = oEvent;
 				}
-
-				var oParameters = this.fromURIComponent(oEvent.getParameter("arguments").oParameters);
+				else {
+					oParameters = this.fromURIComponent(oEvent.getParameter("arguments").oParameters);
+				}
 
 				if (!this.isIFrame()) {
 
@@ -194,7 +207,7 @@ sap.ui.define(
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
 				this.getModel().setProperty("/NomeUsuario", oParameters.nomeUsuario);
-				
+				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 
 				var sIdEmpresa = oParameters.oEmpresa.id_empresa,
 					sIdPeriodo = oParameters.oPeriodo.id_periodo;

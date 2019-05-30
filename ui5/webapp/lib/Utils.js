@@ -1884,18 +1884,20 @@ sap.ui.define(
 				for (var i = 0, length = filtrarPor.length; i < length; i++) {
 					var item = filtrarPor[i];
 					
-					var oFilterItemEmpresa = new sap.m.ViewSettingsFilterItem({
+					var oFilterItem = new sap.m.ViewSettingsFilterItem({
 						text: item.text,
 						key: sIdTabela ? item.applyTo : item.key,
 						multiSelect: true
 					});
 					
-					oFilterItemEmpresa.bindItems({
+					var selectedProperty = '{= ${' + item.items.key + '} === ' + (item.defaultKey ? item.defaultKey : -1) + '}';
+					
+					oFilterItem.bindItems({
 						path: item.items.path,
-						template: new sap.m.ViewSettingsItem({ text: '{' + item.items.text + '}', key: '{' + item.items.key + '}' })
+						template: new sap.m.ViewSettingsItem({ selected: selectedProperty, text: '{' + item.items.text + '}', key: '{' + item.items.key + '}' })
 					});
 					
-					oFilterDialog.addFilterItem(oFilterItemEmpresa);
+					oFilterDialog.addFilterItem(oFilterItem);
 				}
 				
 				that.getView().addDependent(oFilterDialog);

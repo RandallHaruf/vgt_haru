@@ -1,10 +1,11 @@
 "use strict";
 
-var db = require("../db");
+const db = require("../db");
 const Excel = require('exceljs');
 const modelTaxaTTC = require('../models/modelTax');
 const modelDominioPais = require('../models/modelDomPais');
 const modelDominioAnoFiscal = require('../models/modelDomAnoFiscal');
+const QueryBuildHelper = require('../QueryBuildHelper.js');
 
 function isNumber (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -525,6 +526,128 @@ module.exports = {
 			}
 		});
 	},
+	
+	listarResumoEmpresaAdmin: function (req, res, next) {
+		let sQuery = 
+			'select t.* '
+			 + 'from ('
+			 + 'select '
+			 + 'pais."fk_dominio_pais_regiao.id_dominio_pais_regiao" "fkRegiao", '
+			 + 'empresa."id_empresa" "idEmpresa", '
+			 + 'empresa."nome" "nomeEmpresa", '
+			 + 'empresa."fk_pais.id_pais" "fkPais", '
+			 + 'periodo."id_periodo" "idPeriodo", '
+			 + 'periodo."periodo" "labelTrimestre", '
+			 + 'periodo."numero_ordem" "numeroOrdem", '
+			 + 'dominioAnoCalendario."id_dominio_ano_calendario" "idAnoCalendario", '
+			 + 'dominioAnoCalendario."ano_calendario" "anoCalendario", '
+			 + 'dominioMoeda."id_dominio_moeda" "idMoeda", '
+			 + 'dominioMoeda."acronimo" "acronimoMoeda", '
+			 + '(case '
+			 + 'when totalPagamento."totalBorne" is null '
+			 + 'then 0 '
+			 + 'else totalPagamento."totalBorne" '
+			 + 'end) "totalBorne", '
+			 + '(case '
+			 + 'when totalPagamento."totalCollected" is null '
+			 + 'then 0 '
+			 + 'else totalPagamento."totalCollected" '
+			 + 'end) "totalCollected", '
+			 + '(case '
+			 + 'when (totalPagamento."totalBorne" + totalPagamento."totalCollected") is null '
+			 + 'then 0 '
+			 + 'else (totalPagamento."totalBorne" + totalPagamento."totalCollected") '
+			 + 'end) "total", '
+			 + '( '
+			 + 'case '
+			 + 'when relEmpresaPeriodo."ind_ativo" = true or relEmpresaPeriodo."ind_enviado" = false '
+			 + 'then 0 '
+			 + 'else 1 '
+			 + 'end '
+			 + ') "indEnviado" '
+			 + 'from "VGT.EMPRESA" empresa '
+			 + 'inner join "VGT.REL_EMPRESA_PERIODO" relEmpresaPeriodo '
+			 + 'on empresa."id_empresa" = relEmpresaPeriodo."fk_empresa.id_empresa" '
+			 + 'inner join "VGT.PAIS" pais '
+			 + 'on empresa."fk_pais.id_pais" = pais."id_pais" '
+			 + 'inner join "VGT.PERIODO" periodo '
+			 + 'on periodo."id_periodo" = relEmpresaPeriodo."fk_periodo.id_periodo" '
+			 + 'inner join "VGT.DOMINIO_ANO_CALENDARIO" dominioAnoCalendario '
+			 + 'on dominioAnoCalendario."id_dominio_ano_calendario" = periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" '
+			 + 'left outer join ( '
+			 + 'select '
+			 + 'pagamento1."fk_empresa.id_empresa", '
+			 + 'pagamento1."fk_periodo.id_periodo", '
+			 + 'pagamento1."fk_dominio_moeda.id_dominio_moeda", '
+			 + 'SUM( '
+			 + 'case '
+			 + 'when taxCategory."fk_dominio_tax_classification.id_dominio_tax_classification" = 1 '
+			 + 'then pagamento1."total" '
+			 + 'else 0 '
+			 + 'end '
+			 + ') "totalBorne", '
+			 + 'SUM( '
+			 + 'case '
+			 + 'when taxCategory."fk_dominio_tax_classification.id_dominio_tax_classification" = 2 '
+			 + 'then pagamento1."total" '
+			 + 'else 0 '
+			 + 'end '
+			 + ') "totalCollected" '
+			 + 'from "VGT.PAGAMENTO" pagamento1 '
+			 + 'inner join "VGT.NAME_OF_TAX" nameOfTax '
+			 + 'on pagamento1."fk_name_of_tax.id_name_of_tax" = nameOfTax."id_name_of_tax" '
+			 + 'inner join "VGT.TAX" tax '
+			 + 'on nameOfTax."fk_tax.id_tax" = tax."id_tax" '
+			 + 'inner join "VGT.TAX_CATEGORY" taxCategory '
+			 + 'on tax."fk_category.id_tax_category" = taxCategory."id_tax_category" '
+			 + 'group by pagamento1."fk_empresa.id_empresa", pagamento1."fk_periodo.id_periodo", pagamento1."fk_dominio_moeda.id_dominio_moeda" '
+			 + ') totalPagamento '
+			 + 'on totalPagamento."fk_empresa.id_empresa" = empresa."id_empresa" '
+			 + 'and totalPagamento."fk_periodo.id_periodo" = periodo."id_periodo" '
+			 + 'left outer join "VGT.DOMINIO_MOEDA" dominioMoeda '
+			 + 'on dominioMoeda."id_dominio_moeda" = totalPagamento."fk_dominio_moeda.id_dominio_moeda" '
+			 + ') t ',
+			 aParam = [];
+			 
+		let queryBuildHelper = new QueryBuildHelper({
+			initialStatement: sQuery
+		});
+		
+		queryBuildHelper
+			.where('t."idAnoCalendario"')
+				.in(req.query.filtroAnoCalendario)
+			.and('t."idMoeda"')
+				.in(req.query.filtroMoeda)
+			.and('t."fkPais"')
+				.in(req.query.filtroPais)
+			.and('t."fkRegiao"')
+				.in(req.query.filtroRegiao)
+			.and('t."indEnviado"')
+				.in(req.query.filtroStatus)
+			.and('t."numeroOrdem"')
+				.in(req.query.filtroPeriodo);
+			
+		sQuery = queryBuildHelper.getStatement();
+		aParam = queryBuildHelper.getParameters();	
+			 
+		sQuery += 'order by "nomeEmpresa", "idAnoCalendario", "numeroOrdem", "acronimoMoeda" ';
+
+		db.executeStatement({
+			statement: sQuery,
+			parameters: aParam
+		}, (err, result) => {
+			if (err) {
+				console.log(err);
+				next(err);
+			}
+			else {
+				res.status(200).json({
+					result: result
+				});
+			}
+		});
+	},
+	
 	downloadModeloImport: function (req, res, next) {
 		const configurarPastaDiferenca = (workbook, sNomePasta, sColunaPasta, sColunaDados, qteRegistros) => {
 			var worksheet = workbook.getWorksheet(sNomePasta);
@@ -694,6 +817,7 @@ module.exports = {
 		}
 	}
 };
+
 function retornarTaxasTTC(tipoTaxa){
 	var sStatement = 
 		'select tblTax.* from "VGT.TAX" tblTax '
@@ -714,6 +838,7 @@ function retornarTaxasTTC(tipoTaxa){
 		});
 	});
 };
+
 function retornarDominioPais(){
 	var sStatement = 
 		'Select * from "VGT.DOMINIO_PAIS" tblPais '
@@ -731,6 +856,7 @@ function retornarDominioPais(){
 		});
 	});
 };
+
 function retornarDominioAnoFiscal(){
 	var sStatement = 
 		'Select * from "VGT.DOMINIO_ANO_FISCAL" tblAnoFiscal '
@@ -749,6 +875,7 @@ function retornarDominioAnoFiscal(){
 		});
 	});
 }
+
 function retornarDominioMoeda(){
 	var sStatement = 
 		'Select * from "VGT.DOMINIO_MOEDA" tblMoeda '

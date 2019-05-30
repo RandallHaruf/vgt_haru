@@ -501,7 +501,9 @@ sap.ui.define(
 			},
 
 			navToAdmin: function (oEvent) {
-				this.getRouter().navTo("adminInicio");
+				this.navTo("adminInicio", {
+					idAnoCalendarioCorrente: this.getModel().getProperty("/idAnoAtual")
+				});
 			},
 
 			onNavToComunicacao: function (oEvent) {

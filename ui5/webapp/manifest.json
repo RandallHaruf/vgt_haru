@@ -158,7 +158,7 @@
 					]
 				},
 				{
-					"pattern": "adminInicio",
+					"pattern": "adminInicio/{parametros}",
 					"name": "adminInicio",
 					"target": [
 						"adminInicio"

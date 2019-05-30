@@ -27,19 +27,22 @@ sap.ui.define(
 
 				this._setToggleButtonTooltip(!sap.ui.Device.system.desktop);
 
-				this.getRouter().getRoute("adminInicio").attachPatternMatched(this._onRouteMatched, this);
+				//this.getRouter().getRoute("adminInicio").attachPatternMatched(this._onRouteMatched, this);
+				this.setUpRouteMatched("adminInicio");
 
 				var that = this;
 				
-				this._carregarViewRelatorio("relatorioTTCXMLView", "ui5ns.ui5.view.ttc.Relatorio");
-				this._carregarViewRelatorio("relatorioTaxPackageItemsToReportXMLView", "ui5ns.ui5.view.taxPackage.RelatorioItemsToReport");
-				this._carregarViewRelatorio("relatorioTaxPackageAccountingResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioAccountingResult");
-				this._carregarViewRelatorio("relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView", "ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences");
-				this._carregarViewRelatorio("relatorioTaxPackageFiscalResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioFiscalResult");
-				this._carregarViewRelatorio("relatorioTaxPackageIncomeTaxXMLView", "ui5ns.ui5.view.taxPackage.RelatorioIncomeTax");
-				this._carregarViewRelatorio("relatorioTaxPackageLossScheduleXMLView", "ui5ns.ui5.view.taxPackage.RelatorioLossSchedule");
-				this._carregarViewRelatorio("relatorioTaxPackageCreditScheduleXMLView", "ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule");
-				this._carregarViewRelatorio("relatorioComplianceBepsXMLView", "ui5ns.ui5.view.compliance.Relatorio");
+				this._carregarViewExterna("relatorioTTCXMLView", "ui5ns.ui5.view.ttc.Relatorio");
+				this._carregarViewExterna("relatorioTaxPackageItemsToReportXMLView", "ui5ns.ui5.view.taxPackage.RelatorioItemsToReport");
+				this._carregarViewExterna("relatorioTaxPackageAccountingResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioAccountingResult");
+				this._carregarViewExterna("relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView", "ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences");
+				this._carregarViewExterna("relatorioTaxPackageFiscalResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioFiscalResult");
+				this._carregarViewExterna("relatorioTaxPackageIncomeTaxXMLView", "ui5ns.ui5.view.taxPackage.RelatorioIncomeTax");
+				this._carregarViewExterna("relatorioTaxPackageLossScheduleXMLView", "ui5ns.ui5.view.taxPackage.RelatorioLossSchedule");
+				this._carregarViewExterna("relatorioTaxPackageCreditScheduleXMLView", "ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule");
+				this._carregarViewExterna("relatorioComplianceBepsXMLView", "ui5ns.ui5.view.compliance.Relatorio");
+				this._carregarViewExterna("visualizarTTCXMLView", "ui5ns.ui5.view.ttc.ListagemEmpresas");
+				this._carregarViewExterna("detalheTTCXMLView", "ui5ns.ui5.view.ttc.VisualizacaoTrimestre");
 			},
 
 			onItemSelect: function (oEvent) {
@@ -48,17 +51,97 @@ sap.ui.define(
 				var viewPath = oEvent.getParameter("item").getBindingContext("viewModel").getObject().viewPath;
 				var containerId = item.getKey();
 				
-				var oPage = this.byId("pageContainer").getPage(containerId);
+				if (this._isItemInception(containerId)) {
+					this._itemInceptionHandler(containerId);
+				}
+				else {
+					var oPage = this.byId("pageContainer").getPage(containerId);
+	
+					if (oPage) {
+						this.byId("pageContainer").to(oPage);
+	
+						this._dispararOnAfterShow(viewPath);
+					} else {
+						this._carregarViewItemMenu(viewPath, containerId)
+							.then(function (oPage) {
+								that.byId("pageContainer").to(oPage);
+							});
+					}
+				}
+			},
+			
+			_isItemInception: function (sItemKey) {
+				return sItemKey.toLowerCase().startsWith('visualizar');
+			},
+			
+			_itemInceptionHandler: function (sItemKey) {
+				var oParam;
+				
+				switch (true) {
+					case this._isItemInceptionTTC(sItemKey):
+						oParam = this._getParametrosInceptionTTC();
+						break;
+				}
+				
+				this._navegarParaViewExterna(sItemKey, oParam);	
+			},
+			
+			_isItemInceptionTTC: function (sItemKey) {
+				return sItemKey.toLowerCase().indexOf('ttc') > -1;
+			},
+			
+			_isItemInceptionTaxPackage: function (sItemKey) {
+				return sItemKey.toLowerCase().indexOf('taxpackage') > -1;
+			},
+			
+			_isItemInceptionCompliance: function (sItemKey) {
+				return sItemKey.toLowerCase().indexOf('compliance') > -1;
+			},
+			
+			_getParametrosInceptionTTC: function () {
+				var that = this;
+				
+				return {
+					params: {
+						idAnoCalendarioCorrente: this.getModel().getProperty("/idAnoCalendarioCorrente"),
+						atualizarDados: true
+					},
+					router: {
+						navToListagem: function (oParam) {
+							that._navegarParaViewExterna('visualizarTTC', oParam);
+						},
+						navToDetalhes: function (oParam) {
+							that._navegarParaViewExterna('detalheTTC', oParam);
+						}
+					}
+				};
+			},
+			
+			_navegarParaViewExterna: function (sItemKey, oParam) {
+				var oView = this.byId("pageContainer").getPage(sItemKey + "XMLView");
+						
+				var that = this;
 
-				if (oPage) {
-					this.byId("pageContainer").to(oPage);
+				if (oView) {
+					// Navega para a view destino
+					this.byId("pageContainer").to(oView);
 
-					this._dispararOnAfterShow(viewPath);
-				} else {
-					this._carregarViewItemMenu(viewPath, containerId)
-						.then(function (oPage) {
-							that.byId("pageContainer").to(oPage);
-						});
+					// Sobescreve o acesso rapido para que ele não seja exibido na área admin
+					oView.getController().mostrarAcessoRapidoInception = function () {
+						this.getView().byId("menuAcessoRapido").setVisible(false);
+					};
+
+					// Sobescreve o isFrame para sempre indicar que está sim na área admin
+					oView.getController().isIFrame = function () {
+						return true;
+					};
+
+					// Dispara o método que executa ações no carregamento da página
+					if (oView.getController()._onRouteMatched) {
+						oView.getController()._onRouteMatched(oParam);
+					} else if (oView.getController()._handleRouteMatched) {
+						oView.getController()._handleRouteMatched(oParam);
+					}
 				}
 			},
 
@@ -105,16 +188,13 @@ sap.ui.define(
 				});
 			},
 			
-			_carregarViewRelatorio: function (sViewId, sViewName, callback) {
+			_carregarViewExterna: function (sViewId, sViewName) {
 				var that = this;
 				XMLView.create({
 					id: sViewId,
 					viewName: sViewName
 				}).then(function (oView) {
-					that.byId("pageContainer").addPage(oView);
-					
-					if (callback)
-						callback();		
+					that.byId("pageContainer").addPage(oView);	
 				});
 			},
 
@@ -418,7 +498,7 @@ sap.ui.define(
 				}
 			},
 
-			_onRouteMatched: function (oEvent) {
+			_onRouteMatched: function (oParam) {
 				this._carregarValoresNotificacoes();
 
 				fetch(Constants.urlBackend + "verifica-auth", {
@@ -446,6 +526,8 @@ sap.ui.define(
 
 				var that = this;
 
+				this.getModel().setProperty("/idAnoCalendarioCorrente", oParam.idAnoCalendarioCorrente);
+
 				this.getModel("viewModel").setProperty("/menu", {
 					navigation: [{
 						title: that.getResourceBundle().getText("viewAdminInicioMenuUsuario"),
@@ -472,6 +554,10 @@ sap.ui.define(
 						icon: "sap-icon://batch-payments",
 						expanded: false,
 						items: [{
+							title: that.getResourceBundle().getText("viewAdminInicioMenuTTCVisualizarModulo"),
+							key: "visualizarTTC",
+							viewPath: "ui5ns.ui5.view.ttc.ListagemEmpresas"
+						}, {
 							title: that.getResourceBundle().getText("viewGeralCambio"),
 							key: "ttcCambio",
 							viewPath: "ui5ns.ui5.view.admin.CambioTTC"

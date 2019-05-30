@@ -10,9 +10,9 @@
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="{i18n>viewTTCMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTTCMenu1}" press="navToHome" visible="{/IsAreaUsuario}" />
 						<Link text="{i18n>viewTTCMenu2}" press="navToPage2" />
-						<Link text="{i18n>viewTTCMenu3}" press="navToPage3" />
+						<Link text="{i18n>viewTTCMenu3}" press="navToPage3" visible="{/IsAreaUsuario}"  />
 						<Link text="{i18n>viewTTCMenu5}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
@@ -203,9 +203,9 @@
 									}]
 								}">
 								<columns>
-									<Column width="7rem" hAlign="Center">
+									<!--<Column width="7rem" hAlign="Center">
 										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" textAlign="Center"/>
-									</Column>
+									</Column>-->
 									<Column width="10rem" hAlign="Center">
 										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
 									</Column>
@@ -274,7 +274,7 @@
 								<items>
 									<ColumnListItem>
 										<cells>
-											<core:Icon src="{icone_aplicavel}" />
+											<!--<core:Icon src="{icone_aplicavel}" />-->
 											<Text text="{category}" />
 											<Text text="{tax}" />
 											<Text text="{name_of_tax}" />
