@@ -5,7 +5,8 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:f2="sap.f"
 	xmlns:uni="sap.ui.unified"
-	xmlns="sap.m">
+	xmlns="sap.m"
+	xmlns:tbl="sap.ui.table">
 	<f2:DynamicPage 
 		id="dynamicPage"
 		showFooter="true">
@@ -66,106 +67,48 @@
 				class="sapUiNoContentPadding">
 				<items>
 					<IconTabFilter id="backgroundBorne" text="{i18n>viewGeralBorne} ({/ContadorBorne})">
-						<ScrollContainer
-							
-							horizontal="true"
-							vertical="true"
-							height="100%">
-							<Table
-								class="celulasSeparadas"
-								items="{
-									path: '/Borne/Pagamentos'
-								}">
-								<headerToolbar>
-									<Toolbar class="myCustomButton">
+						<ScrollContainer height="100%">
+							<tbl:Table
+								class="celulasSeparadas tblTTC"
+								id="tableBorne"
+								rows="{/Borne/Pagamentos}"
+								visibleRowCount="6"
+								enableColumnReordering="false"
+								selectionMode="None"
+								ariaLabelledBy="title">
+								<tbl:toolbar>
+									<OverflowToolbar>
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoBorne" />
+											<Button icon="sap-icon://filter" press="onFiltrarBorne" />
+											<ToolbarSpacer/>
+											<HBox>
+												<Input id="linhasExibidas" value="{/numeroLinhas}"></Input>
+												<Button press="onMudarLinhasExibidas" text="{i18n>redefinirLinhas}"></Button>	
+											</HBox>
 										</content>
-									</Toolbar>
-								</headerToolbar>
-								<columns>
-									<Column width="7.5rem" />
-									<!--<Column width="4rem" hAlign="Center" >
-										<Text text="N/A" textAlign="Center" />
-									</Column>-->
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired" textAlign="Center"  />
-									</Column>
-									<Column width="15rem" hAlign="Center" > 
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" textAlign="Center" />
-									</Column> 
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
-									</Column>
-									<Column width="9rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
-									</Column>
-									<Column width="7rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="12rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<!-- pegar aki  -->
-								<!--	<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
-									</Column> -->
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
-									</Column>
-									<!-- colocar aki  -->
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									
-									<Column width="10rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center" >
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
-									</Column>
-								</columns>
-								<items>
-									<ColumnListItem>
-										<cells>
+									</OverflowToolbar>
+								</tbl:toolbar>
+								<tbl:rowSettingsTemplate>
+									<tbl:RowSettings highlight="{novo}" />
+								</tbl:rowSettingsTemplate>
+								<tbl:columns hAlign="Center">
+									<tbl:Column
+										width="7.5rem"
+										sortProperty="category">
+										<tbl:template>
 											<HBox>
 												<Button icon="sap-icon://duplicate" type="Accept" tooltip="{i18n>viewGeralDuplicarLinha}" class="sapUiSmallMarginEnd" press="onDuplicarLinha" />
 												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirLinha" />
 											</HBox>
-											<!--<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />-->
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										id="categoria"
+										width="10rem"
+										sortProperty="category" hAlign="Center">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCategoria}"/>
+										<tbl:template>
 											<Select
 												items="{
 													path: '/Borne/TaxCategory',
@@ -175,6 +118,15 @@
 												enabled="false">
 												<core:Item text="{category}" key="{id_tax_category}" />
 											</Select>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										id="taxa"
+										width="10rem"
+										hAlign="Center"
+										sortProperty="tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -185,30 +137,39 @@
 												change="onTrocarTax">
 												<core:Item text="{tax}" key="{id_tax}" />
 											</Select>
-										<!--<ComboBox 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												items="{
-													path: 'opcoesNameOfTax',
-													templateShareable: false
-												}"
-												selectedKey="{fk_name_of_tax.id_name_of_tax}" 
-												value="{name_of_tax}">
-												<core:Item text="{name_of_tax}" key="{id_name_of_tax}" />
-											</ComboBox> -->
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="name_of_tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
 												showSuggestion="true"
 												suggest="handleSuggest"
-													value="{name_of_tax}"
-												
+												value="{name_of_tax}"
 											></Input>
-												
-												
-											
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="administracao_governamental">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
 												value="{administracao_governamental}" />
-												
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_jurisdicao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -219,15 +180,32 @@
 												selectedKey="{fk_jurisdicao.id_dominio_jurisdicao}">
 												<core:Item text="{jurisdicao}" key="{id_dominio_jurisdicao}" />
 											</Select>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_pais">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<ComboBox
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/DominioPais',
 													templateShareable: false
 												}"
+												change="onTrocarPais"
 												selectedKey="{fk_dominio_pais.id_dominio_pais}">
 												<core:Item text="{pais}" key="{id_dominio_pais}" />
 											</ComboBox>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="estado">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center"  />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{estado}"
@@ -235,6 +213,14 @@
 												valueState="{estadoValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}"
 												/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="cidade">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{cidade}" 
@@ -242,15 +228,32 @@
 												valueState="{cidadeValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}"
 												/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="7rem"
+										hAlign="Center"
+										sortProperty="nome_ano_fiscal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/DominioAnoFiscal',
 													templateShareable: false
 												}"
+												change="onTrocarAnoFiscal"
 												selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}">
 												<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
 											</Select>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="12rem"
+										hAlign="Center"
+										sortProperty="data_pagamento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<DatePicker 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{data_pagamento}" 
@@ -260,24 +263,14 @@
 												minDate="{/MinDate}" 
 												maxDate="{/MaxDate}"
 												change="onValidarData" />
-											<!--<ComboBox
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												items="{
-													path: '/DominioMoeda', 
-													templateShareable: false
-												}"
-												selectedKey="{fk_dominio_moeda.id_dominio_moeda}">
-												<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
-											</ComboBox> -->
-											
-											<!-- pegar aki  -->
-											<!-- <Input 
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
-												showSuggestion="true"
-												suggest="handleSuggest2"
-												value="{AcroNome}"
-											>
-											</Input> --> 
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="nome_tipo_transacao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
@@ -288,16 +281,28 @@
 												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
-											
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="tipo_transacao_outros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false)}"
 												type="Text" 
 												value="{tipo_transacao_outros}"
 												valueState="{tipo_transacao_outros_value_state}"
 												change="onTrocarTipoTransacaoOutros"/>
-											<!--<Input textAlign="End" value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"  editable="{ind_ativo}" change="onAplicarRegras" />-->
-											
-											<!-- colocar aki -->
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="AcroNome">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
 												showSuggestion="true"
@@ -305,146 +310,154 @@
 												value="{AcroNome}"
 											>
 											</Input>
-											
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="principal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="juros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="multa">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="total">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money total"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												editable="false" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="numero_documento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{numero_documento}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="entidade_beneficiaria">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{entidade_beneficiaria}" 
 												valueState = "{entidadeValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="descricao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{descricao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="projeto">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{projeto}" />
-										</cells>
-									</ColumnListItem>
-								</items>
-							</Table>
-						</ScrollContainer>
+										</tbl:template>
+									</tbl:Column>
+								</tbl:columns>
+							</tbl:Table>	
+						</ScrollContainer>	
 					</IconTabFilter>
 					<IconTabSeparator icon=""/>
 					<IconTabFilter id="backgroundCollected" text="{i18n>viewGeralCollected} ({/ContadorCollected})">
-						<ScrollContainer
-							horizontal="true"
-							vertical="true"
-							height="100%">
-							<Table
-								class="celulasSeparadas"
-								items="{
-									path: '/Collected/Pagamentos'
-								}">
-								<headerToolbar>
-									<Toolbar class="myCustomButton">
+						<ScrollContainer height="100%" vertical="false">
+							<tbl:Table
+								class="tblTTC"
+								id="tableCollected"
+								visibleRowCount="6"
+								enableColumnReordering="false"
+								rows="{/Collected/Pagamentos}"
+								selectionMode="None"
+								ariaLabelledBy="title">
+								<tbl:toolbar>
+									<OverflowToolbar>
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoCollected" />
+											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
 										</content>
-									</Toolbar>
-								</headerToolbar>
-								<columns>
-									<Column width="7.5rem" />
-									<!--<Column width="4rem" hAlign="Center">
-										<Text text="N/A" textAlign="Center" />
-									</Column>-->
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center"> 
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
-									</Column>
-									<Column width="9rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
-									</Column>
-									<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="12rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
-									</Column>
-								</columns>
-								<items>
-									<ColumnListItem>
-										<cells>
+									</OverflowToolbar>
+								</tbl:toolbar>
+								<tbl:rowSettingsTemplate>
+									<tbl:RowSettings highlight="{novo}" />
+								</tbl:rowSettingsTemplate>
+								<tbl:columns>
+									<tbl:Column
+										width="7.5rem"
+										hAlign="Center"
+										sortProperty="category">
+										<tbl:template>
 											<HBox>
 												<Button icon="sap-icon://duplicate" type="Accept" tooltip="{i18n>viewGeralDuplicarLinha}" class="sapUiSmallMarginEnd" press="onDuplicarLinha" />
 												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirLinha" />
 											</HBox>
-											<!--<CheckBox selected="{ind_nao_aplicavel}" select="onTrocarIndNaoAplicavel" />-->
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="category">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
+										<tbl:template>
 											<Select
 												items="{
 													path: '/Collected/TaxCategory',
@@ -454,9 +467,16 @@
 												enabled="false">
 												<core:Item text="{category}" key="{id_tax_category}" />
 											</Select>
-											<!--enabled="{= !!${ind_nao_aplicavel} ? false : true }"-->
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTax}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
-												
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/Collected/Tax',
 													templateShareable: false
@@ -465,30 +485,41 @@
 												change="onTrocarTax">
 												<core:Item text="{tax}" key="{id_tax}" />
 											</Select>
-											<!--enabled="{= !!${ind_nao_aplicavel} ? false : true }"-->
-										<!--	<ComboBox 
-												items="{
-													path: 'opcoesNameOfTax',
-													templateShareable: false
-												}"
-												selectedKey="{fk_name_of_tax.id_name_of_tax}" 
-												value="{name_of_tax}">
-												<core:Item text="{name_of_tax}" key="{id_name_of_tax}" />
-											</ComboBox>-->
-											
-												<Input 
-												enabled="{= !!!!${ind_nao_aplicavel} ? false : true }" 
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="name_of_tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
+											<Input 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
 												showSuggestion="true"
 												suggest="handleSuggest"
-													value="{name_of_tax}"
-												
+												value="{name_of_tax}"
 											></Input>
-												
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="administracao_governamental">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
+										<tbl:template>
 											<Input 
-												enabled="{= !!!!${ind_nao_aplicavel} ? false : true }" 
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
 												value="{administracao_governamental}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_jurisdicao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
-												enabled="{= !!!!${ind_nao_aplicavel} ? false : true }"
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/DominioJurisdicao',
 													templateShareable: false
@@ -497,147 +528,242 @@
 												selectedKey="{fk_jurisdicao.id_dominio_jurisdicao}">
 												<core:Item text="{jurisdicao}" key="{id_dominio_jurisdicao}" />
 											</Select>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_pais">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPais}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<ComboBox
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/DominioPais',
 													templateShareable: false
 												}"
+												change="onTrocarPais"
 												selectedKey="{fk_dominio_pais.id_dominio_pais}">
 												<core:Item text="{pais}" key="{id_dominio_pais}" />
 											</ComboBox>
-										
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="estado">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center"  />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{estado}"
 												change="onPreencherEstado"
-												valueState="{estadoValueState}" 
+												valueState="{estadoValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}"
-											/>
+												/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="cidade">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{cidade}" 
 												change="onPreencherCidade"
 												valueState="{cidadeValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}"
-											/>
+												/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="7rem"
+										hAlign="Center"
+										sortProperty="nome_ano_fiscal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/DominioAnoFiscal',
 													templateShareable: false
 												}"
+												change="onTrocarAnoFiscal"
 												selectedKey="{fk_dominio_ano_fiscal.id_dominio_ano_fiscal}">
 												<core:Item text="{ano_fiscal}" key="{id_dominio_ano_fiscal}" />
 											</Select>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="12rem"
+										hAlign="Center"
+										sortProperty="data_pagamento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<DatePicker 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{data_pagamento}" 
-												valueFormat="yyyy-MM-dd" 
 												displayFormat="{/displayFormatFull}"
 												placeholder="{/displayFormatFull}"
+												valueFormat="yyyy-MM-dd" 
 												minDate="{/MinDate}" 
-												maxDate="{/MaxDate}" 
+												maxDate="{/MaxDate}"
 												change="onValidarData" />
-								 	<!--		<ComboBox
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												items="{
-													path: '/DominioMoeda', 
-													templateShareable: false
-												}"
-												selectedKey="{fk_dominio_moeda.id_dominio_moeda}">
-												<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
-											</ComboBox>  -->
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="nome_tipo_transacao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Select
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												items="{
 													path: '/DominioTipoTransacao',
 													templateShareable: false
 												}"
-												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}"
-												change="onTrocarTipoTransacao">
+												change="onTrocarTipoTransacao" 
+												selectedKey="{fk_dominio_tipo_transacao.id_dominio_tipo_transacao}">
 												<core:Item text="{tipo_transacao}" key="{id_dominio_tipo_transacao}" />
 											</Select>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="tipo_transacao_outros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : ((Number(${fk_dominio_tipo_transacao.id_dominio_tipo_transacao}) === 5) ? true : false)}"
 												type="Text" 
 												value="{tipo_transacao_outros}"
 												valueState="{tipo_transacao_outros_value_state}"
 												change="onTrocarTipoTransacaoOutros"/>
-											<!--<Input 
-												class="money"
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{principal}" 
-												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="AcroNome">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Input 
-												class="money"
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{juros}" 
-												change="onCalcularTotal" />
-											<Input 
-												class="money"
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{multa}" 
-												change="onCalcularTotal" />
-											<Input 
-												class="money total"
-												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												type="Number" 
-												value="{total}" 
-												editable="false" />-->
-												
-											<Input 
-											enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
-											showSuggestion="true"
-											suggest="handleSuggest2"
-											value="{AcroNome}">
-											</Input>	
+												enabled="{= !!${ind_nao_aplicavel} ? false : true }" 
+												showSuggestion="true"
+												suggest="handleSuggest2"
+												value="{AcroNome}"
+											>
+											</Input>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="principal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="juros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="multa">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												change="onCalcularTotal" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="total">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												class="money total"
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												textAlign="End" 
 												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
 												editable="false" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="numero_documento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{numero_documento}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="entidade_beneficiaria">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
-												value="{entidade_beneficiaria}"
-												change="onPreencherEntidade"
+												value="{entidade_beneficiaria}" 
 												valueState = "{entidadeValueState}"
 												valueStateText="{i18n>viewTTCEntradaInvalida}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="descricao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{descricao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="projeto">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
+										<tbl:template>
 											<Input 
 												enabled="{= !!${ind_nao_aplicavel} ? false : true }"
 												value="{projeto}" />
-										</cells>
-									</ColumnListItem>
-								</items>
-							</Table>
+										</tbl:template>
+									</tbl:Column>
+								</tbl:columns>
+							</tbl:Table>
 						</ScrollContainer>
 					</IconTabFilter>
 				</items>

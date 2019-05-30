@@ -267,3 +267,10 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 .btnListaNotificacoes {
 	display: none;
 }
+
+.adjustedHeight{
+    height: calc(100% - 125px) !important;
+}
+.tblTTC .sapUiTableCellInner{
+	justify-content:center!important;
+}
