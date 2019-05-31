@@ -34,6 +34,7 @@ sap.ui.define(
 				
 				this._carregarViewExterna("relatorioTTCXMLView", "ui5ns.ui5.view.ttc.Relatorio");
 				this._carregarViewExterna("relatorioTaxPackageItemsToReportXMLView", "ui5ns.ui5.view.taxPackage.RelatorioItemsToReport");
+				this._carregarViewExterna("relatorioTaxPackageTaxReconciliationXMLView", "ui5ns.ui5.view.taxPackage.Relatorio");
 				this._carregarViewExterna("relatorioTaxPackageAccountingResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioAccountingResult");
 				this._carregarViewExterna("relatorioTaxPackageTemporaryAndPermanentDifferencesXMLView", "ui5ns.ui5.view.taxPackage.RelatorioTemporaryAndPermanentDifferences");
 				this._carregarViewExterna("relatorioTaxPackageFiscalResultXMLView", "ui5ns.ui5.view.taxPackage.RelatorioFiscalResult");
@@ -305,7 +306,9 @@ sap.ui.define(
 					"{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}");
 				this._adicionarSubItemMenu(oItemRelatorioTaxPackage, "ui5ns.ui5.view.taxPackage.RelatorioCreditSchedule",
 					"{i18n>viewTaxpackageEdiçãoTrimestreCreditSchedule}");*/
-					
+				
+				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageTaxReconciliation",
+					"{i18n>viewGeralTodos}");
 				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageAccountingResult",
 					"{i18n>viewEdiçãoTrimestreResultadoContabil}");
 				this._adicionarSubItemMenu(oItemRelatorioTaxPackageReconciliacaoFiscal, "relatorioTaxPackageTemporaryAndPermanentDifferences",
