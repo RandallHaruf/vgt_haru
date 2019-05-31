@@ -43,6 +43,8 @@ sap.ui.define(
 				this._carregarViewExterna("relatorioComplianceBepsXMLView", "ui5ns.ui5.view.compliance.Relatorio");
 				this._carregarViewExterna("visualizarTTCXMLView", "ui5ns.ui5.view.ttc.ListagemEmpresas");
 				this._carregarViewExterna("detalheTTCXMLView", "ui5ns.ui5.view.ttc.VisualizacaoTrimestre");
+				this._carregarViewExterna("visualizarTaxPackageXMLView", "ui5ns.ui5.view.taxPackage.ListagemEmpresas");
+				this._carregarViewExterna("detalheTaxPackageXMLView", "ui5ns.ui5.view.taxPackage.VisualizacaoTrimestre");
 			},
 
 			onItemSelect: function (oEvent) {
@@ -81,6 +83,9 @@ sap.ui.define(
 					case this._isItemInceptionTTC(sItemKey):
 						oParam = this._getParametrosInceptionTTC();
 						break;
+					case this._isItemInceptionTaxPackage(sItemKey):
+						oParam = this._getParametrosInceptionTaxPackage();
+						break;
 				}
 				
 				this._navegarParaViewExterna(sItemKey, oParam);	
@@ -112,6 +117,25 @@ sap.ui.define(
 						},
 						navToDetalhes: function (oParam) {
 							that._navegarParaViewExterna('detalheTTC', oParam);
+						}
+					}
+				};
+			},
+			
+			_getParametrosInceptionTaxPackage: function () {
+				var that = this;
+					
+				return {
+					params: {
+						idAnoCalendarioCorrente: this.getModel().getProperty("/idAnoCalendarioCorrente"),
+						atualizarDados: true
+					},
+					router: {
+						navToListagem: function (oParam) {
+							that._navegarParaViewExterna('visualizarTaxPackage', oParam);
+						},
+						navToDetalhes: function (oParam) {
+							that._navegarParaViewExterna('detalheTaxPackage', oParam);
 						}
 					}
 				};
@@ -555,8 +579,7 @@ sap.ui.define(
 						expanded: false,
 						items: [{
 							title: that.getResourceBundle().getText("viewAdminInicioMenuTTCVisualizarModulo"),
-							key: "visualizarTTC",
-							viewPath: "ui5ns.ui5.view.ttc.ListagemEmpresas"
+							key: "visualizarTTC"
 						}, {
 							title: that.getResourceBundle().getText("viewGeralCambio"),
 							key: "ttcCambio",
@@ -579,6 +602,9 @@ sap.ui.define(
 						icon: "sap-icon://product",
 						expanded: false,
 						items: [{
+							title: that.getResourceBundle().getText("viewAdminInicioMenuTTCVisualizarModulo"),
+							key: "visualizarTaxPackage"
+						}, {
 							title: that.getResourceBundle().getText("viewGeralItemsTR"),
 							key: "taxPackageCadastroItemsToReport",
 							viewPath: "ui5ns.ui5.view.admin.CadastroItemsToReportTaxPackage"

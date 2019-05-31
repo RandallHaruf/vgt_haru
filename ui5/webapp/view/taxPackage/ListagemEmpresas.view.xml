@@ -10,7 +10,7 @@
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTAXMenu1}" press="navToHome" visible="{/IsAreaUsuario}" />
 						<Link text="{i18n>viewTAXMenu2}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
@@ -21,128 +21,180 @@
 					<ObjectIdentifier title="{/NomeUsuario}" />
 				</f:expandedContent>
 				<f:navigationActions>
-					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXListagemEmpresaTooltipBotao}" text="XLSX" press="onBaixarModeloImport" />
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewTAXListagemEmpresaTooltipBotao}" text="XLSX" press="onBaixarModeloImport" visible="{/IsAreaUsuario}" />
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
 				</f:navigationActions>
 			</f:DynamicPageTitle>
 		</f:title>
 		<f:content>
-			<Table 
-				id="tabelaEmpresas"
-				inset="false"
-				items="{
-					path: '/Empresa',
-					sorter: [{
-						path: 'empresa'
-					}]
-				}">
-				<headerToolbar>
-					<Toolbar>
-						<content>
-							<!--<Title text="Empresas" level="H2"/>-->
-							<ToolbarSpacer />
-							<Button icon="sap-icon://filter" press="onFiltrarListagemEmpresas" />
-							<Select
-								id="selectAnoCalendario"
-								tooltip="{i18n>viewGeralAnoCalendario}"
-								change="onTrocarAnoCalendario"
-								items="{/DominioAnoCalendario}"
-								selectedKey="{/AnoCalendarioSelecionado}">
-								<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
-							</Select>
-						</content>
-					</Toolbar>
-				</headerToolbar>
-				<columns>
-					<Column hAlign="Center">
-						<!--<Text text="Nome" />-->
-						<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" textAlign="Center"/>
-					</Column>
-					<Column hAlign="Center">  
-						<!--<Text text="1º trimestre" />-->
-						<Title text="{i18n>viewGeralPeriodo1}" titleStyle="H4" />
-					</Column>
-					<Column hAlign="Center">
-						<!--<Text text="2º trimestre" />-->
-						<Title text="{i18n>viewGeralPeriodo2}" titleStyle="H4" />
-					</Column>
-					<Column hAlign="Center">
-						<!--<Text text="3º trimestre" />-->
-						<Title text="{i18n>viewGeralPeriodo3}" titleStyle="H4" />
-					</Column>
-					<Column hAlign="Center">
-						<!--<Text text="4º trimestre" />-->
-						<Title text="{i18n>viewGeralPeriodo4}" titleStyle="H4" />
-					</Column>
-					<Column hAlign="Center" >
-						<!--<Text text="Anual" />-->
-						<Title text="{i18n>viewGeralPeriodo5}" titleStyle="H4" />
-					</Column>
-					<Column
-						hAlign="Center">
-						<!--<Text text="Qte. Retificadoras" />-->
-						<Title text="{i18n>viewGeralPeriodo6Qtd}" titleStyle="H4" />
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem
-						type="Navigation"
-						press="onSelecionarEmpresa">
-						<cells>
-							<Text text="{empresa}" class="celulaDestacada" />
-							
-							<core:Icon src="{iconeStatusPrimeiroPeriodo}" 
-								color="{
-									parts: [
-										'iconeStatusPrimeiroPeriodo'
-									],
-									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"
-								tooltip="{tooltipPrimeiroPeriodo}"
-								useIconTooltip="false"/>
-							<core:Icon src="{iconeStatusSegundoPeriodo}" 
-								color="{
-									parts: [
-										'iconeStatusSegundoPeriodo'
-									],
-									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"
-								tooltip="{tooltipSegundoPeriodo}"
-								useIconTooltip="false"/>
-							<core:Icon src="{iconeStatusTerceiroPeriodo}" 
-								color="{
-									parts: [
-										'iconeStatusTerceiroPeriodo'
-									],
-									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"
-								tooltip="{tooltipTerceiroPeriodo}"
-								useIconTooltip="false"/>
-							<core:Icon src="{iconeStatusQuartoPeriodo}" 
-								color="{
-									parts: [
-										'iconeStatusQuartoPeriodo'
-									],
-									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"
-								tooltip="{tooltipQuartoPeriodo}"
-								useIconTooltip="false"/>
-							<core:Icon src="{iconeStatusAnual}" 
-								color="{
-									parts: [
-										'iconeStatusAnual'
-									],
-									formatter: '.formatter.taxPackageIconeListagemEmpresas'
-								}"
-								tooltip="{tooltipAnualPeriodo}"
-								useIconTooltip="false"/>
-							
-							<ObjectNumber
-								number="{qte_retificadoras}"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
+			<VBox>
+				<Table 
+					id="tabelaEmpresas"
+					inset="false"
+					items="{
+						path: '/Empresa',
+						sorter: [{
+							path: 'empresa'
+						}]
+					}"
+					visible="{/IsAreaUsuario}">
+					<headerToolbar>
+						<Toolbar>
+							<content>
+								<!--<Title text="Empresas" level="H2"/>-->
+								<ToolbarSpacer />
+								<Button icon="sap-icon://filter" press="onFiltrarListagemEmpresas" />
+								<Select
+									id="selectAnoCalendario"
+									tooltip="{i18n>viewGeralAnoCalendario}"
+									change="onTrocarAnoCalendario"
+									items="{/DominioAnoCalendario}"
+									selectedKey="{/AnoCalendarioSelecionado}">
+									<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}" />
+								</Select>
+							</content>
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column hAlign="Center">
+							<!--<Text text="Nome" />-->
+							<Title text="{i18n>viewGeralEmpresas}" titleStyle="H4" textAlign="Center"/>
+						</Column>
+						<Column hAlign="Center">  
+							<!--<Text text="1º trimestre" />-->
+							<Title text="{i18n>viewGeralPeriodo1}" titleStyle="H4" />
+						</Column>
+						<Column hAlign="Center">
+							<!--<Text text="2º trimestre" />-->
+							<Title text="{i18n>viewGeralPeriodo2}" titleStyle="H4" />
+						</Column>
+						<Column hAlign="Center">
+							<!--<Text text="3º trimestre" />-->
+							<Title text="{i18n>viewGeralPeriodo3}" titleStyle="H4" />
+						</Column>
+						<Column hAlign="Center">
+							<!--<Text text="4º trimestre" />-->
+							<Title text="{i18n>viewGeralPeriodo4}" titleStyle="H4" />
+						</Column>
+						<Column hAlign="Center" >
+							<!--<Text text="Anual" />-->
+							<Title text="{i18n>viewGeralPeriodo5}" titleStyle="H4" />
+						</Column>
+						<Column
+							hAlign="Center">
+							<!--<Text text="Qte. Retificadoras" />-->
+							<Title text="{i18n>viewGeralPeriodo6Qtd}" titleStyle="H4" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem
+							type="Navigation"
+							press="onSelecionarEmpresa">
+							<cells>
+								<Text text="{empresa}" class="celulaDestacada" />
+								
+								<core:Icon src="{iconeStatusPrimeiroPeriodo}" 
+									color="{
+										parts: [
+											'iconeStatusPrimeiroPeriodo'
+										],
+										formatter: '.formatter.taxPackageIconeListagemEmpresas'
+									}"
+									tooltip="{tooltipPrimeiroPeriodo}"
+									useIconTooltip="false"/>
+								<core:Icon src="{iconeStatusSegundoPeriodo}" 
+									color="{
+										parts: [
+											'iconeStatusSegundoPeriodo'
+										],
+										formatter: '.formatter.taxPackageIconeListagemEmpresas'
+									}"
+									tooltip="{tooltipSegundoPeriodo}"
+									useIconTooltip="false"/>
+								<core:Icon src="{iconeStatusTerceiroPeriodo}" 
+									color="{
+										parts: [
+											'iconeStatusTerceiroPeriodo'
+										],
+										formatter: '.formatter.taxPackageIconeListagemEmpresas'
+									}"
+									tooltip="{tooltipTerceiroPeriodo}"
+									useIconTooltip="false"/>
+								<core:Icon src="{iconeStatusQuartoPeriodo}" 
+									color="{
+										parts: [
+											'iconeStatusQuartoPeriodo'
+										],
+										formatter: '.formatter.taxPackageIconeListagemEmpresas'
+									}"
+									tooltip="{tooltipQuartoPeriodo}"
+									useIconTooltip="false"/>
+								<core:Icon src="{iconeStatusAnual}" 
+									color="{
+										parts: [
+											'iconeStatusAnual'
+										],
+										formatter: '.formatter.taxPackageIconeListagemEmpresas'
+									}"
+									tooltip="{tooltipAnualPeriodo}"
+									useIconTooltip="false"/>
+								
+								<ObjectNumber
+									number="{qte_retificadoras}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+				<Table 
+					id="tabelaAdmin"
+					inset="false"
+					items="{
+						path: '/ResumoEmpresaAdmin',
+						sorter: [{
+							path: 'anoCalendario',
+							descending: true,
+							group: true
+						}]
+					}"
+					visible="{=!${/IsAreaUsuario}}">
+					<headerToolbar>
+						<Toolbar>
+							<content>
+								<ToolbarSpacer />
+								<Button icon="sap-icon://filter" press="onFiltrarListagemEmpresas" />
+							</content>
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column mergeDuplicates="true" hAlign="Center">
+							<ObjectIdentifier title="{i18n>viewGeralEmpresas}" />
+						</Column>
+						<Column hAlign="Center">
+							<ObjectIdentifier title="{i18n>viewGeralTrimestre}" />
+						</Column>
+						<Column hAlign="Center">
+							<ObjectIdentifier title="Status" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{nomeEmpresa}" />
+								<ObjectIdentifier title="{labelPeriodo}" titleActive="true" titlePress="onSelecionarEmpresa"/>
+								<core:Icon src="{iconeStatus}" 
+									color="{
+										parts: [
+											'iconeStatus'
+										],
+										formatter: '.formatter.taxPackageIconeListagemEmpresas'
+									}"
+									tooltip="{tooltipStatus}"
+									useIconTooltip="false" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</VBox>
 		</f:content>
 	</f:DynamicPage>
 </mvc:View>

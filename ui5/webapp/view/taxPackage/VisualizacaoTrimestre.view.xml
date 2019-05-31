@@ -5,9 +5,9 @@
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="{i18n>viewTAXMenu1}" press="navToHome" />
+						<Link text="{i18n>viewTAXMenu1}" press="navToHome" visible="{/IsAreaUsuario}" />
 						<Link text="{i18n>viewTAXMenu2}" press="navToPage2" />
-						<Link text="{i18n>viewTAXMenu3}" press="navToPage3" />
+						<Link text="{i18n>viewTAXMenu3}" press="navToPage3" visible="{/IsAreaUsuario}" />
 						<Link text="{i18n>viewTAXMenu5}" enabled="false" />
 					</Breadcrumbs>
 				</f2:breadcrumbs>

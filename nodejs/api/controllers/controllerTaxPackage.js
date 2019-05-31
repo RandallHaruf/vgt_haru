@@ -4,6 +4,7 @@ const db = require("../db");
 const modelDiferenca = require('../models/modelDiferenca');
 const modelDiferencaOpcao = require('../models/modelDiferencaOpcao');
 const Excel = require('exceljs');
+const QueryBuildHelper = require('../QueryBuildHelper.js');
 
 module.exports = {
 	listarTaxPackage: function (req, res) {
@@ -1180,6 +1181,122 @@ module.exports = {
 			const error = new Error("Erro ao baixar arquivo: " + e.message);
 			next(error);
 		}
+	},
+	
+	resumoEmpresaAdmin: function (req, res, next) {
+		let sQuery =
+			 'select '
+			 + 'dominioAnoCalendario."id_dominio_ano_calendario" "idAnoCalendario", '
+			 + 'dominioAnoCalendario."ano_calendario" "anoCalendario", '
+			 + 'pais."id_pais" "idPais", '
+			 + 'pais."fk_aliquota.id_aliquota" "fkTributoPais", '
+			 + 'pais."prescricao_prejuizo" "prescricaoPrejuizoPais", '
+			 + 'pais."prescricao_credito" "prescricaoCreditoPais", '
+			 + 'empresa."id_empresa" "idEmpresa", '
+			 + 'empresa."nome" "nomeEmpresa", '
+			 + 'empresa."tin", '
+			 + 'empresa."fy_start_date" "fyStartDate", '
+			 + 'empresa."fy_end_date" "fyEndDate", '
+			 + 'empresa."fk_aliquota.id_aliquota" "fkTributoEmpresa", '
+			 + 'relTaxPackagePeriodo."id_rel_tax_package_periodo" "idRelTaxPackagePeriodo", '
+			 + 'relTaxPackagePeriodo."fk_tax_package.id_tax_package" "fkTaxPackage", '
+			 + 'periodo."numero_ordem" "numeroOrdem", '
+			 + 'relTaxPackagePeriodo."status_envio" "statusEnvio", '
+			 + 'countRetificadora."numero_retificadora" "numeroRetificadora", '
+			 + '( '
+			 + 'case '
+			 + 'when periodo."numero_ordem" = 6 '
+			 + 'and requisicaoReabertura."id_requisicao_reabertura_tax_tackage" is not null '
+			 + 'then 1 '
+			 + 'else 0 '
+			 + 'end '
+			 + ') "indMostrarRetificadora" '
+			 + 'from "VGT.EMPRESA" empresa '
+			 + 'inner join "VGT.PAIS" pais '
+			 + 'on empresa."fk_pais.id_pais" = pais."id_pais" '
+			 + 'inner join "VGT.TAX_PACKAGE" taxPackage '
+			 + 'on empresa."id_empresa" = taxPackage."fk_empresa.id_empresa" '
+			 + 'inner join "VGT.REL_TAX_PACKAGE_PERIODO" relTaxPackagePeriodo '
+			 + 'on taxPackage."id_tax_package" = relTaxPackagePeriodo."fk_tax_package.id_tax_package" '
+			 + 'inner join "VGT.PERIODO" periodo '
+			 + 'on relTaxPackagePeriodo."fk_periodo.id_periodo" = periodo."id_periodo" '
+			 + 'inner join "VGT.DOMINIO_ANO_CALENDARIO" dominioAnoCalendario '
+			 + 'on periodo."fk_dominio_ano_calendario.id_dominio_ano_calendario" = dominioAnoCalendario."id_dominio_ano_calendario" '
+			 + 'left outer join ( '
+			 + 'select '
+			 + '"id_rel_tax_package_periodo", '
+			 + '"fk_tax_package.id_tax_package", '
+			 + 'row_number() over ( '
+			 + 'partition by "fk_tax_package.id_tax_package" '
+			 + 'order by "id_rel_tax_package_periodo" '
+			 + ') "numero_retificadora" '
+			 + 'from "VGT.REL_TAX_PACKAGE_PERIODO" '
+			 + 'inner join "VGT.PERIODO" '
+			 + 'on "fk_periodo.id_periodo" = "id_periodo" '
+			 + 'where '
+			 + '"numero_ordem" = 6 '
+			 + ') countRetificadora '
+			 + 'on relTaxPackagePeriodo."id_rel_tax_package_periodo" = countRetificadora."id_rel_tax_package_periodo" '
+			 + 'left outer join ( '
+			 + 'select '
+			 + '"id_requisicao_reabertura_tax_tackage", '
+			 + '"fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo", '
+			 + 'row_number() over ( '
+			 + 'partition by "fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo" '
+			 + 'order by "id_requisicao_reabertura_tax_tackage" '
+			 + ') as "rownumberReabertura" '
+			 + 'from "VGT.REQUISICAO_REABERTURA_TAX_PACKAGE" '
+			 + 'where '
+			 + '"fk_dominio_requisicao_reabertura_status.id_dominio_requisicao_reabertura_status" = 2 '
+			 + ') requisicaoReabertura '
+			 + 'on requisicaoReabertura."fk_id_rel_tax_package_periodo.id_rel_tax_package_periodo" = relTaxPackagePeriodo."id_rel_tax_package_periodo" '
+			 + 'and requisicaoReabertura."rownumberReabertura" = 1 ',
+			 aParam = [];
+		
+		let queryBuildHelper = new QueryBuildHelper({
+			initialStatement: sQuery
+		});
+		
+		queryBuildHelper
+			.where('dominioAnoCalendario."id_dominio_ano_calendario"')
+				.in(req.query.filtroAnoCalendario)
+			.and('empresa."fk_pais.id_pais"')
+				.in(req.query.filtroPais)
+			.and('pais."fk_dominio_pais_regiao.id_dominio_pais_regiao"')
+				.in(req.query.filtroRegiao)
+			.and('relTaxPackagePeriodo."status_envio"')
+				.in(req.query.filtroStatus)
+			.and('periodo."numero_ordem"')
+				.in(req.query.filtroPeriodo);
+			
+		sQuery = queryBuildHelper.getStatement();
+		aParam = queryBuildHelper.getParameters();	
+			
+		sQuery += 'order by "nomeEmpresa", "anoCalendario", "numeroOrdem", "idRelTaxPackagePeriodo" ';
+		
+		sQuery = 
+			'select * '
+			+ 'from ( '
+			+ sQuery
+			+ ') t '
+			+ 'where '
+			+ 't."numeroOrdem" <= 5 '
+			+ 'or (t."numeroOrdem" = 6 and t."indMostrarRetificadora" = 1) ';
+		
+		db.executeStatement({
+			statement: sQuery,
+			parameters: aParam
+		}, (err, result) => {
+			if (err) {
+				console.log(err);
+				next(err);
+			}
+			else {
+				res.status(200).json({
+					result: result
+				});
+			}
+		});
 	}
 };
 

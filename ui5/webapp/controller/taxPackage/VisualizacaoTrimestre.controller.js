@@ -19,7 +19,10 @@ sap.ui.define(
 				this.setModel(oModel);
 				this._zerarModel();
 
-				this.getRouter().getRoute("taxPackageVisualizacaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+				
+				if (this.isVisualizacaoUsuario()) {
+					this.getRouter().getRoute("taxPackageVisualizacaoTrimestre").attachPatternMatched(this._onRouteMatched, this);
+				}
 			},
 
 			_adicionarTaxaMultipla: function (sProperty, sFkTipo) {
@@ -2638,14 +2641,19 @@ sap.ui.define(
 
 			navToPage2: function () {
 				var that = this;
-				//this._confirmarCancelamento(function () {
-				that.getRouter().navTo("taxPackageListagemEmpresas",{
-					parametros: this.toURIComponent({
-						idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario")
-					})
-				});
-				//});
+				
+				if (this.isVisualizacaoUsuario()) {
+					that.getRouter().navTo("taxPackageListagemEmpresas",{
+						parametros: this.toURIComponent({
+							idAnoCalendario: this.getModel().getProperty("/AnoCalendario").idAnoCalendario,
+							nomeUsuario: this.getModel().getProperty("/NomeUsuario")
+						})
+					});
+				}
+				else {
+					//this._inceptionParams._targetInceptionParams.params.idAnoCalendarioCorrente = this.getModel().getProperty("/AnoCalendario").idAnoCalendario;
+					this._inceptionParams._targetInceptionParams.router.navToListagem(this._inceptionParams._targetInceptionParams);
+				}
 			},
 
 			navToPage3: function () {
@@ -2689,7 +2697,15 @@ sap.ui.define(
 				this._zerarModel();
 				this.getModel().setProperty("/ocultarItemToReport", true);
 
-				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
+				var oParametros;
+
+				if (this.isVisualizacaoUsuario()) {
+					oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
+				}
+				else {
+					this._inceptionParams = oEvent;
+					oParametros = oEvent;
+				}
 				
 				if (oParametros.oPeriodo.numero_ordem === 6) {
 					this.getModel().setProperty("/ocultarItemToReport", false);
@@ -2708,6 +2724,7 @@ sap.ui.define(
 					console.log(e);
 				}
 
+				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 				this.getModel().setProperty("/LabelDataInicio", sLabelDataInicio);
 				this.getModel().setProperty("/LabelDataFim", sLabelDataFim);
 				this.getModel().setProperty("/LabelCITType", this._pegarLabelCITType(oParametros.oPeriodo.numero_ordem));

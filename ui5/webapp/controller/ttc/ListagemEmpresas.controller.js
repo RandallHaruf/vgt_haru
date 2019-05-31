@@ -83,7 +83,6 @@ sap.ui.define(
 				if (this.isVisualizacaoAdmin()) {
 					this._inceptionParams = oEvent;
 					parametro = oEvent.params.idAnoCalendarioCorrente;
-					usuario = '';
 					
 					// Sempre invalida o atualizar dados, pois no retorno do detalhe para o resumo esse parametro
 					// é recebido de volta e impede a atualizacao da tabela/reconstrução do filtro. É preciso manter o estado anterior ao detalhamento.
@@ -135,19 +134,19 @@ sap.ui.define(
 				
 				thisController.setBusy(thisController.byId("tabelaAdmin"), true);
 				
-				NodeAPI.pListarRegistros('TTC/ResumoEmpresaAdmin', oFiltro ? oFiltro : ''/*{
-					anoCalendario: thisController.getModel().getProperty("/AnoCalendarioSelecionado")
-				}*/).then(function (res) {
-					for (var i = 0; i < res.result.length; i++) {
-						res.result[i].labelTrimestre = Utils.traduzTrimestreTTC(res.result[i].numeroOrdem, thisController);
-						res.result[i].labelEnviado = Utils.traduzStatusEnvioTrimestreTTC(res.result[i].indEnviado, thisController);
-						res.result[i].iconeEnviado = res.result[i].indEnviado ? 'sap-icon://accept' : 'sap-icon://decline';
-					}
-					
-					thisController.getModel().setProperty('/ResumoEmpresaAdmin', res.result);
-				}).finally(function () {
-					thisController.setBusy(thisController.byId('tabelaAdmin'), false);
-				});	
+				NodeAPI.pListarRegistros('TTC/ResumoEmpresaAdmin', oFiltro ? oFiltro : '')
+					.then(function (res) {
+						for (var i = 0; i < res.result.length; i++) {
+							res.result[i].labelTrimestre = Utils.traduzTrimestreTTC(res.result[i].numeroOrdem, thisController);
+							res.result[i].labelEnviado = Utils.traduzStatusEnvioTrimestreTTC(res.result[i].indEnviado, thisController);
+							res.result[i].iconeEnviado = res.result[i].indEnviado ? 'sap-icon://accept' : 'sap-icon://decline';
+						}
+						
+						thisController.getModel().setProperty('/ResumoEmpresaAdmin', res.result);
+					})
+					.finally(function () {
+						thisController.setBusy(thisController.byId('tabelaAdmin'), false);
+					});	
 			},
 
 			_atualizarDadosUsuario: function () {
@@ -255,11 +254,11 @@ sap.ui.define(
                 });
                
                 this._loadFrom().then((function (res) {
-                    that.getModel().setProperty("/EasyFilterMoeda", Utils.orderByArrayParaBox(res[0].map(obj => {
+                	that.getModel().setProperty("/EasyFilterMoeda", Utils.orderByArrayParaBox(res[0].map(obj => {
                     	obj.nome = obj.acronimo + ' - ' + obj.nome;
                     	return obj;
                     }), "nome"));
-                    
+                	
                     that.getModel().setProperty("/EasyFilterAnoCalendario", res[1]);
                     
                     that.getModel().setProperty("/EasyFilterRegiao", Utils.orderByArrayParaBox(res[2].map(obj => { 
@@ -274,19 +273,19 @@ sap.ui.define(
                     
                     that.getModel().setProperty("/EasyFilterPeriodo", Utils.orderByArrayParaBox([
                     	{
-                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo1'),
+                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo7'),
                     		numero_ordem: 1
                     	},
                     	{
-                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo2'),
+                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo8'),
                     		numero_ordem: 2
                     	},
                     	{
-                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo3'),
+                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo9'),
                     		numero_ordem: 3
                     	},
                     	{
-                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo4'),
+                    		periodo: that.getResourceBundle().getText('viewGeralPeriodo10'),
                     		numero_ordem: 4
                     	}
                     ], "periodo"));

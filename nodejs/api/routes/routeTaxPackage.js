@@ -12,4 +12,5 @@ module.exports = function (aRoutes) {
 	aRoutes.push(express.Router().put("/EncerrarTrimestreTaxPackage", controller.encerrarTrimestre));
 	aRoutes.push(express.Router().get("/ChecarDeclaracaoEnviada", controller.checarDeclaracaoEnviada));
 	aRoutes.push(express.Router().get("/TaxPackage/DownloadModeloImport", controller.downloadModeloImport));
+	aRoutes.push(express.Router().get("/TaxPackage/ResumoEmpresaAdmin", controller.resumoEmpresaAdmin));
 };
