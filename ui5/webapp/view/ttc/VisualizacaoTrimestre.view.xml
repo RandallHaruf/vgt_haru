@@ -4,7 +4,8 @@
 	xmlns:core="sap.ui.core" 
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.f"
-	xmlns="sap.m">
+	xmlns="sap.m"
+	xmlns:tbl="sap.ui.table">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -65,249 +66,458 @@
 							horizontal="true"
 							vertical="true"
 							height="100%">
-							<Table
-								id="tabelaPagamentosBorne"
-								class="celulasSeparadas"
-								items="{
-									path: '/Pagamentos/Borne',
-									sorter: [{
-										path: 'data_pagamento',
-										descending: true
-									}]
-								}">
-								<columns>
-									<!--<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" textAlign="Center"/>
-									</Column>-->
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center"/>
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center"/>
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
-									</Column>
-								</columns>
-								<items>
-									<ColumnListItem>
-										<!--
-											textAlign="End" 
-												value="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" 
-										-->
-										<cells>
-											<!--<core:Icon src="{icone_aplicavel}" />-->
-											<Text text="{category}" />
-											<Text text="{tax}" />
-											<Text text="{name_of_tax}" />
-											<Text text="{administracao_governamental}" />
-											<Text text="{jurisdicao}" />
-											<Text text="{pais}" />
-											<Text text="{estado}" />
-											<Text text="{cidade}" />
-											<Text text="{ano_fiscal}" />
-											<Text text="{data_pagamento}" />
-											<Text text="{tipo_transacao}" />
-											<Text text="{tipo_transacao_outros}" />
-											<Text text="{acronimo}" />
+							<tbl:Table
+								class="celulasSeparadas tblTTC"
+								id="tableBorne"
+								rows="{/Pagamentos/Borne}"
+								visibleRowCount="6"
+								enableColumnReordering="false"
+								selectionMode="None"
+								ariaLabelledBy="title">
+								<tbl:toolbar>
+									<OverflowToolbar>
+										<content>
+											<ToolbarSpacer/>
+											<Button icon="sap-icon://filter" press="onFiltrarBorne" />
+											<HBox>
+												<Input id="linhasExibidasBorne" value="{/numeroLinhasBorne}"></Input>
+												<Button press="onMudarLinhasExibidasBorne" text="{i18n>redefinirLinhas}"></Button>	
+											</HBox>
+										</content>
+									</OverflowToolbar>
+								</tbl:toolbar>
+								<tbl:rowSettingsTemplate>
+									<tbl:RowSettings highlight="{novo}" />
+								</tbl:rowSettingsTemplate>
+								<tbl:columns hAlign="Center">
+									<tbl:Column
+										id="categoria"
+										width="10rem"
+										sortProperty="category" hAlign="Center">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCategoria}"/>
+										<tbl:template>
+											<Text textAlign="Center" text="{category}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										id="taxa"
+										width="10rem"
+										hAlign="Center"
+										sortProperty="tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTax}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{tax}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="name_of_tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{name_of_tax}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="administracao_governamental">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{administracao_governamental}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_jurisdicao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{jurisdicao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_pais">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPais}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{pais}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="estado">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center"  />
+										<tbl:template>
+											<Text textAlign="Center" text="{estado}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="cidade">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{cidade}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="7rem"
+										hAlign="Center"
+										sortProperty="nome_ano_fiscal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{ano_fiscal}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="12rem"
+										hAlign="Center"
+										sortProperty="data_pagamento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{data_pagamento}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="nome_tipo_transacao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{tipo_transacao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="tipo_transacao_outros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{tipo_transacao_outros}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="AcroNome">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{acronimo}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="principal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="juros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="multa">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="total">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
-											<Text text="{numero_documento}" />
-											<Text text="{entidade_beneficiaria}" />
-											<Text text="{descricao}" />
-											<Text text="{projeto}" />
-										</cells>
-									</ColumnListItem>
-								</items>
-							</Table>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="numero_documento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{numero_documento}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="entidade_beneficiaria">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{entidade_beneficiaria}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="descricao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{descricao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="projeto">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{projeto}" />
+										</tbl:template>
+									</tbl:Column>
+								</tbl:columns>
+							</tbl:Table>
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon=""/>
-					<IconTabFilter text="{i18n>viewGeralCollected} ({/ContadorCollected})">
-						<ScrollContainer
-							horizontal="true"
-							vertical="true"
-							height="100%">
-							<Table
-								id="tabelaPagamentosCollected"
-								class="celulasSeparadas"
-								items="{
-									path: '/Pagamentos/Collected',
-									sorter: [{
-										path: 'data_pagamento',
-										descending: true
-									}]
-								}">
-								<columns>
-									<!--<Column width="7rem" hAlign="Center">
-										<Text text="{i18n>viewTTCVisualizacaoTrimestreColunaSemPagamento}" textAlign="Center"/>
-									</Column>-->
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTax}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center"/>
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center"/>
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPais}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaEstado}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCity}" />
-									</Column>
-									
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center"/>
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" />
-									</Column>
-									<Column width="15rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaOther}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaInterest}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaFine}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaValue}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center"/>
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaDescription}" />
-									</Column>
-									<Column width="10rem" hAlign="Center">
-										<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" />
-									</Column>
-								</columns>
-								<items>
-									<ColumnListItem>
-										<cells>
-											<!--<core:Icon src="{icone_aplicavel}" />-->
-											<Text text="{category}" />
-											<Text text="{tax}" />
-											<Text text="{name_of_tax}" />
-											<Text text="{administracao_governamental}" />
-											<Text text="{jurisdicao}" />
-											<Text text="{pais}" />
+					<IconTabFilter id="backgroundCollected" text="{i18n>viewGeralCollected} ({/ContadorCollected})">
+						<ScrollContainer height="100%" vertical="false">
+							<tbl:Table
+								class="tblTTC"
+								id="tableCollected"
+								visibleRowCount="6"
+								enableColumnReordering="false"
+								rows="{/Pagamentos/Collected}"
+								selectionMode="None"
+								ariaLabelledBy="title">
+								<tbl:toolbar>
+									<OverflowToolbar>
+										<content>
+											<ToolbarSpacer/>
+											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
+											<HBox>
+												<Input id="linhasExibidasCollected" value="{/numeroLinhasCollected}"></Input>
+												<Button press="onMudarLinhasExibidasCollected" text="{i18n>redefinirLinhas}"></Button>	
+											</HBox>
+										</content>
+									</OverflowToolbar>
+								</tbl:toolbar>
+								<tbl:rowSettingsTemplate>
+									<tbl:RowSettings highlight="{novo}" />
+								</tbl:rowSettingsTemplate>
+								<tbl:columns hAlign="Center">
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="category">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center"  text="{category}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTax}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{tax}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="name_of_tax">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameTax}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{name_of_tax}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="administracao_governamental">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNameGovernment}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{administracao_governamental}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_jurisdicao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaJurisdicao}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{jurisdicao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="nome_pais">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPais}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{pais}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="estado">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaEstado}" textAlign="Center"  />
+										<tbl:template>
 											<Text text="{estado}" />
-											<Text text="{cidade}" />
-											<Text text="{ano_fiscal}" />
-											<Text text="{data_pagamento}" />
-											<Text text="{tipo_transacao}" />
-											<Text text="{tipo_transacao_outros}" />
-											<Text text="{acronimo}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="cidade">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCity}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{cidade}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="7rem"
+										hAlign="Center"
+										sortProperty="nome_ano_fiscal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaAnoFiscal}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{ano_fiscal}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="12rem"
+										hAlign="Center"
+										sortProperty="data_pagamento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDataPagamento}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{data_pagamento}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="nome_tipo_transacao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaTypeTransaction}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{tipo_transacao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="tipo_transacao_outros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaOther}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{tipo_transacao_outros}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="AcroNome">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaCurrency}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{acronimo}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="principal">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaPrincipal}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'principal', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="juros">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaInterest}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'juros', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="multa">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaFine}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'multa', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center"
+										sortProperty="total">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaValue}" textAlign="Center" />
+										<tbl:template>
 											<Text 
 												textAlign="End"
 												text="{path: 'total', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}" />
-											<Text text="{numero_documento}" />
-											<Text text="{entidade_beneficiaria}" />
-											<Text text="{descricao}" />
-											<Text text="{projeto}" />
-										</cells>
-									</ColumnListItem>
-								</items>
-							</Table>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="numero_documento">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaNumberDocument}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{numero_documento}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="entidade_beneficiaria">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaBeneficiary}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{entidade_beneficiaria}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="descricao">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaDescription}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{descricao}" />
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="15rem"
+										hAlign="Center"
+										sortProperty="projeto">
+										<Label text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
+										<tbl:template>
+											<Text textAlign="Center" text="{projeto}" />
+										</tbl:template>
+									</tbl:Column>
+								</tbl:columns>
+							</tbl:Table>
 						</ScrollContainer>
 					</IconTabFilter>
 				</items>

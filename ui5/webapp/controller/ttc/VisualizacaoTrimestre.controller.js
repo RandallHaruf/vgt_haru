@@ -2,9 +2,10 @@ sap.ui.define(
 	[
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/lib/Validador"
 	],
-	function (BaseController, NodeAPI, Utils) {
+	function (BaseController, NodeAPI, Utils, Validador) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.ttc.VisualizacaoTrimestre", {
@@ -125,6 +126,250 @@ sap.ui.define(
 
 				dialog.open();
 			},
+			
+			onMudarLinhasExibidasBorne: function(oEvent){
+				var numeroLinhasBorne = this.getModel().getProperty("/numeroLinhasBorne");
+				var isNum = /^\d+$/.test(numeroLinhasBorne);
+				if(isNum){
+					this.byId("tableBorne").setVisibleRowCount(Number(numeroLinhasBorne));
+				}
+			},
+			
+			onMudarLinhasExibidasCollected: function(oEvent){
+				var numeroLinhasCollected = this.getModel().getProperty("/numeroLinhasCollected");
+				var isNum = /^\d+$/.test(numeroLinhasCollected);
+				if(isNum){
+					this.byId("tableCollected").setVisibleRowCount(Number(numeroLinhasCollected));
+				}
+			},
+			
+			onFiltrarBorne: function () {
+				this.filterDialogBorne.open();
+			},
+			
+			onFiltrarCollected: function () {
+				this.filterDialogCollected.open();
+			},
+			
+			_montarFiltro: function (bManterFiltro) {
+				var that = this;
+				
+				Utils.criarDialogFiltro("tableBorne", [{
+					text: this.getResourceBundle().getText("viewGeralPais"),
+					applyTo: 'fk_dominio_pais.id_dominio_pais',
+					items: {
+						loadFrom: 'DominioPais',
+						path: '/EasyFilterBorneDominioPais',
+						text: 'pais',
+						key: 'id_dominio_pais'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralCategoria"),
+					applyTo: 'fk_category.id_tax_category',
+					items: {
+						loadFrom: "TaxCategory?classification=1",
+						path: '/EasyFilterBorneTaxCategory',
+						text: 'category',
+						key: 'id_tax_category'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralTaxa"),
+					applyTo: 'fk_tax.id_tax',
+					items: {
+						loadFrom: "DeepQuery/Tax?classification=1",
+						path: '/EasyFilterBorneTax',
+						text: 'tax',
+						key: 'id_tax'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralJurisdicao"),
+					applyTo: 'fk_jurisdicao.id_dominio_jurisdicao',
+					items: {
+						loadFrom: "DominioJurisdicao",
+						path: '/EasyFilterBorneJurisdicao',
+						text: 'jurisdicao',
+						key: 'id_dominio_jurisdicao'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralAnoFiscal"),
+					applyTo: 'fk_dominio_ano_fiscal.id_dominio_ano_fiscal',
+					items: {
+						loadFrom: "DominioAnoFiscal",
+						path: '/EasyFilterBorneAnoFiscal',
+						text: 'ano_fiscal',
+						key: 'id_dominio_ano_fiscal'
+					}
+				}, {
+					text: this.getResourceBundle().getText("ViewRelatorioCurrency"),
+					applyTo: 'fk_dominio_moeda.id_dominio_moeda',
+					items: {
+						loadFrom: "DominioMoeda",
+						path: '/EasyFilterBorneMoeda',
+						text: 'AcroNome',
+						key: 'id_dominio_moeda'
+					}
+				}, {
+					text: this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					applyTo: 'fk_dominio_tipo_transacao.id_dominio_tipo_transacao',
+					items: {
+						loadFrom: "DominioTipoTransacao",
+						path: '/EasyFilterBorneTipoTransacao',
+						text: 'tipo_transacao',
+						key: 'id_dominio_tipo_transacao'
+					}
+				}], this, function (params) {
+					
+				}, "filterDialogBorne");
+
+				Utils.criarDialogFiltro("tableCollected", [{
+					text: this.getResourceBundle().getText("viewGeralPais"),
+					applyTo: 'fk_dominio_pais.id_dominio_pais',
+					items: {
+						loadFrom: 'DominioPais',
+						path: '/EasyFilterCollectedDominioPais',
+						text: 'pais',
+						key: 'id_dominio_pais'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralCategoria"),
+					applyTo: 'fk_category.id_tax_category',
+					items: {
+						loadFrom: "TaxCategory?classification=2",
+						path: '/EasyFilterCollectedTaxCategory',
+						text: 'category',
+						key: 'id_tax_category'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralTaxa"),
+					applyTo: 'fk_tax.id_tax',
+					items: {
+						loadFrom: "DeepQuery/Tax?classification=2",
+						path: '/EasyFilterCollectedTax',
+						text: 'tax',
+						key: 'id_tax'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralJurisdicao"),
+					applyTo: 'fk_jurisdicao.id_dominio_jurisdicao',
+					items: {
+						loadFrom: "DominioJurisdicao",
+						path: '/EasyFilterCollectedJurisdicao',
+						text: 'jurisdicao',
+						key: 'id_dominio_jurisdicao'
+					}
+				}, {
+					text: this.getResourceBundle().getText("viewGeralAnoFiscal"),
+					applyTo: 'fk_dominio_ano_fiscal.id_dominio_ano_fiscal',
+					items: {
+						loadFrom: "DominioAnoFiscal",
+						path: '/EasyFilterCollectedAnoFiscal',
+						text: 'ano_fiscal',
+						key: 'id_dominio_ano_fiscal'
+					}
+				}, {
+					text: this.getResourceBundle().getText("ViewRelatorioCurrency"),
+					applyTo: 'fk_dominio_moeda.id_dominio_moeda',
+					items: {
+						loadFrom: "DominioMoeda",
+						path: '/EasyFilterCollectedMoeda',
+						text: 'AcroNome',
+						key: 'id_dominio_moeda'
+					}
+				}, {
+					text: this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
+					applyTo: 'fk_dominio_tipo_transacao.id_dominio_tipo_transacao',
+					items: {
+						loadFrom: "DominioTipoTransacao",
+						path: '/EasyFilterCollectedTipoTransacao',
+						text: 'tipo_transacao',
+						key: 'id_dominio_tipo_transacao'
+					}
+				}], this, function (params) {
+					
+				}, "filterDialogCollected");
+
+
+				this._loadFrom_filterDialogBorne().then((function (res) {
+					for (var i = 0, length = res[0].length; i < length; i++) {
+						res[0][i]["pais"] = Utils.traduzDominioPais(res[0][i]["id_dominio_pais"], that);
+					}
+					res[0] = Utils.orderByArrayParaBox(res[0], "pais");
+					res[0].unshift({"id_dominio_pais":0,"pais":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneDominioPais", res[0]);
+					
+					res[1] = Utils.orderByArrayParaBox(res[1], "category");
+					res[1].unshift({"id_tax_category":0,"category":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneTaxCategory", res[1]);
+					
+					res[2] = Utils.orderByArrayParaBox(res[2], "tax");
+					res[2].unshift({"id_tax":0,"tax": that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneTax", res[2]);
+					
+					for (var i = 0, length = res[3].length; i < length; i++) {
+						res[3][i]["jurisdicao"] = Utils.traduzJurisdicao(res[3][i]["id_dominio_jurisdicao"], that);
+					}
+					res[3] = Utils.orderByArrayParaBox(res[3], "jurisdicao");
+					res[3].unshift({"id_dominio_jurisdicao":0,"jurisdicao":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneJurisdicao",res[3]);
+					
+					res[4].unshift({"id_dominio_ano_fiscal":0,"ano_fiscal":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneAnoFiscal", res[4]);
+					
+					for (var i = 0; i < res[5].length; i++) {
+						res[5][i].AcroNome = res[5][i]["acronimo"] + " - " + res[5][i]["nome"];
+					}
+					res[5] = Utils.orderByArrayParaBox(res[5], "AcroNome");
+					res[5].unshift({"id_dominio_moeda":0,"AcroNome":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneMoeda", res[5]);
+					
+					for (var i = 0, length = res[6].length; i < length; i++) {
+						res[6][i]["tipo_transacao"] = Utils.traduzTipoTransacao(res[6][i]["id_dominio_tipo_transacao"], that);
+					}
+					res[6] = Utils.orderByArrayParaBox(res[6],"tipo_transacao");
+					res[6].unshift({"id_dominio_tipo_transacao":0,"tipo_transacao":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterBorneTipoTransacao", res[6]);
+				}));
+				this._loadFrom_filterDialogCollected().then((function (res) {
+					for (var i = 0, length = res[0].length; i < length; i++) {
+						res[0][i]["pais"] = Utils.traduzDominioPais(res[0][i]["id_dominio_pais"], that);
+					}
+					res[0] = Utils.orderByArrayParaBox(res[0], "pais");
+					res[0].unshift({"id_dominio_pais":0,"pais":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedDominioPais", res[0]);
+					
+					res[1] = Utils.orderByArrayParaBox(res[1], "category");
+					res[1].unshift({"id_tax_category":0,"category":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedTaxCategory", res[1]);
+					
+					res[2] = Utils.orderByArrayParaBox(res[2], "tax");
+					res[2].unshift({"id_tax":0,"tax": that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedTax", res[2]);
+					
+					for (var i = 0, length = res[3].length; i < length; i++) {
+						res[3][i]["jurisdicao"] = Utils.traduzJurisdicao(res[3][i]["id_dominio_jurisdicao"], that);
+					}
+					res[3] = Utils.orderByArrayParaBox(res[3], "jurisdicao");
+					res[3].unshift({"id_dominio_jurisdicao":0,"jurisdicao":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedJurisdicao",res[3]);
+					
+					res[4].unshift({"id_dominio_ano_fiscal":0,"ano_fiscal":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedAnoFiscal", res[4]);
+					
+					for (var i = 0; i < res[5].length; i++) {
+						res[5][i].AcroNome = res[5][i]["acronimo"] + " - " + res[5][i]["nome"];
+					}
+					res[5] = Utils.orderByArrayParaBox(res[5], "AcroNome");
+					res[5].unshift({"id_dominio_moeda":0,"AcroNome":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedMoeda", res[5]);
+					
+					for (var i = 0, length = res[6].length; i < length; i++) {
+						res[6][i]["tipo_transacao"] = Utils.traduzTipoTransacao(res[6][i]["id_dominio_tipo_transacao"], that);
+					}
+					res[6] = Utils.orderByArrayParaBox(res[6],"tipo_transacao");
+					res[6].unshift({"id_dominio_tipo_transacao":0,"tipo_transacao":that.emBrancoTraduzido});
+					that.getModel().setProperty("/EasyFilterCollectedTipoTransacao",res[6]);
+				}));
+			},
 
 			navToHome: function () {
 				this.getRouter().navTo("selecaoModulo");
@@ -198,22 +443,29 @@ sap.ui.define(
 						} else
 						if (this.byId("btnReabrir").getVisible())
 							this.byId("btnReabrir").setVisible(true);
-					};
+					}
 				}
+				
+				this.byId("tableBorne").setFixedColumnCount(3);
+				this.byId("tableCollected").setFixedColumnCount(3);
 
 				oParameters.oPeriodo.periodo = Utils.traduzTrimestreTTC(oParameters.oPeriodo.numero_ordem, that);
-
+				
+				Utils.displayFormat(this);
 				this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
 				this.getModel().setProperty("/Periodo", oParameters.oPeriodo);
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
 				this.getModel().setProperty("/NomeUsuario", oParameters.nomeUsuario);
 				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
+				
+				this._montarFiltro();
 
+				
 				var sIdEmpresa = oParameters.oEmpresa.id_empresa,
 					sIdPeriodo = oParameters.oPeriodo.id_periodo;
 
-				this.byId("tabelaPagamentosBorne").setBusyIndicatorDelay(100);
-				this.byId("tabelaPagamentosBorne").setBusy(true);
+				this.byId("tableBorne").setBusyIndicatorDelay(100);
+				this.byId("tableBorne").setBusy(true);
 
 				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
 					"&tax_classification=1",
@@ -221,17 +473,19 @@ sap.ui.define(
 						if (response) {
 							for (var i = 0; i < response.length; i++) {
 								response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
+								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"], that);
 								countBorne++;
 							}
 							that.getModel().setProperty("/ContadorBorne", countBorne);
 							that.getModel().setProperty("/Pagamentos/Borne", response);
 						}
 
-						that.byId("tabelaPagamentosBorne").setBusy(false);
+						that.byId("tableBorne").setBusy(false);
 					});
 
-				this.byId("tabelaPagamentosCollected").setBusyIndicatorDelay(100);
-				this.byId("tabelaPagamentosCollected").setBusy(true);
+
+				this.byId("tableCollected").setBusyIndicatorDelay(100);
+				this.byId("tableCollected").setBusy(true);
 
 				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
 					"&tax_classification=2",
@@ -239,13 +493,14 @@ sap.ui.define(
 						if (response) {
 							for (var i = 0; i < response.length; i++) {
 								response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
+								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"], that);
 								countCollected++;
 							}
 							that.getModel().setProperty("/ContadorCollected", countCollected);
 							that.getModel().setProperty("/Pagamentos/Collected", response);
 						}
 
-						that.byId("tabelaPagamentosCollected").setBusy(false);
+						that.byId("tableCollected").setBusy(false);
 					});
 			}
 		});

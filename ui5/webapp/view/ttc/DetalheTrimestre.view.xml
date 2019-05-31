@@ -80,11 +80,11 @@
 									<OverflowToolbar>
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoBorne" />
-											<Button icon="sap-icon://filter" press="onFiltrarBorne" />
 											<ToolbarSpacer/>
+											<Button icon="sap-icon://filter" press="onFiltrarBorne" />
 											<HBox>
-												<Input id="linhasExibidas" value="{/numeroLinhas}"></Input>
-												<Button press="onMudarLinhasExibidas" text="{i18n>redefinirLinhas}"></Button>	
+												<Input id="linhasExibidasBorne" value="{/numeroLinhasBorne}"></Input>
+												<Button press="onMudarLinhasExibidasBorne" text="{i18n>redefinirLinhas}"></Button>	
 											</HBox>
 										</content>
 									</OverflowToolbar>
@@ -434,6 +434,11 @@
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoCollected" />
 											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
+											<ToolbarSpacer/>
+											<HBox>
+												<Input id="linhasExibidasCollected" value="{/numeroLinhasCollected}"></Input>
+												<Button press="onMudarLinhasExibidasCollected" text="{i18n>redefinirLinhas}"></Button>	
+											</HBox>
 										</content>
 									</OverflowToolbar>
 								</tbl:toolbar>

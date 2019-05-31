@@ -178,7 +178,6 @@ sap.ui.define(
 				}
 			},
 			
-			
 			_exibirErroImportacao: function (sErro) {
 				var conteudo;
 				if(typeof sErro == "object"){
@@ -1457,11 +1456,19 @@ sap.ui.define(
 				});
 			},
 			
-			onMudarLinhasExibidas: function(oEvent){
-				var numeroLinhas = this.getModel().getProperty("/numeroLinhas");
-				var isNum = /^\d+$/.test(numeroLinhas);
+			onMudarLinhasExibidasBorne: function(oEvent){
+				var numeroLinhasBorne = this.getModel().getProperty("/numeroLinhasBorne");
+				var isNum = /^\d+$/.test(numeroLinhasBorne);
 				if(isNum){
-					this.byId("tableBorne").setVisibleRowCount(Number(numeroLinhas));
+					this.byId("tableBorne").setVisibleRowCount(Number(numeroLinhasBorne));
+				}
+			},
+			
+			onMudarLinhasExibidasCollected: function(oEvent){
+				var numeroLinhasCollected = this.getModel().getProperty("/numeroLinhasCollected");
+				var isNum = /^\d+$/.test(numeroLinhasCollected);
+				if(isNum){
+					this.byId("tableCollected").setVisibleRowCount(Number(numeroLinhasCollected));
 				}
 			},
 
