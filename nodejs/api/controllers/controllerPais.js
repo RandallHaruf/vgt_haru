@@ -258,7 +258,7 @@ module.exports = {
 				+ 'pais."ano_obrigacao_compliance" "anoObrigacaoCompliance", ' 
 				+ 'pais."ano_obrigacao_beps" "anoObrigacaoBeps", ' 		
 				+ 'aliquota."nome" "nomeAliquota", ' 
-				+ 'aliquota."valor" "valorAliquota" ' 
+				+ 'tblFusao."valor" "valorAliquota" ' 
 				+ 'from "VGT.PAIS" pais ' 
 				+ 'left outer join "VGT.DOMINIO_PAIS" dom_pais ' 
 					+ 'on pais."fk_dominio_pais.id_dominio_pais" = dom_pais."id_dominio_pais" ' 
