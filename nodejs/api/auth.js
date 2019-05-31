@@ -210,7 +210,8 @@ const verificaAuth = function (req, res) {
 			msg: "Usuário já autenticado.",
 			modulos: req.session.usuario.modulos,
 			nome: req.session.usuario.nome,
-			id: req.session.usuario.id
+			id: req.session.usuario.id,
+			nivelAcesso:req.session.usuario.nivelAcesso
 		});
 	} else {
 		req.session = {
@@ -375,7 +376,17 @@ module.exports = function (app) {
 function filtrarEmpresasPorModulo(moduloAtual, aEmpresa){
 	var aEmpresaFiltrado = [];
 	moduloAtual.toLowerCase();
-	var idFiltro = 0;
+	var aModulos = [];
+	if(moduloAtual.indexOf(",") > -1){
+		aModulos = moduloAtual.split(",");
+	}
+	else{
+		aModulos.push(moduloAtual);
+	}
+	var idFiltro = "";
+	for(let i = 0; i < aModulos.length; i++){
+		idFiltro += idFiltro.length > 0 ? "," + aModulos[i] : aModulos[i];
+	}
 	switch(moduloAtual){
 		case "ttc"://1
 			idFiltro = 1;
@@ -391,7 +402,7 @@ function filtrarEmpresasPorModulo(moduloAtual, aEmpresa){
 			break;
 	}
 	var sQuerySelect = 'Select * from "VGT.REL_EMPRESA_MODULO" '
-						+'where "fk_dominio_modulo.id_dominio_modulo" = ? ';
+						+'where "fk_dominio_modulo.id_dominio_modulo" in (?) ';
 	var aParam = [];
 	aParam.push(idFiltro);
 	var aEmpresasModulo = db.executeStatementSync(sQuerySelect, aParam);

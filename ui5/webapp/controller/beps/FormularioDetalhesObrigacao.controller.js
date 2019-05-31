@@ -6,9 +6,10 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Arquivo",
 		"ui5ns/ui5/lib/jQueryMask",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5//model/enums/PerfilUsuario"
 	],
-	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador) {
+	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador, PerfilUsuario) {
 		return BaseController.extend("ui5ns.ui5.controller.beps.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
@@ -500,48 +501,79 @@ sap.ui.define(
 				dialog.open();
 			},
 			_onRouteMatched: function (oEvent) {
-                this.getModel().setProperty("/IsIFrame", this.isIFrame());
-				this.getModel().setProperty("/IsDeclaracao", false);
-				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
-
 				var that = this;
-				NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
-					if (response) {
-						that.getModel().setProperty("/DominioMoeda", response);
-					}
-
-				});
-				var oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
-				var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
-                var idAnoCalendario = oParametros.idAnoCalendario;
-				this.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
-				oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
-				/*oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
-					"status_obrigacao_calculado"] != 4 ? true : false;*/
-				oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao.ind_iniciada ? true : false;
-				/*this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
-					"status_obrigacao_calculado"] == 4 ? true : false));*/
-				this.getModel().setProperty("/JaEstavaIniciada", (!oParametros.Obrigacao.ind_iniciada ? true : false));
-				this.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
-				that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
-				that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));				
-                this.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
-                this.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
-				
-				if (!idObrigacao) {
-					NodeAPI.pCriarRegistro('RespostaObrigacao', {
-							fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"]
+				const oEventoInicial = oEvent.getParameter("arguments");
+				fetch(Constants.urlBackend + "verifica-auth", {
+							credentials: "include"
 						})
-						.then(function (res) {
-							var generatedId = JSON.parse(res)[0].generated_id;
-							
-							that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
-							
-							that._atualizarDocumentos('/Documentos', generatedId, that.byId("tabelaDocumentos"));
+						.then((res) => {
+							res.json()
+								.then((response) => {
+	
+									if (response.success) {
+										if(response.nivelAcesso == PerfilUsuario.MANAGER){
+											this.isIFrame = function() {
+												return true;
+											}
+										}
+										continuarRouteMatched(oEventoInicial);
+									} else {
+										sap.m.MessageToast.show(response.error.msg);
+										that.getRouter().navTo("login");
+									}
+								})
+								.catch((err) => {
+									sap.m.MessageToast.show(err);
+									that.getRouter().navTo("login");
+								});
+						})
+						.catch((err) => {
+							sap.m.MessageToast.show(err);
+							that.getRouter().navTo("login");
 						});
-				}
-				else {
-					this._atualizarDocumentos('/Documentos', idObrigacao, this.byId("tabelaDocumentos"));
+				var continuarRouteMatched = function (Parametros){
+					that.getModel().setProperty("/IsIFrame", that.isIFrame());
+					that.getModel().setProperty("/IsDeclaracao", false);
+					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
+	
+					NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
+						if (response) {
+							that.getModel().setProperty("/DominioMoeda", response);
+						}
+	
+					});
+					var oParametros = that.fromURIComponent(Parametros.parametros);
+					var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
+	                var idAnoCalendario = oParametros.idAnoCalendario;
+					that.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
+					oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
+					/*oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
+						"status_obrigacao_calculado"] != 4 ? true : false;*/
+					oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao.ind_iniciada ? true : false;
+					/*this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
+						"status_obrigacao_calculado"] == 4 ? true : false));*/
+					that.getModel().setProperty("/JaEstavaIniciada", (!oParametros.Obrigacao.ind_iniciada ? true : false));
+					that.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
+					that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
+					that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));				
+	                that.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
+	                that.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
+					
+					if (!idObrigacao) {
+						NodeAPI.pCriarRegistro('RespostaObrigacao', {
+								fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"]
+							})
+							.then(function (res) {
+								var generatedId = JSON.parse(res)[0].generated_id;
+								
+								that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
+								
+								that._atualizarDocumentos('/Documentos', generatedId, that.byId("tabelaDocumentos"));
+							});
+					}
+					else {
+						that._atualizarDocumentos('/Documentos', idObrigacao, that.byId("tabelaDocumentos"));
+					}	
 				}
 			}			
 		});

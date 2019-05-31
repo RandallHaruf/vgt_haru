@@ -354,6 +354,14 @@ sap.ui.define(
 								Modulos[i].habilitado = true;
 							}
 							break;
+						case 3:
+							if(Modulos[i]["id_dominio_modulo"] == 5){
+								Modulos[i].selecionado = false;
+								Modulos[i].habilitado = false;
+							}
+							else{
+								Modulos[i].habilitado = true;
+							}
 					}
 				}
 				for(let i = 0; i < Empresas.length; i++){

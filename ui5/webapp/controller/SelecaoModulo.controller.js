@@ -436,20 +436,20 @@ sap.ui.define(
 										this.getModel().setProperty("/ShowAdmin", response.modulos && response.modulos.includes(5) ? true : false);
 										this.getModel().setProperty("/NomeUsuario", response.nome);
 									} else {
-										MessageToast.show(response.error.msg);
-										this.getRouter().navTo("Login");
+										sap.m.MessageToast.show(response.error.msg);
+										this.getRouter().navTo("login");
 									}
 								})
 								.catch((err) => {
 									this.setBusy(this.byId("painelSelecaoModulo"), false)
-									MessageToast.show(err);
-									this.getRouter().navTo("Login");
+									sap.m.MessageToast.show(err);
+									this.getRouter().navTo("login");
 								});
 						})
 						.catch((err) => {
 							this.setBusy(this.byId("painelSelecaoModulo"), false)
-							MessageToast.show(err);
-							this.getRouter().navTo("Login");
+							sap.m.MessageToast.show(err);
+							this.getRouter().navTo("login");
 						});
 				}
 				else {

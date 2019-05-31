@@ -474,6 +474,7 @@ upsert "VGT.DOMINIO_TIPO_TRANSACAO"("id_dominio_tipo_transacao", "tipo_transacao
 upsert "VGT.DOMINIO_ACESSO_USUARIO" ("id_tipo_acesso","descricao") values(0,'User') where "id_tipo_acesso" = 0;
 upsert "VGT.DOMINIO_ACESSO_USUARIO" ("id_tipo_acesso","descricao") values(1,'Administrator') where "id_tipo_acesso" = 1;
 upsert "VGT.DOMINIO_ACESSO_USUARIO" ("id_tipo_acesso","descricao") values(2,'UserAdmin') where "id_tipo_acesso" = 2;
+UPSERT "VGT.DOMINIO_ACESSO_USUARIO" ("id_tipo_acesso","descricao") values(3,'Manager') where "id_tipo_acesso" = 3
 -- 
 ---- "VGT.DOMINIO_REQUISICAO_REABERTURA_STATUS"
 --

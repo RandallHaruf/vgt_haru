@@ -5,9 +5,10 @@ sap.ui.define(
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/jQueryMask",
 		"ui5ns/ui5/model/Constants",
-		"ui5ns/ui5/lib/Utils"
+		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5//model/enums/PerfilUsuario"
 	],
-	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants, Utils) {
+	function (BaseController, JSONModel, NodeAPI, JQueryMask, Constants, Utils, PerfilUsuario) {
 		"use strict";
 
 		BaseController.extend("ui5ns.ui5.controller.ttc.ResumoTrimestre", {
@@ -520,27 +521,58 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-
-				if (this.isIFrame()) {
-					this.mostrarAcessoRapidoInception();
-					this.byId("btnRequisicoes").setVisible(false);
-				}
-
-				var oEmpresa = this.fromURIComponent(oEvent.getParameter("arguments").oEmpresa);
-				var idAnoCalendario = this.fromURIComponent(oEvent.getParameter("arguments").idAnoCalendario);
-				var nomeUsuario = this.fromURIComponent(oEvent.getParameter("arguments").nomeUsuario);
-
-				this.getModel().setProperty("/AnoCalendarioSelecionado", idAnoCalendario);
-				this.getModel().setProperty("/Empresa", oEmpresa);
-				this.getModel().setProperty("/NomeUsuario", nomeUsuario);
-
-				NodeAPI.listarRegistros("/DominioAnoCalendario", function (response) {
-					if (response) {
-						that.getModel().setProperty("/DominioAnoCalendario", response);
-
-						that._atualizarDados();
+				const oEventoInicial = oEvent.getParameter("arguments");
+				fetch(Constants.urlBackend + "verifica-auth", {
+							credentials: "include"
+						})
+						.then((res) => {
+							res.json()
+								.then((response) => {
+	
+									if (response.success) {
+										if(response.nivelAcesso == PerfilUsuario.MANAGER){
+											this.isIFrame = function() {
+												return true;
+											}
+										}
+										continuarRouteMatched(oEventoInicial);
+									} else {
+										sap.m.MessageToast.show(response.error.msg);
+										that.getRouter().navTo("login");
+									}
+								})
+								.catch((err) => {
+									sap.m.MessageToast.show(err);
+									that.getRouter().navTo("login");
+								});
+						})
+						.catch((err) => {
+							sap.m.MessageToast.show(err);
+							that.getRouter().navTo("login");
+						});
+				
+				var continuarRouteMatched = function (Parametros) {
+					if (that.isIFrame()) {
+						that.mostrarAcessoRapidoInception();
+						that.byId("btnRequisicoes").setVisible(false);
 					}
-				});
+					
+					var oEmpresa = that.fromURIComponent(Parametros.oEmpresa);
+					var idAnoCalendario = that.fromURIComponent(Parametros.idAnoCalendario);
+					var nomeUsuario = that.fromURIComponent(Parametros.nomeUsuario);
+	
+					that.getModel().setProperty("/AnoCalendarioSelecionado", idAnoCalendario);
+					that.getModel().setProperty("/Empresa", oEmpresa);
+					that.getModel().setProperty("/NomeUsuario", nomeUsuario);
+	
+					NodeAPI.listarRegistros("/DominioAnoCalendario", function (response) {
+						if (response) {
+							that.getModel().setProperty("/DominioAnoCalendario", response);
+	
+							that._atualizarDados();
+						}
+					});
+				}
 			},
 
 			_atualizarDados: function () {

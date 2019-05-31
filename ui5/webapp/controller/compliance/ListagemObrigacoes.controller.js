@@ -7,9 +7,12 @@ sap.ui.define(
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/lib/Arquivo",
-		"sap/m/MessageBox"
+		"sap/m/MessageBox",
+		"ui5ns/ui5//model/Constants",
+		"ui5ns/ui5//model/enums/PerfilUsuario"
 	],
-	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo,MessageBox) {
+	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo,MessageBox, Constants, PerfilUsuario) {
+		
 		return BaseController.extend("ui5ns.ui5.controller.compliance.ListagemObrigacoes", {
 
 			onInit: function (oEvent) {
@@ -21,7 +24,8 @@ sap.ui.define(
 					//FiltroTipoObrigacao: [],
 					FiltroNomeObrigacao: [],
 					ValorFiltroNomeObrigacao: [],
-					ValorFiltroNomeArquivo: ""
+					ValorFiltroNomeArquivo: "",
+					isUser: false
 				}));
 				var hoje = new Date();
 				this.getModel().setProperty("/startDate",new Date(JSON.stringify(hoje.getFullYear()),"0","1"));
@@ -30,31 +34,62 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
+				var oEventoInicial = oEvent.getParameter("arguments");
 				
-				if (this.isIFrame()) {
-					this.mostrarAcessoRapidoInception();
-					this._parametroInception = "full=true";
-					that.getModel().setProperty("/isIFrame",true);
-				} else {
-					this._parametroInception = "full=false";
-					that.getModel().setProperty("/isIFrame",false);
+				fetch(Constants.urlBackend + "verifica-auth", {
+							credentials: "include"
+						})
+						.then((res) => {
+							res.json()
+								.then((response) => {
+	
+									if (response.success) {
+										if(this.isVisualizacaoUsuario()
+											&& (response.nivelAcesso == PerfilUsuario.USER
+												|| response.nivelAcesso == PerfilUsuario.USER_ADMIN)){
+											that.getModel().setProperty("/isUser", true);
+										}
+										continuarRouteMatched(oEventoInicial);
+									} else {
+										sap.m.MessageToast.show(response.error.msg);
+										that.getRouter().navTo("login");
+									}
+								})
+								.catch((err) => {
+									sap.m.MessageToast.show(err);
+									that.getRouter().navTo("login");
+								});
+						})
+						.catch((err) => {
+							sap.m.MessageToast.show(err);
+							that.getRouter().navTo("login");
+						});
+				var continuarRouteMatched = function (Parametros){
+					if (that.isIFrame()) {
+						that.mostrarAcessoRapidoInception();
+						that._parametroInception = "full=true";
+						that.getModel().setProperty("/isIFrame",true);
+					} else {
+						that._parametroInception = "full=false";
+						that.getModel().setProperty("/isIFrame",false);
+					}
+					
+					/*NodeAPI.pListarRegistros("DominioObrigacaoAcessoriaTipo")
+						.then(function (res) {
+							that.getModel().setProperty("/FiltroTipoObrigacao", res);
+						});*/
+					
+					that.getModel().setProperty("/RepositorioDocumento", []);
+					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
+					that.carregarFiltroEmpresa();
+					that.carregarFiltroAnoCalendario();
+					that.getModel().setProperty("/IdEmpresaSelecionado", that.fromURIComponent(Parametros.parametros).idEmpresaCalendario);
+					that.getModel().setProperty("/AnoCalendarioSelecionado", that.fromURIComponent(Parametros.parametros).idAnoCalendario);
+					that.getModel().setProperty("/NomeUsuario", that.fromURIComponent(Parametros.parametros).nomeUsuario);
+					//this._atualizarDados();
+					that._atualizarDadosFiltrado();
+					//this.setBusy(this.byId("tabelaObrigacoes"), false);
 				}
-				
-				/*NodeAPI.pListarRegistros("DominioObrigacaoAcessoriaTipo")
-					.then(function (res) {
-						that.getModel().setProperty("/FiltroTipoObrigacao", res);
-					});*/
-				
-				this.getModel().setProperty("/RepositorioDocumento", []);
-				this.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
-				this.carregarFiltroEmpresa();
-				this.carregarFiltroAnoCalendario();
-				this.getModel().setProperty("/IdEmpresaSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idEmpresaCalendario);
-				this.getModel().setProperty("/AnoCalendarioSelecionado", this.fromURIComponent(oEvent.getParameter("arguments").parametros).idAnoCalendario);
-				this.getModel().setProperty("/NomeUsuario", this.fromURIComponent(oEvent.getParameter("arguments").parametros).nomeUsuario);
-				//this._atualizarDados();
-				this._atualizarDadosFiltrado();
-				//this.setBusy(this.byId("tabelaObrigacoes"), false);
 			},
 			
 			onProcurarArquivos: function (oEvent) {
