@@ -71,8 +71,8 @@ sap.ui.define(
 				}
 				that.getModel().setProperty(propriedadeDaTabela, array);
 			},
-			dataExportReport: function (that, tipo, nomeAba, nomeReport) {
-				var array = that.getModel().getProperty("/TabelaDaView");
+			dataExportReport: function (that, tipo, nomeAba, nomeReport,tabelaDaView) {
+				var array = that.getModel().getProperty(tabelaDaView);
 				var coluna = [];
 				var excel = [];
 				for (var k = 0, length = array.length; k < length; k++) {
@@ -1355,21 +1355,21 @@ sap.ui.define(
 				return traducao;
 			},
 
-			_reportAdicionar: function (sProperty, that) {
+			_reportAdicionar: function (sProperty, that,preselecionado) {
 				if (that.getModel().getProperty(sProperty) ? false : true) {
 					that.getModel().setProperty(sProperty, []);
 				}
 				that.getModel().getProperty(sProperty).unshift({
 					descricao: null,
 					descricaoValueState: sap.ui.core.ValueState.Error,
-					parametros: JSON.stringify(that.getModel().getProperty("/Preselecionado"))
+					parametros: JSON.stringify(that.getModel().getProperty(preselecionado))
 				});
 				//that.getModel().refresh();
 			},
 
-			_dialogSalvar: function (sProperty, that, id) {
+			_dialogSalvar: function (sProperty, that, id,preselecionado) {
 				var self = this;
-				self._reportAdicionar(sProperty, that);
+				self._reportAdicionar(sProperty, that,preselecionado);
 				var lista = that.getModel().getProperty(sProperty);
 				var dialog = new sap.m.Dialog({
 					title: that.getResourceBundle().getText("viewGeralGravarVisao"),
@@ -1709,17 +1709,17 @@ sap.ui.define(
 
 			},
 
-			_reportSelecionar: function (oEvent, sProperty, that) {
+			_reportSelecionar: function (oEvent, sProperty, that,preselecionado) {
 
 				var aTaxaMultipla = that.getModel().getProperty(sProperty);
 				var oSelecionado = oEvent.getSource().getBindingContext().getObject();
-				that.getModel().setProperty("/Preselecionado", JSON.parse(oSelecionado["parametros"]));
+				that.getModel().setProperty(preselecionado, JSON.parse(oSelecionado["parametros"]));
 				that.getModel().setProperty("/NomeReport",oSelecionado["descricao"]);
 				that.onTemplateGet();
 
 			},
 
-			_dialogReport: function (sTitulo, sProperty, excluirProperty, that, id, oEvent) {
+			_dialogReport: function (sTitulo, sProperty, excluirProperty, that, id,preselecionado, oEvent) {
 				var self = this;
 				that.getModel().setProperty("/Excluir", []);
 				if (!that._dialogFiltro) {
@@ -1738,7 +1738,7 @@ sap.ui.define(
 						type: "Active",
 						cells: [oVisao]
 					}).attachPress(oTable, function (oEvent3) {
-						self._reportSelecionar(oEvent3, sProperty, that);
+						self._reportSelecionar(oEvent3, sProperty, that,preselecionado);
 					}, that);
 
 					oTable.bindItems({
@@ -1763,7 +1763,7 @@ sap.ui.define(
 					oToolbar.addContent(new sap.m.Button({
 						text: "{i18n>viewGeralGravarComo}"
 					}).attachPress(oTable, function () {
-						self._dialogSalvar(sProperty, that, id);
+						self._dialogSalvar(sProperty, that, id,preselecionado);
 					}, that));
 
 					oToolbar.addContent(new sap.m.Button({

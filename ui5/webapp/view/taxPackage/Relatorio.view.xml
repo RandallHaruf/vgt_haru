@@ -1,6 +1,6 @@
 <mvc:View controllerName="ui5ns.ui5.controller.taxPackage.Relatorio" height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
 	xmlns:layout="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
-	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}" class="sapUiNoContentPadding">
 		<!-- DynamicPage Title -->
 		<f:title>
 			<f:DynamicPageTitle>
@@ -8,11 +8,11 @@
 					<Breadcrumbs visible="{/IsAreaUsuario}">
 						<Link text="Home" press="navToHome" />
 						<!--<Link text="Tax Package" press="navToPage2" />-->
-						<Link text="{i18n>viewGeralRelatorio} Tax Package" enabled="false" />
+						<Link text="{i18n>viewGeralRelatorio} {i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}" enabled="false" />
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
-					<vm:VariantManagement id="myVariantManagement" visible = "false" standardItemText="{i18n>viewGeralRelatorio} Tax Package" save="onSaveView" manage="onManageView" select ="onSelectView"></vm:VariantManagement>
+					<vm:VariantManagement id="myVariantManagement" visible = "false" standardItemText="{i18n>viewGeralRelatorio} {i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}" save="onSaveView" manage="onManageView" select ="onSelectView"></vm:VariantManagement>
 					<HBox justifyContent="Center" alignItems="Center">
 						<Title id= "idNomeReport" text="{/NomeReport}" />		
 						<Button
@@ -63,73 +63,59 @@
 							<fb:FilterItem name="A" label="{i18n>viewRelatorioEmpresa}">
 								<fb:control>
 									<MultiComboBox id="selectEmpresa" selectionFinish="onSelectChange" items="{ path: '/Empresa' ,templateShareable:true}" selectedKeys="{/IdEmpresasSelecionadas}">
-										<core:Item key="{tblEmpresa.id_empresa}" text="{tblEmpresa.nome}"/>
+										<core:Item key="{id_empresa}" text="{nome}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="{i18n>viewGeralAnoCalendario}">
 								<fb:control>
 									<MultiComboBox id="selectAnoCalendario" selectionFinish="onSelectChange" items="{ path: '/DominioAnoCalendario' ,templateShareable:true}" selectedKeys="{/IdDominioAnoCalendarioSelecionadas}">
-										<core:Item key="{tblDominioAnoCalendario.id_dominio_ano_calendario}" text="{tblDominioAnoCalendario.ano_calendario}"/>
+										<core:Item key="{id_dominio_ano_calendario}" text="{ano_calendario}"/>
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="{i18n>viewGeralPeriodo}">
 								<fb:control>
 									<MultiComboBox id="selectPeriodo" selectionFinish="onSelectChange" items="{ path: '/Periodo' ,templateShareable:true}" selectedKeys="{/IdPeriodoSelecionadas}">
-										<core:Item key="{tblPeriodo.numero_ordem}" text="{tblPeriodo.periodo}"/><!--text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>-->
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterItem><!--
-							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
-								<fb:control>
-									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
-										<core:Item key="{tblDominioMoeda.id_dominio_moeda}" text="{tblDominioMoeda.acronimo} - {tblDominioMoeda.nome}"/>
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterItem>-->
-							<fb:FilterItem name="E" label="{i18n>viewGeralFlagSN}">
-								<fb:control>
-									<MultiComboBox id="selectFlagSN" selectionFinish="onSelectChange" items="{ path: '/FlagSN' ,templateShareable:true}" selectedKeys="{/FlagSNSelecionado}">
-										<core:Item key="{tblItemToReport.flag_sim_nao}" text="{tblItemToReport.flag_sim_nao}"/>
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterItem>	
-							<fb:FilterItem name="F" label="{i18n>viewGeralFlagAno}">
-								<fb:control>
-									<MultiComboBox id="selectFlagAno" selectionFinish="onSelectChange" items="{ path: '/FlagAno' ,templateShareable:true}" selectedKeys="{/FlagAnoSelecionado}">
-										<core:Item key="{tblItemToReport.flag_ano}" text="{tblItemToReport.flag_ano}"/>
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterItem>	
-							<fb:FilterItem name="G" label="{i18n>viewGeralQUestion}">
-								<fb:control>
-									<MultiComboBox id="selectPergunta" selectionFinish="onSelectChange" items="{ path: '/Pergunta' ,templateShareable:true}" selectedKeys="{/PerguntaSelecionada}">
-										<core:Item key="{tblItemToReport.pergunta}" text="{tblItemToReport.pergunta}"/>
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterItem>	
-							<fb:FilterItem name="H" label="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?">
-								<fb:control>
-									<MultiComboBox id="selectRespondeuSim" selectionFinish="onSelectChange" items="{ path: '/RespondeuSim' ,templateShareable:true}" selectedKeys="{/RespondeuSimSelecionado}">
-										<core:Item key="{tblRespostaItemToReport.ind_se_aplica}" text="{tblRespostaItemToReport.ind_se_aplica}"/>
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterItem>		
-							<fb:FilterItem name="I" label="{i18n>viewRelatorioAnoFiscal}">
-								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange" items="{ path: '/AnoFiscal' ,templateShareable:true}" selectedKeys="{/AnoFiscalSelecionado}">
-										<core:Item key="{Ano_Fiscal_Filtro}" text="{Ano_Fiscal_Agregado}"/>
+										<core:Item key="{numero_ordem}" text="{periodo}"/><!--text="{tblPeriodo.periodo} - {tblDominioAnoCalendario.ano_calendario}"/>-->
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="J" label="{i18n>viewGeral}" visible="{= !${/IsAreaUsuario}}">
+							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
 								<fb:control>
-									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/Status' ,templateShareable:true}" selectedKeys="{/StatusSelecionado}" >
-										<core:Item key="{tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio}" text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
+										<core:Item key="{id_dominio_moeda}" text="{acronimo} - {nome}"/>
 									</MultiComboBox>
 								</fb:control>
-							</fb:FilterItem>							
+							</fb:FilterItem>
+							<fb:FilterItem name="E" label="{i18n>viewGeral}" visible="{= !${/IsAreaUsuario}}">
+								<fb:control>
+									<MultiComboBox id="selectStatus" selectionFinish="onSelectChange" items="{ path: '/Status' ,templateShareable:true}" selectedKeys="{/StatusSelecionado}" >
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>	
+							<fb:FilterItem name="F" label="{i18n>viewGeralTipo}">
+								<fb:control>
+									<MultiComboBox id="selectTipo" selectionFinish="onSelectChange" items="{ path: '/TipoDiferenca' ,templateShareable:true}" selectedKeys="{/IdTipoDiferencaSelecionadas}">
+										<core:Item key="{tblDiferencaOpcao.id_diferenca_opcao}" text="{tblDiferencaOpcao.nome}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<fb:FilterItem name="G" label="{i18n>viewGeralDiferencas}">
+								<fb:control>
+									<MultiComboBox id="selectDiferencas" selectionFinish="onSelectChange" items="{ path: '/DominioTipoDiferenca' ,templateShareable:true}"	selectedKeys="{/IdDominioTipoDiferencaSelecionadas}">
+										<core:Item key="{tblDominioDiferencaTipo.id_dominio_diferenca_tipo}" text="{tblDominioDiferencaTipo.tipo}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>	
+							<fb:FilterItem name="H" label="Modulo">
+								<fb:control>
+									<MultiComboBox id="selectModulo" selectionFinish="onSelectChange" items="{ path: '/Modulo' ,templateShareable:true}" selectedKeys="{/ModuloSelecionado}" >
+										<core:Item key="{key}" text="{value}"/>
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>								
 						</fb:filterItems>
 					</fb:FilterBar>
 						<HBox justifyContent="End" class="sapUiSmallMarginEnd">
@@ -144,58 +130,450 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<!-- DynamicPage Content -->
-		<f:content>
+		<f:content>		
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
-					<columns>
-						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
-						</Column>
-						<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
-							<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
-						</Column>
-						<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
-							<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
-						</Column>
-						<Column width="{/remtblItemToReport.flag_sim_nao}" hAlign="Center">
-							<Text text="{i18n>viewGeralFlagSN}" textAlign="Center"/>
-						</Column>
-						<Column width="{/remtblItemToReport.flag_ano}" hAlign="Center">
-							<Text text="{i18n>viewGeralFlagAno}" textAlign="Center"/>
-						</Column>
-						<Column width="{/remAno_Fiscal_Agregado}" hAlign="Center">
-							<Text text="{i18n>viewRelatorioAnoFiscal}" textAlign="Center"/>
-						</Column>	
-						<Column width="{/remtblRespostaItemToReport.ind_se_aplica}" hAlign="Center">
-							<Text text="{i18n>viewTPRequisicaoReaberturaResposta} {i18n>viewGeralSim}?" textAlign="Center"/>
-						</Column>						
-						<Column width="{/remtblItemToReport.pergunta}" hAlign="Center">							
-							<Text text="{i18n>viewGeralQUestion}" textAlign="Center"/>
-						</Column>
-						<Column width="{/remtblRespostaItemToReport.resposta}" hAlign="Center">
-							<Text text="{i18n>viewTPRequisicaoReaberturaResposta}" textAlign="Center"/>
-						</Column>	
-						<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
-							<Text text="{i18n>viewGeral}" textAlign="Center"/>
-						</Column>							
-					</columns>
-					<items>
-						<ColumnListItem>
-							<cells>
-								<Text text="{tblEmpresa.nome}"/>
-								<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
-								<Text text="{tblPeriodo.periodo}"/>
-								<Text text="{tblItemToReport.flag_sim_nao}"/>
-								<Text text="{tblItemToReport.flag_ano}"/>
-								<Text text="{Ano_Fiscal_Agregado}"/>	
-								<Text text="{tblRespostaItemToReport.ind_se_aplica}"/>								
-								<Text text="{tblItemToReport.pergunta}"/>
-								<Text text="{tblRespostaItemToReport.resposta}"/>
-								<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>								
-							</cells>
-						</ColumnListItem>
-					</items>
-				</Table>
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreResultadoContabil}" width="auto" class="sapUiResponsiveMargin" visible="{/AccountingResultVisible}">
+					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
+						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageAccountingResult" items="{ path: '/ReportTaxPackageAccountingResult'}" >
+							<columns>
+								<Column width="{/remtblEmpresa.nome}" hAlign="Center">
+									<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+									<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
+									<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
+									<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutárioantesdoimposto}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rc_current_income_tax_current_year}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAtual}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rc_current_income_tax_previous_year}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRenDaAtual} - {i18n>viewEdiçãoTrimestreAnoAnterior}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rc_deferred_income_tax}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreImpostoDeRendaDiferido}" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblTaxReconciliation.rc_non_recoverable_wht}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreNonRecoverableWHT}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rc_statutory_provision_for_income_tax}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreStatutoryProvisionForIncomeTax}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreLucroperdaGAAPestatutáriodepoisdoimposto}" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+									<Text text="{i18n>viewGeral}" textAlign="Center"/>
+								</Column>						
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{tblEmpresa.nome}"/>
+										<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+										<Text text="{tblPeriodo.periodo}"/>
+										<Text text="{tblDominioMoeda.acronimo}"/>
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_statutory_gaap_profit_loss_before_tax',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_current_income_tax_current_year',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_current_income_tax_previous_year',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_deferred_income_tax',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_non_recoverable_wht',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_statutory_provision_for_income_tax',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rc_statutory_gaap_profit_loss_after_tax',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />	
+										<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>									
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</ScrollContainer>						
+				</Panel>				
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewGeralAdicoesEExclusoes}" width="auto" class="sapUiResponsiveMargin" visible="{/TemporaryAndPermanentDiferencesVisible}">
+					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
+						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageTemporaryAndPermanentDiferences" items="{ path: '/ReportTaxPackageTemporaryAndPermanentDiferences'}" >
+							<columns>
+								<Column width="{/remtblEmpresa.nome}" hAlign="Center">
+									<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+									<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
+									<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
+									<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDiferencaOpcao.nome}" hAlign="Center">
+									<Text text="{i18n>viewGeralTipo}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDiferenca.outro}" hAlign="Center">
+									<Text text="{i18n>viewGeralOutro}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblRelTaxReconciliationDiferenca.valor}" hAlign="Center">
+									<Text text="{i18n>viewGeralValue}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioDiferencaTipo.tipo}" hAlign="Center">
+									<Text text="{i18n>viewGeralDiferencas}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+									<Text text="{i18n>viewGeral}" textAlign="Center"/>
+								</Column>							
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{tblEmpresa.nome}"/>
+										<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+										<Text text="{tblPeriodo.periodo}"/>
+										<Text text="{tblDominioMoeda.acronimo}"/>
+										<Text text="{tblDiferencaOpcao.nome}"/>
+										<Text text="{tblDiferenca.outro}"/>
+										<Text text="{ path: 'tblRelTaxReconciliationDiferenca.valor', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 } }"/>
+										<Text text="{tblDominioDiferencaTipo.tipo}"/>
+										<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>										
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>	
+					</ScrollContainer>		
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreResultadoFiscal}" width="auto" class="sapUiResponsiveMargin" visible="{/FiscalResultVisible}">
+					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
+						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageFiscalResult" items="{ path: '/ReportTaxPackageFiscalResult'}" >						
+							<columns>
+								<Column width="{/remtblEmpresa.nome}" hAlign="Center">
+									<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+									<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
+									<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
+									<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits}" hAlign="Center">
+									<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncome}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_taxable_income_deductions}" hAlign="Center">
+									<Text text="{i18n>viewTAXResumoTrimestreColunaTaxableIncomeReductions}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_total_losses_utilized}" hAlign="Center">
+									<Text text="{i18n>viewGeralTotalLossesUtilized}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_taxable_income_loss_after_losses}" hAlign="Center">
+									<Text text="{i18n>viewGeralTaxableIncome}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_income_tax_before_other_taxes_and_credits}" hAlign="Center">
+									<Text text="{i18n>ViewGeralIncomeTaxBeforeOtherTaxesAndcredits}" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblTaxReconciliation.rf_other_taxes}" hAlign="Center">
+									<Text text="{i18n>viewGeralOthertaxes}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_incentivos_fiscais}" hAlign="Center">
+									<Text text="{i18n>viewGeralIncentivosFiscais}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_total_other_taxes_and_tax_credits}" hAlign="Center">
+									<Text text="{i18n>viewGeralTotalOtherTaxesAndTaxCredits}" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblTaxReconciliation.rf_net_local_tax}" hAlign="Center">
+									<Text text="{i18n>viewGeralNetLocalTax}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_wht}" hAlign="Center">
+									<Text text="WHT" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year}" hAlign="Center">
+									<Text text="{i18n>viewGeralOverpaymentFromPriorYearAppliedToCurrentYear}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes}" hAlign="Center">
+									<Text text="{i18n>viewGeralTotalInterim}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.rf_tax_due_overpaid}" hAlign="Center">
+									<Text text="{i18n>viewGeralTaxDueoverpaid}" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+									<Text text="{i18n>viewGeral}" textAlign="Center"/>
+								</Column>							
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{tblEmpresa.nome}"/>
+										<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+										<Text text="{tblPeriodo.periodo}"/>
+										<Text text="{tblDominioMoeda.acronimo}"/>
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_taxable_income_loss_before_losses_and_tax_credits',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_taxable_income_deductions',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_total_losses_utilized',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_taxable_income_loss_after_losses',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_income_tax_before_other_taxes_and_credits',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_other_taxes',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_incentivos_fiscais',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />	
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_total_other_taxes_and_tax_credits',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_net_local_tax',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_wht',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_overpayment_from_prior_year_applied_to_current_year',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_total_interim_taxes_payments_antecipacoes',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.rf_tax_due_overpaid',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />	
+										<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>									
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>	
+					</ScrollContainer>						
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreImpostoRenda}" width="auto" class="sapUiResponsiveMargin" visible="{/IncomeTaxVisible}">
+					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
+						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageIncomeTax" items="{ path: '/ReportTaxPackageIncomeTax'}" >							
+							<columns>
+								<Column width="{/remtblEmpresa.nome}" hAlign="Center">
+									<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioAnoCalendario.ano_calendario}" hAlign="Center">
+									<Text text="{i18n>viewGeralAnoCalendario}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblPeriodo.periodo}" hAlign="Center">
+									<Text text="{i18n>viewGeralPeriodo}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioMoeda.acronimo}" hAlign="Center">
+									<Text text="{i18n>viewGeralMoeda}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_statutory_financials}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthestatutoryfinancials}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.it_income_tax_as_per_the_tax_return}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreIncomeTaxasperthetaxreturn}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.it_jurisdiction_tax_rate_average}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreJurisdictiontaxrateaverage}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.it_statutory_tax_rate_average}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreStaturoryTaxrateaverage}" textAlign="Center"/>
+								</Column>	
+								<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_statutory_financials}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthestatutoryfinancials}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.it_effective_tax_rate_as_per_the_tax_return}" hAlign="Center">
+									<Text text="{i18n>viewEdiçãoTrimestreEffectiveTaxrateasperthetaxreturn}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblTaxReconciliation.it_details_if_tax_returns_income_differs_from_fs}" hAlign="Center">
+									<Text text="{i18n>viewTaxpackageEdiçãoTrimestrePleaseprovidedetailsifTaxReturnsIncomediffersfromFS}" textAlign="Center"/>
+								</Column>
+								<Column width="{/remtblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}" hAlign="Center" visible="{= !${/IsAreaUsuario}}">
+									<Text text="{i18n>viewGeral}" textAlign="Center"/>
+								</Column>						
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{tblEmpresa.nome}"/>
+										<Text text="{tblDominioAnoCalendario.ano_calendario}"/>
+										<Text text="{tblPeriodo.periodo}"/>
+										<Text text="{tblDominioMoeda.acronimo}"/>
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.it_income_tax_as_per_the_statutory_financials',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.it_income_tax_as_per_the_tax_return',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.it_jurisdiction_tax_rate_average',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.it_statutory_tax_rate_average',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.it_effective_tax_rate_as_per_the_statutory_financials',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />
+										<Text
+										text="{
+										  path: 'tblTaxReconciliation.it_effective_tax_rate_as_per_the_tax_return',
+										  type: 'sap.ui.model.type.Float',
+										  formatOptions: {
+							                 maxFractionDigits: 2
+										  }
+										}" />	
+										<Text text="{tblTaxReconciliation.it_details_if_tax_returns_income_differs_from_fs}"/>				
+										<Text text="{tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio}"/>									
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>	
+					</ScrollContainer>						
+				</Panel>
 			</ScrollContainer>
 		</f:content>
 	</f:DynamicPage>

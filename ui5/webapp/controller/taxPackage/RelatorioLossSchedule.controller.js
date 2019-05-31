@@ -134,7 +134,7 @@ sap.ui.define([
 		onDialogOpen: function (oEvent) {
 			var that = this;
 			this.onTemplateSet();
-			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report",oEvent);
+			Utils._dialogReport("Layout", "/TemplateReport","/Excluir",that,"id_template_report","/Preselecionado",oEvent);
 			that.setBusy(that._dialogFiltro, true);
 			NodeAPI.pListarRegistros("TemplateReport", {
 					tela: that.oView.mProperties.viewName,
@@ -375,7 +375,7 @@ sap.ui.define([
 		*/
 		
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
-			Utils.dataExportReport(this,tipo,"viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE","viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE");
+			Utils.dataExportReport(this,tipo,"viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE","viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE","/TabelaDaView");
 			
 		},	
 				

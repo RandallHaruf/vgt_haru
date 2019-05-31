@@ -19,11 +19,11 @@
 									<MenuItem text="{i18n>viewGeralItemsTR}" id="acessoRapidoRelatorioItemsToReport" />
 									<MenuItem text="{i18n>viewTaxPackageVisualiazaçcaoTaxReconciliation}" >
 										<items>
+											<MenuItem text="{i18n>viewGeralTodos}" id="acessoRapidoRelatorioTaxPackage"/>											
 											<MenuItem text="{i18n>viewEdiçãoTrimestreResultadoContabil}" id="acessoRapidoRelatorioAccountingResult" />
 											<MenuItem text="{i18n>viewGeralAdicoesEExclusoes}" id="acessoRapidoRelatorioTemporaryAndPermanentDifferences"/>
 											<MenuItem text="{i18n>viewEdiçãoTrimestreResultadoFiscal}" id="acessoRapidoRelatorioFiscalResult" />											
 											<MenuItem text="{i18n>viewEdiçãoTrimestreImpostoRenda}" id="acessoRapidoRelatorioIncomeTax" />
-											<!--<MenuItem text="Teste" id="acessoRapidoRelatorioTaxPackage"/>-->
 										</items>
 									</MenuItem>
 									<MenuItem text="{i18n>viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE}" id="acessoRapidoRelatorioLossSchedule" />
