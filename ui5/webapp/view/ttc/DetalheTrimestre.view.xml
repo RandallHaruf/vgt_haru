@@ -433,8 +433,8 @@
 									<OverflowToolbar>
 										<content>
 											<Button text="{i18n>viewGeralNovo}" icon="sap-icon://add" type="Emphasized" press="onNovoPagamentoCollected" />
-											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
 											<ToolbarSpacer/>
+											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
 											<HBox>
 												<Input id="linhasExibidasCollected" value="{/numeroLinhasCollected}"></Input>
 												<Button press="onMudarLinhasExibidasCollected" text="{i18n>redefinirLinhas}"></Button>	
