@@ -128,6 +128,15 @@ sap.ui.define([
 			this.getModel().setProperty("/ModuloSelecionado", undefined);
 			this.getModel().setProperty("/TemplateReport", undefined);
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
+			this.getModel().setProperty("/ReportTaxPackageTemporaryAndPermanentDiferences", undefined);
+			this.getModel().setProperty("/ReportTaxPackageIncomeTax", undefined);
+			this.getModel().setProperty("/ReportTaxPackageFiscalResult", undefined);
+			this.getModel().setProperty("/ReportTaxPackageAccountingResult", undefined);	
+			this.byId("PanelAccountingResult").setProperty("expanded",false);			
+			this.byId("PanelTemporaryAndPermanentDiferences").setProperty("expanded",false);			
+			this.byId("PanelFiscalResult").setProperty("expanded",false);			
+			this.byId("PanelIncomeTax").setProperty("expanded",false);						
+
 		},
 
 		onSelectChange: function (oEvent) {

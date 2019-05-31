@@ -109,7 +109,7 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>	
-							<fb:FilterItem name="H" label="Modulo">
+							<fb:FilterItem name="H" label="{i18n>viewRelatorioAba}">
 								<fb:control>
 									<MultiComboBox id="selectModulo" selectionFinish="onSelectChange" items="{ path: '/Modulo' ,templateShareable:true}" selectedKeys="{/ModuloSelecionado}" >
 										<core:Item key="{key}" text="{value}"/>
@@ -132,7 +132,7 @@
 		<!-- DynamicPage Content -->
 		<f:content>		
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Panel expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreResultadoContabil}" width="auto" class="sapUiResponsiveMargin" visible="{/AccountingResultVisible}">
+				<Panel id="PanelAccountingResult" expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreResultadoContabil}" width="auto" class="sapUiResponsiveMargin" visible="{/AccountingResultVisible}">
 					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
 						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageAccountingResult" items="{ path: '/ReportTaxPackageAccountingResult'}" >
 							<columns>
@@ -243,7 +243,7 @@
 						</Table>
 					</ScrollContainer>						
 				</Panel>				
-				<Panel expandable="true" expanded="false" headerText="{i18n>viewGeralAdicoesEExclusoes}" width="auto" class="sapUiResponsiveMargin" visible="{/TemporaryAndPermanentDiferencesVisible}">
+				<Panel id="PanelTemporaryAndPermanentDiferences" expandable="true" expanded="false" headerText="{i18n>viewGeralAdicoesEExclusoes}" width="auto" class="sapUiResponsiveMargin" visible="{/TemporaryAndPermanentDiferencesVisible}">
 					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
 						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageTemporaryAndPermanentDiferences" items="{ path: '/ReportTaxPackageTemporaryAndPermanentDiferences'}" >
 							<columns>
@@ -293,7 +293,7 @@
 						</Table>	
 					</ScrollContainer>		
 				</Panel>
-				<Panel expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreResultadoFiscal}" width="auto" class="sapUiResponsiveMargin" visible="{/FiscalResultVisible}">
+				<Panel id="PanelFiscalResult" expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreResultadoFiscal}" width="auto" class="sapUiResponsiveMargin" visible="{/FiscalResultVisible}">
 					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
 						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageFiscalResult" items="{ path: '/ReportTaxPackageFiscalResult'}" >						
 							<columns>
@@ -470,7 +470,7 @@
 						</Table>	
 					</ScrollContainer>						
 				</Panel>
-				<Panel expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreImpostoRenda}" width="auto" class="sapUiResponsiveMargin" visible="{/IncomeTaxVisible}">
+				<Panel id="PanelIncomeTax" expandable="true" expanded="false" headerText="{i18n>viewEdiçãoTrimestreImpostoRenda}" width="auto" class="sapUiResponsiveMargin" visible="{/IncomeTaxVisible}">
 					<ScrollContainer class="sapUiSmallMarginBottom" horizontal="true" vertical="true" height="400px" >
 						<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackageIncomeTax" items="{ path: '/ReportTaxPackageIncomeTax'}" >							
 							<columns>
