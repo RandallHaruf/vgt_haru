@@ -142,8 +142,20 @@ sap.ui.define([
 		onSelectChange: function (oEvent) {
 			//this.onValidarData(oEvent);
 			//this._atualizarDados();
+			var that = this;
 			var oAba = this.getModel().getProperty("/ModuloSelecionado") ? this.getModel().getProperty("/ModuloSelecionado")[0] !==
 				undefined ? this.getModel().getProperty("/ModuloSelecionado") : null : null;	
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"id_empresa"));
+			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"id_dominio_ano_calendario"));				
+			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"numero_ordem"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"id_dominio_moeda"));				
+			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"value",that.getModel().getProperty("/StatusSelecionado"),"key"));				
+			that.getModel().setProperty("/TipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TipoDiferenca"),"tblDiferencaOpcao.nome",that.getModel().getProperty("/IdTipoDiferencaSelecionadas"),"tblDiferencaOpcao.id_diferenca_opcao"));				
+			that.getModel().setProperty("/DominioTipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoDiferenca"),"tblDominioDiferencaTipo.tipo",that.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas"),"tblDominioDiferencaTipo.id_dominio_diferenca_tipo"));				
+			that.getModel().setProperty("/Modulo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Modulo"),"value",that.getModel().getProperty("/ModuloSelecionado"),"key"));
+			COMMENT*/		
 		},
 
 		onImprimir: function (oEvent) {

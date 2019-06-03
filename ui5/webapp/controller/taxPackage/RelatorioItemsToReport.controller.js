@@ -284,7 +284,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro, "tblEmpresa.nome"));
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			}COMMENT*/
 			if (oDominioAnoCalendario === null) {
 				oWhere[11] = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -302,9 +305,15 @@ sap.ui.define([
 							return Number(Number(x["tblDominioAnoCalendario.ano_calendario"] - y["tblDominioAnoCalendario.ano_calendario"]));
 						});
 						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+						/*COMMENT M_VGT.23
+						that.getModel().setProperty("/DominioAnoCalendario", Utils.orderByArrayParaBoxComSelecao(aRegistro,"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));							
+						COMMENT*/
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			}COMMENT*/
 			if (oPeriodoSelecionadas === null) {
 				oWhere[11] = ["tblPeriodo.id_periodo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -324,7 +333,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Periodo", Utils.orderByArrayParaBox(aRegistro, "tblPeriodo.periodo"));
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
+			}COMMENT*/
 			if (oMoedaSelecionadas === null) {
 				oWhere[11] = ["tblDominioMoeda.acronimo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -341,7 +353,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro, "tblDominioMoeda.acronimo"));
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			}COMMENT*/
 			if (oPerguntaSelecionada === null) {
 				oWhere[11] = ["tblItemToReport.pergunta"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -358,7 +373,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Pergunta", Utils.orderByArrayParaBox(aRegistro, "tblItemToReport.pergunta"));
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Pergunta",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Pergunta"),"tblItemToReport.pergunta",that.getModel().getProperty("/PerguntaSelecionada"),"tblItemToReport.pergunta"));				
+			}COMMENT*/
 			if (oFlagAnoSelecionado === null) {
 				oWhere[11] = ["tblItemToReport.flag_ano"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -372,10 +390,16 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++){
+							aRegistro[i]["tblItemToReport.flag_ano"] = Utils.traduzBooleano(aRegistro[i]["tblItemToReport.flag_ano"], that);							
+						}
 						that.getModel().setProperty("/FlagAno", aRegistro);
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/FlagAno",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FlagAno"),"tblItemToReport.flag_ano",that.getModel().getProperty("/FlagAnoSelecionado"),"tblItemToReport.flag_ano"));				
+			}COMMENT*/
 
 			if (oFlagSNSelecionado === null) {
 				oWhere[11] = ["tblItemToReport.flag_sim_nao"];
@@ -390,10 +414,16 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++){
+							aRegistro[i]["tblItemToReport.flag_sim_nao"] = Utils.traduzBooleano(aRegistro[i]["tblItemToReport.flag_sim_nao"], that);
+						}						
 						that.getModel().setProperty("/FlagSN", aRegistro);
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/FlagSN",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FlagSN"),"tblItemToReport.flag_sim_nao",that.getModel().getProperty("/FlagSNSelecionado"),"tblItemToReport.flag_sim_nao"));				
+			}COMMENT*/
 			if (oRespondeuSimSelecionado === null) {
 				oWhere[11] = ["tblRespostaItemToReport.ind_se_aplica"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -407,10 +437,16 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
+						for (var i = 0, length = aRegistro.length; i < length; i++){
+							aRegistro[i]["tblRespostaItemToReport.ind_se_aplica"] = Utils.traduzBooleano(aRegistro[i]["tblRespostaItemToReport.ind_se_aplica"], that);
+						}						
 						that.getModel().setProperty("/RespondeuSim", aRegistro);
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/RespondeuSim",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/RespondeuSim"),"tblRespostaItemToReport.ind_se_aplica",that.getModel().getProperty("/RespondeuSimSelecionado"),"tblRespostaItemToReport.ind_se_aplica"));				
+			}COMMENT*/
 			if (oAnoFiscalSelecionado === null) {
 				oWhere[11] = ["tblDominioAnoFiscal.ano_fiscal"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -454,7 +490,10 @@ sap.ui.define([
 						that.getModel().setProperty("/AnoFiscal", result);
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/AnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/AnoFiscal"),"Ano_Fiscal_Agregado",that.getModel().getProperty("/AnoFiscalSelecionado"),"Ano_Fiscal_Filtro"));				
+			}COMMENT*/
 			if (oStatusSelecionado === null) {
 				oWhere[11] = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -474,125 +513,12 @@ sap.ui.define([
 						that.getModel().setProperty("/Status", Utils.orderByArrayParaBox(aRegistro, "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"));
 					}
 				});
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
+			}COMMENT*/
 		},
-		/*
-		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
-			var array = this.getModel().getProperty("/TabelaDaView");
-			var coluna = [];
-			for (var k = 0, length = array.length; k < length; k++) {
-				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
-			}	
-			
-			var oExport = new Export({
-			
-				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
-				exportType : new ExportTypeCSV({
-					separatorChar : ";"
-				}),
 
-				// Pass in the model created above
-				models : this.getView().getModel(),
-
-				// binding information for the rows aggregation
-				rows : {
-					path : "/CSV"
-				},
-				columns : coluna
-			});
-			
-			// download exported file
-			oExport.saveFile(
-				Utils.dateNowParaArquivo()
-				+"_"
-				+this.getResourceBundle().getText("viewGeralRelatorio") 
-				+"_" 
-				+ this.getResourceBundle().getText("viewEdiçãoTrimestreImpostoRenda")
-				).catch(function(oError) {
-				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
-			}).then(function() {
-				oExport.destroy();
-			});
-		},*/
-		/*
-		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
-
-			var oExport = new Export({
-
-				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
-				exportType : new ExportTypeCSV({
-					separatorChar : ";"
-				}),
-
-				// Pass in the model created above
-				models : this.getView().getModel(),
-
-				// binding information for the rows aggregation
-				rows : {
-					path : "/ReportTaxPackage"
-				},
-				// column definitions with column name and binding info for the content
-				columns : [{
-					name : this.getResourceBundle().getText("viewRelatorioEmpresa"),
-					template : {
-						content : "{tblEmpresa.nome}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralAnoCalendario"),
-					template : {
-						content : "{tblDominioAnoCalendario.ano_calendario}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralPeriodo"),
-					template : {
-						content : "{tblPeriodo.periodo}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralFlagSN"),
-					template : {
-						content : "{tblItemToReport.flag_sim_nao}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralFlagAno"),
-					template : {
-						content : "{tblItemToReport.flag_ano}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
-					template : {
-						content : "{Ano_Fiscal_Agregado}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewTPRequisicaoReaberturaResposta") + " " + this.getResourceBundle().getText("viewGeralSim")+ "?",
-					template : {
-						content : "{tblRespostaItemToReport.ind_se_aplica}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewGeralQUestion"),
-					template : {
-						content : "{tblItemToReport.pergunta}"
-					}
-				}, {
-					name : this.getResourceBundle().getText("viewTPRequisicaoReaberturaResposta"),
-					template : {
-						content : "{tblRespostaItemToReport.resposta}"
-					}
-				}]
-			});
-			
-			// download exported file
-			oExport.saveFile(
-				Utils.dateNowParaArquivo()
-				+"_"
-				+this.getResourceBundle().getText("viewGeralRelatorio") 
-				+"_" 
-				+ this.getResourceBundle().getText("viewTaxPackageVisualizacaoTrimestreItensParaReportar")
-				).catch(function(oError) {
-				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
-			}).then(function() {
-				oExport.destroy();
-			});
-		},	*/
 		onDataExport: sap.m.Table.prototype.exportData || function (tipo) {
 			Utils.dataExportReport(this, tipo, "viewTaxPackageVisualizacaoTrimestreItensParaReportar",
 				"viewTaxPackageVisualizacaoTrimestreItensParaReportar","/TabelaDaView");

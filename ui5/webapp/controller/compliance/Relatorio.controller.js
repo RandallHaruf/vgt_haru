@@ -436,7 +436,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoAcessoriaTipo.tipo"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioObrigacaoAcessoriaTipo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioObrigacaoAcessoriaTipo"),"tblDominioObrigacaoAcessoriaTipo.tipo",that.getModel().getProperty("/IdDominioObrigacaoAcessoriaTipoSelecionadas"),"tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo"));				
+			}COMMENT*/
 			if(oEmpresa === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblEmpresa.nome"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -453,7 +456,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			}COMMENT*/
 			if(oDominioPais === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioPais.pais"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -473,7 +479,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro,"tblDominioPais.pais"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioPais",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioPais"),"tblDominioPais.pais",that.getModel().getProperty("/IdDominioPaisSelecionadas"),"tblDominioPais.id_dominio_pais"));				
+			}COMMENT*/
 			if(oObrigacaoAcessoria === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblModeloObrigacao.nome_obrigacao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -493,7 +502,10 @@ sap.ui.define([
 						that.getModel().setProperty("/ModeloObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblModeloObrigacao.nome_obrigacao"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/ModeloObrigacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/ModeloObrigacao"),"tblModeloObrigacao.nome_obrigacao",that.getModel().getProperty("/IdObrigacaoAcessoriaSelecionadas"),"tblModeloObrigacao.id_modelo"));				
+			}COMMENT*/
 			if(oDomPeriodicidadeObrigacao === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioPeriodicidadeObrigacao.descricao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -513,7 +525,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DomPeriodicidadeObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioPeriodicidadeObrigacao.descricao"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DomPeriodicidadeObrigacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DomPeriodicidadeObrigacao"),"tblDominioPeriodicidadeObrigacao.descricao",that.getModel().getProperty("/IdDomPeriodicidadeObrigacaoSelecionadas"),"tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao"));				
+			}COMMENT*/
 			if(oDominioAnoFiscal === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioAnoFiscal.ano_fiscal"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -533,7 +548,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioAnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoFiscal"),"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));				
+			}COMMENT*/
 			if(oDominioStatusObrigacao === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioObrigacaoStatus.descricao_obrigacao_status"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -553,7 +571,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioStatusObrigacao", Utils.orderByArrayParaBox(aRegistro,"tblDominioObrigacaoStatus.descricao_obrigacao_status"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioStatusObrigacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioStatusObrigacao"),"tblDominioObrigacaoStatus.descricao_obrigacao_status",that.getModel().getProperty("/IdDominioStatusObrigacaoSelecionadas"),"tblDominioObrigacaoStatus.id_dominio_obrigacao_status"));				
+			}COMMENT*/
 			if(oDataPrazoEntregaInicio === null && oDataPrazoEntregaFim === null ){
 				oWhere[posicaoDoArrayParaDistinct] = ["prazo_de_entrega_calculado"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {
@@ -618,7 +639,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);	
 					}
 				});					
-			}	
+			}	/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			}COMMENT*/
 			
 			if(oDominioMoeda === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblDominioMoeda.nome"];
@@ -636,7 +660,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioMoeda",  Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));	
 					}
 				});					
-			}			
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdDominioMoedaSelecionadas"),"tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda"));				
+			}COMMENT*/			
 			if(oDataConclusaoInicio === null && oDataConclusaoFim === null){
 				oWhere[posicaoDoArrayParaDistinct] = ["tblRespostaObrigacao.data_conclusao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryNewDistinct/ReportObrigacao?full=" + (this.isIFrame() ? "true": "false")+"&moduloAtual=3" /*Modulo 3e4 representa Compliance/Beps*/, {

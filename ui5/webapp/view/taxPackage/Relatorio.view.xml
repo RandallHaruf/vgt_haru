@@ -83,7 +83,7 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="{i18n>viewGeralMoeda}">
 								<fb:control>
-									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' }" selectedKeys="{/IdMoedaSelecionadas}">
+									<MultiComboBox id="selectMoeda" selectionFinish="onSelectChange" items="{ path: '/DominioMoeda' ,templateShareable:true}" selectedKeys="{/IdMoedaSelecionadas}">
 										<core:Item key="{id_dominio_moeda}" text="{acronimo} - {nome}"/>
 									</MultiComboBox>
 								</fb:control>

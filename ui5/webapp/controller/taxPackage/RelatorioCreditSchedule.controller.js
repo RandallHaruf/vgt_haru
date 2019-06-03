@@ -243,7 +243,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			}COMMENT*/
 			if(oDominioAnoCalendario === null){
 				oWhere[7] = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -258,9 +261,15 @@ sap.ui.define([
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
 						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
+						/*COMMENT M_VGT.23
+						that.getModel().setProperty("/DominioAnoCalendario", Utils.orderByArrayParaBoxComSelecao(aRegistro,"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));							
+						COMMENT*/							
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			}COMMENT*/
 			if(oPeriodoSelecionadas === null){
 				oWhere[7] = ["tblPeriodo.id_periodo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -280,7 +289,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
 					}
 				});					
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
+			}COMMENT*/
 			if(oMoedaSelecionadas === null){
 				oWhere[7] = ["tblDominioMoeda.acronimo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -297,7 +309,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
 					}
 				});						
-			}
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			}COMMENT*/
 			if(oFYSelecionadas === null){
 				oWhere[7] = ["tblSchedule.fy"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -314,7 +329,10 @@ sap.ui.define([
 						that.getModel().setProperty("/FY",aRegistro);
 					}
 				});					
-			}	
+			}	/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/FY",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FY"),"tblSchedule.fy",that.getModel().getProperty("/FYSelecionadas"),"tblSchedule.fy"));				
+			}COMMENT*/
 			if (oStatusSelecionado === null) {
 				oWhere[7] = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctCREDITSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -334,7 +352,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Status", Utils.orderByArrayParaBox(aRegistro, "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"));
 					}
 				});
-			}			
+			}/*COMMENT M_VGT.23
+			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+				that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
+			}COMMENT*/				
 		},
 		/*
 		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
