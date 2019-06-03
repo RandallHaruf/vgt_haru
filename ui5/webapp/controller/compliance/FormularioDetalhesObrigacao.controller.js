@@ -13,27 +13,14 @@ sap.ui.define(
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
-
-				//this.setModel(new sap.ui.model.json.JSONModel({}));
 				this.setModel(new sap.ui.model.json.JSONModel({
 					IsIFrame: false,
-					RespostaObrigacao: {
-						/*
-						 {
-        				"id_resposta_obrigacao": 1,
-        				"suporte_contratado": "True",
-        				"suporte_especificacao": "BlaBla",
-        				"suporte_valor": 1000.00,
-        				"fk_id_dominio_moeda.id_dominio_moeda": 1,
-        				"fk_id_rel_modelo_empresa.id_rel_modelo_empresa": "1",
-        				"id_ano_fiscal_calculado": "1",
-        				"fk_id_dominio_ano_calendario.id_dominio_ano_calendario": 1,
-        			},
-						*/
-					}
+					RespostaObrigacao: { }
 				}));
-				this.getRouter().getRoute("complianceFormularioDetalhesObrigacao").attachPatternMatched(this._onRouteMatched, this);
-
+				
+				if (this.isVisualizacaoUsuario()) {
+					this.getRouter().getRoute("complianceFormularioDetalhesObrigacao").attachPatternMatched(this._onRouteMatched, this);
+				}
 			},
 
 			_atualizarDocumentos: function (sProperty, sIdObrigacao, oTable) {
@@ -179,7 +166,12 @@ sap.ui.define(
 			},
 
 			navToPage2: function () {
-				this.onCancelar();
+				if (this.isVisualizacaoUsuario()) {
+					this.onCancelar();
+				}
+				else {
+					this._inceptionParams._targetInceptionParams.router.navToListagem(this._inceptionParams._targetInceptionParams);
+				}
 			},
 
 			onTrocarSuporte: function () {
@@ -504,7 +496,9 @@ sap.ui.define(
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-				const oEventoInicial = oEvent.getParameter("arguments");
+				
+				const oEventoInicial = jQuery.extend(true, {}, oEvent);
+				
 				fetch(Constants.urlBackend + "verifica-auth", {
 							credentials: "include"
 						})
@@ -534,34 +528,39 @@ sap.ui.define(
 							that.getRouter().navTo("login");
 						});
 				
-				var continuarRouteMatched = function (Parametros){
+				var continuarRouteMatched = function (event){
 					that.getModel().setProperty("/IsIFrame", that.isIFrame());
 					that.getModel().setProperty("/IsDeclaracao", false);
 					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 	
-					
 					NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
 						if (response) {
 							that.getModel().setProperty("/DominioMoeda", response);
 						}
-	
 					});
-					var oParametros = that.fromURIComponent(Parametros.parametros);
+					
+					var oParametros;
+					
+					if (that.isVisualizacaoUsuario()) {
+						oParametros = that.fromURIComponent(event.getParameter("arguments").parametros);
+					}
+					else {
+						oParametros = event;
+						that._inceptionParams = event;
+					}
+					
 					var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 					var idAnoCalendario = oParametros.idAnoCalendario;
 					that.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
 					oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
-					/*oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao[
-						"status_obrigacao_calculado"] != 4 ? true : false;*/
 					oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao.ind_iniciada ? true : false;
-					/*this.getModel().setProperty("/JaEstavaIniciada", (oParametros.Obrigacao[
-						"status_obrigacao_calculado"] == 4 ? true : false));*/
 					that.getModel().setProperty("/JaEstavaIniciada", (!oParametros.Obrigacao.ind_iniciada ? true : false));
 					that.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
 					that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 					that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
 					that.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
 					that.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
+					that.getModel().setProperty('/IsAreaUsuario', !that.isIFrame());
 					
 					if (!idObrigacao) {
 						NodeAPI.pCriarRegistro('RespostaObrigacao', {

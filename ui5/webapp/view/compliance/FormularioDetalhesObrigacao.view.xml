@@ -6,7 +6,7 @@
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome"/>
+						<Link text="Home" press="navToHome" visible="{/IsAreaUsuario}" />
 						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="navToPage2"/>
 						<Link text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}" enabled="false"/>
 					</Breadcrumbs>

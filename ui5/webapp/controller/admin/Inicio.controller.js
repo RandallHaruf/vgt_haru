@@ -46,6 +46,8 @@ sap.ui.define(
 				this._carregarViewExterna("detalheTTCXMLView", "ui5ns.ui5.view.ttc.VisualizacaoTrimestre");
 				this._carregarViewExterna("visualizarTaxPackageXMLView", "ui5ns.ui5.view.taxPackage.ListagemEmpresas");
 				this._carregarViewExterna("detalheTaxPackageXMLView", "ui5ns.ui5.view.taxPackage.VisualizacaoTrimestre");
+				this._carregarViewExterna("visualizarComplianceBepsXMLView", "ui5ns.ui5.view.compliance.ListagemObrigacoes");
+				this._carregarViewExterna("detalheComplianceBepsXMLView", "ui5ns.ui5.view.compliance.FormularioDetalhesObrigacao");
 			},
 
 			onItemSelect: function (oEvent) {
@@ -87,6 +89,9 @@ sap.ui.define(
 					case this._isItemInceptionTaxPackage(sItemKey):
 						oParam = this._getParametrosInceptionTaxPackage();
 						break;
+					case this._isItemInceptionComplianceBeps(sItemKey):
+						oParam = this._getParametrosInceptionComplianceBeps();
+						break;
 				}
 				
 				this._navegarParaViewExterna(sItemKey, oParam);	
@@ -100,8 +105,8 @@ sap.ui.define(
 				return sItemKey.toLowerCase().indexOf('taxpackage') > -1;
 			},
 			
-			_isItemInceptionCompliance: function (sItemKey) {
-				return sItemKey.toLowerCase().indexOf('compliance') > -1;
+			_isItemInceptionComplianceBeps: function (sItemKey) {
+				return sItemKey.toLowerCase().indexOf('compliancebeps') > -1;
 			},
 			
 			_getParametrosInceptionTTC: function () {
@@ -137,6 +142,25 @@ sap.ui.define(
 						},
 						navToDetalhes: function (oParam) {
 							that._navegarParaViewExterna('detalheTaxPackage', oParam);
+						}
+					}
+				};
+			},
+			
+			_getParametrosInceptionComplianceBeps: function () {
+				var that = this;
+					
+				return {
+					params: {
+						idAnoCalendarioCorrente: this.getModel().getProperty("/idAnoCalendarioCorrente"),
+						atualizarDados: true
+					},
+					router: {
+						navToListagem: function (oParam) {
+							that._navegarParaViewExterna('visualizarComplianceBeps', oParam);
+						},
+						navToDetalhes: function (oParam) {
+							that._navegarParaViewExterna('detalheComplianceBeps', oParam);
 						}
 					}
 				};
@@ -621,6 +645,9 @@ sap.ui.define(
 						icon: "sap-icon://activities",
 						expanded: false,
 						items: [{
+							title: that.getResourceBundle().getText("viewAdminInicioMenuTTCVisualizarModulo"),
+							key: "visualizarComplianceBeps"
+						},{
 							title: that.getResourceBundle().getText("viewAdminInicioMenuComplianceBepsCadastroTipoObrigacoes"),
 							key: "cadastroObrigacoes",
 							viewPath: "ui5ns.ui5.view.admin.CadastroObrigacoesComplianceBeps"

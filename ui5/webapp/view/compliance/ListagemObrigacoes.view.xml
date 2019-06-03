@@ -1,11 +1,11 @@
-<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified"
-	xmlns:f="sap.f" xmlns="sap.m" class="viewComplianceListagemObrigacoes">
+<mvc:View controllerName="ui5ns.ui5.controller.compliance.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:unified="sap.ui.unified" xmlns:f="sap.f" xmlns="sap.m" class="viewComplianceListagemObrigacoes">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome"/>
+						<Link text="Home" press="navToHome" visible="{/IsAreaUsuario}" />
 						<Link text="{i18n>ViewComplianceListagemObrigacoesL}" enabled="false"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
@@ -13,10 +13,11 @@
 					<Title text="{i18n>viewComplianceListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:expandedContent>
-					<ObjectIdentifier title="{/NomeUsuario}" />
+					<ObjectIdentifier title="{/NomeUsuario}"/>
 				</f:expandedContent>
 				<f:navigationActions>
-					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" visible="{/isUser}" />
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}"
+						text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" visible="{/isUser}"/>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 			</f:DynamicPageTitle>
@@ -39,99 +40,71 @@
 				</items>
 				<content>
 					<VBox class="semContentPadding">
-						<PlanningCalendar
-							id="PC1"
-							class="myCalendar"
-							visible="{/isIFrame}"
-							startDate="{path: '/startDate'}"
-							showRowHeaders="false"
-							rows="{path: '/people'}"
-							appointmentsVisualization="Filled"
-							appointmentSelect="handleAppointmentSelect"
-							showEmptyIntervalHeaders="false"
-							stickyHeader="true"
-							showWeekNumbers="true"
-							appointmentsReducedHeight="false">
-							<toolbarContent>
-								<Title text="Calendario" titleStyle="H4"/>
-							</toolbarContent>
-							<rows>
-								<PlanningCalendarRow
-									icon="{pic}"
-									title="{name}"
-									text="{role}"
-									appointments="{path : 'appointments', templateShareable: 'true'}"
-									intervalHeaders="{path: 'headers', templateShareable: 'true'}">
-									<appointments>
-										<unified:CalendarAppointment
-											startDate="{start}"
-											endDate="{end}"
-											icon="{pic}"
-											title="{title}"
-											tooltip="{title}"
-											text="{info}"
-											color="{color}"
-											type="{type}"
-											tentative="{tentative}">
-										</unified:CalendarAppointment>
-									</appointments>
-									<intervalHeaders>
-										<unified:CalendarAppointment
-											startDate="{start}"
-											endDate="{end}"
-											icon="{pic}"
-											title="{title}"
-											type="{type}">
-										</unified:CalendarAppointment>
-									</intervalHeaders>
-								</PlanningCalendarRow>
-							</rows>
-						</PlanningCalendar>
-					</VBox>	
-				</content>				
+						<!--<PlanningCalendar-->
+						<!--	id="PC1"-->
+						<!--	class="myCalendar"-->
+						<!--	visible="{/isIFrame}"-->
+						<!--	startDate="{path: '/startDate'}"-->
+						<!--	showRowHeaders="false"-->
+						<!--	rows="{path: '/people'}"-->
+						<!--	appointmentsVisualization="Filled"-->
+						<!--	appointmentSelect="handleAppointmentSelect"-->
+						<!--	showEmptyIntervalHeaders="false"-->
+						<!--	stickyHeader="true"-->
+						<!--	showWeekNumbers="true"-->
+						<!--	appointmentsReducedHeight="false">-->
+						<!--	<toolbarContent>-->
+						<!--		<Title text="Calendario" titleStyle="H4"/>-->
+						<!--	</toolbarContent>-->
+						<!--	<rows>-->
+						<!--		<PlanningCalendarRow-->
+						<!--			icon="{pic}"-->
+						<!--			title="{name}"-->
+						<!--			text="{role}"-->
+						<!--			appointments="{path : 'appointments', templateShareable: 'true'}"-->
+						<!--			intervalHeaders="{path: 'headers', templateShareable: 'true'}">-->
+						<!--			<appointments>-->
+						<!--				<unified:CalendarAppointment-->
+						<!--					startDate="{start}"-->
+						<!--					endDate="{end}"-->
+						<!--					icon="{pic}"-->
+						<!--					title="{title}"-->
+						<!--					tooltip="{title}"-->
+						<!--					text="{info}"-->
+						<!--					color="{color}"-->
+						<!--					type="{type}"-->
+						<!--					tentative="{tentative}">-->
+						<!--				</unified:CalendarAppointment>-->
+						<!--			</appointments>-->
+						<!--			<intervalHeaders>-->
+						<!--				<unified:CalendarAppointment-->
+						<!--					startDate="{start}"-->
+						<!--					endDate="{end}"-->
+						<!--					icon="{pic}"-->
+						<!--					title="{title}"-->
+						<!--					type="{type}">-->
+						<!--				</unified:CalendarAppointment>-->
+						<!--			</intervalHeaders>-->
+						<!--		</PlanningCalendarRow>-->
+						<!--	</rows>-->
+						<!--</PlanningCalendar>-->
+					</VBox>
+				</content>
 				<content>
 					<Table id="tabelaObrigacoes" items="{ path: '/Obrigacao', sorter: { path: 'nome', group: true } }" growing="true" enableBusyIndicator="true"
-						growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
+						growingScrollToLoad="true">
 						<headerToolbar>
 							<Toolbar>
-								<!--<Title 
-									id="cabecalhoTabelaObrigacoes" 
-									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}" />-->
-								<Label text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"></Label>
-								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}" id="selectEmpresa" items="{/Empresa}"
-									selectedKey="{/IdEmpresaSelecionado}" change="onTrocarEmpresa">
-									<items>
-										<core:Item text="{nome}" key="{id_empresa}"/>
-										<!--<core:Item text="Empresa A"/>
-										<core:Item text="Empresa B"/>
-										<core:Item text="Empresa C"/>-->
-									</items>
-								</Select>
-								<Label text="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"></Label>
-								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}" id="selectAnoCalendario" items="{/DominioAnoCalendario}"
-									selectedKey="{/AnoCalendarioSelecionado}" change="onTrocarAnoCalendario">
-									<items>
-										<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}"/>
-										<!--<core:Item text="2018"/>
-										<core:Item text="2017"/>
-										<core:Item text="2016"/>-->
-									</items>
-								</Select>
 								<ToolbarSpacer/>
-								<Button text="{i18n>viewComplianceListagemObrigacoesProcurarArquivo}" type="Emphasized" icon="sap-icon://browse-folder" press="onProcurarArquivos" />
-								<Button 
-									id="botaoNovaObrigacao" 
-									icon="sap-icon://add" 
-									press="onNovaObrigacao" 
-									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}"
-									visible="{/isUser}"
-									type="Emphasized"/>
+								<Button icon="sap-icon://filter" press="onFiltrarListagemEmpresas"/>
+								<Button text="{i18n>viewComplianceListagemObrigacoesProcurarArquivo}" type="Emphasized" icon="sap-icon://browse-folder"
+									press="onProcurarArquivos" visible="{/IsAreaUsuario}"/>
+								<Button id="botaoNovaObrigacao" icon="sap-icon://add" press="onNovaObrigacao"
+									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}" visible="{/isUser}" type="Emphasized"/>
 							</Toolbar>
 						</headerToolbar>
 						<columns>
-							<Column hAlign="Center">	
-
-							</Column>
+							<Column hAlign="Center"></Column>
 							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 							</Column>
@@ -160,9 +133,7 @@
 						<items>
 							<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 								<cells>
-									<Text>
-										
-									</Text>
+									<Text></Text>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
 									<Text
 										text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}"/>
@@ -171,7 +142,6 @@
 									<Text text="{ano_fiscal_calculado}"/>
 									<Text text="{pais}"/>
 									<Text text="{descricao}"/>
-									<!--core:Icon src="{viewModel>suporteContratado}"/-->
 									<Text text="{= !!${suporte_contratado} ? ${i18n>viewGeralSim} : ${i18n>viewGeralNao} }"/>
 									<Text text="{descricao_obrigacao_status}"/>
 								</cells>

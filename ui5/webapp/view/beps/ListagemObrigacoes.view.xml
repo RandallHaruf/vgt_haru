@@ -1,5 +1,5 @@
-<mvc:View controllerName="ui5ns.ui5.controller.beps.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified"
-	xmlns:f="sap.f" xmlns="sap.m" class="viewBepsListagemObrigacoes">
+<mvc:View controllerName="ui5ns.ui5.controller.beps.ListagemObrigacoes" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:unified="sap.ui.unified" xmlns:f="sap.f" xmlns="sap.m" class="viewBepsListagemObrigacoes">
 	<f:DynamicPage class="semContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -13,10 +13,11 @@
 					<Title text="{i18n>viewBepsListagemObrigacoesTituloPagina} - {i18n>ViewComplianceListagemObrigacoesL}"/>
 				</f:heading>
 				<f:expandedContent>
-					<ObjectIdentifier title="{/NomeUsuario}" />
+					<ObjectIdentifier title="{/NomeUsuario}"/>
 				</f:expandedContent>
 				<f:navigationActions>
-					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}" text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" visible="{/isUser}"/>
+					<Button icon="sap-icon://manager-insight" tooltip="{i18n>viewComplianceListagemObrigacoesBotaoRequisicaoToolTip}"
+						text="{i18n>viewComplianceListagemObrigacoesBotaoRequisicao}" press="navToListagemRequisicoes" visible="{/isUser}"/>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML"/>
 				</f:navigationActions>
 			</f:DynamicPageTitle>
@@ -42,44 +43,16 @@
 						growingScrollToLoad="true" updateFinished="onTerminouAtualizar">
 						<headerToolbar>
 							<Toolbar>
-								<!--Title 
-									id="cabecalhoTabelaObrigacoes" 
-									text="{i18n>viewComplianceListagemObrigacoesTituloTabelaObrigacoes}"/-->
-								<Label text="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}"></Label>
-								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectEmpresas}" id="selectEmpresa" items="{/Empresa}"
-									selectedKey="{/IdEmpresaSelecionado}" change="onTrocarEmpresa">
-									<items>
-										<core:Item text="{nome}" key="{id_empresa}"/>
-										<!--<core:Item text="Empresa A"/>
-										<core:Item text="Empresa B"/>
-										<core:Item text="Empresa C"/>-->
-									</items>
-								</Select>
-								<Label text="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}"></Label>
-								<Select tooltip="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}" id="selectAnoCalendario" items="{/DominioAnoCalendario}"
-									selectedKey="{/AnoCalendarioSelecionado}" change="onTrocarAnoCalendario">
-									<items>
-										<core:Item text="{ano_calendario}" key="{id_dominio_ano_calendario}"/>
-										<!--<core:Item text="2018"/>
-										<core:Item text="2017"/>
-										<core:Item text="2016"/>-->
-									</items>
-								</Select>
 								<ToolbarSpacer/>
-								<Button text="{i18n>viewComplianceListagemObrigacoesProcurarArquivo}" type="Emphasized" icon="sap-icon://browse-folder" press="onProcurarArquivos" />
-								<Button 
-									id="botaoNovaObrigacao" 
-									icon="sap-icon://add" 
-									press="onNovaObrigacao" 
-									visible="{/isUser}"
-									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}"
-									type="Emphasized"/>
+								<Button icon="sap-icon://filter" press="onFiltrarListagemEmpresas"/>
+								<Button text="{i18n>viewComplianceListagemObrigacoesProcurarArquivo}" type="Emphasized" icon="sap-icon://browse-folder"
+									press="onProcurarArquivos"/>
+								<Button id="botaoNovaObrigacao" icon="sap-icon://add" press="onNovaObrigacao" visible="{/isUser}"
+									text="{i18n>viewComplianceListagemObrigacoesBotaoNovaObrigacao}" type="Emphasized"/>
 							</Toolbar>
 						</headerToolbar>
 						<columns>
-							<Column>
-								
-							</Column>
+							<Column></Column>
 							<Column hAlign="Center">
 								<Text text="{i18n>viewComplianceListagemObrigacoesColunaTipo}"/>
 							</Column>
@@ -108,9 +81,7 @@
 						<items>
 							<ColumnListItem type="Navigation" press="onDetalharObrigacao">
 								<cells>
-									<Text>
-										
-									</Text>
+									<Text></Text>
 									<ObjectIdentifier title="{nome_obrigacao}"/>
 									<Text
 										text="{= ${/Linguagem} === 'EN-US' ? ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(0,4) : null) : ( ${label_prazo_entrega} !== null ? ${label_prazo_entrega}.substring(8,10)+'/'+${label_prazo_entrega}.substring(5,7)+'/'+${label_prazo_entrega}.substring(0,4) : null)}"/>

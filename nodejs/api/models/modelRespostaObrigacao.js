@@ -101,6 +101,7 @@ oModel.pegarQueryRespostaObrigacaoCalculada = function (aIdTipoObrigacao, aIdAno
 			+ 'modeloObrigacao.*, '
 			+ 'empresa.*, '
 			+ 'pais."fk_dominio_pais.id_dominio_pais", '
+			+ 'pais."fk_dominio_pais_regiao.id_dominio_pais_regiao", '
 			+ 'pais."ind_extensao_compliance", '
 			+ 'pais."ind_extensao_beps", '
 			+ 'anoCalendario.*,  '

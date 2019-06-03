@@ -486,7 +486,8 @@ sap.ui.define(
 				this.getRouter().navTo("complianceListagemObrigacoes",{
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : ""
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : "",
+						atualizarDados: true
 					})
 				});
 			},
@@ -495,7 +496,8 @@ sap.ui.define(
 				this.getRouter().navTo("bepsListagemObrigacoes",{
 					parametros: this.toURIComponent({
 						idAnoCalendario: this.getModel().getProperty("/idAnoAtual"),
-						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : ""
+						nomeUsuario: this.getModel().getProperty("/NomeUsuario") ? this.getModel().getProperty("/NomeUsuario") : "",
+						atualizarDados: true
 					})
 				});
 			},

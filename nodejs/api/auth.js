@@ -356,7 +356,7 @@ module.exports = function (app) {
 				}
 				else{
 					if(req.query.moduloAtual){
-						aEmpresa = filtrarEmpresasPorModulo(req.query.moduloAtual, aEmpresa);
+						aEmpresa = filtrarEmpresasPorModulo(req.query.moduloAtual, aEmpresa, sNomeCampoIdEmpresa);
 					}
 					return aEmpresa.filter(function (obj) {
 						return req.session.usuario.empresas.includes(obj[sNomeCampoIdEmpresa]);
@@ -373,45 +373,53 @@ module.exports = function (app) {
 		}
 	};
 };
-function filtrarEmpresasPorModulo(moduloAtual, aEmpresa){
+
+function filtrarEmpresasPorModulo(moduloAtual, aEmpresa, sNomeCampoIdEmpresa) {
+	var aModulo = moduloAtual.toLowerCase().split(',');
+	
+	var sQuery = 
+		'Select * from "VGT.REL_EMPRESA_MODULO" '
+		+ 'where "fk_dominio_modulo.id_dominio_modulo" in ( ',
+		aParam = [];
+	
+	for (let i = 0; i < aModulo.length; i++) {
+		let id;
+		
+		switch (aModulo[i]) {
+			case 'ttc': 
+				id = 1;
+				break;
+			case 'compliance':
+				id = 3;
+				break;
+			case 'taxpackage':
+				id = 2;
+				break;
+			case 'beps':
+				id = 4;
+				break;
+		}
+		
+		if (i !== 0) {
+			sQuery += ' , ';
+		}
+		
+		sQuery += ' ? ';
+		aParam.push(id);
+	}
+	
+	sQuery += ' ) ';
+	
 	var aEmpresaFiltrado = [];
-	moduloAtual.toLowerCase();
-	var aModulos = [];
-	if(moduloAtual.indexOf(",") > -1){
-		aModulos = moduloAtual.split(",");
-	}
-	else{
-		aModulos.push(moduloAtual);
-	}
-	var idFiltro = "";
-	for(let i = 0; i < aModulos.length; i++){
-		idFiltro += idFiltro.length > 0 ? "," + aModulos[i] : aModulos[i];
-	}
-	switch(moduloAtual){
-		case "ttc"://1
-			idFiltro = 1;
-			break;
-		case "compliance"://3
-			idFiltro = 3;
-			break;
-		case "taxpackage"://2
-			idFiltro = 2;
-			break;
-		case "beps"://4
-			idFiltro = 4;
-			break;
-	}
-	var sQuerySelect = 'Select * from "VGT.REL_EMPRESA_MODULO" '
-						+'where "fk_dominio_modulo.id_dominio_modulo" in (?) ';
-	var aParam = [];
-	aParam.push(idFiltro);
-	var aEmpresasModulo = db.executeStatementSync(sQuerySelect, aParam);
-	for(let i = 0; i < aEmpresa.length; i++){
-		for(let j = 0; j < aEmpresasModulo.length; j++){
-			if(aEmpresa[i]["id_empresa"] == aEmpresasModulo[j]["fk_empresa.id_empresa"]){
+	var aEmpresasModulo = db.executeStatementSync(sQuery, aParam);
+	
+	for (let i = 0; i < aEmpresa.length; i++) {
+		for (let j = 0; j < aEmpresasModulo.length; j++) {
+			if (aEmpresa[i][sNomeCampoIdEmpresa] == aEmpresasModulo[j]["fk_empresa.id_empresa"]) {
 				aEmpresaFiltrado.push(aEmpresa[i]);
 			}
 		}
 	}
+	
 	return aEmpresaFiltrado;
 }

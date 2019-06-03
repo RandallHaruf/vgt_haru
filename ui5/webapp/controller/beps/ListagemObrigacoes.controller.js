@@ -8,87 +8,351 @@ sap.ui.define(
 		"ui5ns/ui5/lib/Utils",
 		"ui5ns/ui5/lib/Arquivo",
 		"sap/m/MessageBox",
-		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5//model/Constants",
 		"ui5ns/ui5//model/enums/PerfilUsuario"
 	],
 	function (BaseController, models, Filter, MessageToast, NodeAPI, Utils, Arquivo, MessageBox, Constants, PerfilUsuario) {
+
 		return BaseController.extend("ui5ns.ui5.controller.beps.ListagemObrigacoes", {
 
 			onInit: function (oEvent) {
-				this.setModel(models.createViewModelParaBepsListagemObrigacoes(), "viewModel");
 				this.setModel(new sap.ui.model.json.JSONModel({
 					RepositorioDocumento: [],
 					FiltroEmpresa: [],
 					ValorFiltroEmpresa: [],
-					//FiltroTipoObrigacao: [],
 					FiltroNomeObrigacao: [],
 					ValorFiltroNomeObrigacao: [],
 					ValorFiltroNomeArquivo: "",
-					isUser:false
+					isUser: false,
+					FiltrosTabela: {}
 				}));
+				
 				var hoje = new Date();
 				this.getModel().setProperty("/startDate", new Date(JSON.stringify(hoje.getFullYear()), "0", "1"));
-				this.getRouter().getRoute("bepsListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
+
+				if (this.isVisualizacaoUsuario()) {
+					this.getRouter().getRoute("bepsListagemObrigacoes").attachPatternMatched(this._onRouteMatched, this);
+				}
 			},
 
 			_onRouteMatched: function (oEvent) {
 				var that = this;
-				const oEventoInicial = oEvent.getParameter("arguments");
-				fetch(Constants.urlBackend + "verifica-auth", {
-							credentials: "include"
-						})
-						.then((res) => {
-							res.json()
-								.then((response) => {
-	
-									if (response.success) {
-										if(this.isVisualizacaoUsuario()
-											&& (response.nivelAcesso == PerfilUsuario.USER
-												|| response.nivelAcesso == PerfilUsuario.USER_ADMIN)){
-											that.getModel().setProperty("/isUser", true);
-										}
-										continuarRouteMatched(oEventoInicial);
-									} else {
-										sap.m.MessageToast.show(response.error.msg);
-										that.getRouter().navTo("login");
-									}
-								})
-								.catch((err) => {
-									sap.m.MessageToast.show(err);
-									that.getRouter().navTo("login");
-								});
-						})
-						.catch((err) => {
-							sap.m.MessageToast.show(err);
-							that.getRouter().navTo("login");
-						});
+				var oEventoInicial = jQuery.extend(true, {}, oEvent);
 				
-				var continuarRouteMatched = function (Parametros){
+				this.setBusy(this.getView(), false);
+
+				fetch(Constants.urlBackend + "verifica-auth", {
+						credentials: "include"
+					})
+					.then((res) => {
+						res.json()
+							.then((response) => {
+
+								if (response.success) {
+									if (this.isVisualizacaoUsuario() && (response.nivelAcesso == PerfilUsuario.USER || response.nivelAcesso == PerfilUsuario.USER_ADMIN)) {
+										that.getModel().setProperty("/isUser", true);
+									}
+									continuarRouteMatched(oEventoInicial);
+								} else {
+									sap.m.MessageToast.show(response.error.msg);
+									that.getRouter().navTo("login");
+								}
+							})
+							.catch((err) => {
+								sap.m.MessageToast.show(err);
+								that.getRouter().navTo("login");
+							});
+					})
+					.catch((err) => {
+						sap.m.MessageToast.show(err);
+						that.getRouter().navTo("login");
+					});
+
+				var continuarRouteMatched = function (event) {
+					var anoCalendario;
+					var nomeUsuario = '';
+					var empresa = '';
+					var atualizarDados = true;
+
 					if (that.isIFrame()) {
 						that.mostrarAcessoRapidoInception();
-						that._parametroInception = "full=true";
 						that.getModel().setProperty("/isIFrame", true);
+
+						anoCalendario = event.params.idAnoCalendarioCorrente;
+						atualizarDados = event.params.atualizarDados;
+						
+						event.params.atualizarDados = false;
+						
+						that._inceptionParams = event;
 					} else {
-						that._parametroInception = "full=false";
 						that.getModel().setProperty("/isIFrame", false);
+
+						anoCalendario = that.fromURIComponent(event.getParameter("arguments").parametros).idAnoCalendario;
+						nomeUsuario = that.fromURIComponent(event.getParameter("arguments").parametros).nomeUsuario;
+						empresa = that.fromURIComponent(event.getParameter("arguments").parametros).idEmpresaCalendario;
+						
+						// Verificao apenas para garantir o boolean em caso do parametro não existir,
+						// pois ele apenas é passado ao vir da pagina de selecao de módulo
+						atualizarDados = that.fromURIComponent(event.getParameter("arguments").parametros).atualizarDados;
+						atualizarDados = atualizarDados ? atualizarDados : false;
 					}
-	
-					/*NodeAPI.pListarRegistros("DominioObrigacaoAcessoriaTipo")
-						.then(function (res) {
-							that.getModel().setProperty("/FiltroTipoObrigacao", res);
-						});*/
-	
+
+					that.getModel().setProperty('/IsAreaUsuario', !that.isIFrame());
 					that.getModel().setProperty("/RepositorioDocumento", []);
 					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
-					that.carregarFiltroEmpresa();
-					that.carregarFiltroAnoCalendario();
-					that.getModel().setProperty("/IdEmpresaSelecionado", that.fromURIComponent(Parametros.parametros).idEmpresaCalendario);
-					that.getModel().setProperty("/AnoCalendarioSelecionado", that.fromURIComponent(Parametros.parametros).idAnoCalendario);
-					that.getModel().setProperty("/NomeUsuario", that.fromURIComponent(Parametros.parametros).nomeUsuario);
-					//this._atualizarDados();
-					that._atualizarDadosFiltrado();
-					//this.setBusy(this.byId("tabelaObrigacoes"), false);
+					that.getModel().setProperty("/IdEmpresaSelecionado", empresa);
+					that.getModel().setProperty("/AnoCalendarioSelecionado", anoCalendario);
+					that.getModel().setProperty("/NomeUsuario", nomeUsuario);
+					
+					if (atualizarDados) {
+						that.getModel().setProperty('/FiltrosTabela', {});
+						that.getModel().setProperty('/FiltrosTabela/anoCalendario', anoCalendario);
+					
+						that._montarFiltro();
+						that._atualizarRespostasEContador();
+					}
 				}
+			},
+
+			_montarFiltro: function () {
+				var that = this;
+
+				var config = [{
+					text: that.getResourceBundle().getText('viewGeralAnoCalendario'),
+					key: 'anoCalendario',
+					defaultKey: this.getModel().getProperty("/AnoCalendarioSelecionado"),
+					items: {
+						loadFrom: 'DeepQuery/DominioAnoCalendarioAteCorrente',
+						path: '/EasyFilterAnoCalendario',
+						text: 'ano_calendario',
+						key: 'id_dominio_ano_calendario'
+					}
+				}, {
+					text: that.getResourceBundle().getText('viewPaisRegião'),
+					key: 'regiao',
+					items: {
+						loadFrom: 'DominioPaisRegiao',
+						path: '/EasyFilterRegiao',
+						text: 'regiao',
+						key: 'id_dominio_pais_regiao'
+					}
+				}, {
+					text: that.getResourceBundle().getText('viewRelatorioPais'),
+					key: 'pais',
+					items: {
+						loadFrom: 'DeepQuery/Pais',
+						path: '/EasyFilterPais',
+						text: 'nomePais',
+						key: 'id'
+					}
+				}, {
+					text: that.getResourceBundle().getText('viewGeralEmpresa'),
+					key: 'empresa',
+					items: {
+						loadFrom: 'Empresa?full=' + (this.isVisualizacaoAdmin() ? 'true' : 'false') + '&moduloAtual=' + (this.isVisualizacaoAdmin() ? 'beps,compliance' : 'beps'),
+						path: '/EasyFilterEmpresa',
+						text: 'nome',
+						key: 'id_empresa'
+					}
+				}];
+				
+				if (this.isVisualizacaoAdmin()) {
+					config.push({
+						text: that.getResourceBundle().getText('viewGeralTipo'),
+						key: 'tipoObrigacao',
+						items: {
+							path: '/EasyFilterTipoObrigacao',
+							text: 'tipo',
+							key: 'id'
+						}
+					});
+					
+					this.getModel().setProperty('/EasyFilterTipoObrigacao', [{
+						id: 1,
+						tipo: 'Beps'
+					}, {
+						id: 2,
+						tipo: 'Compliance'
+					}])
+				}
+
+				Utils.criarDialogFiltroManual(config, this, function (params) {
+					console.log(params);
+					that.getModel().setProperty('/FiltrosTabela', params.filterSelection);
+					that._atualizarRespostasEContador();
+				});
+
+				this._loadFrom().then((function (res) {
+					that.getModel().setProperty("/EasyFilterAnoCalendario", res[0].sort(function (a, b) {
+						return b.ano_calendario - a.ano_calendario;
+					}));
+
+					that.getModel().setProperty("/EasyFilterRegiao", Utils.orderByArrayParaBox(res[1].map(obj => {
+						obj.regiao = Utils.traduzPaisRegiao(obj.id_dominio_pais_regiao, that);
+						return obj;
+					}), "regiao"));
+
+					that.getModel().setProperty("/EasyFilterPais", Utils.orderByArrayParaBox(res[2].map(obj => {
+						obj.nomePais = Utils.traduzDominioPais(obj.fkDominioPais, that);
+						return obj;
+					}), "nomePais"));
+					
+					that.getModel().setProperty("/EasyFilterEmpresa", res[3]);
+				}));
+			},
+
+			onFiltrarListagemEmpresas: function () {
+				this._filterDialog.open();
+			},
+
+			_atualizarRespostasEContador: function () {
+				this._atualizarDadosComNovoFiltro(true);
+			},
+			
+			_atualizarRespostas: function () {
+				this._atualizarDadosComNovoFiltro(false);
+			},
+
+			_atualizarDadosComNovoFiltro: function (bAtualizarContador) {
+				var thisController = this;
+
+				thisController.setBusy(thisController.getView(), true);
+
+				var aPromise = [];
+				
+				if (bAtualizarContador) {
+					aPromise.push(thisController._pAtualizarContador());
+				}
+				
+				aPromise.push(thisController._pAtualizarRespostas());
+
+				Promise.all(aPromise)
+					.catch(function (err) {
+						console.log(err);
+						thisController.showError(err);
+					})
+					.finally(function () {
+						thisController.setBusy(thisController.getView(), false);
+					});
+			},
+
+			_pAtualizarContador: function () {
+				var thisController = this;
+
+				return new Promise(function (resolve, reject) {
+					var oFiltro = thisController._getFiltroSemStatus();
+
+					NodeAPI.pListarRegistros('DeepQuery/RespostaObrigacao', oFiltro)
+						.then(function (res) {
+							thisController.getModel().setProperty("/Contadores", thisController._getContagem(res));
+							resolve();
+						})
+						.catch(function (err) {
+							reject(err);
+						});
+				});
+			},
+
+			_pAtualizarRespostas: function () {
+				var thisController = this;
+				
+				thisController.getModel().setProperty("/Obrigacao", []);
+
+				return new Promise(function (resolve, reject) {
+					var oFiltro = thisController._getFiltroSemStatus();
+
+					oFiltro.statusResposta = thisController._getSelecaoStatus();
+
+					NodeAPI.pListarRegistros('DeepQuery/RespostaObrigacao', oFiltro)
+						.then(function (res) {
+							thisController.getModel().setProperty("/Obrigacao", thisController._traduzirRespostas(res));
+							resolve();
+						})
+						.catch(function (err) {
+							reject(err);
+						});
+				});
+			},
+
+			_getContagem: function (respostas) {
+				var Todos = 0,
+					NaoIniciada = 0,
+					Aguardando = 0,
+					EmAtraso = 0,
+					EntregueNoPrazo = 0,
+					EntregueForaPrazo = 0;
+
+				for (var i = 0, length = respostas.length; i < length; i++) {
+					switch (respostas[i]["status_obrigacao_calculado"]) {
+					case 4:
+						NaoIniciada++;
+						break;
+					case 1:
+						Aguardando++;
+						break;
+					case 5:
+						EmAtraso++;
+						break;
+					case 6:
+						EntregueNoPrazo++;
+						break;
+					case 7:
+						EntregueForaPrazo++;
+						break;
+					}
+					Todos++;
+				}
+
+				return {
+					modelTodos: Todos,
+					modelNaoIniciada: NaoIniciada,
+					modelAguardando: Aguardando,
+					modelEmAtraso: EmAtraso,
+					modelEntregueNoPrazo: EntregueNoPrazo,
+					modelEntregueForaPrazo: EntregueForaPrazo
+				};
+			},
+
+			_traduzirRespostas: function (respostas) {
+				var thisController = this,
+					copiaRespostas = respostas.slice();
+
+				for (var i = 0, length = respostas.length; i < length; i++) {
+					var resposta = copiaRespostas[i];
+
+					resposta.label_prazo_entrega = resposta.prazo_entrega_calculado;
+
+					resposta.prazo_entrega_customizado =
+						(resposta.prazo_entrega_customizado !== null) ? resposta.ano_calendario + "-" + resposta.prazo_entrega_customizado.substring(5, 7) +
+						"-" + resposta.prazo_entrega_customizado.substring(8, 10) : null;
+
+					resposta.pais = Utils.traduzDominioPais(resposta["fk_dominio_pais.id_dominio_pais"], thisController);
+					resposta.descricao_obrigacao_status = Utils.traduzStatusObrigacao(resposta.status_obrigacao_calculado, thisController);
+					resposta.descricao = Utils.traduzPeriodo(resposta["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"], thisController);
+				}
+
+				return copiaRespostas;
+			},
+
+			_getFiltroSemStatus: function () {
+				var oFiltro = this.getModel().getProperty('/FiltrosTabela');
+
+				oFiltro.full = (this.isVisualizacaoAdmin() ? 'true' : 'false');
+				oFiltro.moduloAtual = (this.isVisualizacaoAdmin() ? 'beps,compliance' : 'beps');
+
+				if (this.isVisualizacaoUsuario()) {
+					oFiltro.tipoObrigacao = 1; // força tipo beps
+				}
+
+				return oFiltro;
+			},
+
+			_getSelecaoStatus: function () {
+				var status = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
+				if (status == '0') {
+					status = '';
+				}
+				return status;
 			},
 
 			onProcurarArquivos: function (oEvent) {
@@ -127,7 +391,7 @@ sap.ui.define(
 					oVBox.addItem(oToolbar);
 
 					var oTable = new sap.m.Table({
-						id: "tabelaProcurarArquivosBeps",
+						id: "tabelaProcurarArquivos",
 						growing: true
 					});
 
@@ -138,14 +402,6 @@ sap.ui.define(
 					}).setHeader(new sap.m.Text({
 						text: "{i18n>viewComplianceListagemObrigacoesNomeArquivo}"
 					})));
-
-					/*oTable.addColumn(new sap.m.Column({
-						vAlign: "Middle",
-						demandPopin: true,
-						minScreenWidth: "Large"
-					}).setHeader(new sap.m.Text({
-						text: "Tipo"
-					})));*/
 
 					oTable.addColumn(new sap.m.Column({
 						hAlign: "Center",
@@ -164,10 +420,6 @@ sap.ui.define(
 					var oTextNome = new sap.m.Text({
 						text: "{nome_arquivo}"
 					});
-
-					/*var oTextTipo = new sap.m.Text({
-						text: "{tipo}"
-					});*/
 
 					var oTextObrigacao = new sap.m.Text({
 						text: "{nome_obrigacao}"
@@ -190,7 +442,6 @@ sap.ui.define(
 						template: oTemplate,
 						sorter: [
 							new sap.ui.model.Sorter("nome_empresa", false, true),
-							//new sap.ui.model.Sorter("tipo"),
 							new sap.ui.model.Sorter("nome_obrigacao"),
 							new sap.ui.model.Sorter("nome_arquivo")
 						]
@@ -212,7 +463,7 @@ sap.ui.define(
 							}
 						}),
 						afterClose: function () {
-							//dialog.destroy();
+							dialog.destroy();
 							that.getModel().setProperty("/RepositorioDocumento", []);
 							that.getModel().setProperty("/ValorFiltroEmpresa", []);
 							that.getModel().setProperty("/ValorFiltroNomeObrigacao", []);
@@ -242,19 +493,6 @@ sap.ui.define(
 						that._onConfirmarFiltroArquivos(event);
 					});
 
-					/*var oFilterItemTipo = new sap.m.ViewSettingsFilterItem({
-						text: "Tipo",
-						key: "filtroTipo",
-						multiSelect: true
-					});
-					
-					oFilterItemTipo.bindItems({
-						path: "/FiltroTipoObrigacao",
-						template: new sap.m.ViewSettingsItem({ text: "{tipo}", key: "{id_dominio_obrigacao_acessoria_tipo}" })
-					});
-					
-					oFilterDialog.addFilterItem(oFilterItemTipo);*/
-
 					var oFilterItemEmpresa = new sap.m.ViewSettingsFilterItem({
 						text: that.getResourceBundle().getText("viewGeralEmpresa"),
 						key: "filtroEmpresa",
@@ -262,7 +500,7 @@ sap.ui.define(
 					});
 
 					oFilterItemEmpresa.bindItems({
-						path: "/FiltroEmpresa",
+						path: "/EasyFilterEmpresa",
 						template: new sap.m.ViewSettingsItem({
 							text: "{nome}",
 							key: "{id_empresa}"
@@ -297,7 +535,6 @@ sap.ui.define(
 
 			_onConfirmarFiltroArquivos: function (oEvent) {
 				var aFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
-					//aFiltroTipo = [],
 					aFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao");
 
 				// Reseta os valores de filtros anteriores
@@ -311,9 +548,6 @@ sap.ui.define(
 						case "filtroEmpresa":
 							aFiltroEmpresa.push(oEvent.getParameter("filterItems")[i].getKey());
 							break;
-							/*case "filtroTipo":
-								aFiltroTipo.push(oEvent.getParameter("filterItems")[i].getKey());
-								break;*/
 						case "filtroNomeObrigacao":
 							aFiltroNomeObrigacao.push(oEvent.getParameter("filterItems")[i].getKey());
 							break;
@@ -349,33 +583,7 @@ sap.ui.define(
 			},
 
 			onFiltrar: function (oEvent) {
-				if (!this._filtrosRapidos) {
-					var that = this;
-					this._filtrosRapidos = {
-						naoIniciada: [new Filter("status", "EQ", that.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro2"))],
-						emAndamento: [new Filter("status", "EQ", that.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro3"))],
-						emAtraso: [new Filter("status", "EQ", that.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro4"))],
-						entregueNoPrazo: [new Filter("status", "EQ", that.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro5"))],
-						entregueForaPrazo: [new Filter("status", "EQ", that.getResourceBundle().getText("viewComplianceListagemObrigacoesTextoFiltro6"))]
-					};
-				}
-
-				var sKey = oEvent.getParameter("key");
-				var oFilter = this._filtrosRapidos[sKey];
-				var oBinding = this.byId("tabelaObrigacoes").getBinding("items");
-
-				oBinding.filter(oFilter);
-
-				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
-					"/AnoCalendarioSelecionado") : "";
-				var CampoAnoEstaPreenchido = (oAnoCalendario ? "&ListarAteAnoAtualMaisUm=1" : "");
-				this._atualizarDadosFiltrado();
-				/*if (!!CampoAnoEstaPreenchido) {
-					this._atualizarDadosFiltrado();
-				}
-				else{
-					this._atualizarDados();
-				}*/
+				this._atualizarRespostas();
 			},
 
 			navToHome: function () {
@@ -394,35 +602,6 @@ sap.ui.define(
 				});
 			},
 
-			onNavToReport: function () {
-				this.getRouter().navTo("bepsRelatorio");
-			},
-
-			onTerminouAtualizar: function (oEvent) {
-				//MessageToast.show("Atualizar contadores");	
-				//this._atualizarDados();
-				/*var existeEmpresa = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
-					"/AnoCalendarioSelecionado") : "";
-				if () {
-					
-				}*/
-
-			},
-
-			onTrocarAnoCalendario: function (oEvent) {
-				//MessageToast.show("Filtrar tabela por ano calendário: " + oEvent.getSource().getSelectedItem().getText());	
-				this._atualizarDadosFiltrado();
-			},
-
-			onTrocarEmpresa: function (oEvent) {
-				//MessageToast.show("Filtrar tabela por empresas: " + oEvent.getSource().getSelectedItem().getText());
-				this._atualizarDadosFiltrado();
-			},
-
-			onBuscarDocumentos: function (oEvent) {
-				this.getRouter().navTo("bepsRepositorioDocumentos");
-			},
-
 			onNovaObrigacao: function (oEvent) {
 				var oParametros = {
 					empresa: this.getModel().getProperty("/IdEmpresaSelecionado"),
@@ -435,46 +614,27 @@ sap.ui.define(
 				});
 			},
 
-			//CODIGO DO CALENDARIO START--------------------
-			//----------------------------------------------
-			handleAppointmentSelect: function (oEvent) {
-				var oAppointment = oEvent.getParameter("appointment"),
-					sSelected;
-				if (oAppointment) {
-					/*sSelected = oAppointment.getSelected() ? "selected" : "deselected";
-					MessageBox.show("'" + oAppointment.getTitle() + "' " + sSelected + ". \n Selected appointments: " + this.byId("PC1").getSelectedAppointments().length);*/
-					var split = oEvent.mParameters.appointment.sId.split("-");
-					var oParametros = {
-						Obrigacao: oEvent.getSource().mBindingInfos.rows.binding.oList[0].appointments[split[split.length - 1]].codigo,
-						idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado")
-					};
-					this.getRouter().navTo("bepsFormularioDetalhesObrigacao", {
-						parametros: this.toURIComponent(oParametros)
-					});
-				} else {
-					var aAppointments = oEvent.getParameter("appointments");
-					var sValue = aAppointments.length + " Appointments selected";
-					MessageBox.show(sValue);
-				}
-			},
-			//----------------------------------------------
-			//CODIGO DO CALENDARIO END--------------------
-
 			onDetalharObrigacao: function (oEvent) {
-				this.setBusy(this.byId("tabelaObrigacoes"), true);
+				var thisController = this;
+				
+				thisController.setBusy(thisController.getView(), true);
+				
 				var oParametros = {
 					Obrigacao: this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()),
 					idAnoCalendario: this.getModel().getProperty("/AnoCalendarioSelecionado"),
 					nomeUsuario: this.getModel().getProperty("/NomeUsuario")
 				};
-
-				this.getRouter().navTo("bepsFormularioDetalhesObrigacao", {
-					parametros: this.toURIComponent(oParametros)
-				});
-			},
-
-			onNavBack: function () {
-				this.getRouter().navTo("selecaoModulo");
+				
+				if (this.isVisualizacaoUsuario()) {
+					this.getRouter().navTo("bepsFormularioDetalhesObrigacao", {
+						parametros: this.toURIComponent(oParametros)
+					});
+				}
+				else {
+					oParametros._targetInceptionParams = this._inceptionParams;
+					
+					this._inceptionParams.router.navToDetalhes(oParametros);
+				}
 			},
 
 			_carregarFiltroNomeObrigacao: function () {
@@ -496,259 +656,20 @@ sap.ui.define(
 				this.getModel().setProperty("/FiltroNomeObrigacao", distinctResult.objects);
 			},
 
-			carregarFiltroEmpresa: function () {
-				var that = this;
-				NodeAPI.listarRegistros("Empresa?" + this._parametroInception + "&moduloAtual=beps", function (response) {
-					response = Utils.orderByArrayParaBox(response, "nome");
-					that.getModel().setProperty("/FiltroEmpresa", response.concat());
-					response.unshift({
-						id: null,
-						nome: that.getResourceBundle().getText("viewGeralTodos")
-					});
-					that.getModel().setProperty("/Empresa", response);
-				});
-			},
-
-			carregarFiltroAnoCalendario: function () {
-				var that = this;
-				NodeAPI.listarRegistros("DeepQuery/DominioAnoCalendarioAteCorrente", function (response) {
-					response.unshift({
-						id: null,
-						ano_calendario: that.getResourceBundle().getText("viewGeralTodos")
-					});
-					that.getModel().setProperty("/DominioAnoCalendario", response);
-				});
-			},
-
-			_atualizarDados: function () {
-				var that = this;
-
-				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado") ? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
-				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
-					"/AnoCalendarioSelecionado") : "";
-				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
-				if (oStatus == '0') {
-					oStatus = '';
-				}
-
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
-					"]&" + this._parametroInception +
-					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true&moduloAtual=beps",
-					function (response) { // 1 BEPS
-						if (response) {
-							var Todos = 0,
-								NaoIniciada = 0,
-								Aguardando = 0,
-								EmAtraso = 0,
-								EntregueNoPrazo = 0,
-								EntregueForaPrazo = 0;
-							for (var i = 0, length = response.length; i < length; i++) {
-								switch (response[i]["status_obrigacao_calculado"]) {
-								case 4:
-									NaoIniciada++;
-									break;
-								case 1:
-									Aguardando++;
-									break;
-								case 5:
-									EmAtraso++;
-									break;
-								case 6:
-									EntregueNoPrazo++;
-									break;
-								case 7:
-									EntregueForaPrazo++;
-									break;
-								}
-								Todos++;
-							}
-							that.getModel().setProperty("/Contadores", {
-								modelTodos: Todos,
-								modelNaoIniciada: NaoIniciada,
-								modelAguardando: Aguardando,
-								modelEmAtraso: EmAtraso,
-								modelEntregueNoPrazo: EntregueNoPrazo,
-								modelEntregueForaPrazo: EntregueForaPrazo
-							});
-							//that.getModel().setProperty("/Obrigacao", response);
-
-						}
-					});
-
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
-					"]&" + this._parametroInception +
-					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarAteAnoAtual=true&moduloAtual=beps",
-					function (response) { // 1 BEPS
-						if (response) {
-							for (var i = 0, length = response.length; i < length; i++) {
-								/*response[i]["label_prazo_entrega"] = 
-									(response[i]["prazo_entrega_customizado"] !== null) 
-									? response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
-									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);*/
-								response[i]["label_prazo_entrega"] = response[i]["prazo_entrega_calculado"];
-
-								response[i]["prazo_entrega_customizado"] =
-									(response[i]["prazo_entrega_customizado"] !== null) ? response[i]["ano_calendario"] + "-" + response[i][
-										"prazo_entrega_customizado"
-									].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) : null;
-							}
-							that.getModel().setProperty("/Obrigacao", response);
-
-						}
-					});
-			},
-
-			_atualizarDadosFiltrado: function () {
-				var that = this;
-
-				var oEmpresa = this.getModel().getProperty("/IdEmpresaSelecionado") ? this.getModel().getProperty("/IdEmpresaSelecionado") : "";
-				var oAnoCalendario = this.getModel().getProperty("/AnoCalendarioSelecionado") ? this.getModel().getProperty(
-					"/AnoCalendarioSelecionado") : "";
-				var oStatus = this.getView().byId('iconTabBarObrigacoes').getSelectedKey();
-				var campoAnoEstaVazio = (!oAnoCalendario ? "&ListarAteAnoAtualMaisUm=1" : "");
-				if (oStatus == '0') {
-					oStatus = '';
-				};
-
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
-					"]&" + this._parametroInception +
-					"&statusResposta=&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1&moduloAtual=beps" + campoAnoEstaVazio,
-					function (response) { // 1 Beps
-						if (response) {
-							var Todos = 0,
-								NaoIniciada = 0,
-								Aguardando = 0,
-								EmAtraso = 0,
-								EntregueNoPrazo = 0,
-								EntregueForaPrazo = 0;
-							for (var i = 0, length = response.length; i < length; i++) {
-								switch (response[i]["status_obrigacao_calculado"]) {
-								case 4:
-									NaoIniciada++;
-									break;
-								case 1:
-									Aguardando++;
-									break;
-								case 5:
-									EmAtraso++;
-									break;
-								case 6:
-									EntregueNoPrazo++;
-									break;
-								case 7:
-									EntregueForaPrazo++;
-									break;
-								}
-								Todos++;
-							}
-							that.getModel().setProperty("/Contadores", {
-								modelTodos: Todos,
-								modelNaoIniciada: NaoIniciada,
-								modelAguardando: Aguardando,
-								modelEmAtraso: EmAtraso,
-								modelEntregueNoPrazo: EntregueNoPrazo,
-								modelEntregueForaPrazo: EntregueForaPrazo
-							});
-							//that.getModel().setProperty("/Obrigacao", response);
-
-						}
-					});
-
-				this.setBusy(this.byId("tabelaObrigacoes"), true);
-
-				NodeAPI.listarRegistros("DeepQuery/RespostaObrigacao?tipoObrigacao=[1]&empresa=[" + oEmpresa + "]&anoCalendario=[" + oAnoCalendario +
-					"]&" + this._parametroInception +
-					"&statusResposta=[" + oStatus + "]&statusModelo=2&IndAtivoRel=true&ListarSomenteEmVigencia=1&moduloAtual=beps" + campoAnoEstaVazio,
-					function (response) { // 1 BEPS
-						if (response) {
-							for (var i = 0, length = response.length; i < length; i++) {
-								/*response[i]["label_prazo_entrega"] = 
-									(response[i]["prazo_entrega_customizado"] !== null) 
-									? response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega_customizado"].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) 
-									: response[i]["ano_calendario"] + "-" + response[i]["prazo_entrega"].substring(5, 7) + '-' + response[i]["prazo_entrega"].substring(8, 10);*/
-								response[i]["label_prazo_entrega"] = response[i]["prazo_entrega_calculado"];
-
-								response[i]["prazo_entrega_customizado"] =
-									(response[i]["prazo_entrega_customizado"] !== null) ? response[i]["ano_calendario"] + "-" + response[i][
-										"prazo_entrega_customizado"
-									].substring(5, 7) + "-" + response[i]["prazo_entrega_customizado"].substring(8, 10) : null;
-
-								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"], that);
-								response[i]["descricao_obrigacao_status"] = Utils.traduzStatusObrigacao(response[i]["status_obrigacao_calculado"], that);
-								response[i]["descricao"] = Utils.traduzPeriodo(response[i]["fk_id_dominio_periodicidade.id_periodicidade_obrigacao"], that);
-							}
-							that.getModel().setProperty("/Obrigacao", response);
-							//CODIGO DO CALENDARIO START--------------------
-							//----------------------------------------------
-							var aRegistro = that.getModel().getProperty("/Obrigacao");
-							var people = [];
-							var appointments = [];
-							var headers = [];
-							var cor;
-							for (var i = 0, length = aRegistro.length; i < length; i++) {
-								cor = "";
-								switch (aRegistro[i]["status_obrigacao_calculado"]) {
-								case 1:
-									cor = "rgb(94, 105, 110)";
-									break;
-								case 4:
-									cor = "rgb(66, 124, 172)";
-									break;
-								case 5:
-									cor = "rgb(187, 0, 0)";
-									break;
-								case 6:
-									cor = "rgb(43, 124, 43)";
-									break;
-								case 7:
-									cor = "rgb(231, 140, 7)";
-									break;
-								}
-								if (cor) {
-									appointments.push({
-										codigo: aRegistro[i],
-										start: Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]),
-										end: new Date(Utils.bancoParaJsDate(aRegistro[i]["prazo_entrega_calculado"]).setHours(23, 59, 59)),
-										title: aRegistro[i]["nome"] + "\n" + aRegistro[i]["nome_obrigacao"],
-										type: "Type02",
-										color: cor,
-										tentative: false
-									});
-								}
-
-							}
-							people.push({
-								pic: "sap-icon://add",
-								name: "John Miller",
-								role: "team member",
-								appointments: appointments
-							});
-							that.getModel().setProperty("/people", people);
-							//----------------------------------------------
-							//CODIGO DO CALENDARIO END -----------------------
-
-						}
-						
-						that.setBusy(that.byId("tabelaObrigacoes"), false);
-					});
-			},
-
 			_listarArquivos: function () {
 				var that = this,
 					aValorFiltroEmpresa = this.getModel().getProperty("/ValorFiltroEmpresa"),
 					aValorFiltroNomeObrigacao = this.getModel().getProperty("/ValorFiltroNomeObrigacao"),
 					sValorFiltroNomeArquivo = this.getModel().getProperty("/ValorFiltroNomeArquivo");
 
-				this.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivosBeps"), true);
+				this.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivos"), true);
 
 				var oQueryString = {};
 
 				if (aValorFiltroEmpresa && aValorFiltroEmpresa.length) {
 					oQueryString.empresa = JSON.stringify(aValorFiltroEmpresa);
 				}
-
-				//if (aTipo && aTipo.length) oQueryString.tipo = JSON.stringify(aTipo);
-
+				
 				if (aValorFiltroNomeObrigacao && aValorFiltroNomeObrigacao.length) {
 					oQueryString.nomeObrigacao = JSON.stringify(aValorFiltroNomeObrigacao);
 				}
@@ -757,7 +678,7 @@ sap.ui.define(
 					oQueryString.nomeArquivo = sValorFiltroNomeArquivo;
 				}
 
-				// Fixa a pesquisa por documentos relacionados a obrigações do tipo COMPLIANCE
+				// Fixa a pesquisa por documentos relacionados a obrigações do tipo BEPS
 				oQueryString.tipo = JSON.stringify([1]);
 				oQueryString.full = this.isIFrame() ? true : false;
 
@@ -768,11 +689,9 @@ sap.ui.define(
 						if (!sValorFiltroNomeArquivo && !aValorFiltroEmpresa.length && !aValorFiltroNomeObrigacao.length) {
 							that._carregarFiltroNomeObrigacao();
 						}
-						that.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivosBeps"), false);
+						that.setBusy(sap.ui.getCore().byId("tabelaProcurarArquivos"), false);
 					});
-			},
-
-			_parametroInception: "full=true"
+			}
 		});
 	}
 );
