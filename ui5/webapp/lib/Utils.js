@@ -237,7 +237,33 @@ sap.ui.define(
 				});
 				return array;
 			},
-
+			orderByArrayParaBoxComSelecao: function (array, stringOrderBy, vetorSelecionado,colunaIdDoVetor) {
+				if(array != null || array != undefined){
+					for (var i = 0, length = array.length; i < length; i++) {
+						array[i].selected = false;
+						if(vetorSelecionado != null || vetorSelecionado != undefined){
+							for (var k = 0, length2 = vetorSelecionado.length; k < length2; k++) {
+								if(array[i][colunaIdDoVetor] == vetorSelecionado[k]){
+									array[i].selected = true;
+									break;
+								}
+							}							
+						}
+					}				
+					
+					array.sort(function (x, y) {
+						if (x[stringOrderBy]) {
+							return y[stringOrderBy] ? x[stringOrderBy].localeCompare(y[stringOrderBy]) : 1;
+						} else if (y[stringOrderBy]) {
+							return x[stringOrderBy] ? y[stringOrderBy].localeCompare(x[stringOrderBy]) : -1;
+						}
+					});
+					array.sort(function(x,y){
+						return y["selected"] - x["selected"];
+					});					
+				}
+				return array;
+			},
 			displayFormat: function (that) {
 				var lingua = sap.ui.getCore().getConfiguration().getLanguage();
 				var formatFull = "";
