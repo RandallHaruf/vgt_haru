@@ -1456,20 +1456,55 @@ sap.ui.define(
 				});
 			},
 			
-			onMudarLinhasExibidasBorne: function(oEvent){
-				var numeroLinhasBorne = this.getModel().getProperty("/numeroLinhasBorne");
-				var isNum = /^\d+$/.test(numeroLinhasBorne);
-				if(isNum){
-					this.byId("tableBorne").setVisibleRowCount(Number(numeroLinhasBorne));
+			onMudarLinhasExibidasBorne: function(oEvent, e) {
+				var that = this,
+						numeroLinhasBorne = this.getModel().getProperty("/numeroLinhasBorne"),
+						isNum = /^\d+$/.test(numeroLinhasBorne);
+				if (isNum){
+					if (numeroLinhasBorne > 50) {
+						 that._confirmarLinhas();
+						 return false;
+					}
+					else{
+						this.byId("tableBorne").setVisibleRowCount(Number(numeroLinhasBorne));
+					}
 				}
 			},
 			
-			onMudarLinhasExibidasCollected: function(oEvent){
-				var numeroLinhasCollected = this.getModel().getProperty("/numeroLinhasCollected");
-				var isNum = /^\d+$/.test(numeroLinhasCollected);
-				if(isNum){
-					this.byId("tableCollected").setVisibleRowCount(Number(numeroLinhasCollected));
+			onMudarLinhasExibidasCollected: function(oEvent, e){
+				var that = this,
+						numeroLinhasCollected = this.getModel().getProperty("/numeroLinhasCollected"),
+						isNum = /^\d+$/.test(numeroLinhasCollected);
+				if (isNum){
+					if (numeroLinhasCollected > 50) {
+						 that._confirmarLinhas();
+						 return false;
+					}
+					else{
+						this.byId("tableCollected").setVisibleRowCount(Number(numeroLinhasCollected));
+					}
 				}
+			},
+			
+			_confirmarLinhas: function (onConfirm) {
+				var dialog = new sap.m.Dialog({
+					title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralAviso"),
+					type: "Message",
+					content: new sap.m.Text({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralValor")
+					}),
+					endButton: new sap.m.Button({
+						text: this.getView().getModel("i18n").getResourceBundle().getText("Ok"),
+						press: function () {
+							dialog.close();
+						}
+					}),
+					afterClose: function () {
+						dialog.destroy();
+					}
+				});
+
+				dialog.open();
 			},
 
 			_carregarPagamentos: function () {

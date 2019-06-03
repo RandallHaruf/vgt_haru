@@ -80,7 +80,7 @@
 											<ToolbarSpacer/>
 											<Button icon="sap-icon://filter" press="onFiltrarBorne" />
 											<HBox>
-												<Input id="linhasExibidasBorne" value="{/numeroLinhasBorne}"></Input>
+												<Input type="Number" id="linhasExibidasBorne" value="{/numeroLinhasBorne}"></Input>
 												<Button press="onMudarLinhasExibidasBorne" text="{i18n>redefinirLinhas}"></Button>	
 											</HBox>
 										</content>
@@ -309,7 +309,7 @@
 											<ToolbarSpacer/>
 											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
 											<HBox>
-												<Input id="linhasExibidasCollected" value="{/numeroLinhasCollected}"></Input>
+												<Input type="Number" id="linhasExibidasCollected" value="{/numeroLinhasCollected}" />
 												<Button press="onMudarLinhasExibidasCollected" text="{i18n>redefinirLinhas}"></Button>	
 											</HBox>
 										</content>
