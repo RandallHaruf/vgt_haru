@@ -238,6 +238,10 @@ sap.ui.define(
 				return array;
 			},
 			orderByArrayParaBoxComSelecao: function (array, stringOrderBy, vetorSelecionado,colunaIdDoVetor) {
+				//array = vetor com chave e valor para ser traduzido
+				//stringOrderBy = nome do atributo para order by no array descrito acima
+				//vetorSelecionado = vetor com id's selecionados numa multicombobox referente ao array
+				//colunaIdDoVetor = nome do atributo de id do array
 				if(array != null || array != undefined){
 					for (var i = 0, length = array.length; i < length; i++) {
 						array[i].selected = false;
@@ -250,14 +254,25 @@ sap.ui.define(
 							}							
 						}
 					}				
-					
-					array.sort(function (x, y) {
-						if (x[stringOrderBy]) {
-							return y[stringOrderBy] ? x[stringOrderBy].localeCompare(y[stringOrderBy]) : 1;
-						} else if (y[stringOrderBy]) {
-							return x[stringOrderBy] ? y[stringOrderBy].localeCompare(x[stringOrderBy]) : -1;
-						}
-					});
+					if(isNaN(array[0][stringOrderBy])){
+						array.sort(function (x, y) {
+							if (x[stringOrderBy]) {
+								return y[stringOrderBy] ? x[stringOrderBy].localeCompare(y[stringOrderBy]) : 1;
+							} else if (y[stringOrderBy]) {
+								return x[stringOrderBy] ? y[stringOrderBy].localeCompare(x[stringOrderBy]) : -1;
+							}
+						});						
+					}else{
+						array.sort(function(x,y){
+							if(y[stringOrderBy] != null){
+								return y[stringOrderBy] - x[stringOrderBy];
+							}else{
+								return 1;
+							}
+							
+						});							
+					}
+
 					array.sort(function(x,y){
 						return y["selected"] - x["selected"];
 					});					
