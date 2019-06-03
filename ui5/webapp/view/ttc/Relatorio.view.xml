@@ -119,23 +119,33 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="H" label="{i18n>viewRelatorioAnoFiscal}">
 								<fb:control>
-									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal', sorter: {path: 'tblDominioAnoFiscal.ano_fiscal', descending: true}, templateShareable:true }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
+									<!--DESCOMENTAR A LINHA ABAIXO E COMENTAR A ABAIXO DELA PARA O ITEM M_VGT.23-->
+									<!--<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal' , templateShareable:true }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >									-->
+									<MultiComboBox id="selectAnoFiscal" selectionFinish="onSelectChange"  items="{ path: '/DominioAnoFiscal' , sorter: {path: 'tblDominioAnoFiscal.ano_fiscal', descending: true}, templateShareable:true }" selectedKeys="{/IdDominioAnoFiscalSelecionadas}" >
 										<core:Item key="{tblDominioAnoFiscal.id_dominio_ano_fiscal}" text="{tblDominioAnoFiscal.ano_fiscal}"/>																				
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamento}">
+							<fb:FilterItem name="I" label="{i18n>ViewRelatorioDataDePagamento} {i18n>viewGeralInicial}">
 								<fb:control>
-									<DateRangeSelection	
-									id="DataPagamento" 
-									dateValue="{/DataPagamentoInicio}"	
-									secondDateValue="{/DataPagamentoFim}" 
-									displayFormat="{/displayFormatFull}" 
-									placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" 
-									delimiter="{i18n>viewGeralAte}" 
-									change="onSelectChange" 
-									minDate="{/DataPagamentoMin}" 
-									maxDate="{/DataPagamentoMax}"/>
+									<DatePicker id="DataPagamentoInicio" placeholder="{/displayFormatFull}" displayFormat="{/displayFormatFull}"
+										valueFormat="yyyy-MM-dd" value="{/DataPagamentoInicio}"  change="onSelectChange" minDate="{/DataPagamentoMin}" maxDate="{/DataPagamentoMax}"/>									
+									<!--<DateRangeSelection	-->
+									<!--id="DataPagamento" -->
+									<!--dateValue="{/DataPagamentoInicio}"	-->
+									<!--secondDateValue="{/DataPagamentoFim}" -->
+									<!--displayFormat="{/displayFormatFull}" -->
+									<!--placeholder="{/displayFormatFull} {i18n>viewGeralAte} {/displayFormatFull}" -->
+									<!--delimiter="{i18n>viewGeralAte}" -->
+									<!--change="onSelectChange" -->
+									<!--minDate="{/DataPagamentoMin}" -->
+									<!--maxDate="{/DataPagamentoMax}"/>-->
+								</fb:control>
+							</fb:FilterItem>		
+							<fb:FilterItem name="N" label="{i18n>ViewRelatorioDataDePagamento} {i18n>viewGeralFinal}">
+								<fb:control>
+									<DatePicker id="DataPagamentoFim" placeholder="{/displayFormatFull}" displayFormat="{/displayFormatFull}"
+										valueFormat="yyyy-MM-dd" value="{/DataPagamentoFim}"  change="onSelectChange" minDate="{/DataPagamentoMin}" maxDate="{/DataPagamentoMax}" />			
 								</fb:control>
 							</fb:FilterItem>								
 							<fb:FilterItem name="K" label="{i18n>ViewRelatorioCurrency}">
@@ -152,6 +162,13 @@
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="M" label="{i18n>viewGeralEnviadoTTC}">
+								<fb:control>
+									<MultiComboBox id="selectEnviado" selectionFinish="onSelectChange"  items="{ path: '/Enviado' ,templateShareable:true }" selectedKeys="{/IdEnviadoSelecionadas}" >
+										<core:Item key="{key}" text="{value}"/>																				
+									</MultiComboBox>
+								</fb:control>
+							</fb:FilterItem>							
 						</fb:filterItems>
 					<!--<Label text="Number" labelFor="inputNumber"/>-->
 				
@@ -247,6 +264,12 @@
 						<Column width="10rem" hAlign="Center">
 							<Text text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center"/>
 						</Column>
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewGeralEnviadoTTC}" textAlign="Center"/>
+						</Column>		
+						<Column width="10rem" hAlign="Center">
+							<Text text="{i18n>viewCambioData}" textAlign="Center"/>
+						</Column>						
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -276,6 +299,8 @@
 								<Text text="{tblPagamento.entidade_beneficiaria}"/>	
 								<Text text="{tblPagamento.descricao}"/>	
 								<Text text="{tblPagamento.projeto}"/>
+								<Text text="{tblRelEmpresaPeriodo.ind_enviado}"/>		
+								<Text text="{tblRelEmpresaPeriodo.data_enviado}"/>									
 							</cells>
 						</ColumnListItem>
 					</items>

@@ -106,6 +106,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", undefined);
 			this.getModel().setProperty("/DataPagamentoInicio", undefined);
 			this.getModel().setProperty("/DataPagamentoFim", undefined);
+			this.getModel().setProperty("/IdEnviadoSelecionadas", undefined);
 			this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportTTC", undefined);
 		},
@@ -128,10 +129,18 @@ sap.ui.define([
 		},		
 
 		onExit: function () {
+			this.getModel().setProperty("/Enviado",[{
+					"key": "true",
+					"value": this.getResourceBundle().getText("viewGeralEnviadoTTC")
+				}, {
+					"key": "false",
+					"value": this.getResourceBundle().getText("viewGeralNaoEnviadoTTC")
+				}]);			
 			this._onClearSelecoes();
 			this._atualizarDados();
 			
 			var that = this;
+			
 			that.setBusy(that.byId("idNomeReport"), true);
 			that.getModel().setProperty("/NomeReport",that.getResourceBundle().getText("viewGeralRelatorio") + " TTC");			
 			NodeAPI.pListarRegistros("TemplateReport", {
@@ -302,13 +311,11 @@ sap.ui.define([
 					"/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") :
 				null : null;
 			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio") ? this.getModel().getProperty("/DataPagamentoInicio")[0] !==
-				null ? vetorInicio[0] = (this.getModel().getProperty("/DataPagamentoInicio").getFullYear().toString() + "-" + (this.getModel().getProperty(
-						"/DataPagamentoInicio").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoInicio").getDate()
-					.toString().padStart(2, '0')) : null : null;
+				null ? vetorInicio[0] = this.getModel().getProperty("/DataPagamentoInicio") : null : null;
 			var oDataFim = this.getModel().getProperty("/DataPagamentoFim") ? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ?
-				vetorFim[0] = (this.getModel().getProperty("/DataPagamentoFim").getFullYear().toString() + "-" + (this.getModel().getProperty(
-						"/DataPagamentoFim").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate()
-					.toString().padStart(2, '0')) : null : null;
+				vetorFim[0] = this.getModel().getProperty("/DataPagamentoFim") : null : null;		
+			var oEnviado = this.getModel().getProperty("/IdEnviadoSelecionadas") ? this.getModel().getProperty(
+				"/IdEnviadoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEnviadoSelecionadas") : null : null;					
 			var oWhere = [];
 			//-----------------ALTERAR NAS OUTRAS TELAS
 			var oFiltrosVisiveis = [];
@@ -337,6 +344,7 @@ sap.ui.define([
 			oWhere.push(oDominioTipoTransacao);
 			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
+			oWhere.push(oEnviado);
 			oWhere.push(oFiltrosVisiveis);
 			this.getModel().setProperty("/Preselecionado", oWhere);
 		},
@@ -356,12 +364,13 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioTipoTransacaoSelecionadas", forcaSelecao[9]);
 			this.getModel().setProperty("/DataPagamentoInicio", forcaSelecao[10]?Utils.bancoParaJsDate(forcaSelecao[10][0]): null);
 			this.getModel().setProperty("/DataPagamentoFim", forcaSelecao[11]?Utils.bancoParaJsDate(forcaSelecao[11][0]): null);	
+			this.getModel().setProperty("/IdEnviadoSelecionadas", forcaSelecao[12]);			
 			//-----------------ALTERAR NAS OUTRAS TELAS
-			if(forcaSelecao.length >= 13){
-				for (var i = 0, length = forcaSelecao[12].length; i < length; i++) {
+			if(forcaSelecao.length >= 14){
+				for (var i = 0, length = forcaSelecao[13].length; i < length; i++) {
 					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
-						if(forcaSelecao[12][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
-							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[12][i].visible;
+						if(forcaSelecao[13][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[13][i].visible;
 							break;
 						}
 					}
@@ -372,17 +381,6 @@ sap.ui.define([
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
 			dialog._setConsiderFilterChanges(true);	
-				
-				
-				
-				
-				
-				
-				
-				
-				
-			
-
 		},
 
 		_atualizarDados: function () {
@@ -415,14 +413,12 @@ sap.ui.define([
 					"/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") :
 				null : null;
 			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio") ? this.getModel().getProperty("/DataPagamentoInicio")[0] !==
-				null ? vetorInicio[0] = (this.getModel().getProperty("/DataPagamentoInicio").getFullYear().toString() + "-" + (this.getModel().getProperty(
-						"/DataPagamentoInicio").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoInicio").getDate()
-					.toString().padStart(2, '0')) : null : null;
+				null ? vetorInicio[0] = this.getModel().getProperty("/DataPagamentoInicio") : null : null;
 			var oDataFim = this.getModel().getProperty("/DataPagamentoFim") ? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ?
-				vetorFim[0] = (this.getModel().getProperty("/DataPagamentoFim").getFullYear().toString() + "-" + (this.getModel().getProperty(
-						"/DataPagamentoFim").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate()
-					.toString().padStart(2, '0')) : null : null;
-
+				vetorFim[0] = this.getModel().getProperty("/DataPagamentoFim") : null : null;	
+			var oEnviado = this.getModel().getProperty("/IdEnviadoSelecionadas") ? this.getModel().getProperty(
+				"/IdEnviadoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEnviadoSelecionadas") : null : null;	
+				
 			var oWhere = [];
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);
@@ -436,9 +432,12 @@ sap.ui.define([
 			oWhere.push(oDominioTipoTransacao);
 			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
+			oWhere.push(oEnviado);			
 			oWhere.push(null);
+			
+			that.getModel().setProperty("/Enviado",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Enviado"),"value",that.getModel().getProperty("/IdEnviadoSelecionadas"),"key"));
 			if(oEmpresa === null){
-				oWhere[13] = ["tblEmpresa.nome"];
+				oWhere[14] = ["tblEmpresa.nome"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -454,8 +453,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			// }
 			if(oDominioTaxClassification === null){
-				oWhere[13] = ["tblDominioTaxClassification.classification"];
+				oWhere[14] = ["tblDominioTaxClassification.classification"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -478,8 +480,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/DominioTaxClassification",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTaxClassification"),"tblDominioTaxClassification.classification",that.getModel().getProperty("/IdDominioTaxClassificationSelecionadas"),"tblDominioTaxClassification.id_dominio_tax_classification"));				
+			// }			
 			if(oTaxCategory === null){
-				oWhere[13] = ["tblTaxCategory.category"];
+				oWhere[14] = ["tblTaxCategory.category"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -496,8 +501,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/TaxCategory",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TaxCategory"),"tblTaxCategory.category",that.getModel().getProperty("/IdTaxCategorySelecionadas"),"tblTaxCategory.id_tax_category"));				
+			// }				
 			if(oTax === null){
-				oWhere[13] = ["tblTax.tax"];
+				oWhere[14] = ["tblTax.tax"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -514,8 +522,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/Tax",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Tax"),"tblTax.tax",that.getModel().getProperty("/IdTaxSelecionadas"),"tblTax.id_tax"));				
+			// }				
 			if(oNameOfTax === null){
-				oWhere[13] = ["tblNameOfTax.name_of_tax"];
+				oWhere[14] = ["tblNameOfTax.name_of_tax"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -532,8 +543,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/NameOfTax",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/NameOfTax"),"tblNameOfTax.name_of_tax",that.getModel().getProperty("/IdNameOfTaxSelecionadas"),"tblNameOfTax.id_name_of_tax"));				
+			// }				
 			if(oDominioJurisdicao === null){
-				oWhere[13] = ["tblDominioJurisdicao.jurisdicao"];
+				oWhere[14] = ["tblDominioJurisdicao.jurisdicao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -555,8 +569,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/DominioJurisdicao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioJurisdicao"),"tblDominioJurisdicao.jurisdicao",that.getModel().getProperty("/IdDominioJurisdicaoSelecionadas"),"tblDominioJurisdicao.id_dominio_jurisdicao"));				
+			// }				
 			if(oDominioPais === null){
-				oWhere[13] = ["tblDominioPais.pais"];
+				oWhere[14] = ["tblDominioPais.pais"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -575,8 +592,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/DominioPais",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioPais"),"tblDominioPais.pais",that.getModel().getProperty("/IdDominioPaisSelecionadas"),"tblDominioPais.id_dominio_pais"));				
+			// }			
 			if(oDominioAnoFiscal === null){
-				oWhere[13] = ["tblDominioAnoFiscal.ano_fiscal"];
+				oWhere[14] = ["tblDominioAnoFiscal.ano_fiscal"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -588,12 +608,16 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
-						that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
+						// that.getModel().setProperty("/DominioAnoFiscal", aRegistro);
+						that.getModel().setProperty("/DominioAnoFiscal", Utils.orderByArrayParaBoxComSelecao(aRegistro,"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));							
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/DominioAnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoFiscal"),"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));				
+			// }				
 			if(oDataInicio === null && oDataFim === null){
-				oWhere[13] = ["tblPagamento.data_pagamento"];
+				oWhere[14] = ["tblPagamento.data_pagamento"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -615,7 +639,7 @@ sap.ui.define([
 				});				
 			}
 			if(oDominioMoeda === null){
-				oWhere[13] = ["tblDominioMoeda.acronimo"];
+				oWhere[14] = ["tblDominioMoeda.acronimo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -631,8 +655,11 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdDominioMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			// }				
 			if(oDominioTipoTransacao === null){
-				oWhere[13] = ["tblDominioTipoTransacao.tipo_transacao"];
+				oWhere[14] = ["tblDominioTipoTransacao.tipo_transacao"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
@@ -654,6 +681,9 @@ sap.ui.define([
 					}
 				});				
 			}
+			// else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			// 	that.getModel().setProperty("/DominioTipoTransacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoTransacao"),"tblDominioTipoTransacao.tipo_transacao",that.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas"),"tblDominioTipoTransacao.id_dominio_tipo_transacao"));				
+			// }			
 		},
 
 		_geraRelatorio: function (ifExport) {
@@ -684,15 +714,20 @@ sap.ui.define([
 			var oDominioTipoTransacao = this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") ? this.getModel().getProperty(
 					"/IdDominioTipoTransacaoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas") :
 				null : null;
+			// var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio") ? this.getModel().getProperty("/DataPagamentoInicio")[0] !==
+			// 	null ? vetorInicio[0] = (this.getModel().getProperty("/DataPagamentoInicio").getFullYear().toString() + "-" + (this.getModel().getProperty(
+			// 			"/DataPagamentoInicio").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoInicio").getDate()
+			// 		.toString().padStart(2, '0')) : null : null;
+			// var oDataFim = this.getModel().getProperty("/DataPagamentoFim") ? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ?
+			// 	vetorFim[0] = (this.getModel().getProperty("/DataPagamentoFim").getFullYear().toString() + "-" + (this.getModel().getProperty(
+			// 			"/DataPagamentoFim").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate()
+			// 		.toString().padStart(2, '0')) : null : null;
 			var oDataInicio = this.getModel().getProperty("/DataPagamentoInicio") ? this.getModel().getProperty("/DataPagamentoInicio")[0] !==
-				null ? vetorInicio[0] = (this.getModel().getProperty("/DataPagamentoInicio").getFullYear().toString() + "-" + (this.getModel().getProperty(
-						"/DataPagamentoInicio").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoInicio").getDate()
-					.toString().padStart(2, '0')) : null : null;
+				null ? vetorInicio[0] = this.getModel().getProperty("/DataPagamentoInicio") : null : null;
 			var oDataFim = this.getModel().getProperty("/DataPagamentoFim") ? this.getModel().getProperty("/DataPagamentoFim")[0] !== null ?
-				vetorFim[0] = (this.getModel().getProperty("/DataPagamentoFim").getFullYear().toString() + "-" + (this.getModel().getProperty(
-						"/DataPagamentoFim").getMonth() + 1).toString().padStart(2, '0') + "-" + this.getModel().getProperty("/DataPagamentoFim").getDate()
-					.toString().padStart(2, '0')) : null : null;
-
+				vetorFim[0] = this.getModel().getProperty("/DataPagamentoFim") : null : null;			
+			var oEnviado = this.getModel().getProperty("/IdEnviadoSelecionadas") ? this.getModel().getProperty(
+				"/IdEnviadoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEnviadoSelecionadas") : null : null;	
 			var oWhere = [];
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);
@@ -706,6 +741,7 @@ sap.ui.define([
 			oWhere.push(oDominioTipoTransacao);
 			oWhere.push(oDataInicio === null ? oDataInicio : vetorInicio);
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
+			oWhere.push(oEnviado);
 			oWhere.push(null);
 
 			var that = this;
@@ -749,6 +785,9 @@ sap.ui.define([
 						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i][
 							"tblDominioTipoTransacao.id_dominio_tipo_transacao"
 						], that);
+						aRegistro[i]["tblRelEmpresaPeriodo.ind_enviado"] = Utils.traduzStatusEnvioTrimestreTTC(
+							aRegistro[i]["tblRelEmpresaPeriodo.ind_enviado"] ? 1 : 0
+							, that);						
 					}
 					Utils.conteudoView("relatorioDoTTC",that,"/TabelaDaView");
 					var array = that.getModel().getProperty("/TabelaDaView");
@@ -765,71 +804,15 @@ sap.ui.define([
 						that.byId("GerarRelatorio").setEnabled(true);						
 						that.onDataExport(ifExport);
 					}
-					else{/*
-						for (var k = 0, length = array.length; k < length; k++) {
-							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
-						}		*/				
+					else{				
 						that.getModel().setProperty(ifExport, aRegistro);
 						that.setBusy(that.byId("relatorioDoTTC"),false);		
 						that.byId("GerarRelatorio").setEnabled(true);						
-					}/*					
-					that.getModel().setProperty("/ReportTTC", aRegistro);
-					that.setBusy(that.byId("relatorioDoTTC"), false);
-					that.byId("GerarRelatorio").setEnabled(true);*/
+					}
 				}
 			});
 		},
 
-		_preencheReportTTC: function (oWhere) {
-			var that = this;
-			that.setBusy(that.byId("relatorioDoTTC"), true);
-			that.byId("GerarRelatorio").setEnabled(false);
-			jQuery.ajax(Constants.urlBackend + "DeepQuery/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblPagamento.data_pagamento"] = aRegistro[i]["tblPagamento.data_pagamento"] ? Utils.stringDataDoBancoParaStringDDMMYYYY(
-							aRegistro[i]["tblPagamento.data_pagamento"]) : null;
-						/*aRegistro[i]["tblPagamento.juros"] = aRegistro[i]["tblPagamento.juros"] ? Number(aRegistro[i]["tblPagamento.juros"]).toFixed(
-							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
-						aRegistro[i]["tblPagamento.juros"] = that._aplicarMascara(aRegistro[i]["tblPagamento.juros"]);
-						/*aRegistro[i]["tblPagamento.multa"] = aRegistro[i]["tblPagamento.multa"] ? Number(aRegistro[i]["tblPagamento.multa"]).toFixed(
-							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
-						aRegistro[i]["tblPagamento.multa"] = that._aplicarMascara(aRegistro[i]["tblPagamento.multa"]);
-						/*aRegistro[i]["tblPagamento.principal"] = aRegistro[i]["tblPagamento.principal"] ? Number(aRegistro[i][
-							"tblPagamento.principal"]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
-						aRegistro[i]["tblPagamento.principal"] = that._aplicarMascara(aRegistro[i]["tblPagamento.principal"]);
-						/*aRegistro[i]["tblPagamento.total"] = aRegistro[i]["tblPagamento.total"] ? Number(aRegistro[i]["tblPagamento.total"]).toFixed(
-							2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";*/
-						aRegistro[i]["tblPagamento.total"] = that._aplicarMascara(aRegistro[i]["tblPagamento.total"]);
-						aRegistro[i]["conversao_brl"] = that._aplicarMascara(aRegistro[i]["conversao_brl"]);
-						aRegistro[i]["conversao_usd"] = that._aplicarMascara(aRegistro[i]["conversao_usd"]);						
-						aRegistro[i]["tblDominioTaxClassification.classification"] = Utils.traduzDominioTaxClassification(aRegistro[i][
-							"tblDominioTaxClassification.id_dominio_tax_classification"
-						], that);
-						aRegistro[i]["tblDominioJurisdicao.jurisdicao"] = Utils.traduzJurisdicao(aRegistro[i][
-							"tblDominioJurisdicao.id_dominio_jurisdicao"
-						], that);
-						aRegistro[i]["tblDominioPais.pais"] = Utils.traduzDominioPais(aRegistro[i]["tblDominioPais.id_dominio_pais"], that);
-						aRegistro[i]["tblDominioTipoTransacao.tipo_transacao"] = Utils.traduzTipoTransacao(aRegistro[i][
-							"tblDominioTipoTransacao.id_dominio_tipo_transacao"
-						], that);
-					}
-					that.getModel().setProperty("/ReportTTC", aRegistro);
-					that.setBusy(that.byId("relatorioDoTTC"), false);
-					that.byId("GerarRelatorio").setEnabled(true);
-				}
-			});
-		},
-		
 		_aplicarMascara: function (numero) {
 			if (this.isPTBR()) {
 				return numero ? Number(numero).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "%").replace(/\./g, ',').replace(/%/g, '.') : "0";
@@ -840,202 +823,9 @@ sap.ui.define([
 		},
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
 			
-			Utils.dataExportReport(this,tipo,"viewAdminInicioMenuTTC","viewAdminInicioMenuTTC","/TabelaDaView");     /*                
-			var array = this.getModel().getProperty("/TabelaDaView");
-			var coluna = [];
-			var excel = [];
-			for (var k = 0, length = array.length; k < length; k++) {
-				if(array[k]["visible"]){
-					coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
-					excel.push(array[k]["textoNomeDaColuna"]);					
-				}
-			}	
-			var valores = this.getModel().getProperty(tipo);
-				var wsAccountResultData = [];
-				wsAccountResultData.push(excel);	
-				for (var i = 0, length = valores.length; i < length; i++) {
-				excel = [];
-				    for (var j = 0, length2 = array.length; j < length2; j++) {
-    					if(array[j]["visible"]){
-					    	excel.push(valores[i][array[j]["propriedadeDoValorDaLinha"]]);
-    					}
-				    }
-				wsAccountResultData.push(excel);
-				};		
-				
-				var wbTaxPackage  = XLSX.utils.book_new();
-				var wsAccountResultName = this.getResourceBundle().getText("viewAdminInicioMenuTTC");
-				var wsAccountResult = XLSX.utils.aoa_to_sheet(wsAccountResultData);
-				XLSX.utils.book_append_sheet(wbTaxPackage, wsAccountResult, wsAccountResultName);
-				var wopts = {};
-				var formato = "";
-				if(tipo === "/XLSX"){
-					wopts = { bookType:'xlsx', type:'array' };
-					formato = ".xlsx";
-				}
-				else if (tipo === "/TXT"){
-					wopts = { bookType:'txt', type:'array' };
-					formato = ".txt";
-				}
-				else{
-					wopts = { bookType:'csv', type:'array' };
-					formato = ".csv";
-				}
-				var wbout = XLSX.write(wbTaxPackage,wopts);
-				saveAs(new Blob([wbout],{type:"application/octet-stream"}), 
-					Utils.dateNowParaArquivo()
-					+"_"
-					+this.getResourceBundle().getText("viewGeralRelatorio") 
-					+"_" 
-					+ this.getResourceBundle().getText("viewAdminInicioMenuTTC")
-					+formato);	*/			
+			Utils.dataExportReport(this,tipo,"viewAdminInicioMenuTTC","viewAdminInicioMenuTTC","/TabelaDaView");                    
+		
 		}		
-/*
-		onDataExport: sap.m.Table.prototype.exportData || function (oEvent) {
 
-			var oExport = new Export({
-
-				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
-				exportType: new ExportTypeCSV({
-					separatorChar: ";"
-				}),
-
-				// Pass in the model created above
-				models: this.getView().getModel(),
-
-				// binding information for the rows aggregation
-				rows: {
-					path: "/ReportTTC"
-				},
-
-				// column definitions with column name and binding info for the content
-				columns: [{
-					name: this.getResourceBundle().getText("viewRelatorioEmpresa"),
-					template: {
-						content: "{tblEmpresa.nome}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioClassificacao"),
-					template: {
-						content: "{tblDominioTaxClassification.classification}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioCategoria"),
-					template: {
-						content: "{tblTaxCategory.category}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioT"),
-					template: {
-						content: "{tblTax.tax}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioNomeT"),
-					template: {
-						content: "{tblNameOfTax.name_of_tax}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioNomeDoOrgao"),
-					template: {
-						content: "{tblPagamento.administracao_governamental}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioJurisdicao"),
-					template: {
-						content: "{tblDominioJurisdicao.jurisdicao}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioPais"),
-					template: {
-						content: "{tblDominioPais.pais}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaEstado"),
-					template: {
-						content: "{tblPagamento.estado}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaCity"),
-					template: {
-						content: "{tblPagamento.cidade}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewRelatorioAnoFiscal"),
-					template: {
-						content: "{tblDominioAnoFiscal.ano_fiscal}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("ViewRelatorioCurrency"),
-					template: {
-						content: "{tblDominioMoeda.acronimo}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("ViewRelatorioTipoDeTransacao"),
-					template: {
-						content: "{tblDominioTipoTransacao.tipo_transacao}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaDataPagamento"),
-					template: {
-						content: "{tblPagamento.data_pagamento}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaProjeto"),
-					template: {
-						content: "{tblPagamento.projeto}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaDescription"),
-					template: {
-						content: "{tblPagamento.descricao}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaOther"),
-					template: {
-						content: "{tblPagamento.tipo_transacao_outros}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaPrincipal"),
-					template: {
-						content: "{tblPagamento.principal}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaInterest"),
-					template: {
-						content: "{tblPagamento.juros}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaFine"),
-					template: {
-						content: "{tblPagamento.multa}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaValue"),
-					template: {
-						content: "{tblPagamento.total}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaNumberDocument"),
-					template: {
-						content: "{tblPagamento.numero_documento}"
-					}
-				}, {
-					name: this.getResourceBundle().getText("viewTTCDetalheTrimestreColunaBeneficiary"),
-					template: {
-						content: "{tblPagamento.entidade_beneficiaria}"
-					}
-				}]
-			});
-
-			// download exported file
-			oExport.saveFile(
-				Utils.dateNowParaArquivo() + "_" + this.getResourceBundle().getText("viewGeralRelatorio") + "_" + this.getResourceBundle().getText(
-					"viewAdminInicioMenuTTC")
-			).catch(function (oError) {
-				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
-			}).then(function () {
-				oExport.destroy();
-			});
-		}*/
 	});
 });
