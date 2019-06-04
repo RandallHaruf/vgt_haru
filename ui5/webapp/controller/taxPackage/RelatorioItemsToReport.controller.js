@@ -202,7 +202,7 @@ sap.ui.define([
 
 		onTemplateGet: function (oEvent) {
 			this._onClearSelecoes();
-			this._atualizarDados();
+			//this._atualizarDados();
 			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
 			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
@@ -229,6 +229,20 @@ sap.ui.define([
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
 			dialog._setConsiderFilterChanges(true);
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			var that = this;
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			that.getModel().setProperty("/Pergunta",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Pergunta"),"tblItemToReport.pergunta",that.getModel().getProperty("/PerguntaSelecionada"),"tblItemToReport.pergunta"));				
+			that.getModel().setProperty("/FlagAno",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FlagAno"),"tblItemToReport.flag_ano",that.getModel().getProperty("/FlagAnoSelecionado"),"tblItemToReport.flag_ano"));				
+			that.getModel().setProperty("/FlagSN",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FlagSN"),"tblItemToReport.flag_sim_nao",that.getModel().getProperty("/FlagSNSelecionado"),"tblItemToReport.flag_sim_nao"));				
+			that.getModel().setProperty("/RespondeuSim",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/RespondeuSim"),"tblRespostaItemToReport.ind_se_aplica",that.getModel().getProperty("/RespondeuSimSelecionado"),"tblRespostaItemToReport.ind_se_aplica"));				
+			that.getModel().setProperty("/AnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/AnoFiscal"),"Ano_Fiscal_Agregado",that.getModel().getProperty("/AnoFiscalSelecionado"),"Ano_Fiscal_Filtro"));				
+			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
+			COMMENT*/
 		},
 
 		_atualizarDados: function () {

@@ -26,7 +26,6 @@ sap.ui.define([
 			});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
-			//this._atualizarDados();
 			Utils.conteudoView("relatorioDoTaxPackage",this,"/TabelaDaView");
 			if (this.isVisualizacaoUsuario()) {				
 				this.getRouter().getRoute("taxPackageRelatorioCreditSchedule").attachPatternMatched(this._handleRouteMatched, this);				
@@ -113,7 +112,6 @@ sap.ui.define([
 		},
 
 		onSelectChange: function (oEvent) {
-			//this.onValidarData(oEvent);
 			this._atualizarDados();			
 		},
 
@@ -183,7 +181,7 @@ sap.ui.define([
 		
 		onTemplateGet: function (oEvent) {
 			this._onClearSelecoes();
-			this._atualizarDados();
+			//this._atualizarDados();
 			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
 			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
@@ -205,7 +203,17 @@ sap.ui.define([
 			dialog._setConsiderFilterChanges(false);
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
-			dialog._setConsiderFilterChanges(true);				
+			dialog._setConsiderFilterChanges(true);		
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			var that = this;
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			that.getModel().setProperty("/FY",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FY"),"tblSchedule.fy",that.getModel().getProperty("/FYSelecionadas"),"tblSchedule.fy"));				
+			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
+			COMMENT*/			
 		},		
 		
 		_atualizarDados: function () {

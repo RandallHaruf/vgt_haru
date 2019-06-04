@@ -181,7 +181,7 @@ sap.ui.define([
 		
 		onTemplateGet: function (oEvent) {
 			this._onClearSelecoes();
-			this._atualizarDados();
+			//this._atualizarDados();
 			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
 			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
@@ -203,7 +203,17 @@ sap.ui.define([
 			dialog._setConsiderFilterChanges(false);
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
-			dialog._setConsiderFilterChanges(true);					
+			dialog._setConsiderFilterChanges(true);		
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			var that = this;
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			that.getModel().setProperty("/FY",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FY"),"tblSchedule.fy",that.getModel().getProperty("/FYSelecionadas"),"tblSchedule.fy"));				
+			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
+			COMMENT*/			
 		},
 
 		_atualizarDados: function () {
@@ -355,46 +365,7 @@ sap.ui.define([
 				that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
 			}COMMENT*/	
 		},
-		/*
-		onDataExportCSV : sap.m.Table.prototype.exportData || function(oEvent) {
-			var array = this.getModel().getProperty("/TabelaDaView");
-			var coluna = [];
-			for (var k = 0, length = array.length; k < length; k++) {
-				coluna.push({name: array[k]["textoNomeDaColuna"],template:{content: "{"+array[k]["propriedadeDoValorDaLinha"]+"}"}}) 
-			}	
-			
-			var oExport = new Export({
-			
-				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
-				exportType : new ExportTypeCSV({
-					separatorChar : ";"
-				}),
 
-				// Pass in the model created above
-				models : this.getView().getModel(),
-
-				// binding information for the rows aggregation
-				rows : {
-					path : "/CSV"
-				},
-				columns : coluna
-			});
-			
-			// download exported file
-			oExport.saveFile(
-				Utils.dateNowParaArquivo()
-				+"_"
-				+this.getResourceBundle().getText("viewGeralRelatorio") 
-				+"_" 
-				+ this.getResourceBundle().getText("viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE")
-				).catch(function(oError) {
-				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
-			}).then(function() {
-				oExport.destroy();
-			});
-		},	
-		*/
-		
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
 			Utils.dataExportReport(this,tipo,"viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE","viewTaxpackageEdiçãoTrimestreLOSSSCHEDULE","/TabelaDaView");
 			

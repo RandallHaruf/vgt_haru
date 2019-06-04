@@ -598,7 +598,37 @@ module.exports = {
 				+'"tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
 				+'"tblRespostaObrigacao.id_resposta_obrigacao" '
 				+'from (';	
-			stringDistinctFilter = 'order by "tblDominioObrigacaoAcessoriaTipo.tipo","tblDominioPais.pais" ,"tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc';
+			stringDistinctFilter = 
+				'group by '
+				+'"tblDominioMoeda.nome", '
+				+'"tblDominioMoeda.acronimo", '
+				+'"tblDocumentoObrigacao.ind_conclusao", '
+				+'"tblDocumentoObrigacao.data_upload", '
+				+'"tblDominioObrigacaoAcessoriaTipo.tipo", '
+				+'"tblDominioPais.pais", '
+				+'"tblDominioPeriodicidadeObrigacao.descricao", '
+				+'"tblDominioObrigacaoStatus.descricao_obrigacao_status", '
+				+'"tblDominioObrigacaoAcessoriaTipo.id_dominio_obrigacao_acessoria_tipo", '
+				+'"tblEmpresa.nome", '
+				+'"tblEmpresa.id_empresa", '
+				+'"tblDominioPais.id_dominio_pais", '
+				+'"tblModeloObrigacao.nome_obrigacao", '
+				+'"tblModeloObrigacao.id_modelo", '
+				+'"tblDominioPeriodicidadeObrigacao.id_periodicidade_obrigacao", '
+				+'"tblDominioAnoFiscal.ano_fiscal", '
+				+'"tblDominioAnoFiscal.id_dominio_ano_fiscal", '
+				+'"tblDominioAnoCalendario.id_dominio_ano_calendario", '
+				+'"tblDominioAnoCalendario.ano_calendario", '
+				+'"prazo_de_entrega_calculado", '
+				+'"tblRespostaObrigacao.data_extensao", '
+				+'"tblDominioObrigacaoStatus.id_dominio_obrigacao_status", '
+				+'"tblRespostaObrigacao.suporte_contratado", '
+				+'"tblRespostaObrigacao.suporte_especificacao", '
+				+'"tblRespostaObrigacao.suporte_valor", '
+				+'"tblRespostaObrigacao.data_conclusao", '
+				+'"tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
+				+'"tblRespostaObrigacao.id_resposta_obrigacao" '
+				+'order by "tblDominioObrigacaoAcessoriaTipo.tipo","tblDominioPais.pais" ,"tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc';
 		}
 		else{
 			switch(aEntrada[posicaoDoArrayParaDistinct][0]){

@@ -25,31 +25,7 @@ sap.ui.define([
 			var oModel = new sap.ui.model.json.JSONModel({});
 			oModel.setSizeLimit(5000);
 			this.getView().setModel(oModel);
-			//this._atualizarDados();
-			//-----------------ALTERAR NAS OUTRAS TELAS
-			var that = this;/*
-			that.setBusy(that.byId("myVariantManagement"), true);
-			this.getModel().setProperty("/NomeReport",this.getResourceBundle().getText("viewGeralRelatorio") + " TTC");
-			NodeAPI.pListarRegistros("TemplateReport", {
-					tela: that.oView.mProperties.viewName,
-					isIFrame: that.isIFrame() ? "true" : "false",
-					indDefault: true,
-					usarSession: 1
-				})
-				.then(function (res) {
-					if(res.result.length){
-						that.getModel().setProperty("/Preselecionado", JSON.parse(res.result[0].parametros));
-						that.getModel().setProperty("/NomeReport", res.result[0].descricao);
-						that.onTemplateGet();						
-					}
-				})
-				.catch(function (err) {
-					alert(err.status + " - " + err.statusText + "\n" + err.responseJSON.error.message);
-				})
-				.finally(function(){
-					that.setBusy(that.byId("myVariantManagement"), false);
-				});		*/	
-				
+			var that = this;
 			if (this.isVisualizacaoUsuario()) {
 				this.getRouter().getRoute("ttcRelatorio").attachPatternMatched(this._handleRouteMatched, this);
 			}
@@ -175,9 +151,7 @@ sap.ui.define([
 			this.getPage().setShowFooter(!this.getPage().getShowFooter());
 		},
 		onSelectChange: function (oEvent) {
-			//this.onValidarData(oEvent);
 			this._atualizarDados();
-			//this._geraRelatorio();
 		},
 
 		filterTable: function (aCurrentFilterValues) {
@@ -317,7 +291,7 @@ sap.ui.define([
 			var oEnviado = this.getModel().getProperty("/IdEnviadoSelecionadas") ? this.getModel().getProperty(
 				"/IdEnviadoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEnviadoSelecionadas") : null : null;					
 			var oWhere = [];
-			//-----------------ALTERAR NAS OUTRAS TELAS
+
 			var oFiltrosVisiveis = [];
 			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
 				oFiltrosVisiveis.push(
@@ -327,10 +301,6 @@ sap.ui.define([
 					}
 				);
 			}
-			
-			
-			
-			
 			
 			oWhere.push(oEmpresa);
 			oWhere.push(oDominioTaxClassification);
@@ -350,7 +320,7 @@ sap.ui.define([
 		},
 		onTemplateGet: function (oEvent) {
 			this._onClearSelecoes();
-			this._atualizarDados();
+			//this._atualizarDados();
 			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
 			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
 			this.getModel().setProperty("/IdDominioTaxClassificationSelecionadas", forcaSelecao[1]);
@@ -365,7 +335,6 @@ sap.ui.define([
 			this.getModel().setProperty("/DataPagamentoInicio", forcaSelecao[10]?Utils.bancoParaJsDate(forcaSelecao[10][0]): null);
 			this.getModel().setProperty("/DataPagamentoFim", forcaSelecao[11]?Utils.bancoParaJsDate(forcaSelecao[11][0]): null);	
 			this.getModel().setProperty("/IdEnviadoSelecionadas", forcaSelecao[12]);			
-			//-----------------ALTERAR NAS OUTRAS TELAS
 			if(forcaSelecao.length >= 14){
 				for (var i = 0, length = forcaSelecao[13].length; i < length; i++) {
 					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
@@ -381,6 +350,21 @@ sap.ui.define([
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
 			dialog._setConsiderFilterChanges(true);	
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			var that = this;
+			that.getModel().setProperty("/Enviado",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Enviado"),"value",that.getModel().getProperty("/IdEnviadoSelecionadas"),"key"));
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			that.getModel().setProperty("/DominioTaxClassification",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTaxClassification"),"tblDominioTaxClassification.classification",that.getModel().getProperty("/IdDominioTaxClassificationSelecionadas"),"tblDominioTaxClassification.id_dominio_tax_classification"));				
+			that.getModel().setProperty("/TaxCategory",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TaxCategory"),"tblTaxCategory.category",that.getModel().getProperty("/IdTaxCategorySelecionadas"),"tblTaxCategory.id_tax_category"));				
+			that.getModel().setProperty("/Tax",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Tax"),"tblTax.tax",that.getModel().getProperty("/IdTaxSelecionadas"),"tblTax.id_tax"));				
+			that.getModel().setProperty("/NameOfTax",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/NameOfTax"),"tblNameOfTax.name_of_tax",that.getModel().getProperty("/IdNameOfTaxSelecionadas"),"tblNameOfTax.id_name_of_tax"));				
+			that.getModel().setProperty("/DominioJurisdicao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioJurisdicao"),"tblDominioJurisdicao.jurisdicao",that.getModel().getProperty("/IdDominioJurisdicaoSelecionadas"),"tblDominioJurisdicao.id_dominio_jurisdicao"));				
+			that.getModel().setProperty("/DominioPais",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioPais"),"tblDominioPais.pais",that.getModel().getProperty("/IdDominioPaisSelecionadas"),"tblDominioPais.id_dominio_pais"));				
+			that.getModel().setProperty("/DominioAnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoFiscal"),"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdDominioMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			that.getModel().setProperty("/DominioTipoTransacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoTransacao"),"tblDominioTipoTransacao.tipo_transacao",that.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas"),"tblDominioTipoTransacao.id_dominio_tipo_transacao"));				
+			COMMENT*/			
 		},
 
 		_atualizarDados: function () {
@@ -434,8 +418,10 @@ sap.ui.define([
 			oWhere.push(oDataFim === null ? oDataFim : vetorFim);
 			oWhere.push(oEnviado);			
 			oWhere.push(null);
-			
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 			that.getModel().setProperty("/Enviado",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Enviado"),"value",that.getModel().getProperty("/IdEnviadoSelecionadas"),"key"));
+			COMMENT*/
 			if(oEmpresa === null){
 				oWhere[14] = ["tblEmpresa.nome"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
