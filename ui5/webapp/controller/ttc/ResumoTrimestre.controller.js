@@ -290,7 +290,22 @@ sap.ui.define(
 
 			_onEnviarMensagem: function (vEmpresa, vPeriodo) {
 				var that = this;
-
+				
+				switch (vPeriodo) {
+					case "1º Quarter":
+						vPeriodo = "1ˢᵗ Quarter";
+						break;
+					case "2º Quarter":
+						vPeriodo = "2ⁿᵈ Quarter";
+						break;
+					case "3º Quarter":
+						vPeriodo = "3ʳᵈ Quarter";
+						break;
+					case "4º Quarter":
+						vPeriodo = "4ᵗʰ Quarter";
+						break;
+				}
+				
 				var assunto = "TTC - Quarter reopening - " + vEmpresa + " - " + vPeriodo;
 				var htmlBody =
 					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TTC module at <a href='" + document

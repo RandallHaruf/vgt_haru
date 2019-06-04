@@ -497,6 +497,39 @@ sap.ui.define(
 				var that = this,
 					assunto = "",
 					htmlBody = "";
+					
+				switch (vPeriodo) {
+					case "1º Período":
+						vPeriodo = "1ˢᵗ Quarter";
+						break;
+					case "2º Período":
+						vPeriodo = "2ⁿᵈ Quarter";
+						break;
+					case "3º Período":
+						vPeriodo = "3ʳᵈ Quarter";
+						break;
+					case "4º Período":
+						vPeriodo = "4ᵗʰ Quarter";
+						break;
+					case "Anual":
+						vPeriodo = "Annual";
+						break;
+					case "Retificadora":
+						vPeriodo = "Amendment";
+						break;
+					case "1º Trimestre":
+						vPeriodo = "1ˢᵗ Quarter";
+						break;
+					case "2º Trimestre":
+						vPeriodo = "2ⁿᵈ Quarter";
+						break;
+					case "3º Trimestre":
+						vPeriodo = "3ʳᵈ Quarter";
+						break;
+					case "4º Trimestre":
+						vPeriodo = "4ᵗʰ Quarter";
+						break;
+				}
 
 				if (vTipo === "ENCERRAMENTO_TP") {
 					assunto = "Tax Package - Quarter closing request - " + vEmpresa + " - " + vPeriodo;

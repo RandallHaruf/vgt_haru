@@ -273,11 +273,33 @@ sap.ui.define(
 
 			_onEnviarMensagem: function (vEmpresa, vPeriodo) {
 				var that = this;
-
+						   
+				switch (vPeriodo) {
+					case 1:
+						vPeriodo = "1ˢᵗ Quarter";
+						break;
+					case 2:
+						vPeriodo = "2ⁿᵈ Quarter";
+						break;
+					case 3:
+						vPeriodo = "3ʳᵈ Quarter";
+						break;
+					case 4:
+						vPeriodo = "4ᵗʰ Quarter";
+						break;
+					case 5:
+						vPeriodo = "Annual";
+						break;
+					case 6:
+						vPeriodo = "Amendment";
+						break;
+				}
+				
+				var caminho = "https://tenti-tecnologia-e-engenharia-ltda---epp-dev-ui5.cfapps.eu10.hana.ondemand.com/ui5/index.html";
 				var assunto = "TAX PACKAGE – Quarter reopening - " + vEmpresa + " - " + vPeriodo;
 				//var corpo = that.getModel().getProperty("/corpo");
 				var htmlBody =
-					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TAX PACKAGE module at Vale Global Tax (VGT) – inserir hyperlink– Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
+					"<p>Dear Administrator,</p><br><p>&nbsp;A user is requesting to reopen a closed quarter in the TAX PACKAGE module at Vale Global Tax (VGT) – " + caminho + " – Your approval is required</p><p>Thank you in advance.</p><p>Global Tax Team</p>";
 				//this.getModel().setProperty("/bEmailButton", false);
 
 				jQuery.ajax({ //Desativar botao
@@ -294,7 +316,7 @@ sap.ui.define(
 					success: function (response) {
 						//sap.m.MessageToast.show("Email enviado com sucesso");
 					}
-				});
+				}); 
 			},
 
 			onReabrirPeriodo: function (oEvent, oPeriodo) {
@@ -387,7 +409,7 @@ sap.ui.define(
 												fkIdRelTaxPackagePeriodo: oPeriodo.id_rel_tax_package_periodo
 											}).then(function (response) {
 												dialog.close();
-												that._onEnviarMensagem(oEmpresa.empresa, oPeriodo.periodo);
+												that._onEnviarMensagem(oEmpresa.empresa, oPeriodo.numero_ordem);
 												sap.m.MessageToast.show(that.getResourceBundle().getText("viewResumoTrimestreToast"));
 											}).catch(function (err) {
 												dialog.close();

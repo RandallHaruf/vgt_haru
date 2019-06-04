@@ -73,9 +73,30 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 				var vSubj = '';
 				var vHtml = '';
 				
+				switch (numOrdem) {
+					case 1:
+						numOrdem = "1ˢᵗ Quarter";
+						break;
+					case 2:
+						numOrdem = "2ⁿᵈ Quarter";
+						break;
+					case 3:
+						numOrdem = "3ʳᵈ Quarter";
+						break;
+					case 4:
+						numOrdem = "4ᵗʰ Quarter";
+						break;
+					case 5:
+						numOrdem = "Annual";
+						break;
+					case 6:
+						numOrdem = "Amendment";
+						break;
+				}
+				
 				switch (qtdDia) {
 					case 15:
-						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							',<br><br>Please access the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>' +
@@ -83,7 +104,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 							' days.</span></strong> Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 5:
-						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - Pending information – ' + numOrdem + ' of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							',<br><br>Please access the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a> and complete the information of the previous quarter, for the following Entity(ies):<br><br>' +
@@ -91,7 +112,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 							' days.</span></strong> Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 3:
-						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							'/Country Manager<br><br>This is a reminder regarding the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
@@ -99,7 +120,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 							' days.</span></strong><br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 2:
-						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							'/Country Manager<br><br>This is a reminder regarding the Tax Package module at <a href="' + caminho +
 							'">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
@@ -107,7 +128,7 @@ const send_Not_Email = (numOrdem, qtdDia) => {
 							' days.</span></strong><br><br>Please enter the system ASAP and complete the information of the previous quarter. Should you have any question or require any support, please don’t hesitate to contact us at L-Vale-Global-Tax@vale.com.<br><br>Thank you in advance for your support.<br><br>Global Tax Team</p></body></html>';
 						break;
 					case 1:
-						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' Quarter of ' + anoCal;
+						vSubj = 'Tax Package - URGENT Pending information – ' + numOrdem + ' of ' + anoCal;
 						vHtml = '<!DOCTYPE html><html><body><p style="font-family:Arial!important; font-size:12px">Dear ' + lbc_nome +
 							'/Country Manager<br><br><strong><span style="text-decoration: underline;">Today is the LAST day</span></strong> to complete the Tax Package module at <a href="' +
 							caminho + '">Vale Global Tax (VGT)</a>, for the following Entity(ies):<br><br>' + nome +
