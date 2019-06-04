@@ -27,7 +27,7 @@ sap.ui.define(
 				});
 			},
 			
-			upload: function (oArquivo, sNomeArquivo, sRota, oData) {
+			upload: function (oArquivo, sNomeArquivo, sRota, oData, options) {
 				return new Promise(function (resolve, reject) {
 					var formData = new FormData();
 					formData.append("file", oArquivo);
@@ -49,7 +49,23 @@ sap.ui.define(
 						crossDomain: true,
 						contentType: false,
 						processData: false,
-						dataType: "json"
+						dataType: "json",
+						xhr: function () {
+							var xhr = new XMLHttpRequest();
+							
+							if (options && options.onProgress) {
+								xhr.upload.addEventListener('progress', function (e) {
+									if (e.lengthComputable) {
+										options.onProgress(parseInt((e.loaded / e.total) * 100, 10));
+									}
+									else {
+										console.log('Length not computable.');
+									}
+								});
+							}
+							
+							return xhr;
+						}
 					}).then(function (response) {
 						if (response.success) {
 							resolve(response.result);
@@ -120,7 +136,7 @@ sap.ui.define(
 						reject(err.status);
 					});
 				});
-			},
+			}
 			
 		};
 	}
