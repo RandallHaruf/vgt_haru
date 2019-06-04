@@ -34,7 +34,10 @@ sap.ui.define(
 						TaxCategory: [],
 						Tax: [],
 						NameOfTax: []
-					} 
+					},
+					documentosVigentes: [],
+					linhasDocumentos: [],
+					documentosNaoVigentes: []
 				});
 
 				oModel.setSizeLimit(300);
@@ -56,22 +59,40 @@ sap.ui.define(
 				}, true);
             },
 			
-			onEnviarXml: function (oEvent) {
-				var oItem = oEvent.getParameter("item");
-				
-				if (oItem === this.byId("enviarSubstituir")) {
-					this.getModel().setProperty("/substituirDados", true);
-					this.byId("btnImportarExcel").oFileUpload.click();
-				}
-				else if (oItem === this.byId("enviarAdicionar")) {
-					this.getModel().setProperty("/substituirDados", false);
-					this.byId("btnImportarExcel").oFileUpload.click();
-				}
-			},
-			
 			onImportarDadosSubstituir: function(oEvent){
-				this.getModel().setProperty("/substituirDados", true);
-				this.onImportarDados(oEvent);
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				if(aDocumentosVigentes.length){
+						var dialog = new sap.m.Dialog({
+							title: "Nova Diferença",
+							content: oForm,
+							beginButton: new sap.m.Button({
+								text: "salvar",
+								press: function () {
+									this.getModel().setProperty("/substituirDados", true);
+									this.onImportarDados(oEvent);
+									dialog.close();
+								}.bind(this)
+							}),
+							endButton: new sap.m.Button({
+								text: "sair",
+								press: function () {
+									dialog.close();
+								}.bind(this)
+							}),
+							afterClose: function() {
+								dialog.destroy();
+							}
+						});
+		
+						// to get access to the global model
+						this.getView().addDependent(dialog);
+						
+						dialog.open();
+					}
+					else{
+						this.getModel().setProperty("/substituirDados", true);
+						this.onImportarDados(oEvent);
+					}
 			},
 			
 			onImportarDadosAdicionar: function(oEvent){
@@ -475,6 +496,7 @@ sap.ui.define(
 					that.getModel().refresh();
 					that.byId("tableBorne").refreshRows();
 					that._paintNewLine("tableBorne");
+                    that._remontarAbaDocumentos();
 					//that.byId("tableCollected").refreshRows();
 					//this._paintNewLine("tableCollected");
 				}
@@ -833,65 +855,119 @@ sap.ui.define(
 				}
 			},
 
+            verificarPendenciaDeDocumento: function (oTaxAnterior){
+				var aLinhasDocumentos = this.getModel().getProperty("/linhasDocumentos");
+				var bTemDocumentoPraEssaCategoria = false;
+				var iNumeroLinhasDessaCategoria = 1;
+				var aPagamentos = this._dadosPagamentosBorne.concat(this._dadosPagamentosCollected);
+				for(let i = 0; i < aLinhasDocumentos.length; i++){
+					if(aLinhasDocumentos[i]["fk_category.id_tax_category"] == oTaxAnterior["fk_category.id_tax_category"] && aLinhasDocumentos[i]["fk_documento_ttc.id_documento_ttc"]){
+						bTemDocumentoPraEssaCategoria = true;
+					}
+				}
+				if(bTemDocumentoPraEssaCategoria){
+					for(let i =0; i < aPagamentos.length; i++){
+						if(aPagamentos[i]["fk_category.id_tax_category"] == oTaxAnterior["fk_category.id_tax_category"]){
+							iNumeroLinhasDessaCategoria++;
+						}
+					}
+				}
+				if(bTemDocumentoPraEssaCategoria && iNumeroLinhasDessaCategoria === 1){
+					return true;
+				}
+				else{
+					return false;
+				}
+			},
+
 			onTrocarTax: function (oEvent) {
 				// Pega o objeto do tax para ser capaz de recuperar a fk de category
 				var sTaxPath = oEvent.getSource().getSelectedItem().getBindingContext().getPath(),
 					oTax = this.getModel().getObject(sTaxPath);
+
 				var aTaxCategory = this.getModel().getProperty("/Borne/TaxCategory").concat(this.getModel().getProperty("/Collected/TaxCategory"));
 
+
 				// Pega o objeto do pagamento e seta sua category como a category do tax selecionado
-				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath());
-				oPagamento["fk_category.id_tax_category"] = oTax["fk_category.id_tax_category"];
+				var oPagamento = this.getModel().getObject(oEvent.getSource().getBindingContext().getPath()),
+					oTaxAnterior = oPagamento["tax_anterior"];
+                oPagamento["fk_category.id_tax_category"] = oTax["fk_category.id_tax_category"];
 				
-				if(oTax){
-					oPagamento.tax = oTax.tax;
-					for(let i =0; i < aTaxCategory.length; i++){
-						if(aTaxCategory[i]["id_tax_category"] == oTax["fk_category.id_tax_category"]){
-							var oTaxCategory = aTaxCategory[i];
-							oPagamento.category = oTaxCategory["category"];
-						}
-					}
-				}
-				
-				//Verifica se o campo de entidade deve ser marcado como obrigatorio ou nao...
-				if ((oTax.tax) != undefined && (oTax.tax) !== null) {
-					if ((oTax.tax).toLowerCase() === "Tax Withheld on payments to overseas group companies".toLowerCase()) {
-						if (oPagamento["entidade_beneficiaria"] == "" || oPagamento["entidade_beneficiaria"] === null || oPagamento[
-								"entidade_beneficiaria"] === undefined) {
-							oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
-						}
-					} else {
-						oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
-					}
-				}
-
-				var that = this;
-
-				// Limpa as opções de name of tax..
-				oPagamento.opcoesNameOfTax = [];
-				oPagamento.name_of_tax = "";
-				oPagamento["fk_name_of_tax.id_name_of_tax"] = "";
-
-				// Caso o tax selecionado seja valido, recupera a lista de name of tax padrão relacionado ao país da empresa e este tax
-				if (oTax.id_tax) {
-					var idPais = this.getModel().getProperty("/Empresa")["fk_pais.id_pais"];
-					NodeAPI.listarRegistros("Pais/" + idPais + "/NameOfTax?default=true&tax=" + oTax.id_tax, function (response) {
-						if (response) {
-							response.unshift({});
-							oPagamento.opcoesNameOfTax = response;
-							that.getModel().refresh();
+				var bPendencia = this.verificarPendenciaDeDocumento(oTaxAnterior);
+				if(bPendencia){
+					oPagamento["fk_category.id_tax_category"] = oTaxAnterior["fk_category.id_tax_category"];
+					oPagamento["fk_tax.id_tax"] = oTaxAnterior["id_tax"];
+					var dialog = new sap.m.Dialog({
+						title: "por favor me traduza Aviso",
+						content: new sap.m.Label({
+							text:"Por favor me traduza e aqui colocar titulo:Voce nao pode mudar essa taxa pois existe um documento"
+						}),
+						endButton: new sap.m.Button({
+							text: "por favor me traduza OK",
+							press: function () {
+								dialog.close();
+							}.bind(this)
+						}),
+						afterClose: function() {
+							dialog.destroy();
 						}
 					});
+					this.getView().addDependent(dialog);
+					dialog.open();
 				}
-
-				if (oTax["ind_requer_beneficiary_company"]) {
-					if (oPagamento.entidade_beneficiaria == "" ||
-						oPagamento.entidade_beneficiaria === null ||
-						oPagamento["entidade_beneficiaria"] === undefined) {
-						oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+				else{
+					if(oTax){
+						oPagamento.tax = oTax.tax;
+						oPagamento["tax_anterior"] = oTax;
+						for(let i =0; i < aTaxCategory.length; i++){
+							if(aTaxCategory[i]["id_tax_category"] == oTax["fk_category.id_tax_category"]){
+								var oTaxCategory = aTaxCategory[i];
+								oPagamento.category = oTaxCategory["category"];
+							}
+						}
 					}
-				} else
-					oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+					
+					//Verifica se o campo de entidade deve ser marcado como obrigatorio ou nao...
+					if ((oTax.tax) != undefined && (oTax.tax) !== null) {
+						if ((oTax.tax).toLowerCase() === "Tax Withheld on payments to overseas group companies".toLowerCase()) {
+							if (oPagamento["entidade_beneficiaria"] == "" || oPagamento["entidade_beneficiaria"] === null || oPagamento[
+									"entidade_beneficiaria"] === undefined) {
+								oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+							}
+						} else {
+							oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+						}
+					}
+	
+					var that = this;
+	
+					// Limpa as opções de name of tax..
+					oPagamento.opcoesNameOfTax = [];
+					oPagamento.name_of_tax = "";
+					oPagamento["fk_name_of_tax.id_name_of_tax"] = "";
+	
+					// Caso o tax selecionado seja valido, recupera a lista de name of tax padrão relacionado ao país da empresa e este tax
+					if (oTax.id_tax) {
+						var idPais = this.getModel().getProperty("/Empresa")["fk_pais.id_pais"];
+						NodeAPI.listarRegistros("Pais/" + idPais + "/NameOfTax?default=true&tax=" + oTax.id_tax, function (response) {
+							if (response) {
+								response.unshift({});
+								oPagamento.opcoesNameOfTax = response;
+								that.getModel().refresh();
+							}
+						});
+					}
+	
+					if (oTax["ind_requer_beneficiary_company"]) {
+						if (oPagamento.entidade_beneficiaria == "" ||
+							oPagamento.entidade_beneficiaria === null ||
+							oPagamento["entidade_beneficiaria"] === undefined) {
+							oPagamento.entidadeValueState = sap.ui.core.ValueState.Error;
+						}
+					} else
+						oPagamento.entidadeValueState = sap.ui.core.ValueState.None;
+				}
+				this._remontarAbaDocumentos();
 			},
 
 			onTrocarTaxImport: function (oPagamento,grupoPagamento) {
@@ -973,6 +1049,7 @@ sap.ui.define(
 
 				oPagamento.total = (fPrincipal + fJuros + fMulta).toFixed(2);
 				this.getModel().refresh();
+                that._remontarAbaDocumentos();
 			},
 
 			onCalcularTotalImport: function (oPagamento) {
@@ -1534,6 +1611,10 @@ sap.ui.define(
 							response1[0][i].cidadeValueState = sap.ui.core.ValueState.None;
 							response1[0][i].entidadeValueState = sap.ui.core.ValueState.None;
 							response1[0][i].fkDominioTipoTransacaoAnterior = response1[0][i]["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"];
+                            response1[0][i]["tax_anterior"] = {
+								"id_tax": Number(response1[0][i]["fk_tax.id_tax"]),
+								"fk_category.id_tax_category": Number(response1[0][i]["fk_category.id_tax_category"])
+							};
 	
 							response1[0][i].principal = response1[0][i].principal ? Number(response1[0][i].principal) : 0;
 							response1[0][i].juros = response1[0][i].juros ? Number(response1[0][i].juros) : 0;
@@ -1584,6 +1665,10 @@ sap.ui.define(
 							response2[0][j].cidadeValueState = sap.ui.core.ValueState.None;
 							response2[0][j].entidadeValueState = sap.ui.core.ValueState.None;
 							response2[0][j].fkDominioTipoTransacaoAnterior = response2[0][j]["fk_dominio_tipo_transacao.id_dominio_tipo_transacao"];
+                            response2[0][j]["tax_anterior"] = {
+								"id_tax": Number(response2[0][j]["fk_tax.id_tax"]),
+								"fk_category.id_tax_category": Number(response2[0][j]["fk_category.id_tax_category"])
+							};
 
 							response2[0][j].principal = response2[0][j].principal ? Number(response2[0][j].principal) : 0;
 							response2[0][j].juros = response2[0][j].juros ? Number(response2[0][j].juros) : 0;
@@ -1629,6 +1714,7 @@ sap.ui.define(
 					/*that.getModel().setProperty("/ContadorCollected", countCollected);*/
 					that.getModel().refresh();
 					that.getModel().setProperty("/ContadorCollected", that._dadosPagamentosCollected.length);
+                    that._remontarAbaDocumentos();
 					that.byId("dynamicPage").setBusy(false);
 				});
 			},
@@ -2135,8 +2221,99 @@ sap.ui.define(
 					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.None;
 				} else {
 					oPagamento["tipo_transacao_outros_value_state"] = sap.ui.core.ValueState.Error;
+				}		
+                },
+			
+			onEnviarDocumento: function (oEvent){
+				var oLinhaDocumento = oEvent.getSource().getBindingContext().getObject();
+				var oFileUploader = oEvent.oSource.oParent.mAggregations.items[0];
+				var oDocumento = oFileUploader.oFileUpload.files[0];
+				var nome_documento = oFileUploader.getValue();
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				var oDocumentoAtual = {};
+				if(nome_documento && oDocumento){
+					oFileUploader.clear();
+					oDocumentoAtual["persistido"] = false;
+					oDocumentoAtual["dados"] = oDocumento;
+					oDocumentoAtual["fk_category.id_tax_category"] = oLinhaDocumento["fk_category.id_tax_category"];
+					oDocumentoAtual["fk_periodo.id_periodo"] = oLinhaDocumento["fk_periodo.id_periodo"];
+					oDocumentoAtual["nome_documento"] = nome_documento;
+					oDocumentoAtual["id_documento_ttc"] = -1;
+					oLinhaDocumento["nome_documento"] = nome_documento;
+					oLinhaDocumento["persistido"] = false;
+					oLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = -1;
+					aDocumentosVigentes.push(oDocumentoAtual);
+					this.getModel().refresh();
 				}
-			}
+			},
+			
+			onExcluirDocumento: function (oEvent){
+				var oLinhaDocumento = oEvent.getSource().getBindingContext().getObject();
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				var aDocumentosNaoVigentes = this.getModel().getProperty("/documentosNaoVigentes");
+				var novoDocumentoNaoVigente = {};
+				for(let i =0; i < aDocumentosVigentes.length; i++){
+					if(oLinhaDocumento["fk_category.id_tax_category"] == aDocumentosVigentes[i]["fk_category.id_tax_category"]
+					   && oLinhaDocumento["fk_periodo.id_periodo"] == aDocumentosVigentes[i]["fk_periodo.id_periodo"])
+					{
+						novoDocumentoNaoVigente["fk_periodo.id_periodo"] = aDocumentosVigentes[i]["fk_periodo.id_periodo"];
+						novoDocumentoNaoVigente["fk_category.id_tax_category"] = aDocumentosVigentes[i]["fk_category.id_tax_category"];
+						novoDocumentoNaoVigente["nome_documento"] = aDocumentosVigentes[i]["nome_documento"];
+						novoDocumentoNaoVigente["persistido"] = aDocumentosVigentes[i]["persistido"];
+						novoDocumentoNaoVigente["id_documento_ttc"] = aDocumentosVigentes[i]["id_documento_ttc"];
+						aDocumentosVigentes.splice(i,1);
+						oLinhaDocumento["nome_documento"] = "";
+						oLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = 0;
+						oLinhaDocumento["persistido"] = undefined;
+						oLinhaDocumento["valor_total"] = 0;
+					}
+				}
+				this.getModel().refresh();
+				aDocumentosNaoVigentes.push(novoDocumentoNaoVigente);
+			},
+			
+			_remontarAbaDocumentos: function () {
+				var aPagamentosBorne = Utils.orderByArrayParaBox(this._dadosPagamentosBorne.slice(0),'category');
+				var aPagamentosCollected = Utils.orderByArrayParaBox(this._dadosPagamentosCollected.slice(0), 'category');
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				var linhasDocumentos = [];
+				var insereArrayNoLinhasDocumentos = function (array, classificacao){
+					var categoriaCorrente = -1;
+					var objLinhaDocumento = {};
+					var idDaLinha = 0;
+					for(let i = 0; i < array.length; i++){
+						if(array[i]["fk_category.id_tax_category"]){
+							if(array[i]["fk_category.id_tax_category"] == categoriaCorrente){
+								linhasDocumentos[linhasDocumentos.length -1]["valor_total"] = Number(array[i]["total"]) + linhasDocumentos[linhasDocumentos.length -1]["valor_total"];
+							}
+							else{
+								idDaLinha++;
+								categoriaCorrente = array[i]["fk_category.id_tax_category"];
+								objLinhaDocumento = {};
+								objLinhaDocumento["id_linha_documento"] = idDaLinha;
+								objLinhaDocumento["classificacao"] = classificacao;
+								objLinhaDocumento["category"] = array[i]["category"];
+								objLinhaDocumento["fk_category.id_tax_category"] = array[i]["fk_category.id_tax_category"];
+								objLinhaDocumento["fk_periodo.id_periodo"] = array[i]["fk_periodo.id_periodo"];
+								objLinhaDocumento["valor_total"] = Number(array[i]["total"]);
+								for(let j = 0; j < aDocumentosVigentes.length; j++){
+									if(array[i]["fk_periodo.id_periodo"] == aDocumentosVigentes[j]["fk_periodo.id_periodo"]
+									   && array[i]["fk_category.id_tax_category"] == aDocumentosVigentes[j]["fk_category.id_tax_category"])
+								    {
+										objLinhaDocumento["nome_documento"] = aDocumentosVigentes[j]["nome_documento"];
+										objLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = aDocumentosVigentes[j]["id_documento_ttc"];
+										objLinhaDocumento["persistido"] = aDocumentosVigentes[j]["persistido"];
+									}
+								}
+								linhasDocumentos.push(objLinhaDocumento);
+							}
+						}
+					}
+				}
+				insereArrayNoLinhasDocumentos(aPagamentosBorne, "Borne");
+				insereArrayNoLinhasDocumentos(aPagamentosCollected, "Collected");
+				this.getModel().setProperty("/linhasDocumentos", linhasDocumentos);
+			}	
 		});
 	}
 );
