@@ -1,0 +1,20 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="{i18n>viewGeralAvisoAguardarUpload}" showHeader="true" type="Message" class="sapUiNoContentPadding">
+		<content>
+			<Table items="{ path: '/Documentos', filters: [{ path: 'id_documento', operator: 'EQ', value1: 0 }] }" width="400px">
+				<columns>
+					<Column></Column>
+					<Column></Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier title="{nome_arquivo}"/>
+							<ProgressIndicator percentValue="{progresso}" displayValue="{progresso}%" showValue="true" state="Information"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Dialog>
+</core:FragmentDefinition>

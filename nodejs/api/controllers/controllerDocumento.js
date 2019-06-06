@@ -110,7 +110,7 @@ module.exports = {
 				req.file.mimetype,
 				req.file.size,
 				req.file.originalname,
-				1,
+				req.session.usuario.id,
 				Confirmado
 			];
 

@@ -73,10 +73,10 @@ module.exports = {
 		var aParams = [{
 			coluna: model.colunas.fkIdRespostaObrigacao,
 			valor: req.body.fkIdRespostaObrigacao ? Number(req.body.fkIdRespostaObrigacao) : null
-		}, {
+		},/* {
 			coluna: model.colunas.dadosArquivo,
 			valor: req.body.dadosArquivo ? req.body.dadosArquivo : null
-		}, {
+		},*/ {
 			coluna: model.colunas.mimetype,
 			valor: req.body.mimetype ? req.body.mimetype : null
 		}, {
@@ -88,6 +88,9 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdUsuario,
 			valor: req.body.fkIdUsuario ? Number(req.body.fkIdUsuario) : null
+		}, {
+			coluna: model.colunas.indConclusao,
+			valor: req.body.indConclusao ? Number(req.body.indConclusao) : null
 		}, {
 			isIdLog: true,
 			valor: req

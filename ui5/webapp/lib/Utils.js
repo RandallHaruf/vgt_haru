@@ -193,6 +193,21 @@ sap.ui.define(
 					.getFullYear().toString();
 				return fDataNoPadrao;
 			},
+			
+			stringDateNowParaVariavelFormatoYYYYMMDD: function () {
+				//PASSAR DATA CORRENTE PARA O FORMATO "yyyy-MM-dd a partir da aplicação"
+				var dataArquivo = new Date();
+				var dia = dataArquivo.getDate().toString();
+				var mes = (dataArquivo.getMonth() + 1).toString();
+				var ano = dataArquivo.getFullYear().toString();
+
+				if (parseInt(mes) < 10)
+					mes = "0" + mes;
+				if (parseInt(dia) < 10)
+					dia = "0" + dia;
+
+				return ano + "-" + mes + "-" + dia;
+			},
 
 			stringDataDoBancoParaStringDDMMYYYY: function (dataString) {
 				//PASSAR DIRETO DO BANCO NO FORMATO "yyyy-MM-dd"

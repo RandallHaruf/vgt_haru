@@ -6,7 +6,7 @@
 			<f2:DynamicPageTitle>
 				<f2:breadcrumbs>
 					<Breadcrumbs>
-						<Link text="Home" press="navToHome" visible="{/IsAreaUsuario}" />
+						<Link text="Home" press="navToHome" visible="{/IsAreaUsuario}"/>
 						<Link text="{i18n>ViewFormularioListagemObrigacoes}" press="navToPage2"/>
 						<Link text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}" enabled="false"/>
 					</Breadcrumbs>
@@ -15,7 +15,7 @@
 					<Title text="{i18n>viewFormularioComplianceComplianceFormulariodeDetalhedeObrigacao}"/>
 				</f2:heading>
 				<f2:expandedContent>
-					<ObjectIdentifier title="{/NomeUsuario}" />
+					<ObjectIdentifier title="{/NomeUsuario}"/>
 				</f2:expandedContent>
 			</f2:DynamicPageTitle>
 		</f2:title>
@@ -107,11 +107,10 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelValorSuporte}">
 									<f:fields>
-										<Input 
-											id="ValorSuporte"
+										<Input id="ValorSuporte"
 											value="{path: '/RespostaObrigacao/suporte_valor', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
 											enabled="{= ${/RespostaObrigacao/suporte_contratado} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}"
-											change="onTrocarValorSuporte" />
+											change="onTrocarValorSuporte"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewGeralMoeda}">
@@ -129,8 +128,8 @@
 								</f:FormElement>
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
-										<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd" value="{/RespostaObrigacao/ano_fiscal_calculado}"
-											enabled="false" change="onValidarData"/>
+										<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd"
+											value="{/RespostaObrigacao/ano_fiscal_calculado}" enabled="false" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}">
@@ -157,17 +156,17 @@
 								<f:FormElement>
 									<VBox>
 										<VBox visible="{= ${/IsIFrame} ? false : true}">
-											<HBox>
-												<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}"
-													select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }"/>
-											</HBox>
+											<!--<HBox>-->
+											<!--	<CheckBox id="CheckSeleciona" text="{i18n>viewComplianceFormularioObrigacoesTituloConcluida}" selected="{/IsDeclaracao}"-->
+											<!--		select="onSelecionaCheck" class="sapUiSmallMarginEnd" visible="{= ${/JaDataObrigacaoConcluida} ? true : false }"/>-->
+											<!--</HBox>-->
 											<HBox>
 												<DatePicker id="DataAtual" valueFormat="yyyy-MM-dd" visible="{= ${/IsDeclaracao} === true ? true : false}" change="onValidarData"/>
 											</HBox>
 											<HBox>
 												<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
 													buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}"/>
-												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onEnviarArquivo" class="customButton"/>
+												<Button id="btnEnviar" text="{i18n>viewGeralEnviarArq}" press="onAnexarArquivo" class="customButton"/>
 											</HBox>
 										</VBox>
 										<Table id="tabelaDocumentos" inset="false" items="{ path: '/Documentos', sorter: [{ path: 'nome_arquivo' }, { path: 'data_upload' }] }">
@@ -212,8 +211,9 @@
 		<f2:footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" enabled="{/CancelaBotaoConfirmar}"/>
-				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" enabled="{/CancelaBotaoCancelar}"/>
+				<Button text="{i18n>viewGeralEncerrar}" type="Accept" press="onEncerrar" enabled="{/PodeEncerrar}"/>
+				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" />
+				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" />
 			</Toolbar>
 		</f2:footer>
 	</f2:DynamicPage>
