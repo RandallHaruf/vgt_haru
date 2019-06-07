@@ -111,7 +111,7 @@
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
+				<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTaxPackage" items="{ path: '/ReportTaxPackage'}">
 					<columns>
 						<Column width="{/remtblEmpresa.nome}" hAlign="Center">
 							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>

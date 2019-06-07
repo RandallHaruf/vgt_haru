@@ -211,7 +211,7 @@
 		<!-- DynamicPage Content -->
 		<f:content>
 			<ScrollContainer  horizontal="true" vertical="true" height="100%">
-				<Table id="relatorioCompliance" items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
+				<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioCompliance" items="{ path: '/ReportObrigacao', sorter: [{path:'nome'}] }" >
 					<columns>
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewComplianceListagemObrigacoesTextoFiltro1}" textAlign="Center"/>

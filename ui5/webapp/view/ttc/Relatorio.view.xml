@@ -187,7 +187,7 @@
 		<!-- DynamicPage Content  -->
 		<f:content>
 			<ScrollContainer horizontal="true" vertical="true" height="100%">
-				<Table id="relatorioDoTTC" items="{ path: '/ReportTTC' }"> <!--items="{ path: '/ReportTTC', sorter: [{path:'tblPagamento.data_pagamento'}] }">-->
+				<Table sticky="HeaderToolbar,ColumnHeaders" id="relatorioDoTTC" items="{ path: '/ReportTTC' }"> <!--items="{ path: '/ReportTTC', sorter: [{path:'tblPagamento.data_pagamento'}] }">-->
 					<columns>
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewRelatorioEmpresa}" textAlign="Center"/>
