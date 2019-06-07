@@ -184,26 +184,27 @@ module.exports = {
 		var stringtemporaria = "";
 		var stringInnerJoinModulo = "";
 		var filtro = "";
-		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
 
+		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : {};
+		
 		const isFull = function () {
 			return (req.query && req.query.full && req.query.full == "true");
 		};
 
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/ req.session.usuario.empresas.length > 0){
+		if (!isFull() && req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
-			if (aEntrada[13] === null){
-				aEntrada[13] = [];
-			}
+
+			aEntrada.EmpresasUsuario = [];
+
 			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[13].push(JSON.stringify(aEmpresas[j]));
+				aEntrada.EmpresasUsuario.push(JSON.stringify(aEmpresas[j]));
 			}
 			if(req.query.moduloAtual){
 				stringInnerJoinModulo = 
 				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
 				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 1 ';
 			}					
-		}		
+		}			
 		var sStatement = 
 			'SELECT '
 			+'tblEmpresa."id_empresa" "tblEmpresa.id_empresa", '
@@ -291,84 +292,82 @@ module.exports = {
 			+'LEFT OUTER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"'
 			+stringInnerJoinModulo			
 			+'LEFT OUTER JOIN "VGT.CAMBIO_TTC" AS tblCambioTTC ON tblCambioTTC."data" = tblPagamento."data_pagamento" and tblCambioTTC."fk_dominio_moeda.id_dominio_moeda" = tblPagamento."fk_dominio_moeda.id_dominio_moeda"';
-	
-
+			
+		var variavelDefault;
 		var valorSeNulo = "";//se receber o parametro neste valor, o parametro sera considerado como "is null"
-		for (var i = 0; i < aEntrada.length; i++) {
-			filtro = "";			
-			if (aEntrada[i] !== null){
-				stringtemporaria = "";
-				for (var k = 0; k < aEntrada[i].length; k++) {
-					switch (i){
-						case 0:
-							filtro = ' tblEmpresa."id_empresa" ' ;
-							break;
-						case 1:
-							filtro = ' tblDominioTaxClassification."id_dominio_tax_classification" ';
-							break;
-						case 2:
-							filtro = ' tblTaxCategory."id_tax_category" ';
-							break;
-						case 3:
-							filtro = ' tblTax."id_tax" ';
-							break;
-						case 4:
-							filtro = ' tblNameOfTax."id_name_of_tax" ';
-							break;
-						case 5:
-							filtro = ' tblDominioJurisdicao."id_dominio_jurisdicao" ';
-							break;
-						case 6:
-							filtro = ' tblDominioPais."id_dominio_pais" ';
-							break;
-						case 7:
-							filtro = ' tblDominioAnoFiscal."id_dominio_ano_fiscal"  ';
-							break;
-						case 8:
-							filtro = ' tblDominioMoeda."id_dominio_moeda"  ';
-							break;
-						case 9:
-							filtro = ' tblDominioTipoTransacao."id_dominio_tipo_transacao" ';
-							break;
-						case 10:
-							filtro = ' tblPagamento."data_pagamento" >';
-							break;	
-						case 11:
-							filtro = ' tblPagamento."data_pagamento" <';
-							break;	
-						case 12:
-							filtro = ' tblRelEmpresaPeriodo."ind_enviado" ';
-							break;								
-						case 13:
-							filtro = ' tblEmpresa."id_empresa" ';
-							break;							
-					}
-					if(aEntrada[i][k] != valorSeNulo){
-						filtro += '= ? '
-					}
-					else{
-						filtro += ' is null ';
-					}
-					if(aEntrada[i].length == 1){
-						oWhere.push(filtro);
-						if(aEntrada[i][k] != valorSeNulo){
-							aParams.push(aEntrada[i][k])
-						}
-					}	 
-					else{
-						k == 0 ? 
-						stringtemporaria = stringtemporaria + '(' + filtro :
-							k == aEntrada[i].length - 1 ?
-							(stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) :
-							stringtemporaria = stringtemporaria +  ' or' + filtro; 
-						if(aEntrada[i][k] != valorSeNulo){
-							aParams.push(aEntrada[i][k])
-						}
-					}					
-					
+		for (var atributo in aEntrada){
+			filtro = "";
+			stringtemporaria = "";
+			variavelDefault = true;
+			for(var item in aEntrada[atributo]){
+				switch (atributo){
+					case "Empresa":
+						filtro = ' tblEmpresa."id_empresa" ' ;
+						break;
+					case "TaxClassification":
+						filtro = ' tblDominioTaxClassification."id_dominio_tax_classification" ';
+						break;
+					case "TaxCategory":
+						filtro = ' tblTaxCategory."id_tax_category" ';
+						break;
+					case "Tax":
+						filtro = ' tblTax."id_tax" ';
+						break;
+					case "NameOfTax":
+						filtro = ' tblNameOfTax."id_name_of_tax" ';
+						break;
+					case "Jurisdicao":
+						filtro = ' tblDominioJurisdicao."id_dominio_jurisdicao" ';
+						break;
+					case "Pais":
+						filtro = ' tblDominioPais."id_dominio_pais" ';
+						break;
+					case "AnoFiscal":
+						filtro = ' tblDominioAnoFiscal."id_dominio_ano_fiscal"  ';
+						break;
+					case "Moeda":
+						filtro = ' tblDominioMoeda."id_dominio_moeda"  ';
+						break;
+					case "TipoTransacao":
+						filtro = ' tblDominioTipoTransacao."id_dominio_tipo_transacao" ';
+						break;
+					case "DataInicio":
+						filtro = ' tblPagamento."data_pagamento" >';
+						break;	
+					case "DataFim":
+						filtro = ' tblPagamento."data_pagamento" <';
+						break;	
+					case "Enviado":
+						filtro = ' tblRelEmpresaPeriodo."ind_enviado" ';
+						break;								
+					case "EmpresasUsuario":
+						filtro = ' tblEmpresa."id_empresa" ';
+						break;	
+					default:
+						variavelDefault = false;
+						break;
+				}
+				if(aEntrada[atributo][item] != valorSeNulo){
+					filtro += '= ? '
+				}
+				else{
+					filtro += ' is null ';
 				}	
+				if(variavelDefault){
+					if(aEntrada[atributo].length == 1){
+						oWhere.push(filtro);
+						if(aEntrada[atributo][0] != valorSeNulo){
+							aParams.push(aEntrada[atributo][0]);	
+						}	
+					}else{
+						item == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : item == aEntrada[atributo].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
+						if(aEntrada[atributo][item] != valorSeNulo){
+							aParams.push(aEntrada[atributo][item]);	
+						}
+					}						
+				}
 			}
-		}
+		}	
 
 		if (oWhere.length > 0) {
 			sStatement += ' where (tblPagamento."id_pagamento" is not null or ( tblPagamento."id_pagamento" is null and tblRelEmpresaPeriodo."ind_enviado" = true) ) and ';
@@ -403,28 +402,27 @@ module.exports = {
 		var stringDistinct = "";
 		var stringOrderBy = "";
 		var filtro = "";
-		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : [];
+
+		var aEntrada = req.body.parametros ? JSON.parse(req.body.parametros) : {};
 
 		const isFull = function () {
 			return (req.query && req.query.full && req.query.full == "true");
 		};
 		
-		if (!isFull() && /*req.session.usuario.nivelAcesso === 0 &&*/req.session.usuario.empresas.length > 0) {
+		if (!isFull() && req.session.usuario.empresas.length > 0){
 			var aEmpresas = req.session.usuario.empresas;
-			if (aEntrada[13] === null){
-				aEntrada[13] = [];
-			}
+			aEntrada.EmpresasUsuario = [];
 			for(var j = 0; j < req.session.usuario.empresas.length;j++){
-				aEntrada[13].push(JSON.stringify(aEmpresas[j]));
+				aEntrada.EmpresasUsuario.push(JSON.stringify(aEmpresas[j]));
 			}
 			if(req.query.moduloAtual){
 				stringInnerJoinModulo = 
 				'INNER JOIN "VGT.REL_EMPRESA_MODULO" AS tblRelEmpresaModulo '
 				+'ON tblEmpresa."id_empresa" = tblRelEmpresaModulo."fk_empresa.id_empresa" and tblRelEmpresaModulo."fk_dominio_modulo.id_dominio_modulo" = 1 ';
-			}				
-		}	
+			}					
+		}				
 
-		switch(aEntrada[14][0]){
+		switch(aEntrada.Distinct[0]){
 			case "tblEmpresa.nome":
 				stringDistinct = 'Select distinct "tblEmpresa.nome", "tblEmpresa.id_empresa" from (';
 				break;			
@@ -547,82 +545,81 @@ module.exports = {
 			+stringInnerJoinModulo
 			+'LEFT OUTER JOIN "VGT.DOMINIO_TIPO_TRANSACAO" AS tblDominioTipoTransacao ON tblDominioTipoTransacao."id_dominio_tipo_transacao" = tblPagamento."fk_dominio_tipo_transacao.id_dominio_tipo_transacao"';
 
+		var variavelDefault;
 		var valorSeNulo = "";//se receber o parametro neste valor, o parametro sera considerado como "is null"
-		
-		for (var i = 0; i < aEntrada.length - 1; i++) {
-			filtro = "";			
-			if (aEntrada[i] !== null){
-				stringtemporaria = "";
-				for (var k = 0; k < aEntrada[i].length; k++) {
-					switch (i){
-						case 0:
-							filtro = ' tblEmpresa."id_empresa" ' ;
-							break;
-						case 1:
-							filtro = ' tblDominioTaxClassification."id_dominio_tax_classification" ';
-							break;
-						case 2:
-							filtro = ' tblTaxCategory."id_tax_category" ';
-							break;
-						case 3:
-							filtro = ' tblTax."id_tax" ';
-							break;
-						case 4:
-							filtro = ' tblNameOfTax."id_name_of_tax" ';
-							break;
-						case 5:
-							filtro = ' tblDominioJurisdicao."id_dominio_jurisdicao" ';
-							break;
-						case 6:
-							filtro = ' tblDominioPais."id_dominio_pais" ';
-							break;
-						case 7:
-							filtro = ' tblDominioAnoFiscal."id_dominio_ano_fiscal"  ';
-							break;
-						case 8:
-							filtro = ' tblDominioMoeda."id_dominio_moeda"  ';
-							break;
-						case 9:
-							filtro = ' tblDominioTipoTransacao."id_dominio_tipo_transacao" ';
-							break;
-						case 10:
-							filtro = ' tblPagamento."data_pagamento" >= ? ';
-							break;	
-						case 11:
-							filtro = ' tblPagamento."data_pagamento" <= ? ';
-							break;	
-						case 12:
-							filtro = ' tblRelEmpresaPeriodo."ind_enviado" ';
-							break;								
-						case 13:
-							filtro = ' tblEmpresa."id_empresa" ';
-							break;							
-					}
-					if(aEntrada[i][k] != valorSeNulo){
-						filtro += ' = ?'
-					}
-					else{
-						filtro += ' is null ';
-					}
-					if(aEntrada[i].length == 1){
-						oWhere.push(filtro);
-						if(aEntrada[i][k] != valorSeNulo){
-							aParams.push(aEntrada[i][k])
-						}
-					}	 
-					else{
-						k == 0 ? 
-						stringtemporaria = stringtemporaria + '(' + filtro :
-							k == aEntrada[i].length - 1 ?
-							(stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) :
-							stringtemporaria = stringtemporaria +  ' or' + filtro; 
-						if(aEntrada[i][k] != valorSeNulo){
-							aParams.push(aEntrada[i][k])
-						}
-					}
+		for (var atributo in aEntrada){
+			filtro = "";
+			stringtemporaria = "";
+			variavelDefault = true;
+			for(var item in aEntrada[atributo]){
+				switch (atributo){
+					case "Empresa":
+						filtro = ' tblEmpresa."id_empresa" ' ;
+						break;
+					case "TaxClassification":
+						filtro = ' tblDominioTaxClassification."id_dominio_tax_classification" ';
+						break;
+					case "TaxCategory":
+						filtro = ' tblTaxCategory."id_tax_category" ';
+						break;
+					case "Tax":
+						filtro = ' tblTax."id_tax" ';
+						break;
+					case "NameOfTax":
+						filtro = ' tblNameOfTax."id_name_of_tax" ';
+						break;
+					case "Jurisdicao":
+						filtro = ' tblDominioJurisdicao."id_dominio_jurisdicao" ';
+						break;
+					case "Pais":
+						filtro = ' tblDominioPais."id_dominio_pais" ';
+						break;
+					case "AnoFiscal":
+						filtro = ' tblDominioAnoFiscal."id_dominio_ano_fiscal"  ';
+						break;
+					case "Moeda":
+						filtro = ' tblDominioMoeda."id_dominio_moeda"  ';
+						break;
+					case "TipoTransacao":
+						filtro = ' tblDominioTipoTransacao."id_dominio_tipo_transacao" ';
+						break;
+					case "DataInicio":
+						filtro = ' tblPagamento."data_pagamento" >';
+						break;	
+					case "DataFim":
+						filtro = ' tblPagamento."data_pagamento" <';
+						break;	
+					case "Enviado":
+						filtro = ' tblRelEmpresaPeriodo."ind_enviado" ';
+						break;								
+					case "EmpresasUsuario":
+						filtro = ' tblEmpresa."id_empresa" ';
+						break;	
+					default:
+						variavelDefault = false;
+						break;
+				}
+				if(aEntrada[atributo][item] != valorSeNulo){
+					filtro += '= ? '
+				}
+				else{
+					filtro += ' is null ';
 				}	
+				if(variavelDefault){
+					if(aEntrada[atributo].length == 1){
+						oWhere.push(filtro);
+						if(aEntrada[atributo][0] != valorSeNulo){
+							aParams.push(aEntrada[atributo][0]);	
+						}	
+					}else{
+						item == 0 ? stringtemporaria = stringtemporaria + '(' + filtro : item == aEntrada[atributo].length - 1 ? (stringtemporaria = stringtemporaria +  ' or' + filtro + ')' , oWhere.push(stringtemporaria)) : stringtemporaria = stringtemporaria +  ' or' + filtro; 
+						if(aEntrada[atributo][item] != valorSeNulo){
+							aParams.push(aEntrada[atributo][item]);	
+						}
+					}						
+				}
 			}
-		}
+		}	
 
 		if (oWhere.length > 0) {
 			sStatement += ' where (tblPagamento."id_pagamento" is not null or ( tblPagamento."id_pagamento" is null and tblRelEmpresaPeriodo."ind_enviado" = true) ) and ';
@@ -636,7 +633,6 @@ module.exports = {
 		}
 		
 		sStatement += ") " + stringOrderBy;
-		
 		
 		model.execute({
 			statement: sStatement,

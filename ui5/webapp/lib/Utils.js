@@ -1816,6 +1816,13 @@ sap.ui.define(
 
 					var oToolbar = new sap.m.Toolbar();
 					oToolbar.addContent(new sap.m.ToolbarSpacer());
+					/*COMMENT M_VGT.53
+					oToolbar.addContent(new sap.m.Button({
+						text: "{i18n>viewGeralLimparFiltro}"
+					}).attachPress(oTable, function () {
+						that._onClearFiltros();
+					}, that));					
+					COMMENT M_VGT.53*/					
 					oToolbar.addContent(new sap.m.Button({
 						text: "{i18n>viewGeralGravarComo}"
 					}).attachPress(oTable, function () {

@@ -107,10 +107,18 @@ sap.ui.define([
 			this.getModel().setProperty("/IdPeriodoSelecionadas", undefined);
 			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
 			this.getModel().setProperty("/StatusSelecionado", undefined);				
-			this.getModel().setProperty("/TemplateReport", undefined);			
+			//this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
 		},
-
+		/*COMMENT M_VGT.53
+		_onClearFiltros: function (oEvent) {
+			this.getModel().setProperty("/IdEmpresasSelecionadas" , undefined);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
+			this.getModel().setProperty("/IdPeriodoSelecionadas", undefined);
+			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
+			this.getModel().setProperty("/StatusSelecionado", undefined);		
+		},		
+		COMMENT M_VGT.53*/	
 		onSelectChange: function (oEvent) {
 			//this.onValidarData(oEvent);
 			this._atualizarDados();			
@@ -152,6 +160,43 @@ sap.ui.define([
 		},
 		
 		onTemplateSet: function (oEvent) {
+			var oWhere = this.getSelectedItemsTemplate();
+			this.getModel().setProperty("/Preselecionado", oWhere);
+		},
+		onTemplateGet: function (oEvent) {
+			this._onClearSelecoes();
+			//this._atualizarDados();
+			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
+			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao.Empresa);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao.AnoCalendario);
+			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao.Periodo);
+			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao.Moeda);
+			this.getModel().setProperty("/StatusSelecionado", forcaSelecao.Status);			
+			for (var i = 0, length = forcaSelecao.Filtros.length; i < length; i++) {
+				for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
+					if (forcaSelecao.Filtros[i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name) {
+						this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao.Filtros[i].visible;
+						break;
+					}
+				}
+			}
+
+			var dialog = this.byId("filterbar");
+			dialog._setConsiderFilterChanges(false);
+			dialog._recreateBasicAreaContainer(true);
+			dialog._retrieveVisibleAdvancedItems();
+			dialog._setConsiderFilterChanges(true);
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			var that = this;
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
+			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
+			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
+			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
+			COMMENT*/				
+		},
+		getSelectedItemsTemplate: function(oEvent){
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas") ? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !==
 				undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas") : null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") ? this.getModel().getProperty(
@@ -163,80 +208,31 @@ sap.ui.define([
 				0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
 			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
 				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;				
-			var oWhere = [];
+			var oWhere = {};
 			var oFiltrosVisiveis = [];
 			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
-				oFiltrosVisiveis.push(
-					{
-						name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name ,
-						visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
-					}
-				);
-			}			
-			oWhere.push(oEmpresa);
-			oWhere.push(oDominioAnoCalendario);
-			oWhere.push(oPeriodoSelecionadas);
-			oWhere.push(oMoedaSelecionadas);
-			oWhere.push(oStatusSelecionado);			
-			oWhere.push(oFiltrosVisiveis);			
-			this.getModel().setProperty("/Preselecionado", oWhere);
-		},
-		
-		onTemplateGet: function (oEvent) {
-			this._onClearSelecoes();
-			//this._atualizarDados();
-			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
-			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
-			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
-			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao[2]);
-			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao[3]);
-			this.getModel().setProperty("/StatusSelecionado", forcaSelecao[4]);			
-			if(forcaSelecao.length >= 6){
-				for (var i = 0, length = forcaSelecao[5].length; i < length; i++) {
-					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
-						if(forcaSelecao[5][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name){
-							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[5][i].visible;
-							break;
-						}
-					}
-				}					
+				oFiltrosVisiveis.push({
+					name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name,
+					visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
+				});
 			}
-			var dialog = this.byId("filterbar");
-			dialog._setConsiderFilterChanges(false);
-			dialog._recreateBasicAreaContainer(true);
-			dialog._retrieveVisibleAdvancedItems();
-			dialog._setConsiderFilterChanges(true);	
-			/*COMMENT M_VGT.23
-			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
-			var that = this;
-			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
-			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
-			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
-			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
-			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
-			COMMENT*/				
-		},
-		
+			oWhere.Empresa = oEmpresa;
+			oWhere.AnoCalendario = oDominioAnoCalendario; 
+			oWhere.Periodo = oPeriodoSelecionadas; 
+			oWhere.Moeda = oMoedaSelecionadas;
+			oWhere.Status = oStatusSelecionado;
+			oWhere.Filtros = oFiltrosVisiveis;
+			return oWhere;
+			
+		},			
 		_atualizarDados: function () {
 			var that = this;
-			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
-			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
-			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
-			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
-				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;
-				
-			var oWhere = []; 
-			oWhere.push(oEmpresa);
-			oWhere.push(oDominioAnoCalendario);
-			oWhere.push(oPeriodoSelecionadas);
-			oWhere.push(oMoedaSelecionadas);
-			oWhere.push(null);
-			oWhere.push(oStatusSelecionado);			
-			oWhere.push(null);
-			if(oEmpresa === null){
-				oWhere[6] = ["tblEmpresa.nome"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
+			var oWhere = this.getSelectedItemsTemplate();
+
+			if (oWhere.Empresa === null) {
+				oWhere.Distinct = ["tblEmpresa.nome"];				
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
+					"false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -247,17 +243,18 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
-						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
+						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro, "tblEmpresa.nome"));
 					}
-				});					
+				});
 			}/*COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
 			}COMMENT*/
 
-			if(oDominioAnoCalendario === null){
-				oWhere[6] = ["tblDominioAnoCalendario.ano_calendario"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
+			if (oWhere.AnoCalendario === null) {
+				oWhere.Distinct = ["tblDominioAnoCalendario.ano_calendario"];				
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
+					"false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -271,17 +268,18 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
 						/*COMMENT M_VGT.23
 						that.getModel().setProperty("/DominioAnoCalendario", Utils.orderByArrayParaBoxComSelecao(aRegistro,"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));							
-						COMMENT*/							
+						COMMENT*/						
 					}
-				});				
-			}	/*COMMENT M_VGT.23
+				});
+			}/*COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
-			}COMMENT*/		
-	
-			if(oPeriodoSelecionadas === null){
-				oWhere[6] = ["tblPeriodo.id_periodo"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
+			}COMMENT*/
+
+			if (oWhere.Periodo === null) {
+				oWhere.Distinct = ["tblPeriodo.id_periodo"];				
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
+					"false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -292,20 +290,21 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
-							for (var i = 0, length = aRegistro.length; i < length; i++) {
-							aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that);           
-						}							
-						that.getModel().setProperty("/Periodo", Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
+						for (var i = 0, length = aRegistro.length; i < length; i++) {
+							aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"], that);
+						}
+						that.getModel().setProperty("/Periodo", Utils.orderByArrayParaBox(aRegistro, "tblPeriodo.periodo"));
 					}
-				});					
+				});
 			}/*COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
-			}COMMENT*/			
+			}COMMENT*/	
 
-			if(oMoedaSelecionadas === null){
-				oWhere[6] = ["tblDominioMoeda.acronimo"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
+			if (oWhere.Moeda === null) {
+				oWhere.Distinct = ["tblDominioMoeda.acronimo"];				
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" :
+					"false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -316,16 +315,17 @@ sap.ui.define([
 					},
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
-						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
+						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro, "tblDominioMoeda.acronimo"));
 					}
-				});					
+				});
 			}/*COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
 			}COMMENT*/	
-			if (oStatusSelecionado === null) {
-				oWhere[6] = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
+
+			if (oWhere.Status === null) {
+				oWhere.Distinct = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];				
+				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 					type: "POST",
 					xhrFields: {
 						withCredentials: true
@@ -345,7 +345,7 @@ sap.ui.define([
 			}/*COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
-			}COMMENT*/				
+			}COMMENT*/	
 		},
 		
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {
@@ -355,35 +355,32 @@ sap.ui.define([
 		
 		_geraRelatorioTax: function (ifExport) {
 
-			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas")? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas"): null : null;
-			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") : null : null;
-			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas")? this.getModel().getProperty("/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
-			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas")? this.getModel().getProperty("/IdMoedaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
-				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;	
-				
-			var oWhere = []; 
-			oWhere.push(oEmpresa);
-			oWhere.push(oDominioAnoCalendario);
-			oWhere.push(oPeriodoSelecionadas);
-			oWhere.push(oMoedaSelecionadas);
-			oWhere.push(null);
-			oWhere.push(oStatusSelecionado);			
-			oWhere.push(null);
-			
+			var oWhere = this.getSelectedItemsTemplate();
 			var that = this;
-			that.setBusy(that.byId("relatorioDoTaxPackage"),true);
-			that.byId("GerarRelatorio").setEnabled(false);				
-			jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
+			that.byId("GerarRelatorio").setEnabled(false);			
+			
+			
+			const promise1 = function () {
+				return new Promise(function (resolve, reject) {
+					that.setBusy(that.byId("relatorioDoTaxPackage"),true);							
+					jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (that.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
+						type: "POST",
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
+						data: {
+							parametros: JSON.stringify(oWhere)
+						},
+						success: function (response) {
+							resolve(response);
+						}
+					});								
+
+				});
+			};		
+			
+			const handler1 = function (response) {
 					var aRegistro = JSON.parse(response);
 					for (var i = 0, length = aRegistro.length; i < length; i++) {
 						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 		
@@ -399,21 +396,29 @@ sap.ui.define([
 								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
 							}
 						}						
-						that.getModel().setProperty(ifExport, aRegistro);
-						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
-						that.byId("GerarRelatorio").setEnabled(true);						
+						that.getModel().setProperty(ifExport, aRegistro);				
 						that.onDataExport(ifExport);
 					}
 					else{
 						for (var k = 0, length = array.length; k < length; k++) {
 							Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
 						}						
-						that.getModel().setProperty(ifExport, aRegistro);
-						that.setBusy(that.byId("relatorioDoTaxPackage"),false);		
-						that.byId("GerarRelatorio").setEnabled(true);						
+						that.getModel().setProperty(ifExport, aRegistro);						
 					}
-				}
-			});			
+				};		
+			
+			promise1()
+				.then(function(res) {
+					handler1(res);
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+				.finally(function(){
+					that.byId("GerarRelatorio").setEnabled(true);	
+					that.setBusy(that.byId("relatorioDoTaxPackage"),false);	
+				});				
+
 		},
 
 		onSaveView: function (oEvent) {

@@ -11,7 +11,7 @@ aRoutes.push(express.Router().get("/ReportObrigacao/:idRegistro", controller.ler
 aRoutes.push(express.Router().put("/ReportObrigacao/:idRegistro", controller.atualizarRegistro));
 aRoutes.push(express.Router().delete("/ReportObrigacao/:idRegistro", controller.excluirRegistro));
 */
-aRoutes.push(express.Router().post("/DeepQuery/ReportObrigacao", controller.deepQuery));
-aRoutes.push(express.Router().post("/DeepQueryDistinct/ReportObrigacao", controller.deepQueryDistinct));
+// aRoutes.push(express.Router().post("/DeepQuery/ReportObrigacao", controller.deepQuery));
+// aRoutes.push(express.Router().post("/DeepQueryDistinct/ReportObrigacao", controller.deepQueryDistinct));
 aRoutes.push(express.Router().post("/DeepQueryNewDistinct/ReportObrigacao", controller.deepQueryNewDistinct));
 };

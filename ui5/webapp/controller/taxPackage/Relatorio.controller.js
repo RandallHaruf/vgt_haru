@@ -126,7 +126,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdTipoDiferencaSelecionadas", undefined);
 			this.getModel().setProperty("/IdDominioTipoDiferencaSelecionadas", undefined);
 			this.getModel().setProperty("/ModuloSelecionado", undefined);
-			this.getModel().setProperty("/TemplateReport", undefined);
+			//this.getModel().setProperty("/TemplateReport", undefined);
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
 			this.getModel().setProperty("/ReportTaxPackageTemporaryAndPermanentDiferences", undefined);
 			this.getModel().setProperty("/ReportTaxPackageIncomeTax", undefined);
@@ -138,10 +138,19 @@ sap.ui.define([
 			this.byId("PanelIncomeTax").setProperty("expanded",false);						
 
 		},
-
+		/*COMMENT M_VGT.53
+		_onClearFiltros: function (oEvent) {
+			this.getModel().setProperty("/IdEmpresasSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
+			this.getModel().setProperty("/IdPeriodoSelecionadas", undefined);
+			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
+			this.getModel().setProperty("/StatusSelecionado", undefined);
+			this.getModel().setProperty("/IdTipoDiferencaSelecionadas", undefined);
+			this.getModel().setProperty("/IdDominioTipoDiferencaSelecionadas", undefined);
+			this.getModel().setProperty("/ModuloSelecionado", undefined);					
+		},		
+		COMMENT M_VGT.53*/	
 		onSelectChange: function (oEvent) {
-			//this.onValidarData(oEvent);
-			//this._atualizarDados();
 			var that = this;
 			var oAba = this.getModel().getProperty("/ModuloSelecionado") ? this.getModel().getProperty("/ModuloSelecionado")[0] !==
 				undefined ? this.getModel().getProperty("/ModuloSelecionado") : null : null;	
@@ -194,6 +203,51 @@ sap.ui.define([
 		},
 
 		onTemplateSet: function (oEvent) {
+			var oWhere = this.getSelectedItemsTemplate();
+			this.getModel().setProperty("/Preselecionado", oWhere);
+		},
+
+		onTemplateGet: function (oEvent) {
+			this._onClearSelecoes();
+			var that = this;
+			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
+			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao.Empresa);
+			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao.AnoCalendario);
+			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao.Periodo);
+			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao.Moeda);
+			this.getModel().setProperty("/StatusSelecionado", forcaSelecao.Status);
+			this.getModel().setProperty("/IdTipoDiferencaSelecionadas", forcaSelecao.TipoDiferenca);
+			this.getModel().setProperty("/IdDominioTipoDiferencaSelecionadas", forcaSelecao.DominioTipoDiferenca);
+			this.getModel().setProperty("/ModuloSelecionado", forcaSelecao.Modulo);
+			
+				for (var i = 0, length = forcaSelecao.Filtros.length; i < length; i++) {
+					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
+						if (forcaSelecao.Filtros[i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name) {
+							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao.Filtros[i].visible;
+							break;
+						}
+					}
+				}
+
+			var dialog = this.byId("filterbar");
+			dialog._setConsiderFilterChanges(false);
+			dialog._recreateBasicAreaContainer(true);
+			dialog._retrieveVisibleAdvancedItems();
+			dialog._setConsiderFilterChanges(true);
+			/*COMMENT M_VGT.23
+			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
+			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"id_empresa"));
+			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"id_dominio_ano_calendario"));				
+			that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"numero_ordem"));				
+			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"id_dominio_moeda"));				
+			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"value",that.getModel().getProperty("/StatusSelecionado"),"key"));				
+			that.getModel().setProperty("/TipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TipoDiferenca"),"tblDiferencaOpcao.nome",that.getModel().getProperty("/IdTipoDiferencaSelecionadas"),"tblDiferencaOpcao.id_diferenca_opcao"));				
+			that.getModel().setProperty("/DominioTipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoDiferenca"),"tblDominioDiferencaTipo.tipo",that.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas"),"tblDominioDiferencaTipo.id_dominio_diferenca_tipo"));				
+			that.getModel().setProperty("/Modulo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Modulo"),"value",that.getModel().getProperty("/ModuloSelecionado"),"key"));
+			COMMENT*/			
+		},
+		
+		getSelectedItemsTemplate: function(oEvent){
 			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas") ? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !==
 				undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas") : null : null;
 			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") ? this.getModel().getProperty(
@@ -210,58 +264,31 @@ sap.ui.define([
 			var oIdDominioTipoDiferencaSelecionadas = this.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas") ? this.getModel().getProperty(
 				"/IdDominioTipoDiferencaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas") : null : null;
 			var oModuloSelecionado = this.getModel().getProperty("/ModuloSelecionado") ? this.getModel().getProperty(
-				"/ModuloSelecionado")[0] !== undefined ? this.getModel().getProperty("/ModuloSelecionado") : null : null;				
+				"/ModuloSelecionado")[0] !== undefined ? this.getModel().getProperty("/ModuloSelecionado") : null : null;
 				
-				
-			var oWhere = [];
 			var oFiltrosVisiveis = [];
 			for (var i = 0, length = this.byId("filterbar").getAllFilterItems().length; i < length; i++) {
-				oFiltrosVisiveis.push({
-					name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name,
-					visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
-				});
-			}
-			oWhere.push(oEmpresa); //0
-			oWhere.push(oDominioAnoCalendario); //1
-			oWhere.push(oPeriodoSelecionadas); //2
-			oWhere.push(oMoedaSelecionadas); //3
-			oWhere.push(oStatusSelecionado); //4
-			oWhere.push(oIdTipoDiferencaSelecionadas); //5
-			oWhere.push(oIdDominioTipoDiferencaSelecionadas); //6
-			oWhere.push(oModuloSelecionado);//7
-			oWhere.push(oFiltrosVisiveis);//8
-			this.getModel().setProperty("/Preselecionado", oWhere);
-		},
-
-		onTemplateGet: function (oEvent) {
-			this._onClearSelecoes();
-			//this._atualizarDados();
-			var forcaSelecao = this.getModel().getProperty("/Preselecionado");
-			this.getModel().setProperty("/IdEmpresasSelecionadas", forcaSelecao[0]);
-			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", forcaSelecao[1]);
-			this.getModel().setProperty("/IdPeriodoSelecionadas", forcaSelecao[2]);
-			this.getModel().setProperty("/IdMoedaSelecionadas", forcaSelecao[3]);
-			this.getModel().setProperty("/StatusSelecionado", forcaSelecao[4]);
-			this.getModel().setProperty("/IdTipoDiferencaSelecionadas", forcaSelecao[5]);
-			this.getModel().setProperty("/IdDominioTipoDiferencaSelecionadas", forcaSelecao[6]);
-			this.getModel().setProperty("/ModuloSelecionado", forcaSelecao[7]);
-			if (forcaSelecao.length >= 9) {
-				for (var i = 0, length = forcaSelecao[8].length; i < length; i++) {
-					for (var k = 0, length = this.byId("filterbar").getAllFilterItems().length; k < length; k++) {
-						if (forcaSelecao[8][i].name == this.byId("filterbar").getAllFilterItems()[k].mProperties.name) {
-							this.byId("filterbar").getAllFilterItems()[k].mProperties.visibleInFilterBar = forcaSelecao[8][i].visible;
-							break;
-						}
+				oFiltrosVisiveis.push(
+					{
+						name: this.byId("filterbar").getAllFilterItems()[i].mProperties.name ,
+						visible: this.byId("filterbar").getAllFilterItems()[i].mProperties.visibleInFilterBar
 					}
-				}
+				);
 			}
-			var dialog = this.byId("filterbar");
-			dialog._setConsiderFilterChanges(false);
-			dialog._recreateBasicAreaContainer(true);
-			dialog._retrieveVisibleAdvancedItems();
-			dialog._setConsiderFilterChanges(true);
+		
+			var oWhere = {};
+			oWhere.Empresa = oEmpresa;
+			oWhere.AnoCalendario = oDominioAnoCalendario;
+			oWhere.Periodo = oPeriodoSelecionadas;
+			oWhere.Moeda = oMoedaSelecionadas;
+			oWhere.Status = oStatusSelecionado;				
+			oWhere.TipoDiferenca = oIdTipoDiferencaSelecionadas;	
+			oWhere.DominioTipoDiferenca = oIdDominioTipoDiferencaSelecionadas;
+			oWhere.Modulo = oModuloSelecionado;
+			oWhere.Filtros = oFiltrosVisiveis;
+			return oWhere;
 		},
-
+		
 		_atualizarDados: function () {
 			var that = this;
 			
@@ -314,18 +341,19 @@ sap.ui.define([
 				key: 5
 				}], "value"));				
 	
-			var oWhere = [];
-			oWhere.push(null); //0
-			oWhere.push(null); //1
-			oWhere.push(null); //2
-			oWhere.push(null); //3
-			oWhere.push(null); //4
-			oWhere.push(null); //5
-			oWhere.push(null); //6
-			oWhere.push(null); //7
-			oWhere.push(null);
+			var oWhere = {};
+
+			oWhere.Empresa = null;
+			oWhere.AnoCalendario = null;
+			oWhere.Periodo = null;
+			oWhere.Moeda = null;
+			oWhere.Status = null;				
+			oWhere.TipoDiferenca = null;	
+			oWhere.DominioTipoDiferenca = null;
+			oWhere.Modulo = null;
+			oWhere.Filtros = null;			
 			
-			oWhere[8] = ["tblDiferencaOpcao.nome"];
+			oWhere.Distinct = ["tblDiferencaOpcao.nome"];			
 			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 				type: "POST",
 				xhrFields: {
@@ -340,7 +368,8 @@ sap.ui.define([
 					that.getModel().setProperty("/TipoDiferenca", Utils.orderByArrayParaBox(aRegistro,"tblDiferencaOpcao.nome"));
 				}
 			});
-			oWhere[8] = ["tblDominioDiferencaTipo.tipo"];
+
+			oWhere.Distinct = ["tblDominioDiferencaTipo.tipo"];			
 			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
 				type: "POST",
 				xhrFields: {
@@ -366,43 +395,7 @@ sap.ui.define([
 		
 		_geraRelatorioTax: function (ifExport) {
 
-			var oEmpresa = this.getModel().getProperty("/IdEmpresasSelecionadas") ? this.getModel().getProperty("/IdEmpresasSelecionadas")[0] !==
-				undefined ? this.getModel().getProperty("/IdEmpresasSelecionadas") : null : null;
-			var oDominioAnoCalendario = this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") ? this.getModel().getProperty(
-					"/IdDominioAnoCalendarioSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas") :
-				null : null;
-			var oPeriodoSelecionadas = this.getModel().getProperty("/IdPeriodoSelecionadas") ? this.getModel().getProperty(
-				"/IdPeriodoSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdPeriodoSelecionadas") : null : null;
-			var oMoedaSelecionadas = this.getModel().getProperty("/IdMoedaSelecionadas") ? this.getModel().getProperty("/IdMoedaSelecionadas")[
-				0] !== undefined ? this.getModel().getProperty("/IdMoedaSelecionadas") : null : null;
-			var oStatusSelecionado = this.getModel().getProperty("/StatusSelecionado") ? this.getModel().getProperty(
-				"/StatusSelecionado")[0] !== undefined ? this.getModel().getProperty("/StatusSelecionado") : null : null;
-			var oTipoDiferencaSelecionadas = this.getModel().getProperty("/IdTipoDiferencaSelecionadas") ? this.getModel().getProperty(
-				"/IdTipoDiferencaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdTipoDiferencaSelecionadas") : null : null;
-			var oDominioTipoDiferencaSelecionadas = this.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas") ? this.getModel().getProperty(
-				"/IdDominioTipoDiferencaSelecionadas")[0] !== undefined ? this.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas") : null : null;
-			var oModuloSelecionado = this.getModel().getProperty("/ModuloSelecionado") ? this.getModel().getProperty(
-				"/ModuloSelecionado")[0] !== undefined ? this.getModel().getProperty("/ModuloSelecionado") : null : null;			
-				
-			var oWhere = [];//FILTRO USADO PARA TEMPORARY AND PERMANENT DIFFERENCES
-			oWhere.push(oEmpresa);
-			oWhere.push(oDominioAnoCalendario);
-			oWhere.push(oPeriodoSelecionadas);
-			oWhere.push(oMoedaSelecionadas);
-			oWhere.push(null);
-			oWhere.push(oTipoDiferencaSelecionadas);
-			oWhere.push(oDominioTipoDiferencaSelecionadas);		
-			oWhere.push(oStatusSelecionado);			
-			oWhere.push(null);	
-			
-			var oWhere2 = [];//FILTRO UTILIZADO PARA AS OUTRAS 3 TABELAS
-			oWhere2.push(oEmpresa);
-			oWhere2.push(oDominioAnoCalendario);
-			oWhere2.push(oPeriodoSelecionadas);
-			oWhere2.push(oMoedaSelecionadas);
-			oWhere2.push(null);
-			oWhere2.push(oStatusSelecionado);
-			oWhere2.push(null);				
+			var oWhere = this.getSelectedItemsTemplate();
 			
 			var that = this;
 
@@ -413,15 +406,15 @@ sap.ui.define([
 			var FiscalResultVisible = false;
 			var IncomeTaxVisible = false;		
 			
-			if(oModuloSelecionado == null){
+			if(oWhere.Modulo == null){			
 				AccountingResultVisible = true;
 				TemporaryAndPermanentDiferencesVisible = true;
 				FiscalResultVisible = true;
 				IncomeTaxVisible = true;					
 			}
 			else{
-				for (var k = 0, length = oModuloSelecionado.length; k < length; k++) {
-					switch(oModuloSelecionado[k]){
+				for (var k = 0, length = oWhere.Modulo.length; k < length; k++) {
+					switch(oWhere.Modulo[k]){
 						case "AccountingResult":
 							AccountingResultVisible = true;
 							break;
@@ -518,7 +511,7 @@ sap.ui.define([
 							},
 							crossDomain: true,
 							data: {
-								parametros: JSON.stringify(oWhere2)
+								parametros: JSON.stringify(oWhere)
 							},
 							success: function (response1) {
 								resolve(response1);
@@ -580,7 +573,7 @@ sap.ui.define([
 							},
 							crossDomain: true,
 							data: {
-								parametros: JSON.stringify(oWhere2)
+								parametros: JSON.stringify(oWhere)
 							},
 							success: function (response2) {		
 								resolve(response2);
@@ -643,7 +636,7 @@ sap.ui.define([
 							},
 							crossDomain: true,
 							data: {
-								parametros: JSON.stringify(oWhere2)
+								parametros: JSON.stringify(oWhere)
 							},
 							success: function (response3) {			
 								resolve(response3);
@@ -717,231 +710,6 @@ sap.ui.define([
 				.finally(function(){
 					that.byId("GerarRelatorio").setEnabled(true);					
 				});
-
-			/*
-		that.setBusy(that.byId("relatorioDoTaxPackageTemporaryAndPermanentDiferences"), true);				
-			//AJAX TEMPORARY AND PERMANENT DIFERENCES
-			jQuery.ajax(Constants.urlBackend + "deepQueryDistinctTemporaryAndPermanentDifferences/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" , {
-				type: "POST",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain: true,
-				data: {
-					parametros: JSON.stringify(oWhere)
-				},
-				success: function (response) {
-					var aRegistro = JSON.parse(response);
-					for (var i = 0, length = aRegistro.length; i < length; i++) {
-						aRegistro[i]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro[i]["tblPeriodo.numero_ordem"],that); 
-						aRegistro[i]["tblDominioDiferencaTipo.tipo"] = Utils.traduzDominioDiferencaTipo(aRegistro[i]["tblDominioDiferencaTipo.id_dominio_diferenca_tipo"],that); 
-						aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro[i]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);						
-					}
-					Utils.conteudoView("relatorioDoTaxPackageTemporaryAndPermanentDiferences",that,"/TabelaDaViewTemporaryAndPermanentDiferences");
-					var array = that.getModel().getProperty("/TabelaDaViewTemporaryAndPermanentDiferences");
-					var valor;
-					if(ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT"){
-						for (var i = 0, length = aRegistro.length; i < length; i++) {
-							for (var k = 0, lengthk = array.length; k < lengthk; k++) {
-								valor = aRegistro[i][array[k]["propriedadeDoValorDaLinha"]]
-								aRegistro[i][array[k]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor) ? valor.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor,that): valor : valor;
-							}
-						}						
-						that.getModel().setProperty(ifExport, aRegistro);
-						that.setBusy(that.byId("relatorioDoTaxPackageTemporaryAndPermanentDiferences"),false);		
-						that.byId("GerarRelatorio").setEnabled(true);						
-						that.onDataExport(
-							ifExport,
-							"viewGeralAdicoesEExclusoes",
-							"viewGeralAdicoesEExclusoes",
-							"/TabelaDaViewTemporaryAndPermanentDiferences"
-						);
-					}
-					else{
-						if(aRegistro.length > 0){
-							for (var k = 0, length = array.length; k < length; k++) {
-								Utils.ajustaRem(that,aRegistro,array[k]["propriedadeDoValorDaLinha"],array[k]["textoNomeDaColuna"],3,1.35)
-							}							
-						}
-						that.getModel().setProperty("/ReportTaxPackageTemporaryAndPermanentDiferences", aRegistro);
-						that.setBusy(that.byId("relatorioDoTaxPackageTemporaryAndPermanentDiferences"),false);		
-						that.byId("GerarRelatorio").setEnabled(true);						
-					}
-				}
-			});						
-			//--------------------------------------				
-			
-			
-			var oWhere2 = [];
-			oWhere2.push(oEmpresa);
-			oWhere2.push(oDominioAnoCalendario);
-			oWhere2.push(oPeriodoSelecionadas);
-			oWhere2.push(oMoedaSelecionadas);
-			oWhere2.push(null);
-			oWhere2.push(oStatusSelecionado);
-			oWhere2.push(null);
-			
-			if(IncomeTaxVisible){
-				that.setBusy(that.byId("relatorioDoTaxPackageIncomeTax"), true);
-				//AJAX INCOME TAX
-				jQuery.ajax(Constants.urlBackend + "deepQueryDistinctIncomeTax/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" , {
-					type: "POST",
-					xhrFields: {
-						withCredentials: true
-					},
-					crossDomain: true,
-					data: {
-						parametros: JSON.stringify(oWhere2)
-					},
-					success: function (response1) {
-						var aRegistro1 = JSON.parse(response1);
-						for (var j = 0, length1 = aRegistro1.length; j < length1; j++) {
-							aRegistro1[j]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro1[j]["tblPeriodo.numero_ordem"], that);
-							aRegistro1[j]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro1[j]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);						
-						}
-						Utils.conteudoView("relatorioDoTaxPackageIncomeTax", that, "/TabelaDaViewIncomeTax");
-						var array1 = that.getModel().getProperty("/TabelaDaViewIncomeTax");
-						var valor1;
-						if (ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT") {
-							for (var j = 0, length1 = aRegistro1.length; j < length1; j++) {
-								for (var l = 0, lengthk1 = array1.length; l< lengthk1; l++) {
-									valor1 = aRegistro1[j][array1[l]["propriedadeDoValorDaLinha"]]
-									aRegistro1[j][array1[l]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor1) ? valor1.toString().indexOf(".") !== -1 ?
-										Utils.aplicarMascara(valor1, that) : valor1 : valor1;
-								}
-							}
-							that.getModel().setProperty(ifExport, aRegistro1);
-							that.setBusy(that.byId("relatorioDoTaxPackageIncomeTax"), false);
-							that.byId("GerarRelatorio").setEnabled(true);
-							that.onDataExport(
-								ifExport,
-								"viewEdiçãoTrimestreImpostoRenda",
-								"viewEdiçãoTrimestreImpostoRenda",
-								"/TabelaDaViewIncomeTax"
-							);
-						} else {
-							if(aRegistro1.length > 0){
-								for (var l = 0, length1 = array1.length; l < length1; l++) {
-									Utils.ajustaRem(that,aRegistro1,array1[l]["propriedadeDoValorDaLinha"],array1[l]["textoNomeDaColuna"],3,1.35)
-								}							
-							}						
-							that.getModel().setProperty("/ReportTaxPackageIncomeTax", aRegistro1);
-							that.setBusy(that.byId("relatorioDoTaxPackageIncomeTax"), false);
-							that.byId("GerarRelatorio").setEnabled(true);
-						}
-					}
-				});			
-				//--------------------------------------				
-			}
-			
-			if(FiscalResultVisible){
-				that.setBusy(that.byId("relatorioDoTaxPackageFiscalResult"), true);
-				//AJAX FISCAL RESULT
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctFiscalResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" , {
-					type: "POST",
-					xhrFields: {
-						withCredentials: true
-					},
-					crossDomain: true,
-					data: {
-						parametros: JSON.stringify(oWhere2)
-					},
-					success: function (response2) {
-						var aRegistro2 = JSON.parse(response2);
-						for (var x = 0, length2 = aRegistro2.length; x < length2; x++) {
-							aRegistro2[x]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro2[x]["tblPeriodo.numero_ordem"],that); 		
-							aRegistro2[x]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro2[x]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);						
-						}
-						Utils.conteudoView("relatorioDoTaxPackageFiscalResult",that,"/TabelaDaViewFiscalResult");
-						var array2 = that.getModel().getProperty("/TabelaDaViewFiscalResult");
-						var valor2;
-						if(ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT"){
-							for (var x = 0, length2 = aRegistro2.length; x < length2; x++) {
-								for (var y = 0, lengthk2 = array2.length; y < lengthk2; y++) {
-									valor2 = aRegistro2[x][array2[y]["propriedadeDoValorDaLinha"]]
-									aRegistro2[x][array2[y]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor2) ? valor2.toString().indexOf(".") !== -1 ? Utils.aplicarMascara(valor2,that): valor2 : valor2;
-								}
-							}						
-							that.getModel().setProperty(ifExport, aRegistro2);
-							that.setBusy(that.byId("relatorioDoTaxPackageFiscalResult"),false);		
-							that.byId("GerarRelatorio").setEnabled(true);						
-							that.onDataExport(
-								ifExport,
-								"viewEdiçãoTrimestreResultadoFiscal",
-								"viewEdiçãoTrimestreResultadoFiscal",							
-								"/TabelaDaViewFiscalResult"
-							);
-						}
-						else{
-							if(aRegistro2.length > 0){
-								for (var x = 0, length = array2.length; x < length; x++) {
-									Utils.ajustaRem(that,aRegistro2,array2[x]["propriedadeDoValorDaLinha"],array2[x]["textoNomeDaColuna"],3,1.35)
-								}							
-							}						
-							that.getModel().setProperty("/ReportTaxPackageFiscalResult", aRegistro2);
-							that.setBusy(that.byId("relatorioDoTaxPackageFiscalResult"),false);		
-							that.byId("GerarRelatorio").setEnabled(true);						
-						}
-					}
-				});		
-				//--------------------------------------				
-			}
-			
-			if(AccountingResultVisible){
-				that.setBusy(that.byId("relatorioDoTaxPackageAccountingResult"), true);
-				//AJAX ACCOUNTING RESULT
-				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctAccountingResult/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" , {
-					type: "POST",
-					xhrFields: {
-						withCredentials: true
-					},
-					crossDomain: true,
-					data: {
-						parametros: JSON.stringify(oWhere2)
-					},
-					success: function (response3) {
-						var aRegistro3 = JSON.parse(response3);
-						for (var w = 0, length3 = aRegistro3.length; w < length3; w++) {
-							aRegistro3[w]["tblPeriodo.periodo"] = Utils.traduzTrimestre(aRegistro3[w]["tblPeriodo.numero_ordem"], that);
-							aRegistro3[w]["tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"] = Utils.traduzRelTaxPackagePeriodoStatusEnvio(aRegistro3[w]["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"], that);						
-						}
-						Utils.conteudoView("relatorioDoTaxPackageAccountingResult", that, "/TabelaDaViewAccountingResult");
-						var array3 = that.getModel().getProperty("/TabelaDaViewAccountingResult");
-						var valor3;
-						if (ifExport === "/CSV" || ifExport === "/XLSX" || ifExport === "/TXT") {
-							for (var w = 0, length3 = aRegistro3.length; w < length3; w++) {
-								for (var z = 0, lengthk3 = array3.length; z < lengthk3; z++) {
-									valor3 = aRegistro3[w][array3[z]["propriedadeDoValorDaLinha"]]
-									aRegistro3[w][array3[z]["propriedadeDoValorDaLinha"]] = Validador.isNumber(valor3) ? valor3.toString().indexOf(".") !== -1 ?
-										Utils.aplicarMascara(valor3, that) : valor3 : valor3;
-								}
-							}
-							that.getModel().setProperty(ifExport, aRegistro3);
-							that.setBusy(that.byId("relatorioDoTaxPackageAccountingResult"), false);
-							that.byId("GerarRelatorio").setEnabled(true);
-							that.onDataExport(
-								ifExport,
-								"viewEdiçãoTrimestreResultadoContabil",
-								"viewEdiçãoTrimestreResultadoContabil",									
-								"/TabelaDaViewAccountingResult"
-							);
-						} else {
-							if(aRegistro3.length > 0){
-								for (var w = 0, length3 = array3.length; w < length3; w++) {
-									Utils.ajustaRem(that,aRegistro3,array3[w]["propriedadeDoValorDaLinha"],array3[w]["textoNomeDaColuna"],3,1.35)
-								}							
-							}						
-							that.getModel().setProperty("/ReportTaxPackageAccountingResult", aRegistro3);
-							that.setBusy(that.byId("relatorioDoTaxPackageAccountingResult"), false);
-							that.byId("GerarRelatorio").setEnabled(true);
-						}
-					}
-				});
-				//--------------------------------------				
-			}
-			that.byId("GerarRelatorio").setEnabled(true);
-			
-			*/
 		},
 
 		_aplicarMascara: function (numero) {
@@ -1037,7 +805,7 @@ sap.ui.define([
 			return new sap.m.Label({
 				text: "{/Filter/text}"
 			});
-		},
+		}
 
 	});
 });
