@@ -7,9 +7,10 @@ sap.ui.define(
 		"ui5ns/ui5/lib/jQueryMask",
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Validador",
-		"ui5ns/ui5//model/enums/PerfilUsuario"
+		"ui5ns/ui5//model/enums/PerfilUsuario",
+		"sap/ui/core/Fragment"
 	],
-	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador, PerfilUsuario) {
+	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador, PerfilUsuario, Fragment) {
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
@@ -77,6 +78,9 @@ sap.ui.define(
 					oFileUploader.setValue("");
 					this._atualizarStatusPodeEncerrar();
 				}
+				else {
+					sap.m.MessageToast.show(this.getResourceBundle().getText('viewGeralSelecioneArquivo'));
+				}
 			},
 
 			onSelecionaCheck: function (oEvent) {
@@ -102,14 +106,25 @@ sap.ui.define(
 			
 			_mostrarDialogProgressoUploadAnexo: function () {
 				if (!this._dialogProgresso) {
-					this._dialogProgresso = sap.ui.xmlfragment("ui5ns.ui5.view.compliance.DialogProgresso", this);
-					this._dialogProgresso.setEscapeHandler(function (promise) {
-						promise.reject();
+					var that = this;
+					
+					Fragment.load({
+						name: "ui5ns.ui5.view.compliance.DialogProgresso"
+					}).then(function (oDialog) {
+						that._dialogProgresso = oDialog;
+						
+						that._dialogProgresso.setEscapeHandler(function (promise) {
+							promise.reject();
+						});
+						
+						that.getView().addDependent(that._dialogProgresso);	
+						
+						that._dialogProgresso.open();
 					});
-					this.getView().addDependent(this._dialogProgresso);
 				}
-				
-				this._dialogProgresso.open();
+				else {
+					this._dialogProgresso.open();
+				}
 			},
 			
 			_mostrarDialogDataConclusao: function (callbackSalvar) {
