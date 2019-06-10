@@ -109,8 +109,11 @@ sap.ui.define(
 						that.getModel().setProperty('/FiltrosTabela/anoCalendario', anoCalendario);
 					
 						that._montarFiltro();
+						that._atualizarRespostasEContador();
 					}
-					that._atualizarRespostasEContador();
+					else {
+						that._atualizarRespostas();
+					}
 				}
 			},
 

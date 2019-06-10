@@ -879,7 +879,8 @@ sap.ui.define(
 
 					if (!idObrigacao) {
 						NodeAPI.pCriarRegistro('RespostaObrigacao', {
-								fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"]
+								fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"],
+								fkIdDominioAnoCalendario: oParametros.Obrigacao.id_dominio_ano_calendario
 							})
 							.then(function (res) {
 								var generatedId = JSON.parse(res)[0].generated_id;
