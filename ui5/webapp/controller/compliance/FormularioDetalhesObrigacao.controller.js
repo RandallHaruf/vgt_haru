@@ -135,10 +135,9 @@ sap.ui.define(
 					alignItems: 'Center'
 				});
 
-				// Traduzir este texto
 				var labelDataConclusao = new sap.m.Text({
 					textAlign: 'Center',
-					text: 'ATENÇÃO! Você está prestes a encerrar a obrigação. Será necessário inserir a data de conclusão para continuar.' //that.getView().getModel("i18n").getResourceBundle().getText("viewMensagemObrigacao")
+					text: that.getView().getModel("i18n").getResourceBundle().getText("viewMensagemObrigacao")
 				}).addStyleClass('sapUiSmallMarginBottom');
 
 				var datePickerDataConclusao = new sap.m.DatePicker({
