@@ -173,8 +173,8 @@ sap.ui.define(
 					},
 					beforeOpen: function () {
 						var DataConclusao = that.getModel().getProperty("/DataConclusao");
-						var d = new Date();
 						if (!DataConclusao) {
+							var d = new Date();
 							datePickerDataConclusao.setDateValue(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
 							that.getModel().setProperty("/ButtonOkEncerrar", true);
 							that.getModel().refresh();
@@ -269,10 +269,10 @@ sap.ui.define(
 				return aPromise;	
 			},
 			
-			_atualizarRespostaObrigacao: function () {
+			_atualizarRespostaObrigacao: function (bIsEncerramento) {
 				var oRespostaObrigacao = this.getModel().getProperty('/RespostaObrigacao');
 				
-				oRespostaObrigacao.data_conclusao = oRespostaObrigacao.data_conclusao || this.getModel().getProperty('/DataConclusao');
+				oRespostaObrigacao.data_conclusao = bIsEncerramento ? this.getModel().getProperty('/DataConclusao') : oRespostaObrigacao.data_conclusao;
 				
 				// ANALISAR NCESSIDADE
 				
@@ -314,7 +314,7 @@ sap.ui.define(
 				
 				Promise.all(aPromise)
 					.then(function () {
-						return that._atualizarRespostaObrigacao();
+						return that._atualizarRespostaObrigacao(bIsEncerramento);
 					})
 					.catch(function (err) {
 						that._showError(err);	

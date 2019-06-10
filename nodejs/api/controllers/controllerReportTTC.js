@@ -272,7 +272,12 @@ module.exports = {
 			+'tblRelEmpresaPeriodo."fk_periodo.id_periodo" "tblRelEmpresaPeriodo.fk_periodo.id_periodo", '
 			+'tblRelEmpresaPeriodo."ind_ativo" "tblRelEmpresaPeriodo.ind_ativo", '
 			+'tblRelEmpresaPeriodo."ind_enviado" "tblRelEmpresaPeriodo.ind_enviado", '
-			+'tblRelEmpresaPeriodo."data_enviado" "tblRelEmpresaPeriodo.data_enviado", '			
+			+ '(case '
+				+ 'when tblRelEmpresaPeriodo."ind_enviado" = true '
+					+ 'then tblRelEmpresaPeriodo."data_enviado" '
+				+ 'else \'\' '
+			+ 'end) "tblRelEmpresaPeriodo.data_enviado", '
+			// +'tblRelEmpresaPeriodo."data_enviado" "tblRelEmpresaPeriodo.data_enviado", '			
 			+'tblDominioTipoTransacao."id_dominio_tipo_transacao" "tblDominioTipoTransacao.id_dominio_tipo_transacao", '
 			+'tblDominioTipoTransacao."tipo_transacao" "tblDominioTipoTransacao.tipo_transacao", '
 			+'TO_NVARCHAR(IFNULL(tblPagamento."total",0) * IFNULL(tblCambioTTC."cambio_usd",0),\'00.0000\') "conversao_usd", '
@@ -338,7 +343,14 @@ module.exports = {
 						filtro = ' tblPagamento."data_pagamento" <';
 						break;	
 					case "Enviado":
-						filtro = ' tblRelEmpresaPeriodo."ind_enviado" ';
+						if(aEntrada[atributo][item] == "false"){
+							filtro = ' ( tblRelEmpresaPeriodo."ind_enviado" is null or tblRelEmpresaPeriodo."ind_enviado" = ? ) ';
+						}
+						else if(aEntrada[atributo][item] == "true"){
+							filtro = 'tblRelEmpresaPeriodo."ind_enviado" = ? ';
+						}else{
+							filtro = 'tblRelEmpresaPeriodo."ind_enviado" is null ';
+						}
 						break;								
 					case "EmpresasUsuario":
 						filtro = ' tblEmpresa."id_empresa" ';
@@ -347,12 +359,14 @@ module.exports = {
 						variavelDefault = false;
 						break;
 				}
-				if(aEntrada[atributo][item] != valorSeNulo){
-					filtro += '= ? '
+				if (atributo !== "Enviado") {
+					if(aEntrada[atributo][item] != valorSeNulo){
+						filtro += '= ? '
+					}
+					else{
+						filtro += ' is null ';
+					}	
 				}
-				else{
-					filtro += ' is null ';
-				}	
 				if(variavelDefault){
 					if(aEntrada[atributo].length == 1){
 						oWhere.push(filtro);
@@ -370,7 +384,7 @@ module.exports = {
 		}	
 
 		if (oWhere.length > 0) {
-			sStatement += ' where (tblPagamento."id_pagamento" is not null or ( tblPagamento."id_pagamento" is null and tblRelEmpresaPeriodo."ind_enviado" = true) ) and ';
+			sStatement += ' where (tblPagamento."id_pagamento" is not null or ( tblPagamento."id_pagamento" is null and tblRelEmpresaPeriodo."ind_enviado" is not null) ) and ';
 
 			for (var i = 0; i < oWhere.length; i++) {
 				if (i !== 0) {
@@ -527,7 +541,12 @@ module.exports = {
 			+'tblRelEmpresaPeriodo."fk_periodo.id_periodo" "tblRelEmpresaPeriodo.fk_periodo.id_periodo", '
 			+'tblRelEmpresaPeriodo."ind_ativo" "tblRelEmpresaPeriodo.ind_ativo", '
 			+'tblRelEmpresaPeriodo."ind_enviado" "tblRelEmpresaPeriodo.ind_enviado", '
-			+'tblRelEmpresaPeriodo."data_enviado" "tblRelEmpresaPeriodo.data_enviado", ' 	 		
+			+ '(case '
+				+ 'when tblRelEmpresaPeriodo."ind_enviado" = true '
+					+ 'then tblRelEmpresaPeriodo."data_enviado" '
+				+ 'else \'\' '
+			+ 'end) "tblRelEmpresaPeriodo.data_enviado", '
+			// +'tblRelEmpresaPeriodo."data_enviado" "tblRelEmpresaPeriodo.data_enviado", ' 	 		
 			+'tblDominioTipoTransacao."id_dominio_tipo_transacao" "tblDominioTipoTransacao.id_dominio_tipo_transacao", '
 			+'tblDominioTipoTransacao."tipo_transacao" "tblDominioTipoTransacao.tipo_transacao" '
 			+'FROM "VGT.REL_EMPRESA_PERIODO" AS tblRelEmpresaPeriodo '
@@ -590,7 +609,14 @@ module.exports = {
 						filtro = ' tblPagamento."data_pagamento" <';
 						break;	
 					case "Enviado":
-						filtro = ' tblRelEmpresaPeriodo."ind_enviado" ';
+						if(aEntrada[atributo][item] == "false"){
+							filtro = ' ( tblRelEmpresaPeriodo."ind_enviado" is null or tblRelEmpresaPeriodo."ind_enviado" = ? ) ';
+						}
+						else if(aEntrada[atributo][item] == "true"){
+							filtro = 'tblRelEmpresaPeriodo."ind_enviado" = ? ';
+						}else{
+							filtro = 'tblRelEmpresaPeriodo."ind_enviado" is null ';
+						}
 						break;								
 					case "EmpresasUsuario":
 						filtro = ' tblEmpresa."id_empresa" ';
@@ -599,12 +625,14 @@ module.exports = {
 						variavelDefault = false;
 						break;
 				}
-				if(aEntrada[atributo][item] != valorSeNulo){
-					filtro += '= ? '
+				if (atributo !== "Enviado") {
+					if(aEntrada[atributo][item] != valorSeNulo){
+						filtro += '= ? '
+					}
+					else{
+						filtro += ' is null ';
+					}	
 				}
-				else{
-					filtro += ' is null ';
-				}	
 				if(variavelDefault){
 					if(aEntrada[atributo].length == 1){
 						oWhere.push(filtro);
@@ -622,7 +650,7 @@ module.exports = {
 		}	
 
 		if (oWhere.length > 0) {
-			sStatement += ' where (tblPagamento."id_pagamento" is not null or ( tblPagamento."id_pagamento" is null and tblRelEmpresaPeriodo."ind_enviado" = true) ) and ';
+			sStatement += ' where (tblPagamento."id_pagamento" is not null or ( tblPagamento."id_pagamento" is null and tblRelEmpresaPeriodo."ind_enviado" is not null) ) and ';
 
 			for (var i = 0; i < oWhere.length; i++) {
 				if (i !== 0) {

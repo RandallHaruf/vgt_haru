@@ -2939,6 +2939,9 @@ sap.ui.define(
 						this.getModel().setProperty('/Moeda', oMoeda.sIdMoedaRetificadora);
 						break;
 				}
+				if (!this.getModel().getProperty('/Moeda')) {
+					this.getModel().setProperty('/Moeda', this.getModel().getProperty("/Periodo")["fk_dominio_moeda_rel.id_dominio_moeda"]);
+				}
 			},
 
 			_carregarAntecipacoes: function (sIdTaxReconciliation) {

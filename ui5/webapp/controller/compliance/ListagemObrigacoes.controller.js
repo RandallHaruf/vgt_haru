@@ -104,13 +104,13 @@ sap.ui.define(
 					that.getModel().setProperty("/AnoCalendarioSelecionado", anoCalendario);
 					that.getModel().setProperty("/NomeUsuario", nomeUsuario);
 					
-					if (atualizarDados) {
+					if (atualizarDados || !that._filterDialog) {
 						that.getModel().setProperty('/FiltrosTabela', {});
 						that.getModel().setProperty('/FiltrosTabela/anoCalendario', anoCalendario);
 					
 						that._montarFiltro();
-						that._atualizarRespostasEContador();
 					}
+					that._atualizarRespostasEContador();
 				}
 			},
 
