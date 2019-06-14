@@ -45,6 +45,18 @@ module.exports = {
 			coluna: model.colunas.fkIdDominioObrigacaoStatusResposta,
 			valor: req.body.fkIdDominioObrigacaoStatusResposta ? Number(req.body.fkIdDominioObrigacaoStatusResposta) : null
 		}, {
+			coluna: model.colunas.fkIdDominioMoedaPenalidade,
+			valor: req.body.fkIdDominioMoedaPenalidade ? Number(req.body.fkIdDominioMoedaPenalidade) : null
+		}, {
+			coluna: model.colunas.confirmarPenalidade,
+			valor: req.body.confirmarPenalidade ? req.body.confirmarPenalidade : null
+		}, {
+			coluna: model.colunas.justificativa,
+			valor: req.body.justificativa ? req.body.justificativa : null
+		}, {
+			coluna: model.colunas.valorPenalidade,
+			valor: req.body.valorPenalidade ? req.body.valorPenalidade : null
+		}, {
 			coluna: model.colunas.dataExtensao,
 			valor: req.body.dataExtensao ? req.body.dataExtensao : null
 		}, {
@@ -111,6 +123,18 @@ module.exports = {
 		}, {
 			coluna: model.colunas.fkIdDominioObrigacaoStatusResposta,
 			valor: req.body.fkIdDominioObrigacaoStatusResposta ? Number(req.body.fkIdDominioObrigacaoStatusResposta) : null
+		}, {
+			coluna: model.colunas.fkIdDominioMoedaPenalidade,
+			valor: req.body.fkIdDominioMoedaPenalidade ? Number(req.body.fkIdDominioMoedaPenalidade) : null
+		}, {
+			coluna: model.colunas.confirmarPenalidade,
+			valor: req.body.confirmarPenalidade ? req.body.confirmarPenalidade : null
+		}, {
+			coluna: model.colunas.justificativa,
+			valor: req.body.justificativa ? req.body.justificativa : null
+		}, {
+			coluna: model.colunas.valorPenalidade,
+			valor: req.body.valorPenalidade ? req.body.valorPenalidade : null
 		}, {
 			coluna: model.colunas.dataExtensao,
 			valor: req.body.dataExtensao ? req.body.dataExtensao : null

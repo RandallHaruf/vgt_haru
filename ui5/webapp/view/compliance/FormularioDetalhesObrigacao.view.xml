@@ -129,13 +129,50 @@
 								<f:FormElement label="{i18n>formularioObrigacaoLabelAnoFiscal}">
 									<f:fields>
 										<DatePicker id="datepickerAnoFiscal" placeholder="Insira uma data" valueFormat="yyyy-MM-dd"
-											value="{/RespostaObrigacao/ano_fiscal_calculado}" enabled="false" change="onValidarData"/>
+                                         value="{/RespostaObrigacao/ano_fiscal_calculado}" enabled="false" change="onValidarData"/>
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="{i18n>viewComplianceListagemObrigacoesSelectAnoCalendario}">
 									<f:fields>
 										<DatePicker id="datepickerAnoCalendario" placeholder="{i18n>viewGeralInsiraUmaData}" valueFormat="yyyy-MM-dd"
 											value="{/RespostaObrigacao/ano_calendario}" enabled="false" change="onValidarData"/>
+									</f:fields>
+								</f:FormElement>
+                                <f:FormElement label="{i18n>viewGeralPenalidade}" visible="{= !!${/ocultarPenalidade} ? false : true}">
+									<f:fields>
+										<CheckBox 
+											select="onTrocarPenalidade" 
+											selected="{/RespostaObrigacao/confirmar_penalidade}"
+											enabled="{= ${/JaDataObrigacaoConcluida} ? true : false }" />
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>viewGeralValue}" visible="{= !!${/ocultarPenalidade} ? false : true}">
+									<f:fields>
+										<Input 
+											id="ValorPenalidade"
+											value="{path: '/RespostaObrigacao/valor_penalidade', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits:2}}"
+											change="onTrocarValorPenalidade" 
+											enabled="{= ${/RespostaObrigacao/confirmar_penalidade} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}" />
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>viewGeralMoeda}" visible="{= !!${/ocultarPenalidade} ? false : true}">
+									<f:fields>
+										<ComboBox 
+											items="{/DominioMoeda}"
+											selectedKey="{/RespostaObrigacao/fk_id_dominio_moeda_penalidade.id_dominio_moeda}"
+											enabled="{= ${/RespostaObrigacao/confirmar_penalidade} ? ( ${/JaDataObrigacaoConcluida} ? true : false ) : false}" >
+											<core:Item text="{acronimo} - {nome}" key="{id_dominio_moeda}" />
+										</ComboBox>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>viewGeralJustificativa}" visible="{= !!${/ocultarPenalidade} ? false : true}" >
+									<f:fields>
+										<TextArea 
+											id="textAreaJustificativa"
+											value="{/RespostaObrigacao/justificativa}"
+											rows="5"
+											required="true"
+											enabled="{= ${/JaDataObrigacaoConcluida} ? true : false }"/>
 									</f:fields>
 								</f:FormElement>
 							</f:formElements>
@@ -214,7 +251,7 @@
 				<Button text="{i18n>viewGeralEncerrar}" type="Accept" press="onEncerrar" enabled="{/PodeEncerrar}"/>
 				<Button text="{i18n>formularioObrigacaoBotaoSalvar}" type="Accept" press="onSalvar" />
 				<Button text="{i18n>formularioObrigacaoBotaoCancelar}" type="Reject" press="onCancelar" />
-			</Toolbar>
+            </Toolbar>
 		</f2:footer>
 	</f2:DynamicPage>
 </mvc:View>

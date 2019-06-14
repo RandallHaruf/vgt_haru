@@ -65,7 +65,8 @@ module.exports = {
 				+'"tblRespostaObrigacao.suporte_valor", '
 				+'"tblRespostaObrigacao.data_conclusao", '
 				+'"tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
-				+'"tblRespostaObrigacao.id_resposta_obrigacao" '
+				+'"tblRespostaObrigacao.id_resposta_obrigacao", '
+				+'"tblRespostaObrigacao.justificativa" '
 				+'from (';	
 			stringDistinctFilter = 
 				'group by '
@@ -96,7 +97,8 @@ module.exports = {
 				+'"tblRespostaObrigacao.suporte_valor", '
 				+'"tblRespostaObrigacao.data_conclusao", '
 				+'"tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
-				+'"tblRespostaObrigacao.id_resposta_obrigacao" '
+				+'"tblRespostaObrigacao.id_resposta_obrigacao", '
+				+'"tblRespostaObrigacao.justificativa" '
 				+'order by "tblDominioObrigacaoAcessoriaTipo.tipo","tblDominioPais.pais" ,"tblEmpresa.nome" asc, "tblDominioAnoCalendario.ano_calendario" desc';
 		}
 		else{
@@ -180,7 +182,8 @@ module.exports = {
 			+'"suporte_valor" AS "tblRespostaObrigacao.suporte_valor", '
 			+'"data_conclusao" AS "tblRespostaObrigacao.data_conclusao", '
 			+'"fk_id_dominio_moeda.id_dominio_moeda" AS "tblResposataObrigacao.fk_id_dominio_moeda.id_dominio_moeda", '
-			+'"id_resposta_obrigacao" AS "tblRespostaObrigacao.id_resposta_obrigacao" '
+			+'"id_resposta_obrigacao" AS "tblRespostaObrigacao.id_resposta_obrigacao", '
+			+'"justificativa" AS "tblRespostaObrigacao.justificativa" '
 			+' from ('
 			+model.pegarQueryRespostaObrigacaoCalculada()
 			+'))t3 '

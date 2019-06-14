@@ -593,6 +593,10 @@ context VGT {
         data_extensao                           : LocalDate;
         data_conclusao                          : LocalDate;
         ind_iniciada                            : Boolean;
+        fk_id_dominio_moeda_penalidade          : association[*, 0..1] to VGT.DOMINIO_MOEDA { id_dominio_moeda };
+        justificativa                           : String(200);
+        valor_penalidade                        : Decimal(19, 4);
+        confirmar_penalidade                    : Boolean;
     };
 
     /*@@layout{"layoutInfo":{"x":1019,"y":817.5}}*/

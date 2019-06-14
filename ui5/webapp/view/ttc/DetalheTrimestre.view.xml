@@ -772,7 +772,7 @@
 						</ScrollContainer>
 					</IconTabFilter>
 					<IconTabSeparator icon=""/>
-					<IconTabFilter id="backgroundDocumentos" text="{i18n>viewGeralCollected} ({/ContadorCollected})">
+					<IconTabFilter id="backgroundDocumentos" text="{i18n>formularioObrigacaoTituloDocumentos} ({/ContadorDocumentos})">
 						<ScrollContainer height="100%" vertical="false">
 							<tbl:Table
 								class="tblTTC"
@@ -786,10 +786,10 @@
 									<OverflowToolbar>
 										<content>
 											<ToolbarSpacer/>
-											<Button icon="sap-icon://filter" press="onFiltrarCollected" />
+											<Button icon="sap-icon://filter" press="onFiltrarDocumentos" />
 											<HBox>
-												<Input id="linhasExibidasDocumentos" value="{/numeroLinhasCollected}"></Input>
-												<Button press="onMudarLinhasExibidasCollected" text="{i18n>redefinirLinhas}"></Button>	
+												<Input id="linhasExibidasDocumentos" value="{/numeroLinhasDocumentos}"></Input>
+												<Button press="onMudarLinhasExibidasDocumentos" text="{i18n>redefinirLinhas}"></Button>	
 											</HBox>
 										</content>
 									</OverflowToolbar>
@@ -800,47 +800,43 @@
 								<tbl:columns>
 									<tbl:Column
 										width="10rem"
-										hAlign="Center"
-										sortProperty="category">
-										<Label text="Classificacao" textAlign="Center" />
+										hAlign="Center">
+										<Label text="{i18n>viewGeralClassificacao}" textAlign="Center" />
 										<tbl:template>
 											<Label text="{classificacao}"/>
 										</tbl:template>
 									</tbl:Column>
 									<tbl:Column
 										width="10rem"
-										hAlign="Center"
-										>
-										<Label text="{i18n>viewTTCDetalheTrimestreColunaCategoria}" class="sapMLabelRequired" textAlign="Center" />
+										hAlign="Center">
+										<Label text="{i18n>viewGeralCategoria}" class="sapMLabelRequired" textAlign="Center" />
 										<tbl:template>
 											<Label text="{category}"/>
 										</tbl:template>
 									</tbl:Column>
 									<tbl:Column
 										width="10rem"
-										hAlign="Center"
-										>
-										<Label text="Valor Total" class="sapMLabelRequired" textAlign="Center" />
+										hAlign="Center">
+										<Label text="{i18n>viewGeralValueAliquot}" class="sapMLabelRequired" textAlign="Center" />
 										<tbl:template>
 											<Label text="{valor_total}"/>
 										</tbl:template>
 									</tbl:Column>
 									<tbl:Column
-										width="30rem"
-										hAlign="Center"
-										>
-										<Label text="Documento" class="sapMLabelRequired" textAlign="Center" />
+										width="35rem"
+										hAlign="Center">
+										<Label text="{i18n>formularioObrigacaoTituloDocumentos}" class="sapMLabelRequired" textAlign="Center" />
 										<tbl:template>
-											<HBox>
-												<uni:FileUploader name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEnviarArquivoNodejs}"
-													buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}" visible="{= !!!${nome_documento}}"/>
-												<Button icon="sap-icon://upload" type="Accept" tooltip="{i18n>viewGeralExcluirLinha}" press="onEnviarDocumento" visible="{= !!!${nome_documento}}" />
-												<Label text="{nome_documento}" visible="{= !!${nome_documento}}"/>
-												<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>viewGeralExcluirLinha}" enabled="{persistido}" press="onBaixarDocumento" visible="{= !!${nome_documento}}" />
-												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewGeralExcluirLinha}" press="onExcluirDocumento" visible="{= !!${nome_documento}}" />
+											<HBox alignItems="Center">
+												<uni:FileUploader name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEscolhaUmArquivo}"
+													buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}" visible="{= !!!${nome_documento}}" class="sapUiSmallMarginEnd resolveTop" />
+												<Button text="{i18n>viewGeralEnviarArq}" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" press="onEnviarDocumento" visible="{= !!!${nome_documento}}" />
+												<Label text="{nome_documento}" visible="{= !!${nome_documento}}" class="sapUiSmallMarginEnd" textAlign="Center" />
+												<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" enabled="{persistido}" press="onBaixarDocumento" visible="{= !!${nome_documento}}" class="sapUiSmallMarginEnd" />
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewTAXResumoTrimestreAnexarDeclaracaoExcluirArquivo}" press="onExcluirDocumento" visible="{= !!${nome_documento}}" />
 											</HBox>
 										</tbl:template>
-									</tbl:Column>									
+									</tbl:Column>
 								</tbl:columns>
 							</tbl:Table>
 						</ScrollContainer>

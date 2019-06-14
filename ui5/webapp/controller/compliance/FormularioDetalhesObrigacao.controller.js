@@ -14,6 +14,7 @@ sap.ui.define(
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
+                var ocultarPenalidade;
 				this._zerarModel();
 				
 				if (this.isVisualizacaoUsuario()) {
@@ -312,6 +313,10 @@ sap.ui.define(
 					fkIdDominioObrigacaoStatusResposta: oRespostaObrigacao.status_obrigacao_calculado, // TALVEZ PRECISEMOS USAR O METODO DE ATUALIZAR STATUS
 					dataExtensao: oRespostaObrigacao.data_extensao,
 					dataConclusao: oRespostaObrigacao.data_conclusao,
+                    confirmarPenalidade: oRespostaObrigacao.confirmar_penalidade,
+					justificativa: oRespostaObrigacao.justificativa,
+					fkIdDominioMoedaPenalidade: oRespostaObrigacao["fk_id_dominio_moeda_penalidade.id_dominio_moeda"],
+					valorPenalidade: oRespostaObrigacao.valor_penalidade,
 					indIniciada: true
 				});
 			},
@@ -347,9 +352,34 @@ sap.ui.define(
 				this._persistir(true);
 			},
 			
-			onEncerrar: function (oEvent) {
-				this._mostrarDialogDataConclusao(this._encerrar.bind(this));
-			},
+			onEncerrar: function (oEvent, event) {
+				var that = this,
+					justificativa = that.getModel().getProperty("/RespostaObrigacao/justificativa");
+					
+				if (justificativa && !ocultarPenalidade) {
+					this._mostrarDialogDataConclusao(this._encerrar.bind(this));
+				}
+				else {
+					var dialog = new sap.m.Dialog({
+						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralAviso"),
+						type: "Message",
+						content: new sap.m.Text({
+							text: this.getView().getModel("i18n").getResourceBundle().getText("viewFormularioComplianceBepsJustificativa") 
+						}),
+						endButton: new sap.m.Button({
+							text: "Ok",
+							press: function () {
+								dialog.close();
+							}
+						}),
+						afterClose: function () {
+							dialog.destroy();
+						}
+					});
+
+				dialog.open();
+				}			
+            },
 
 			onSalvar: function (oEvent) {
 				this._salvar();
@@ -468,7 +498,19 @@ sap.ui.define(
 				}
 			},
 
+			onTrocarPenalidade: function () {
+				var obj = this.getModel().getProperty("/RespostaObrigacao");
+				if (!!obj["confirmar_penalidade"] === false) {
+					obj["fk_id_dominio_moeda_penalidade.id_dominio_moeda"] = "";
+					obj["valor_penalidade"] = "";
+				}
+			},
+
 			onTrocarValorSuporte: function (oEvent) {
+				Validador.validarNumeroInserido(oEvent, this);
+			},
+			
+			onTrocarValorPenalidade: function (oEvent) {
 				Validador.validarNumeroInserido(oEvent, this);
 			},
 
@@ -571,6 +613,10 @@ sap.ui.define(
 													fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
 													dataExtensao: obj["data_extensao"],
 													dataConclusao: obj["data_conclusao"],
+                                                    confirmarPenalidade: obj["confirmar_penalidade"],
+													justificativa: obj["justificativa"],
+													fkIdDominioMoedaPenalidade: obj["fk_id_dominio_moeda_penalidade.id_dominio_moeda"],
+													valorPenalidade: obj["valor_penalidade"],
 													indIniciada: true
 												}, function (response2) {
 													that.onVoltarParaListagem();
@@ -780,7 +826,7 @@ sap.ui.define(
 					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 					type: "Message",
 					content: new sap.m.Text({
-						text: "Você tem certeza que deseja excluir este arquivo?"
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfimarExclusaoArquivo") 
 					}),
 					beginButton: new sap.m.Button({
 						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
@@ -821,7 +867,22 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
-				var that = this;
+				var that = this,
+					oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
+					
+				ocultarPenalidade = false;
+					
+				if (oParametros.Obrigacao.status_obrigacao_calculado != 5 && oParametros.Obrigacao.status_obrigacao_calculado != 7) {
+					ocultarPenalidade = true;
+				}
+
+				if (oParametros.Obrigacao.status_obrigacao_calculado === 5) {
+					this.getModel().setProperty("/ConfirmarPenalidade", true);
+				}
+
+				if (oParametros.Obrigacao.status_obrigacao_calculado === 5 || oParametros.Obrigacao.status_obrigacao_calculado === 7) {
+					this.getModel().setProperty("/ocultarJustificativa", true);
+				}
 
 				const oEventoInicial = jQuery.extend(true, {}, oEvent);
 
@@ -856,7 +917,7 @@ sap.ui.define(
 
 				var continuarRouteMatched = function (event) {
 					that._zerarModel();
-					
+					that.getModel().setProperty("/ocultarPenalidade", ocultarPenalidade);
 					that.getModel().setProperty("/IsIFrame", that.isIFrame());
 					that.getModel().setProperty("/IsDeclaracao", false);
 					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
@@ -874,10 +935,12 @@ sap.ui.define(
 					var idAnoCalendario = oParametros.idAnoCalendario;
 					that.getModel().setProperty("/AnoSelecionadoAnteriormente", idAnoCalendario);
 					oParametros.Obrigacao["suporte_contratado"] = (!!oParametros.Obrigacao["suporte_contratado"] === true ? true : false);
+					oParametros.Obrigacao["confirmar_penalidade"] = (!!oParametros.Obrigacao["confirmar_penalidade"] === true ? true : false);
 					oParametros.Obrigacao["ObrigacaoIniciada"] = oParametros.Obrigacao.ind_iniciada ? true : false;
 					that.getModel().setProperty("/JaEstavaIniciada", (!oParametros.Obrigacao.ind_iniciada ? true : false));
 					that.getModel().setProperty("/JaEstavaPreenchido", (oParametros.Obrigacao["data_extensao"] ? true : false));
 					that.getModel().setProperty("/JaDataObrigacaoConcluida", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
+					that.getModel().setProperty("/ConfirmarPenalidade", (!!oParametros.Obrigacao["confirmar_penalidade"] === false ? true : false));
 					that.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
 					that.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 					that.getModel().setProperty('/IsAreaUsuario', !that.isIFrame());

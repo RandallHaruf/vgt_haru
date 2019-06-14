@@ -16,6 +16,19 @@ var oSketch = {
 		suporteValor: {
 			nome: "suporte_valor"
 		},
+        confirmarPenalidade: {
+			nome: "confirmar_penalidade"
+		},
+		justificativa: {
+			nome: "justificativa"
+		},
+		valorPenalidade: {
+			nome: "valor_penalidade"
+		},
+		fkIdDominioMoedaPenalidade: {
+			nome: "fk_id_dominio_moeda_penalidade.id_dominio_moeda",
+			number: true
+		},
 		fkIdDominioMoeda: {
 			nome: "fk_id_dominio_moeda.id_dominio_moeda",
 			number: true
@@ -156,7 +169,8 @@ oModel.pegarQueryRespostaObrigacaoCalculada = function (aIdTipoObrigacao, aIdAno
 				+ 'on relModeloEmpresa."id_rel_modelo_empresa" = respostaObrigacao."fk_id_rel_modelo_empresa.id_rel_modelo_empresa"  '
 					+ 'and anoCalendario."id_dominio_ano_calendario" = respostaObrigacao."fk_id_dominio_ano_calendario.id_dominio_ano_calendario" '
 			+ 'left outer join "VGT.DOMINIO_MOEDA" moeda '
-				+ 'ON respostaObrigacao."fk_id_dominio_moeda.id_dominio_moeda" = moeda."id_dominio_moeda"  '
+				+ 'ON respostaObrigacao."fk_id_dominio_moeda.id_dominio_moeda" = moeda."id_dominio_moeda" '
+					+ 'and respostaObrigacao."fk_id_dominio_moeda_penalidade.id_dominio_moeda" = moeda."id_dominio_moeda" ';
 				
 	if (aIdTipoObrigacao && aIdTipoObrigacao.length) {
 		statement += 

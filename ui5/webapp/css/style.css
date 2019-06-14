@@ -274,3 +274,9 @@ setar um cabeçalho customizado com maior altura para acomodar mais informação
 .tblTTC .sapUiTableCellInner{
 	justify-content:center!important;
 }
+.tblTTC .sapMFlexBox{
+	justify-content:center!important;
+}
+.resolveTop {
+	padding-top: 5px;
+}

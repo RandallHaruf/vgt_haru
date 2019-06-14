@@ -260,7 +260,10 @@
 						</Column>		
 						<Column width="6rem" hAlign="Center">
 							<Text text="{i18n>viewArquivosAdminDataUpload}" textAlign="Center"/>
-						</Column>							
+						</Column>	
+						<Column width="6rem" hAlign="Center">
+							<Text text="{i18n>viewGeralJustificativa}" textAlign="Center"/>
+						</Column>	
 					</columns>
 					<items>
 						<ColumnListItem>
@@ -283,7 +286,8 @@
 								<Text text="{tblRespostaObrigacao.suporte_especificacao}"/>	
 								<Text text="{tblDominioMoeda.acronimo}"/>		
 								<Text text="{tblRespostaObrigacao.data_conclusao}"/>					
-								<Text text="{tblDocumentoObrigacao.data_upload}"/>									
+								<Text text="{tblDocumentoObrigacao.data_upload}"/>	
+								<Text text="{tblRespostaObrigacao.justificativa}"/>	
 							</cells>
 						</ColumnListItem>
 					</items>
