@@ -665,7 +665,6 @@ sap.ui.define(
 											oPagamento.terceiroValor = (oPagamento.terceiroValor ? parseInt(oPagamento.terceiroValor, 10) : 0);
 											oPagamento.total = (oPagamento.total ? parseInt(oPagamento.total, 10) : 0);
 										}
-										//}
 									}
 									that.getModel().setProperty("/Resumo", response);
 								}
@@ -680,6 +679,7 @@ sap.ui.define(
 					listarRelacionamento(),
 					listarResumo()
 				]).then(function (result) {
+					console.log(result);
 					if (result) {
 						var relacionamentos = result[0];
 						var resumo = result[1];
@@ -700,18 +700,18 @@ sap.ui.define(
 								case 1:
 									sChaveResumo = "PrimeiroPeriodo";
 									break;
-								case 1:
+								case 2:
 									sChaveResumo = "SegundoPeriodo";
 									break;
-								case 1:
+								case 3:
 									sChaveResumo = "TerceiroPeriodo";
 									break;
-								case 1:
+								case 4:
 									sChaveResumo = "QuartoPeriodo";
 									break;
 							}
 							
-							if (!resumo[sChaveResumo].length && relacionamentos[i].data_enviado != null) {
+							if (!resumo[sChaveResumo].length && relacionamentos[i].data_enviado === null) {
 								resumo[sChaveResumo].push(oPagamento);
 							}
 						}
