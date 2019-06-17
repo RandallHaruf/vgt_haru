@@ -829,11 +829,11 @@
 										<tbl:template>
 											<HBox alignItems="Center">
 												<uni:FileUploader name="myFileUpload" uploadUrl="" width="400px" tooltip="{i18n>viewGeralEscolhaUmArquivo}"
-													buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}" visible="{= !!!${nome_documento}}" class="sapUiSmallMarginEnd resolveTop" />
-												<Button text="{i18n>viewGeralEnviarArq}" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" press="onEnviarDocumento" visible="{= !!!${nome_documento}}" />
-												<Label text="{nome_documento}" visible="{= !!${nome_documento}}" class="sapUiSmallMarginEnd" textAlign="Center" />
-												<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" enabled="{persistido}" press="onBaixarDocumento" visible="{= !!${nome_documento}}" class="sapUiSmallMarginEnd" />
-												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewTAXResumoTrimestreAnexarDeclaracaoExcluirArquivo}" press="onExcluirDocumento" visible="{= !!${nome_documento}}" />
+													buttonText="{i18n>viewGeralEscolhaUmArquivo}" placeholder="{i18n>viewGeralplaceholderEscolhaUmArquivo}" visible="{= !!!${nome_arquivo}}" class="sapUiSmallMarginEnd resolveTop" />
+												<Button text="{i18n>viewGeralEnviarArq}" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" press="onEnviarDocumento" visible="{= !!!${nome_arquivo}}" />
+												<Label text="{nome_arquivo}" visible="{= !!${nome_arquivo}}" class="sapUiSmallMarginEnd" textAlign="Center" />
+												<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" enabled="{persistido}" press="onBaixarDocumento" visible="{= !!${nome_arquivo}}" class="sapUiSmallMarginEnd" />
+												<Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>viewTAXResumoTrimestreAnexarDeclaracaoExcluirArquivo}" press="onExcluirDocumento" visible="{= !!${nome_arquivo}}" />
 											</HBox>
 										</tbl:template>
 									</tbl:Column>

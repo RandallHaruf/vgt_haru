@@ -736,4 +736,18 @@ context VGT {
         fk_empresa        : association[*, 0..1] to VGT.EMPRESA { id_empresa };
         fk_dominio_modulo : association[*, 0..1] to VGT.DOMINIO_MODULO { id_dominio_modulo };
     };
+
+	/*@@layout{"layoutInfo":{"x":-2039,"y":-334.5}}*/
+    entity DOCUMENTO_TTC {
+        id_documento_ttc : Integer64;
+        dados_arquivo    : LargeBinary;
+        mimetype         : String(255);
+        tamanho          : Integer;
+        data_upload      : LocalDate;
+        nome_arquivo     : String(255);
+        fk_usuario  	 : association[*, 0..1] to VGT.USUARIO { id_usuario };
+        fk_periodo       : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_periodo.id_periodo };
+        fk_empresa       : association[*, 0..1] to VGT.REL_EMPRESA_PERIODO { fk_empresa.id_empresa };
+        fk_category      : association[0..1]    to VGT.TAX_CATEGORY { id_tax_category };
+    };
 };

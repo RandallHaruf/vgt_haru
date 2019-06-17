@@ -3,9 +3,10 @@ sap.ui.define(
 		"ui5ns/ui5/controller/BaseController",
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Utils",
-		"ui5ns/ui5/lib/Validador"
+		"ui5ns/ui5/lib/Validador",
+		"ui5ns/ui5/lib/Arquivo",
 	],
-	function (BaseController, NodeAPI, Utils, Validador) {
+	function (BaseController, NodeAPI, Utils, Validador, Arquivo) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.ttc.VisualizacaoTrimestre", {
@@ -448,6 +449,48 @@ sap.ui.define(
 					this.byId("btnReabrir").setVisible(true);
 			},
 
+			_recarregarArquivos: function(){
+				var that = this;
+				var oEmpresa = this.getModel().getProperty("/Empresa");
+				var oPeriodo = this.getModel().getProperty("/Periodo");
+				var iIdEmpresa = oEmpresa.id_empresa;
+				var iIdPeriodo = oPeriodo.id_periodo;
+				
+				NodeAPI.pListarRegistros("DeepQuery/ListarTodosDocumentosTTC?idPeriodo=" + iIdPeriodo + "&idEmpresa" + iIdEmpresa)
+				.then(function(response){
+					for(let i =0; i < response.result.length; i++){
+						response.result[i]["persistido"] = true;
+					}
+					that.getModel().setProperty("/documentosVigentes",response.result);
+					that.getModel().setProperty("/documentosNaoVigentes",[]);
+					that._remontarAbaDocumentos();
+				})
+				.catch(function(err){
+					console.log(err);
+				});
+				
+			},
+
+			onBaixarDocumento: function (oEvent){
+				var oButton = oEvent.getSource();
+				var sIdDocumento = oEvent.getSource().getBindingContext().getObject()["fk_documento_ttc.id_documento_ttc"];
+				var that = this;
+				this.setBusy(oButton, true);
+
+				Arquivo.download("DownloadDocumentoTTC?arquivo=" + sIdDocumento)
+					.then(function (response) {
+						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
+
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					})
+					.catch(function (err) {
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoErroAoBaixarArquivo"));
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					});
+			},
+
 			_onRouteMatched: function (oEvent) {
 				var that = this;
 				
@@ -481,6 +524,7 @@ sap.ui.define(
 					}
 				}
 				
+				
 				this.byId("tableBorne").setFixedColumnCount(3);
 				this.byId("tableCollected").setFixedColumnCount(3);
 
@@ -493,6 +537,8 @@ sap.ui.define(
 				this.getModel().setProperty("/NomeUsuario", oParameters.nomeUsuario);
 				this.getModel().setProperty('/IsAreaUsuario', !this.isIFrame());
 				
+				this._recarregarArquivos();
+				
 				this._montarFiltro();
 
 				
@@ -502,41 +548,86 @@ sap.ui.define(
 				this.byId("tableBorne").setBusyIndicatorDelay(100);
 				this.byId("tableBorne").setBusy(true);
 
-				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
-					"&tax_classification=1",
-					function (response) { // tax_classification = BORNE
-						if (response) {
-							for (var i = 0; i < response.length; i++) {
-								response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
-								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"], that);
-								countBorne++;
+				Promise.all([
+					NodeAPI.pListarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo + "&tax_classification=1"),
+					NodeAPI.pListarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo + "&tax_classification=2")
+					])
+				.then(function (response){
+					var responseBorne = response[0];
+					var responseCollected = response[1];
+					
+					//Borne
+					
+					for (var i = 0; i < responseBorne.length; i++) {
+						responseBorne[i].icone_aplicavel = responseBorne[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
+						responseBorne[i]["pais"] = Utils.traduzDominioPais(responseBorne[i]["fk_dominio_pais.id_dominio_pais"], that);
+						countBorne++;
+					}
+					that.getModel().setProperty("/ContadorBorne", countBorne);
+					that.getModel().setProperty("/Pagamentos/Borne", responseBorne);
+					//Collected
+					
+					for (var i = 0; i < responseCollected.length; i++) {
+						responseCollected[i].icone_aplicavel = responseCollected[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
+						responseCollected[i]["pais"] = Utils.traduzDominioPais(responseCollected[i]["fk_dominio_pais.id_dominio_pais"], that);
+						countCollected++;
+					}
+					that.getModel().setProperty("/ContadorCollected", countCollected);
+					that.getModel().setProperty("/Pagamentos/Collected", responseCollected);
+					
+					that.byId("tableBorne").setBusy(false);
+					that.byId("tableCollected").setBusy(false);
+					that._remontarAbaDocumentos();
+				})
+				.catch(function (err){
+					console.log(err);
+				})
+			},
+			
+			_remontarAbaDocumentos: function () {
+				let dadosPagamentosBorne = this.getModel().getProperty("/Pagamentos/Borne"),
+					dadosPagamentosCollected = this.getModel().getProperty("/Pagamentos/Collected");
+				var aPagamentosBorne = Utils.orderByArrayParaBox(dadosPagamentosBorne.slice(0), 'category');
+				var aPagamentosCollected = Utils.orderByArrayParaBox(dadosPagamentosCollected.slice(0), 'category');
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				var linhasDocumentos = [];
+				var insereArrayNoLinhasDocumentos = function (array, classificacao) {
+					var categoriaCorrente = -1;
+					var objLinhaDocumento = {};
+					var idDaLinha = 0;
+					for (let i = 0; i < array.length; i++) {
+						if (array[i]["fk_category.id_tax_category"]) {
+							if (array[i]["fk_category.id_tax_category"] == categoriaCorrente) {
+								linhasDocumentos[linhasDocumentos.length - 1]["valor_total"] = Number(array[i]["total"]) + linhasDocumentos[linhasDocumentos.length -
+									1]["valor_total"];
+							} else {
+								idDaLinha++;
+								categoriaCorrente = array[i]["fk_category.id_tax_category"];
+								objLinhaDocumento = {};
+								objLinhaDocumento["id_linha_documento"] = idDaLinha;
+								objLinhaDocumento["classificacao"] = classificacao;
+								objLinhaDocumento["category"] = array[i]["category"];
+								objLinhaDocumento["fk_category.id_tax_category"] = array[i]["fk_category.id_tax_category"];
+								objLinhaDocumento["fk_periodo.id_periodo"] = array[i]["fk_periodo.id_periodo"];
+								objLinhaDocumento["valor_total"] = Number(array[i]["total"]);
+								for (let j = 0; j < aDocumentosVigentes.length; j++) {
+									if (array[i]["fk_periodo.id_periodo"] == aDocumentosVigentes[j]["fk_periodo.id_periodo"] && array[i][
+											"fk_category.id_tax_category"
+										] == aDocumentosVigentes[j]["fk_category.id_tax_category"]) {
+										objLinhaDocumento["nome_arquivo"] = aDocumentosVigentes[j]["nome_arquivo"];
+										objLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = aDocumentosVigentes[j]["id_documento_ttc"];
+										objLinhaDocumento["persistido"] = aDocumentosVigentes[j]["persistido"];
+									}
+								}
+								linhasDocumentos.push(objLinhaDocumento);
 							}
-							that.getModel().setProperty("/ContadorBorne", countBorne);
-							that.getModel().setProperty("/Pagamentos/Borne", response);
 						}
-
-						that.byId("tableBorne").setBusy(false);
-					});
-
-
-				this.byId("tableCollected").setBusyIndicatorDelay(100);
-				this.byId("tableCollected").setBusy(true);
-
-				NodeAPI.listarRegistros("/DeepQuery/Pagamento?full=true&empresa=" + sIdEmpresa + "&periodo=" + sIdPeriodo +
-					"&tax_classification=2",
-					function (response) { // tax_classification = COLLECTED
-						if (response) {
-							for (var i = 0; i < response.length; i++) {
-								response[i].icone_aplicavel = response[i].ind_nao_aplicavel ? "sap-icon://accept" : "sap-icon://decline";
-								response[i]["pais"] = Utils.traduzDominioPais(response[i]["fk_dominio_pais.id_dominio_pais"], that);
-								countCollected++;
-							}
-							that.getModel().setProperty("/ContadorCollected", countCollected);
-							that.getModel().setProperty("/Pagamentos/Collected", response);
-						}
-
-						that.byId("tableCollected").setBusy(false);
-					});
+					}
+				}
+				insereArrayNoLinhasDocumentos(aPagamentosBorne, this.getResourceBundle().getText("viewGeralBorne"));
+				insereArrayNoLinhasDocumentos(aPagamentosCollected, this.getResourceBundle().getText("viewGeralCollected"));
+				this.getModel().setProperty("/linhasDocumentos", linhasDocumentos);
+				this.getModel().setProperty("/ContadorDocumentos", linhasDocumentos.length);
 			}
 		});
 	});

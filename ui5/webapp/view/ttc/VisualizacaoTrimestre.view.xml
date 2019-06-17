@@ -3,6 +3,7 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" 
 	xmlns:l="sap.ui.layout"
+	xmlns:uni="sap.ui.unified"
 	xmlns:f="sap.f"
 	xmlns="sap.m"
 	xmlns:tbl="sap.ui.table">
@@ -514,6 +515,72 @@
 										<Label text="{i18n>viewTTCDetalheTrimestreColunaProjeto}" textAlign="Center" />
 										<tbl:template>
 											<Text textAlign="Center" text="{projeto}" />
+										</tbl:template>
+									</tbl:Column>
+								</tbl:columns>
+							</tbl:Table>
+						</ScrollContainer>
+					</IconTabFilter>
+					<IconTabSeparator icon=""/>
+					<IconTabFilter id="backgroundDocumentos" text="{i18n>formularioObrigacaoTituloDocumentos} ({/ContadorDocumentos})">
+						<ScrollContainer height="100%" vertical="false">
+							<tbl:Table
+								class="tblTTC"
+								id="tableDocumentos"
+								visibleRowCount="6"
+								enableColumnReordering="false"
+								rows="{/linhasDocumentos}"
+								selectionMode="None"
+								ariaLabelledBy="title">
+								<tbl:toolbar>
+									<OverflowToolbar>
+										<content>
+											<ToolbarSpacer/>
+											<Button icon="sap-icon://filter" press="onFiltrarDocumentos" />
+											<HBox>
+												<Input id="linhasExibidasDocumentos" value="{/numeroLinhasDocumentos}"></Input>
+												<Button press="onMudarLinhasExibidasDocumentos" text="{i18n>redefinirLinhas}"></Button>	
+											</HBox>
+										</content>
+									</OverflowToolbar>
+								</tbl:toolbar>
+								<tbl:rowSettingsTemplate>
+									<tbl:RowSettings highlight="{novo}" />
+								</tbl:rowSettingsTemplate>
+								<tbl:columns>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center">
+										<Label text="{i18n>viewGeralClassificacao}" textAlign="Center" />
+										<tbl:template>
+											<Label text="{classificacao}"/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center">
+										<Label text="{i18n>viewGeralCategoria}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
+											<Label text="{category}"/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="10rem"
+										hAlign="Center">
+										<Label text="{i18n>viewGeralValueAliquot}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
+											<Label text="{valor_total}"/>
+										</tbl:template>
+									</tbl:Column>
+									<tbl:Column
+										width="35rem"
+										hAlign="Center">
+										<Label text="{i18n>formularioObrigacaoTituloDocumentos}" class="sapMLabelRequired" textAlign="Center" />
+										<tbl:template>
+											<HBox alignItems="Center">
+												<Label text="{nome_arquivo}" visible="{= !!${nome_arquivo}}" class="sapUiSmallMarginEnd" textAlign="Center" />
+												<Button icon="sap-icon://download-from-cloud" type="Accept" tooltip="{i18n>viewGeralEnviarArq}" enabled="{persistido}" press="onBaixarDocumento" visible="{= !!${nome_arquivo}}" class="sapUiSmallMarginEnd" />
+											</HBox>
 										</tbl:template>
 									</tbl:Column>
 								</tbl:columns>

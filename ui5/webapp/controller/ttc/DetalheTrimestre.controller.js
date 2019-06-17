@@ -4,10 +4,14 @@ sap.ui.define(
 		"ui5ns/ui5/lib/NodeAPI",
 		"ui5ns/ui5/lib/Validador",
 		"ui5ns/ui5/lib/Utils",
+		"ui5ns/ui5/model/Constants",
+		"ui5ns/ui5/lib/Arquivo",
+		"sap/ui/model/json/JSONModel",
+		"sap/ui/core/Fragment",
 		"ui5ns/ui5/lib/jszip",
 		"ui5ns/ui5/lib/XLSX"
 	],
-	function (BaseController, NodeAPI, Validador, Utils) {
+	function (BaseController, NodeAPI, Validador, Utils, Constants, Arquivo,JSONModel, Fragment) {
 		"use strict";
 
 		return BaseController.extend("ui5ns.ui5.controller.ttc.DetalheTrimestre", {
@@ -48,6 +52,8 @@ sap.ui.define(
 				oModel.setSizeLimit(300);
 
 				this.setModel(oModel);
+
+				this.setModel(new JSONModel(), "anexos");
 
 				this.getRouter().getRoute("ttcDetalheTrimestre").attachPatternMatched(this._onRouteMatched, this);
 			},
@@ -152,33 +158,53 @@ sap.ui.define(
 				});
 
 				try {
-					if (workbook.Sheets["Borne"]["A1"].v === "Tax" && workbook.Sheets["Borne"]["B1"].v ===
-						"Goverment administration/body (payee name)" && workbook.Sheets["Borne"]["C1"].v === "Jurisdiction" && workbook.Sheets["Borne"][
-							"D1"
-						].v === "Country" && workbook.Sheets["Borne"]["E1"].v === "State" && workbook.Sheets["Borne"]["F1"].v === "City" && workbook.Sheets[
-							"Borne"]["G1"].v === "Project" && workbook.Sheets["Borne"]["H1"].v === "Fiscal Year" && workbook.Sheets["Borne"]["I1"].v ===
-						"Description" && workbook.Sheets["Borne"]["J1"].v === "Date of Payment (MM/DD/YYYY)" && workbook.Sheets["Borne"]["K1"].v ===
-						"Currency" && workbook.Sheets["Borne"]["L1"].v === "Type of Transaction" && workbook.Sheets["Borne"]["M1"].v ===
-						"Other Type of Transactions" && workbook.Sheets["Borne"]["N1"].v === "Value" && workbook.Sheets["Borne"]["O1"].v === "Interest" &&
-						workbook.Sheets["Borne"]["P1"].v === "Fine" && workbook.Sheets["Borne"]["Q1"].v === "Total Value" && workbook.Sheets["Borne"][
-							"R1"
-						].v === "Document ID" && workbook.Sheets["Borne"]["S1"].v === "Beneficiary entity" && workbook.Sheets["Collected"]["A1"].v ===
-						"Tax" && workbook.Sheets["Collected"]["B1"].v === "Goverment administration/body (payee name)" && workbook.Sheets["Collected"][
-							"C1"
-						].v === "Jurisdiction" && workbook.Sheets["Collected"]["D1"].v === "Country" && workbook.Sheets["Collected"]["E1"].v === "State" &&
-						workbook.Sheets["Collected"]["F1"].v === "City" && workbook.Sheets["Collected"]["G1"].v === "Project" && workbook.Sheets[
-							"Collected"]["H1"].v === "Fiscal Year" && workbook.Sheets["Collected"]["I1"].v === "Description" && workbook.Sheets["Collected"]
-						["J1"].v === "Date of Payment (MM/DD/YYYY)" && workbook.Sheets["Collected"]["K1"].v === "Currency" && workbook.Sheets["Collected"]
-						["L1"].v === "Type of Transaction" && workbook.Sheets["Collected"]["M1"].v === "Other Type of Transactions" && workbook.Sheets[
-							"Collected"]["N1"].v === "Value" && workbook.Sheets["Collected"]["O1"].v === "Interest" && workbook.Sheets["Collected"]["P1"].v ===
-						"Fine" && workbook.Sheets["Collected"]["Q1"].v === "Total Value" && workbook.Sheets["Collected"]["R1"].v === "Document ID" &&
-						workbook.Sheets["Collected"]["S1"].v === "Beneficiary entity" && workbook.Sheets["Dados"]) {
+					if (workbook.Sheets["Borne"]["A1"].v === "Tax"
+						&& workbook.Sheets["Borne"]["B1"].v === "Goverment administration/body (payee name)"
+						&& workbook.Sheets["Borne"]["C1"].v === "Jurisdiction"
+						&& workbook.Sheets["Borne"]["D1"].v === "Country"
+						&& workbook.Sheets["Borne"]["E1"].v === "State"
+						&& workbook.Sheets["Borne"]["F1"].v === "City"
+						&& workbook.Sheets["Borne"]["G1"].v === "Project"
+						&& workbook.Sheets["Borne"]["H1"].v === "Fiscal Year"
+						&& workbook.Sheets["Borne"]["I1"].v === "Description"
+						&& workbook.Sheets["Borne"]["J1"].v === "Date of Payment (MM/DD/YYYY)"
+						&& workbook.Sheets["Borne"]["K1"].v === "Currency"
+						&& workbook.Sheets["Borne"]["L1"].v === "Type of Transaction"
+						&& workbook.Sheets["Borne"]["M1"].v === "Other Type of Transactions"
+						&& workbook.Sheets["Borne"]["N1"].v === "Value"
+						&& workbook.Sheets["Borne"]["O1"].v === "Interest"
+						&& workbook.Sheets["Borne"]["P1"].v === "Fine"
+						&& workbook.Sheets["Borne"]["Q1"].v === "Total Value"
+						&& workbook.Sheets["Borne"]["R1"].v === "Document ID"
+						&& workbook.Sheets["Borne"]["S1"].v === "Beneficiary entity"
+						&& workbook.Sheets["Collected"]["A1"].v === "Tax"
+						&& workbook.Sheets["Collected"]["B1"].v === "Goverment administration/body (payee name)"
+						&& workbook.Sheets["Collected"]["C1"].v === "Jurisdiction"
+						&& workbook.Sheets["Collected"]["D1"].v === "Country"
+						&& workbook.Sheets["Collected"]["E1"].v === "State"
+						&& workbook.Sheets["Collected"]["F1"].v === "City"
+						&& workbook.Sheets["Collected"]["G1"].v === "Project"
+						&& workbook.Sheets["Collected"]["H1"].v === "Fiscal Year"
+						&& workbook.Sheets["Collected"]["I1"].v === "Description"
+						&& workbook.Sheets["Collected"]["J1"].v === "Date of Payment (MM/DD/YYYY)"
+						&& workbook.Sheets["Collected"]["K1"].v === "Currency"
+						&& workbook.Sheets["Collected"]["L1"].v === "Type of Transaction"
+						&& workbook.Sheets["Collected"]["M1"].v === "Other Type of Transactions"
+						&& workbook.Sheets["Collected"]["N1"].v === "Value"
+						&& workbook.Sheets["Collected"]["O1"].v === "Interest"
+						&& workbook.Sheets["Collected"]["P1"].v === "Fine"
+						&& workbook.Sheets["Collected"]["Q1"].v === "Total Value"
+						&& workbook.Sheets["Collected"]["R1"].v === "Document ID"
+						&& workbook.Sheets["Collected"]["S1"].v === "Beneficiary entity"
+						&& workbook.Sheets["Dados"]) {
 						var ws = workbook.Sheets["Dados"];
 						return workbook;
-					} else {
+					} 
+					else {
 						throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao"));
 					}
-				} catch (e) {
+				} 
+				catch (e) {
 					console.log("Planilha fora do padrão: " + e.message)
 					throw new Error(that.getResourceBundle().getText("viewGeralPlanilhaForaDoPadrao") + ": \n" + e.message);
 				}
@@ -499,7 +525,6 @@ sap.ui.define(
 				}
 				that.getModel().setProperty("/ContadorBorne", that._dadosPagamentosBorne.length);
 				that.getModel().setProperty("/ContadorCollected", that._dadosPagamentosCollected.length);
-				that.getModel().setProperty("/ContadorDocumentos", that._dadosPagamentosCollected.length && that._dadosPagamentosBorne.length);
 
 				function convertExcelNumberToData(ExcelData) {
 					var data = new Date((ExcelData - (25567 + 1)) * 86400 * 1000);
@@ -755,12 +780,38 @@ sap.ui.define(
 					});
 				}
 			},
-
+			
+			verificarSePodeExcluir: function (oExcluir){
+				var aLinhasDocumentos = this.getModel().getProperty("/linhasDocumentos");
+				var bTemDocumentoPraEssaCategoria = false;
+				var iNumeroLinhasDessaCategoria = 0;
+				var aPagamentos = this._dadosPagamentosBorne.concat(this._dadosPagamentosCollected);
+				for (let i = 0; i < aLinhasDocumentos.length; i++) {
+					if (aLinhasDocumentos[i]["fk_category.id_tax_category"] == oExcluir["fk_category.id_tax_category"] && aLinhasDocumentos[i]["fk_documento_ttc.id_documento_ttc"]) {
+						bTemDocumentoPraEssaCategoria = true;
+						
+					}
+				}
+				if (bTemDocumentoPraEssaCategoria) {
+					for (let i = 0; i < aPagamentos.length; i++) {
+						if (aPagamentos[i]["fk_category.id_tax_category"] == oExcluir["fk_category.id_tax_category"]) {
+							iNumeroLinhasDessaCategoria++;
+						}
+					}
+				}
+				if (bTemDocumentoPraEssaCategoria && iNumeroLinhasDessaCategoria === 1) {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			
 			onExcluirLinha: function (oEvent) {
 				var that = this;
 				var sPath = oEvent.getSource().getBindingContext().getPath();
 				var oExcluir = oEvent.getSource().getBindingContext().getObject();
 				var aDadosPagamentos = this._getDadosPagamentos(oEvent.getSource().getBindingContext().getPath());
+				var bPodeExcluir = this.verificarSePodeExcluir(oExcluir);
 
 				var dialog = new sap.m.Dialog({
 					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
@@ -772,17 +823,39 @@ sap.ui.define(
 					beginButton: new sap.m.Button({
 						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
 						press: function () {
-							for (var i = 0; i < aDadosPagamentos.length; i++) {
-								if (aDadosPagamentos[i] === oExcluir) {
-									aDadosPagamentos.splice(i, 1);
-									that.getModel().refresh();
-									break;
-								}
-							}
-
 							dialog.close();
-							that.getModel().setProperty(sPath.toUpperCase().indexOf("BORNE") > -1 ? "/ContadorBorne" : "/ContadorCollected",
-								aDadosPagamentos.length);
+							if(!bPodeExcluir){
+								for (var i = 0; i < aDadosPagamentos.length; i++) {
+									if (aDadosPagamentos[i] === oExcluir) {
+										aDadosPagamentos.splice(i, 1);
+										that.getModel().refresh();
+										break;
+									}
+								}
+								that.getModel().setProperty(sPath.toUpperCase().indexOf("BORNE") > -1 ? "/ContadorBorne" : "/ContadorCollected",
+									aDadosPagamentos.length);
+								that._remontarAbaDocumentos();
+							}
+							else{
+								var dialog2 = new sap.m.Dialog({
+									title: that.getView().getModel("i18n").getResourceBundle().getText("viewGeralAviso"),
+									type: "Message",
+									content: new sap.m.Text({
+										textAlign: "Center",
+										text: that.getView().getModel("i18n").getResourceBundle().getText("viewTTCErroApagarPagamento")
+									}),
+									beginButton: new sap.m.Button({
+										text: "Ok",
+										press: function () {
+											dialog2.close();
+										}.bind(that)
+									}),
+									afterClose: function () {
+										dialog2.destroy();
+									}
+								});
+								dialog2.open();
+							}
 						}
 					}),
 					endButton: new sap.m.Button({
@@ -863,6 +936,7 @@ sap.ui.define(
 							"fk_documento_ttc.id_documento_ttc"
 						]) {
 						bTemDocumentoPraEssaCategoria = true;
+						break;
 					}
 				}
 				if (bTemDocumentoPraEssaCategoria) {
@@ -1444,9 +1518,10 @@ sap.ui.define(
 			},
 
 			_onRouteMatched: function (oEvent) {
+				this.byId("dynamicPage").setBusy(true);
+				this._limparModel();
 				this.byId("tableBorne").setFixedColumnCount(3);
-				this.byId("tableCollected").setFixedColumnCount(3);
-				this.byId("tableDocumentos").setFixedColumnCount(3);
+				this.byId("tableCollected").setFixedColumnCount(3);				
 				var oParameters = this.fromURIComponent(oEvent.getParameter("arguments").oParameters);
 				Utils.displayFormat(this);
 				this.getModel().setProperty("/Empresa", oParameters.oEmpresa);
@@ -1454,7 +1529,8 @@ sap.ui.define(
 				this.getModel().setProperty("/AnoCalendario", oParameters.oAnoCalendario);
 				this.getModel().setProperty("/LabelPeriodo", this._pegarLabelPeriodoDetalheTrimestre(oParameters.oPeriodo.numero_ordem));
 				this.getModel().setProperty("/NomeUsuario", oParameters.nomeUsuario);
-
+				var iIdEmpresa = oParameters.oEmpresa.id_empresa;
+				var iIdPeriodo = oParameters.oPeriodo.id_periodo;			
 				this._montarFiltro();
 
 				this._resolverMinMaxDate(oParameters.oPeriodo);
@@ -1479,6 +1555,8 @@ sap.ui.define(
 						that.getModel().setProperty("/Pais", response);
 					}
 				});
+
+				this._recarregarArquivos();
 
 				NodeAPI.listarRegistros("TaxCategory?classification=1", function (response) { // Classification=Borne
 					if (response) {
@@ -1605,6 +1683,9 @@ sap.ui.define(
 						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
 						press: function () {
 							dialog.close();
+							if (onConfirm) {
+								onConfirm();
+							}
 						}
 					}),
 					endButton: new sap.m.Button({
@@ -1771,7 +1852,6 @@ sap.ui.define(
 							that.onTrocarTipoTransacaoImport(response1[0][i]);
 						}
 						that.getModel().setProperty("/ContadorBorne", that._dadosPagamentosBorne.length);
-						that.getModel().setProperty("/ContadorDocumentos", that._dadosPagamentosBorne.length);
 					}
 
 					if (response2) {
@@ -1829,10 +1909,31 @@ sap.ui.define(
 					/*that.getModel().setProperty("/ContadorCollected", countCollected);*/
 					that.getModel().refresh();
 					that.getModel().setProperty("/ContadorCollected", that._dadosPagamentosCollected.length);
-					that.getModel().setProperty("/ContadorDocumentos", that._dadosPagamentosCollected.length);
 					that._remontarAbaDocumentos();
 					that.byId("dynamicPage").setBusy(false);
 				});
+			},
+
+			_recarregarArquivos: function(){
+				var that = this;
+				var oEmpresa = this.getModel().getProperty("/Empresa");
+				var oPeriodo = this.getModel().getProperty("/Periodo");
+				var iIdEmpresa = oEmpresa.id_empresa;
+				var iIdPeriodo = oPeriodo.id_periodo;
+				
+				NodeAPI.pListarRegistros("DeepQuery/ListarTodosDocumentosTTC?idPeriodo=" + iIdPeriodo + "&idEmpresa" + iIdEmpresa)
+				.then(function(response){
+					for(let i =0; i < response.result.length; i++){
+						response.result[i]["persistido"] = true;
+					}
+					that.getModel().setProperty("/documentosVigentes",response.result);
+					that.getModel().setProperty("/documentosNaoVigentes",[]);
+					that._remontarAbaDocumentos();
+				})
+				.catch(function(err){
+					console.log(err);
+				});
+				
 			},
 
 			_getDadosPagamentos: function (sObjectPath) {
@@ -2002,7 +2103,8 @@ sap.ui.define(
 			_salvar: function (oEvent, callback, exibirmsg) {
 				var that = this,
 					oButton = oEvent.getSource(),
-					dialog = null;
+					dialog = null,
+					callback = callback;
 
 				if (!this._isFormularioValido()) {
 					dialog = new sap.m.Dialog({
@@ -2069,10 +2171,41 @@ sap.ui.define(
 						that._inserirPagamentos(function (response) {
 							oButton.setEnabled(true);
 
-							var json = JSON.parse(response);
-
-							if (callback) {
-								callback(json);
+							var jsonRespostaInsertPagamento = JSON.parse(response);
+							
+							var aArquivosVigentesParaEnviar = [];
+							
+							
+							if (jsonRespostaInsertPagamento.success) {
+								that._excluirArquivosServidor()
+								.then(function(resExcluirArquivos){
+									Promise.all(that._salvarArquivosServidor())
+									.then(function(resSalvarArquivos){
+										if(that._dialogProgresso){
+											that._dialogProgresso.close();
+										}
+										if (callback) {
+											callback(jsonRespostaInsertPagamento);
+										}
+										that._recarregarArquivos();
+									})
+									.catch(function(errSalvarArquivos){
+										alert("erro no upload dos arquivos");
+										if(that._dialogProgresso){
+											that._dialogProgresso.close();
+										}
+										that._recarregarArquivos();
+									})
+								})
+								.catch(function(errExcluirArquivos){
+									alert("Erro na exclusao de arquivos");
+									that._recarregarArquivos();
+								})
+							}
+							else {
+								if (callback) {
+									callback(jsonRespostaInsertPagamento);
+								}
 							}
 						}, oButton);
 					}, exibirmsg);
@@ -2161,7 +2294,7 @@ sap.ui.define(
 								press: function () {
 									if (callback) {
 										callback();
-										sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreSalvoSucesso"));
+										//sap.m.MessageToast.show(that.getResourceBundle().getText("viewDetalheTrimestreSalvoSucesso"));
 									}
 									dialog.close();
 								}
@@ -2349,12 +2482,12 @@ sap.ui.define(
 					novoDocumentoNaoVigente = {};
 					novoDocumentoNaoVigente["fk_periodo.id_periodo"] = aDocumentosVigentes[i]["fk_periodo.id_periodo"];
 					novoDocumentoNaoVigente["fk_category.id_tax_category"] = aDocumentosVigentes[i]["fk_category.id_tax_category"];
-					novoDocumentoNaoVigente["nome_documento"] = aDocumentosVigentes[i]["nome_documento"];
+					novoDocumentoNaoVigente["nome_arquivo"] = aDocumentosVigentes[i]["nome_arquivo"];
 					novoDocumentoNaoVigente["persistido"] = aDocumentosVigentes[i]["persistido"];
 					novoDocumentoNaoVigente["id_documento_ttc"] = aDocumentosVigentes[i]["id_documento_ttc"];
-					aDocumentosVigentes.splice(i, 1);
-					aDocumentosNaoVigentes.push(aDocumentosVigentes);
+					aDocumentosNaoVigentes.push(novoDocumentoNaoVigente);
 				}
+				this.getModel().setProperty("/documentosVigentes",[]);
 				this.getModel().refresh();
 			},
 
@@ -2362,23 +2495,43 @@ sap.ui.define(
 				var oLinhaDocumento = oEvent.getSource().getBindingContext().getObject();
 				var oFileUploader = oEvent.oSource.oParent.mAggregations.items[0];
 				var oDocumento = oFileUploader.oFileUpload.files[0];
-				var nome_documento = oFileUploader.getValue();
+				var nome_arquivo = oFileUploader.getValue();
 				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
 				var oDocumentoAtual = {};
-				if (nome_documento && oDocumento) {
+				if(nome_arquivo && oDocumento){
 					oFileUploader.clear();
 					oDocumentoAtual["persistido"] = false;
 					oDocumentoAtual["dados"] = oDocumento;
 					oDocumentoAtual["fk_category.id_tax_category"] = oLinhaDocumento["fk_category.id_tax_category"];
 					oDocumentoAtual["fk_periodo.id_periodo"] = oLinhaDocumento["fk_periodo.id_periodo"];
-					oDocumentoAtual["nome_documento"] = nome_documento;
+					oDocumentoAtual["nome_arquivo"] = nome_arquivo;
 					oDocumentoAtual["id_documento_ttc"] = -1;
-					oLinhaDocumento["nome_documento"] = nome_documento;
+					oLinhaDocumento["nome_arquivo"] = nome_arquivo;
 					oLinhaDocumento["persistido"] = false;
 					oLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = -1;
 					aDocumentosVigentes.push(oDocumentoAtual);
 					this.getModel().refresh();
 				}
+			},
+
+			onBaixarDocumento: function (oEvent){
+				var oButton = oEvent.getSource();
+				var sIdDocumento = oEvent.getSource().getBindingContext().getObject()["fk_documento_ttc.id_documento_ttc"];
+				var that = this;
+				this.setBusy(oButton, true);
+
+				Arquivo.download("DownloadDocumentoTTC?arquivo=" + sIdDocumento)
+					.then(function (response) {
+						Arquivo.salvar(response[0].nome_arquivo, response[0].mimetype, response[0].dados_arquivo.data);
+
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					})
+					.catch(function (err) {
+						sap.m.MessageToast.show(that.getResourceBundle().getText("viewTAXResumoTrimestreAnexarDeclaracaoErroAoBaixarArquivo"));
+						that.setBusy(oButton, false);
+						that.getModel().refresh();
+					});
 			},
 
 			onExcluirDocumento: function (oEvent) {
@@ -2391,11 +2544,11 @@ sap.ui.define(
 					&& oLinhaDocumento["fk_periodo.id_periodo"] == aDocumentosVigentes[i]["fk_periodo.id_periodo"]) {
 						novoDocumentoNaoVigente["fk_periodo.id_periodo"] = aDocumentosVigentes[i]["fk_periodo.id_periodo"];
 						novoDocumentoNaoVigente["fk_category.id_tax_category"] = aDocumentosVigentes[i]["fk_category.id_tax_category"];
-						novoDocumentoNaoVigente["nome_documento"] = aDocumentosVigentes[i]["nome_documento"];
+						novoDocumentoNaoVigente["nome_arquivo"] = aDocumentosVigentes[i]["nome_arquivo"];
 						novoDocumentoNaoVigente["persistido"] = aDocumentosVigentes[i]["persistido"];
 						novoDocumentoNaoVigente["id_documento_ttc"] = aDocumentosVigentes[i]["id_documento_ttc"];
 						aDocumentosVigentes.splice(i, 1);
-						oLinhaDocumento["nome_documento"] = "";
+						oLinhaDocumento["nome_arquivo"] = "";
 						oLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = 0;
 						oLinhaDocumento["persistido"] = undefined;
 						oLinhaDocumento["valor_total"] = 0;
@@ -2405,6 +2558,152 @@ sap.ui.define(
 				aDocumentosNaoVigentes.push(novoDocumentoNaoVigente);
 			},
 
+		_mostrarDialogProgressoUploadAnexo: function () {
+				if (!this._dialogProgresso) {
+					var that = this;
+					
+					Fragment.load({
+						name: "ui5ns.ui5.view.compliance.DialogProgresso"
+					}).then(function (oDialog) {
+						that._dialogProgresso = oDialog;
+						
+						that._dialogProgresso.setEscapeHandler(function (promise) {
+							promise.reject();
+						});
+						
+						that.getView().addDependent(that._dialogProgresso);	
+						
+						that._dialogProgresso.open();
+					});
+				}
+				else {
+					this._dialogProgresso.open();
+				}
+			},
+			
+			_salvarArquivosServidor: function () {
+				var aPromesasUpload = [];
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				var aDocumentosParaInserir = this._pegarArrayDocumentosParaEnviar();
+				this.getModel("anexos").setProperty('/', aDocumentosParaInserir);
+				aDocumentosParaInserir = this.getModel("anexos").getProperty("/");
+				var iIdEmpresa = this.getModel().getProperty("/Empresa").id_empresa;
+				var aPromessas = [];
+				var that = this;
+				
+				var criaPromessaUpload = function (oDocumentoVigenteParaInserir) {
+					var oData = {
+						"fk_periodo.id_periodo": oDocumentoVigenteParaInserir["fk_periodo.id_periodo"],
+						"fk_empresa.id_empresa": iIdEmpresa,
+						"fk_categoria.id_categoria": oDocumentoVigenteParaInserir["fk_category.id_tax_category"]
+					};
+					var sRota = "UploadDocumentoTTC";
+					return new Promise(function(resolve,reject){
+						Arquivo.upload(oDocumentoVigenteParaInserir["dados"], oDocumentoVigenteParaInserir["nome_arquivo"], sRota, oData,{
+							onProgress: function(progresso){
+								oDocumentoVigenteParaInserir.progresso = progresso;
+								that.getModel("anexos").refresh();
+							}
+						})
+						.then(function (response) {
+							resolve(response);
+						})
+						.catch(function (err) {
+							reject(err);
+						});
+					})
+				};
+				
+				for(let i=0; i < aDocumentosParaInserir.length; i++){
+					aPromessas.push(criaPromessaUpload(aDocumentosParaInserir[i]));
+				}
+
+				if(aPromessas.length == 0){
+					aPromessas.push(Promise.resolve());
+				}
+				else{
+					this._mostrarDialogProgressoUploadAnexo();
+				}
+				return aPromessas;
+			},
+			
+			_pegarArrayDocumentosParaApagar: function (){
+				var aDocumentosNaoVigentes = this.getModel().getProperty("/documentosNaoVigentes");
+				var aDocumentosParaApagar = [];
+				for(let i=0; i < aDocumentosNaoVigentes.length; i++){
+					if(aDocumentosNaoVigentes[i]["persistido"] == true){
+						aDocumentosParaApagar.push(aDocumentosNaoVigentes[i].id_documento_ttc);
+					}
+				}
+				return aDocumentosParaApagar;
+			},
+			
+			_pegarArrayDocumentosParaEnviar: function (){
+				var aDocumentosVigentes = this.getModel().getProperty("/documentosVigentes");
+				var aDocumentosParaInserir = [];
+				for(let i=0; i < aDocumentosVigentes.length; i++){
+					if(aDocumentosVigentes[i]["persistido"] == false){
+						aDocumentosParaInserir.push(aDocumentosVigentes[i]);
+					}
+				}
+				return aDocumentosParaInserir;
+			},
+			
+			_excluirArquivosServidor: function (){
+				var idDocumentosParaApagar = this._pegarArrayDocumentosParaApagar();
+				var sRota = "ExcluirDocumentosTTC";
+				if(idDocumentosParaApagar.length){
+					return new Promise(function(resolve,reject){
+						jQuery.ajax({
+							url: Constants.urlBackend + sRota,
+							type: "DELETE",
+							xhrFields: {
+								withCredentials: true
+							},
+							crossDomain: true,
+							dataType: "json",
+							data: {"idDocumentosParaApagar":idDocumentosParaApagar}
+						}).then(function (response) {
+							if (response.success) {
+								resolve(response.result);
+							} else {
+								reject(response);
+							}
+						}, function (err) {
+							reject(err.status);
+						});
+					})
+				}
+				else{
+					return Promise.resolve();
+				}
+			},
+			
+			_limparModel: function () {
+				var modelSemNome = this.getModel();
+				modelSemNome = {
+					ValueState: sap.ui.core.ValueState.Error,
+					MinDate: null,
+					MaxDate: null,
+					pagamentos: this._dadosPagamentos,
+					Borne: {
+						Pagamentos: this._dadosPagamentosBorne,
+						TaxCategory: [],
+						Tax: [],
+						NameOfTax: []
+					},
+					Collected: {
+						Pagamentos: this._dadosPagamentosCollected,
+						TaxCategory: [],
+						Tax: [],
+						NameOfTax: []
+					},
+					documentosVigentes: [],
+					linhasDocumentos: [],
+					documentosNaoVigentes: []
+				}
+			},
+			
 			_remontarAbaDocumentos: function () {
 				var aPagamentosBorne = Utils.orderByArrayParaBox(this._dadosPagamentosBorne.slice(0), 'category');
 				var aPagamentosCollected = Utils.orderByArrayParaBox(this._dadosPagamentosCollected.slice(0), 'category');
@@ -2433,7 +2732,7 @@ sap.ui.define(
 									if (array[i]["fk_periodo.id_periodo"] == aDocumentosVigentes[j]["fk_periodo.id_periodo"] && array[i][
 											"fk_category.id_tax_category"
 										] == aDocumentosVigentes[j]["fk_category.id_tax_category"]) {
-										objLinhaDocumento["nome_documento"] = aDocumentosVigentes[j]["nome_documento"];
+										objLinhaDocumento["nome_arquivo"] = aDocumentosVigentes[j]["nome_arquivo"];
 										objLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = aDocumentosVigentes[j]["id_documento_ttc"];
 										objLinhaDocumento["persistido"] = aDocumentosVigentes[j]["persistido"];
 									}
@@ -2446,6 +2745,7 @@ sap.ui.define(
 				insereArrayNoLinhasDocumentos(aPagamentosBorne, this.getResourceBundle().getText("viewGeralBorne"));
 				insereArrayNoLinhasDocumentos(aPagamentosCollected, this.getResourceBundle().getText("viewGeralCollected"));
 				this.getModel().setProperty("/linhasDocumentos", linhasDocumentos);
+				this.getModel().setProperty("/ContadorDocumentos", linhasDocumentos.length);
 			}
 		});
 	}

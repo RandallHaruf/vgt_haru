@@ -1,0 +1,17 @@
+<core:FragmentDefinition
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<MenuButton 
+		text="Excel" 
+		useDefaultActionOnly="true">
+		<!--menuPosition="BeginBottom"-->
+		<menu>
+			<Menu itemSelected="onEnviarXml">
+				<items>
+					<MenuItem text="Importar e substituir" id="enviarSubstituir" />
+					<MenuItem text="Importar e adicionar" id="enviarAdicionar" />
+				</items>
+			</Menu>
+		</menu>
+	</MenuButton>
+</core:FragmentDefinition>
