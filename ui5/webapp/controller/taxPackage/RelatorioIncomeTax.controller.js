@@ -49,7 +49,7 @@ sap.ui.define([
 					res.json()
 						.then((response) => {
 							if (response.success) {
-								this.getModel().setProperty("/NomeUsuario", response.nome);
+								this.getModel().setProperty("/NomeUsuario", response.nome + " - " + response.ambiente);
 							} else {
 								MessageToast.show(response.error.msg);
 								this.getRouter().navTo("Login");

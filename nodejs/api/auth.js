@@ -86,7 +86,6 @@ const login = function (req, res) {
 					req.session = {
 						autenticado: false
 					};
-
 					res.send(JSON.stringify(err));
 				} 
 				else if (result.length === 0 || !result[0].ind_ativo) {
@@ -133,10 +132,26 @@ const login = function (req, res) {
 								.then(function (aEmpresa) {
 									req.session.usuario.empresas = aEmpresa;
 
-									res.send(JSON.stringify({
-										success: true,
-										msg: "Usuário autenticado com sucesso."
-									}));
+									retornarAmbienteLogado()
+									.then(function(responseAmbiente){
+										req.session.usuario.ambiente = responseAmbiente[0].valor;
+										res.send(JSON.stringify({
+											success: true,
+											msg: "Usuário autenticado com sucesso."
+										}));
+									})
+									.catch(function (errAmbiente){
+										console.log("erro" + JSON.stringify(errAmbiente));
+										req.session = {
+											autenticado: false
+										};
+										res.send({
+											success: false,
+											error: {
+												msg: "Erro ao carregar ambiente logado"
+											}
+										});
+									})
 								})
 								.catch(function (err2) {
 									req.session = {
@@ -211,7 +226,8 @@ const verificaAuth = function (req, res) {
 			modulos: req.session.usuario.modulos,
 			nome: req.session.usuario.nome,
 			id: req.session.usuario.id,
-			nivelAcesso:req.session.usuario.nivelAcesso
+			nivelAcesso:req.session.usuario.nivelAcesso,
+			ambiente: req.session.usuario.ambiente
 		});
 	} else {
 		req.session = {
@@ -423,3 +439,19 @@ function filtrarEmpresasPorModulo(moduloAtual, aEmpresa, sNomeCampoIdEmpresa) {
 	
 	return aEmpresaFiltrado;
 }
+
+function retornarAmbienteLogado(){
+	return new Promise(function(resolve,reject){
+		db.executeStatement({
+			statement:'select * from "VGT.APP_CONFIG" where "chave" = \'ambienteLogado\''
+			},
+			function (err, result) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
+			}
+		);
+	});
+};

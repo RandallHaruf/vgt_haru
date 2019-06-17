@@ -7,7 +7,6 @@ sap.ui.define(
 	],
 	function (BaseController, NumericIcon, Constants, NodeAPI) {
 		return BaseController.extend("ui5ns.ui5.controller.SelecaoModulo", {
-
 			onStartUpload: function (oEvent) {
 				var that = this,
 					oButton = oEvent.getSource(),
@@ -434,7 +433,7 @@ sap.ui.define(
 										this.getModel().setProperty("/ShowCompliance", response.modulos && response.modulos.includes(3) ? true : false);
 										this.getModel().setProperty("/ShowBeps", response.modulos && response.modulos.includes(4) ? true : false);
 										this.getModel().setProperty("/ShowAdmin", response.modulos && response.modulos.includes(5) ? true : false);
-										this.getModel().setProperty("/NomeUsuario", response.nome);
+										this.getModel().setProperty("/NomeUsuario", response.nome + " - " + response.ambiente);
 									} else {
 										sap.m.MessageToast.show(response.error.msg);
 										this.getRouter().navTo("login");

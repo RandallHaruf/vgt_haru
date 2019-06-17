@@ -9,3 +9,10 @@ upsert "VGT.APP_CONFIG"("chave", "valor") values('senhaEmailQueEnvia', '{"conten
 */
 /* OBS: PARA APLICAÇÃO TESTE NA WEBIDE UTILIZAR EMAIL PESSOAL */
 upsert "VGT.APP_CONFIG"("chave", "valor") values('emailQueRecebe', 'substituir.email.ambiente.correto@email.com') where "chave" = 'emailQueRecebe';
+
+/*
+* DEV: DEV
+* PRD: PRD
+*/
+
+upsert "VGT.APP_CONFIG"("chave", "valor") values('ambienteLogado', 'DEV') where "chave" = 'ambienteLogado';
