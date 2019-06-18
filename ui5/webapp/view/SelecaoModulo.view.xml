@@ -15,7 +15,7 @@
 					<Title text="{i18n>viewSelecaoModuloTituloPagina}" />
 				</f:heading>
 				<f:expandedContent>
-					<ObjectIdentifier title="{/NomeUsuario}" />
+					<ObjectIdentifier title="{i18n>olaUsuarioLogado} {/NomeUsuario}" />
 				</f:expandedContent>
 				<f:navigationActions>
 					<core:Fragment fragmentName="ui5ns.ui5.view.AcessoRapido" type="XML" />
