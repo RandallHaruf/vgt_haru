@@ -8,9 +8,10 @@ sap.ui.define(
 		"ui5ns/ui5/model/Constants",
 		"ui5ns/ui5/lib/Validador",
 		"ui5ns/ui5//model/enums/PerfilUsuario",
-		"sap/ui/core/Fragment"
+		"sap/ui/core/Fragment",
+		"sap/ui/model/json/JSONModel"
 	],
-	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador, PerfilUsuario, Fragment) {
+	function (BaseController, NodeAPI, Utils, Arquivo, jQueryMask, Constants, Validador, PerfilUsuario, Fragment, JSONModel) {
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
@@ -225,6 +226,8 @@ sap.ui.define(
 					return documento.arquivo;
 				});
 				
+				this.getModel("anexos").setProperty('/', aAnexo);
+				
 				var oData = {
 					indConclusao: bIsEncerramento,
 					id: oRespostaObrigacao["id_resposta_obrigacao"]
@@ -243,7 +246,7 @@ sap.ui.define(
 						var oPromise = Arquivo.upload(oAnexo.arquivo, oAnexo.nome_arquivo, "UploadDocumento", oData, {
 							onProgress: function (progresso) {
 								anexo.progresso = progresso;	
-								thisController.getModel().refresh();
+								thisController.getModel("anexos").refresh();
 							}
 						});
 						aPromise.push(oPromise);
@@ -864,6 +867,8 @@ sap.ui.define(
 				oModel.setSizeLimit(500);
 				
 				this.setModel(oModel);
+				
+				this.setModel(new JSONModel(), "anexos");
 			},
 
 			_onRouteMatched: function (oEvent) {
