@@ -109,7 +109,7 @@ sap.ui.define([
 			//this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportTaxPackage", undefined);
 		},
-		/*COMMENT M_VGT.53
+		//COMMENT M_VGT.53
 		_onClearFiltros: function (oEvent) {
 			this.getModel().setProperty("/IdEmpresasSelecionadas", undefined);
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
@@ -117,7 +117,7 @@ sap.ui.define([
 			this.getModel().setProperty("/IdMoedaSelecionadas", undefined);
 			this.getModel().setProperty("/StatusSelecionado", undefined);	
 		},		
-		COMMENT M_VGT.53*/	
+		//COMMENT M_VGT.53*/	
 		onSelectChange: function (oEvent) {
 			//this.onValidarData(oEvent);
 			this._atualizarDados();			
@@ -215,7 +215,7 @@ sap.ui.define([
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
 			dialog._setConsiderFilterChanges(true);		
-			/*COMMENT M_VGT.23
+			//COMMENT M_VGT.23
 			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 			var that = this;
 			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
@@ -224,7 +224,7 @@ sap.ui.define([
 			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
 			that.getModel().setProperty("/FY",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FY"),"tblSchedule.fy",that.getModel().getProperty("/FYSelecionadas"),"tblSchedule.fy"));				
 			that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
-			COMMENT*/			
+			//COMMENT M_VGT.23*/			
 		},
 
 		_atualizarDados: function () {
@@ -258,10 +258,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro,"tblEmpresa.nome") );
 					}
 				});					
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
-			}COMMENT*/
+			}//COMMENT M_VGT.23*/
 			if(oWhere.AnoCalendario === null){
 				oWhere.Distinct = ["tblDominioAnoCalendario.ano_calendario"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -276,15 +276,15 @@ sap.ui.define([
 					success: function (response) {
 						var aRegistro = JSON.parse(response);
 						that.getModel().setProperty("/DominioAnoCalendario", aRegistro);
-						/*COMMENT M_VGT.23
+						//COMMENT M_VGT.23
 						that.getModel().setProperty("/DominioAnoCalendario", Utils.orderByArrayParaBoxComSelecao(aRegistro,"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));							
-						COMMENT*/						
+						//COMMENT M_VGT.23*/						
 					}
 				});					
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"tblDominioAnoCalendario.ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"tblDominioAnoCalendario.id_dominio_ano_calendario"));				
-			}COMMENT*/
+			}//COMMENT M_VGT.23*/
 			if(oWhere.Periodo === null){
 				oWhere.Distinct = ["tblPeriodo.id_periodo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -304,10 +304,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Periodo",  Utils.orderByArrayParaBox(aRegistro,"tblPeriodo.periodo"));
 					}
 				});					
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Periodo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Periodo"),"tblPeriodo.periodo",that.getModel().getProperty("/IdPeriodoSelecionadas"),"tblPeriodo.numero_ordem"));				
-			}COMMENT*/
+			}//COMMENT M_VGT.23*/
 			if(oWhere.Moeda === null){
 				oWhere.Distinct = ["tblDominioMoeda.acronimo"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -324,10 +324,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro,"tblDominioMoeda.acronimo"));
 					}
 				});						
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
-			}COMMENT*/
+			}//COMMENT M_VGT.23*/
 			if(oWhere.AnoFiscal === null){
 				oWhere.Distinct = ["tblSchedule.fy"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -344,10 +344,10 @@ sap.ui.define([
 						that.getModel().setProperty("/FY",aRegistro);
 					}
 				});					
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/FY",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/FY"),"tblSchedule.fy",that.getModel().getProperty("/FYSelecionadas"),"tblSchedule.fy"));				
-			}COMMENT*/
+			}//COMMENT M_VGT.23*/
 			if (oWhere.Status === null) {
 				oWhere.Distinct = ["tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"];
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinctLOSSSCHEDULE/ReportTaxPackage?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=2" /*Modulo 2 representa Tax Package*/, {
@@ -367,10 +367,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Status", Utils.orderByArrayParaBox(aRegistro, "tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio"));
 					}
 				});
-			}		/*COMMENT M_VGT.23
+			}		//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Status",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Status"),"tblDominioRelTaxPackagePeriodoStatusEnvio.status_envio",that.getModel().getProperty("/StatusSelecionado"),"tblDominioRelTaxPackagePeriodoStatusEnvio.id_dominio_rel_tax_package_periodo_status_envio"));				
-			}COMMENT*/	
+			}//COMMENT M_VGT.23*/	
 		},
 
 		onDataExport : sap.m.Table.prototype.exportData || function(tipo) {

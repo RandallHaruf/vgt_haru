@@ -138,7 +138,7 @@ sap.ui.define([
 			this.byId("PanelIncomeTax").setProperty("expanded",false);						
 
 		},
-		/*COMMENT M_VGT.53
+		//COMMENT M_VGT.53
 		_onClearFiltros: function (oEvent) {
 			this.getModel().setProperty("/IdEmpresasSelecionadas", undefined);
 			this.getModel().setProperty("/IdDominioAnoCalendarioSelecionadas", undefined);
@@ -149,12 +149,12 @@ sap.ui.define([
 			this.getModel().setProperty("/IdDominioTipoDiferencaSelecionadas", undefined);
 			this.getModel().setProperty("/ModuloSelecionado", undefined);					
 		},		
-		COMMENT M_VGT.53*/	
+		//COMMENT M_VGT.53*/	
 		onSelectChange: function (oEvent) {
 			var that = this;
 			var oAba = this.getModel().getProperty("/ModuloSelecionado") ? this.getModel().getProperty("/ModuloSelecionado")[0] !==
 				undefined ? this.getModel().getProperty("/ModuloSelecionado") : null : null;	
-			/*COMMENT M_VGT.23
+			//COMMENT M_VGT.23
 			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"id_empresa"));
 			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"id_dominio_ano_calendario"));				
@@ -164,7 +164,7 @@ sap.ui.define([
 			that.getModel().setProperty("/TipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TipoDiferenca"),"tblDiferencaOpcao.nome",that.getModel().getProperty("/IdTipoDiferencaSelecionadas"),"tblDiferencaOpcao.id_diferenca_opcao"));				
 			that.getModel().setProperty("/DominioTipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoDiferenca"),"tblDominioDiferencaTipo.tipo",that.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas"),"tblDominioDiferencaTipo.id_dominio_diferenca_tipo"));				
 			that.getModel().setProperty("/Modulo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Modulo"),"value",that.getModel().getProperty("/ModuloSelecionado"),"key"));
-			COMMENT*/		
+			//COMMENT M_VGT.23*/		
 		},
 
 		onImprimir: function (oEvent) {
@@ -234,7 +234,7 @@ sap.ui.define([
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
 			dialog._setConsiderFilterChanges(true);
-			/*COMMENT M_VGT.23
+			//COMMENT M_VGT.23
 			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 			that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"id_empresa"));
 			that.getModel().setProperty("/DominioAnoCalendario",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoCalendario"),"ano_calendario",that.getModel().getProperty("/IdDominioAnoCalendarioSelecionadas"),"id_dominio_ano_calendario"));				
@@ -244,7 +244,7 @@ sap.ui.define([
 			that.getModel().setProperty("/TipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TipoDiferenca"),"tblDiferencaOpcao.nome",that.getModel().getProperty("/IdTipoDiferencaSelecionadas"),"tblDiferencaOpcao.id_diferenca_opcao"));				
 			that.getModel().setProperty("/DominioTipoDiferenca",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoDiferenca"),"tblDominioDiferencaTipo.tipo",that.getModel().getProperty("/IdDominioTipoDiferencaSelecionadas"),"tblDominioDiferencaTipo.id_dominio_diferenca_tipo"));				
 			that.getModel().setProperty("/Modulo",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Modulo"),"value",that.getModel().getProperty("/ModuloSelecionado"),"key"));
-			COMMENT*/			
+			//COMMENT M_VGT.23*/			
 		},
 		
 		getSelectedItemsTemplate: function(oEvent){

@@ -86,7 +86,7 @@ sap.ui.define([
 			//this.getModel().setProperty("/TemplateReport", undefined);			
 			this.getModel().setProperty("/ReportTTC", undefined);
 		},
-		/*COMMENT M_VGT.53
+		//COMMENT M_VGT.53
 		_onClearFiltros: function (oEvent) {
 			this.getModel().setProperty("/IdEmpresasSelecionadas", undefined);
 			this.getModel().setProperty("/IdDominioTaxClassificationSelecionadas", undefined);
@@ -102,7 +102,7 @@ sap.ui.define([
 			this.getModel().setProperty("/DataPagamentoFim", undefined);
 			this.getModel().setProperty("/IdEnviadoSelecionadas", undefined);
 		},		
-		COMMENT M_VGT.53*/			
+		//COMMENT M_VGT.53*/			
 		onNavBack: function (oEvent) {
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("ttcListagemEmpresas");
 		},
@@ -312,7 +312,7 @@ sap.ui.define([
 			dialog._recreateBasicAreaContainer(true);
 			dialog._retrieveVisibleAdvancedItems();
 			dialog._setConsiderFilterChanges(true);	
-			/*COMMENT M_VGT.23
+			//COMMENT M_VGT.23
 			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 			var that = this;
 			that.getModel().setProperty("/Enviado",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Enviado"),"value",that.getModel().getProperty("/IdEnviadoSelecionadas"),"key"));
@@ -326,7 +326,7 @@ sap.ui.define([
 			that.getModel().setProperty("/DominioAnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoFiscal"),"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));				
 			that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdDominioMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
 			that.getModel().setProperty("/DominioTipoTransacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoTransacao"),"tblDominioTipoTransacao.tipo_transacao",that.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas"),"tblDominioTipoTransacao.id_dominio_tipo_transacao"));				
-			COMMENT*/			
+			//COMMENT M_VGT.23*/			
 		},
 		getSelectedItemsTemplate: function(oEvent){
 			var vetorInicio = [];
@@ -395,10 +395,10 @@ sap.ui.define([
 
 			var oWhere = this.getSelectedItemsTemplate();
 			
-			/*COMMENT M_VGT.23
+			//COMMENT M_VGT.23
 			//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 			that.getModel().setProperty("/Enviado",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Enviado"),"value",that.getModel().getProperty("/IdEnviadoSelecionadas"),"key"));
-			COMMENT*/
+			//COMMENT M_VGT.23*/
 			if(oWhere.Empresa === null){
 				oWhere.Distinct = ["tblEmpresa.nome"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -415,10 +415,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Empresa", Utils.orderByArrayParaBox(aRegistro, "tblEmpresa.nome"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Empresa",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Empresa"),"tblEmpresa.nome",that.getModel().getProperty("/IdEmpresasSelecionadas"),"tblEmpresa.id_empresa"));				
-			}COMMENT*/
+			}//COMMENT M_VGT.23*/
 			if(oWhere.TaxClassification === null){
 				oWhere.Distinct = ["tblDominioTaxClassification.classification"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -442,10 +442,10 @@ sap.ui.define([
 							"tblDominioTaxClassification.classification"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioTaxClassification",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTaxClassification"),"tblDominioTaxClassification.classification",that.getModel().getProperty("/IdDominioTaxClassificationSelecionadas"),"tblDominioTaxClassification.id_dominio_tax_classification"));				
-			}	COMMENT*/		
+			}	//COMMENT M_VGT.23*/		
 			if(oWhere.TaxCategory === null){
 				oWhere.Distinct = ["tblTaxCategory.category"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -463,10 +463,10 @@ sap.ui.define([
 						that.getModel().setProperty("/TaxCategory", Utils.orderByArrayParaBox(aRegistro, "tblTaxCategory.category"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/TaxCategory",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/TaxCategory"),"tblTaxCategory.category",that.getModel().getProperty("/IdTaxCategorySelecionadas"),"tblTaxCategory.id_tax_category"));				
-			}	COMMENT*/			
+			}	//COMMENT M_VGT.23*/			
 			if(oWhere.Tax === null){
 				oWhere.Distinct = ["tblTax.tax"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -484,10 +484,10 @@ sap.ui.define([
 						that.getModel().setProperty("/Tax", Utils.orderByArrayParaBox(aRegistro, "tblTax.tax"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/Tax",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/Tax"),"tblTax.tax",that.getModel().getProperty("/IdTaxSelecionadas"),"tblTax.id_tax"));				
-			}		COMMENT*/			
+			}		//COMMENT M_VGT.23*/			
 			if(oWhere.NameOfTax === null){
 				oWhere.Distinct = ["tblNameOfTax.name_of_tax"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -505,10 +505,10 @@ sap.ui.define([
 						that.getModel().setProperty("/NameOfTax", Utils.orderByArrayParaBox(aRegistro, "tblNameOfTax.name_of_tax"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/NameOfTax",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/NameOfTax"),"tblNameOfTax.name_of_tax",that.getModel().getProperty("/IdNameOfTaxSelecionadas"),"tblNameOfTax.id_name_of_tax"));				
-			}			COMMENT*/		
+			}			//COMMENT M_VGT.23*/		
 			if(oWhere.Jurisdicao === null){
 				oWhere.Distinct = ["tblDominioJurisdicao.jurisdicao"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -531,10 +531,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioJurisdicao", Utils.orderByArrayParaBox(aRegistro, "tblDominioJurisdicao.jurisdicao"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioJurisdicao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioJurisdicao"),"tblDominioJurisdicao.jurisdicao",that.getModel().getProperty("/IdDominioJurisdicaoSelecionadas"),"tblDominioJurisdicao.id_dominio_jurisdicao"));				
-			}			COMMENT*/		
+			}			//COMMENT M_VGT.23*/		
 			if(oWhere.Pais === null){
 				oWhere.Distinct = ["tblDominioPais.pais"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -554,10 +554,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioPais", Utils.orderByArrayParaBox(aRegistro, "tblDominioPais.pais"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioPais",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioPais"),"tblDominioPais.pais",that.getModel().getProperty("/IdDominioPaisSelecionadas"),"tblDominioPais.id_dominio_pais"));				
-			}		COMMENT*/		
+			}		//COMMENT M_VGT.23*/		
 			if(oWhere.AnoFiscal === null){
 				oWhere.Distinct = ["tblDominioAnoFiscal.ano_fiscal"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -575,10 +575,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioAnoFiscal", Utils.orderByArrayParaBoxComSelecao(aRegistro,"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));							
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioAnoFiscal",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioAnoFiscal"),"tblDominioAnoFiscal.ano_fiscal",that.getModel().getProperty("/IdDominioAnoFiscalSelecionadas"),"tblDominioAnoFiscal.id_dominio_ano_fiscal"));				
-			}		COMMENT*/			
+			}		//COMMENT M_VGT.23*/			
 			if(oWhere.DataInicio === null && oWhere.DataFim === null){
 				oWhere.Distinct = ["tblPagamento.data_pagamento"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -617,10 +617,10 @@ sap.ui.define([
 						that.getModel().setProperty("/DominioMoeda", Utils.orderByArrayParaBox(aRegistro, "tblDominioMoeda.acronimo"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioMoeda",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioMoeda"),"tblDominioMoeda.acronimo",that.getModel().getProperty("/IdDominioMoedaSelecionadas"),"tblDominioMoeda.id_dominio_moeda"));				
-			}		COMMENT*/			
+			}		//COMMENT M_VGT.23*/			
 			if(oWhere.TipoTransacao === null){
 				oWhere.Distinct = ["tblDominioTipoTransacao.tipo_transacao"];				
 				jQuery.ajax(Constants.urlBackend + "DeepQueryDistinct/ReportTTC?full=" + (this.isIFrame() ? "true" : "false")+"&moduloAtual=1" /*Modulo 2 representa Tax Package*/, {
@@ -643,10 +643,10 @@ sap.ui.define([
 							"tblDominioTipoTransacao.tipo_transacao"));
 					}
 				});				
-			}/*COMMENT M_VGT.23
+			}//COMMENT M_VGT.23
 			else{//COMENTADO PARA LIBERAR NO ITEM M_VGT.23
 				that.getModel().setProperty("/DominioTipoTransacao",Utils.orderByArrayParaBoxComSelecao(that.getModel().getProperty("/DominioTipoTransacao"),"tblDominioTipoTransacao.tipo_transacao",that.getModel().getProperty("/IdDominioTipoTransacaoSelecionadas"),"tblDominioTipoTransacao.id_dominio_tipo_transacao"));				
-			}		COMMENT*/		
+			}		//COMMENT M_VGT.23*/		
 		},
 
 		_geraRelatorio: function (ifExport) {
