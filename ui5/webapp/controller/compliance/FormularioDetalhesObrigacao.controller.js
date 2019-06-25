@@ -15,18 +15,17 @@ sap.ui.define(
 		BaseController.extend("ui5ns.ui5.controller.compliance.FormularioDetalhesObrigacao", {
 
 			onInit: function () {
-                var ocultarPenalidade;
 				this._zerarModel();
-				
+
 				if (this.isVisualizacaoUsuario()) {
 					this.getRouter().getRoute("complianceFormularioDetalhesObrigacao").attachPatternMatched(this._onRouteMatched, this);
 				}
 			},
-			
+
 			_atualizarStatusPodeEncerrar: function () {
 				var documentos = this.getModel().getProperty("/Documentos");
 				var data = this.getModel().getProperty("/RespostaObrigacao")["data_conclusao"];
-				
+
 				// Só pode encerrar se a resposta ainda não foi concluída e existem documentos anexados a ela
 				var podeEncerrar = !data && documentos.length ? true : false;
 
@@ -51,18 +50,18 @@ sap.ui.define(
 					})
 					.finally(function () {
 						that._atualizarStatusPodeEncerrar();
-						that.setBusy(oTable, false);	
+						that.setBusy(oTable, false);
 					});
 			},
 
 			onAnexarArquivo: function (oEvent) {
 				var oFileUploader = this.getView().byId("fileUploader");
-				
+
 				if (oFileUploader.getValue()) {
 					var dataUpload = Utils.stringDateNowParaVariavelFormatoYYYYMMDD();
-					var idRespostaObrigacao = this.getModel().getProperty("/RespostaObrigacao")["id_resposa_obrigacao"];	
+					var idRespostaObrigacao = this.getModel().getProperty("/RespostaObrigacao")["id_resposa_obrigacao"];
 					var aDocumento = this.getModel().getProperty("/Documentos");
-					
+
 					var oArquivo = {
 						id_documento: 0,
 						data_upload: dataUpload,
@@ -73,14 +72,13 @@ sap.ui.define(
 						btnExcluirEnabled: true,
 						arquivo: oFileUploader.oFileUpload.files[0]
 					};
-					
+
 					aDocumento.push(oArquivo);
 					this.getModel().refresh();
-					
+
 					oFileUploader.setValue("");
 					this._atualizarStatusPodeEncerrar();
-				}
-				else {
+				} else {
 					sap.m.MessageToast.show(this.getResourceBundle().getText('viewGeralSelecioneArquivo'));
 				}
 			},
@@ -105,30 +103,29 @@ sap.ui.define(
 					objObrigacao["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
 				}
 			},
-			
+
 			_mostrarDialogProgressoUploadAnexo: function () {
 				if (!this._dialogProgresso) {
 					var that = this;
-					
+
 					Fragment.load({
 						name: "ui5ns.ui5.view.compliance.DialogProgresso"
 					}).then(function (oDialog) {
 						that._dialogProgresso = oDialog;
-						
+
 						that._dialogProgresso.setEscapeHandler(function (promise) {
 							promise.reject();
 						});
-						
-						that.getView().addDependent(that._dialogProgresso);	
-						
+
+						that.getView().addDependent(that._dialogProgresso);
+
 						that._dialogProgresso.open();
 					});
-				}
-				else {
+				} else {
 					this._dialogProgresso.open();
 				}
 			},
-			
+
 			_mostrarDialogDataConclusao: function (callbackSalvar) {
 				var that = this;
 
@@ -172,7 +169,7 @@ sap.ui.define(
 						enabled: "{/ButtonOkEncerrar}",
 						press: function () {
 							dialog.close();
-							
+
 							if (callbackSalvar) {
 								callbackSalvar();
 							}
@@ -200,76 +197,76 @@ sap.ui.define(
 				})
 
 				this.getView().addDependent(dialog);
-				
-				dialog.open();	
+
+				dialog.open();
 			},
-			
+
 			_getPromisesExcluir: function () {
 				// verificar se tem exclusao e disparar as exclusoes
 				var aPromise = [],
 					aIdDocumentoParaExcluir = this.getModel().getProperty('/IdDocumentosParaExcluir');
-				
+
 				for (var i = 0, length = aIdDocumentoParaExcluir.length; i < length; i++) {
 					var oPromise = Arquivo.excluir("ExcluirDocumento/" + aIdDocumentoParaExcluir[i]);
 					aPromise.push(oPromise);
 				}
-				
-				return aPromise;	
+
+				return aPromise;
 			},
-			
+
 			_getPromisesUpload: function (bIsEncerramento) {
 				// verificar se tem anexo e disparar uploads, caso seja uma conclusão, o arquivo é criado com "ind_conclusao" = true
 				var aDocumento = this.getModel().getProperty('/Documentos');
 				var oRespostaObrigacao = this.getModel().getProperty('/RespostaObrigacao');
-				
+
 				var aAnexo = aDocumento.filter(function (documento) {
 					return documento.arquivo;
 				});
-				
+
 				this.getModel("anexos").setProperty('/', aAnexo);
-				
+
 				var oData = {
 					indConclusao: bIsEncerramento,
 					id: oRespostaObrigacao["id_resposta_obrigacao"]
 				};
-				
+
 				var aPromise = [];
-				
+
 				if (aAnexo.length) {
 					this._mostrarDialogProgressoUploadAnexo();
 				}
-				
+
 				for (var i = 0, length = aAnexo.length; i < length; i++) {
 					var oAnexo = aAnexo[i];
-					
+
 					(function (anexo, thisController) {
 						var oPromise = Arquivo.upload(oAnexo.arquivo, oAnexo.nome_arquivo, "UploadDocumento", oData, {
 							onProgress: function (progresso) {
-								anexo.progresso = progresso;	
+								anexo.progresso = progresso;
 								thisController.getModel("anexos").refresh();
 							}
 						});
 						aPromise.push(oPromise);
-					}) (oAnexo, this); 
+					})(oAnexo, this);
 				}
-				
+
 				return aPromise;
 			},
-			
+
 			_getPromisesAtualizarArquivoConclusao: function (bIsEncerramento) {
 				// verificar se é conclusão e atualizar documentos com "ind_conclusao" = true
-				var aPromise  = [];
-				
+				var aPromise = [];
+
 				if (bIsEncerramento) {
 					var aDocumento = this.getModel().getProperty('/Documentos');
-					
+
 					var aDocumentoPersistido = aDocumento.filter(function (documento) {
 						return documento.id_documento;
 					});
-					
+
 					for (var i = 0, length = aDocumentoPersistido.length; i < length; i++) {
 						var oDocumentoPersistido = aDocumentoPersistido[i];
-						
+
 						var oPromise = NodeAPI.pAtualizarRegistro("DocumentoObrigacao", oDocumentoPersistido.id_documento, {
 							id: oDocumentoPersistido.id_documento,
 							fkIdRespostaObrigacao: oDocumentoPersistido["fk_id_resposta_obrigacao.id_resposta_obrigacao"],
@@ -279,21 +276,21 @@ sap.ui.define(
 							fkIdUsuario: oDocumentoPersistido["fk_id_usuario.id_usuario"],
 							indConclusao: bIsEncerramento
 						});
-						
+
 						aPromise.push(oPromise);
 					}
 				}
-				
-				return aPromise;	
+
+				return aPromise;
 			},
-			
+
 			_atualizarRespostaObrigacao: function (bIsEncerramento) {
 				var oRespostaObrigacao = this.getModel().getProperty('/RespostaObrigacao');
-				
+
 				oRespostaObrigacao.data_conclusao = bIsEncerramento ? this.getModel().getProperty('/DataConclusao') : oRespostaObrigacao.data_conclusao;
-				
+
 				// ANALISAR NCESSIDADE
-				
+
 				// var IntMes = DataConclusao.getMonth(); //Number(DataConclusao.toString());
 				// 	IntMes = IntMes + 1;
 				// 	var strMes = IntMes.toString();
@@ -304,7 +301,7 @@ sap.ui.define(
 				// 	var DataFormatada = that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"];
 
 				// 	that._AtualizaStatusObrigacao(DataFormatada);
-				
+
 				return NodeAPI.pAtualizarRegistro("RespostaObrigacao", oRespostaObrigacao.id_resposta_obrigacao, {
 					suporteContratado: oRespostaObrigacao.suporte_contratado,
 					suporteEspecificacao: oRespostaObrigacao.suporte_especificacao,
@@ -316,58 +313,55 @@ sap.ui.define(
 					fkIdDominioObrigacaoStatusResposta: oRespostaObrigacao.status_obrigacao_calculado, // TALVEZ PRECISEMOS USAR O METODO DE ATUALIZAR STATUS
 					dataExtensao: oRespostaObrigacao.data_extensao,
 					dataConclusao: oRespostaObrigacao.data_conclusao,
-                    confirmarPenalidade: oRespostaObrigacao.confirmar_penalidade,
+					confirmarPenalidade: oRespostaObrigacao.confirmar_penalidade,
 					justificativa: oRespostaObrigacao.justificativa,
 					fkIdDominioMoedaPenalidade: oRespostaObrigacao["fk_id_dominio_moeda_penalidade.id_dominio_moeda"],
 					valorPenalidade: oRespostaObrigacao.valor_penalidade,
 					indIniciada: true
 				});
 			},
-			
+
 			_persistir: function (bIsEncerramento) {
 				var that = this;
-				
+
 				this.setBusy(this.getView(), true);
-				
+
 				var aPromise = []
 					.concat(this._getPromisesExcluir())
 					.concat(this._getPromisesUpload(bIsEncerramento))
-					.concat(this._getPromisesAtualizarArquivoConclusao(bIsEncerramento));				
-				
+					.concat(this._getPromisesAtualizarArquivoConclusao(bIsEncerramento));
+
 				Promise.all(aPromise)
 					.then(function () {
 						return that._atualizarRespostaObrigacao(bIsEncerramento);
 					})
 					.catch(function (err) {
-						that._showError(err);	
+						that._showError(err);
 					})
 					.finally(function () {
 						that.setBusy(that.getView(), false);
 						that.onVoltarParaListagem();
 					});
 			},
-			
+
 			_salvar: function () {
 				this._persistir(false);
 			},
-			
+
 			_encerrar: function () {
 				this._persistir(true);
 			},
-			
+
 			onEncerrar: function (oEvent, event) {
 				var that = this,
 					justificativa = that.getModel().getProperty("/RespostaObrigacao/justificativa");
-					
-				if (justificativa && !ocultarPenalidade) {
-					this._mostrarDialogDataConclusao(this._encerrar.bind(this));
-				}
-				else {
+
+				if (!that.getModel().getProperty("/ocultarPenalidade") && !justificativa) {
 					var dialog = new sap.m.Dialog({
 						title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralAviso"),
 						type: "Message",
 						content: new sap.m.Text({
-							text: this.getView().getModel("i18n").getResourceBundle().getText("viewFormularioComplianceBepsJustificativa") 
+							text: this.getView().getModel("i18n").getResourceBundle().getText("viewFormularioComplianceBepsJustificativa")
 						}),
 						endButton: new sap.m.Button({
 							text: "Ok",
@@ -380,62 +374,14 @@ sap.ui.define(
 						}
 					});
 
-				dialog.open();
-				}			
-            },
+					dialog.open();
+				} else {
+					this._mostrarDialogDataConclusao(this._encerrar.bind(this));
+				}
+			},
 
 			onSalvar: function (oEvent) {
 				this._salvar();
-				// var that = this;
-				// jQuery.sap.require("sap.m.MessageBox");
-				// sap.m.MessageBox.confirm(this.getResourceBundle().getText("formularioObrigacaoMsgSalvar"), {
-				// 	title: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfirma"),
-				// 	onClose: function (oAction) {
-				// 		if (sap.m.MessageBox.Action.OK === oAction) {
-				// 			//that.getRouter().navTo("complianceListagemObrigacoes");
-				// 			var obj = that.getModel().getProperty("/RespostaObrigacao");
-
-				// 			if (obj["ObrigacaoIniciada"] && obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4) {
-				// 				obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
-				// 			}
-
-				// 			//Verificar se a data atual já passou para colocar status como em atraso
-				// 			if (obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 1 || obj[
-				// 					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 5 || obj[
-				// 					"fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] == 4) {
-				// 				if (obj["data_extensao"]) {
-				// 					var dataPrazo = Utils.bancoParaJsDate(obj["data_extensao"]);
-				// 				} else if (obj["prazo_entrega_customizado"]) {
-				// 					var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega_customizado"]);
-				// 				} else {
-				// 					var dataPrazo = Utils.bancoParaJsDate(obj["prazo_entrega"]);
-				// 				}
-				// 				var dataAtual = new Date();
-				// 				dataPrazo = new Date(obj["ano_calendario"], dataPrazo.getMonth(), dataPrazo.getDate(), 23, 59, 59, 0);
-				// 				if (dataPrazo < dataAtual) {
-				// 					obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 5;
-				// 				} else {
-				// 					obj["fk_id_dominio_obrigacao_status_resposta.id_dominio_obrigacao_status"] = 1;
-				// 				}
-				// 			}
-				// 			NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
-				// 				suporteContratado: obj["suporte_contratado"],
-				// 				suporteEspecificacao: obj["suporte_especificacao"],
-				// 				suporteValor: obj["suporte_valor"],
-				// 				fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-				// 				fkIdRelModeloEmpresa: obj["id_rel_modelo_empresa"],
-				// 				fkIdDominioAnoFiscal: obj["id_ano_fiscal_calculado"],
-				// 				fkIdDominioAnoCalendario: obj["id_dominio_ano_calendario"],
-				// 				fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
-				// 				dataExtensao: obj["data_extensao"],
-				// 				indIniciada: true
-				// 			}, function (response) {
-				// 				that.getView().byId("fileUploader").setValue("");
-				// 				that.onVoltarParaListagem();
-				// 			});
-				// 		}
-				// 	}
-				// }); //sap.m.MessageToast.show("Cancelar inserção");
 			},
 
 			onVoltarParaListagem: function () {
@@ -463,7 +409,6 @@ sap.ui.define(
 						}
 					});
 				}
-				//sap.m.MessageToast.show("Cancelar inserção");
 			},
 
 			navToHome: function () {
@@ -512,163 +457,11 @@ sap.ui.define(
 			onTrocarValorSuporte: function (oEvent) {
 				Validador.validarNumeroInserido(oEvent, this);
 			},
-			
+
 			onTrocarValorPenalidade: function (oEvent) {
 				Validador.validarNumeroInserido(oEvent, this);
 			},
-
-			onEnviarArquivo: function (oEvent, sProperty) {
-				var that = this;
-				var oFileUploader = this.getView().byId("fileUploader");
-				var obj2 = that.getModel().getProperty("/RespostaObrigacao");
-				var DataConclusao = that.byId("DataAtual").getDateValue();
-				var oBtnEnviar = oEvent.getSource();
-				var oTable = this.byId("tabelaDocumentos");
-				var DataFormatada;
-
-				var oData = {
-
-					indConclusao: false,
-					id: obj2["id_resposta_obrigacao"]
-				};
-
-				//if (DataConclusao === null) {
-				//if (!this.getModel().getProperty("/JaDataObrigacaoConcluida")) {
-				if (!this.getModel().getProperty("/IsDeclaracao")) {
-					if (oFileUploader.getValue()) {
-						oBtnEnviar.setEnabled(false);
-						this.getModel().setProperty("/CancelaBotaoConfirmar", false);
-						this.getModel().setProperty("/CancelaBotaoCancelar", false);
-						this.setBusy(oBtnEnviar, true);
-						Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDocumento", oData)
-							.then(function (response) {
-								//sap.m.MessageToast.show(response);
-								that._atualizarDocumentos('/Documentos', oData.id, oTable);
-								oFileUploader.setValue("");
-								oBtnEnviar.setEnabled(true);
-								that.setBusy(oBtnEnviar, false);
-								that.getModel().setProperty("/CancelaBotaoConfirmar", true);
-								that.getModel().setProperty("/CancelaBotaoCancelar", true);
-							})
-							.catch(function (err) {
-								sap.m.MessageToast.show(err);
-								oBtnEnviar.setEnabled(true);
-								that.setBusy(oBtnEnviar, false);
-								that.getModel().setProperty("/CancelaBotaoConfirmar", true);
-								that.getModel().setProperty("/CancelaBotaoCancelar", true);
-							});
-					} else {
-						//sap.m.MessageToast.show("Selecione um arquivo");
-						sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
-					}
-
-				} else {
-					if (oFileUploader.getValue()) {
-						DataFormatada = DataConclusao.getFullYear() + "-" + (DataConclusao.getMonth() + 1) + "-" + DataConclusao.getDate();
-						this.getModel().setProperty("/CancelaBotaoConfirmar", false);
-						this.getModel().setProperty("/CancelaBotaoCancelar", false);
-
-						var oBtnCancelar = new sap.m.Button({
-							text: "{i18n>formularioObrigacaoBotaoCancelar}"
-						});
-
-						var dialog = new sap.m.Dialog({
-							title: "{i18n>ViewDetalheTrimestreJSTextsConfirmation}",
-							type: "Message",
-							content: new sap.m.Text({
-								//ATTENTION! You are in the process of closing the Obligation, Are you sure you want to continue?
-								text: "{i18n>viewMensagemObrigacao}"
-							}),
-							beginButton: new sap.m.Button({
-								text: "{i18n>viewGeralSim}",
-								press: function (oEvent2) {
-									if (oFileUploader.getValue()) {
-										oEvent2.getSource().setEnabled(false);
-										oBtnCancelar.setEnabled(false);
-										that.setBusy(dialog, true);
-										oData.indConclusao = true;
-										oBtnEnviar.setEnabled(false);
-										that.setBusy(oBtnEnviar, true);
-										Arquivo.upload(oFileUploader.oFileUpload.files[0], oFileUploader.getValue(), "UploadDocumento", oData)
-											.then(function (response) {
-												//sap.m.MessageToast.show(response);
-												that._atualizarDocumentos('/Documentos', oData.id, oTable);
-
-												var IntMes = DataConclusao.getMonth(); //Number(DataConclusao.toString());
-												IntMes = IntMes + 1;
-												var strMes = IntMes.toString();
-
-												that.getModel().getProperty("/RespostaObrigacao")["data_conclusao"] = DataConclusao.getFullYear() + "-" + strMes +
-													"-" +
-													DataConclusao.getDate();
-												that._AtualizaStatusObrigacao(DataFormatada);
-
-												var obj = that.getModel().getProperty("/RespostaObrigacao");
-
-												NodeAPI.atualizarRegistro("RespostaObrigacao", obj.id_resposta_obrigacao, {
-													suporteContratado: obj["suporte_contratado"],
-													suporteEspecificacao: obj["suporte_especificacao"],
-													suporteValor: obj["suporte_valor"],
-													fkIdDominioMoeda: obj["fk_id_dominio_moeda.id_dominio_moeda"],
-													fkIdRelModeloEmpresa: obj["id_rel_modelo_empresa"],
-													fkIdDominioAnoFiscal: obj["id_ano_fiscal_calculado"],
-													fkIdDominioAnoCalendario: obj["id_dominio_ano_calendario"],
-													fkIdDominioObrigacaoStatusResposta: obj["status_obrigacao_calculado"],
-													dataExtensao: obj["data_extensao"],
-													dataConclusao: obj["data_conclusao"],
-                                                    confirmarPenalidade: obj["confirmar_penalidade"],
-													justificativa: obj["justificativa"],
-													fkIdDominioMoedaPenalidade: obj["fk_id_dominio_moeda_penalidade.id_dominio_moeda"],
-													valorPenalidade: obj["valor_penalidade"],
-													indIniciada: true
-												}, function (response2) {
-													that.onVoltarParaListagem();
-													that.getModel().setProperty("/CancelaBotaoConfirmar", true);
-													that.getModel().setProperty("/CancelaBotaoCancelar", true);
-													oFileUploader.setValue("");
-													oBtnEnviar.setEnabled(true);
-													that.setBusy(oBtnEnviar, false);
-													dialog.close();
-												});
-
-											})
-											.catch(function (err) {
-												sap.m.MessageToast.show(err);
-												oBtnEnviar.setEnabled(true);
-												that.setBusy(oBtnEnviar, false);
-												that.getModel().setProperty("/CancelaBotaoConfirmar", true);
-												that.getModel().setProperty("/CancelaBotaoCancelar", true);
-												dialog.close();
-											});
-									} else {
-										//sap.m.MessageToast.show("Selecione um arquivo");
-										sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
-
-									}
-
-								}
-							}),
-							endButton: oBtnCancelar,
-							afterClose: function () {
-								this.getModel().setProperty("/CancelaBotaoCancelar", true);
-								dialog.destroy();
-							}
-						});
-
-						oBtnCancelar.attachPress(function (oEvent2) {
-							dialog.close();
-						});
-
-						this.getView().addDependent(dialog);
-
-						dialog.open();
-					} else {
-						//sap.m.MessageToast.show("Selecione um arquivo");
-						sap.m.MessageToast.show(that.getResourceBundle().getText("viewGeralSelecioneArquivo"));
-					}
-				}
-			},
-
+			
 			_AtualizaStatusObrigacao: function (Data) {
 				var that = this;
 				var obj2 = that.getModel().getProperty("/RespostaObrigacao");
@@ -764,14 +557,14 @@ sap.ui.define(
 
 			_retirarArquivoDaTabela: function (oArquivoExcluir) {
 				var aDocumento = this.getModel().getProperty('/Documentos');
-				
+
 				for (var i = 0; i < aDocumento.length; i++) {
 					if (oArquivoExcluir === aDocumento[i]) {
 						aDocumento.splice(i, 1);
 						break;
 					}
 				}
-				
+
 				this.getModel().setProperty('/Documentos', aDocumento);
 			},
 
@@ -779,49 +572,15 @@ sap.ui.define(
 				var that = this;
 				var oArquivo = oEvent.getSource().getBindingContext().getObject();
 				var aIdDocumentoParaExcluir = this.getModel().getProperty('/IdDocumentosParaExcluir');
-				
+
 				this._confirmarExclusao(function () {
 					if (oArquivo.id_documento) {
 						aIdDocumentoParaExcluir.push(oArquivo.id_documento);
 					}
-					
+
 					that._retirarArquivoDaTabela(oArquivo);
 					that._atualizarStatusPodeEncerrar();
 				});
-				
-				// var that = this,
-				// 	oButton = oEvent.getSource(),
-				// 	oArquivo = oEvent.getSource().getBindingContext().getObject(),
-				// 	oTable = this.byId("tabelaDocumentos"),
-				// 	idObrigacao = that.getModel().getProperty("/RespostaObrigacao")["id_resposta_obrigacao"];
-
-				// this._confirmarExclusao(function () {
-				// 	oArquivo.btnExcluirEnabled = false;
-				// 	oArquivo.btnDownloadEnabled = false;
-				// 	that.getModel().refresh();
-				// 	that.setBusy(oButton, true);
-
-				// 	Arquivo.excluir("ExcluirDocumento/" + oArquivo.id_documento)
-				// 		.then(function (response) {
-				// 			//sap.m.MessageToast.show(response);
-				// 			that._atualizarDocumentos('/Documentos', idObrigacao, oTable);
-				// 			if (!oArquivo.ind_conclusao) {
-				// 				oArquivo.btnExcluirEnabled = true;
-				// 			}
-				// 			oArquivo.btnDownloadEnabled = true;
-				// 			that.setBusy(oButton, false);
-				// 			that.getModel().refresh();
-				// 		})
-				// 		.catch(function (err) {
-				// 			sap.m.MessageToast.show(that.getResourceBundle().getText("ViewGeralErrSelecionarArquivo") + oArquivo.nome_arquivo);
-				// 			if (!oArquivo.ind_conclusao) {
-				// 				oArquivo.btnExcluirEnabled = true;
-				// 			}
-				// 			oArquivo.btnDownloadEnabled = true;
-				// 			that.setBusy(oButton, false);
-				// 			that.getModel().refresh();
-				// 		});
-				// });
 			},
 
 			_confirmarExclusao: function (onConfirm) {
@@ -829,7 +588,7 @@ sap.ui.define(
 					title: this.getView().getModel("i18n").getResourceBundle().getText("ViewDetalheTrimestreJSTextsConfirmation"),
 					type: "Message",
 					content: new sap.m.Text({
-						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfimarExclusaoArquivo") 
+						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralConfimarExclusaoArquivo")
 					}),
 					beginButton: new sap.m.Button({
 						text: this.getView().getModel("i18n").getResourceBundle().getText("viewGeralSim"),
@@ -863,31 +622,16 @@ sap.ui.define(
 					IdDocumentosParaExcluir: [],
 					DataConclusao: null
 				});
-				
+
 				oModel.setSizeLimit(500);
-				
+
 				this.setModel(oModel);
-				
+
 				this.setModel(new JSONModel(), "anexos");
 			},
 
 			_onRouteMatched: function (oEvent) {
-				var that = this,
-					oParametros = this.fromURIComponent(oEvent.getParameter("arguments").parametros);
-					
-				ocultarPenalidade = false;
-					
-				if (oParametros.Obrigacao.status_obrigacao_calculado != 5 && oParametros.Obrigacao.status_obrigacao_calculado != 7) {
-					ocultarPenalidade = true;
-				}
-
-				if (oParametros.Obrigacao.status_obrigacao_calculado === 5) {
-					this.getModel().setProperty("/ConfirmarPenalidade", true);
-				}
-
-				if (oParametros.Obrigacao.status_obrigacao_calculado === 5 || oParametros.Obrigacao.status_obrigacao_calculado === 7) {
-					this.getModel().setProperty("/ocultarJustificativa", true);
-				}
+				var that = this;
 
 				const oEventoInicial = jQuery.extend(true, {}, oEvent);
 
@@ -922,10 +666,6 @@ sap.ui.define(
 
 				var continuarRouteMatched = function (event) {
 					that._zerarModel();
-					that.getModel().setProperty("/ocultarPenalidade", ocultarPenalidade);
-					that.getModel().setProperty("/IsIFrame", that.isIFrame());
-					that.getModel().setProperty("/IsDeclaracao", false);
-					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 
 					var oParametros;
 
@@ -935,6 +675,25 @@ sap.ui.define(
 						oParametros = event;
 						that._inceptionParams = event;
 					}
+
+					var ocultarPenalidade = false;
+
+					if (oParametros.Obrigacao.status_obrigacao_calculado != 5 && oParametros.Obrigacao.status_obrigacao_calculado != 7) {
+						ocultarPenalidade = true;
+					}
+
+					if (oParametros.Obrigacao.status_obrigacao_calculado === 5) {
+						that.getModel().setProperty("/ConfirmarPenalidade", true);
+					}
+
+					if (oParametros.Obrigacao.status_obrigacao_calculado === 5 || oParametros.Obrigacao.status_obrigacao_calculado === 7) {
+						that.getModel().setProperty("/ocultarJustificativa", true);
+					}
+
+					that.getModel().setProperty("/ocultarPenalidade", ocultarPenalidade);
+					that.getModel().setProperty("/IsIFrame", that.isIFrame());
+					that.getModel().setProperty("/IsDeclaracao", false);
+					that.getModel().setProperty("/Linguagem", sap.ui.getCore().getConfiguration().getLanguage().toUpperCase());
 
 					var idObrigacao = oParametros.Obrigacao["id_resposta_obrigacao"];
 					var idAnoCalendario = oParametros.idAnoCalendario;
@@ -949,31 +708,37 @@ sap.ui.define(
 					that.getModel().setProperty("/CancelaBotaoConfirmar", (!!oParametros.Obrigacao["data_conclusao"] === false ? true : false));
 					that.getModel().setProperty("/NomeUsuario", oParametros.nomeUsuario);
 					that.getModel().setProperty('/IsAreaUsuario', !that.isIFrame());
+
+					that.setBusy(that.getView(), true);
+
 					that.getModel().setProperty("/RespostaObrigacao", oParametros.Obrigacao);
+					that.getModel().setProperty('/CopiaResposta', Object.assign({}, oParametros.Obrigacao));
 
 					NodeAPI.listarRegistros("DominioMoeda", function (response) { // 1 COMPLIANCE
 						if (response) {
 							response.unshift({});
 							that.getModel().setProperty("/DominioMoeda", response);
-							// that.getModel().setProperty("/RespostaObrigacao", that.getModel().getProperty("/RespostaObrigacao"));
+							that.getModel().setProperty('/RespostaObrigacao', that.getModel().getProperty('/CopiaResposta'));
+
+							that.setBusy(that.getView(), false);
+
+							if (!idObrigacao) {
+								NodeAPI.pCriarRegistro('RespostaObrigacao', {
+										fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"],
+										fkIdDominioAnoCalendario: oParametros.Obrigacao.id_dominio_ano_calendario
+									})
+									.then(function (res) {
+										var generatedId = JSON.parse(res)[0].generated_id;
+
+										that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
+
+										that._atualizarDocumentos('/Documentos', generatedId, that.byId("tabelaDocumentos"));
+									});
+							} else {
+								that._atualizarDocumentos('/Documentos', idObrigacao, that.byId("tabelaDocumentos"));
+							}
 						}
 					});
-
-					if (!idObrigacao) {
-						NodeAPI.pCriarRegistro('RespostaObrigacao', {
-								fkIdRelModeloEmpresa: oParametros.Obrigacao["id_rel_modelo_empresa"],
-								fkIdDominioAnoCalendario: oParametros.Obrigacao.id_dominio_ano_calendario
-							})
-							.then(function (res) {
-								var generatedId = JSON.parse(res)[0].generated_id;
-
-								that.getModel().getProperty('/RespostaObrigacao').id_resposta_obrigacao = generatedId;
-
-								that._atualizarDocumentos('/Documentos', generatedId, that.byId("tabelaDocumentos"));
-							});
-					} else {
-						that._atualizarDocumentos('/Documentos', idObrigacao, that.byId("tabelaDocumentos"));
-					}
 				}
 			}
 		});
