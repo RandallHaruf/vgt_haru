@@ -931,12 +931,14 @@ sap.ui.define(
 				var bTemDocumentoPraEssaCategoria = false;
 				var iNumeroLinhasDessaCategoria = 1;
 				var aPagamentos = this._dadosPagamentosBorne.concat(this._dadosPagamentosCollected);
-				for (let i = 0; i < aLinhasDocumentos.length; i++) {
-					if (aLinhasDocumentos[i]["fk_category.id_tax_category"] == oTaxAnterior["fk_category.id_tax_category"] && aLinhasDocumentos[i][
-							"fk_documento_ttc.id_documento_ttc"
-						]) {
-						bTemDocumentoPraEssaCategoria = true;
-						break;
+				if(oTaxAnterior){
+					for (let i = 0; i < aLinhasDocumentos.length; i++) {
+						if (aLinhasDocumentos[i]["fk_category.id_tax_category"] == oTaxAnterior["fk_category.id_tax_category"] && aLinhasDocumentos[i][
+								"fk_documento_ttc.id_documento_ttc"
+							]) {
+							bTemDocumentoPraEssaCategoria = true;
+							break;
+						}
 					}
 				}
 				if (bTemDocumentoPraEssaCategoria) {
@@ -1123,7 +1125,7 @@ sap.ui.define(
 
 				oPagamento.total = (fPrincipal + fJuros + fMulta).toFixed(2);
 				this.getModel().refresh();
-				that._remontarAbaDocumentos();
+				this._remontarAbaDocumentos();
 			},
 
 			onCalcularTotalImport: function (oPagamento) {
@@ -2551,7 +2553,6 @@ sap.ui.define(
 						oLinhaDocumento["nome_arquivo"] = "";
 						oLinhaDocumento["fk_documento_ttc.id_documento_ttc"] = 0;
 						oLinhaDocumento["persistido"] = undefined;
-						oLinhaDocumento["valor_total"] = 0;
 					}
 				}
 				this.getModel().refresh();
